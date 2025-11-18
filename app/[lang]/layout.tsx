@@ -116,7 +116,7 @@ export default async function RootLayout(props: LayoutProps<'/[lang]'>) {
   <html
    lang={lang}
    dir={contentDirection}
-   className={`${faSans.variable} ${enRoboto.variable} font-en-roboto [[dir="rtl"]]:font-fa-sans bg-background text-foreground text-[13px] lg:text-[14px] xl:text-[16px]`}
+   className={`${faSans.variable} ${enRoboto.variable} font-en-roboto [[dir="rtl"]]:font-fa-sans bg-background text-foreground`}
    suppressHydrationWarning
   >
    <head>
