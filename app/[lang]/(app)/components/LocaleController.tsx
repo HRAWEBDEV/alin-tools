@@ -1,0 +1,95 @@
+'use client';
+import {
+ Drawer,
+ DrawerClose,
+ DrawerTrigger,
+ DrawerContent,
+ DrawerHeader,
+ DrawerTitle,
+} from '@/components/ui/drawer';
+import {
+ DropdownMenu,
+ DropdownMenuContent,
+ DropdownMenuTrigger,
+ DropdownMenuGroup,
+ DropdownMenuItem,
+ DropdownMenuLabel,
+} from '@/components/ui/dropdown-menu';
+import { FaGlobeAmericas } from 'react-icons/fa';
+import { Button } from '@/components/ui/button';
+import { useBaseConfig } from '@/services/base-config/baseConfigContext';
+import { locales } from '@/internalization/app/localization';
+import { Badge } from '@/components/ui/badge';
+import { getLocaleIcon } from '../utils/getLocaleIcons';
+
+function LocaleControllerButton() {
+ const { localeInfo, setLocale } = useBaseConfig();
+ // mode icon
+ const modeButton = (
+  <Button
+   type='button'
+   variant='outline'
+   size='icon-lg'
+   className='relative rounded-full'
+  >
+   <div className='absolute -top-1 -end-2'>
+    <Badge variant='secondary'>{localeInfo.localeShortName}</Badge>
+   </div>
+   <FaGlobeAmericas className='size-5' />
+  </Button>
+ );
+
+ return (
+  <>
+   <div className='hidden lg:block'>
+    <DropdownMenu dir={localeInfo.contentDirection}>
+     <DropdownMenuTrigger asChild>{modeButton}</DropdownMenuTrigger>
+     <DropdownMenuContent align='start' className='w-40'>
+      <DropdownMenuLabel className='hidden'></DropdownMenuLabel>
+      <DropdownMenuGroup>
+       {Object.values(locales).map((locale) => (
+        <DropdownMenuItem
+         key={locale.locale}
+         onClick={() => setLocale(locale.locale)}
+         className={`${locale.locale === 'fa' ? 'font-fa-sans' : 'font-en-roboto'}`}
+        >
+         {getLocaleIcon(locale.locale, { className: 'size-8 rounded-full' })}
+         {locale.localeName}
+        </DropdownMenuItem>
+       ))}
+      </DropdownMenuGroup>
+     </DropdownMenuContent>
+    </DropdownMenu>
+   </div>
+   <div className='inline-block lg:hidden'>
+    <Drawer>
+     <DrawerTrigger asChild>{modeButton}</DrawerTrigger>
+     <DrawerContent>
+      <DrawerHeader className='hidden'>
+       <DrawerTitle></DrawerTitle>
+      </DrawerHeader>
+      <ul className='py-2'>
+       {Object.values(locales).map((locale) => (
+        <li key={locale.locale}>
+         <DrawerClose asChild>
+          <Button
+           variant='ghost'
+           size={'icon-lg'}
+           className={`p-4! w-full justify-start h-[unset] gap-4 items-center ${locale.locale === 'fa' ? 'font-fa-sans' : 'font-en-roboto'}`}
+           onClick={() => setLocale(locale.locale)}
+          >
+           {getLocaleIcon(locale.locale, { className: 'size-8 rounded-full' })}
+           <span>{locale.localeName}</span>
+          </Button>
+         </DrawerClose>
+        </li>
+       ))}
+      </ul>
+     </DrawerContent>
+    </Drawer>
+   </div>
+  </>
+ );
+}
+
+export { LocaleControllerButton };
