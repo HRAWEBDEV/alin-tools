@@ -5,6 +5,11 @@
    "newOrder": "ثبت سفارش",
    "profile": "پروفایل",
    "menus": "منو‌ها"
+  },
+  "navigation": {
+   "salons": "سالن‌ها",
+   "newOrder": "ثبت سفارش",
+   "loginDate": "آخرین تاریخ ورود"
   }
  }
 }
