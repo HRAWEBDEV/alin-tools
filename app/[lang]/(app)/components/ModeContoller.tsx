@@ -48,7 +48,7 @@ function ModeControllerButton() {
         <Button
          variant='ghost'
          size={'icon-lg'}
-         className='p-4! w-full justify-start h-[unset] gap-4 items-center'
+         className='text-base p-4! w-full justify-start h-[unset] gap-4 items-center'
          onClick={() => setTheme(mode)}
         >
          {getModeIcon(mode, { className: 'size-6' })}

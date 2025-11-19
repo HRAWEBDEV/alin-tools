@@ -45,7 +45,7 @@ function LocaleControllerButton() {
         <Button
          variant='ghost'
          size={'icon-lg'}
-         className={`p-4! w-full justify-start h-[unset] gap-4 items-center ${locale.locale === 'fa' ? 'font-fa-sans' : 'font-en-roboto'}`}
+         className={`text-base p-4! w-full justify-start h-[unset] gap-4 items-center ${locale.locale === 'fa' ? 'font-fa-sans' : 'font-en-roboto'}`}
          onClick={() => setLocale(locale.locale)}
          disabled={!locale.active}
         >
