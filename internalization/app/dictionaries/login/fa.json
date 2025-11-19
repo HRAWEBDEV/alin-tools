@@ -1,10 +1,13 @@
 {
  "title": "احراز هویت",
  "login": {
-  "form": {
-   "userName": "نام کاربری",
-   "password": "رمز عبور",
-   "login": "ورود"
+  "withPassword": {
+   "form": {
+    "userName": "نام کاربری",
+    "password": "رمز عبور",
+    "login": "ورود",
+    "forgetPassword": "فراموشی رمز عبور؟"
+   }
   }
  }
 }

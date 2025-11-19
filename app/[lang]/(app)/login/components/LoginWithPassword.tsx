@@ -12,11 +12,14 @@ import {
  InputGroupInput,
 } from '@/components/ui/input-group';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default function LoginWithPassword({ dic }: { dic: LoginDictionary }) {
  const [showPassword, setShowPassword] = useState(false);
  const {
-  login: { form: formDic },
+  login: {
+   withPassword: { form: formDic },
+  },
  } = dic;
 
  const iconSize = ' size-5';
@@ -63,6 +66,11 @@ export default function LoginWithPassword({ dic }: { dic: LoginDictionary }) {
    <Button type='submit' size='lg' className='mt-6'>
     {formDic.login}
    </Button>
+   <div>
+    <Button variant='link' className='justify-start' asChild>
+     <Link href='#'>{formDic.forgetPassword}</Link>
+    </Button>
+   </div>
   </FieldGroup>
  );
 }
