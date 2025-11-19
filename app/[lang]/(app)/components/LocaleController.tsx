@@ -22,7 +22,7 @@ function LocaleControllerButton() {
    type='button'
    variant='outline'
    size='icon-lg'
-   className='relative rounded-full'
+   className='relative rounded-full size-11'
   >
    <div className='absolute -top-1 -end-2'>
     <Badge variant='secondary'>{localeInfo.localeShortName}</Badge>

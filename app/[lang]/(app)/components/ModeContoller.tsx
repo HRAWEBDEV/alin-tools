@@ -28,7 +28,7 @@ function ModeControllerButton() {
    type='button'
    variant='outline'
    size='icon-lg'
-   className='rounded-full'
+   className='rounded-full size-11'
   >
    {getModeIcon(theme as AppModes, { className: 'size-6' })}
   </Button>

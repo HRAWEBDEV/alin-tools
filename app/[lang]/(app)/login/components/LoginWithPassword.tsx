@@ -27,17 +27,26 @@ export default function LoginWithPassword({ dic }: { dic: LoginDictionary }) {
  return (
   <FieldGroup>
    <Field>
-    <FieldLabel htmlFor='userName'>{formDic.userName}</FieldLabel>
-    <InputGroup>
+    <FieldLabel htmlFor='userName' className='text-base'>
+     {formDic.userName}
+    </FieldLabel>
+    <InputGroup className='size-11'>
      <InputGroupAddon align='inline-start'>
       <FaUser className={'text-primary' + iconSize} />
      </InputGroupAddon>
-     <InputGroupInput name='userName' id='userName' autoComplete='true' />
+     <InputGroupInput
+      name='userName'
+      id='userName'
+      autoComplete='true'
+      className='text-base!'
+     />
     </InputGroup>
    </Field>
    <Field>
-    <FieldLabel htmlFor='password'>{formDic.password}</FieldLabel>
-    <InputGroup>
+    <FieldLabel htmlFor='password' className='text-base'>
+     {formDic.password}
+    </FieldLabel>
+    <InputGroup className='size-11'>
      <InputGroupAddon align='inline-start'>
       <RiLockPasswordFill className={'text-primary' + iconSize} />
      </InputGroupAddon>
@@ -46,6 +55,7 @@ export default function LoginWithPassword({ dic }: { dic: LoginDictionary }) {
       name='password'
       id='password'
       autoComplete='true'
+      className='text-base!'
      />
      <InputGroupAddon align='inline-end' className='-me-2'>
       <Button
@@ -63,7 +73,7 @@ export default function LoginWithPassword({ dic }: { dic: LoginDictionary }) {
      </InputGroupAddon>
     </InputGroup>
    </Field>
-   <Button type='submit' size='lg' className='mt-6'>
+   <Button type='submit' size='lg' className='mt-6 h-11 text-base'>
     {formDic.login}
    </Button>
    <div>
