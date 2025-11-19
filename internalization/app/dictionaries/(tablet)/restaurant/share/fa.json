@@ -1,0 +1,9 @@
+{
+ "components": {
+  "tabs": {
+   "salons": "سالن‌ها",
+   "newOrder": "ثبت سفارش",
+   "profile": "پروفایل"
+  }
+ }
+}

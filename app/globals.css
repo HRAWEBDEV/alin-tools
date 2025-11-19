@@ -76,14 +76,7 @@
  --sidebar-accent-foreground: oklch(0.205 0 0);
  --sidebar-border: oklch(0.922 0 0);
  --sidebar-ring: oklch(0.708 0 0);
- --startup-loading-zindex: 1000;
- --app-frame-bg: var(--background);
- --app-main-bg: var(--input);
- --app-header-height: 3.6rem;
- --app-tabs-height: var(--app-header-height);
- --app-nav-programs-width: 6rem;
- --app-nav-menus-width: 17rem;
- --app-nav-zindex: 1000;
+ --app-restaurant-tabs-zindex: 1000;
 }
 
 [data-theme='dark'] {
@@ -118,6 +111,11 @@
  --sidebar-accent-foreground: oklch(0.985 0 0);
  --sidebar-border: oklch(1 0 0 / 10%);
  --sidebar-ring: oklch(0.556 0 0);
+}
+
+.glass-card {
+ backdrop-filter: blur(5px);
+ -webkit-backdrop-filter: blur(5px);
 }
 
 @layer base {

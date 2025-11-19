@@ -27,14 +27,14 @@ function LocaleControllerButton() {
    <div className='absolute -top-1 -end-2'>
     <Badge variant='secondary'>{localeInfo.localeShortName}</Badge>
    </div>
-   <FaGlobeAmericas className='size-5' />
+   <FaGlobeAmericas className='size-6' />
   </Button>
  );
 
  return (
   <Drawer>
    <DrawerTrigger asChild>{modeButton}</DrawerTrigger>
-   <DrawerContent>
+   <DrawerContent className='min-h-[40svh]'>
     <DrawerHeader className='hidden'>
      <DrawerTitle></DrawerTitle>
     </DrawerHeader>
@@ -47,6 +47,7 @@ function LocaleControllerButton() {
          size={'icon-lg'}
          className={`p-4! w-full justify-start h-[unset] gap-4 items-center ${locale.locale === 'fa' ? 'font-fa-sans' : 'font-en-roboto'}`}
          onClick={() => setLocale(locale.locale)}
+         disabled={!locale.active}
         >
          {getLocaleIcon(locale.locale, { className: 'size-8 rounded-full' })}
          <span>{locale.localeName}</span>

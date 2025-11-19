@@ -22,7 +22,7 @@ export default function LoginWithPassword({ dic }: { dic: LoginDictionary }) {
   },
  } = dic;
 
- const iconSize = ' size-5';
+ const iconSize = ' size-6';
 
  return (
   <FieldGroup>
@@ -55,9 +55,9 @@ export default function LoginWithPassword({ dic }: { dic: LoginDictionary }) {
        type='button'
       >
        {showPassword ? (
-        <FaEye className='text-primary size-5' />
+        <FaEye className={'text-primary' + iconSize} />
        ) : (
-        <FaEyeSlash className='text-primary size-5' />
+        <FaEyeSlash className={'text-primary' + iconSize} />
        )}
       </Button>
      </InputGroupAddon>

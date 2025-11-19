@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 import { type Locale } from '@/internalization/app/localization';
 import { ModeControllerButton } from '../components/ModeContoller';
 import { LocaleControllerButton } from '../components/LocaleController';
+import { AuroraBackground } from '@/components/ui/aurora-background';
 
 export async function generateMetadata({
  params,
@@ -20,12 +21,14 @@ export default function LoginLayout({
  children,
 }: LayoutProps<'/[lang]/login'>) {
  return (
-  <div className='relative h-svh flex flex-col p-4'>
-   <div className='flex sm:hidden gap-2 absolute start-0 top-0 p-4'>
-    <ModeControllerButton />
-    <LocaleControllerButton />
+  <AuroraBackground>
+   <div className='relative h-svh flex flex-col p-4'>
+    <div className='flex sm:hidden gap-2 absolute start-0 top-0 p-4'>
+     <ModeControllerButton />
+     <LocaleControllerButton />
+    </div>
+    {children}
    </div>
-   {children}
-  </div>
+  </AuroraBackground>
  );
 }

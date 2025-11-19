@@ -12,6 +12,7 @@ interface LocaleInfo {
  calendar: Calendar;
  localeName: string;
  localeShortName: string;
+ active: boolean;
 }
 
 const locales: Record<Locale, LocaleInfo> = {
@@ -22,6 +23,7 @@ const locales: Record<Locale, LocaleInfo> = {
   calendar: 'jalali',
   localeName: 'فارسی',
   localeShortName: 'فا',
+  active: true,
  },
  en: {
   locale: 'en',
@@ -30,6 +32,7 @@ const locales: Record<Locale, LocaleInfo> = {
   calendar: 'gregorian',
   localeName: 'English',
   localeShortName: 'EN',
+  active: false,
  },
 } as const;
 

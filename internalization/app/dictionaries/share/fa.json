@@ -8,29 +8,8 @@
   }
  },
  "components": {
-  "headerProfile": {
-   "previewProfile": "مشاهده حساب کاربری",
-   "exit": "خروج"
-  },
-  "addressbar": {
-   "reload": "بروزرسانی مجدد",
-   "quickAccess": "دسترسی سریع",
-   "back": "بازگشت"
-  },
   "modeController": {
    "description": "تغییر حالت"
-  },
-  "tabs": {
-   "home": "خـــانه",
-   "menus": "منــــو‌ها",
-   "quickAccess": "دسترسی سریع",
-   "tools": "ابزار"
-  },
-  "navigation": {
-   "search": "جستجو",
-   "closeMenu": "بستن منـــو",
-   "sliding": "pin",
-   "overlay": "unpin"
   }
  }
 }

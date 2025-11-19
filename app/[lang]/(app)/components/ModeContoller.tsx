@@ -30,14 +30,14 @@ function ModeControllerButton() {
    size='icon-lg'
    className='rounded-full'
   >
-   {getModeIcon(theme as AppModes, { className: 'size-5' })}
+   {getModeIcon(theme as AppModes, { className: 'size-6' })}
   </Button>
  );
 
  return (
   <Drawer>
    <DrawerTrigger asChild>{modeButton}</DrawerTrigger>
-   <DrawerContent>
+   <DrawerContent className='min-h-[40svh]'>
     <DrawerHeader className='hidden'>
      <DrawerTitle>{modeController.description}</DrawerTitle>
     </DrawerHeader>
