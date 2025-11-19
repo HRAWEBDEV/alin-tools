@@ -22,7 +22,7 @@ function LocaleControllerButton() {
    type='button'
    variant='outline'
    size='icon-lg'
-   className='relative rounded-full size-11'
+   className='relative rounded-full size-11 bg-transparent'
   >
    <div className='absolute -top-1 -end-2'>
     <Badge variant='secondary'>{localeInfo.localeShortName}</Badge>
@@ -34,7 +34,7 @@ function LocaleControllerButton() {
  return (
   <Drawer>
    <DrawerTrigger asChild>{modeButton}</DrawerTrigger>
-   <DrawerContent className='min-h-[40svh]'>
+   <DrawerContent className='lg:min-h-[50svh]'>
     <DrawerHeader className='hidden'>
      <DrawerTitle></DrawerTitle>
     </DrawerHeader>

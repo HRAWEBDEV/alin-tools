@@ -28,7 +28,7 @@ function ModeControllerButton() {
    type='button'
    variant='outline'
    size='icon-lg'
-   className='rounded-full size-11'
+   className='rounded-full size-11 bg-transparent'
   >
    {getModeIcon(theme as AppModes, { className: 'size-6' })}
   </Button>
@@ -37,7 +37,7 @@ function ModeControllerButton() {
  return (
   <Drawer>
    <DrawerTrigger asChild>{modeButton}</DrawerTrigger>
-   <DrawerContent className='min-h-[40svh]'>
+   <DrawerContent className='lg:min-h-[50svh]'>
     <DrawerHeader className='hidden'>
      <DrawerTitle>{modeController.description}</DrawerTitle>
     </DrawerHeader>

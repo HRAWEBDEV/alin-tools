@@ -16,9 +16,9 @@ export default function NavProfile() {
   },
  } = useRestaurantShareDictionary();
  return (
-  <div>
+  <div className='p-2 border-t border-input'>
    <Button
-    variant='outline'
+    variant='ghost'
     className='w-full p-1 justify-start h-auto bg-transparent'
    >
     <Avatar className='size-14'>
