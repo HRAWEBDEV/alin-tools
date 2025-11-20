@@ -23,7 +23,7 @@ export default function NavProfile() {
    </div>
    <Button
     variant='ghost'
-    className='w-full p-1 justify-start h-auto rounded-none border-t border-input'
+    className='w-full p-1 pt-2 justify-start h-auto rounded-none border-t border-input'
    >
     <Avatar className='size-14'>
      <AvatarImage src='https://github.com/shadcn.png' alt='@shadcn' />
