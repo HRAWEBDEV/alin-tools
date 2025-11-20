@@ -11,12 +11,30 @@ export default function NavList() {
   },
  } = useRestaurantShareDictionary();
  return (
-  <ul className='p-2 w-[min(100%,15rem)] mx-auto'>
+  <ul className='p-2 w-[min(100%,15rem)] mx-auto grid gap-2'>
    <li>
-    <Button variant='ghost' className='w-auto h-auto justify-start' asChild>
+    <Button
+     data-active='true'
+     variant='ghost'
+     className='w-full h-auto justify-start data-[active="true"]:text-primary'
+     asChild
+    >
      <Link href='#' className='flex w-auto h-auto items-center gap-4'>
       <DishIcon className='size-12' />
       <p className='text-base'>{navigation.salons}</p>
+     </Link>
+    </Button>
+   </li>
+   <li>
+    <Button
+     data-active='false'
+     variant='ghost'
+     className='w-full h-auto justify-start data-[active="true"]:text-primary'
+     asChild
+    >
+     <Link href='#' className='flex w-auto h-auto items-center gap-4'>
+      <DishIcon className='size-12' />
+      <p className='text-base'>{navigation.newOrder}</p>
      </Link>
     </Button>
    </li>

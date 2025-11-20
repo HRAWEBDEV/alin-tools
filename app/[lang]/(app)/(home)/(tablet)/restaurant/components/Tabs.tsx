@@ -17,7 +17,7 @@ export default function Tabs() {
  const tabIconClass = 'size-8 sm:size-9';
 
  return (
-  <nav className='flex items-center lg:hidden fixed end-0 start-0 bottom-0 z-(--app-restaurant-tabs-zindex) bg-neutral-100 dark:bg-neutral-900 *:shrink-0 border-t border-input text-neutral-700 dark:text-neutral-300'>
+  <nav className='shrink-0 flex items-center lg:hidden fixed end-0 start-0 bottom-0 z-(--app-restaurant-tabs-zindex) bg-neutral-100 dark:bg-neutral-900 *:shrink-0 border-t border-input text-neutral-700 dark:text-neutral-300'>
    <Button variant='ghost' className={tabClass}>
     <DishIcon className={tabIconClass} />
     <p>{tabsDic.salons}</p>

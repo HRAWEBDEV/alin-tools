@@ -77,8 +77,10 @@
  --sidebar-border: oklch(0.922 0 0);
  --sidebar-ring: oklch(0.708 0 0);
  --app-restaurant-nav-width: 18rem;
- --app-restaurant-tabs-height: 4rem;
- --app-restaurant-tabs-zindex: 1000;
+ --app-restaurant-tabs-height: 3rem;
+ --app-restaurant-tabs-zindex: 40;
+ --app-restaurant-header-height: 4rem;
+ --app-restaurant-header-zindex: 40;
 }
 
 [data-theme='dark'] {

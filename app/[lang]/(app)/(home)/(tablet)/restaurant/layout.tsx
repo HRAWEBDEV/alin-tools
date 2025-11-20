@@ -1,7 +1,8 @@
 import { type Locale } from '@/internalization/app/localization';
-import Main from './components/Main';
+import Header from './components/Header';
 import Nav from './components/Nav';
 import Tabs from './components/Tabs';
+import Main from './components/Main';
 import { getRestaurantShareDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/share/dictionary';
 import ResturantShareDictionaryProvider from './services/share-dictionary/RestaurantShareDictionaryProvider';
 
@@ -16,6 +17,7 @@ export default async function HomeLayout({
  return (
   <ResturantShareDictionaryProvider restaurantShareDictionary={shareDic}>
    <div className='h-svh overflow-hidden flex flex-col'>
+    <Header />
     <div className='lg:flex grow overflow-hidden'>
      <Nav />
      <Main>{children}</Main>

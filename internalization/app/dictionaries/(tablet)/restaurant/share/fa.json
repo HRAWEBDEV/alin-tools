@@ -1,5 +1,8 @@
 {
  "components": {
+  "profile": {
+   "lastLoginDate": "آخرین ورود"
+  },
   "tabs": {
    "salons": "سالن‌ها",
    "newOrder": "ثبت سفارش",
@@ -8,8 +11,7 @@
   },
   "navigation": {
    "salons": "سالن‌ها",
-   "newOrder": "ثبت سفارش",
-   "loginDate": "آخرین تاریخ ورود"
+   "newOrder": "ثبت سفارش"
   }
  }
 }
