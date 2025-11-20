@@ -15,7 +15,7 @@ export default function NavList() {
    <li>
     <Button
      data-active='true'
-     variant='ghost'
+     variant='outline'
      className='w-full h-auto justify-start data-[active="true"]:text-primary'
      asChild
     >

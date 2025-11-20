@@ -15,7 +15,7 @@ export default function HeaderDate() {
   };
  }, []);
  return (
-  <div className='flex items-center gap-1 text-xs text-orange-800 dark:text-orange-200 mb-1 font-medium'>
+  <div className='flex items-center gap-1 text-xs text-orange-800 dark:text-orange-400 font-medium'>
    <span>
     {date
      ? date.toLocaleDateString(locale, {

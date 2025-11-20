@@ -17,9 +17,14 @@ export default function NavProfile() {
   },
  } = useRestaurantShareDictionary();
  return (
-  <div className='p-2'>
-   <HeaderDate />
-   <Button variant='outline' className='w-full p-1 justify-start h-auto'>
+  <div className='mt-2'>
+   <div className='mb-1 ps-4'>
+    <HeaderDate />
+   </div>
+   <Button
+    variant='ghost'
+    className='w-full p-1 justify-start h-auto rounded-none border-t border-input'
+   >
     <Avatar className='size-14'>
      <AvatarImage src='https://github.com/shadcn.png' alt='@shadcn' />
      <AvatarFallback className='bg-neutral-200'>H</AvatarFallback>
