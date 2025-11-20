@@ -5,8 +5,10 @@ import { IoMdArrowDropdown } from 'react-icons/io';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { useRestaurantShareDictionary } from '../services/share-dictionary/restaurantShareDictionaryContext';
 import HeaderDate from './HeaderDate';
+import { useProfileContext } from '../services/profile/profileContext';
 
 export default function NavProfile() {
+ const { toggleProfile } = useProfileContext();
  const { locale } = useBaseConfig();
  const date = new Date();
  const {
@@ -24,6 +26,7 @@ export default function NavProfile() {
    <Button
     variant='ghost'
     className='w-full p-1 pt-2 justify-start h-auto rounded-none border-t border-input'
+    onClick={() => toggleProfile()}
    >
     <Avatar className='size-14'>
      <AvatarImage src='https://github.com/shadcn.png' alt='@shadcn' />
@@ -31,7 +34,7 @@ export default function NavProfile() {
     </Avatar>
     <div className='grow text-start overflow-hidden'>
      <p className='text-sm truncate w-full'>حمیدرضا اکبری</p>
-     <p className='text-xs truncate w-full text-secondary mb-1'>هتل عباسی</p>
+     <p className='text-xs truncate w-full text-primary mb-1'>هتل عباسی</p>
      <p className='text-[0.65rem] text-neutral-600 dark:text-neutral-300'>
       <span>{lastLoginDate}: </span>
       <span>

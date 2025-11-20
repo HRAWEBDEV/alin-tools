@@ -5,6 +5,7 @@ import Tabs from './components/Tabs';
 import Main from './components/Main';
 import { getRestaurantShareDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/share/dictionary';
 import ResturantShareDictionaryProvider from './services/share-dictionary/RestaurantShareDictionaryProvider';
+import ProfileProvider from './services/profile/ProfileProvider';
 
 export default async function HomeLayout({
  children,
@@ -16,14 +17,16 @@ export default async function HomeLayout({
  });
  return (
   <ResturantShareDictionaryProvider restaurantShareDictionary={shareDic}>
-   <div className='h-svh overflow-hidden flex flex-col'>
-    <Header />
-    <div className='lg:flex grow overflow-hidden'>
-     <Nav />
-     <Main>{children}</Main>
+   <ProfileProvider>
+    <div className='h-svh overflow-hidden flex flex-col'>
+     <Header />
+     <div className='lg:flex grow overflow-hidden'>
+      <Nav />
+      <Main>{children}</Main>
+     </div>
+     <Tabs />
     </div>
-    <Tabs />
-   </div>
+   </ProfileProvider>
   </ResturantShareDictionaryProvider>
  );
 }

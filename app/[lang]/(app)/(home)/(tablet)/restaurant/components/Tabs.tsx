@@ -5,8 +5,10 @@ import { FaUserCircle } from 'react-icons/fa';
 import { FaCirclePlus } from 'react-icons/fa6';
 import { CgMenuGridO } from 'react-icons/cg';
 import DishIcon from '@/app/[lang]/(app)/components/icons/DishIcon';
+import { useProfileContext } from '../services/profile/profileContext';
 
 export default function Tabs() {
+ const { toggleProfile } = useProfileContext();
  const {
   restaurantShareDictionary: {
    components: { tabs: tabsDic },
@@ -38,7 +40,7 @@ export default function Tabs() {
     <FaUserCircle className={tabIconClass} />
     <p>{tabsDic.salons}</p>
    </Button>
-   <Button variant='ghost' className={tabClass}>
+   <Button variant='ghost' className={tabClass} onClick={() => toggleProfile()}>
     <FaUserCircle className={tabIconClass} />
     <p>{tabsDic.profile}</p>
    </Button>
