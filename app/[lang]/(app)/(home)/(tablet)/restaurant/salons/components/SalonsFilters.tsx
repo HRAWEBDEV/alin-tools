@@ -3,7 +3,7 @@ import { type SalonsDictionary } from '@/internalization/app/dictionaries/(table
 import { ChevronsUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
 import {
  Drawer,
  DrawerTrigger,
@@ -32,7 +32,13 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
        size='lg'
       >
        سالن شماره یک
-       <ChevronsUpDown className='opacity-50 size-6 -me-2' />
+       <div className='flex gap-2 -me-4'>
+        <Badge className='font-medium'>
+         <span>{dic.filters.tables}: </span>
+         <span>122</span>
+        </Badge>
+        <ChevronsUpDown className='opacity-50 size-6 ' />
+       </div>
       </Button>
      </DrawerTrigger>
      <DrawerContent className='h-[80svh]'>
