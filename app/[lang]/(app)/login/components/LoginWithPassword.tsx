@@ -13,8 +13,10 @@ import {
 } from '@/components/ui/input-group';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function LoginWithPassword({ dic }: { dic: LoginDictionary }) {
+ const router = useRouter();
  const [showPassword, setShowPassword] = useState(false);
  const {
   login: {
@@ -73,7 +75,15 @@ export default function LoginWithPassword({ dic }: { dic: LoginDictionary }) {
      </InputGroupAddon>
     </InputGroup>
    </Field>
-   <Button type='submit' size='lg' className='mt-6 h-11 text-base'>
+   <Button
+    type='submit'
+    size='lg'
+    className='mt-6 h-11 text-base'
+    onClick={(e) => {
+     e.preventDefault();
+     router.push('/fa/restaurant');
+    }}
+   >
     {formDic.login}
    </Button>
    <div>

@@ -4,8 +4,6 @@ import { useState } from 'react';
 import { type Profile, profileContext } from './profileContext';
 import {
  Drawer,
- DrawerClose,
- DrawerTrigger,
  DrawerContent,
  DrawerHeader,
  DrawerTitle,
@@ -13,15 +11,18 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { useRestaurantShareDictionary } from '../share-dictionary/restaurantShareDictionaryContext';
+import { Button } from '@/components/ui/button';
+import { RiLogoutBoxRLine } from 'react-icons/ri';
+import { IoMdSettings } from 'react-icons/io';
+import { useRouter } from 'next/navigation';
 
 export default function ProfileProvider({ children }: { children: ReactNode }) {
+ const router = useRouter();
  const { locale } = useBaseConfig();
  const date = new Date();
  const {
   restaurantShareDictionary: {
-   components: {
-    profile: { lastLoginDate },
-   },
+   components: { profile },
   },
  } = useRestaurantShareDictionary();
  const [isOpen, setIsOpen] = useState(false);
@@ -41,20 +42,22 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
      <DrawerHeader className='hidden'>
       <DrawerTitle>test</DrawerTitle>
      </DrawerHeader>
-     <div className='flex gap-4 border-b border-input p-4'>
+     <div className='flex gap-4 border-b border-input p-4 mb-2'>
       <Avatar className='size-20'>
        <AvatarImage src='https://github.com/shadcn.png' alt='@shadcn' />
        <AvatarFallback className='bg-neutral-200'>H</AvatarFallback>
       </Avatar>
       <div className='grow text-start overflow-hidden'>
        <p className='truncate w-full font-medium'>حمیدرضا اکبری</p>
-       <p className='truncate w-full text-primary mb-2'>هتل عباسی</p>
+       <p className='truncate w-full text-primary mb-3 font-medium'>
+        هتل عباسی
+       </p>
        <p className='text-sm text-neutral-600 dark:text-neutral-300'>
-        <span>{lastLoginDate}: </span>
+        <span>{profile.lastLoginDate}: </span>
         <span>
          {date.toLocaleDateString(locale, {
           year: 'numeric',
-          month: '2-digit',
+          month: 'long',
           day: '2-digit',
           hour: '2-digit',
           minute: '2-digit',
@@ -62,6 +65,33 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
         </span>
        </p>
       </div>
+     </div>
+     <div>
+      <ul>
+       <li>
+        <Button
+         variant='ghost'
+         size={'icon-lg'}
+         className='text-base p-4 px-8 w-full justify-start h-[unset] gap-4 items-center'
+        >
+         <IoMdSettings className='size-8' />
+         <span>{profile.sttings}</span>
+        </Button>
+       </li>
+       <li>
+        <Button
+         variant='ghost'
+         size={'icon-lg'}
+         className='text-base p-4 px-8 w-full justify-start h-[unset] gap-4 items-center text-rose-700 dark:text-rose-300'
+         onClick={() => {
+          router.push('/fa/login');
+         }}
+        >
+         <RiLogoutBoxRLine className='size-8' />
+         <span>{profile.logout}</span>
+        </Button>
+       </li>
+      </ul>
      </div>
     </DrawerContent>
    </Drawer>

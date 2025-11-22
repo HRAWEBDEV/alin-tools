@@ -1,7 +1,9 @@
 {
  "components": {
   "profile": {
-   "lastLoginDate": "آخرین ورود"
+   "lastLoginDate": "آخرین ورود",
+   "sttings": "تنظیمات",
+   "logout": "خروج"
   },
   "tabs": {
    "salons": "سالن‌ها",
