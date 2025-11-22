@@ -19,6 +19,8 @@ import {
 import { FaSearch } from 'react-icons/fa';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import { TiArrowLeft } from 'react-icons/ti';
+import { TiArrowRight } from 'react-icons/ti';
 
 export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
  return (
@@ -100,8 +102,14 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
    </div>
    <div className='flex flex-wrap gap-4 items-center justify-between col-span-full'>
     <div className='flex gap-2 items-center'>
-     <Button className='w-16'>{dic.filters.prev}</Button>
-     <Button className='w-16'>{dic.filters.next}</Button>
+     <Button className='md:w-16'>
+      <TiArrowRight className='size-5 md:hidden' />
+      <span className='hidden md:inline-block'>{dic.filters.prev}</span>
+     </Button>
+     <Button className='md:w-16'>
+      <TiArrowLeft className='size-5 md:hidden' />
+      <span className='hidden md:inline-block'>{dic.filters.next}</span>
+     </Button>
     </div>
     <div className='flex gap-4 flex-wrap items-center justify-end'>
      <div className='flex gap-2 items-center'>
