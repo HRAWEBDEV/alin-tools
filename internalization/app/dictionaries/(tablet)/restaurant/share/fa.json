@@ -1,6 +1,7 @@
 {
  "components": {
   "profile": {
+   "title": "پروفایل کاربر",
    "lastLoginDate": "آخرین ورود",
    "sttings": "تنظیمات",
    "logout": "خروج"

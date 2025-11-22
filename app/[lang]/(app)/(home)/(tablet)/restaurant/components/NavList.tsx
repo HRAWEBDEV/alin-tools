@@ -4,8 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useRestaurantShareDictionary } from '../services/share-dictionary/restaurantShareDictionaryContext';
 import Link from 'next/link';
+import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 
 export default function NavList() {
+ const { locale } = useBaseConfig();
  const {
   restaurantShareDictionary: {
    components: { navigation },
@@ -20,7 +22,10 @@ export default function NavList() {
      className='relative w-full h-auto justify-start data-[active="true"]:text-primary border-primary'
      asChild
     >
-     <Link href='#' className='flex w-auto h-auto items-center gap-4'>
+     <Link
+      href={`/${locale}/restaurant/salons`}
+      className='flex w-auto h-auto items-center gap-4'
+     >
       <DishIcon className='size-12' />
       <p className='text-base'>{navigation.salons}</p>
       <div className='absolute end-0 top-1/2 -translate-y-1/2 -translate-x-1/2'>

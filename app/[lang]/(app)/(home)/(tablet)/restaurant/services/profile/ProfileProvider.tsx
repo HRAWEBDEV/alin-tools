@@ -40,7 +40,7 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
    <Drawer open={isOpen} onOpenChange={setIsOpen}>
     <DrawerContent className='h-[70svh]'>
      <DrawerHeader className='hidden'>
-      <DrawerTitle>test</DrawerTitle>
+      <DrawerTitle>{profile.title}</DrawerTitle>
      </DrawerHeader>
      <div className='flex gap-4 border-b border-input p-4 mb-2'>
       <Avatar className='size-20'>
