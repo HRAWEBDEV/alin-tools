@@ -20,7 +20,7 @@ import { FaSearch } from 'react-icons/fa';
 
 export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
  return (
-  <div className='grid gap-4 md:grid-cols-[max-content_1fr] lg:grid-cols-[max-content_minmax(0,40rem)] items-center mb-6'>
+  <div className='grid gap-4 md:grid-cols-[max-content_1fr] lg:grid-cols-[max-content_minmax(0,40rem)] items-center mb-6 p-4 lg:p-8 bg-background top-0 sticky z-3'>
    <h1 className='font-medium text-2xl lg:text-3xl'>{dic.title}</h1>
    <div>
     <Drawer>

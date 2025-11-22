@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function SalonTables({}: { dic: SalonsDictionary }) {
  return (
-  <div className='grid gap-8 grid-cols-[repeat(auto-fill,minmax(12rem,13rem))] justify-center'>
+  <div className='grid gap-8 grid-cols-[repeat(auto-fill,minmax(10rem,12rem))] justify-center p-4 pt-0'>
    {Array.from({ length: 10 }, (_, i) => i).map((i) => (
     <div key={i} className='relative grid h-40'>
      <div className='absolute inset-0 z-[-1] py-2 grid gap-1 content-center'>
@@ -15,18 +15,18 @@ export default function SalonTables({}: { dic: SalonsDictionary }) {
        >
         <div
          data-occupied={i === 0 || i === 1}
-         className='data-[occupied="true"]:bg-rose-700 data-[occupied="true"]:dark:bg-rose-400'
+         className='data-[occupied="true"]:bg-rose-400 data-[occupied="true"]:dark:bg-rose-600'
         ></div>
         <div
          data-occupied={i === 0 || i === 1}
-         className='data-[occupied="true"]:bg-rose-700 data-[occupied="true"]:dark:bg-rose-400'
+         className='data-[occupied="true"]:bg-rose-400 data-[occupied="true"]:dark:bg-rose-600'
         ></div>
        </div>
       ))}
      </div>
      <Button
       variant={'outline'}
-      className='rounded-2xl h-full flex-col justify-start text-start p-0 overflow-hidden border-teal-600 dark:border-teal-400 mx-6'
+      className='rounded-2xl h-full flex-col justify-start text-start p-0 overflow-hidden mx-4 shadow-lg'
       asChild
      >
       <Link
@@ -34,7 +34,7 @@ export default function SalonTables({}: { dic: SalonsDictionary }) {
        className='flex! flex-col grow items-stretch bg-background!'
       >
        <div className='p-2'>
-        <div className='bg-teal-100 text-teal-800 p-1 rounded-2xl border border-dashed border-teal-800 text-center'>
+        <div className='bg-teal-50 text-teal-600 p-1 rounded-2xl border border-dashed border-teal-600 text-center'>
          <span className='text-base font-medium'>رزرو شده</span>
         </div>
         <div className='text-start ps-2 pt-2'>
