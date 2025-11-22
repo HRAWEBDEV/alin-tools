@@ -23,8 +23,8 @@ export default async function Salons({
   locale: lang as Locale,
  });
  return (
-  <div>
+  <>
    <SalonsWrapper dic={dic} />
-  </div>
+  </>
  );
 }

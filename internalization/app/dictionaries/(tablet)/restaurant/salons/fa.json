@@ -6,6 +6,8 @@
   "tables": "میز‌ها",
   "empty": "خالی",
   "occupied": "اشغال",
-  "reserved": "رزرو"
+  "reserved": "رزرو",
+  "next": "بعدی",
+  "prev": "قبلی"
  }
 }

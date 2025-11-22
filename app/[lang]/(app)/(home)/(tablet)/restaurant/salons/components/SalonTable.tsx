@@ -42,7 +42,7 @@ export default function SalonTable({}: { dic: SalonsDictionary }) {
        {(1).toString().padStart(2, '0')}
       </h3>
      </div>
-     <div>
+     <div className='flex items-center justify-between gap-4'>
       <div className='flex items-center gap-1 text-base text-neutral-600 dark:text-neutral-400 font-medium'>
        <span>
         {new Date().toLocaleTimeString(locale, {
@@ -50,13 +50,9 @@ export default function SalonTable({}: { dic: SalonsDictionary }) {
          minute: '2-digit',
         })}
        </span>
-       -
-       <span>
-        {new Date().toLocaleTimeString(locale, {
-         hour: 'numeric',
-         minute: '2-digit',
-        })}
-       </span>
+      </div>
+      <div className='font-medium text-base text-rose-600 dark:text-rose-400 '>
+       4/12
       </div>
      </div>
     </Link>

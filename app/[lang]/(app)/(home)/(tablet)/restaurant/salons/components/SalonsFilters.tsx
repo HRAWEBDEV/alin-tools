@@ -22,9 +22,9 @@ import { Label } from '@/components/ui/label';
 
 export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
  return (
-  <div className='grid gap-4 md:grid-cols-[max-content_1fr] lg:grid-cols-[max-content_minmax(0,40rem)] items-center mb-4 p-4 lg:p-8 bg-background top-0 sticky z-3'>
+  <div className='grid gap-4 gap-y-3 md:grid-cols-[max-content_1fr] lg:grid-cols-[max-content_minmax(0,40rem)] items-center mb-4 p-4 lg:p-6 lg:pb-4 bg-background top-0 sticky z-3'>
    <h1 className='font-medium text-2xl lg:text-3xl'>{dic.title}</h1>
-   <div>
+   <div className='col-span-full'>
     <Drawer>
      <DrawerTrigger asChild>
       <Button
@@ -98,40 +98,45 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
      </DrawerContent>
     </Drawer>
    </div>
-   <div className='hidden md:block'></div>
-   <div className='flex gap-6 flex-wrap items-center'>
+   <div className='flex flex-wrap gap-4 items-center justify-between col-span-full'>
     <div className='flex gap-2 items-center'>
-     <Switch
-      style={{
-       direction: 'ltr',
-      }}
-      id='empty'
-      className='scale-125'
-      checked
-     />
-     <Label htmlFor='empty'>{dic.filters.empty}</Label>
+     <Button className='w-16'>{dic.filters.prev}</Button>
+     <Button className='w-16'>{dic.filters.next}</Button>
     </div>
-    <div className='flex gap-2 items-center'>
-     <Switch
-      style={{
-       direction: 'ltr',
-      }}
-      id='occupied'
-      className='scale-125'
-      checked
-     />
-     <Label htmlFor='occupied'>{dic.filters.occupied}</Label>
-    </div>
-    <div className='flex gap-2 items-center'>
-     <Switch
-      style={{
-       direction: 'ltr',
-      }}
-      id='reserved'
-      className='scale-125'
-      checked
-     />
-     <Label htmlFor='reserved'>{dic.filters.reserved}</Label>
+    <div className='flex gap-4 flex-wrap items-center justify-end'>
+     <div className='flex gap-2 items-center'>
+      <Switch
+       style={{
+        direction: 'ltr',
+       }}
+       id='empty'
+       className='scale-125'
+       checked
+      />
+      <Label htmlFor='empty'>{dic.filters.empty}</Label>
+     </div>
+     <div className='flex gap-2 items-center'>
+      <Switch
+       style={{
+        direction: 'ltr',
+       }}
+       id='occupied'
+       className='scale-125'
+       checked
+      />
+      <Label htmlFor='occupied'>{dic.filters.occupied}</Label>
+     </div>
+     <div className='flex gap-2 items-center'>
+      <Switch
+       style={{
+        direction: 'ltr',
+       }}
+       id='reserved'
+       className='scale-125'
+       checked
+      />
+      <Label htmlFor='reserved'>{dic.filters.reserved}</Label>
+     </div>
     </div>
    </div>
   </div>
