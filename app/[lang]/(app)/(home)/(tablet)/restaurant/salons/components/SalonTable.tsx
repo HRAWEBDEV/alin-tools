@@ -2,10 +2,9 @@
 import { type SalonsDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/salons/dictionary';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { FaRegClock } from 'react-icons/fa';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 
-export default function SalonTable({ dic }: { dic: SalonsDictionary }) {
+export default function SalonTable({}: { dic: SalonsDictionary }) {
  const { locale } = useBaseConfig();
  return (
   <div className='relative grid h-40'>
@@ -44,7 +43,7 @@ export default function SalonTable({ dic }: { dic: SalonsDictionary }) {
       </h3>
      </div>
      <div>
-      <div className='flex items-center gap-1 text-base text-neutral-600 font-medium'>
+      <div className='flex items-center gap-1 text-base text-neutral-600 dark:text-neutral-400 font-medium'>
        <span>
         {new Date().toLocaleTimeString(locale, {
          hour: 'numeric',

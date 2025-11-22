@@ -17,10 +17,12 @@ import {
  InputGroupAddon,
 } from '@/components/ui/input-group';
 import { FaSearch } from 'react-icons/fa';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 
 export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
  return (
-  <div className='grid gap-4 md:grid-cols-[max-content_1fr] lg:grid-cols-[max-content_minmax(0,40rem)] items-center mb-6 p-4 lg:p-8 bg-background top-0 sticky z-3'>
+  <div className='grid gap-4 md:grid-cols-[max-content_1fr] lg:grid-cols-[max-content_minmax(0,40rem)] items-center mb-4 p-4 lg:p-8 bg-background top-0 sticky z-3'>
    <h1 className='font-medium text-2xl lg:text-3xl'>{dic.title}</h1>
    <div>
     <Drawer>
@@ -95,6 +97,42 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
       </div>
      </DrawerContent>
     </Drawer>
+   </div>
+   <div className='hidden md:block'></div>
+   <div className='flex gap-6 flex-wrap items-center'>
+    <div className='flex gap-2 items-center'>
+     <Switch
+      style={{
+       direction: 'ltr',
+      }}
+      id='empty'
+      className='scale-125'
+      checked
+     />
+     <Label htmlFor='empty'>{dic.filters.empty}</Label>
+    </div>
+    <div className='flex gap-2 items-center'>
+     <Switch
+      style={{
+       direction: 'ltr',
+      }}
+      id='occupied'
+      className='scale-125'
+      checked
+     />
+     <Label htmlFor='occupied'>{dic.filters.occupied}</Label>
+    </div>
+    <div className='flex gap-2 items-center'>
+     <Switch
+      style={{
+       direction: 'ltr',
+      }}
+      id='reserved'
+      className='scale-125'
+      checked
+     />
+     <Label htmlFor='reserved'>{dic.filters.reserved}</Label>
+    </div>
    </div>
   </div>
  );
