@@ -84,7 +84,7 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
        <ul>
         {Array.from({ length: 3 }, (_, i) => i).map((i) => (
          <li className='flex gap-1 items-center ps-6 py-2' key={i}>
-          <Checkbox className='size-6' defaultChecked={i === 0} />
+          <Checkbox tabIndex={-1} className='size-6' defaultChecked={i === 0} />
           <Button
            variant='ghost'
            className='w-full justify-start h-auto text-lg'

@@ -20,7 +20,7 @@ export default async function HomeLayout({
    <ProfileProvider>
     <div className='h-svh overflow-hidden flex flex-col'>
      <Header />
-     <div className='lg:flex grow overflow-hidden'>
+     <div className='flex grow overflow-hidden'>
       <Nav />
       <Main>{children}</Main>
      </div>
