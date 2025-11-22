@@ -11,7 +11,7 @@ export default function SalonTables({}: { dic: SalonsDictionary }) {
       {Array.from({ length: 5 }, (_, i) => i).map((i) => (
        <div
         key={i}
-        className='bg-neutral-200 h-6 rounded-2xl grid grid-cols-2 overflow-hidden'
+        className='bg-neutral-200 dark:bg-neutral-800 h-6 rounded-2xl grid grid-cols-2 overflow-hidden'
        >
         <div
          data-occupied={i === 0 || i === 1}
@@ -34,7 +34,7 @@ export default function SalonTables({}: { dic: SalonsDictionary }) {
        className='flex! flex-col grow items-stretch bg-background!'
       >
        <div className='p-2'>
-        <div className='bg-teal-50 text-teal-600 p-1 rounded-2xl border border-dashed border-teal-600 text-center'>
+        <div className='bg-teal-50 dark:bg-teal-950 text-teal-600 dark:text-teal-400 p-1 rounded-2xl border border-dashed border-teal-600 dark:border-teal-400 text-center'>
          <span className='text-base font-medium'>رزرو شده</span>
         </div>
         <div className='text-start ps-2 pt-2'>
