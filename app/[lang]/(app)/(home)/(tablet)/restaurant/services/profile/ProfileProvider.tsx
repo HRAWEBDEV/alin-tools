@@ -48,8 +48,8 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
        <AvatarFallback className='bg-neutral-200'>H</AvatarFallback>
       </Avatar>
       <div className='grow text-start overflow-hidden'>
-       <p className='truncate w-full font-medium'>حمیدرضا اکبری</p>
-       <p className='truncate w-full text-primary mb-3 font-medium'>
+       <p className='text-lg truncate w-full font-medium'>حمیدرضا اکبری</p>
+       <p className='text-base truncate w-full text-primary mb-3 font-medium'>
         هتل عباسی
        </p>
        <p className='text-sm text-neutral-600 dark:text-neutral-300'>
@@ -72,7 +72,7 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
         <Button
          variant='ghost'
          size={'icon-lg'}
-         className='text-base p-4 px-8 w-full justify-start h-[unset] gap-4 items-center'
+         className='text-base p-4 px-8 w-full justify-start h-[unset] gap-4 items-center text-neutral-600 dark:text-neutral-400'
         >
          <IoMdSettings className='size-8' />
          <span>{profile.sttings}</span>
@@ -82,7 +82,7 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
         <Button
          variant='ghost'
          size={'icon-lg'}
-         className='text-base p-4 px-8 w-full justify-start h-[unset] gap-4 items-center text-rose-700 dark:text-rose-300'
+         className='text-base p-4 px-8 w-full justify-start h-[unset] gap-4 items-center text-rose-600 dark:text-rose-400'
          onClick={() => {
           router.push('/fa/login');
          }}
