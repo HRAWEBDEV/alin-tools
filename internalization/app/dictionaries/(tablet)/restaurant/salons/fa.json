@@ -3,6 +3,9 @@
  "filters": {
   "search": "جستجو ...",
   "selectSalon": "انتخاب سالن",
-  "tables": "میز‌ها"
+  "tables": "میز‌ها",
+  "empty": "خالی",
+  "occupied": "اشغال",
+  "reserved": "رزرو"
  }
 }

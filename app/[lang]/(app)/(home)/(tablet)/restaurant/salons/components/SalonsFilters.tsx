@@ -20,7 +20,7 @@ import { FaSearch } from 'react-icons/fa';
 
 export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
  return (
-  <div className='grid gap-4 grid-cols-[max-content_minmax(0,20rem)] items-center'>
+  <div className='grid gap-4 md:grid-cols-[max-content_1fr] lg:grid-cols-[max-content_minmax(0,40rem)] items-center mb-6'>
    <h1 className='font-medium text-2xl lg:text-3xl'>{dic.title}</h1>
    <div>
     <Drawer>
@@ -28,15 +28,35 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
       <Button
        variant='outline'
        role='combobox'
-       className='w-full justify-between font-medium text-base bg-sky-100 dark:bg-sky-900 border-primary'
+       className='w-full grid grid-cols-[1fr_max-content] md:grid-cols-[1fr_max-content_max-content] justify-items-start justify-start font-medium text-base bg-sky-100 dark:bg-sky-900 border-primary p-2 h-auto'
        size='lg'
       >
-       سالن شماره یک
-       <div className='flex gap-2 -me-4'>
-        <Badge className='font-medium'>
+       <span>سالن شماره یک</span>
+       <div className='flex flex-wrap gap-2 row-start-2 md:row-start-auto'>
+        <Badge className='font-medium border-primary' variant='outline'>
          <span>{dic.filters.tables}: </span>
-         <span>122</span>
+         <span>10</span>
         </Badge>
+        <Badge className='font-medium border-secondary' variant='outline'>
+         <span>{dic.filters.empty}: </span>
+         <span>10</span>
+        </Badge>
+        <Badge
+         className='font-medium border-red-600 dark:border-red-400'
+         variant='outline'
+        >
+         <span>{dic.filters.occupied}: </span>
+         <span>10</span>
+        </Badge>
+        <Badge
+         className='font-medium border-yellow-600 dark:border-yellow-400'
+         variant='outline'
+        >
+         <span>{dic.filters.reserved}: </span>
+         <span>10</span>
+        </Badge>
+       </div>
+       <div className='flex gap-2'>
         <ChevronsUpDown className='opacity-50 size-6 ' />
        </div>
       </Button>
