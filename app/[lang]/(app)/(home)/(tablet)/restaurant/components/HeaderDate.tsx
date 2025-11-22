@@ -4,13 +4,15 @@ import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { FaRegClock } from 'react-icons/fa';
 
 export default function HeaderDate() {
- const [date, setDate] = useState<null | Date>(null);
+ const [date, setDate] = useState<null | Date>(() => {
+  return new Date();
+ });
  const { locale } = useBaseConfig();
 
  useEffect(() => {
   const intervalID = setInterval(() => {
    setDate(new Date());
-  }, 1000);
+  }, 60 * 1000);
   return () => {
    clearInterval(intervalID);
   };
