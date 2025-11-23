@@ -9,8 +9,9 @@ export default function OrderCategories({ dic }: { dic: NewOrderDictionary }) {
  const { localeInfo } = useBaseConfig();
  const [sliderRef, sliderInstanceRef] = useKeenSlider({
   rtl: localeInfo.contentDirection === 'rtl',
+  mode: 'free',
   slides: {
-   perView: 7,
+   perView: 8,
    spacing: 8,
   },
  });
@@ -21,10 +22,10 @@ export default function OrderCategories({ dic }: { dic: NewOrderDictionary }) {
      <Button
       data-active={i === 0}
       key={i}
-      className='text-foreground keen-slider__slide h-28 rounded-xl p-2 flex flex-col items-center justify-center gap-1 bg-neutral-200 dark:bg-neutral-800 data-[active="true"]:bg-primary data-[active="true"]:text-white data-[active="true"]:dark:text-primary-foreground'
+      className='keen-slider__slide h-24 rounded-xl p-2 flex flex-col items-center justify-center gap-1 text-neutral-700 dark:text-neutral-300 bg-neutral-200 dark:bg-neutral-800 data-[active="true"]:bg-primary data-[active="true"]:text-white data-[active="true"]:dark:text-primary-foreground'
      >
-      <DishIcon className='size-12 font-medium' />
-      <p className='font-medium'>میان معده</p>
+      <DishIcon className='size-10' />
+      <p className=' text-xs font-medium'>شام نهار صبحانه</p>
      </Button>
     ))}
    </div>
