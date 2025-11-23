@@ -5,9 +5,13 @@ import { Badge } from '@/components/ui/badge';
 import { useRestaurantShareDictionary } from '../services/share-dictionary/restaurantShareDictionaryContext';
 import Link from 'next/link';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
+import { usePathname } from 'next/navigation';
 
 export default function NavList() {
  const { locale } = useBaseConfig();
+ const pathname = usePathname();
+ const pathSegments = pathname.split('/');
+ const activePath = pathSegments.at(-1);
  const {
   restaurantShareDictionary: {
    components: { navigation },
@@ -17,9 +21,9 @@ export default function NavList() {
   <ul className='p-2 w-[min(100%,15rem)] mx-auto grid gap-2'>
    <li>
     <Button
-     data-active='true'
-     variant='outline'
-     className='relative w-full h-auto justify-start data-[active="true"]:text-primary border-primary'
+     data-active={activePath === 'salons'}
+     variant='ghost'
+     className='relative w-full h-auto justify-start data-[active="true"]:border data-[active="true"]:text-primary border-primary'
      asChild
     >
      <Link
@@ -28,20 +32,25 @@ export default function NavList() {
      >
       <DishIcon className='size-12' />
       <p className='text-base'>{navigation.salons}</p>
-      <div className='absolute end-0 top-1/2 -translate-y-1/2 -translate-x-1/2'>
-       <Badge className='size-7 text-base'>12</Badge>
-      </div>
+      {activePath === 'salons' && (
+       <div className='absolute end-0 top-1/2 -translate-y-1/2 -translate-x-1/2'>
+        <Badge className='size-7 text-base'>12</Badge>
+       </div>
+      )}
      </Link>
     </Button>
    </li>
    <li>
     <Button
-     data-active='false'
+     data-active={activePath === 'new-order'}
      variant='ghost'
-     className='w-full h-auto justify-start data-[active="true"]:text-primary border-primary'
+     className='w-full h-auto justify-start data-[active="true"]:border data-[active="true"]:text-primary border-primary'
      asChild
     >
-     <Link href='#' className='flex w-auto h-auto items-center gap-4'>
+     <Link
+      href={`/${locale}/restaurant/new-order`}
+      className='flex w-auto h-auto items-center gap-4'
+     >
       <DishIcon className='size-12' />
       <p className='text-base'>{navigation.newOrder}</p>
      </Link>

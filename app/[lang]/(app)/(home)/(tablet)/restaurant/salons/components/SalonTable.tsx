@@ -9,7 +9,7 @@ export default function SalonTable({}: { dic: SalonsDictionary }) {
  return (
   <div className='relative grid h-40'>
    <div className='absolute inset-0 z-[-1] py-2 grid gap-1 content-center'>
-    {Array.from({ length: 6 }, (_, i) => i).map((i) => (
+    {Array.from({ length: 4 }, (_, i) => i).map((i) => (
      <div
       key={i}
       className='bg-neutral-200 dark:bg-neutral-800 h-5 rounded-2xl grid grid-cols-2 overflow-hidden'
