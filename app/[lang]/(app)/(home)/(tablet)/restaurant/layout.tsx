@@ -6,6 +6,7 @@ import Main from './components/Main';
 import { getRestaurantShareDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/share/dictionary';
 import ResturantShareDictionaryProvider from './services/share-dictionary/RestaurantShareDictionaryProvider';
 import ProfileProvider from './services/profile/ProfileProvider';
+import 'keen-slider/keen-slider.min.css';
 
 export default async function HomeLayout({
  children,
