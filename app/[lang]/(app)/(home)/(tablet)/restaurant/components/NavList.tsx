@@ -23,7 +23,7 @@ export default function NavList() {
     <Button
      data-active={activePath === 'salons'}
      variant='ghost'
-     className='relative w-full h-auto justify-start data-[active="true"]:border data-[active="true"]:text-primary border-primary'
+     className='relative w-full h-auto justify-start data-[active="true"]:bg-background border border-transparent data-[active="true"]:text-primary data-[active="true"]:border-primary'
      asChild
     >
      <Link
@@ -44,7 +44,7 @@ export default function NavList() {
     <Button
      data-active={activePath === 'new-order'}
      variant='ghost'
-     className='w-full h-auto justify-start data-[active="true"]:border data-[active="true"]:text-primary border-primary'
+     className='w-full h-auto justify-start data-[active="true"]:bg-background border border-transparent data-[active="true"]:text-primary data-[active="true"]:border-primary'
      asChild
     >
      <Link
