@@ -9,18 +9,26 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { type NewOrderDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/new-order/dictionary';
-import { useOrderToolsContext } from '../../services/order-tools/orderToolsContext';
+import {
+ type ConfirmOrderType,
+ useOrderToolsContext,
+} from '../../services/order-tools/orderToolsContext';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { confirmOrderTypes } from '../../services/order-tools/orderToolsContext';
+import OrderShoppingCard from '../OrderShoppingCard';
+import OrderInfo from '../OrderInfo';
+import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 
 export default function ConfirmOrderModal({
  dic,
 }: {
  dic: NewOrderDictionary;
 }) {
+ const { localeInfo } = useBaseConfig();
  const {
   confirmOrderIsOpen,
   confirmOrderActiveType,
+  changeConfirmType,
   showConfirmOrder,
   closeConfirmOrder,
  } = useOrderToolsContext();
@@ -41,7 +49,13 @@ export default function ConfirmOrderModal({
      <DialogDescription className='hidden'></DialogDescription>
     </DialogHeader>
     <div className='max-h-[60svh] overflow-auto p-4 pt-0'>
-     <Tabs value={confirmOrderActiveType}>
+     <Tabs
+      dir={localeInfo.contentDirection}
+      value={confirmOrderActiveType}
+      onValueChange={(newValue) =>
+       changeConfirmType(newValue as ConfirmOrderType)
+      }
+     >
       <TabsList className='self-center sticky top-0'>
        {confirmOrderTypes.map((item) => (
         <TabsTrigger key={item} value={item} className='w-40'>
@@ -49,6 +63,12 @@ export default function ConfirmOrderModal({
         </TabsTrigger>
        ))}
       </TabsList>
+      <TabsContent value='orderInfo'>
+       <OrderInfo dic={dic} />
+      </TabsContent>
+      <TabsContent value='shoppingCard'>
+       <OrderShoppingCard dic={dic} />
+      </TabsContent>
      </Tabs>
     </div>
     <DialogFooter className='p-4'>

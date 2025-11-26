@@ -2,7 +2,7 @@ import { use, createContext } from 'react';
 import { OutOfContext } from '@/utils/OutOfContext';
 
 type ConfirmOrderType = (typeof confirmOrderTypes)[number];
-const confirmOrderTypes = ['shoppingCard', 'orderInfo'] as const;
+const confirmOrderTypes = ['orderInfo', 'shoppingCard'] as const;
 
 interface OrderTools {
  confirmOrderIsOpen: boolean;
