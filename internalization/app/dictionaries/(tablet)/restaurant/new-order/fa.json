@@ -5,6 +5,8 @@
   "orderInfo": "اطلاعات سفارش"
  },
  "orderInfo": {
-  "salonName": "نام سالن"
+  "salonName": "نام سالن",
+  "customer": "مشتری",
+  "table": "میز"
  }
 }
