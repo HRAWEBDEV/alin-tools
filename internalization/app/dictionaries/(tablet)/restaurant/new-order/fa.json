@@ -1,3 +1,10 @@
 {
- "title": "ثبت سفارش"
+ "title": "ثبت سفارش",
+ "tools": {
+  "shoppingCard": "سبد خرید",
+  "orderInfo": "اطلاعات سفارش"
+ },
+ "orderInfo": {
+  "salonName": "نام سالن"
+ }
 }

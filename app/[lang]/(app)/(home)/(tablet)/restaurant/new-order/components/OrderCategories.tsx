@@ -25,7 +25,7 @@ export default function OrderCategories({ dic }: { dic: NewOrderDictionary }) {
       className='keen-slider__slide h-24 rounded-xl p-2 flex flex-col items-center justify-center gap-1 text-neutral-700 dark:text-neutral-300 bg-neutral-200 dark:bg-neutral-800 data-[active="true"]:bg-primary data-[active="true"]:text-white data-[active="true"]:dark:text-primary-foreground'
      >
       <DishIcon className='size-10' />
-      <p className=' text-xs font-medium'>شام نهار صبحانه</p>
+      <p className='text-wrap text-xs font-medium'>شام نهار صبحانه</p>
      </Button>
     ))}
    </div>
