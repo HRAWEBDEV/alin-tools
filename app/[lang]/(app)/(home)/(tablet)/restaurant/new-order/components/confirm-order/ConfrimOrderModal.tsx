@@ -15,8 +15,8 @@ import {
 } from '../../services/order-tools/orderToolsContext';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { confirmOrderTypes } from '../../services/order-tools/orderToolsContext';
-import OrderShoppingCard from '../OrderShoppingCard';
-import OrderInfo from '../OrderInfo';
+import OrderShoppingCard from '../order-shop/OrderShoppingCard';
+import OrderInfo from '../order-info/OrderInfo';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 
 export default function ConfirmOrderModal({
