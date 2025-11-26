@@ -1,10 +1,13 @@
+'use client';
 import { type NewOrderDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/new-order/dictionary';
 import { FaShoppingBag } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
 import { FaCircleInfo } from 'react-icons/fa6';
 import { Badge } from '@/components/ui/badge';
+import { useOrderToolsContext } from '../services/order-tools/orderToolsContext';
 
 export default function OrderTools({ dic }: { dic: NewOrderDictionary }) {
+ const { showConfirmOrder } = useOrderToolsContext();
  return (
   <div className='flex items-center justify-between gap-2 mb-2'>
    <div className='text-sm flex gap-3 text-neutral-600 dark:text-neutral-400'>
@@ -22,11 +25,19 @@ export default function OrderTools({ dic }: { dic: NewOrderDictionary }) {
     </div>
    </div>
    <div className='flex gap-2'>
-    <Button className='w-36 text-primary border-primary' variant='outline'>
+    <Button
+     className='w-36 text-primary border-primary'
+     variant='outline'
+     onClick={() => showConfirmOrder('orderInfo')}
+    >
      <FaCircleInfo />
      <span>{dic.tools.orderInfo}</span>
     </Button>
-    <Button variant='secondary' className='relative w-36'>
+    <Button
+     variant='secondary'
+     className='relative w-36'
+     onClick={() => showConfirmOrder('shoppingCard')}
+    >
      <FaShoppingBag />
      <span>{dic.tools.shoppingCard}</span>
      <Badge className='p-1 size-6 bg-orange-600 dark:bg-orange-400'>12</Badge>

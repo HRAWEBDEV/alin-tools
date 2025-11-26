@@ -8,5 +8,9 @@
   "salonName": "نام سالن",
   "customer": "مشتری",
   "table": "میز"
+ },
+ "orderConfirm": {
+  "cancel": "انصراف",
+  "confirm": "تایید"
  }
 }

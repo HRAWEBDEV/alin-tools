@@ -10,20 +10,25 @@ export default function OrderToolsProvider({
 }) {
  const [confirmOrderIsOpen, setConfirmOrderIsOpen] = useState(false);
  const [confirmOrderActiveType, setConfirmOrderActiveType] =
-  useState<ConfirmOrderType>('order-info');
+  useState<ConfirmOrderType>('orderInfo');
 
  function showConfirmOrder(confirmType?: ConfirmOrderType) {
   setConfirmOrderIsOpen(true);
-  setConfirmOrderActiveType(confirmType || 'order-info');
+  setConfirmOrderActiveType(confirmType || 'orderInfo');
  }
 
  function closeConfirmOrder() {
-  setConfirmOrderIsOpen(true);
-  setConfirmOrderActiveType('order-info');
+  setConfirmOrderIsOpen(false);
+  setConfirmOrderActiveType('orderInfo');
+ }
+
+ function changeConfirmType(type: ConfirmOrderType) {
+  setConfirmOrderActiveType(type);
  }
 
  const ctx = {
   confirmOrderIsOpen,
+  changeConfirmType,
   confirmOrderActiveType,
   showConfirmOrder,
   closeConfirmOrder,

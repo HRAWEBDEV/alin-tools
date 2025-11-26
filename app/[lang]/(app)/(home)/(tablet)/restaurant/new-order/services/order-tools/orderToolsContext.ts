@@ -1,11 +1,13 @@
 import { use, createContext } from 'react';
 import { OutOfContext } from '@/utils/OutOfContext';
 
-type ConfirmOrderType = 'shopping-card' | 'order-info';
+type ConfirmOrderType = (typeof confirmOrderTypes)[number];
+const confirmOrderTypes = ['shoppingCard', 'orderInfo'] as const;
 
 interface OrderTools {
  confirmOrderIsOpen: boolean;
  confirmOrderActiveType: ConfirmOrderType;
+ changeConfirmType: (type: ConfirmOrderType) => unknown;
  showConfirmOrder: (type?: ConfirmOrderType) => unknown;
  closeConfirmOrder: () => unknown;
 }
@@ -19,4 +21,4 @@ function useOrderToolsContext() {
 }
 
 export type { OrderTools, ConfirmOrderType };
-export { orderToolsContext, useOrderToolsContext };
+export { orderToolsContext, confirmOrderTypes, useOrderToolsContext };
