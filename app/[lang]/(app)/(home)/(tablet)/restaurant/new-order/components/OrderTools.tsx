@@ -9,8 +9,8 @@ import { useOrderToolsContext } from '../services/order-tools/orderToolsContext'
 export default function OrderTools({ dic }: { dic: NewOrderDictionary }) {
  const { showConfirmOrder } = useOrderToolsContext();
  return (
-  <div className='flex items-center justify-between gap-2 mb-2'>
-   <div className='text-sm flex gap-3 text-neutral-600 dark:text-neutral-400'>
+  <div className='flex md:items-center md:justify-between gap-2 mb-2 flex-col md:flex-row'>
+   <div className='text-sm flex gap-3 text-neutral-600 dark:text-neutral-400 flex-wrap'>
     <div>
      <span>{dic.orderInfo.salonName}: </span>
      <span className='text-primary font-medium'>سالن یک</span>
@@ -24,9 +24,9 @@ export default function OrderTools({ dic }: { dic: NewOrderDictionary }) {
      <span className='text-primary font-medium'>حمیدرضا اکبری</span>
     </div>
    </div>
-   <div className='flex gap-2'>
+   <div className='md:flex md:justify-end grid grid-cols-2 gap-2'>
     <Button
-     className='w-36 text-primary border-primary'
+     className='md:w-36 text-primary border-primary'
      variant='outline'
      onClick={() => showConfirmOrder('orderInfo')}
     >
@@ -35,7 +35,7 @@ export default function OrderTools({ dic }: { dic: NewOrderDictionary }) {
     </Button>
     <Button
      variant='secondary'
-     className='relative w-36'
+     className='relative md:w-36'
      onClick={() => showConfirmOrder('shoppingCard')}
     >
      <FaShoppingBag />

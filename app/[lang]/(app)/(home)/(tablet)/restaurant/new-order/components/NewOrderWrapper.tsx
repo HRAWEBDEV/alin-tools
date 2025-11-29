@@ -10,8 +10,10 @@ export default function NewOrderWrapper({ dic }: { dic: NewOrderDictionary }) {
  return (
   <OrderToolsProvider>
    <div>
-    <div className='mb-4 p-4 lg:p-8'>
+    <div className='p-4 lg:p-8 pb-0!'>
      <NewOrderHeader dic={dic} />
+    </div>
+    <div className='p-4 lg:px-8 top-0 sticky bg-background'>
      <OrderTools dic={dic} />
      <OrderCategories dic={dic} />
     </div>

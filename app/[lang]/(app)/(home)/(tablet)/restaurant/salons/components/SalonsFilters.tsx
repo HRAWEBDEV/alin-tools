@@ -24,7 +24,9 @@ import { TiArrowRight } from 'react-icons/ti';
 export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
  return (
   <div className='mb-4 p-4 lg:p-6 lg:pb-4 bg-background top-0 sticky z-3'>
-   <h1 className='font-medium text-2xl lg:text-3xl mb-4'>{dic.title}</h1>
+   <h1 className='text-center md:text-start font-medium text-2xl lg:text-3xl mb-4'>
+    {dic.title}
+   </h1>
    <div className='grid md:grid-cols-[minmax(0,20rem)_max-content] md:justify-between gap-4'>
     <div className='grid grid-cols-[max-content_1fr_max-content]'>
      <Button
@@ -92,7 +94,7 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
       <TiArrowLeft className='size-8' />
      </Button>
     </div>
-    <div className='flex gap-4 items-center flex-wrap'>
+    <div className='flex gap-4 items-center flex-wrap justify-center md:justify-start'>
      <div className='flex gap-2 items-center'>
       <Switch
        style={{

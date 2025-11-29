@@ -7,10 +7,11 @@
  "orderInfo": {
   "salonName": "نام سالن",
   "customer": "مشتری",
-  "table": "میز"
+  "table": "میز",
+  "confirm": "تایید"
  },
  "orderConfirm": {
   "cancel": "انصراف",
-  "confirm": "تایید"
+  "confirm": "ثبت سفارش"
  }
 }

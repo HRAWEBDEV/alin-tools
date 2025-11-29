@@ -49,7 +49,7 @@ export default function ConfirmOrderModal({
      <DialogTitle className='hidden'></DialogTitle>
      <DialogDescription className='hidden'></DialogDescription>
     </DialogHeader>
-    <div className='h-[80svh] overflow-auto p-4 pt-0'>
+    <div className='min-h-[40svh] max-h-[80svh] overflow-auto p-4 pt-0'>
      <Tabs
       dir={localeInfo.contentDirection}
       value={confirmOrderActiveType}
@@ -80,7 +80,12 @@ export default function ConfirmOrderModal({
        {dic.orderConfirm.cancel}
       </Button>
      </DialogClose>
-     <Button className='w-24'>{dic.orderConfirm.confirm}</Button>
+     {confirmOrderActiveType === 'orderInfo' && (
+      <Button className='w-24'>{dic.orderInfo.confirm}</Button>
+     )}
+     {confirmOrderActiveType === 'shoppingCard' && (
+      <Button className='w-24'>{dic.orderConfirm.confirm}</Button>
+     )}
     </DialogFooter>
    </DialogContent>
   </Dialog>
