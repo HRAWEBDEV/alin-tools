@@ -4,7 +4,9 @@ import { type NewOrderDictionary } from '@/internalization/app/dictionaries/(tab
 export default function NewOrderHeader({ dic }: { dic: NewOrderDictionary }) {
  return (
   <div>
-   <h1 className='font-medium text-2xl lg:text-3xl'>{dic.title}</h1>
+   <h1 className='text-center md:text-start font-medium text-2xl lg:text-3xl'>
+    {dic.title}
+   </h1>
   </div>
  );
 }

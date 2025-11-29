@@ -23,7 +23,7 @@ export default function OrderCategories({}: { dic: NewOrderDictionary }) {
    },
    '(max-width:700px)': {
     slides: {
-     perView: 2,
+     perView: 3,
      spacing: 4,
     },
    },
