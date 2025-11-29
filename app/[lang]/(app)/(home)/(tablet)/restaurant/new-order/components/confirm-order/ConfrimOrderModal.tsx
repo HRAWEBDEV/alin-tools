@@ -76,15 +76,15 @@ export default function ConfirmOrderModal({
     </div>
     <DialogFooter className='p-4'>
      <DialogClose asChild>
-      <Button variant='destructive' className='w-24'>
+      <Button variant='destructive' className='sm:w-24'>
        {dic.orderConfirm.cancel}
       </Button>
      </DialogClose>
      {confirmOrderActiveType === 'orderInfo' && (
-      <Button className='w-24'>{dic.orderInfo.confirm}</Button>
+      <Button className='sm:w-24'>{dic.orderInfo.confirm}</Button>
      )}
      {confirmOrderActiveType === 'shoppingCard' && (
-      <Button className='w-24'>{dic.orderConfirm.confirm}</Button>
+      <Button className='sm:w-24'>{dic.orderConfirm.confirm}</Button>
      )}
     </DialogFooter>
    </DialogContent>

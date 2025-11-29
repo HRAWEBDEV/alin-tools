@@ -19,49 +19,51 @@ export default function OrderShoppingItem({
       className='object-center object-cover w-full h-full'
      />
     </div>
-    <div className='grow'>
-     <h3 className='font-medium text-neutral-700 dark:text-neutral-300 mb-1'>
-      خورشت فسنجان
-     </h3>
-     <p className='px-2 text-xs text-neutral-600 dark:text-neutral-400 font-light mb-3 w-[min(100%,20rem)]'>
-      توضیحات مختصری در مورد غذا توضیحات مختصری در مورد غذا
-     </p>
-     <div className='flex mb-2 gap-4'>
-      <div className='text-[0.7rem] font-medium text-red-600 dark:text-red-400 line-through'>
-       <Badge variant='destructive' className='text-[0.7rem] p-1 me-2'>
-        12%
-       </Badge>
-       <span>14,000,000</span>
+    <div className='grow flex flex-col sm:flex-row sm:items-center'>
+     <div className='grow'>
+      <h3 className='font-medium text-neutral-700 dark:text-neutral-300 mb-1'>
+       خورشت فسنجان
+      </h3>
+      <p className='px-2 text-xs text-neutral-600 dark:text-neutral-400 font-light mb-3 w-[min(100%,20rem)]'>
+       توضیحات مختصری در مورد غذا توضیحات مختصری در مورد غذا
+      </p>
+      <div className='flex mb-6 sm:mb-2 gap-4'>
+       <div className='text-[0.7rem] font-medium text-red-600 dark:text-red-400 line-through'>
+        <Badge variant='destructive' className='text-[0.7rem] p-1 me-2'>
+         12%
+        </Badge>
+        <span>14,000,000</span>
+       </div>
+       <span className='text-lg font-medium text-neutral-600 dark:text-neutral-400'>
+        14,000,000
+       </span>
       </div>
-      <span className='text-lg font-medium text-neutral-600 dark:text-neutral-400'>
-       14,000,000
-      </span>
      </div>
-    </div>
-    <div className='flex flex-col items-center shrink-0'>
-     <div>
-      <span className='text-lg font-medium text-neutral-600 dark:text-neutral-400'>
-       14,000,000
-      </span>
-     </div>
-     <div className='flex justify-center items-center mb-2'>
-      <Button
-       variant='ghost'
-       size='icon-lg'
-       className='text-rose-600 dark:text-rose-400 rounded-full'
-      >
-       <CiCircleMinus className='size-10' />
-      </Button>
-      <div className='text-lg px-2 shrink-0 text-center basis-8 font-medium'>
-       12
+     <div className='flex gap-2 justify-end sm:justify-start sm:flex-col items-center shrink-0'>
+      <div>
+       <span className='text-lg font-medium text-neutral-600 dark:text-neutral-400'>
+        14,000,000
+       </span>
       </div>
-      <Button
-       variant='ghost'
-       size='icon-lg'
-       className='text-secondary rounded-full'
-      >
-       <CiCirclePlus className='size-10' />
-      </Button>
+      <div className='flex items-center justify-center sm:mb-2'>
+       <Button
+        variant='ghost'
+        size='icon-lg'
+        className='text-rose-600 dark:text-rose-400 rounded-full'
+       >
+        <CiCircleMinus className='size-10' />
+       </Button>
+       <div className='text-lg px-2 shrink-0 text-center basis-8 font-medium'>
+        12
+       </div>
+       <Button
+        variant='ghost'
+        size='icon-lg'
+        className='text-secondary rounded-full'
+       >
+        <CiCirclePlus className='size-10' />
+       </Button>
+      </div>
      </div>
     </div>
    </div>
