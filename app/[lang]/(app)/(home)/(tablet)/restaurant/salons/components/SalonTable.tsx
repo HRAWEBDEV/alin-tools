@@ -46,7 +46,7 @@ export default function SalonTable({}: { dic: SalonsDictionary }) {
       <div className='flex items-center gap-1 text-base text-neutral-600 dark:text-neutral-400 font-medium'>
        <span>
         {new Date().toLocaleTimeString(locale, {
-         hour: 'numeric',
+         hour: '2-digit',
          minute: '2-digit',
         })}
        </span>

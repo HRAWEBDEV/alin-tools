@@ -14,10 +14,11 @@ import {
  useOrderToolsContext,
 } from '../../services/order-tools/orderToolsContext';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { confirmOrderTypes } from '../../services/order-tools/orderToolsContext';
 import OrderShoppingCard from '../order-shop/OrderShoppingCard';
 import OrderInfo from '../order-info/OrderInfo';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
+import { Badge } from '@/components/ui/badge';
+import { DialogClose } from '@radix-ui/react-dialog';
 
 export default function ConfirmOrderModal({
  dic,
@@ -43,12 +44,12 @@ export default function ConfirmOrderModal({
     closeConfirmOrder();
    }}
   >
-   <DialogContent className='w-[min(100%,50rem)] max-w-none! p-0'>
+   <DialogContent className='w-[min(100%,45rem)] max-w-none! p-0'>
     <DialogHeader className='p-4'>
      <DialogTitle className='hidden'></DialogTitle>
      <DialogDescription className='hidden'></DialogDescription>
     </DialogHeader>
-    <div className='max-h-[60svh] overflow-auto p-4 pt-0'>
+    <div className='h-[80svh] overflow-auto p-4 pt-0'>
      <Tabs
       dir={localeInfo.contentDirection}
       value={confirmOrderActiveType}
@@ -57,11 +58,13 @@ export default function ConfirmOrderModal({
       }
      >
       <TabsList className='self-center sticky top-0'>
-       {confirmOrderTypes.map((item) => (
-        <TabsTrigger key={item} value={item} className='w-40'>
-         {dic.tools[item]}
-        </TabsTrigger>
-       ))}
+       <TabsTrigger value='orderInfo' className='w-40'>
+        {dic.tools.orderInfo}
+       </TabsTrigger>
+       <TabsTrigger value='shoppingCard' className='w-40'>
+        {dic.tools.shoppingCard}
+        <Badge className='p-1 size-6 rounded-full'>20</Badge>
+       </TabsTrigger>
       </TabsList>
       <TabsContent value='orderInfo'>
        <OrderInfo dic={dic} />
@@ -72,9 +75,11 @@ export default function ConfirmOrderModal({
      </Tabs>
     </div>
     <DialogFooter className='p-4'>
-     <Button variant='destructive' className='w-24'>
-      {dic.orderConfirm.cancel}
-     </Button>
+     <DialogClose asChild>
+      <Button variant='destructive' className='w-24'>
+       {dic.orderConfirm.cancel}
+      </Button>
+     </DialogClose>
      <Button className='w-24'>{dic.orderConfirm.confirm}</Button>
     </DialogFooter>
    </DialogContent>

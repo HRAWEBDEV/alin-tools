@@ -39,7 +39,7 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
        <Button
         variant='outline'
         role='combobox'
-        className='font-medium text-base p-2 px-1! h-auto text-start rounded-none grow'
+        className='font-medium text-base p-2 pe-1! h-auto text-start rounded-none grow'
         size='lg'
        >
         <p className='grow'>سالن شماره یک</p>
