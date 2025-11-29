@@ -6,8 +6,10 @@ import { FaUserCircle } from 'react-icons/fa';
 import DishIcon from '@/app/[lang]/(app)/components/icons/DishIcon';
 import DinnerIcon from '@/app/[lang]/(app)/components/icons/DinnerIcon';
 import { useProfileContext } from '../services/profile/profileContext';
+import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 
 export default function Tabs() {
+ const { locale } = useBaseConfig();
  const { toggleProfile } = useProfileContext();
  const {
   restaurantShareDictionary: {
@@ -21,13 +23,13 @@ export default function Tabs() {
  return (
   <nav className='shrink-0 flex items-center lg:hidden fixed end-0 start-0 bottom-0 z-(--app-restaurant-tabs-zindex) bg-neutral-100 dark:bg-neutral-900 *:shrink-0 border-t border-input text-neutral-700 dark:text-neutral-300'>
    <Button variant='ghost' className={tabClass} asChild>
-    <Link href={'/fa/restaurant/salons'}>
+    <Link href={`/${locale}/restaurant/salons`}>
      <DinnerIcon className={tabIconClass} />
      <p>{tabsDic.salons}</p>
     </Link>
    </Button>
    <Button variant='ghost' className={tabClass} asChild>
-    <Link href={'/fa/restaurant/new-order'}>
+    <Link href={`/${locale}/restaurant/new-order`}>
      <DishIcon className={tabIconClass} />
      <p>{tabsDic.newOrder}</p>
     </Link>

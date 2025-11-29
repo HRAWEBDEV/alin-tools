@@ -3,8 +3,11 @@ import { type NewOrderDictionary } from '@/internalization/app/dictionaries/(tab
 import { useKeenSlider } from 'keen-slider/react';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import DishIcon from '@/app/[lang]/(app)/components/icons/DishIcon';
+import { useScrollWatcher } from '../../hooks/useScrollWatcher';
 
 export default function OrderCategories({}: { dic: NewOrderDictionary }) {
+ const { scrollTop } = useScrollWatcher();
+ const scrollTopOffsetReached = scrollTop > 20;
  const { localeInfo } = useBaseConfig();
  const [sliderRef] = useKeenSlider({
   rtl: localeInfo.contentDirection === 'rtl',
@@ -40,10 +43,12 @@ export default function OrderCategories({}: { dic: NewOrderDictionary }) {
      <button
       data-active={i === 0}
       key={i}
-      className={`keen-slider__slide number-slide${i} h-24 rounded-xl p-2 flex flex-col items-center justify-center gap-1 text-neutral-700 dark:text-neutral-300 bg-neutral-200 dark:bg-neutral-800 data-[active="true"]:bg-primary data-[active="true"]:text-white data-[active="true"]:dark:text-primary-foreground cursor-pointer`}
+      className={`transition-[height_0.4s_ease] keen-slider__slide number-slide${i} ${scrollTopOffsetReached ? 'h-16' : 'h-24'} rounded-xl p-2 flex flex-col items-center justify-center gap-1 text-neutral-700 dark:text-neutral-300 bg-neutral-200 dark:bg-neutral-800 data-[active="true"]:bg-primary data-[active="true"]:text-white data-[active="true"]:dark:text-primary-foreground cursor-pointer`}
      >
       <DishIcon className='size-10' />
-      <p className='text-wrap text-xs font-medium'>شام نهار صبحانه</p>
+      {!scrollTopOffsetReached && (
+       <p className='text-wrap text-xs font-medium'>شام نهار صبحانه</p>
+      )}
      </button>
     ))}
    </div>
