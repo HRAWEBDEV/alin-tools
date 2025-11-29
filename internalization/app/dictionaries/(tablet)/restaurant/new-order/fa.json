@@ -5,10 +5,15 @@
   "orderInfo": "اطلاعات سفارش"
  },
  "orderInfo": {
+  "search": "جستجو",
   "salonName": "نام سالن",
   "customer": "مشتری",
   "table": "میز",
-  "confirm": "تایید"
+  "confirm": "تایید",
+  "description": "توضیحات",
+  "guestCount": "تعداد مهمان",
+  "discountRate": "درصد تخفیف",
+  "bonNo": "شماره بن"
  },
  "orderConfirm": {
   "cancel": "انصراف",
