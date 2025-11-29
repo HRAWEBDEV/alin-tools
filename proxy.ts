@@ -27,19 +27,8 @@ export async function proxy(req: NextRequest) {
  // check for valid user locale
  if (!isUserLocaleValid(pathSegments[1])) {
   req.nextUrl.pathname = `${await getUserLocale()}${path}`;
-  return NextResponse.redirect(req.nextUrl);
+  return NextResponse.redirect(new URL(req.nextUrl, req.url));
  }
- // check user app login
- // not logged in user
- // if (pathSegments[2] !== 'login' && !isUserLoggedIn) {
- //  req.nextUrl.pathname = `${await getUserLocale()}/login/sign-in/${defaultSignInOption}`;
- //  return NextResponse.redirect(req.nextUrl);
- // }
- // // logged in user
- // if (pathSegments[2] === 'login' && isUserLoggedIn) {
- //  req.nextUrl.pathname = `${await getUserLocale()}/`;
- //  return NextResponse.redirect(req.nextUrl);
- // }
 }
 
 export const config = {
