@@ -4,11 +4,17 @@ import { useKeenSlider } from 'keen-slider/react';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import DishIcon from '@/app/[lang]/(app)/components/icons/DishIcon';
 
-export default function OrderCategories({ dic }: { dic: NewOrderDictionary }) {
+export default function OrderCategories({}: { dic: NewOrderDictionary }) {
  const { localeInfo } = useBaseConfig();
- const [sliderRef, sliderRefInstance] = useKeenSlider({
+ const [sliderRef] = useKeenSlider({
   rtl: localeInfo.contentDirection === 'rtl',
   breakpoints: {
+   '(max-width:1280px)': {
+    slides: {
+     perView: 6,
+     spacing: 4,
+    },
+   },
    '(max-width:980px)': {
     slides: {
      perView: 4,
@@ -23,7 +29,7 @@ export default function OrderCategories({ dic }: { dic: NewOrderDictionary }) {
    },
   },
   slides: {
-   perView: 6,
+   perView: 8,
    spacing: 4,
   },
  });
