@@ -1,4 +1,5 @@
 'use client';
+import DinnerIcon from '@/app/[lang]/(app)/components/icons/DinnerIcon';
 import DishIcon from '@/app/[lang]/(app)/components/icons/DishIcon';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -30,7 +31,7 @@ export default function NavList() {
       href={`/${locale}/restaurant/salons`}
       className='flex w-auto h-auto items-center gap-4'
      >
-      <DishIcon className='size-12' />
+      <DinnerIcon className='size-12' />
       <p className='text-base'>{navigation.salons}</p>
       {activePath === 'salons' && (
        <div className='absolute end-0 top-1/2 -translate-y-1/2 -translate-x-1/2'>
