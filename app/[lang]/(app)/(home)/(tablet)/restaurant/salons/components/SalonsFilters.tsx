@@ -26,7 +26,7 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
   <div className='mb-4 p-4 lg:p-6 lg:pb-4 bg-background top-0 sticky z-3'>
    <h1 className='font-medium text-2xl lg:text-3xl mb-4'>{dic.title}</h1>
    <div className='grid md:grid-cols-[minmax(0,20rem)_max-content] md:justify-between gap-4'>
-    <div className='flex'>
+    <div className='grid grid-cols-[max-content_1fr_max-content]'>
      <Button
       size='icon'
       variant='outline'
@@ -39,10 +39,10 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
        <Button
         variant='outline'
         role='combobox'
-        className='font-medium text-base p-2 pe-1! h-auto text-start rounded-none grow'
+        className='font-medium text-base p-2 pe-1! h-auto text-start rounded-none grow overflow-hidden'
         size='lg'
        >
-        <p className='grow'>سالن شماره یک</p>
+        <p className='grow text-ellipsis overflow-hidden'>سالن شماره یک</p>
         <ChevronsUpDown className='opacity-50 size-6' />
        </Button>
       </DrawerTrigger>
