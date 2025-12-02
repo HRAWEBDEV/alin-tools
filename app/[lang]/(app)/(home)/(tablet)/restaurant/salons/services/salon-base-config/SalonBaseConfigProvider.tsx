@@ -1,18 +1,24 @@
 'use client';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import {
  type SalonBaseConfig,
  salonBaseConfigContext,
 } from './salonBaseConfigContext';
 import { type Hall, getHallKey, getHalls } from '../salonsApiActions';
 import { useQuery } from '@tanstack/react-query';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 
 export default function SalonBaseConfigProvider({
  children,
 }: {
  children: ReactNode;
 }) {
+ const { locale } = useBaseConfig();
+ const router = useRouter();
+ const searchQueries = useSearchParams();
  const [selectedHall, setSelectedHall] = useState<Hall | null>(null);
+
  const {
   data: hallsData = [],
   isFetching: hallsIsFetching,
@@ -20,13 +26,18 @@ export default function SalonBaseConfigProvider({
   // isSuccess: hallsIsSuccess,
  } = useQuery({
   queryKey: [getHallKey, 'list'],
+  staleTime: 'static',
   async queryFn({ signal }) {
    const res = await getHalls({ signal });
-   return res.data.halls;
+   const halls = res.data.halls;
+   return halls;
   },
  });
 
  function handleChangeHall(newHall: Hall) {
+  const newSearchQueries = new URLSearchParams(searchQueries.toString());
+  newSearchQueries.set('selectedHall', newHall.key);
+  router.replace(`/${locale}/restaurant/salons?${newSearchQueries.toString()}`);
   setSelectedHall(newHall);
  }
  const selectedHallIndex =
@@ -36,11 +47,11 @@ export default function SalonBaseConfigProvider({
 
  function handleNextHall() {
   if (!hasNextHall) return;
-  setSelectedHall(hallsData[selectedHallIndex + 1]);
+  handleChangeHall(hallsData[selectedHallIndex + 1]);
  }
  function handlePrevHall() {
   if (!hasPrevHall) return;
-  setSelectedHall(hallsData[selectedHallIndex - 1]);
+  handleChangeHall(hallsData[selectedHallIndex - 1]);
  }
 
  const ctx: SalonBaseConfig = {
@@ -56,6 +67,14 @@ export default function SalonBaseConfigProvider({
    changeHall: handleChangeHall,
   },
  };
+
+ useEffect(() => {
+  const querySelectedhall = searchQueries.get('selectedHall');
+  const findQueryHall = hallsData.find(
+   (item) => item.key === querySelectedhall,
+  );
+  if (findQueryHall) setSelectedHall(findQueryHall);
+ }, [handleChangeHall, searchQueries, hallsData]);
 
  return (
   <salonBaseConfigContext.Provider value={ctx}>
