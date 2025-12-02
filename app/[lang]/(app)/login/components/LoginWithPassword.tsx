@@ -28,6 +28,8 @@ import { z } from 'zod';
 import { IoMdInformationCircleOutline } from 'react-icons/io';
 import { Spinner } from '@/components/ui/spinner';
 import { useMutation } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
+import { toast } from 'sonner';
 
 const formDefaults: LoginWithPasswordCredentials = {
  userName: '',
@@ -47,6 +49,9 @@ export default function LoginWithPassword({ dic }: { dic: LoginDictionary }) {
  const { mutate, isPending } = useMutation({
   mutationFn(credentials: LoginWithPasswordCredentials) {
    return loginWithPassword(credentials);
+  },
+  onError(err: AxiosError<string>) {
+   toast.error(err.response?.data);
   },
  });
  // form setup
@@ -78,6 +83,7 @@ export default function LoginWithPassword({ dic }: { dic: LoginDictionary }) {
         </InputGroupAddon>
         <InputGroupInput
          data-invalid={!field.state.meta.isValid}
+         autoComplete='true'
          id='userName'
          value={field.state.value}
          onBlur={field.handleBlur}
@@ -109,6 +115,7 @@ export default function LoginWithPassword({ dic }: { dic: LoginDictionary }) {
         <InputGroupInput
          data-invalid={!field.state.meta.isValid}
          id='password'
+         autoComplete='true'
          type={showPassword ? 'text' : 'password'}
          value={field.state.value}
          onBlur={field.handleBlur}
