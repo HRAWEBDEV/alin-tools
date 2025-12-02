@@ -28,22 +28,23 @@ export default function LoginWithPassword({ dic }: { dic: LoginDictionary }) {
    <FieldGroup>
     <Field>
      <FieldLabel htmlFor='userName'>{formDic.userName}: </FieldLabel>
-     <InputGroup>
+     <InputGroup className='h-11'>
       <InputGroupAddon align='inline-start'>
-       <FaUser className='text-primary size-4' />
+       <FaUser className='text-primary size-5' />
       </InputGroupAddon>
       <InputGroupInput id='userName' />
      </InputGroup>
     </Field>
     <Field>
      <FieldLabel htmlFor='password'>{formDic.password}: </FieldLabel>
-     <InputGroup>
+     <InputGroup className='h-11'>
       <InputGroupAddon align='inline-start'>
-       <TbLockPassword className='text-primary size-5' />
+       <TbLockPassword className='text-primary size-6' />
       </InputGroupAddon>
       <InputGroupInput
        id='password'
        type={showPassword ? 'text' : 'password'}
+       className='text-base!'
       />
       <InputGroupAddon align='inline-end' className='-me-2'>
        <Button
@@ -53,17 +54,16 @@ export default function LoginWithPassword({ dic }: { dic: LoginDictionary }) {
         onClick={() => setShowPassword((pre) => !pre)}
        >
         {showPassword ? (
-         <IoEye className='text-primary size-5' />
+         <IoEye className='text-primary size-6' />
         ) : (
-         <IoEyeOff className='text-primary size-5' />
+         <IoEyeOff className='text-primary size-6' />
         )}
        </Button>
       </InputGroupAddon>
      </InputGroup>
     </Field>
     <Button
-     size='lg'
-     className='mt-4'
+     className='mt-4 text-base h-11'
      type='submit'
      onClick={(e) => {
       e.preventDefault();

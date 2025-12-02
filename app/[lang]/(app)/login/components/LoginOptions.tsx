@@ -5,8 +5,8 @@ import { Button } from '@/components/ui/button';
 export default function LoginOptions({ dic }: { dic: LoginDictionary }) {
  return (
   <div className='mt-1'>
-   <Button variant='link' asChild className='px-0 text-xs'>
-    <Link href='#'></Link>
+   <Button variant='link' asChild className='px-0 text-sm'>
+    <Link href='#'>{dic.login.loginOptions.forgetPassword}</Link>
    </Button>
   </div>
  );

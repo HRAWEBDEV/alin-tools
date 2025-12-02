@@ -22,10 +22,12 @@ function LocaleControllerButton() {
    type='button'
    variant='outline'
    size='icon-lg'
-   className='relative rounded-full size-11 bg-transparent'
+   className='relative rounded-full size-11 bg-transparent text-neutral-600 dark:text-neutral-400'
   >
    <div className='absolute -top-1 -end-2'>
-    <Badge variant='secondary'>{localeInfo.localeShortName}</Badge>
+    <Badge variant='secondary' className='p-1 size-6'>
+     {localeInfo.localeShortName}
+    </Badge>
    </div>
    <FaGlobeAmericas className='size-6' />
   </Button>

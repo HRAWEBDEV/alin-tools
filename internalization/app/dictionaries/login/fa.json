@@ -1,12 +1,14 @@
 {
  "title": "احراز هویت",
  "login": {
+  "loginOptions": {
+   "forgetPassword": "فراموشی رمز عبور؟"
+  },
   "withPassword": {
    "form": {
     "userName": "نام کاربری",
     "password": "رمز عبور",
-    "login": "ورود",
-    "forgetPassword": "فراموشی رمز عبور؟"
+    "login": "ورود"
    },
    "formValidation": {
     "fillRequiredFields": "فیلد‌‌های الزامی را پر کنید"
