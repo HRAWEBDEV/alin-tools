@@ -30,6 +30,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { toast } from 'sonner';
+import { setUserLoginToken } from '../utils/loginTokenManager';
 
 const formDefaults: LoginWithPasswordCredentials = {
  userName: '',
@@ -49,6 +50,10 @@ export default function LoginWithPassword({ dic }: { dic: LoginDictionary }) {
  const { mutate, isPending } = useMutation({
   mutationFn(credentials: LoginWithPasswordCredentials) {
    return loginWithPassword(credentials);
+  },
+  onSuccess({ data }) {
+   setUserLoginToken(data.item1);
+   router.push(`/${localeInfo.locale}/restaurant`);
   },
   onError(err: AxiosError<string>) {
    toast.error(err.response?.data);
