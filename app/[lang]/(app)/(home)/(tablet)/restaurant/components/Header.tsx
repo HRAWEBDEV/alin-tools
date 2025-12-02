@@ -1,5 +1,3 @@
-import { ModeControllerButton } from '@/app/[lang]/(app)/components/ModeContoller';
-import { LocaleControllerButton } from '@/app/[lang]/(app)/components/LocaleController';
 import Tools from './Tools';
 
 export default function Header() {
