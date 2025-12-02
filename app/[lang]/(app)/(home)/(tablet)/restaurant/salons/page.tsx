@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { getSalonsDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/salons/dictionary';
 import { type Locale } from '@/internalization/app/localization';
 import SalonsWrapper from './components/SalonsWrapper';
+import SalonBaseConfigProvider from './services/salon-base-config/SalonBaseConfigProvider';
 
 export async function generateMetadata({
  params,
@@ -23,8 +24,8 @@ export default async function Salons({
   locale: lang as Locale,
  });
  return (
-  <>
+  <SalonBaseConfigProvider>
    <SalonsWrapper dic={dic} />
-  </>
+  </SalonBaseConfigProvider>
  );
 }
