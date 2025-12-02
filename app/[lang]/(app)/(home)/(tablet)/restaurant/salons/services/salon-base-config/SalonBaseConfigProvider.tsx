@@ -69,11 +69,16 @@ export default function SalonBaseConfigProvider({
  };
 
  useEffect(() => {
+  if (!hallsData.length) return;
   const querySelectedhall = searchQueries.get('selectedHall');
   const findQueryHall = hallsData.find(
    (item) => item.key === querySelectedhall,
   );
-  if (findQueryHall) setSelectedHall(findQueryHall);
+  if (findQueryHall) {
+   setSelectedHall(findQueryHall);
+  } else {
+   setSelectedHall(hallsData[0]);
+  }
  }, [handleChangeHall, searchQueries, hallsData]);
 
  return (
