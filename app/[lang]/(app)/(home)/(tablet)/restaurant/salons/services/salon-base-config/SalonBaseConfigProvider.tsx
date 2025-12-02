@@ -14,7 +14,7 @@ export default function SalonBaseConfigProvider({
 }) {
  const [selectedHall, setSelectedHall] = useState<Hall | null>(null);
  const {
-  data: hallsData,
+  data: hallsData = [],
   isFetching: hallsIsFetching,
   isLoading: hallsIsLoading,
   // isSuccess: hallsIsSuccess,
@@ -29,13 +29,30 @@ export default function SalonBaseConfigProvider({
  function handleChangeHall(newHall: Hall) {
   setSelectedHall(newHall);
  }
+ const selectedHallIndex =
+  hallsData?.findIndex((item) => item.key === selectedHall?.key) || 0;
+ const hasPrevHall = !!selectedHall && selectedHallIndex !== 0;
+ const hasNextHall = !!selectedHall && selectedHallIndex < hallsData.length - 1;
+
+ function handleNextHall() {
+  if (!hasNextHall) return;
+  setSelectedHall(hallsData[selectedHallIndex + 1]);
+ }
+ function handlePrevHall() {
+  if (!hasPrevHall) return;
+  setSelectedHall(hallsData[selectedHallIndex - 1]);
+ }
 
  const ctx: SalonBaseConfig = {
   hallsInfo: {
-   data: hallsData || [],
+   data: hallsData,
    isFetching: hallsIsFetching,
    isLoading: hallsIsLoading,
    selectedHall,
+   hasNext: hasNextHall,
+   hasPrev: hasPrevHall,
+   nextHall: handleNextHall,
+   prevHall: handlePrevHall,
    changeHall: handleChangeHall,
   },
  };

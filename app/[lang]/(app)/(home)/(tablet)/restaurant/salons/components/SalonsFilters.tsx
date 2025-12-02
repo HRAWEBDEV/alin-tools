@@ -23,10 +23,21 @@ import { TiArrowLeft } from 'react-icons/ti';
 import { TiArrowRight } from 'react-icons/ti';
 import { Spinner } from '@/components/ui/spinner';
 import { useSalonBaseConfigContext } from '../services/salon-base-config/salonBaseConfigContext';
+import next from 'next';
 
 export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
  const {
-  hallsInfo: { isFetching, isLoading, data, selectedHall, changeHall },
+  hallsInfo: {
+   isFetching,
+   isLoading,
+   data,
+   selectedHall,
+   hasNext,
+   hasPrev,
+   nextHall,
+   prevHall,
+   changeHall,
+  },
  } = useSalonBaseConfigContext();
  return (
   <div className='mb-4 p-4 lg:p-6 lg:pb-4 bg-background top-0 sticky z-3'>
@@ -39,7 +50,8 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
       size='icon'
       variant='outline'
       className='h-auto rounded-se-none rounded-ee-none border-e-0 px-6'
-      disabled={isLoading}
+      disabled={isLoading || !hasPrev}
+      onClick={prevHall}
      >
       <TiArrowRight className='size-8' />
      </Button>
@@ -108,7 +120,8 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
       size='icon'
       variant='outline'
       className='h-auto rounded-ss-none rounded-es-none border-s-0 px-6'
-      disabled={isLoading}
+      disabled={isLoading || !hasNext}
+      onClick={nextHall}
      >
       <TiArrowLeft className='size-8' />
      </Button>

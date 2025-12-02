@@ -6,9 +6,13 @@ interface SalonBaseConfig {
  hallsInfo: {
   data: Hall[];
   selectedHall: Hall | null;
-  changeHall: (newHall: Hall) => unknown;
   isFetching: boolean;
   isLoading: boolean;
+  hasPrev: boolean;
+  hasNext: boolean;
+  changeHall: (newHall: Hall) => unknown;
+  nextHall: () => unknown;
+  prevHall: () => unknown;
  };
 }
 

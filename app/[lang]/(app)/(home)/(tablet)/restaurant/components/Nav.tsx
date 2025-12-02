@@ -8,7 +8,7 @@ import NavWrapper from './NavWrapper';
 export default function Nav() {
  return (
   <NavWrapper>
-   <div className='p-4 py-2 pb-0 flex gap-4 justify-start text-neutral-600 dark:text-neutral-400'>
+   <div className='p-4 py-2 pb-0 flex gap-4 justify-center text-neutral-600 dark:text-neutral-400'>
     <Tools />
    </div>
    <div className='p-2 pt-0'>
