@@ -1,4 +1,5 @@
 'use client';
+import { useState } from 'react';
 import { type SalonsDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/salons/dictionary';
 import { ChevronsUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -23,9 +24,9 @@ import { TiArrowLeft } from 'react-icons/ti';
 import { TiArrowRight } from 'react-icons/ti';
 import { Spinner } from '@/components/ui/spinner';
 import { useSalonBaseConfigContext } from '../services/salon-base-config/salonBaseConfigContext';
-import next from 'next';
 
 export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
+ const [searchedSalon, setSearchedSalon] = useState('');
  const {
   hallsInfo: {
    isFetching,
@@ -39,6 +40,11 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
    changeHall,
   },
  } = useSalonBaseConfigContext();
+
+ const filteredSalons = data.filter((item) =>
+  item.value.includes(searchedSalon),
+ );
+
  return (
   <div className='mb-4 p-4 lg:p-6 lg:pb-4 bg-background top-0 sticky z-3'>
    <h1 className='text-center md:text-start font-medium text-2xl lg:text-3xl mb-4'>
@@ -83,7 +89,11 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
         </h1>
         <div className='w-[20rem]'>
          <InputGroup>
-          <InputGroupInput placeholder={dic.filters.search} type='search' />
+          <InputGroupInput
+           placeholder={dic.filters.search}
+           value={searchedSalon}
+           onChange={(e) => setSearchedSalon(e.target.value)}
+          />
           <InputGroupAddon align='inline-end'>
            <FaSearch className='text-primary size-4' />
           </InputGroupAddon>
@@ -91,28 +101,34 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
         </div>
        </div>
        <div>
-        <ul>
-         {data.map((item) => (
-          <DrawerClose asChild key={item.key}>
-           <li
-            className='flex gap-1 items-center ps-6 py-2'
-            onClick={() => changeHall(item)}
-           >
-            <Checkbox
-             className='size-6'
-             checked={item.key === selectedHall?.key}
-            />
-            <Button
-             tabIndex={-1}
-             variant='ghost'
-             className='w-full justify-start h-auto text-lg'
+        {filteredSalons.length ? (
+         <ul>
+          {filteredSalons.map((item) => (
+           <DrawerClose asChild key={item.key}>
+            <li
+             className='flex gap-1 items-center ps-6 py-2'
+             onClick={() => changeHall(item)}
             >
-             <span>{item.value}</span>
-            </Button>
-           </li>
-          </DrawerClose>
-         ))}
-        </ul>
+             <Checkbox
+              className='size-6'
+              checked={item.key === selectedHall?.key}
+             />
+             <Button
+              tabIndex={-1}
+              variant='ghost'
+              className='w-full justify-start h-auto text-lg'
+             >
+              <span>{item.value}</span>
+             </Button>
+            </li>
+           </DrawerClose>
+          ))}
+         </ul>
+        ) : (
+         <div className='text-center font-medium'>
+          <span>{dic.noItemsFound}</span>
+         </div>
+        )}
        </div>
       </DrawerContent>
      </Drawer>
