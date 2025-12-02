@@ -10,5 +10,11 @@
   "reserved": "رزرو",
   "next": "بعدی",
   "prev": "قبلی"
+ },
+ "tables": {
+  "readyToService": "خالـــی",
+  "outOfService": "",
+  "reserved": "رزرو",
+  "occupied": "اشغال"
  }
 }

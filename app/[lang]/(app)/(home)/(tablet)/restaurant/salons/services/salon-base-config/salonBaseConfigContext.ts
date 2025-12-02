@@ -1,4 +1,4 @@
-import { type Hall } from '../salonsApiActions';
+import { type Hall, type Table } from '../salonsApiActions';
 import { use, createContext } from 'react';
 import { OutOfContext } from '@/utils/OutOfContext';
 
@@ -13,6 +13,11 @@ interface SalonBaseConfig {
   changeHall: (newHall: Hall) => unknown;
   nextHall: () => unknown;
   prevHall: () => unknown;
+ };
+ tablesInfo: {
+  data: Table[];
+  isLoading: boolean;
+  lastTablesUpdate: Date | null;
  };
 }
 
