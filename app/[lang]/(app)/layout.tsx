@@ -3,6 +3,7 @@ import { getMetaDictionary } from '@/internalization/app/dictionaries/meta/dicti
 import ShareDictionaryProvider from './services/share-dictionary/ShareDictionaryProvider';
 import { type Locale } from '@/internalization/app/localization';
 import { Toaster } from '@/components/ui/sonner';
+import AxiosBaseConfig from './services/axios-base-config/AxiosBaseConfig';
 
 export default async function AppLayout({
  children,
@@ -13,6 +14,7 @@ export default async function AppLayout({
  const metaDic = await getMetaDictionary({ locale: lang as Locale });
  return (
   <ShareDictionaryProvider shareDictionary={shareDic} metaDictionary={metaDic}>
+   <AxiosBaseConfig />
    {children}
    <Toaster position='top-left' richColors closeButton />
   </ShareDictionaryProvider>

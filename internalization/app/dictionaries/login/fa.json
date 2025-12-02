@@ -7,6 +7,9 @@
     "password": "رمز عبور",
     "login": "ورود",
     "forgetPassword": "فراموشی رمز عبور؟"
+   },
+   "formValidation": {
+    "fillRequiredFields": "فیلد‌‌های الزامی را پر کنید"
    }
   }
  }
