@@ -12,7 +12,7 @@ import { MdOutlineBlock } from 'react-icons/md';
 
 export default function ChangeTableState({ dic }: { dic: SalonsDictionary }) {
  const {
-  tablesInfo: { showChangeTableState, onShowChangeTableState },
+  tablesInfo: { selectedTable, showChangeTableState, onShowChangeTableState },
  } = useSalonBaseConfigContext();
  return (
   <Dialog
@@ -21,11 +21,13 @@ export default function ChangeTableState({ dic }: { dic: SalonsDictionary }) {
   >
    <DialogContent className='gap-0 p-0'>
     <DialogHeader className='p-4 py-6'>
-     <DialogTitle>{dic.tables.changeTableState}</DialogTitle>
+     <DialogTitle>{dic.tableStateModal.title}</DialogTitle>
     </DialogHeader>
     <div className='p-4'>
      <p className='mb-4 text-base font-medium text-center'>
-      <span>{dic.tableStateModal.currentTableState}: </span>
+      <span>
+       {dic.tableStateModal.currentTableState} {selectedTable?.tableNo} :
+      </span>
       <span className='text-teal-800 dark:text-teal-200'>
        {dic.tableStateModal.readyToService}
       </span>

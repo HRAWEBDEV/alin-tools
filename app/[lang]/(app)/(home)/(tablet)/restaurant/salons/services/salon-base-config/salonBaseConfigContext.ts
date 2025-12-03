@@ -31,7 +31,9 @@ interface SalonBaseConfig {
   tablesReport: TablesReport;
   filters: TablesFilters;
   showChangeTableState: boolean;
+  showTransferTable: boolean;
   onShowChangeTableState: (open?: boolean) => unknown;
+  changeShowTransferTable: (open?: boolean) => unknown;
   changeFilters: (filters: TablesFilters) => unknown;
   changeSelectedTable: (newTable: Table | null) => unknown;
  };

@@ -4,6 +4,7 @@ import SalonTable from './SalonTable';
 import { useSalonBaseConfigContext } from '../services/salon-base-config/salonBaseConfigContext';
 import { AnimatePresence } from 'motion/react';
 import ChangeTableState from './table-state/ChangeTableStateModal';
+import TransferTableModal from './transfer-table/TransferTableModal';
 
 export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
  const {
@@ -25,6 +26,7 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
     </div>
    )}
    <ChangeTableState dic={dic} />
+   <TransferTableModal dic={dic} />
   </div>
  );
 }

@@ -26,8 +26,14 @@
   "changeTableState": "تغییر وضعیت میز"
  },
  "tableStateModal": {
+  "title": "تغییر وضعیت میز",
   "currentTableState": "وضعیت فعلی میز",
   "outOfOrder": "خارج از سرویس",
   "readyToService": "آماده به سرویس"
+ },
+ "transferTableModal": {
+  "title": "انتقال میز",
+  "selectTargetTable": "انتخاب میز",
+  "transferTo": "انتقال به"
  }
 }

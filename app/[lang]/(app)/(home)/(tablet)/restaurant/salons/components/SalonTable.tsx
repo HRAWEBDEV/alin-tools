@@ -30,7 +30,11 @@ export default function SalonTable({
  table: Table;
 }) {
  const {
-  tablesInfo: { changeSelectedTable, onShowChangeTableState },
+  tablesInfo: {
+   changeSelectedTable,
+   onShowChangeTableState,
+   changeShowTransferTable,
+  },
  } = useSalonBaseConfigContext();
  const tableStyles = getTableStateStyles(table.tableStateTypeID);
  const { locale, localeInfo } = useBaseConfig();
@@ -93,7 +97,9 @@ export default function SalonTable({
       </div>
       <div className='text-start ps-2 grow'>
        <div className='flex items-center gap-2'>
-        <h3 className={`text-2xl lg:text-3xl ${tableStyles.text}`}>
+        <h3
+         className={`text-2xl lg:text-3xl ${tableStyles.text} font-en-roboto`}
+        >
          {table.tableNo.toString().padStart(2, '0')}
         </h3>
        </div>
@@ -125,12 +131,18 @@ export default function SalonTable({
     </Button>
    </div>
    <div className='mx-4 -mt-4'>
-    <DropdownMenu dir={localeInfo.contentDirection}>
+    <DropdownMenu
+     dir={localeInfo.contentDirection}
+     onOpenChange={(newValue) => {
+      if (newValue) {
+       changeSelectedTable(table);
+      }
+     }}
+    >
      <DropdownMenuTrigger asChild>
       <Button
        variant='outline'
-       className='w-full h-auto pt-5 pb-1 bg-neutral-100 dark:bg-neutral-900 text-primary rounded-xl rounded-ss-none rounded-se-none'
-       onClick={() => changeSelectedTable(table)}
+       className='w-full h-auto pt-5 pb-1 bg-neutral-50 dark:bg-neutral-900 text-primary rounded-xl rounded-ss-none rounded-se-none'
       >
        <SlOptions className='size-6' />
       </Button>
@@ -149,7 +161,9 @@ export default function SalonTable({
         table.tableStateTypeID === TableStateTypes.readyToService) && (
         <DropdownMenuItem
          className='text-yellow-600 dark:text-yellow-400'
-         onClick={() => onShowChangeTableState(true)}
+         onClick={() => {
+          onShowChangeTableState(true);
+         }}
         >
          <GrStatusUnknown className='size-8 text-inherit' />
          <DropdownMenuLabel className='text-base'>
@@ -160,7 +174,12 @@ export default function SalonTable({
        {table.tableStateTypeID !== TableStateTypes.outOfService &&
         table.tableStateTypeID !== TableStateTypes.readyToService && (
          <>
-          <DropdownMenuItem className='text-teal-700 dark:text-teal-400'>
+          <DropdownMenuItem
+           className='text-teal-700 dark:text-teal-400'
+           onClick={() => {
+            changeShowTransferTable(true);
+           }}
+          >
            <TbTransfer className='size-8 text-inherit' />
            <DropdownMenuLabel className='text-base'>
             {dic.tables.transferTable}

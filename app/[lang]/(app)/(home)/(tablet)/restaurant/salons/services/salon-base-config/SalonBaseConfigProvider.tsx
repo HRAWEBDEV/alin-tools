@@ -35,6 +35,7 @@ export default function SalonBaseConfigProvider({
  const [isLoadingTables, setIsLoadingTables] = useState(false);
  const [lastTablesUpdate, setLastTablesUpdate] = useState<Date | null>(null);
  const [showChangeTableState, setShowChangeTableState] = useState(false);
+ const [showTransferTable, setShowTransferTable] = useState(false);
  const [connection, setConnection] = useState<signalR.HubConnection | null>(
   null,
  );
@@ -156,6 +157,10 @@ export default function SalonBaseConfigProvider({
  function handleShowChangeStateTable(open?: boolean) {
   setShowChangeTableState((pre) => (open === undefined ? !pre : open));
  }
+ //
+ function changeShowTransferTable(open?: boolean) {
+  setShowTransferTable((pre) => (open === undefined ? !pre : open));
+ }
  // table report
  const tablesReport = getTablesReport(tables);
  // change selectedTable
@@ -185,9 +190,11 @@ export default function SalonBaseConfigProvider({
    filters: tableFilters,
    selectedTable,
    showChangeTableState,
+   showTransferTable,
    onShowChangeTableState: handleShowChangeStateTable,
    changeFilters: handleChangeTableFilters,
    changeSelectedTable,
+   changeShowTransferTable,
   },
  };
 
