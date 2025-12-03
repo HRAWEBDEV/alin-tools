@@ -130,7 +130,7 @@ export default function SalonTable({
      </Link>
     </Button>
    </div>
-   <div className='mx-4 -mt-4'>
+   <div className='mx-2 -mt-4'>
     <DropdownMenu
      dir={localeInfo.contentDirection}
      onOpenChange={(newValue) => {
