@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { TbTransfer } from 'react-icons/tb';
 import { IoMdAddCircle } from 'react-icons/io';
+import { GrStatusUnknown } from 'react-icons/gr';
 
 export default function SalonTable({
  table,
@@ -29,7 +30,7 @@ export default function SalonTable({
 }) {
  const tableStyles = getTableStateStyles(table.tableStateTypeID);
  const { locale, localeInfo } = useBaseConfig();
- const tableRows = getTableRows(table.tableCapacity, 3);
+ const tableRows = getTableRows(table.tableCapacity, 5);
 
  function getTableExtensionTitle() {
   switch (table.tableStateTypeID) {
@@ -129,32 +130,48 @@ export default function SalonTable({
        <SlOptions className='size-6' />
       </Button>
      </DropdownMenuTrigger>
-     <DropdownMenuContent align='start' className='w-48'>
+     <DropdownMenuContent align='start' className='w-56'>
       <DropdownMenuGroup>
-       <DropdownMenuItem className='text-sky-700 dark:text-sky-400'>
-        <IoMdAddCircle className='size-8 text-inherit' />
-        <DropdownMenuLabel className='text-base'>
-         {dic.tables.order}
-        </DropdownMenuLabel>
-       </DropdownMenuItem>
-       <DropdownMenuItem className='text-teal-700 dark:text-teal-400'>
-        <TbTransfer className='size-8 text-inherit' />
-        <DropdownMenuLabel className='text-base'>
-         {dic.tables.transferTable}
-        </DropdownMenuLabel>
-       </DropdownMenuItem>
-       <DropdownMenuItem className='text-orange-700 dark:text-orange-400'>
-        <AiOutlineMergeCells className='size-8 text-inherit' />
-        <DropdownMenuLabel className='text-base'>
-         {dic.tables.mergeTables}
-        </DropdownMenuLabel>
-       </DropdownMenuItem>
-       <DropdownMenuItem className='text-rose-700 dark:text-rose-400'>
-        <IoMdCloseCircleOutline className='size-8 text-inherit' />
-        <DropdownMenuLabel className='text-base'>
-         {dic.tables.closeOrder}
-        </DropdownMenuLabel>
-       </DropdownMenuItem>
+       {table.tableStateTypeID !== TableStateTypes.outOfService && (
+        <DropdownMenuItem className='text-sky-700 dark:text-sky-400'>
+         <IoMdAddCircle className='size-8 text-inherit' />
+         <DropdownMenuLabel className='text-base'>
+          {dic.tables.order}
+         </DropdownMenuLabel>
+        </DropdownMenuItem>
+       )}
+       {(table.tableStateTypeID === TableStateTypes.outOfService ||
+        table.tableStateTypeID === TableStateTypes.readyToService) && (
+        <DropdownMenuItem className='text-yellow-600 dark:text-yellow-400'>
+         <GrStatusUnknown className='size-8 text-inherit' />
+         <DropdownMenuLabel className='text-base'>
+          {dic.tables.changeTableState}
+         </DropdownMenuLabel>
+        </DropdownMenuItem>
+       )}
+       {table.tableStateTypeID !== TableStateTypes.outOfService &&
+        table.tableStateTypeID !== TableStateTypes.readyToService && (
+         <>
+          <DropdownMenuItem className='text-teal-700 dark:text-teal-400'>
+           <TbTransfer className='size-8 text-inherit' />
+           <DropdownMenuLabel className='text-base'>
+            {dic.tables.transferTable}
+           </DropdownMenuLabel>
+          </DropdownMenuItem>
+          <DropdownMenuItem className='text-orange-700 dark:text-orange-400'>
+           <AiOutlineMergeCells className='size-8 text-inherit' />
+           <DropdownMenuLabel className='text-base'>
+            {dic.tables.mergeTables}
+           </DropdownMenuLabel>
+          </DropdownMenuItem>
+          <DropdownMenuItem className='text-rose-700 dark:text-rose-400'>
+           <IoMdCloseCircleOutline className='size-8 text-inherit' />
+           <DropdownMenuLabel className='text-base'>
+            {dic.tables.closeOrder}
+           </DropdownMenuLabel>
+          </DropdownMenuItem>
+         </>
+        )}
       </DropdownMenuGroup>
      </DropdownMenuContent>
     </DropdownMenu>

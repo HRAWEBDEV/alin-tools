@@ -22,6 +22,7 @@
   "transferTable": "انتقال میـــــز",
   "mergeTables": "ادغام میـــــز",
   "closeOrder": "بستن",
-  "order": "سفارش"
+  "order": "سفارش",
+  "changeTableState": "تغییر وضعیت میز"
  }
 }
