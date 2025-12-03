@@ -30,9 +30,11 @@ export default function SalonBaseConfigProvider({
   showOutOfServiceTables: true,
   showReservedTables: true,
  });
+ const [selectedTable, setSelectedTable] = useState<Table | null>(null);
  const [tables, setTables] = useState<Table[]>([]);
  const [isLoadingTables, setIsLoadingTables] = useState(false);
  const [lastTablesUpdate, setLastTablesUpdate] = useState<Date | null>(null);
+ const [showChangeTableState, setShowChangeTableState] = useState(false);
  const [connection, setConnection] = useState<signalR.HubConnection | null>(
   null,
  );
@@ -151,7 +153,15 @@ export default function SalonBaseConfigProvider({
  }, [getSalonTables]);
 
  //
+ function handleShowChangeStateTable(open?: boolean) {
+  setShowChangeTableState((pre) => (open === undefined ? !pre : open));
+ }
+ // table report
  const tablesReport = getTablesReport(tables);
+ // change selectedTable
+ function changeSelectedTable(newTable: Table | null) {
+  setSelectedTable(newTable);
+ }
  // ctx
 
  const ctx: SalonBaseConfig = {
@@ -173,7 +183,11 @@ export default function SalonBaseConfigProvider({
    lastTablesUpdate,
    tablesReport,
    filters: tableFilters,
+   selectedTable,
+   showChangeTableState,
+   onShowChangeTableState: handleShowChangeStateTable,
    changeFilters: handleChangeTableFilters,
+   changeSelectedTable,
   },
  };
 

@@ -25,11 +25,15 @@ interface SalonBaseConfig {
  tablesInfo: {
   data: Table[];
   filteredData: Table[];
+  selectedTable: Table | null;
   isLoading: boolean;
   lastTablesUpdate: Date | null;
   tablesReport: TablesReport;
   filters: TablesFilters;
+  showChangeTableState: boolean;
+  onShowChangeTableState: (open?: boolean) => unknown;
   changeFilters: (filters: TablesFilters) => unknown;
+  changeSelectedTable: (newTable: Table | null) => unknown;
  };
 }
 

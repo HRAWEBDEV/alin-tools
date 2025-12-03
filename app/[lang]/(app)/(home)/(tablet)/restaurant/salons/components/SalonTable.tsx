@@ -20,6 +20,7 @@ import {
 import { TbTransfer } from 'react-icons/tb';
 import { IoMdAddCircle } from 'react-icons/io';
 import { GrStatusUnknown } from 'react-icons/gr';
+import { useSalonBaseConfigContext } from '../services/salon-base-config/salonBaseConfigContext';
 
 export default function SalonTable({
  table,
@@ -28,6 +29,9 @@ export default function SalonTable({
  dic: SalonsDictionary;
  table: Table;
 }) {
+ const {
+  tablesInfo: { changeSelectedTable, onShowChangeTableState },
+ } = useSalonBaseConfigContext();
  const tableStyles = getTableStateStyles(table.tableStateTypeID);
  const { locale, localeInfo } = useBaseConfig();
  const tableRows = getTableRows(table.tableCapacity, 5);
@@ -126,6 +130,7 @@ export default function SalonTable({
       <Button
        variant='outline'
        className='w-full h-auto pt-5 pb-1 bg-neutral-100 dark:bg-neutral-900 text-primary rounded-xl rounded-ss-none rounded-se-none'
+       onClick={() => changeSelectedTable(table)}
       >
        <SlOptions className='size-6' />
       </Button>
@@ -142,7 +147,10 @@ export default function SalonTable({
        )}
        {(table.tableStateTypeID === TableStateTypes.outOfService ||
         table.tableStateTypeID === TableStateTypes.readyToService) && (
-        <DropdownMenuItem className='text-yellow-600 dark:text-yellow-400'>
+        <DropdownMenuItem
+         className='text-yellow-600 dark:text-yellow-400'
+         onClick={() => onShowChangeTableState(true)}
+        >
          <GrStatusUnknown className='size-8 text-inherit' />
          <DropdownMenuLabel className='text-base'>
           {dic.tables.changeTableState}

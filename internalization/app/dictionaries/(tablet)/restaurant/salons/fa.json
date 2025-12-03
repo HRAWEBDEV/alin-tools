@@ -24,5 +24,10 @@
   "closeOrder": "بستن",
   "order": "سفارش",
   "changeTableState": "تغییر وضعیت میز"
+ },
+ "tableStateModal": {
+  "currentTableState": "وضعیت فعلی میز",
+  "outOfOrder": "خارج از سرویس",
+  "readyToService": "آماده به سرویس"
  }
 }
