@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { type Table } from '../services/salonsApiActions';
-import { FaStar } from 'react-icons/fa';
 import { SlOptions } from 'react-icons/sl';
 import { TableStateTypes, getTableStateStyles } from '../utils/tableStates';
 import { getTableRows } from '../utils/getTableRows';
@@ -62,6 +61,11 @@ export default function SalonTable({
       href='#'
       className='relative flex! flex-col grow items-stretch bg-background! p-2'
      >
+      {table.vip && (
+       <div className='absolute top-11 start-0 end-0 text-end text-4xl text-amber-400/30 font-en-roboto'>
+        VIP
+       </div>
+      )}
       <div
        className={`p-1 rounded-2xl border border-dashed text-center ${tableStyles.backgoundColor} ${tableStyles.border} ${tableStyles.text}`}
       >
