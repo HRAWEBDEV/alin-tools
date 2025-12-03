@@ -3,6 +3,7 @@ import { type SalonsDictionary } from '@/internalization/app/dictionaries/(table
 import SalonTable from './SalonTable';
 import { useSalonBaseConfigContext } from '../services/salon-base-config/salonBaseConfigContext';
 import { AnimatePresence } from 'motion/react';
+import ChangeTableState from './table-state/ChangeTableStateModal';
 
 export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
  const {
@@ -23,6 +24,7 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
      {/* <p className='text-center font-medium'>{dic.noItemsFound}</p> */}
     </div>
    )}
+   <ChangeTableState dic={dic} />
   </div>
  );
 }
