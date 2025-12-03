@@ -38,7 +38,7 @@ export default function SalonTable({
  } = useSalonBaseConfigContext();
  const tableStyles = getTableStateStyles(table.tableStateTypeID);
  const { locale, localeInfo } = useBaseConfig();
- const tableRows = getTableRows(table.tableCapacity, 5);
+ const tableRows = getTableRows(table.tableCapacity, 0);
 
  function getTableExtensionTitle() {
   switch (table.tableStateTypeID) {
@@ -66,7 +66,7 @@ export default function SalonTable({
          <div
           data-occupied={row.occupiedSeats >= seat + 1}
           key={seat}
-          className='size-5 rounded-full bg-neutral-200 dark:bg-neutral-800 data-[occupied="true"]:bg-rose-400 data-[occupied="true"]:dark:bg-rose-800'
+          className='size-5 rounded-full bg-neutral-200 dark:bg-neutral-800 data-[occupied="true"]:bg-rose-300 data-[occupied="true"]:dark:bg-rose-800'
          ></div>
         ))}
        </div>
