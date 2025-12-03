@@ -24,6 +24,8 @@ import { TiArrowLeft } from 'react-icons/ti';
 import { TiArrowRight } from 'react-icons/ti';
 import { Spinner } from '@/components/ui/spinner';
 import { useSalonBaseConfigContext } from '../services/salon-base-config/salonBaseConfigContext';
+import { getTableStateStyles } from '../utils/tableStates';
+import { TableStateTypes } from '../utils/tableStates';
 
 export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
  const [searchedSalon, setSearchedSalon] = useState('');
@@ -39,6 +41,7 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
    prevHall,
    changeHall,
   },
+  tablesInfo: { tablesReport },
  } = useSalonBaseConfigContext();
 
  const filteredSalons = data.filter((item) =>
@@ -142,7 +145,7 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
       <TiArrowLeft className='size-8' />
      </Button>
     </div>
-    <div className='flex gap-4 items-center flex-wrap justify-center md:justify-start'>
+    <div className='grid grid-cols-2 gap-5 sm:flex sm:gap-4 items-center flex-wrap justify-center md:justify-start'>
      <div className='flex gap-2 items-center'>
       <Switch
        style={{
@@ -152,7 +155,15 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
        className='scale-125'
        checked
       />
-      <Label htmlFor='empty'>{dic.filters.empty} (10)</Label>
+      <Label
+       htmlFor='empty'
+       className={
+        getTableStateStyles(TableStateTypes.readyToService).text +
+        ' font-medium'
+       }
+      >
+       {dic.filters.empty} ({tablesReport.emptyTables})
+      </Label>
      </div>
      <div className='flex gap-2 items-center'>
       <Switch
@@ -163,17 +174,51 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
        className='scale-125'
        checked
       />
-      <Label htmlFor='occupied'>{dic.filters.occupied} (10)</Label>
+      <Label
+       htmlFor='occupied'
+       className={
+        getTableStateStyles(TableStateTypes.regularCustomer).text +
+        ' font-medium'
+       }
+      >
+       {dic.filters.occupied} ({tablesReport.occupiedTables})
+      </Label>
      </div>
      <div className='flex gap-2 items-center'>
       <Switch
+       id='reserved'
        style={{
         direction: 'ltr',
        }}
        className='scale-125'
        checked
       />
-      <Label htmlFor='reserved'>{dic.filters.reserved} (10)</Label>
+      <Label
+       htmlFor='reserved'
+       className={
+        getTableStateStyles(TableStateTypes.reserved).text + ' font-medium'
+       }
+      >
+       {dic.filters.reserved} ({tablesReport.reservedTables})
+      </Label>
+     </div>
+     <div className='flex gap-2 items-center'>
+      <Switch
+       id='outOfService'
+       style={{
+        direction: 'ltr',
+       }}
+       className='scale-125'
+       checked
+      />
+      <Label
+       htmlFor='outOfService'
+       className={
+        getTableStateStyles(TableStateTypes.outOfService).text + ' font-medium'
+       }
+      >
+       {dic.filters.reserved} ({tablesReport.outOfServiceTables})
+      </Label>
      </div>
     </div>
    </div>

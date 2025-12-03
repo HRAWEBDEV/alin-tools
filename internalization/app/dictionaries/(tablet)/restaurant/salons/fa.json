@@ -8,6 +8,7 @@
   "empty": "خالی",
   "occupied": "اشغال",
   "reserved": "رزرو",
+  "outOfService": "خارج از سرویس",
   "next": "بعدی",
   "prev": "قبلی"
  },
