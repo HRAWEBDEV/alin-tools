@@ -2,6 +2,7 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react';
 import {
  type SalonBaseConfig,
+ type TablesFilters,
  salonBaseConfigContext,
 } from './salonBaseConfigContext';
 import {
@@ -16,12 +17,19 @@ import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import * as signalR from '@microsoft/signalr';
 import { getUserLoginToken } from '@/app/[lang]/(app)/login/utils/loginTokenManager';
 import { getTablesReport } from '../../utils/getTablesReport';
+import { getFilteredTables } from '../../utils/getfilteredTables';
 
 export default function SalonBaseConfigProvider({
  children,
 }: {
  children: ReactNode;
 }) {
+ const [tableFilters, setTableFilters] = useState<TablesFilters>({
+  showEmptyTables: true,
+  showOccupiedTables: true,
+  showOutOfServiceTables: true,
+  showReservedTables: true,
+ });
  const [tables, setTables] = useState<Table[]>([]);
  const [isLoadingTables, setIsLoadingTables] = useState(false);
  const [lastTablesUpdate, setLastTablesUpdate] = useState<Date | null>(null);
@@ -73,7 +81,10 @@ export default function SalonBaseConfigProvider({
   if (!hasPrevHall) return;
   handleChangeHall(hallsData[selectedHallIndex - 1]);
  }
-
+ // tables filters
+ function handleChangeTableFilters(tableFilters: TablesFilters) {
+  setTableFilters(tableFilters);
+ }
  // * signal r setup
  const getSalonTables = useCallback(async () => {
   if (!connection || !selectedHall) return;
@@ -157,9 +168,12 @@ export default function SalonBaseConfigProvider({
   },
   tablesInfo: {
    data: tables,
+   filteredData: getFilteredTables(tables, tableFilters),
    isLoading: isLoadingTables,
    lastTablesUpdate,
    tablesReport,
+   filters: tableFilters,
+   changeFilters: handleChangeTableFilters,
   },
  };
 

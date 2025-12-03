@@ -3,6 +3,13 @@ import { use, createContext } from 'react';
 import { OutOfContext } from '@/utils/OutOfContext';
 import { type TablesReport } from '../../utils/getTablesReport';
 
+interface TablesFilters {
+ showOccupiedTables: boolean;
+ showOutOfServiceTables: boolean;
+ showReservedTables: boolean;
+ showEmptyTables: boolean;
+}
+
 interface SalonBaseConfig {
  hallsInfo: {
   data: Hall[];
@@ -17,9 +24,12 @@ interface SalonBaseConfig {
  };
  tablesInfo: {
   data: Table[];
+  filteredData: Table[];
   isLoading: boolean;
   lastTablesUpdate: Date | null;
   tablesReport: TablesReport;
+  filters: TablesFilters;
+  changeFilters: (filters: TablesFilters) => unknown;
  };
 }
 
@@ -31,5 +41,5 @@ function useSalonBaseConfigContext() {
  return val;
 }
 
-export type { SalonBaseConfig };
+export type { SalonBaseConfig, TablesFilters };
 export { salonBaseConfigContext, useSalonBaseConfigContext };

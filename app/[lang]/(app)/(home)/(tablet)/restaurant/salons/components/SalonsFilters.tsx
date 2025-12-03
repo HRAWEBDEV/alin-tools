@@ -41,7 +41,7 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
    prevHall,
    changeHall,
   },
-  tablesInfo: { tablesReport },
+  tablesInfo: { tablesReport, filters, changeFilters },
  } = useSalonBaseConfigContext();
 
  const filteredSalons = data.filter((item) =>
@@ -145,7 +145,7 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
       <TiArrowLeft className='size-8' />
      </Button>
     </div>
-    <div className='grid grid-cols-2 gap-5 sm:flex sm:gap-4 items-center flex-wrap justify-center md:justify-start'>
+    <div className='grid grid-cols-2 gap-5 sm:flex sm:gap-3 items-center flex-wrap justify-center md:justify-start'>
      <div className='flex gap-2 items-center'>
       <Switch
        style={{
@@ -153,7 +153,13 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
        }}
        id='empty'
        className='scale-125'
-       checked
+       checked={filters.showEmptyTables}
+       onCheckedChange={(newValue) =>
+        changeFilters({
+         ...filters,
+         showEmptyTables: newValue,
+        })
+       }
       />
       <Label
        htmlFor='empty'
@@ -172,7 +178,13 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
        }}
        id='occupied'
        className='scale-125'
-       checked
+       checked={filters.showOccupiedTables}
+       onCheckedChange={(newValue) =>
+        changeFilters({
+         ...filters,
+         showOccupiedTables: newValue,
+        })
+       }
       />
       <Label
        htmlFor='occupied'
@@ -191,7 +203,13 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
         direction: 'ltr',
        }}
        className='scale-125'
-       checked
+       checked={filters.showReservedTables}
+       onCheckedChange={(newValue) =>
+        changeFilters({
+         ...filters,
+         showReservedTables: newValue,
+        })
+       }
       />
       <Label
        htmlFor='reserved'
@@ -202,24 +220,24 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
        {dic.filters.reserved} ({tablesReport.reservedTables})
       </Label>
      </div>
-     <div className='flex gap-2 items-center'>
-      <Switch
-       id='outOfService'
-       style={{
-        direction: 'ltr',
-       }}
-       className='scale-125'
-       checked
-      />
-      <Label
-       htmlFor='outOfService'
-       className={
-        getTableStateStyles(TableStateTypes.outOfService).text + ' font-medium'
-       }
-      >
-       {dic.filters.reserved} ({tablesReport.outOfServiceTables})
-      </Label>
-     </div>
+     {/* <div className='flex gap-2 items-center'> */}
+     {/*  <Switch */}
+     {/*   id='outOfService' */}
+     {/*   style={{ */}
+     {/*    direction: 'ltr', */}
+     {/*   }} */}
+     {/*   className='scale-125' */}
+     {/*   checked */}
+     {/*  /> */}
+     {/*  <Label */}
+     {/*   htmlFor='outOfService' */}
+     {/*   className={ */}
+     {/*    getTableStateStyles(TableStateTypes.outOfService).text + ' font-medium' */}
+     {/*   } */}
+     {/*  > */}
+     {/*   {dic.filters.outOfService} ({tablesReport.outOfServiceTables}) */}
+     {/*  </Label> */}
+     {/* </div> */}
     </div>
    </div>
   </div>
