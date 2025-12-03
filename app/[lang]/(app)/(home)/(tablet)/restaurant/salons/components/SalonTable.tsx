@@ -38,7 +38,7 @@ export default function SalonTable({
  } = useSalonBaseConfigContext();
  const tableStyles = getTableStateStyles(table.tableStateTypeID);
  const { locale, localeInfo } = useBaseConfig();
- const tableRows = getTableRows(table.tableCapacity, 0);
+ const tableRows = getTableRows(table.tableCapacity, 2);
 
  function getTableExtensionTitle() {
   switch (table.tableStateTypeID) {
@@ -75,7 +75,7 @@ export default function SalonTable({
     )}
     <Button
      variant={'outline'}
-     className='z-1 rounded-2xl h-full flex-col justify-start text-start p-0 overflow-hidden mx-4 shadow-lg'
+     className='z-1 rounded-2xl h-full flex-col justify-start text-start p-0 overflow-hidden mx-2 shadow-lg'
      asChild
     >
      <Link
