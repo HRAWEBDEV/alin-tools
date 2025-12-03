@@ -23,13 +23,13 @@ export default function TransferTableModal({ dic }: { dic: SalonsDictionary }) {
     <DialogHeader className='p-4 py-6'>
      <DialogTitle>{dic.transferTableModal.title}</DialogTitle>
     </DialogHeader>
-    <div className='p-4 flex gap-4 items-center justify-center'>
+    <div className='p-4 flex gap-4 items-center justify-center flex-col sm:flex-row'>
      <div className='size-48 rounded-lg border border-input p-4 grid place-content-center bg-rose-100 dark:bg-rose-900'>
       <p className='text-4xl font-medium font-en-roboto'>
        {selectedTable?.tableNo.toString().padStart(2, '0')}
       </p>
      </div>
-     <div className='flex flex-col items-center text-neutral-600 dark:text-neutral-400'>
+     <div className='flex flex-col items-center text-neutral-600 dark:text-neutral-400 -rotate-90 sm:rotate-0'>
       <span>{dic.transferTableModal.transferTo}</span>
       <FaArrowLeftLong className='size-20 ltr:rotate-180' />
      </div>
@@ -38,7 +38,7 @@ export default function TransferTableModal({ dic }: { dic: SalonsDictionary }) {
        <MdTouchApp className='size-32 text-neutral-200 dark:text-neutral-800' />
       </div>
       <div className='flex flex-col items-center z-1'>
-       <p className='text-xl font-medium'>
+       <p className='text-2xl font-medium'>
         {dic.transferTableModal.selectTargetTable}
        </p>
        {/* <p>{dic.transferTableModal.selectTargetTable}</p> */}
