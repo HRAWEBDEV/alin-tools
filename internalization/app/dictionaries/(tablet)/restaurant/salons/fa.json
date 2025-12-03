@@ -18,6 +18,10 @@
   "reserved": "رزرو",
   "occupied": "اشغال",
   "vip": "ویژه",
-  "room": "اتاق"
+  "room": "اتاق",
+  "transferTable": "انتقال میـــــز",
+  "mergeTables": "ادغام میـــــز",
+  "closeOrder": "بستن",
+  "order": "سفارش"
  }
 }

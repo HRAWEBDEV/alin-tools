@@ -7,6 +7,18 @@ import { SlOptions } from 'react-icons/sl';
 import { TableStateTypes, getTableStateStyles } from '../utils/tableStates';
 import { getTableRows } from '../utils/getTableRows';
 import { motion } from 'motion/react';
+import { IoMdCloseCircleOutline } from 'react-icons/io';
+import { AiOutlineMergeCells } from 'react-icons/ai';
+import {
+ DropdownMenu,
+ DropdownMenuTrigger,
+ DropdownMenuContent,
+ DropdownMenuGroup,
+ DropdownMenuItem,
+ DropdownMenuLabel,
+} from '@/components/ui/dropdown-menu';
+import { TbTransfer } from 'react-icons/tb';
+import { IoMdAddCircle } from 'react-icons/io';
 
 export default function SalonTable({
  table,
@@ -16,7 +28,7 @@ export default function SalonTable({
  table: Table;
 }) {
  const tableStyles = getTableStateStyles(table.tableStateTypeID);
- const { locale } = useBaseConfig();
+ const { locale, localeInfo } = useBaseConfig();
  const tableRows = getTableRows(table.tableCapacity, 3);
 
  function getTableExtensionTitle() {
@@ -45,7 +57,7 @@ export default function SalonTable({
          <div
           data-occupied={row.occupiedSeats >= seat + 1}
           key={seat}
-          className='size-5 rounded-full bg-neutral-200 dark:bg-neutral-800 data-[occupied="true"]:bg-rose-400 data-[occupied="true"]:dark:bg-rose-600'
+          className='size-5 rounded-full bg-neutral-200 dark:bg-neutral-800 data-[occupied="true"]:bg-rose-400 data-[occupied="true"]:dark:bg-rose-800'
          ></div>
         ))}
        </div>
@@ -54,7 +66,7 @@ export default function SalonTable({
     )}
     <Button
      variant={'outline'}
-     className='rounded-2xl h-full flex-col justify-start text-start p-0 overflow-hidden mx-4 shadow-lg'
+     className='z-1 rounded-2xl h-full flex-col justify-start text-start p-0 overflow-hidden mx-4 shadow-lg'
      asChild
     >
      <Link
@@ -62,7 +74,7 @@ export default function SalonTable({
       className='relative flex! flex-col grow items-stretch bg-background! p-2'
      >
       {table.vip && (
-       <div className='absolute top-11 start-0 end-0 text-end text-4xl text-amber-400/30 font-en-roboto'>
+       <div className='absolute top-11 start-0 end-0 text-end text-4xl text-amber-400/40 dark:text-amber-500/40 font-en-roboto'>
         VIP
        </div>
       )}
@@ -108,12 +120,44 @@ export default function SalonTable({
     </Button>
    </div>
    <div className='mx-4 -mt-4'>
-    <Button
-     variant='outline'
-     className='w-full h-auto pt-5 pb-1 bg-neutral-100 dark:bg-neutral-900'
-    >
-     <SlOptions className='size-6 text-primary' />
-    </Button>
+    <DropdownMenu dir={localeInfo.contentDirection}>
+     <DropdownMenuTrigger asChild>
+      <Button
+       variant='outline'
+       className='w-full h-auto pt-5 pb-1 bg-neutral-100 dark:bg-neutral-900 text-primary rounded-xl rounded-ss-none rounded-se-none'
+      >
+       <SlOptions className='size-6' />
+      </Button>
+     </DropdownMenuTrigger>
+     <DropdownMenuContent align='start' className='w-48'>
+      <DropdownMenuGroup>
+       <DropdownMenuItem className='text-sky-700 dark:text-sky-400'>
+        <IoMdAddCircle className='size-8 text-inherit' />
+        <DropdownMenuLabel className='text-base'>
+         {dic.tables.order}
+        </DropdownMenuLabel>
+       </DropdownMenuItem>
+       <DropdownMenuItem className='text-teal-700 dark:text-teal-400'>
+        <TbTransfer className='size-8 text-inherit' />
+        <DropdownMenuLabel className='text-base'>
+         {dic.tables.transferTable}
+        </DropdownMenuLabel>
+       </DropdownMenuItem>
+       <DropdownMenuItem className='text-orange-700 dark:text-orange-400'>
+        <AiOutlineMergeCells className='size-8 text-inherit' />
+        <DropdownMenuLabel className='text-base'>
+         {dic.tables.mergeTables}
+        </DropdownMenuLabel>
+       </DropdownMenuItem>
+       <DropdownMenuItem className='text-rose-700 dark:text-rose-400'>
+        <IoMdCloseCircleOutline className='size-8 text-inherit' />
+        <DropdownMenuLabel className='text-base'>
+         {dic.tables.closeOrder}
+        </DropdownMenuLabel>
+       </DropdownMenuItem>
+      </DropdownMenuGroup>
+     </DropdownMenuContent>
+    </DropdownMenu>
    </div>
   </motion.div>
  );
