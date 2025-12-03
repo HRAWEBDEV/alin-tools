@@ -1,6 +1,7 @@
 import { type Hall, type Table } from '../salonsApiActions';
 import { use, createContext } from 'react';
 import { OutOfContext } from '@/utils/OutOfContext';
+import { type TablesReport } from '../../utils/getTablesReport';
 
 interface SalonBaseConfig {
  hallsInfo: {
@@ -18,6 +19,7 @@ interface SalonBaseConfig {
   data: Table[];
   isLoading: boolean;
   lastTablesUpdate: Date | null;
+  tablesReport: TablesReport;
  };
 }
 

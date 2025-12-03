@@ -15,6 +15,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import * as signalR from '@microsoft/signalr';
 import { getUserLoginToken } from '@/app/[lang]/(app)/login/utils/loginTokenManager';
+import { getTablesReport } from '../../utils/getTablesReport';
 
 export default function SalonBaseConfigProvider({
  children,
@@ -138,6 +139,10 @@ export default function SalonBaseConfigProvider({
   getSalonTables();
  }, [getSalonTables]);
 
+ //
+ const tablesReport = getTablesReport(tables);
+ // ctx
+
  const ctx: SalonBaseConfig = {
   hallsInfo: {
    data: hallsData,
@@ -154,6 +159,7 @@ export default function SalonBaseConfigProvider({
    data: tables,
    isLoading: isLoadingTables,
    lastTablesUpdate,
+   tablesReport,
   },
  };
 

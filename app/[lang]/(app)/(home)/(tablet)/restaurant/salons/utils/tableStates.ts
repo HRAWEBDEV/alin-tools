@@ -24,9 +24,9 @@ function getTableStateStyles(state: TableStateTypes): {
   case 2:
    return {
     type: 'outOfService',
-    border: '',
-    text: '',
-    backgoundColor: '',
+    border: 'border-neutral-400 dark:border-neutral-500',
+    text: 'text-neutral-400 dark:text-neutral-500',
+    backgoundColor: 'bg-neutral-50 dark:bg-neutral-950',
    };
   case 3:
    return {
@@ -38,23 +38,23 @@ function getTableStateStyles(state: TableStateTypes): {
   case 4:
    return {
     type: 'occupied',
-    border: '',
-    text: '',
-    backgoundColor: '',
+    border: 'border-rose-600 dark:border-rose-400',
+    text: 'text-rose-600 dark:text-rose-400',
+    backgoundColor: 'bg-rose-50 dark:bg-rose-950',
    };
   case 5:
    return {
     type: 'occupied',
-    border: '',
-    text: '',
-    backgoundColor: '',
+    border: 'border-rose-600 dark:border-rose-400',
+    text: 'text-rose-600 dark:text-rose-400',
+    backgoundColor: 'bg-rose-50 dark:bg-rose-950',
    };
   case 6:
    return {
     type: 'occupied',
-    border: '',
-    text: '',
-    backgoundColor: '',
+    border: 'border-rose-600 dark:border-rose-400',
+    text: 'text-rose-600 dark:text-rose-400',
+    backgoundColor: 'bg-rose-50 dark:bg-rose-950',
    };
  }
  return {
@@ -65,5 +65,4 @@ function getTableStateStyles(state: TableStateTypes): {
  };
 }
 
-export type { TableStateTypes };
-export { getTableStateStyles };
+export { TableStateTypes, getTableStateStyles };

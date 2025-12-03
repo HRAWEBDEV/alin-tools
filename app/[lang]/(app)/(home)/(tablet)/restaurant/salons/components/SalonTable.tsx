@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { type Table } from '../services/salonsApiActions';
 import { IoIosStar } from 'react-icons/io';
-import { getTableStateStyles } from '../utils/tableStates';
+import { TableStateTypes, getTableStateStyles } from '../utils/tableStates';
 import { getTableRows } from '../utils/getTableRows';
 
 export default function SalonTable({
@@ -16,8 +16,17 @@ export default function SalonTable({
 }) {
  const tableStyles = getTableStateStyles(table.tableStateTypeID);
  const { locale } = useBaseConfig();
- const tableRows = getTableRows(table.tableCapacity, 2);
- console.log(tableRows);
+ const tableRows = getTableRows(table.tableCapacity, 0);
+
+ function getTableExtensionTitle() {
+  switch (table.tableStateTypeID) {
+   case TableStateTypes.VIPCustomer:
+    return ` (${dic.tables.vip})`;
+   case TableStateTypes.roomGuest:
+    return ` (${dic.tables.room})`;
+  }
+  return '';
+ }
 
  return (
   <div className='relative grid h-40'>
@@ -57,8 +66,8 @@ export default function SalonTable({
       className={`p-1 rounded-2xl border border-dashed text-center ${tableStyles.backgoundColor} ${tableStyles.border} ${tableStyles.text}`}
      >
       <span className='text-base font-medium'>
-       {' '}
-       {dic.tables[tableStyles.type]}{' '}
+       {dic.tables[tableStyles.type]}
+       {getTableExtensionTitle()}
       </span>
      </div>
      <div className='text-start ps-2 grow'>
@@ -68,7 +77,7 @@ export default function SalonTable({
        </h3>
       </div>
       <div>
-       <p className='text-xs text-neutral-500 dark:text-neutral-400'>
+       <p className='text-neutral-500 dark:text-neutral-400'>
         {table.customerName || '---'}
        </p>
       </div>

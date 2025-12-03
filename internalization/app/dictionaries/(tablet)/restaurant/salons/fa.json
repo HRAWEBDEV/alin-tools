@@ -13,8 +13,10 @@
  },
  "tables": {
   "readyToService": "خالـــی",
-  "outOfService": "",
+  "outOfService": "خارج از سرویس",
   "reserved": "رزرو",
-  "occupied": "اشغال"
+  "occupied": "اشغال",
+  "vip": "ویژه",
+  "room": "اتاق"
  }
 }
