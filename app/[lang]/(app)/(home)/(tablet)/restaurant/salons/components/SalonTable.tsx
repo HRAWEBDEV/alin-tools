@@ -6,6 +6,7 @@ import { type Table } from '../services/salonsApiActions';
 import { IoIosStar } from 'react-icons/io';
 import { TableStateTypes, getTableStateStyles } from '../utils/tableStates';
 import { getTableRows } from '../utils/getTableRows';
+import { motion } from 'motion/react';
 
 export default function SalonTable({
  table,
@@ -29,7 +30,7 @@ export default function SalonTable({
  }
 
  return (
-  <div className='relative grid h-40'>
+  <motion.div layout className='relative grid h-40'>
    {!!tableRows.length && (
     <div
      style={{
@@ -102,6 +103,6 @@ export default function SalonTable({
      </div>
     </Link>
    </Button>
-  </div>
+  </motion.div>
  );
 }
