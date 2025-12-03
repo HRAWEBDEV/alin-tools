@@ -145,7 +145,7 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
       <TiArrowLeft className='size-8' />
      </Button>
     </div>
-    <div className='grid grid-cols-2 gap-5 sm:flex sm:gap-3 items-center flex-wrap justify-center md:justify-start'>
+    <div className='flex gap-3 items-center flex-wrap justify-center md:justify-start'>
      <div className='flex gap-2 items-center'>
       <Switch
        style={{

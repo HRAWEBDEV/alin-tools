@@ -4,11 +4,7 @@ import { Button } from '@/components/ui/button';
 import { CiCircleMinus } from 'react-icons/ci';
 import { CiCirclePlus } from 'react-icons/ci';
 
-export default function OrderShoppingItem({
- dic,
-}: {
- dic: NewOrderDictionary;
-}) {
+export default function OrderShoppingItem({}: { dic: NewOrderDictionary }) {
  return (
   <div className='border-b border-input p-2'>
    <div className='flex gap-4 items-center'>
