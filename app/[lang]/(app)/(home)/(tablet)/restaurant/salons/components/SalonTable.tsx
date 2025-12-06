@@ -38,7 +38,7 @@ export default function SalonTable({
  } = useSalonBaseConfigContext();
  const tableStyles = getTableStateStyles(table.tableStateTypeID);
  const { locale, localeInfo } = useBaseConfig();
- const tableRows = getTableRows(table.tableCapacity, 2);
+ const tableRows = getTableRows(table.tableCapacity, table.occupiedPerson || 0);
 
  function getTableExtensionTitle() {
   switch (table.tableStateTypeID) {
@@ -105,17 +105,19 @@ export default function SalonTable({
        </div>
        <div>
         <p className='text-neutral-500 dark:text-neutral-400 text-wrap'>
-         {table.customerName || '---'}
+         {table.customerName || ''}
         </p>
        </div>
       </div>
       <div className='flex items-center justify-between gap-4'>
        <div className='flex items-center gap-1 text-base text-neutral-600 dark:text-neutral-400 font-medium'>
         <span>
-         {new Date().toLocaleTimeString(locale, {
-          hour: '2-digit',
-          minute: '2-digit',
-         })}
+         {table.OccupiedDateTimeOffset
+          ? new Date(table.OccupiedDateTimeOffset).toLocaleTimeString(locale, {
+             hour: '2-digit',
+             minute: '2-digit',
+            })
+          : ''}
         </span>
        </div>
        <div
@@ -124,7 +126,7 @@ export default function SalonTable({
         }}
         className={`font-medium text-base ${tableStyles.text}`}
        >
-        --/{table.tableCapacity}
+        {table.occupiedPerson || '-'}/{table.tableCapacity}
        </div>
       </div>
      </Link>

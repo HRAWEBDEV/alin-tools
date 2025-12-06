@@ -41,6 +41,8 @@ interface Table {
  customerID: number | null;
  saleTypeID: number | null;
  remained: number | null;
+ occupiedPerson: number | null;
+ OccupiedDateTimeOffset: string | null;
 }
 
 const getHallKey = 'restaurant-halls';
