@@ -1,9 +1,20 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
+@keyframes slide-away {
+ 0% {
+  transform: translate(-100%, 0);
+ }
+ 100% {
+  transform: translate(400%, 0);
+ }
+}
+
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 @theme inline {
+ --animate-slide-3s: slide-away 3s linear infinite;
+ --animate-slide-2s: slide-away 2s linear infinite;
  --radius-sm: calc(var(--radius) - 4px);
  --radius-md: calc(var(--radius) - 2px);
  --radius-lg: var(--radius);
