@@ -27,6 +27,7 @@ interface SalonBaseConfig {
   filteredData: Table[];
   selectedTable: Table | null;
   isLoading: boolean;
+  isSuccess: boolean;
   lastTablesUpdate: Date | null;
   tablesReport: TablesReport;
   filters: TablesFilters;

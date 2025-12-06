@@ -32,6 +32,7 @@ export default function SalonBaseConfigProvider({
  });
  const [selectedTable, setSelectedTable] = useState<Table | null>(null);
  const [tables, setTables] = useState<Table[]>([]);
+ const [tablesSuccess, setTablesSuccess] = useState(false);
  const [isLoadingTables, setIsLoadingTables] = useState(false);
  const [lastTablesUpdate, setLastTablesUpdate] = useState<Date | null>(null);
  const [showChangeTableState, setShowChangeTableState] = useState(false);
@@ -70,6 +71,7 @@ export default function SalonBaseConfigProvider({
 
  const handleChangeHall = useCallback(
   (newHall: InitiData['salons'][number]) => {
+   setTablesSuccess(false);
    const newSearchQueries = new URLSearchParams(searchQueries.toString());
    newSearchQueries.set('selectedHall', newHall.key);
    router.replace(
@@ -100,7 +102,7 @@ export default function SalonBaseConfigProvider({
  }
  // * signal r setup
  const getSalonTables = useCallback(async () => {
-  if (!connection || !selectedHall) return;
+  if (!connection || !selectedHall || !initData?.defaultSaleTimeID) return;
   setIsLoadingTables(true);
   try {
    await connection.invoke(
@@ -109,15 +111,16 @@ export default function SalonBaseConfigProvider({
     // salon id
     Number(selectedHall.key),
     // sale time id
-    1,
+    initData!.defaultSaleTimeID,
     new Date().toISOString(),
    );
+   setTablesSuccess(true);
   } catch (error) {
    console.log('signalR get salon tables failed: ', error);
   } finally {
    setIsLoadingTables(false);
   }
- }, [connection, selectedHall]);
+ }, [connection, selectedHall, initData]);
 
  useEffect(() => {
   if (!connection) return;
@@ -137,6 +140,7 @@ export default function SalonBaseConfigProvider({
  }, [getSalonTables, connection]);
 
  useEffect(() => {
+  if (!initDataSuccess) return;
   const salonSignalRConnection = new signalR.HubConnectionBuilder()
    .withUrl(
     `${
@@ -158,7 +162,7 @@ export default function SalonBaseConfigProvider({
   return () => {
    salonSignalRConnection.stop();
   };
- }, []);
+ }, [initDataSuccess]);
  useEffect(() => {
   getSalonTables();
  }, [getSalonTables]);
@@ -193,6 +197,7 @@ export default function SalonBaseConfigProvider({
   },
   tablesInfo: {
    data: tables,
+   isSuccess: tablesSuccess,
    filteredData: getFilteredTables(tables, tableFilters),
    isLoading: isLoadingTables,
    lastTablesUpdate,
