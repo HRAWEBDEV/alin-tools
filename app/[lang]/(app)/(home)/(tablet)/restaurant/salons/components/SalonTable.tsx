@@ -31,10 +31,14 @@ export default function SalonTable({
 }) {
  const {
   tablesInfo: {
+   selectedTable,
    showTransferTable,
+   showMergeTable,
    changeSelectedTable,
    onShowChangeTableState,
    changeShowTransferTable,
+   changeShowMergeTable,
+   mergeTableTo,
    transferTableTo,
   },
  } = useSalonBaseConfigContext();
@@ -80,7 +84,9 @@ export default function SalonTable({
      className='z-1 rounded-2xl h-full flex-col justify-start text-start p-0 overflow-hidden mx-2 shadow-lg'
      asChild
      onClick={() => {
+      if (selectedTable?.tableNo === table.tableNo) return;
       if (showTransferTable) transferTableTo(table);
+      if (showMergeTable) mergeTableTo(table);
      }}
     >
      <Link
@@ -194,7 +200,12 @@ export default function SalonTable({
             {dic.tables.transferTable}
            </DropdownMenuLabel>
           </DropdownMenuItem>
-          <DropdownMenuItem className='text-orange-700 dark:text-orange-400'>
+          <DropdownMenuItem
+           className='text-orange-700 dark:text-orange-400'
+           onClick={() => {
+            changeShowMergeTable(true);
+           }}
+          >
            <AiOutlineMergeCells className='size-8 text-inherit' />
            <DropdownMenuLabel className='text-base'>
             {dic.tables.mergeTables}

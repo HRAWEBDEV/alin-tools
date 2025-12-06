@@ -5,10 +5,10 @@ import { useSalonBaseConfigContext } from '../services/salon-base-config/salonBa
 import { AnimatePresence } from 'motion/react';
 import ChangeTableState from './table-state/ChangeTableStateModal';
 import TransferTableModal from './transfer-table/TransferTableModal';
+import MergeTableModal from './merge-table/MergeTableModal';
 import NoItemFound from '@/app/[lang]/(app)/components/NoItemFound';
 import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
 import { Button } from '@/components/ui/button';
-import { changeTableStateType } from '../services/salonsApiActions';
 
 const tablesGridClass =
  'grid gap-6 grid-cols-[repeat(auto-fill,minmax(9rem,10rem))] sm:grid-cols-[repeat(auto-fill,minmax(10rem,11rem))] justify-center';
@@ -25,22 +25,42 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
    selectedTable,
    selectedTransferToTable,
    showTransferTableConfirm,
+   showMergeTable,
+   selectedMergeToTable,
+   showMergeTableConfirm,
    onShowChangeTableState,
    changeShowTransferTable,
    changeShowTransferTableConfirm,
+   changeShowMergeTable,
+   changeShowMergeTableConfirm,
   },
  } = useSalonBaseConfigContext();
- if (isSuccess && !filteredData.length)
-  return (
-   <div>
-    <NoItemFound />
-   </div>
-  );
+
  return (
   <>
    <div className='mb-4 opacity-50'>
     {isLoading ? <LinearLoading /> : <div className='h-[6px]'></div>}
    </div>
+   {showMergeTable && selectedTable && (
+    <div className={tablesGridClass + ' pb-4 mb-2 border-b border-input'}>
+     <SalonTable dic={dic} table={selectedTable} />
+     <div className='col-span-2 flex flex-col'>
+      <p className='text-lg font-medium text-rose-700 dark:text-rose-400 mb-6'>
+       {dic.toMergeTableSelectSelectAvailableTables}
+      </p>
+      <div className='flex justify-end'>
+       <Button
+        variant='destructive'
+        onClick={() => {
+         changeShowMergeTable(false);
+        }}
+       >
+        <span className='font-medium text-base'>{dic.cancelMerge}</span>
+       </Button>
+      </div>
+     </div>
+    </div>
+   )}
    {showTransferTable && selectedTable && (
     <div className={tablesGridClass + ' pb-4 mb-2 border-b border-input'}>
      <SalonTable dic={dic} table={selectedTable} />
@@ -66,14 +86,25 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
      <p className='font-medium text-lg'>{dic.transferTo}</p>
     </div>
    )}
+   {showMergeTable && (
+    <div className='px-4 mb-2'>
+     <p className='font-medium text-lg'>{dic.mergeTo}</p>
+    </div>
+   )}
    <div className='p-4 pt-0'>
-    <AnimatePresence>
-     <div className={tablesGridClass}>
-      {filteredData.map((table) => (
-       <SalonTable key={table.tableID} dic={dic} table={table} />
-      ))}
+    {isSuccess && !filteredData.length ? (
+     <div>
+      <NoItemFound />
      </div>
-    </AnimatePresence>
+    ) : (
+     <AnimatePresence>
+      <div className={tablesGridClass}>
+       {filteredData.map((table) => (
+        <SalonTable key={table.tableID} dic={dic} table={table} />
+       ))}
+      </div>
+     </AnimatePresence>
+    )}
     {selectedTable && (
      <ChangeTableState
       dic={dic}
@@ -84,6 +115,17 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
       tableStateTypeID={selectedTable.tableStateTypeID}
       tableStateDataID={selectedTable.tableStateDataID}
       saleTimeID={defaultSaleTimeID}
+     />
+    )}
+    {selectedMergeToTable && selectedTable && (
+     <MergeTableModal
+      dic={dic}
+      open={showMergeTableConfirm}
+      changeOpen={changeShowMergeTableConfirm}
+      selectedOrderID={selectedTable.orderID}
+      selectedTableNo={selectedTable.tableNo}
+      mergeToOrderID={selectedMergeToTable.orderID}
+      mergeToTableNo={selectedMergeToTable.tableNo}
      />
     )}
     {selectedTransferToTable && selectedTable && (

@@ -41,7 +41,13 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
    prevHall,
    changeHall,
   },
-  tablesInfo: { tablesReport, filters, showTransferTable, changeFilters },
+  tablesInfo: {
+   tablesReport,
+   filters,
+   showTransferTable,
+   changeFilters,
+   showMergeTable,
+  },
  } = useSalonBaseConfigContext();
 
  const filteredSalons = data.filter((item) =>
@@ -148,7 +154,7 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
     <div className='flex gap-3 items-center flex-wrap justify-center md:justify-start'>
      <div className='flex gap-2 items-center'>
       <Switch
-       disabled={showTransferTable}
+       disabled={showTransferTable || showMergeTable}
        style={{
         direction: 'ltr',
        }}
@@ -174,7 +180,7 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
      </div>
      <div className='flex gap-2 items-center'>
       <Switch
-       disabled={showTransferTable}
+       disabled={showTransferTable || showMergeTable}
        style={{
         direction: 'ltr',
        }}
@@ -201,7 +207,7 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
      <div className='flex gap-2 items-center'>
       <Switch
        id='reserved'
-       disabled={showTransferTable}
+       disabled={showTransferTable || showMergeTable}
        style={{
         direction: 'ltr',
        }}

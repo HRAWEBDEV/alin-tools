@@ -36,10 +36,13 @@ export default function SalonBaseConfigProvider({
  const [isLoadingTables, setIsLoadingTables] = useState(false);
  const [lastTablesUpdate, setLastTablesUpdate] = useState<Date | null>(null);
  const [showChangeTableState, setShowChangeTableState] = useState(false);
+ const [showMergeTable, setShowMergeTable] = useState(false);
+ const [showMergeTableConfirm, setShowMergeTableConfirm] = useState(false);
  const [showTransferTable, setShowTransferTable] = useState(false);
  const [showTransferTableConfirm, setShowTransferTableConfirm] =
   useState(false);
  const [transferToTable, setTrasnferToTable] = useState<Table | null>(null);
+ const [mergeToTable, setMergeToTable] = useState<Table | null>(null);
 
  const [connection, setConnection] = useState<signalR.HubConnection | null>(
   null,
@@ -75,6 +78,7 @@ export default function SalonBaseConfigProvider({
 
  const handleChangeHall = useCallback(
   (newHall: InitiData['salons'][number]) => {
+   changeShowMergeTable(false);
    changeShowTransferTable(false);
    setTablesSuccess(false);
    const newSearchQueries = new URLSearchParams(searchQueries.toString());
@@ -177,6 +181,34 @@ export default function SalonBaseConfigProvider({
   setShowChangeTableState((pre) => (open === undefined ? !pre : open));
  }
  //
+ function changeShowMergeTableConfirm(open?: boolean) {
+  setShowTransferTableConfirm((pre) => (open === undefined ? !pre : open));
+  changeShowMergeTable(false);
+ }
+ async function handleMergeTableTo(newTable: Table) {
+  setMergeToTable(newTable);
+  setShowMergeTableConfirm(true);
+ }
+ function changeShowMergeTable(open?: boolean) {
+  if (open) {
+   setTableFilters({
+    showEmptyTables: false,
+    showOccupiedTables: true,
+    showOutOfServiceTables: false,
+    showReservedTables: true,
+   });
+  } else {
+   setTableFilters({
+    showEmptyTables: true,
+    showOccupiedTables: true,
+    showOutOfServiceTables: true,
+    showReservedTables: true,
+   });
+  }
+  setMergeToTable(null);
+  setShowMergeTable((pre) => (open === undefined ? !pre : open));
+ }
+ //
  function changeShowTransferTableConfirm(open?: boolean) {
   setShowTransferTableConfirm((pre) => (open === undefined ? !pre : open));
   changeShowTransferTable(false);
@@ -229,7 +261,12 @@ export default function SalonBaseConfigProvider({
   tablesInfo: {
    data: tables,
    isSuccess: tablesSuccess,
-   filteredData: getFilteredTables(tables, tableFilters),
+   filteredData: getFilteredTables({
+    tables,
+    filters: tableFilters,
+    showMergeTable,
+    selectedTableID: selectedTable?.tableID,
+   }),
    isLoading: isLoadingTables,
    lastTablesUpdate,
    tablesReport,
@@ -239,12 +276,18 @@ export default function SalonBaseConfigProvider({
    showTransferTable,
    selectedTransferToTable: transferToTable,
    showTransferTableConfirm,
+   showMergeTableConfirm,
+   selectedMergeToTable: mergeToTable,
+   showMergeTable,
    onShowChangeTableState: handleShowChangeStateTable,
    changeFilters: handleChangeTableFilters,
    changeSelectedTable,
    changeShowTransferTable,
    transferTableTo: handleTransferTableTo,
+   mergeTableTo: handleMergeTableTo,
    changeShowTransferTableConfirm,
+   changeShowMergeTable,
+   changeShowMergeTableConfirm,
   },
  };
 

@@ -95,6 +95,28 @@ function transferTable({
   `/Restaurant/TableTransfer/TransferTable?${searchParams.toString()}`,
  );
 }
+// merge table
+function mergeTable({
+ mergeOrderID,
+ masterOrderID,
+}: {
+ masterOrderID: number;
+ mergeOrderID: number;
+}) {
+ const searchParams = new URLSearchParams([
+  ['masterOrderID', masterOrderID.toString()],
+  ['mergeOrderID', mergeOrderID.toString()],
+ ]);
+ return axios.post(
+  `/Restaurant/RackTable/MergeOrder?${searchParams.toString()}`,
+ );
+}
 
 export type { Combo, Table, InitiData };
-export { getHallKey, transferTable, getInitialData, changeTableStateType };
+export {
+ getHallKey,
+ transferTable,
+ getInitialData,
+ changeTableStateType,
+ mergeTable,
+};

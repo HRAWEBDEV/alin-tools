@@ -36,12 +36,18 @@ interface SalonBaseConfig {
   showTransferTable: boolean;
   showTransferTableConfirm: boolean;
   selectedTransferToTable: Table | null;
+  showMergeTable: boolean;
+  showMergeTableConfirm: boolean;
+  selectedMergeToTable: Table | null;
   transferTableTo: (newTable: Table) => unknown;
+  mergeTableTo: (newTable: Table) => unknown;
   onShowChangeTableState: (open?: boolean) => unknown;
   changeShowTransferTable: (open?: boolean) => unknown;
+  changeShowMergeTable: (open?: boolean) => unknown;
   changeFilters: (filters: TablesFilters) => unknown;
   changeSelectedTable: (newTable: Table | null) => unknown;
   changeShowTransferTableConfirm: (open?: boolean) => unknown;
+  changeShowMergeTableConfirm: (open?: boolean) => unknown;
  };
 }
 

@@ -2,8 +2,18 @@ import { type TablesFilters } from '../services/salon-base-config/salonBaseConfi
 import { type Table } from '../services/salonsApiActions';
 import { TableStateTypes } from './tableStates';
 
-export function getFilteredTables(tables: Table[], filters: TablesFilters) {
- return tables.filter((table) => {
+export function getFilteredTables({
+ tables,
+ filters,
+ selectedTableID,
+ showMergeTable,
+}: {
+ tables: Table[];
+ filters: TablesFilters;
+ selectedTableID?: number;
+ showMergeTable: boolean;
+}) {
+ let filteredData = tables.filter((table) => {
   switch (table.tableStateTypeID) {
    case TableStateTypes.readyToService:
     return filters.showEmptyTables;
@@ -20,4 +30,10 @@ export function getFilteredTables(tables: Table[], filters: TablesFilters) {
   }
   return true;
  });
+ if (showMergeTable && selectedTableID) {
+  filteredData = filteredData.filter(
+   (table) => table.tableID !== selectedTableID,
+  );
+ }
+ return filteredData;
 }

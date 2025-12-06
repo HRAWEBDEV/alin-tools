@@ -4,6 +4,9 @@
  "toTransferTableSelectSelectAvailableTables": "به منظور انجام عملیات انتقال یکی از جایگاه‌های زیر انتخاب کنید",
  "transferTo": "منتقل شود به:",
  "cancelTransfer": "لغو انتقال",
+ "toMergeTableSelectSelectAvailableTables": "به منظور انجام عملیات ادغام یکی از جایگاه‌های زیر انتخاب کنید",
+ "mergeTo": "ادغام شود با:",
+ "cancelMerge": "لغو ادغام",
  "filters": {
   "search": "جستجو ...",
   "selectSalon": "انتخاب سالن",
@@ -38,6 +41,13 @@
   "title": "انتقال میز",
   "selectTargetTable": "انتخاب میز",
   "transferTo": "انتقال به",
+  "confirm": "تایید",
+  "cancel": "انصراف"
+ },
+ "mergeTableModal": {
+  "title": "ادغام میز",
+  "selectTargetTable": "انتخاب میز",
+  "mergeWith": "ادغام با",
   "confirm": "تایید",
   "cancel": "انصراف"
  }
