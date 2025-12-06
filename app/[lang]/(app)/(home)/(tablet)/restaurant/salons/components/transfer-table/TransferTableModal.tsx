@@ -3,17 +3,19 @@ import {
  DialogTitle,
  DialogContent,
  DialogHeader,
+ DialogFooter,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { type SalonsDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/salons/dictionary';
-import { useSalonBaseConfigContext } from '../../services/salon-base-config/salonBaseConfigContext';
 import { FaArrowLeftLong } from 'react-icons/fa6';
-import { MdTouchApp } from 'react-icons/md';
+import { transferTable } from '../../services/salonsApiActions';
+import { useMutation } from '@tanstack/react-query';
+import { Spinner } from '@/components/ui/spinner';
 
 export default function TransferTableModal({
  dic,
  open,
- selectedOrder,
+ selectedOrderID,
  selectedTableNo,
  transferToTableNo,
  transferToTableID,
@@ -21,15 +23,23 @@ export default function TransferTableModal({
 }: {
  dic: SalonsDictionary;
  open: boolean;
- selectedOrder: number;
+ selectedOrderID: number;
  selectedTableNo: number;
  transferToTableNo: number;
  transferToTableID: number;
  changeOpen: (open?: boolean) => unknown;
 }) {
- const {
-  tablesInfo: { selectedTable },
- } = useSalonBaseConfigContext();
+ const { mutate, isPending } = useMutation({
+  mutationFn() {
+   return transferTable({
+    orderID: selectedOrderID,
+    transferToTableID: transferToTableID,
+   });
+  },
+  onSuccess() {
+   changeOpen(false);
+  },
+ });
  return (
   <Dialog open={open} onOpenChange={changeOpen}>
    <DialogContent className='gap-0 p-0 sm:max-w-3xl'>
@@ -52,6 +62,29 @@ export default function TransferTableModal({
       </p>
      </div>
     </div>
+    <DialogFooter className='p-4'>
+     <Button
+      variant='destructive'
+      className='sm:w-32 text-base'
+      size='lg'
+      disabled={isPending}
+      onClick={() => changeOpen(false)}
+     >
+      {isPending && <Spinner />}
+      {dic.transferTableModal.cancel}
+     </Button>
+     <Button
+      disabled={isPending}
+      className='sm:w-32 text-base'
+      size='lg'
+      onClick={() => {
+       mutate();
+      }}
+     >
+      {isPending && <Spinner />}
+      {dic.transferTableModal.confirm}
+     </Button>
+    </DialogFooter>
    </DialogContent>
   </Dialog>
  );

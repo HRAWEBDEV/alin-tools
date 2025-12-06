@@ -89,7 +89,7 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
     {selectedTransferToTable && selectedTable && (
      <TransferTableModal
       dic={dic}
-      selectedOrder={selectedTable.orderID}
+      selectedOrderID={selectedTable.orderID}
       selectedTableNo={selectedTable.tableNo}
       transferToTableID={selectedTransferToTable.tableID}
       transferToTableNo={selectedTransferToTable.tableNo}

@@ -37,6 +37,8 @@
  "transferTableModal": {
   "title": "انتقال میز",
   "selectTargetTable": "انتخاب میز",
-  "transferTo": "انتقال به"
+  "transferTo": "انتقال به",
+  "confirm": "تایید",
+  "cancel": "انصراف"
  }
 }

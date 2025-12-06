@@ -79,6 +79,22 @@ function getInitialData({ signal }: { signal: AbortSignal }) {
   signal,
  });
 }
+// transfer Table
+function transferTable({
+ orderID,
+ transferToTableID,
+}: {
+ orderID: number;
+ transferToTableID: number;
+}) {
+ const searchParams = new URLSearchParams([
+  ['orderID', orderID.toString()],
+  ['tableID', transferToTableID.toString()],
+ ]);
+ return axios.get(
+  `/Restaurant/TableTransfer/TransferTable?${searchParams.toString()}`,
+ );
+}
 
 export type { Combo, Table, InitiData };
-export { getHallKey, getInitialData, changeTableStateType };
+export { getHallKey, transferTable, getInitialData, changeTableStateType };
