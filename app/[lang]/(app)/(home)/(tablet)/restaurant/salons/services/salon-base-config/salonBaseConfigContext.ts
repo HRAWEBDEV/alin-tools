@@ -1,4 +1,4 @@
-import { type Hall, type Table } from '../salonsApiActions';
+import { type InitiData, type Table } from '../salonsApiActions';
 import { use, createContext } from 'react';
 import { OutOfContext } from '@/utils/OutOfContext';
 import { type TablesReport } from '../../utils/getTablesReport';
@@ -12,13 +12,13 @@ interface TablesFilters {
 
 interface SalonBaseConfig {
  hallsInfo: {
-  data: Hall[];
-  selectedHall: Hall | null;
+  data: InitiData['salons'];
+  selectedHall: InitiData['salons'][number] | null;
   isFetching: boolean;
   isLoading: boolean;
   hasPrev: boolean;
   hasNext: boolean;
-  changeHall: (newHall: Hall) => unknown;
+  changeHall: (newHall: InitiData['salons'][number]) => unknown;
   nextHall: () => unknown;
   prevHall: () => unknown;
  };

@@ -7,9 +7,9 @@ import {
 } from './salonBaseConfigContext';
 import {
  type Table,
- type Hall,
+ type InitiData,
  getHallKey,
- getHalls,
+ getInitialData,
 } from '../salonsApiActions';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams, useRouter } from 'next/navigation';
@@ -42,25 +42,34 @@ export default function SalonBaseConfigProvider({
  const { locale } = useBaseConfig();
  const router = useRouter();
  const searchQueries = useSearchParams();
- const [selectedHall, setSelectedHall] = useState<Hall | null>(null);
+ const [selectedHall, setSelectedHall] = useState<
+  InitiData['salons'][number] | null
+ >(null);
 
  const {
-  data: hallsData = [],
-  isFetching: hallsIsFetching,
-  isLoading: hallsIsLoading,
-  // isSuccess: hallsIsSuccess,
+  data: initData,
+  isFetching: initDataIsFetching,
+  isLoading: initDataIsLoading,
+  isSuccess: initDataSuccess,
  } = useQuery({
+  placeholderData: {
+   salons: [],
+   saleTimes: [],
+   tableStateTypes: [],
+   tableTypes: [],
+   defaultSaleTimeID: 0,
+   defaultPrintCashBox: 0,
+  },
   queryKey: [getHallKey, 'list'],
   staleTime: 'static',
   async queryFn({ signal }) {
-   const res = await getHalls({ signal });
-   const halls = res.data.halls;
-   return halls;
+   const res = await getInitialData({ signal });
+   return res.data;
   },
  });
 
  const handleChangeHall = useCallback(
-  (newHall: Hall) => {
+  (newHall: InitiData['salons'][number]) => {
    const newSearchQueries = new URLSearchParams(searchQueries.toString());
    newSearchQueries.set('selectedHall', newHall.key);
    router.replace(
@@ -72,17 +81,18 @@ export default function SalonBaseConfigProvider({
  );
 
  const selectedHallIndex =
-  hallsData?.findIndex((item) => item.key === selectedHall?.key) || 0;
+  initData!.salons?.findIndex((item) => item.key === selectedHall?.key) || 0;
  const hasPrevHall = !!selectedHall && selectedHallIndex !== 0;
- const hasNextHall = !!selectedHall && selectedHallIndex < hallsData.length - 1;
+ const hasNextHall =
+  !!selectedHall && selectedHallIndex < initData!.salons.length - 1;
 
  function handleNextHall() {
   if (!hasNextHall) return;
-  handleChangeHall(hallsData[selectedHallIndex + 1]);
+  handleChangeHall(initData!.salons[selectedHallIndex + 1]);
  }
  function handlePrevHall() {
   if (!hasPrevHall) return;
-  handleChangeHall(hallsData[selectedHallIndex - 1]);
+  handleChangeHall(initData!.salons[selectedHallIndex - 1]);
  }
  // tables filters
  function handleChangeTableFilters(tableFilters: TablesFilters) {
@@ -99,7 +109,7 @@ export default function SalonBaseConfigProvider({
     // salon id
     Number(selectedHall.key),
     // sale time id
-    2,
+    1,
     new Date().toISOString(),
    );
   } catch (error) {
@@ -171,9 +181,9 @@ export default function SalonBaseConfigProvider({
 
  const ctx: SalonBaseConfig = {
   hallsInfo: {
-   data: hallsData,
-   isFetching: hallsIsFetching,
-   isLoading: hallsIsLoading,
+   data: initData!.salons,
+   isFetching: initDataIsFetching,
+   isLoading: initDataIsLoading,
    selectedHall,
    hasNext: hasNextHall,
    hasPrev: hasPrevHall,
@@ -199,17 +209,17 @@ export default function SalonBaseConfigProvider({
  };
 
  useEffect(() => {
-  if (!hallsData.length) return;
+  if (!initData!.salons.length) return;
   const querySelectedhall = searchQueries.get('selectedHall');
-  const findQueryHall = hallsData.find(
+  const findQueryHall = initData!.salons.find(
    (item) => item.key === querySelectedhall,
   );
   if (findQueryHall) {
    setSelectedHall(findQueryHall);
   } else {
-   setSelectedHall(hallsData[0]);
+   setSelectedHall(initData!.salons[0]);
   }
- }, [handleChangeHall, searchQueries, hallsData]);
+ }, [handleChangeHall, searchQueries, initData]);
 
  return (
   <salonBaseConfigContext.Provider value={ctx}>

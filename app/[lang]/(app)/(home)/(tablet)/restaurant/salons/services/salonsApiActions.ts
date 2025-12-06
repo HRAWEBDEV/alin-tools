@@ -1,10 +1,20 @@
 import { axios } from '@/app/[lang]/(app)/utils/defaultAxios';
 
-interface Hall {
+interface Combo {
  key: string;
  value: string;
 }
-type Table = {
+
+interface InitiData {
+ salons: Combo[];
+ saleTimes: Combo[];
+ tableStateTypes: Combo[];
+ tableTypes: Combo[];
+ defaultSaleTimeID: number;
+ defaultPrintCashBox: number;
+}
+
+interface Table {
  vip: boolean;
  tableID: number;
  tableNo: number;
@@ -31,15 +41,16 @@ type Table = {
  customerID: number | null;
  saleTypeID: number | null;
  remained: number | null;
-};
+}
 
 const getHallKey = 'restaurant-halls';
 
-function getHalls({ signal }: { signal: AbortSignal }) {
- return axios.get<{ halls: Hall[] }>('/Restaurant/Tablet/GetHalls', {
+// get initData
+function getInitialData({ signal }: { signal: AbortSignal }) {
+ return axios.get<InitiData>('/Restaurant/RackTable/GetInitDatas', {
   signal,
  });
 }
 
-export { type Hall, type Table };
-export { getHallKey, getHalls };
+export type { Combo, Table, InitiData };
+export { getHallKey, getInitialData };
