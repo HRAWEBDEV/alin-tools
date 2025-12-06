@@ -1,10 +1,10 @@
 {
  "title": "سالن‌هــا",
  "noItemsFound": "آیتمی یافت نشد",
- "toTransferTableSelectSelectAvailableTables": "به منظور انجام عملیات انتقال یکی از جایگاه‌های زیر انتخاب کنید",
+ "toTransferTableSelectSelectAvailableTables": "به منظور انجام عملیات انتقال یکی از جایگاه‌های زیر را انتخاب کنید",
  "transferTo": "منتقل شود به:",
  "cancelTransfer": "لغو انتقال",
- "toMergeTableSelectSelectAvailableTables": "به منظور انجام عملیات ادغام یکی از جایگاه‌های زیر انتخاب کنید",
+ "toMergeTableSelectSelectAvailableTables": "به منظور انجام عملیات ادغام یکی از جایگاه‌های زیر را انتخاب کنید",
  "mergeTo": "ادغام شود با:",
  "cancelMerge": "لغو ادغام",
  "filters": {
@@ -19,7 +19,7 @@
   "prev": "قبلی"
  },
  "tables": {
-  "readyToService": "خالـــی",
+  "readyToService": "خالـی",
   "outOfService": "خارج از سرویس",
   "reserved": "رزرو",
   "occupied": "اشغال",

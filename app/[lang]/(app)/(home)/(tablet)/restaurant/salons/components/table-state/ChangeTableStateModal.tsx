@@ -73,14 +73,18 @@ export default function ChangeTableState({
     <div className='p-4'>
      <p className='mb-4 text-base font-medium text-center'>
       <span>
-       {dic.tableStateModal.currentTableState} {tableNo} :
+       {dic.tableStateModal.currentTableState} {tableNo}:{' '}
       </span>
-      <span className='text-teal-800 dark:text-teal-200'>
-       {tableStateTypeID === TableStateTypes.readyToService &&
-        dic.tableStateModal.readyToService}
-       {tableStateTypeID === TableStateTypes.outOfService &&
-        dic.tableStateModal.outOfOrder}
-      </span>
+      {tableStateTypeID === TableStateTypes.readyToService && (
+       <span className='text-teal-800 dark:text-teal-200'>
+        {dic.tableStateModal.readyToService}
+       </span>
+      )}
+      {tableStateTypeID === TableStateTypes.outOfService && (
+       <span className='text-rose-800 dark:text-rose-200'>
+        {dic.tableStateModal.outOfOrder}
+       </span>
+      )}
      </p>
      <div className='flex gap-4 justify-center flex-wrap'>
       <Button

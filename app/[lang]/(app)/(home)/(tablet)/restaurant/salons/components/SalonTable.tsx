@@ -30,6 +30,7 @@ export default function SalonTable({
  table: Table;
 }) {
  const {
+  initData,
   tablesInfo: {
    selectedTable,
    showTransferTable,
@@ -102,6 +103,11 @@ export default function SalonTable({
        className={`p-1 rounded-2xl border border-dashed text-center ${tableStyles.backgoundColor} ${tableStyles.border} ${tableStyles.text}`}
       >
        <span className='text-base font-medium'>
+        <span>
+         {initData.tableTypes.find(
+          (item) => item.key === table.tableTypeID.toString(),
+         )?.value || ''}{' '}
+        </span>
         {dic.tables[tableStyles.type]}
         {getTableExtensionTitle()}
        </span>
