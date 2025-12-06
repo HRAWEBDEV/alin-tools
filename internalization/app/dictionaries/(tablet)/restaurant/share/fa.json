@@ -15,6 +15,9 @@
   "navigation": {
    "salons": "سالن‌هـــا",
    "newOrder": "ثبت سفــارش"
+  },
+  "noItemFound": {
+   "title": "آیتمی یافت نشد"
   }
  }
 }
