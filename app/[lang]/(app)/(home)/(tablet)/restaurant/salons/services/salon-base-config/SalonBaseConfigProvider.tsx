@@ -37,6 +37,10 @@ export default function SalonBaseConfigProvider({
  const [lastTablesUpdate, setLastTablesUpdate] = useState<Date | null>(null);
  const [showChangeTableState, setShowChangeTableState] = useState(false);
  const [showTransferTable, setShowTransferTable] = useState(false);
+ const [showTransferTableConfirm, setShowTransferTableConfirm] =
+  useState(false);
+ const [transferToTable, setTrasnferToTable] = useState<Table | null>(null);
+
  const [connection, setConnection] = useState<signalR.HubConnection | null>(
   null,
  );
@@ -71,6 +75,7 @@ export default function SalonBaseConfigProvider({
 
  const handleChangeHall = useCallback(
   (newHall: InitiData['salons'][number]) => {
+   changeShowTransferTable(false);
    setTablesSuccess(false);
    const newSearchQueries = new URLSearchParams(searchQueries.toString());
    newSearchQueries.set('selectedHall', newHall.key);
@@ -172,7 +177,32 @@ export default function SalonBaseConfigProvider({
   setShowChangeTableState((pre) => (open === undefined ? !pre : open));
  }
  //
+ function changeShowTransferTableConfirm(open?: boolean) {
+  setShowTransferTableConfirm((pre) => (open === undefined ? !pre : open));
+  changeShowTransferTable(false);
+ }
+ async function handleTransferTableTo(newTable: Table) {
+  setTrasnferToTable(newTable);
+  setShowTransferTableConfirm(true);
+ }
+ //
  function changeShowTransferTable(open?: boolean) {
+  if (open) {
+   setTableFilters({
+    showEmptyTables: true,
+    showOccupiedTables: false,
+    showOutOfServiceTables: false,
+    showReservedTables: false,
+   });
+  } else {
+   setTableFilters({
+    showEmptyTables: true,
+    showOccupiedTables: true,
+    showOutOfServiceTables: true,
+    showReservedTables: true,
+   });
+  }
+  setTrasnferToTable(null);
   setShowTransferTable((pre) => (open === undefined ? !pre : open));
  }
  // table report
@@ -207,10 +237,14 @@ export default function SalonBaseConfigProvider({
    selectedTable,
    showChangeTableState,
    showTransferTable,
+   selectedTransferToTable: transferToTable,
+   showTransferTableConfirm,
    onShowChangeTableState: handleShowChangeStateTable,
    changeFilters: handleChangeTableFilters,
    changeSelectedTable,
    changeShowTransferTable,
+   transferTableTo: handleTransferTableTo,
+   changeShowTransferTableConfirm,
   },
  };
 

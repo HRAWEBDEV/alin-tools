@@ -34,10 +34,14 @@ interface SalonBaseConfig {
   filters: TablesFilters;
   showChangeTableState: boolean;
   showTransferTable: boolean;
+  showTransferTableConfirm: boolean;
+  selectedTransferToTable: Table | null;
+  transferTableTo: (newTable: Table) => unknown;
   onShowChangeTableState: (open?: boolean) => unknown;
   changeShowTransferTable: (open?: boolean) => unknown;
   changeFilters: (filters: TablesFilters) => unknown;
   changeSelectedTable: (newTable: Table | null) => unknown;
+  changeShowTransferTableConfirm: (open?: boolean) => unknown;
  };
 }
 

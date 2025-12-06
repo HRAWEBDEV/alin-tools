@@ -31,9 +31,11 @@ export default function SalonTable({
 }) {
  const {
   tablesInfo: {
+   showTransferTable,
    changeSelectedTable,
    onShowChangeTableState,
    changeShowTransferTable,
+   transferTableTo,
   },
  } = useSalonBaseConfigContext();
  const tableStyles = getTableStateStyles(table.tableStateTypeID);
@@ -77,6 +79,9 @@ export default function SalonTable({
      variant={'outline'}
      className='z-1 rounded-2xl h-full flex-col justify-start text-start p-0 overflow-hidden mx-2 shadow-lg'
      asChild
+     onClick={() => {
+      if (showTransferTable) transferTableTo(table);
+     }}
     >
      <Link
       href='#'
@@ -141,14 +146,16 @@ export default function SalonTable({
       }
      }}
     >
-     <DropdownMenuTrigger asChild>
-      <Button
-       variant='outline'
-       className='w-full h-auto pt-5 pb-1 bg-neutral-50 dark:bg-neutral-900 text-primary rounded-xl rounded-ss-none rounded-se-none'
-      >
-       <SlOptions className='size-6' />
-      </Button>
-     </DropdownMenuTrigger>
+     {!showTransferTable && (
+      <DropdownMenuTrigger asChild>
+       <Button
+        variant='outline'
+        className='w-full h-auto pt-5 pb-1 bg-neutral-50 dark:bg-neutral-900 text-primary rounded-xl rounded-ss-none rounded-se-none'
+       >
+        <SlOptions className='size-6' />
+       </Button>
+      </DropdownMenuTrigger>
+     )}
      <DropdownMenuContent align='start' className='w-56'>
       <DropdownMenuGroup>
        {table.tableStateTypeID !== TableStateTypes.outOfService && (

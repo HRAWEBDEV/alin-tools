@@ -1,6 +1,9 @@
 {
  "title": "سالن‌هــا",
  "noItemsFound": "آیتمی یافت نشد",
+ "toTransferTableSelectSelectAvailableTables": "به منظور انجام عملیات انتقال یکی از جایگاه‌های زیر انتخاب کنید",
+ "transferTo": "منتقل شود به:",
+ "cancelTransfer": "لغو انتقال",
  "filters": {
   "search": "جستجو ...",
   "selectSalon": "انتخاب سالن",
