@@ -91,7 +91,11 @@ export default function SalonTable({
      }}
     >
      <Link
-      href='#'
+      href={
+       showTransferTable || showMergeTable
+        ? '#'
+        : `/${locale}/restaurant/new-order?tableID=${table.tableID}&orderID=${table.orderID}&fromSalons=true`
+      }
       className='relative flex! flex-col grow items-stretch bg-background! p-2'
      >
       {table.vip && (
