@@ -71,7 +71,7 @@ export default function SalonBaseConfigProvider({
    defaultPrintCashBox: 0,
   },
   queryKey: [getHallKey, 'list'],
-  staleTime: 'static',
+  staleTime: 1000 * 60 * 60,
   async queryFn({ signal }) {
    const res = await getInitialData({ signal });
    return res.data;
