@@ -13,6 +13,7 @@ import { TableStateTypes } from '../../utils/tableStates';
 import { MdTouchApp } from 'react-icons/md';
 import { changeTableStateType } from '../../services/salonsApiActions';
 import { useMutation } from '@tanstack/react-query';
+import { Spinner } from '@/components/ui/spinner';
 
 export default function ChangeTableState({
  dic,
@@ -84,7 +85,11 @@ export default function ChangeTableState({
         <MdTouchApp className='size-24 text-neutral-200 dark:text-neutral-900' />
        </div>
        <div className='flex flex-col items-center z-1'>
-        <FaCheckCircle className='size-14' />
+        {isPending ? (
+         <Spinner className='size-14' />
+        ) : (
+         <FaCheckCircle className='size-14' />
+        )}
         <span className='text-base font-medium'>
          {dic.tableStateModal.readyToService}
         </span>
@@ -107,7 +112,11 @@ export default function ChangeTableState({
         <MdTouchApp className='size-24 text-neutral-200 dark:text-neutral-800' />
        </div>
        <div className='flex flex-col items-center z-1'>
-        <MdOutlineBlock className='size-14' />
+        {isPending ? (
+         <Spinner className='size-14' />
+        ) : (
+         <MdOutlineBlock className='size-14' />
+        )}
         <span className='text-base font-medium'>
          {dic.tableStateModal.outOfOrder}
         </span>
