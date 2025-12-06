@@ -18,12 +18,14 @@ import * as signalR from '@microsoft/signalr';
 import { getUserLoginToken } from '@/app/[lang]/(app)/login/utils/loginTokenManager';
 import { getTablesReport } from '../../utils/getTablesReport';
 import { getFilteredTables } from '../../utils/getfilteredTables';
+import { useMainWrapperSetupContext } from '../../../services/main-wrapper-setup/mainWrapperSetupContext';
 
 export default function SalonBaseConfigProvider({
  children,
 }: {
  children: ReactNode;
 }) {
+ const { scrollToTop } = useMainWrapperSetupContext();
  const [tableFilters, setTableFilters] = useState<TablesFilters>({
   showEmptyTables: true,
   showOccupiedTables: true,
@@ -190,6 +192,7 @@ export default function SalonBaseConfigProvider({
   setShowMergeTableConfirm(true);
  }
  function changeShowMergeTable(open?: boolean) {
+  scrollToTop();
   if (open) {
    setTableFilters({
     showEmptyTables: false,
@@ -219,6 +222,7 @@ export default function SalonBaseConfigProvider({
  }
  //
  function changeShowTransferTable(open?: boolean) {
+  scrollToTop();
   if (open) {
    setTableFilters({
     showEmptyTables: true,
