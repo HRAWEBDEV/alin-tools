@@ -34,8 +34,8 @@ export default function TransferTableModal({ dic }: { dic: SalonsDictionary }) {
       <FaArrowLeftLong className='size-20 ltr:rotate-180' />
      </div>
      <Button variant='outline' className='relative h-auto w-auto size-48'>
-      <div className='absolute top-1/2 start-1/2 translate-x-1/2 -translate-y-1/2 z-0'>
-       <MdTouchApp className='size-32 text-neutral-200 dark:text-neutral-800' />
+      <div className='absolute bottom-0 end-0 z-0'>
+       <MdTouchApp className='size-24 text-neutral-200 dark:text-neutral-800' />
       </div>
       <div className='flex flex-col items-center z-1'>
        <p className='text-2xl font-medium'>

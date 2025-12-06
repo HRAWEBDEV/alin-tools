@@ -10,7 +10,7 @@ import { FaCheckCircle } from 'react-icons/fa';
 import { MdOutlineBlock } from 'react-icons/md';
 import { type Table, type InitiData } from '../../services/salonsApiActions';
 import { TableStateTypes } from '../../utils/tableStates';
-import { Spinner } from '@/components/ui/spinner';
+import { MdTouchApp } from 'react-icons/md';
 import { changeTableStateType } from '../../services/salonsApiActions';
 import { useMutation } from '@tanstack/react-query';
 
@@ -69,29 +69,49 @@ export default function ChangeTableState({
      <div className='flex gap-4 justify-center flex-wrap'>
       <Button
        variant='outline'
-       className='h-auto w-auto flex-col size-48 max-h-none bg-teal-50 dark:bg-teal-950 text-teal-800 dark:text-teal-200'
+       className='relative h-auto w-auto flex-col size-48 max-h-none bg-teal-50 dark:bg-teal-950 text-teal-800 dark:text-teal-200'
        disabled={isPending}
        onClick={() => {
-        mutate(TableStateTypes.readyToService);
+        const newStateType = TableStateTypes.readyToService;
+        if (newStateType === tableStateTypeID) {
+         changeOpen(false);
+         return;
+        }
+        mutate(newStateType);
        }}
       >
-       <FaCheckCircle className='size-14' />
-       <span className='text-base font-medium'>
-        {dic.tableStateModal.readyToService}
-       </span>
+       <div className='absolute bottom-0 end-0 z-0'>
+        <MdTouchApp className='size-24 text-neutral-200 dark:text-neutral-900' />
+       </div>
+       <div className='flex flex-col items-center z-1'>
+        <FaCheckCircle className='size-14' />
+        <span className='text-base font-medium'>
+         {dic.tableStateModal.readyToService}
+        </span>
+       </div>
       </Button>
       <Button
        variant='outline'
-       className='h-auto w-auto flex-col size-48 max-h-none bg-rose-50 dark:bg-rose-950 text-rose-800 dark:text-rose-200'
+       className='relative h-auto w-auto flex-col size-48 max-h-none bg-rose-50 dark:bg-rose-950 text-rose-800 dark:text-rose-200'
        disabled={isPending}
        onClick={() => {
-        mutate(TableStateTypes.outOfService);
+        const newStateType = TableStateTypes.outOfService;
+        if (newStateType === tableStateTypeID) {
+         changeOpen(false);
+         return;
+        }
+        mutate(newStateType);
        }}
       >
-       <MdOutlineBlock className='size-14' />
-       <span className='text-base font-medium'>
-        {dic.tableStateModal.outOfOrder}
-       </span>
+       <div className='absolute bottom-0 end-0 z-0'>
+        <MdTouchApp className='size-24 text-neutral-200 dark:text-neutral-800' />
+       </div>
+       <div className='flex flex-col items-center z-1'>
+        <MdOutlineBlock className='size-14' />
+        <span className='text-base font-medium'>
+         {dic.tableStateModal.outOfOrder}
+        </span>
+       </div>
       </Button>
      </div>
     </div>
