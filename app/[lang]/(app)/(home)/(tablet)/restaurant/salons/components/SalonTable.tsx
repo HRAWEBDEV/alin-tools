@@ -152,7 +152,7 @@ export default function SalonTable({
       }
      }}
     >
-     {!showTransferTable && (
+     {!showTransferTable && !showMergeTable && (
       <DropdownMenuTrigger asChild>
        <Button
         variant='outline'

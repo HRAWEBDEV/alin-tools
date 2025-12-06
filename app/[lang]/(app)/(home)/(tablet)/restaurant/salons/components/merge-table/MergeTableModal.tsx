@@ -11,6 +11,10 @@ import { FaArrowLeftLong } from 'react-icons/fa6';
 import { mergeTable } from '../../services/salonsApiActions';
 import { useMutation } from '@tanstack/react-query';
 import { Spinner } from '@/components/ui/spinner';
+import { AlertCircleIcon } from 'lucide-react';
+import { Alert, AlertTitle } from '@/components/ui/alert';
+import { toast } from 'sonner';
+import { AxiosError } from 'axios';
 
 export default function MergeTableModal({
  dic,
@@ -29,7 +33,7 @@ export default function MergeTableModal({
  mergeToOrderID: number;
  changeOpen: (open?: boolean) => unknown;
 }) {
- const { mutate, isPending } = useMutation({
+ const { mutate, isPending, isError, error } = useMutation({
   mutationFn() {
    return mergeTable({
     masterOrderID: selectedOrderID,
@@ -39,6 +43,9 @@ export default function MergeTableModal({
   onSuccess() {
    changeOpen(false);
   },
+  onError(err: AxiosError<string>) {
+   toast.error(err.response?.data);
+  },
  });
 
  return (
@@ -47,6 +54,14 @@ export default function MergeTableModal({
     <DialogHeader className='p-4 py-6'>
      <DialogTitle>{dic.mergeTableModal.title}</DialogTitle>
     </DialogHeader>
+    {isError && (
+     <div className='p-4'>
+      <Alert variant='destructive'>
+       <AlertCircleIcon />
+       <AlertTitle>{error.response?.data}</AlertTitle>
+      </Alert>
+     </div>
+    )}
     <div className='p-4 flex gap-4 items-center justify-center flex-col sm:flex-row'>
      <div className='size-48 rounded-lg border border-input p-4 grid place-content-center bg-rose-100 dark:bg-rose-900'>
       <p className='text-4xl font-medium font-en-roboto'>

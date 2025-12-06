@@ -14,6 +14,10 @@ import { MdTouchApp } from 'react-icons/md';
 import { changeTableStateType } from '../../services/salonsApiActions';
 import { useMutation } from '@tanstack/react-query';
 import { Spinner } from '@/components/ui/spinner';
+import { AlertCircleIcon } from 'lucide-react';
+import { Alert, AlertTitle } from '@/components/ui/alert';
+import { toast } from 'sonner';
+import { AxiosError } from 'axios';
 
 export default function ChangeTableState({
  dic,
@@ -34,7 +38,7 @@ export default function ChangeTableState({
  tableStateDataID: Table['tableStateDataID'];
  changeOpen: (newState?: boolean) => unknown;
 }) {
- const { mutate, isPending } = useMutation({
+ const { mutate, isPending, isError, error } = useMutation({
   mutationFn(newStateType: number) {
    return changeTableStateType({
     tableID,
@@ -47,6 +51,9 @@ export default function ChangeTableState({
   onSuccess() {
    changeOpen(false);
   },
+  onError(err: AxiosError<string>) {
+   toast.error(err.response?.data);
+  },
  });
 
  return (
@@ -55,6 +62,14 @@ export default function ChangeTableState({
     <DialogHeader className='p-4 py-6'>
      <DialogTitle>{dic.tableStateModal.title}</DialogTitle>
     </DialogHeader>
+    {isError && (
+     <div className='p-4'>
+      <Alert variant='destructive'>
+       <AlertCircleIcon />
+       <AlertTitle>{error.response?.data}</AlertTitle>
+      </Alert>
+     </div>
+    )}
     <div className='p-4'>
      <p className='mb-4 text-base font-medium text-center'>
       <span>

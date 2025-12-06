@@ -11,6 +11,10 @@ import { FaArrowLeftLong } from 'react-icons/fa6';
 import { transferTable } from '../../services/salonsApiActions';
 import { useMutation } from '@tanstack/react-query';
 import { Spinner } from '@/components/ui/spinner';
+import { AxiosError } from 'axios';
+import { toast } from 'sonner';
+import { AlertCircleIcon } from 'lucide-react';
+import { Alert, AlertTitle } from '@/components/ui/alert';
 
 export default function TransferTableModal({
  dic,
@@ -29,7 +33,7 @@ export default function TransferTableModal({
  transferToTableID: number;
  changeOpen: (open?: boolean) => unknown;
 }) {
- const { mutate, isPending } = useMutation({
+ const { mutate, isPending, isError, error } = useMutation({
   mutationFn() {
    return transferTable({
     orderID: selectedOrderID,
@@ -39,6 +43,9 @@ export default function TransferTableModal({
   onSuccess() {
    changeOpen(false);
   },
+  onError(err: AxiosError<string>) {
+   toast.error(err.response?.data);
+  },
  });
  return (
   <Dialog open={open} onOpenChange={changeOpen}>
@@ -46,6 +53,14 @@ export default function TransferTableModal({
     <DialogHeader className='p-4 py-6'>
      <DialogTitle>{dic.transferTableModal.title}</DialogTitle>
     </DialogHeader>
+    {isError && (
+     <div className='p-4'>
+      <Alert variant='destructive'>
+       <AlertCircleIcon />
+       <AlertTitle>{error.response?.data}</AlertTitle>
+      </Alert>
+     </div>
+    )}
     <div className='p-4 flex gap-4 items-center justify-center flex-col sm:flex-row'>
      <div className='size-48 rounded-lg border border-input p-4 grid place-content-center bg-rose-100 dark:bg-rose-900'>
       <p className='text-4xl font-medium font-en-roboto'>
