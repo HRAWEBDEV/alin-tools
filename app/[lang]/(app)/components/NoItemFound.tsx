@@ -1,5 +1,5 @@
 'use client';
-import { FaSearch } from 'react-icons/fa';
+import { IoIosSearch } from 'react-icons/io';
 import { useRestaurantShareDictionary } from '../(home)/(tablet)/restaurant/services/share-dictionary/restaurantShareDictionaryContext';
 
 export default function NoItemFound() {
@@ -9,9 +9,9 @@ export default function NoItemFound() {
   },
  } = useRestaurantShareDictionary();
  return (
-  <div className='w-80 h-60 rounded-xl mx-auto flex flex-col items-center justify-center gap-6 text-neutral-500 bg-rose-50 dark:bg-rose-950'>
-   <FaSearch className='size-20' />
-   <span className='text-xl font-medium'>{noItemFound.title}</span>
+  <div className='w-80 h-60 rounded-xl mx-auto flex flex-col items-center justify-center gap-4 text-neutral-400 dark:text-neutral-600'>
+   <IoIosSearch className='size-16' />
+   <span className='text-xl'>{noItemFound.title}</span>
   </div>
  );
 }
