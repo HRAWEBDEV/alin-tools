@@ -18,15 +18,15 @@ export default function OrderItem() {
      </div>
     </div>
     <div className='text-center'>
-     <h3 className='font-medium text-neutral-700 dark:text-neutral-300 mb-1'>
+     <h3 className='text-lg font-medium text-neutral-700 dark:text-neutral-300 mb-1'>
       خورشت فسنجان
      </h3>
      <p className='px-2 text-xs text-neutral-600 dark:text-neutral-400 font-light mb-3'>
       توضیحات مختصری در مورد غذا توضیحات مختصری در مورد غذا
      </p>
      <div className='flex flex-col mb-2'>
-      <div className='text-[0.7rem] font-medium text-red-600 dark:text-red-400 line-through'>
-       <Badge variant='destructive' className='text-[0.7rem] p-1 me-2'>
+      <div className='text-[0.85rem] font-medium text-red-600 dark:text-red-400 line-through'>
+       <Badge variant='destructive' className='p-1 me-2 text-sm'>
         12%
        </Badge>
        <span>14,000,000</span>
