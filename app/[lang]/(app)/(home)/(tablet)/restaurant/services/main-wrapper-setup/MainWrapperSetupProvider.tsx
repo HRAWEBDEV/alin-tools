@@ -22,7 +22,7 @@ export default function MainWrapperSetupProvider({
    const newScrollTop = mainWrapperRef.current.scrollTop;
    const scrollOffset = newScrollTop - scrollTop;
    let newScrollDirection: ScrollDirection = 'up';
-   if (newScrollTop && Math.abs(scrollOffset) < 30) {
+   if (newScrollTop && Math.abs(scrollOffset) < 80) {
     return;
    }
    if (newScrollTop === 0 || scrollOffset < 0) {
