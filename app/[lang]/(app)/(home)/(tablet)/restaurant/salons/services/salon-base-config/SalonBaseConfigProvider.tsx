@@ -78,35 +78,6 @@ export default function SalonBaseConfigProvider({
   },
  });
 
- const handleChangeHall = useCallback(
-  (newHall: InitiData['salons'][number]) => {
-   changeShowMergeTable(false);
-   changeShowTransferTable(false);
-   setTablesSuccess(false);
-   const newSearchQueries = new URLSearchParams(searchQueries.toString());
-   newSearchQueries.set('selectedHall', newHall.key);
-   router.replace(
-    `/${locale}/restaurant/salons?${newSearchQueries.toString()}`,
-   );
-   setSelectedHall(newHall);
-  },
-  [locale, router, searchQueries],
- );
-
- const selectedHallIndex =
-  initData!.salons?.findIndex((item) => item.key === selectedHall?.key) || 0;
- const hasPrevHall = !!selectedHall && selectedHallIndex !== 0;
- const hasNextHall =
-  !!selectedHall && selectedHallIndex < initData!.salons.length - 1;
-
- function handleNextHall() {
-  if (!hasNextHall) return;
-  handleChangeHall(initData!.salons[selectedHallIndex + 1]);
- }
- function handlePrevHall() {
-  if (!hasPrevHall) return;
-  handleChangeHall(initData!.salons[selectedHallIndex - 1]);
- }
  // tables filters
  function handleChangeTableFilters(tableFilters: TablesFilters) {
   setTableFilters(tableFilters);
@@ -191,26 +162,29 @@ export default function SalonBaseConfigProvider({
   setMergeToTable(newTable);
   setShowMergeTableConfirm(true);
  }
- function changeShowMergeTable(open?: boolean) {
-  scrollToTop();
-  if (open) {
-   setTableFilters({
-    showEmptyTables: false,
-    showOccupiedTables: true,
-    showOutOfServiceTables: false,
-    showReservedTables: true,
-   });
-  } else {
-   setTableFilters({
-    showEmptyTables: true,
-    showOccupiedTables: true,
-    showOutOfServiceTables: true,
-    showReservedTables: true,
-   });
-  }
-  setMergeToTable(null);
-  setShowMergeTable((pre) => (open === undefined ? !pre : open));
- }
+ const changeShowMergeTable = useCallback(
+  (open?: boolean) => {
+   scrollToTop();
+   if (open) {
+    setTableFilters({
+     showEmptyTables: false,
+     showOccupiedTables: true,
+     showOutOfServiceTables: false,
+     showReservedTables: true,
+    });
+   } else {
+    setTableFilters({
+     showEmptyTables: true,
+     showOccupiedTables: true,
+     showOutOfServiceTables: true,
+     showReservedTables: true,
+    });
+   }
+   setMergeToTable(null);
+   setShowMergeTable((pre) => (open === undefined ? !pre : open));
+  },
+  [scrollToTop],
+ );
  //
  function changeShowTransferTableConfirm(open?: boolean) {
   setShowTransferTableConfirm((pre) => (open === undefined ? !pre : open));
@@ -221,31 +195,70 @@ export default function SalonBaseConfigProvider({
   setShowTransferTableConfirm(true);
  }
  //
- function changeShowTransferTable(open?: boolean) {
-  scrollToTop();
-  if (open) {
-   setTableFilters({
-    showEmptyTables: true,
-    showOccupiedTables: false,
-    showOutOfServiceTables: false,
-    showReservedTables: false,
-   });
-  } else {
-   setTableFilters({
-    showEmptyTables: true,
-    showOccupiedTables: true,
-    showOutOfServiceTables: true,
-    showReservedTables: true,
-   });
-  }
-  setTrasnferToTable(null);
-  setShowTransferTable((pre) => (open === undefined ? !pre : open));
- }
+ const changeShowTransferTable = useCallback(
+  (open?: boolean) => {
+   scrollToTop();
+   if (open) {
+    setTableFilters({
+     showEmptyTables: true,
+     showOccupiedTables: false,
+     showOutOfServiceTables: false,
+     showReservedTables: false,
+    });
+   } else {
+    setTableFilters({
+     showEmptyTables: true,
+     showOccupiedTables: true,
+     showOutOfServiceTables: true,
+     showReservedTables: true,
+    });
+   }
+   setTrasnferToTable(null);
+   setShowTransferTable((pre) => (open === undefined ? !pre : open));
+  },
+  [scrollToTop],
+ );
  // table report
  const tablesReport = getTablesReport(tables);
  // change selectedTable
  function changeSelectedTable(newTable: Table | null) {
   setSelectedTable(newTable);
+ }
+ // hall
+ const handleChangeHall = useCallback(
+  (newHall: InitiData['salons'][number]) => {
+   changeShowMergeTable(false);
+   changeShowTransferTable(false);
+   setTablesSuccess(false);
+   const newSearchQueries = new URLSearchParams(searchQueries.toString());
+   newSearchQueries.set('selectedHall', newHall.key);
+   router.replace(
+    `/${locale}/restaurant/salons?${newSearchQueries.toString()}`,
+   );
+   setSelectedHall(newHall);
+  },
+  [
+   locale,
+   router,
+   searchQueries,
+   changeShowMergeTable,
+   changeShowTransferTable,
+  ],
+ );
+
+ const selectedHallIndex =
+  initData!.salons?.findIndex((item) => item.key === selectedHall?.key) || 0;
+ const hasPrevHall = !!selectedHall && selectedHallIndex !== 0;
+ const hasNextHall =
+  !!selectedHall && selectedHallIndex < initData!.salons.length - 1;
+
+ function handleNextHall() {
+  if (!hasNextHall) return;
+  handleChangeHall(initData!.salons[selectedHallIndex + 1]);
+ }
+ function handlePrevHall() {
+  if (!hasPrevHall) return;
+  handleChangeHall(initData!.salons[selectedHallIndex - 1]);
  }
  // ctx
 
