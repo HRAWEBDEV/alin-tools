@@ -47,6 +47,32 @@ interface Table {
 
 const getHallKey = 'restaurant-halls';
 
+// change table state type
+function changeTableStateType({
+ date,
+ saleTimeID,
+ tableStateTypeID,
+ tableID,
+ tableStateDataID,
+}: {
+ date: string;
+ saleTimeID: number;
+ tableID: number;
+ tableStateDataID: number;
+ tableStateTypeID: string;
+}) {
+ const searchParams = new URLSearchParams([
+  ['date', date],
+  ['saleTiemID', saleTimeID.toString()],
+  ['tableStateTypeID', tableStateTypeID.toString()],
+  ['tableStateDataID', tableStateDataID.toString()],
+  ['tableID', tableID.toString()],
+  ['saleTimeID', saleTimeID.toString()],
+ ]);
+ return axios.put(
+  `/Restaurant/RackTable/UpdateTableStateType?${searchParams.toString()}`,
+ );
+}
 // get initData
 function getInitialData({ signal }: { signal: AbortSignal }) {
  return axios.get<InitiData>('/Restaurant/RackTable/GetInitDatas', {
@@ -55,4 +81,4 @@ function getInitialData({ signal }: { signal: AbortSignal }) {
 }
 
 export type { Combo, Table, InitiData };
-export { getHallKey, getInitialData };
+export { getHallKey, getInitialData, changeTableStateType };

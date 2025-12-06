@@ -11,6 +11,7 @@ interface TablesFilters {
 }
 
 interface SalonBaseConfig {
+ initData: InitiData;
  hallsInfo: {
   data: InitiData['salons'];
   selectedHall: InitiData['salons'][number] | null;

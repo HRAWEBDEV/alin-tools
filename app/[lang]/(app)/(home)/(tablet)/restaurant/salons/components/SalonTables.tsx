@@ -10,7 +10,15 @@ import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
 
 export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
  const {
-  tablesInfo: { filteredData, isSuccess, isLoading },
+  initData: { defaultSaleTimeID },
+  tablesInfo: {
+   filteredData,
+   isSuccess,
+   isLoading,
+   showChangeTableState,
+   selectedTable,
+   onShowChangeTableState,
+  },
  } = useSalonBaseConfigContext();
  if (isSuccess && !filteredData.length)
   return (
@@ -20,11 +28,9 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
   );
  return (
   <>
-   {isLoading && (
-    <div className='mb-4 opacity-20'>
-     <LinearLoading />
-    </div>
-   )}
+   <div className={`mb-4 opacity-0 ${isLoading && 'opacity-50'}`}>
+    <LinearLoading />
+   </div>
    <div className='p-4 pt-0'>
     <AnimatePresence>
      <div className='grid gap-6 grid-cols-[repeat(auto-fill,minmax(9rem,10rem))] sm:grid-cols-[repeat(auto-fill,minmax(10rem,11rem))] justify-center'>
@@ -33,7 +39,18 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
       ))}
      </div>
     </AnimatePresence>
-    <ChangeTableState dic={dic} />
+    {selectedTable && (
+     <ChangeTableState
+      dic={dic}
+      open={showChangeTableState}
+      changeOpen={onShowChangeTableState}
+      tableNo={selectedTable.tableNo}
+      tableID={selectedTable.tableID}
+      tableStateTypeID={selectedTable.tableStateTypeID}
+      tableStateDataID={selectedTable.tableStateDataID}
+      saleTimeID={defaultSaleTimeID}
+     />
+    )}
     <TransferTableModal dic={dic} />
    </div>
   </>
