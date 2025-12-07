@@ -17,6 +17,8 @@ interface SalonBaseConfig {
   selectedHall: InitiData['salons'][number] | null;
   isFetching: boolean;
   isLoading: boolean;
+  isError: boolean;
+  isSuccess: boolean;
   hasPrev: boolean;
   hasNext: boolean;
   changeHall: (newHall: InitiData['salons'][number]) => unknown;
@@ -29,6 +31,7 @@ interface SalonBaseConfig {
   selectedTable: Table | null;
   isLoading: boolean;
   isSuccess: boolean;
+  isError: boolean;
   lastTablesUpdate: Date | null;
   tablesReport: TablesReport;
   filters: TablesFilters;

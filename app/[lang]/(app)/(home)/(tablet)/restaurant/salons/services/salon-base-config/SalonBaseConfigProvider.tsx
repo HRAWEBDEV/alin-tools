@@ -35,6 +35,7 @@ export default function SalonBaseConfigProvider({
  const [selectedTable, setSelectedTable] = useState<Table | null>(null);
  const [tables, setTables] = useState<Table[]>([]);
  const [tablesSuccess, setTablesSuccess] = useState(false);
+ const [tablesError, setTablesError] = useState(false);
  const [isLoadingTables, setIsLoadingTables] = useState(false);
  const [lastTablesUpdate, setLastTablesUpdate] = useState<Date | null>(null);
  const [showChangeTableState, setShowChangeTableState] = useState(false);
@@ -61,6 +62,7 @@ export default function SalonBaseConfigProvider({
   isFetching: initDataIsFetching,
   isLoading: initDataIsLoading,
   isSuccess: initDataSuccess,
+  isError: initDataIsError,
  } = useQuery({
   placeholderData: {
    salons: [],
@@ -86,6 +88,7 @@ export default function SalonBaseConfigProvider({
  const getSalonTables = useCallback(async () => {
   if (!connection || !selectedHall || !initData?.defaultSaleTimeID) return;
   setIsLoadingTables(true);
+  setTablesError(false);
   try {
    await connection.invoke(
     'GetOrderBoardUpdate',
@@ -99,6 +102,7 @@ export default function SalonBaseConfigProvider({
    setTablesSuccess(true);
   } catch (error) {
    console.log('signalR get salon tables failed: ', error);
+   setTablesError(true);
   } finally {
    setIsLoadingTables(false);
   }
@@ -268,6 +272,8 @@ export default function SalonBaseConfigProvider({
    data: initData!.salons,
    isFetching: initDataIsFetching,
    isLoading: initDataIsLoading,
+   isError: initDataIsError,
+   isSuccess: initDataSuccess,
    selectedHall,
    hasNext: hasNextHall,
    hasPrev: hasPrevHall,
@@ -284,6 +290,7 @@ export default function SalonBaseConfigProvider({
     showMergeTable,
     selectedTableID: selectedTable?.tableID,
    }),
+   isError: tablesError,
    isLoading: isLoadingTables,
    lastTablesUpdate,
    tablesReport,

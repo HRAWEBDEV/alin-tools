@@ -18,6 +18,10 @@
   },
   "noItemFound": {
    "title": "آیتمی یافت نشد"
+  },
+  "unExpectedError": {
+   "title": "خطایی رخ داده است",
+   "pleaseTryAgainLater": "لطفا دوباره تلاش کنید"
   }
  }
 }

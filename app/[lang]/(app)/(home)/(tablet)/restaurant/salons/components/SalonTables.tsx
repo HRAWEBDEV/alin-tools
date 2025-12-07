@@ -7,6 +7,7 @@ import ChangeTableState from './table-state/ChangeTableStateModal';
 import TransferTableModal from './transfer-table/TransferTableModal';
 import MergeTableModal from './merge-table/MergeTableModal';
 import NoItemFound from '@/app/[lang]/(app)/components/NoItemFound';
+import UnExpectedError from '@/app/[lang]/(app)/components/UnExpectedError';
 import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
 import { Button } from '@/components/ui/button';
 
@@ -16,11 +17,16 @@ const tablesGridClass =
 export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
  const {
   initData: { defaultSaleTimeID },
-  hallsInfo: { isLoading: isLoadingHalls },
+  hallsInfo: {
+   isLoading: isLoadingHalls,
+   isError: hallsInfoError,
+   isSuccess: hallsInfoSuccess,
+  },
   tablesInfo: {
    filteredData,
    isSuccess,
    isLoading,
+   isError,
    showTransferTable,
    showChangeTableState,
    selectedTable,
@@ -36,6 +42,14 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
    changeShowMergeTableConfirm,
   },
  } = useSalonBaseConfigContext();
+
+ if ((hallsInfoError && !hallsInfoSuccess) || isError) {
+  return (
+   <>
+    <UnExpectedError />
+   </>
+  );
+ }
 
  return (
   <>
@@ -86,14 +100,11 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
      </div>
     </div>
    )}
-   {showTransferTable && (
+   {(showTransferTable || showMergeTable) && (
     <div className='px-4 mb-2'>
-     <p className='font-medium text-lg'>{dic.transferTo}</p>
-    </div>
-   )}
-   {showMergeTable && (
-    <div className='px-4 mb-2'>
-     <p className='font-medium text-lg'>{dic.mergeTo}</p>
+     <p className='font-medium text-lg'>
+      {showTransferTable ? dic.transferTo : dic.mergeTo}
+     </p>
     </div>
    )}
    <div className='p-4 pt-0'>
