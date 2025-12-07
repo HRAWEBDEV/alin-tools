@@ -42,6 +42,7 @@ interface SalonBaseConfig {
   showMergeTable: boolean;
   showMergeTableConfirm: boolean;
   selectedMergeToTable: Table | null;
+  refreshTables: () => unknown;
   transferTableTo: (newTable: Table) => unknown;
   mergeTableTo: (newTable: Table) => unknown;
   onShowChangeTableState: (open?: boolean) => unknown;

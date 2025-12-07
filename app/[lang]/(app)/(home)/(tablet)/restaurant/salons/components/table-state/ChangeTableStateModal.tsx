@@ -28,6 +28,7 @@ export default function ChangeTableState({
  saleTimeID,
  tableStateDataID,
  changeOpen,
+ onSuccess,
 }: {
  dic: SalonsDictionary;
  open: boolean;
@@ -37,6 +38,7 @@ export default function ChangeTableState({
  saleTimeID: InitiData['defaultSaleTimeID'];
  tableStateDataID: Table['tableStateDataID'];
  changeOpen: (newState?: boolean) => unknown;
+ onSuccess?: () => unknown;
 }) {
  const { mutate, isPending, isError, error } = useMutation({
   mutationFn(newStateType: number) {
@@ -50,6 +52,7 @@ export default function ChangeTableState({
   },
   onSuccess() {
    changeOpen(false);
+   onSuccess?.();
   },
   onError(err: AxiosError<string>) {
    toast.error(err.response?.data);

@@ -303,6 +303,7 @@ export default function SalonBaseConfigProvider({
    showMergeTableConfirm,
    selectedMergeToTable: mergeToTable,
    showMergeTable,
+   refreshTables: getSalonTables,
    onShowChangeTableState: handleShowChangeStateTable,
    changeFilters: handleChangeTableFilters,
    changeSelectedTable,

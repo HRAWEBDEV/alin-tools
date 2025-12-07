@@ -16,7 +16,8 @@
   "reserved": "رزرو",
   "outOfService": "خارج از سرویس",
   "next": "بعدی",
-  "prev": "قبلی"
+  "prev": "قبلی",
+  "lastUpdate": "آخرین بروزرسانی"
  },
  "tables": {
   "readyToService": "خالـی",

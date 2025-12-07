@@ -26,9 +26,11 @@ import { Spinner } from '@/components/ui/spinner';
 import { useSalonBaseConfigContext } from '../services/salon-base-config/salonBaseConfigContext';
 import { getTableStateStyles } from '../utils/tableStates';
 import { TableStateTypes } from '../utils/tableStates';
+import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 
 export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
  const [searchedSalon, setSearchedSalon] = useState('');
+ const { locale } = useBaseConfig();
  const {
   hallsInfo: {
    isFetching,
@@ -47,6 +49,7 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
    showTransferTable,
    changeFilters,
    showMergeTable,
+   lastTablesUpdate,
   },
  } = useSalonBaseConfigContext();
 
@@ -55,11 +58,11 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
  );
 
  return (
-  <div className='mb-4 p-4 lg:p-6 lg:pb-4 bg-background top-0 sticky z-3'>
+  <div className='mb-4 p-2 lg:p-6 lg:pb-2 bg-background top-0 sticky z-3'>
    <h1 className='text-center md:text-start font-medium text-2xl lg:text-3xl mb-4'>
     {dic.title}
    </h1>
-   <div className='grid md:grid-cols-[minmax(0,20rem)_max-content] md:justify-between gap-4'>
+   <div className='grid md:grid-cols-[minmax(0,20rem)_max-content] md:justify-between gap-4 mb-2'>
     <div className='grid grid-cols-[max-content_1fr_max-content]'>
      <Button
       size='icon'
@@ -207,7 +210,7 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
      <div className='flex gap-2 items-center'>
       <Switch
        id='reserved'
-       disabled={showTransferTable || showMergeTable}
+       disabled={showTransferTable}
        style={{
         direction: 'ltr',
        }}
@@ -247,6 +250,19 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
      {/*   {dic.filters.outOfService} ({tablesReport.outOfServiceTables}) */}
      {/*  </Label> */}
      {/* </div> */}
+    </div>
+   </div>
+   <div>
+    <div className='text-xs font-light text-neutral-700 dark:text-neutral-400'>
+     <span>{dic.filters.lastUpdate}: </span>
+     <span>
+      {lastTablesUpdate
+       ? lastTablesUpdate.toLocaleTimeString(locale, {
+          hour: '2-digit',
+          minute: '2-digit',
+         })
+       : ''}
+     </span>
     </div>
    </div>
   </div>

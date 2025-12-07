@@ -24,6 +24,7 @@ export default function TransferTableModal({
  transferToTableNo,
  transferToTableID,
  changeOpen,
+ onSuccess,
 }: {
  dic: SalonsDictionary;
  open: boolean;
@@ -32,6 +33,7 @@ export default function TransferTableModal({
  transferToTableNo: number;
  transferToTableID: number;
  changeOpen: (open?: boolean) => unknown;
+ onSuccess?: () => unknown;
 }) {
  const { mutate, isPending, isError, error } = useMutation({
   mutationFn() {
@@ -42,6 +44,7 @@ export default function TransferTableModal({
   },
   onSuccess() {
    changeOpen(false);
+   onSuccess?.();
   },
   onError(err: AxiosError<string>) {
    toast.error(err.response?.data);
