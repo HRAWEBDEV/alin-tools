@@ -16,6 +16,7 @@ const tablesGridClass =
 export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
  const {
   initData: { defaultSaleTimeID },
+  hallsInfo: { isLoading: isLoadingHalls },
   tablesInfo: {
    filteredData,
    isSuccess,
@@ -39,7 +40,11 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
  return (
   <>
    <div className='mb-4 opacity-50'>
-    {isLoading ? <LinearLoading /> : <div className='h-[6px]'></div>}
+    {isLoading || isLoadingHalls ? (
+     <LinearLoading />
+    ) : (
+     <div className='h-[6px]'></div>
+    )}
    </div>
    {showMergeTable && selectedTable && (
     <div className={tablesGridClass + ' pb-4 mb-2 border-b border-input'}>
