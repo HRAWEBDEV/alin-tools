@@ -57,6 +57,9 @@ export default function SalonTable({
   return '';
  }
 
+ const newOrderRedirectLink =
+  `/${locale}/restaurant/new-order?tableID=${table.tableID}&orderID=${table.orderID}&fromSalons=true` as const;
+
  return (
   <motion.div layout className='grid'>
    <div className='relative min-h-40'>
@@ -91,11 +94,7 @@ export default function SalonTable({
      }}
     >
      <Link
-      href={
-       showTransferTable || showMergeTable
-        ? '#'
-        : `/${locale}/restaurant/new-order?tableID=${table.tableID}&orderID=${table.orderID}&fromSalons=true`
-      }
+      href={showTransferTable || showMergeTable ? '#' : newOrderRedirectLink}
       className='relative flex! flex-col grow items-stretch bg-background! p-2'
      >
       {table.vip && (
@@ -175,11 +174,13 @@ export default function SalonTable({
      <DropdownMenuContent align='start' className='w-56'>
       <DropdownMenuGroup>
        {table.tableStateTypeID !== TableStateTypes.outOfService && (
-        <DropdownMenuItem className='text-sky-700 dark:text-sky-400'>
-         <IoMdAddCircle className='size-8 text-inherit' />
-         <DropdownMenuLabel className='text-base'>
-          {dic.tables.order}
-         </DropdownMenuLabel>
+        <DropdownMenuItem className='text-sky-700 dark:text-sky-400' asChild>
+         <Link href={newOrderRedirectLink}>
+          <IoMdAddCircle className='size-8 text-inherit' />
+          <DropdownMenuLabel className='text-base'>
+           {dic.tables.order}
+          </DropdownMenuLabel>
+         </Link>
         </DropdownMenuItem>
        )}
        {(table.tableStateTypeID === TableStateTypes.outOfService ||
