@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ReactNode } from 'react';
 import {
  type OrderBaseConfig,
@@ -59,9 +59,6 @@ export default function OrderBaseConfigProvider({
   async queryFn({ signal }) {
    const res = await getInitData({ signal });
    const data = res.data;
-   if (data.itemGroups.length) {
-    handleChangeSelectedItemGroup(data.itemGroups[0]);
-   }
    return data;
   },
  });
@@ -111,6 +108,13 @@ export default function OrderBaseConfigProvider({
    isError: itemProgramsError,
   },
  };
+
+ useEffect(() => {
+  if (initData?.itemGroups.length && !selectedItemGroup) {
+   handleChangeSelectedItemGroup(initData?.itemGroups[0]);
+  }
+ }, [initData?.itemGroups, selectedItemGroup]);
+
  return (
   <orderBaseConfigContext.Provider value={ctx}>
    {children}
