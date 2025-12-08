@@ -1,9 +1,5 @@
 import { axios } from '@/app/[lang]/(app)/utils/defaultAxios';
-
-interface Combo {
- key: string;
- value: string;
-}
+import { type Combo } from '../../utils/apiTypes';
 
 interface InitiData {
  salons: Combo[];

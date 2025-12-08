@@ -3,12 +3,12 @@ import OrderTools from './OrderTools';
 import NewOrderHeader from './NewOrderHeader';
 import OrderCategories from './OrderCategories';
 import OrderItems from './OrderItems';
-import OrderToolsProvider from '../services/order-tools/OrderToolsProvider';
+import OrderBaseConfigProvider from '../services/order-tools/OrderBaseConfigProvider';
 import ConfirmOrderModal from './confirm-order/ConfrimOrderModal';
 
 export default function NewOrderWrapper({ dic }: { dic: NewOrderDictionary }) {
  return (
-  <OrderToolsProvider>
+  <OrderBaseConfigProvider>
    <div>
     <div className='p-4 lg:p-8 pb-0!'>
      <NewOrderHeader dic={dic} />
@@ -20,6 +20,6 @@ export default function NewOrderWrapper({ dic }: { dic: NewOrderDictionary }) {
     <OrderItems dic={dic} />
     <ConfirmOrderModal dic={dic} />
    </div>
-  </OrderToolsProvider>
+  </OrderBaseConfigProvider>
  );
 }

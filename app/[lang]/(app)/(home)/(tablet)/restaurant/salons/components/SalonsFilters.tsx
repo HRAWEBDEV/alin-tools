@@ -253,7 +253,7 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
     </div>
    </div>
    <div>
-    <div className='text-center md:text-start text-xs font-light text-neutral-700 dark:text-neutral-400'>
+    <div className='text-center md:text-start text-[0.75rem] font-medium text-neutral-700 dark:text-neutral-400'>
      <span>{dic.filters.lastUpdate}: </span>
      <span>
       {lastTablesUpdate

@@ -4,10 +4,10 @@ import { FaShoppingBag } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
 import { FaCircleInfo } from 'react-icons/fa6';
 import { Badge } from '@/components/ui/badge';
-import { useOrderToolsContext } from '../services/order-tools/orderToolsContext';
+import { useOrderBaseConfigContext } from '../services/order-tools/orderBaseConfigContext';
 
 export default function OrderTools({ dic }: { dic: NewOrderDictionary }) {
- const { showConfirmOrder } = useOrderToolsContext();
+ const { showConfirmOrder } = useOrderBaseConfigContext();
  return (
   <div className='flex md:items-center md:justify-between gap-2 mb-2 flex-col md:flex-row'>
    <div className='text-sm flex gap-3 text-neutral-600 dark:text-neutral-400 flex-wrap'>

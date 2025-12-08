@@ -11,8 +11,8 @@ import { Button } from '@/components/ui/button';
 import { type NewOrderDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/new-order/dictionary';
 import {
  type ConfirmOrderType,
- useOrderToolsContext,
-} from '../../services/order-tools/orderToolsContext';
+ useOrderBaseConfigContext,
+} from '../../services/order-tools/orderBaseConfigContext';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import OrderShoppingCard from '../order-shop/OrderShoppingCard';
 import OrderInfo from '../order-info/OrderInfo';
@@ -32,7 +32,7 @@ export default function ConfirmOrderModal({
   changeConfirmType,
   showConfirmOrder,
   closeConfirmOrder,
- } = useOrderToolsContext();
+ } = useOrderBaseConfigContext();
  return (
   <Dialog
    open={confirmOrderIsOpen}
