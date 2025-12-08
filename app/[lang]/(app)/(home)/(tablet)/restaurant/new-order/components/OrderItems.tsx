@@ -11,7 +11,7 @@ export default function OrderItems({}: { dic: NewOrderDictionary }) {
   itemsInfo: { data, isLoading },
  } = useOrderBaseConfigContext();
  return (
-  <div className='p-4 pt-0 overflow-hidden'>
+  <div className='p-4 pb-10 pt-0 overflow-hidden'>
    <AnimatePresence>
     <div className='grid justify-center gap-4 grid-cols-[repeat(auto-fill,minmax(9rem,10.2rem))] sm:grid-cols-[repeat(auto-fill,minmax(12rem,13rem))]'>
      {isLoading || initLoading ? (
