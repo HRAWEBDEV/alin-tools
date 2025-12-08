@@ -12,6 +12,7 @@ import {
  getInitData,
 } from '../newOrderApiActions';
 import { useQuery } from '@tanstack/react-query';
+import LoadingLogo from '@/app/[lang]/(app)/components/LoadingLogo';
 
 export default function OrderBaseConfigProvider({
  children,
@@ -82,7 +83,14 @@ export default function OrderBaseConfigProvider({
   },
  };
  if (initError) return <></>;
- if (initLoading || !initSuccess) return <div></div>;
+ if (initLoading || !initSuccess)
+  return (
+   <div className='grid place-content-center'>
+    <div>
+     <LoadingLogo className='size-96' />
+    </div>
+   </div>
+  );
  return (
   <orderBaseConfigContext.Provider value={ctx}>
    {children}
