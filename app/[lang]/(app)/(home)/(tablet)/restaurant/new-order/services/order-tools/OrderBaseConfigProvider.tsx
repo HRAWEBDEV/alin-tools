@@ -111,12 +111,6 @@ export default function OrderBaseConfigProvider({
    isError: itemProgramsError,
   },
  };
- if (initError || itemProgramsError)
-  return (
-   <>
-    <UnExpectedError />
-   </>
-  );
  return (
   <orderBaseConfigContext.Provider value={ctx}>
    {children}
