@@ -10,9 +10,11 @@ import {
  type ItemGroup,
  newOrderKey,
  getInitData,
+ getItemPrograms,
 } from '../newOrderApiActions';
 import { useQuery } from '@tanstack/react-query';
 import LoadingLogo from '@/app/[lang]/(app)/components/LoadingLogo';
+import UnExpectedError from '@/app/[lang]/(app)/components/UnExpectedError';
 
 export default function OrderBaseConfigProvider({
  children,
@@ -64,6 +66,28 @@ export default function OrderBaseConfigProvider({
   },
  });
 
+ // get item get item programs
+ const {
+  data: itemProgramsData,
+  isLoading: itemProgramsLoading,
+  isFetching: itemProgramsFetching,
+  isSuccess: itemProgramsSuccess,
+  isError: itemProgramsError,
+  refetch: itemProgramsRefetch,
+ } = useQuery({
+  enabled: !!selectedItemGroup,
+  queryKey: [newOrderKey, 'item-programs', selectedItemGroup?.key || ''],
+  async queryFn({ signal }) {
+   const res = await getItemPrograms({
+    signal,
+    contractMenuID: null,
+    itemGroupID: Number(selectedItemGroup!.key),
+    orderDateTime: new Date().toISOString(),
+   });
+   return res.data;
+  },
+ });
+
  const ctx: OrderBaseConfig = {
   confirmOrderIsOpen,
   changeConfirmType,
@@ -71,7 +95,7 @@ export default function OrderBaseConfigProvider({
   showConfirmOrder,
   closeConfirmOrder,
   initialDataInfo: {
-   data: initData!,
+   data: initData,
    isError: initError,
    isSuccess: initSuccess,
    isFetching: initFetching,
@@ -80,16 +104,18 @@ export default function OrderBaseConfigProvider({
   itemsInfo: {
    selectedItemGroup,
    changeSelectedItemGroup: handleChangeSelectedItemGroup,
+   data: itemProgramsData,
+   isLoading: itemProgramsLoading,
+   isFetching: itemProgramsFetching,
+   isSuccess: itemProgramsSuccess,
+   isError: itemProgramsError,
   },
  };
- if (initError) return <></>;
- if (initLoading || !initSuccess)
+ if (initError || itemProgramsError)
   return (
-   <div className='grid place-content-center'>
-    <div>
-     <LoadingLogo className='size-96' />
-    </div>
-   </div>
+   <>
+    <UnExpectedError />
+   </>
   );
  return (
   <orderBaseConfigContext.Provider value={ctx}>

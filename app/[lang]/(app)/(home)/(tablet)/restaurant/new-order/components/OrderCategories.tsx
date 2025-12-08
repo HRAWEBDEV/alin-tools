@@ -30,7 +30,7 @@ export default function OrderCategories({}: { dic: NewOrderDictionary }) {
    },
    '(max-width:700px)': {
     slides: {
-     perView: scrollDirection === 'up' ? 3 : 5,
+     perView: scrollDirection === 'up' ? 3 : 4,
      spacing: 4,
     },
    },
@@ -43,7 +43,7 @@ export default function OrderCategories({}: { dic: NewOrderDictionary }) {
  return (
   <div>
    <div ref={sliderRef} className='keen-slider'>
-    {data.itemGroups.map(({ key, value }) => (
+    {data?.itemGroups.map(({ key, value }) => (
      <div key={key} className={`keen-slider__slide number-slide${key}`}>
       <button
        data-active={selectedItemGroup?.key === key}

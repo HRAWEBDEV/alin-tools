@@ -4,6 +4,17 @@ import type { Combo } from '../../utils/apiTypes';
 const newOrderKey = 'restaurant-new-order';
 
 type ItemGroup = Combo;
+interface ItemProgram {
+ id: number;
+ itemID: number;
+ itemCode: number;
+ taxRate: number;
+ serviceRate: number;
+ price: number;
+ itemName: string | null;
+ isContract?: boolean;
+ imageURL?: string | null;
+}
 interface InitialData {
  orderId: number;
  bonNo: number;
@@ -29,5 +40,29 @@ function getInitData({ signal }: { signal: AbortSignal }) {
  });
 }
 
-export type { InitialData, ItemGroup };
-export { newOrderKey, getInitData };
+function getItemPrograms({
+ signal,
+ itemGroupID,
+ contractMenuID,
+ orderDateTime,
+}: {
+ signal: AbortSignal;
+ itemGroupID: number;
+ contractMenuID: number | null;
+ orderDateTime: string;
+}) {
+ const searchParams = new URLSearchParams([
+  ['itemGroupID', itemGroupID.toString()],
+  ['orderDateTime', orderDateTime],
+ ]);
+ if (contractMenuID) {
+  searchParams.set('contractMenuID', contractMenuID.toString());
+ }
+ return axios.get<ItemProgram[]>(
+  `/Restaurant/SaleInvoice/GetItemPrograms?${searchParams.toString()}`,
+  { signal },
+ );
+}
+
+export type { InitialData, ItemGroup, ItemProgram };
+export { newOrderKey, getInitData, getItemPrograms };

@@ -1,6 +1,10 @@
 import { use, createContext } from 'react';
 import { OutOfContext } from '@/utils/OutOfContext';
-import { type InitialData, type ItemGroup } from '../newOrderApiActions';
+import {
+ type InitialData,
+ type ItemGroup,
+ type ItemProgram,
+} from '../newOrderApiActions';
 
 type ConfirmOrderType = (typeof confirmOrderTypes)[number];
 const confirmOrderTypes = ['orderInfo', 'shoppingCard'] as const;
@@ -12,7 +16,7 @@ interface OrderBaseConfig {
  showConfirmOrder: (type?: ConfirmOrderType) => unknown;
  closeConfirmOrder: () => unknown;
  initialDataInfo: {
-  data: InitialData;
+  data?: InitialData;
   isLoading: boolean;
   isError: boolean;
   isSuccess: boolean;
@@ -21,6 +25,11 @@ interface OrderBaseConfig {
  itemsInfo: {
   selectedItemGroup: ItemGroup | null;
   changeSelectedItemGroup: (newItem: ItemGroup) => unknown;
+  data?: ItemProgram[];
+  isLoading: boolean;
+  isError: boolean;
+  isSuccess: boolean;
+  isFetching: boolean;
  };
 }
 
