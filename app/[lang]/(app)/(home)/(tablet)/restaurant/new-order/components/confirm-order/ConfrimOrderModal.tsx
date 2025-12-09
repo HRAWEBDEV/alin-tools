@@ -32,6 +32,7 @@ export default function ConfirmOrderModal({
   changeConfirmType,
   showConfirmOrder,
   closeConfirmOrder,
+  order: { orderItems },
  } = useOrderBaseConfigContext();
  return (
   <Dialog
@@ -49,7 +50,7 @@ export default function ConfirmOrderModal({
      <DialogTitle className='hidden'></DialogTitle>
      <DialogDescription className='hidden'></DialogDescription>
     </DialogHeader>
-    <div className='min-h-[40svh] max-h-[80svh] overflow-auto p-4 pt-0'>
+    <div className='overflow-auto p-4 pt-0'>
      <Tabs
       dir={localeInfo.contentDirection}
       value={confirmOrderActiveType}
@@ -63,7 +64,11 @@ export default function ConfirmOrderModal({
        </TabsTrigger>
        <TabsTrigger value='shoppingCard' className='w-40'>
         {dic.tools.shoppingCard}
-        <Badge className='p-1 size-6 rounded-full'>20</Badge>
+        {!!orderItems.length && (
+         <Badge className='p-1 size-6 rounded-full text-base font-medium'>
+          {orderItems.length}
+         </Badge>
+        )}
        </TabsTrigger>
       </TabsList>
       <TabsContent value='orderInfo'>

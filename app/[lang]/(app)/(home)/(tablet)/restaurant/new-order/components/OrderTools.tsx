@@ -18,6 +18,7 @@ export default function OrderTools({ dic }: { dic: NewOrderDictionary }) {
   showConfirmOrder,
   initialDataInfo: { isLoading },
   itemsInfo: { searchedItemName, changeSearchedItemName },
+  order: { orderItems },
  } = useOrderBaseConfigContext();
  return (
   <div className='flex md:items-center md:justify-between gap-2 mb-2 flex-col md:flex-row'>
@@ -52,7 +53,11 @@ export default function OrderTools({ dic }: { dic: NewOrderDictionary }) {
     >
      {!isLoading ? <FaShoppingBag /> : <Spinner />}
      <span>{dic.tools.shoppingCard}</span>
-     <Badge className='p-1 size-6 bg-orange-600 dark:bg-orange-400'>12</Badge>
+     {!!orderItems.length && (
+      <Badge className='p-1 size-6 bg-orange-600 dark:bg-orange-400 font-medium text-base'>
+       {orderItems.length}
+      </Badge>
+     )}
     </Button>
    </div>
   </div>

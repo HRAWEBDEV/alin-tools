@@ -1,16 +1,32 @@
+'use client';
 import { NewOrderDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/new-order/dictionary';
 import OrderShoppingItem from './OrderShoppingItem';
+import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseConfigContext';
+import NoItemFound from '@/app/[lang]/(app)/components/NoItemFound';
 
 export default function OrderShoppingList({
  dic,
 }: {
  dic: NewOrderDictionary;
 }) {
+ const {
+  order: { orderItems },
+ } = useOrderBaseConfigContext();
  return (
-  <ul>
-   {Array.from({ length: 10 }, (_, i) => i).map((i) => (
-    <OrderShoppingItem key={i} dic={dic} />
-   ))}
-  </ul>
+  <>
+   {orderItems.length ? (
+    <ul>
+     {orderItems.map((orderItem) => (
+      <OrderShoppingItem
+       key={orderItem.itemID}
+       dic={dic}
+       orderItem={orderItem}
+      />
+     ))}
+    </ul>
+   ) : (
+    <NoItemFound />
+   )}
+  </>
  );
 }
