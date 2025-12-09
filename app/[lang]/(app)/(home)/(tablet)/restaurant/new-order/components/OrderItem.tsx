@@ -1,6 +1,5 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-// import { FaCirclePlus } from 'react-icons/fa6';
 import ServeDishIcon from '@/app/[lang]/(app)/components/icons/ServeDishIcon';
 import { CiCircleMinus } from 'react-icons/ci';
 import { FaCirclePlus } from 'react-icons/fa6';
@@ -18,8 +17,12 @@ export default function OrderItem({
 }) {
  const {
   itemsInfo: { searchedItemName },
+  order: { orderItems, orderItemsDispatch },
  } = useOrderBaseConfigContext();
  const { format } = useCurrencyFormatter();
+ const targetOrderItem = orderItems.find(
+  (order) => order.itemID === itemProgram.itemID,
+ );
  return (
   <motion.div layout className='flex flex-col min-h-60 pt-17'>
    <div className='grow rounded-xl shadow-xl dark:bg-neutral-900'>
@@ -61,31 +64,57 @@ export default function OrderItem({
        <span className='ms-1 text-sm'>ریال</span>
       </p>
      </div>
-     <div className='flex justify-center items-center mb-2'>
-      <Button
-       variant='ghost'
-       size='icon-lg'
-       className='text-primary rounded-full'
-      >
-       <FaCirclePlus className='size-9' />
-      </Button>
-     </div>
-     {false && (
+     {!targetOrderItem?.amount && (
       <div className='flex justify-center items-center mb-2'>
        <Button
         variant='ghost'
         size='icon-lg'
+        className='text-primary rounded-full'
+        onClick={() => {
+         orderItemsDispatch({
+          type: 'addOrderItems',
+          payload: [itemProgram],
+         });
+        }}
+       >
+        <FaCirclePlus className='size-9' />
+       </Button>
+      </div>
+     )}
+     {!!targetOrderItem?.amount && (
+      <div className='flex justify-center items-center mb-2 select-none'>
+       <Button
+        variant='ghost'
+        size='icon-lg'
         className='text-rose-600 dark:text-rose-400 rounded-full'
+        onClick={() => {
+         orderItemsDispatch({
+          type: 'decreaseOrderItemsAmount',
+          payload: {
+           decreaseBy: 1,
+           itemsIDs: [itemProgram.itemID],
+          },
+         });
+        }}
        >
         <CiCircleMinus className='size-10' />
        </Button>
-       <div className='text-lg px-2 shrink-0 text-center basis-8 font-medium'>
-        12
+       <div className='text-xl py-[0.2rem] px-1 shrink-0 text-center basis-8 font-medium text-primary rounded'>
+        {targetOrderItem.amount}
        </div>
        <Button
         variant='ghost'
         size='icon-lg'
         className='text-secondary rounded-full'
+        onClick={() => {
+         orderItemsDispatch({
+          type: 'increaseOrderItemsAmount',
+          payload: {
+           increaseBy: 1,
+           itemsIDs: [itemProgram.itemID],
+          },
+         });
+        }}
        >
         <CiCirclePlus className='size-10' />
        </Button>

@@ -47,7 +47,7 @@ function orderItemsReducer(state: OrderItem[], action: OrderItemActions) {
   case 'addOrderItems':
    return [
     ...state,
-    action.payload.map((item) => {
+    ...action.payload.map((item) => {
      const newOrder: OrderItem = {
       id: 0,
       orderID: 0,
