@@ -1,6 +1,7 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 // import { FaCirclePlus } from 'react-icons/fa6';
+import ServeDishIcon from '@/app/[lang]/(app)/components/icons/ServeDishIcon';
 import { CiCircleMinus } from 'react-icons/ci';
 import { FaCirclePlus } from 'react-icons/fa6';
 import { CiCirclePlus } from 'react-icons/ci';
@@ -23,12 +24,16 @@ export default function OrderItem({
   <motion.div layout className='flex flex-col min-h-60 pt-17'>
    <div className='grow rounded-xl shadow-xl dark:bg-neutral-900'>
     <div className='grid place-content-center -mt-17 mb-2'>
-     <div className='rounded-full size-34 bg-neutral-100 dark:bg-neutral-900 overflow-hidden object-center object-contain'>
-      <img
-       alt={itemProgram.itemName || 'food image'}
-       src='/images/faseenjoon.jpg'
-       className='object-center object-cover w-full h-full'
-      />
+     <div className='flex items-center justify-center rounded-full size-34 bg-neutral-100 dark:bg-neutral-900 overflow-hidden object-center object-contain'>
+      {itemProgram.imageURL ? (
+       <img
+        alt={itemProgram.itemName || 'food image'}
+        src='/images/faseenjoon.jpg'
+        className='object-center object-cover w-full h-full'
+       />
+      ) : (
+       <ServeDishIcon className='size-20 text-neutral-300 dark:text-neutral-700' />
+      )}
      </div>
     </div>
     <div className='text-center'>

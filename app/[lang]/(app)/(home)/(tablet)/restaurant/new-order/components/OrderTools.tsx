@@ -21,7 +21,7 @@ export default function OrderTools({ dic }: { dic: NewOrderDictionary }) {
  } = useOrderBaseConfigContext();
  return (
   <div className='flex md:items-center md:justify-between gap-2 mb-2 flex-col md:flex-row'>
-   <div>
+   <div className='md:grid md:grid-cols-[minmax(0,18rem)]'>
     <InputGroup className='bg-neutral-100 dark:bg-neutral-900'>
      <InputGroupAddon align='inline-start'>
       <IoSearch className='text-primary size-5' />
