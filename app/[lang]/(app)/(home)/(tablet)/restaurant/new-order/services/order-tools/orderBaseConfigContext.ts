@@ -1,10 +1,12 @@
-import { use, createContext } from 'react';
+import { use, createContext, ActionDispatch } from 'react';
 import { OutOfContext } from '@/utils/OutOfContext';
 import {
  type InitialData,
  type ItemGroup,
  type ItemProgram,
+ type OrderItem,
 } from '../newOrderApiActions';
+import { type OrderItemActions } from '../../utils/orderItemsActionsReducer';
 
 type ConfirmOrderType = (typeof confirmOrderTypes)[number];
 const confirmOrderTypes = ['orderInfo', 'shoppingCard'] as const;
@@ -33,6 +35,10 @@ interface OrderBaseConfig {
   selectedItemGroup: ItemGroup | null;
   changeSearchedItemName: (newSearch: string) => unknown;
   changeSelectedItemGroup: (newItem: ItemGroup) => unknown;
+ };
+ order: {
+  orderItems: OrderItem[];
+  orderItemsDispatch: ActionDispatch<[action: OrderItemActions]>;
  };
 }
 

@@ -15,6 +15,27 @@ interface ItemProgram {
  isContract?: boolean;
  imageURL?: string | null;
 }
+
+type OrderItem = {
+ id: number;
+ itemID: number;
+ itemCode: number;
+ itemName: string | null;
+ orderID: number;
+ price: number;
+ amount: number;
+ sValue: number;
+ discount: number;
+ service: number;
+ tax: number;
+ netValue: number;
+ discountRate: number;
+ serviceRate: number;
+ taxRate: number;
+ tagID: number | null;
+ tagComment: string | null;
+};
+
 interface InitialData {
  orderId: number;
  bonNo: number;
@@ -64,5 +85,5 @@ function getItemPrograms({
  );
 }
 
-export type { InitialData, ItemGroup, ItemProgram };
+export type { InitialData, ItemGroup, ItemProgram, OrderItem };
 export { newOrderKey, getInitData, getItemPrograms };

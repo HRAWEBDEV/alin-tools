@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useReducer } from 'react';
 import { ReactNode } from 'react';
 import {
  type OrderBaseConfig,
@@ -14,6 +14,7 @@ import {
 } from '../newOrderApiActions';
 import { useQuery } from '@tanstack/react-query';
 import { filterItemPrograms } from '../../utils/filterItemPrograms';
+import { orderItemsReducer } from '../../utils/orderItemsActionsReducer';
 
 export default function OrderBaseConfigProvider({
  children,
@@ -27,7 +28,9 @@ export default function OrderBaseConfigProvider({
  const [confirmOrderIsOpen, setConfirmOrderIsOpen] = useState(false);
  const [confirmOrderActiveType, setConfirmOrderActiveType] =
   useState<ConfirmOrderType>('orderInfo');
-
+ // order items reducer
+ const [orderItems, orderItemsDispatch] = useReducer(orderItemsReducer, []);
+ //
  function showConfirmOrder(confirmType?: ConfirmOrderType) {
   setConfirmOrderIsOpen(true);
   setConfirmOrderActiveType(confirmType || 'orderInfo');
@@ -117,6 +120,10 @@ export default function OrderBaseConfigProvider({
    searchedItemName,
    changeSearchedItemName: handleChangeSearchedItemName,
    changeSelectedItemGroup: handleChangeSelectedItemGroup,
+  },
+  order: {
+   orderItems,
+   orderItemsDispatch,
   },
  };
 

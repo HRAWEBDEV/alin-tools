@@ -24,11 +24,12 @@ export default function OrderItem({
   <motion.div layout className='flex flex-col min-h-60 pt-17'>
    <div className='grow rounded-xl shadow-xl dark:bg-neutral-900'>
     <div className='grid place-content-center -mt-17 mb-2'>
-     <div className='flex items-center justify-center rounded-full size-34 bg-neutral-100 dark:bg-neutral-900 overflow-hidden object-center object-contain'>
+     <div className='flex items-center justify-center rounded-full size-34 bg-neutral-100 dark:bg-neutral-800 overflow-hidden object-center object-contain'>
       {itemProgram.imageURL ? (
        <img
         alt={itemProgram.itemName || 'food image'}
         src='/images/faseenjoon.jpg'
+        loading='lazy'
         className='object-center object-cover w-full h-full'
        />
       ) : (
