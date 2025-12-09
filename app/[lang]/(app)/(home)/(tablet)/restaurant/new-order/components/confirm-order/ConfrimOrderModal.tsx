@@ -45,12 +45,12 @@ export default function ConfirmOrderModal({
     closeConfirmOrder();
    }}
   >
-   <DialogContent className='w-[min(100%,45rem)] max-w-none! p-0'>
+   <DialogContent className='flex flex-col w-[min(95%,45rem)] max-h-[95svh] max-w-none! p-0 overflow-hidden'>
     <DialogHeader className='p-4'>
      <DialogTitle className='hidden'></DialogTitle>
      <DialogDescription className='hidden'></DialogDescription>
     </DialogHeader>
-    <div className='overflow-auto p-4 pt-0'>
+    <div className='grow overflow-auto p-4 pt-0'>
      <Tabs
       dir={localeInfo.contentDirection}
       value={confirmOrderActiveType}
