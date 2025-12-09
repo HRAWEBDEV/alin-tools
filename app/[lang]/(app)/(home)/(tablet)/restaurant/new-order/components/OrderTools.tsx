@@ -6,27 +6,33 @@ import { FaCircleInfo } from 'react-icons/fa6';
 import { Badge } from '@/components/ui/badge';
 import { useOrderBaseConfigContext } from '../services/order-tools/orderBaseConfigContext';
 import { Spinner } from '@/components/ui/spinner';
+import {
+ InputGroup,
+ InputGroupInput,
+ InputGroupAddon,
+} from '@/components/ui/input-group';
+import { IoSearch } from 'react-icons/io5';
 
 export default function OrderTools({ dic }: { dic: NewOrderDictionary }) {
  const {
   showConfirmOrder,
   initialDataInfo: { isLoading },
+  itemsInfo: { searchedItemName, changeSearchedItemName },
  } = useOrderBaseConfigContext();
  return (
   <div className='flex md:items-center md:justify-between gap-2 mb-2 flex-col md:flex-row'>
-   <div className='text-sm flex gap-3 text-neutral-600 dark:text-neutral-400 flex-wrap'>
-    <div>
-     <span>{dic.orderInfo.salonName}: </span>
-     <span className='text-primary font-medium'>سالن یک</span>
-    </div>
-    <div>
-     <span>{dic.orderInfo.table}: </span>
-     <span className='text-primary font-medium'>111</span>
-    </div>
-    <div>
-     <span>{dic.orderInfo.customer}: </span>
-     <span className='text-primary font-medium'>حمیدرضا اکبری</span>
-    </div>
+   <div>
+    <InputGroup className='bg-neutral-100 dark:bg-neutral-900'>
+     <InputGroupAddon align='inline-start'>
+      <IoSearch className='text-primary size-5' />
+     </InputGroupAddon>
+     <InputGroupInput
+      value={searchedItemName}
+      onChange={(e) => changeSearchedItemName(e.target.value)}
+      type='search'
+      placeholder={dic.tools.search + ' ...'}
+     />
+    </InputGroup>
    </div>
    <div className='md:flex md:justify-end grid grid-cols-2 gap-2'>
     <Button

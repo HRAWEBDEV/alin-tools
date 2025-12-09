@@ -4,12 +4,28 @@ import OrderItem from './OrderItem';
 import { useOrderBaseConfigContext } from '../services/order-tools/orderBaseConfigContext';
 import { AnimatePresence } from 'motion/react';
 import { Spinner } from '@/components/ui/spinner';
+import NoItemFound from '@/app/[lang]/(app)/components/NoItemFound';
 
-export default function OrderItems({}: { dic: NewOrderDictionary }) {
+export default function OrderItems({ dic }: { dic: NewOrderDictionary }) {
  const {
   initialDataInfo: { isLoading: initLoading },
-  itemsInfo: { data, isLoading },
+  itemsInfo: { filteredData, isLoading, isSuccess, searchedItemName },
  } = useOrderBaseConfigContext();
+
+ if (isSuccess && !filteredData.length) {
+  return (
+   <div className='flex flex-col items-center'>
+    <NoItemFound />
+    {searchedItemName && (
+     <div className='text-neutral-600 dark:text-neutral-400'>
+      <span>{dic.tools.search}: </span>
+      <span>{searchedItemName}</span>
+     </div>
+    )}
+   </div>
+  );
+ }
+
  return (
   <div className='p-4 pb-10 pt-0 overflow-hidden'>
    <AnimatePresence>
@@ -19,7 +35,7 @@ export default function OrderItems({}: { dic: NewOrderDictionary }) {
        <Spinner className='size-16 text-primary' />
       </div>
      ) : (
-      data?.map((itemProgram) => (
+      filteredData?.map((itemProgram) => (
        <OrderItem key={itemProgram.id} itemProgram={itemProgram} />
       ))
      )}

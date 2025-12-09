@@ -23,13 +23,16 @@ interface OrderBaseConfig {
   isFetching: boolean;
  };
  itemsInfo: {
-  selectedItemGroup: ItemGroup | null;
-  changeSelectedItemGroup: (newItem: ItemGroup) => unknown;
   data?: ItemProgram[];
+  filteredData: ItemProgram[];
+  searchedItemName: string;
   isLoading: boolean;
   isError: boolean;
   isSuccess: boolean;
   isFetching: boolean;
+  selectedItemGroup: ItemGroup | null;
+  changeSearchedItemName: (newSearch: string) => unknown;
+  changeSelectedItemGroup: (newItem: ItemGroup) => unknown;
  };
 }
 

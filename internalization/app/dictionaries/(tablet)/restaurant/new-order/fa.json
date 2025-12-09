@@ -2,7 +2,8 @@
  "title": "ثبت سفارش",
  "tools": {
   "shoppingCard": "سبد خرید",
-  "orderInfo": "اطلاعات سفارش"
+  "orderInfo": "اطلاعات سفارش",
+  "search": "جستجو"
  },
  "orderInfo": {
   "search": "جستجو",

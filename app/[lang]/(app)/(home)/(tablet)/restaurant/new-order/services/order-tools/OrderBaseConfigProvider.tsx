@@ -13,8 +13,7 @@ import {
  getItemPrograms,
 } from '../newOrderApiActions';
 import { useQuery } from '@tanstack/react-query';
-import LoadingLogo from '@/app/[lang]/(app)/components/LoadingLogo';
-import UnExpectedError from '@/app/[lang]/(app)/components/UnExpectedError';
+import { filterItemPrograms } from '../../utils/filterItemPrograms';
 
 export default function OrderBaseConfigProvider({
  children,
@@ -24,6 +23,7 @@ export default function OrderBaseConfigProvider({
  const [selectedItemGroup, setSelectedItemGroup] = useState<ItemGroup | null>(
   null,
  );
+ const [searchedItemName, setSearchedItemName] = useState('');
  const [confirmOrderIsOpen, setConfirmOrderIsOpen] = useState(false);
  const [confirmOrderActiveType, setConfirmOrderActiveType] =
   useState<ConfirmOrderType>('orderInfo');
@@ -63,6 +63,10 @@ export default function OrderBaseConfigProvider({
   },
  });
 
+ // item program search
+ function handleChangeSearchedItemName(newSearch: string) {
+  setSearchedItemName(newSearch);
+ }
  // get item get item programs
  const {
   data: itemProgramsData,
@@ -84,6 +88,10 @@ export default function OrderBaseConfigProvider({
    return res.data;
   },
  });
+ const filteredItemPrograms = filterItemPrograms({
+  items: itemProgramsData,
+  searchedItemName,
+ });
 
  const ctx: OrderBaseConfig = {
   confirmOrderIsOpen,
@@ -100,12 +108,15 @@ export default function OrderBaseConfigProvider({
   },
   itemsInfo: {
    selectedItemGroup,
-   changeSelectedItemGroup: handleChangeSelectedItemGroup,
    data: itemProgramsData,
+   filteredData: filteredItemPrograms,
    isLoading: itemProgramsLoading,
    isFetching: itemProgramsFetching,
    isSuccess: itemProgramsSuccess,
    isError: itemProgramsError,
+   searchedItemName,
+   changeSearchedItemName: handleChangeSearchedItemName,
+   changeSelectedItemGroup: handleChangeSelectedItemGroup,
   },
  };
 

@@ -7,12 +7,17 @@ import { CiCirclePlus } from 'react-icons/ci';
 import { type ItemProgram } from '../services/newOrderApiActions';
 import { useCurrencyFormatter } from '@/hooks/useCurrencyFormatter';
 import { motion } from 'motion/react';
+import Highlighter from 'react-highlight-words';
+import { useOrderBaseConfigContext } from '../services/order-tools/orderBaseConfigContext';
 
 export default function OrderItem({
  itemProgram,
 }: {
  itemProgram: ItemProgram;
 }) {
+ const {
+  itemsInfo: { searchedItemName },
+ } = useOrderBaseConfigContext();
  const { format } = useCurrencyFormatter();
  return (
   <motion.div layout className='flex flex-col min-h-60 pt-17'>
@@ -28,7 +33,10 @@ export default function OrderItem({
     </div>
     <div className='text-center'>
      <h3 className='text-lg font-medium text-neutral-600 dark:text-neutral-400 mb-1'>
-      {itemProgram.itemName}
+      <Highlighter
+       searchWords={[searchedItemName]}
+       textToHighlight={itemProgram.itemName || ''}
+      />
      </h3>
      <p className='px-2 text-xs text-neutral-600 dark:text-neutral-400 font-light mb-3'>
       ---
