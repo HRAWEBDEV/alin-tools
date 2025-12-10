@@ -53,19 +53,30 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
      <div
       className={
        invoiceRowClass +
-       ' p-2 sm:px-8 bg-teal-50 dark:bg-teal-950 border-none text-secondary rounded-md text-xl mb-0!'
+       ' p-2 sm:px-8 bg-teal-50 dark:bg-teal-950 border-secondary text-secondary rounded-md text-xl mb-0!'
       }
      >
       <span className={invoiceLabelClass}>{dic.invoice.payment}: </span>
       <span>12,000,000</span>
      </div>
+     <div
+      className={
+       invoiceRowClass +
+       ' p-2 sm:px-8 bg-orange-50 dark:bg-orange-950 border-none text-orange-700 dark:text-orange-400 rounded-md text-xl mb-0!'
+      }
+     >
+      <span className={invoiceLabelClass}>{dic.invoice.remained}: </span>
+      <span>12,000,000</span>
+     </div>
     </div>
     <div className='grid sm:grid-cols-3 gap-3'>
-     <Button size='lg'>{dic.invoice.confirmOrder}</Button>
-     <Button variant='destructive' size='lg'>
+     <Button size='lg' className='font-medium'>
+      {dic.invoice.confirmOrder}
+     </Button>
+     <Button variant='destructive' size='lg' className='font-medium'>
       {dic.invoice.closeOrder}
      </Button>
-     <Button variant='secondary' size='lg'>
+     <Button variant='secondary' size='lg' className='font-medium'>
       {dic.invoice.confirmPayment}
      </Button>
     </div>
