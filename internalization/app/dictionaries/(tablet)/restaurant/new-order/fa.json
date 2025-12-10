@@ -18,8 +18,10 @@
   "bonNo": "شماره بن"
  },
  "orderConfirm": {
+  "removeOrderItemConfirmMessage": "آیا از حذف این آیتم اطمینان دارید؟",
+  "clearOrderItemsConfirmMessage": "آیا از خالی کردن سبد خرید اطمینان دارید؟",
   "cancel": "انصراف",
-  "confirm": "ثبت سفارش",
+  "confirm": "تایید",
   "closeOrder": "بستن سفارش",
   "invoice": "صورتحساب"
  },

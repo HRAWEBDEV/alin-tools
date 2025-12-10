@@ -32,7 +32,7 @@ export default function NewOrderHeader({ dic }: { dic: NewOrderDictionary }) {
      <Dialog>
       {fromSalons && (
        <DialogTrigger asChild>
-        <Button size='icon-lg' variant='outline'>
+        <Button size='icon-lg' variant='outline' className='ltr:rotate-180'>
          <FaArrowLeft />
         </Button>
        </DialogTrigger>

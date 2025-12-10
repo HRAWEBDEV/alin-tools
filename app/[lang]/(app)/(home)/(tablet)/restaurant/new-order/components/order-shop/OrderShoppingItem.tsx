@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { NewOrderDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/new-order/dictionary';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -7,13 +8,25 @@ import { type OrderItem } from '../../services/newOrderApiActions';
 import { useCurrencyFormatter } from '@/hooks/useCurrencyFormatter';
 import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseConfigContext';
 import ServeDishIcon from '@/app/[lang]/(app)/components/icons/ServeDishIcon';
+import { BsTrash } from 'react-icons/bs';
+import { BiError } from 'react-icons/bi';
+import {
+ Dialog,
+ DialogContent,
+ DialogHeader,
+ DialogFooter,
+ DialogClose,
+} from '@/components/ui/dialog';
 
 export default function OrderShoppingItem({
+ dic,
  orderItem,
 }: {
  dic: NewOrderDictionary;
  orderItem: OrderItem;
 }) {
+ const [showRemoveOrderItemConfirm, setShowRemoveOrderItemConfirm] =
+  useState(false);
  const {
   order: { orderItemsDispatch },
  } = useOrderBaseConfigContext();
@@ -21,17 +34,32 @@ export default function OrderShoppingItem({
  return (
   <div className='border-b border-input p-2'>
    <div className='flex gap-4 items-center'>
-    <div className='flex items-center justify-center  shrink-0 rounded-full size-20 bg-neutral-100 dark:bg-neutral-800 overflow-hidden object-center object-contain'>
-     {false ? (
-      <img
-       alt={''}
-       src=''
-       loading='lazy'
-       className='object-center object-cover w-full h-full'
-      />
-     ) : (
-      <ServeDishIcon className='size-12 text-neutral-300 dark:text-neutral-700' />
-     )}
+    <div className='flex flex-col items-center'>
+     <div className='flex items-center justify-center  shrink-0 rounded-full size-20 bg-neutral-100 dark:bg-neutral-800 overflow-hidden object-center object-contain'>
+      {false ? (
+       <img
+        alt={''}
+        src=''
+        loading='lazy'
+        className='object-center object-cover w-full h-full'
+       />
+      ) : (
+       <ServeDishIcon className='size-12 text-neutral-300 dark:text-neutral-700' />
+      )}
+     </div>
+     <Button
+      variant='ghost'
+      size='icon-lg'
+      className='text-red-600/50 dark:text-red-400/50 rounded-full'
+      onClick={() => {
+       orderItemsDispatch({
+        type: 'removeOrderItems',
+        payload: [orderItem.itemID],
+       });
+      }}
+     >
+      <BsTrash className='size-5' />
+     </Button>
     </div>
     <div className='grow flex flex-col sm:flex-row sm:items-center'>
      <div className='grow'>
@@ -65,16 +93,19 @@ export default function OrderShoppingItem({
        <Button
         variant='ghost'
         size='icon-lg'
-        className='text-rose-600 dark:text-rose-400 rounded-full'
-        disabled={orderItem.amount <= 1}
+        className='text-orange-600 dark:text-orange-400 rounded-full'
         onClick={() => {
-         orderItemsDispatch({
-          type: 'decreaseOrderItemsAmount',
-          payload: {
-           decreaseBy: 1,
-           itemsIDs: [orderItem.itemID],
-          },
-         });
+         if (orderItem.amount <= 1) {
+          setShowRemoveOrderItemConfirm(true);
+         } else {
+          orderItemsDispatch({
+           type: 'decreaseOrderItemsAmount',
+           payload: {
+            decreaseBy: 1,
+            itemsIDs: [orderItem.itemID],
+           },
+          });
+         }
         }}
        >
         <CiCircleMinus className='size-10' />
@@ -102,6 +133,44 @@ export default function OrderShoppingItem({
      </div>
     </div>
    </div>
+   <Dialog
+    open={showRemoveOrderItemConfirm}
+    onOpenChange={(newValue) => setShowRemoveOrderItemConfirm(newValue)}
+   >
+    <DialogContent className='p-0 gap-0'>
+     <DialogHeader className='p-4'></DialogHeader>
+     <div className='p-4'>
+      <div className='flex gap-1 items-center text-red-700 dark:text-red-400 font-medium'>
+       <BiError className='size-12' />
+       <p>{dic.orderConfirm.removeOrderItemConfirmMessage}</p>
+      </div>
+     </div>
+     <DialogFooter className='p-4'>
+      <DialogClose asChild>
+       <Button className='sm:w-24' variant='outline'>
+        {dic.orderConfirm.cancel}
+       </Button>
+      </DialogClose>
+      <DialogClose asChild>
+       <Button
+        className='sm:w-24'
+        variant='destructive'
+        onClick={() => {
+         orderItemsDispatch({
+          type: 'decreaseOrderItemsAmount',
+          payload: {
+           decreaseBy: 1,
+           itemsIDs: [orderItem.itemID],
+          },
+         });
+        }}
+       >
+        {dic.orderConfirm.confirm}
+       </Button>
+      </DialogClose>
+     </DialogFooter>
+    </DialogContent>
+   </Dialog>
   </div>
  );
 }
