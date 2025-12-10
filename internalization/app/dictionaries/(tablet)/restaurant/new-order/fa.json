@@ -21,5 +21,10 @@
   "cancel": "انصراف",
   "confirm": "ثبت سفارش",
   "closeOrder": "بستن سفارش"
+ },
+ "orderLeaveConfirm": {
+  "leaveOrderConfirmMessage": "آیا از خروج اطمینان دارید؟",
+  "cancel": "انصراف",
+  "confirm": "تایید"
  }
 }
