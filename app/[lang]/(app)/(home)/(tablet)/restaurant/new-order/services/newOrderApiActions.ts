@@ -16,7 +16,10 @@ interface ItemProgram {
  imageURL?: string | null;
 }
 
-type OrderItem = {
+interface Order {
+ id: number;
+}
+interface OrderItem {
  id: number;
  itemID: number;
  itemCode: number;
@@ -34,7 +37,7 @@ type OrderItem = {
  taxRate: number;
  tagID: number | null;
  tagComment: string | null;
-};
+}
 
 interface InitialData {
  orderId: number;
@@ -86,6 +89,22 @@ function getItemPrograms({
 }
 
 // order
+
+function getOrder({
+ signal,
+ orderID,
+}: {
+ signal: AbortSignal;
+ orderID: number;
+}) {
+ return axios.get<Order>(
+  `/Restaurant/SaleInvoice/GetOrder?orderID=${orderID}`,
+  {
+   signal,
+  },
+ );
+}
+
 function getOrderItems({
  signal,
  orderID,
@@ -101,5 +120,5 @@ function getOrderItems({
  );
 }
 
-export type { InitialData, ItemGroup, ItemProgram, OrderItem };
-export { newOrderKey, getInitData, getItemPrograms, getOrderItems };
+export type { InitialData, ItemGroup, ItemProgram, OrderItem, Order };
+export { newOrderKey, getInitData, getItemPrograms, getOrderItems, getOrder };

@@ -20,6 +20,7 @@ export default function OrderTools({ dic }: { dic: NewOrderDictionary }) {
   itemsInfo: { searchedItemName, changeSearchedItemName },
   order: { orderItems },
   userOrder: {
+   order: { isLoading: userOrderIsLoading },
    orderItems: { isLoading: userOrderItemsLoading },
   },
  } = useOrderBaseConfigContext();
@@ -42,19 +43,27 @@ export default function OrderTools({ dic }: { dic: NewOrderDictionary }) {
     <Button
      className='md:w-36 text-primary border-primary'
      variant='outline'
-     disabled={isLoading || userOrderItemsLoading}
+     disabled={isLoading || userOrderItemsLoading || userOrderIsLoading}
      onClick={() => showConfirmOrder('orderInfo')}
     >
-     {!isLoading && !userOrderItemsLoading ? <FaCircleInfo /> : <Spinner />}
+     {!isLoading && !userOrderItemsLoading && !userOrderIsLoading ? (
+      <FaCircleInfo />
+     ) : (
+      <Spinner />
+     )}
      <span>{dic.tools.orderInfo}</span>
     </Button>
     <Button
      variant='secondary'
      className='relative md:w-36'
-     disabled={isLoading || userOrderItemsLoading}
+     disabled={isLoading || userOrderItemsLoading || userOrderIsLoading}
      onClick={() => showConfirmOrder('shoppingCard')}
     >
-     {!isLoading && !userOrderItemsLoading ? <FaShoppingBag /> : <Spinner />}
+     {!userOrderIsLoading && !isLoading && !userOrderItemsLoading ? (
+      <FaShoppingBag />
+     ) : (
+      <Spinner />
+     )}
      <span>{dic.tools.shoppingCard}</span>
      {!!orderItems.length && (
       <Badge className='p-1 size-6 bg-orange-600 dark:bg-orange-400 font-medium text-base'>

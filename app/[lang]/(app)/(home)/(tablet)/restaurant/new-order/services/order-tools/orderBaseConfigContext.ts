@@ -5,6 +5,7 @@ import {
  type ItemGroup,
  type ItemProgram,
  type OrderItem,
+ type Order,
 } from '../newOrderApiActions';
 import { type OrderItemActions } from '../../utils/orderItemsActionsReducer';
 
@@ -41,6 +42,12 @@ interface OrderBaseConfig {
   changeSelectedItemGroup: (newItem: ItemGroup) => unknown;
  };
  userOrder: {
+  order: {
+   data?: Order;
+   isLoading: boolean;
+   isError: boolean;
+   isSuccess: boolean;
+  };
   orderItems: {
    data?: OrderItem[];
    isLoading: boolean;

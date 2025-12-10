@@ -12,6 +12,7 @@ import {
  getInitData,
  getItemPrograms,
  getOrderItems,
+ getOrder,
 } from '../newOrderApiActions';
 import { useQuery } from '@tanstack/react-query';
 import { filterItemPrograms } from '../../utils/filterItemPrograms';
@@ -102,6 +103,22 @@ export default function OrderBaseConfigProvider({
   searchedItemName,
  });
  // get Order
+
+ const {
+  data: userOrder,
+  isLoading: userOrderLoading,
+  isError: userOrderError,
+  isSuccess: userOrderSuccess,
+ } = useQuery({
+  staleTime: 'static',
+  enabled: !!orderIDQuery,
+  queryKey: [newOrderKey, 'order-info', orderIDQuery],
+  async queryFn({ signal }) {
+   const { data } = await getOrder({ signal, orderID: orderIDQuery! });
+   return data;
+  },
+ });
+
  const {
   data: userOrderItems,
   isLoading: userOrderItemsLoading,
@@ -151,6 +168,12 @@ export default function OrderBaseConfigProvider({
    changeSelectedItemGroup: handleChangeSelectedItemGroup,
   },
   userOrder: {
+   order: {
+    data: userOrder,
+    isLoading: userOrderLoading,
+    isError: userOrderError,
+    isSuccess: userOrderSuccess,
+   },
    orderItems: {
     data: userOrderItems,
     isLoading: userOrderItemsLoading,

@@ -20,6 +20,7 @@ export default function OrderItem({
   itemsInfo: { searchedItemName },
   order: { orderItems, orderItemsDispatch },
   userOrder: {
+   order: { isLoading: userOrderIsLoading },
    orderItems: { isLoading: userOrderItemsLoading },
   },
  } = useOrderBaseConfigContext();
@@ -74,7 +75,7 @@ export default function OrderItem({
         variant='ghost'
         size='icon-lg'
         className='text-primary rounded-full'
-        disabled={userOrderItemsLoading}
+        disabled={userOrderItemsLoading || userOrderIsLoading}
         onClick={() => {
          orderItemsDispatch({
           type: 'addOrderItems',
@@ -82,7 +83,7 @@ export default function OrderItem({
          });
         }}
        >
-        {userOrderItemsLoading ? (
+        {userOrderItemsLoading || userOrderIsLoading ? (
          <Spinner />
         ) : (
          <FaCirclePlus className='size-9' />
@@ -90,7 +91,7 @@ export default function OrderItem({
        </Button>
       </div>
      )}
-     {!!targetOrderItem?.amount && (
+     {!userOrderIsLoading && !!targetOrderItem?.amount && (
       <div className='flex justify-center items-center mb-2 select-none'>
        <Button
         variant='ghost'

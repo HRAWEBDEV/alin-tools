@@ -5,12 +5,21 @@ import { useOrderBaseConfigContext } from '../services/order-tools/orderBaseConf
 import { AnimatePresence } from 'motion/react';
 import { Spinner } from '@/components/ui/spinner';
 import NoItemFound from '@/app/[lang]/(app)/components/NoItemFound';
+import UnExpectedError from '@/app/[lang]/(app)/components/UnExpectedError';
 
 export default function OrderItems({ dic }: { dic: NewOrderDictionary }) {
  const {
   initialDataInfo: { isLoading: initLoading },
   itemsInfo: { filteredData, isLoading, isSuccess, searchedItemName },
+  userOrder: {
+   order: { isError: userOrderIsError },
+   orderItems: { isError: userOrderItemsError },
+  },
  } = useOrderBaseConfigContext();
+
+ if (userOrderItemsError || userOrderIsError) {
+  return <UnExpectedError />;
+ }
 
  if (isSuccess && !filteredData.length) {
   return (
