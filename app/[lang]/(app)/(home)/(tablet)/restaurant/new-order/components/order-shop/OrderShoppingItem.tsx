@@ -28,18 +28,22 @@ export default function OrderShoppingItem({
  const [showRemoveOrderItemConfirm, setShowRemoveOrderItemConfirm] =
   useState(false);
  const {
+  itemsInfo: { data: itemsPrograms },
   order: { orderItemsDispatch },
  } = useOrderBaseConfigContext();
  const { format } = useCurrencyFormatter();
+ const targetItemProgram = itemsPrograms?.find(
+  (item) => item.itemID === orderItem.itemID,
+ );
  return (
   <div className='border-b border-input p-2'>
    <div className='flex gap-4 items-center'>
     <div className='flex flex-col items-center'>
      <div className='flex items-center justify-center  shrink-0 rounded-full size-20 bg-neutral-100 dark:bg-neutral-800 overflow-hidden object-center object-contain'>
-      {false ? (
+      {targetItemProgram?.imageURL ? (
        <img
-        alt={''}
-        src=''
+        alt={orderItem.itemName || 'food image'}
+        src={targetItemProgram.imageURL}
         loading='lazy'
         className='object-center object-cover w-full h-full'
        />

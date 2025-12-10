@@ -31,6 +31,7 @@ import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { toast } from 'sonner';
 import { setUserLoginToken } from '../utils/loginTokenManager';
+import { useLoginContext } from '../services/login/loginContext';
 
 const formDefaults: LoginWithPasswordCredentials = {
  userName: '',
@@ -38,6 +39,7 @@ const formDefaults: LoginWithPasswordCredentials = {
 };
 
 export default function LoginWithPassword({ dic }: { dic: LoginDictionary }) {
+ const {} = useLoginContext();
  const [showPassword, setShowPassword] = useState(false);
  const { localeInfo } = useBaseConfig();
  const router = useRouter();

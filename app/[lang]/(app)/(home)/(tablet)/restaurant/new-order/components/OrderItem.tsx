@@ -31,7 +31,7 @@ export default function OrderItem({
       {itemProgram.imageURL ? (
        <img
         alt={itemProgram.itemName || 'food image'}
-        src='/images/faseenjoon.jpg'
+        src={itemProgram.imageURL}
         loading='lazy'
         className='object-center object-cover w-full h-full'
        />
