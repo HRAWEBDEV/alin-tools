@@ -20,7 +20,8 @@
  "orderConfirm": {
   "cancel": "انصراف",
   "confirm": "ثبت سفارش",
-  "closeOrder": "بستن سفارش"
+  "closeOrder": "بستن سفارش",
+  "invoice": "صورتحساب"
  },
  "orderLeaveConfirm": {
   "leaveOrderConfirmMessage": "آیا از خروج اطمینان دارید؟",
@@ -35,6 +36,9 @@
   "total": "جمع",
   "tax": "مالیات",
   "remained": "مانده",
-  "service": "سرویس"
+  "service": "سرویس",
+  "confirmOrder": "ثبت سفارش",
+  "closeOrder": "بستن سفارش",
+  "confirmPayment": "پرداخت"
  }
 }

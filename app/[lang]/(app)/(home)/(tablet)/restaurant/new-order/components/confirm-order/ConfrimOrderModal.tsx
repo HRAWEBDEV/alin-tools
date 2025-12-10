@@ -99,13 +99,14 @@ export default function ConfirmOrderModal({
       <Button className='sm:w-24'>{dic.orderInfo.confirm}</Button>
      )}
      {confirmOrderActiveType === 'shoppingCard' && (
-      <Button className='sm:w-24' variant={'secondary'}>
-       {dic.orderConfirm.confirm}
-      </Button>
-     )}
-     {confirmOrderActiveType === 'shoppingCard' && (
-      <Button className='sm:w-24 bg-orange-700! dark:bg-orange-400!'>
-       {dic.orderConfirm.closeOrder}
+      <Button
+       className='sm:w-24'
+       disabled={!orderItems.length}
+       onClick={() => {
+        changeConfirmType('invoice');
+       }}
+      >
+       {dic.orderConfirm.invoice}
       </Button>
      )}
     </DialogFooter>
