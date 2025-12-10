@@ -59,16 +59,19 @@ export default function ConfirmOrderModal({
       }
      >
       <TabsList className='self-center sticky top-0'>
-       <TabsTrigger value='orderInfo' className='w-40'>
+       <TabsTrigger value='orderInfo' className='w-28'>
         {dic.tools.orderInfo}
        </TabsTrigger>
-       <TabsTrigger value='shoppingCard' className='w-40'>
+       <TabsTrigger value='shoppingCard' className='w-28'>
         {dic.tools.shoppingCard}
         {!!orderItems.length && (
          <Badge className='p-1 size-6 rounded-full text-base font-medium'>
           {orderItems.length}
          </Badge>
         )}
+       </TabsTrigger>
+       <TabsTrigger value='invoice' className='w-28'>
+        {dic.tools.invoice}
        </TabsTrigger>
       </TabsList>
       <TabsContent value='orderInfo'>
@@ -81,7 +84,10 @@ export default function ConfirmOrderModal({
     </div>
     <DialogFooter className='p-4'>
      <DialogClose asChild>
-      <Button variant='destructive' className='sm:w-24'>
+      <Button
+       variant='outline'
+       className='sm:w-24 text-rose-700! border-rose-700 dark:text-rose-400! dark:border-rose-400'
+      >
        {dic.orderConfirm.cancel}
       </Button>
      </DialogClose>
@@ -89,7 +95,14 @@ export default function ConfirmOrderModal({
       <Button className='sm:w-24'>{dic.orderInfo.confirm}</Button>
      )}
      {confirmOrderActiveType === 'shoppingCard' && (
-      <Button className='sm:w-24'>{dic.orderConfirm.confirm}</Button>
+      <Button className='sm:w-24' variant={'secondary'}>
+       {dic.orderConfirm.confirm}
+      </Button>
+     )}
+     {confirmOrderActiveType === 'shoppingCard' && (
+      <Button className='sm:w-24 bg-orange-700! dark:bg-orange-400!'>
+       {dic.orderConfirm.closeOrder}
+      </Button>
      )}
     </DialogFooter>
    </DialogContent>

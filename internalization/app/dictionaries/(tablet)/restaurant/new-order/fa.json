@@ -3,6 +3,7 @@
  "tools": {
   "shoppingCard": "سبد خرید",
   "orderInfo": "اطلاعات سفارش",
+  "invoice": "صورتحساب",
   "search": "جستجو"
  },
  "orderInfo": {
@@ -18,6 +19,7 @@
  },
  "orderConfirm": {
   "cancel": "انصراف",
-  "confirm": "ثبت سفارش"
+  "confirm": "ثبت سفارش",
+  "closeOrder": "بستن سفارش"
  }
 }

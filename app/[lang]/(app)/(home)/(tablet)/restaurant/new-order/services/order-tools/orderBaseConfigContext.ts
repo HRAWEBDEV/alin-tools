@@ -9,7 +9,7 @@ import {
 import { type OrderItemActions } from '../../utils/orderItemsActionsReducer';
 
 type ConfirmOrderType = (typeof confirmOrderTypes)[number];
-const confirmOrderTypes = ['orderInfo', 'shoppingCard'] as const;
+const confirmOrderTypes = ['orderInfo', 'shoppingCard', 'invoice'] as const;
 
 interface OrderBaseConfig {
  confirmOrderIsOpen: boolean;
@@ -17,6 +17,9 @@ interface OrderBaseConfig {
  changeConfirmType: (type: ConfirmOrderType) => unknown;
  showConfirmOrder: (type?: ConfirmOrderType) => unknown;
  closeConfirmOrder: () => unknown;
+ queries: {
+  fromSalons: boolean;
+ };
  initialDataInfo: {
   data?: InitialData;
   isLoading: boolean;

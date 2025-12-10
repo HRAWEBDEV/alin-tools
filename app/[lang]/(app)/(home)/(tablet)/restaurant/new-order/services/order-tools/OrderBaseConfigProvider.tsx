@@ -15,12 +15,16 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { filterItemPrograms } from '../../utils/filterItemPrograms';
 import { orderItemsReducer } from '../../utils/orderItemsActionsReducer';
+import { useSearchParams } from 'next/navigation';
 
 export default function OrderBaseConfigProvider({
  children,
 }: {
  children: ReactNode;
 }) {
+ const searchQuery = useSearchParams();
+ const fromSalonsQuery = searchQuery.get('fromSalons') === 'true';
+ //
  const [selectedItemGroup, setSelectedItemGroup] = useState<ItemGroup | null>(
   null,
  );
@@ -102,6 +106,9 @@ export default function OrderBaseConfigProvider({
   confirmOrderActiveType,
   showConfirmOrder,
   closeConfirmOrder,
+  queries: {
+   fromSalons: fromSalonsQuery,
+  },
   initialDataInfo: {
    data: initData,
    isError: initError,

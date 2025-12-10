@@ -9,7 +9,6 @@ import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseC
 import ServeDishIcon from '@/app/[lang]/(app)/components/icons/ServeDishIcon';
 
 export default function OrderShoppingItem({
- dic,
  orderItem,
 }: {
  dic: NewOrderDictionary;
@@ -67,6 +66,7 @@ export default function OrderShoppingItem({
         variant='ghost'
         size='icon-lg'
         className='text-rose-600 dark:text-rose-400 rounded-full'
+        disabled={orderItem.amount <= 1}
         onClick={() => {
          orderItemsDispatch({
           type: 'decreaseOrderItemsAmount',
