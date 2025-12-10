@@ -72,7 +72,10 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
        ' p-2 sm:px-8 bg-teal-50 dark:bg-teal-950 border-secondary text-secondary rounded-md text-xl mb-0!'
       }
      >
-      <span className={invoiceLabelClass}>{dic.invoice.payment}</span>
+      <span className={invoiceLabelClass}>
+       {'- '}
+       {dic.invoice.payment}
+      </span>
       <span>{payment}</span>
      </div>
      <div
@@ -81,7 +84,10 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
        ' p-2 sm:px-8 bg-orange-50 dark:bg-orange-950 border-none text-orange-700 dark:text-orange-400 rounded-md text-xl mb-0!'
       }
      >
-      <span className={invoiceLabelClass}>{dic.invoice.remained}</span>
+      <span className={invoiceLabelClass}>
+       {'= '}
+       {dic.invoice.remained}
+      </span>
       <span>{format(remained)}</span>
      </div>
     </div>

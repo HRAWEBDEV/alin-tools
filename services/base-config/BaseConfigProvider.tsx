@@ -1,5 +1,5 @@
 'use client';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import {
  type BaseConfig,
  baseConfigContext,
@@ -35,6 +35,20 @@ export default function BaseConfigProvider({ children, activeLocale }: Props) {
   appBirthDate,
   setLocale: onChangeLocale,
  };
+
+ useEffect(() => {
+  const ctx = new AbortController();
+  const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+   e.returnValue = true;
+   return true;
+  };
+  window.onbeforeunload = handleBeforeUnload;
+  window.addEventListener('beforeunload', handleBeforeUnload, {
+   signal: ctx.signal,
+  });
+  return () => ctx.abort();
+ }, []);
+
  return (
   <baseConfigContext.Provider value={ctx}>
    <ThemeProvider storageKey='app-theme' themes={[...appModes]} enableSystem>
