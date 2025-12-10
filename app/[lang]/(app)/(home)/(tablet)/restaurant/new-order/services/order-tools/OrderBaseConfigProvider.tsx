@@ -11,6 +11,7 @@ import {
  newOrderKey,
  getInitData,
  getItemPrograms,
+ getOrderItems,
 } from '../newOrderApiActions';
 import { useQuery } from '@tanstack/react-query';
 import { filterItemPrograms } from '../../utils/filterItemPrograms';
@@ -24,6 +25,7 @@ export default function OrderBaseConfigProvider({
 }) {
  const searchQuery = useSearchParams();
  const fromSalonsQuery = searchQuery.get('fromSalons') === 'true';
+ const orderIDQuery = Number(searchQuery.get('orderID')) || null;
  //
  const [selectedItemGroup, setSelectedItemGroup] = useState<ItemGroup | null>(
   null,
@@ -99,6 +101,25 @@ export default function OrderBaseConfigProvider({
   items: itemProgramsData,
   searchedItemName,
  });
+ // get Order
+ const {
+  data: userOrderItems,
+  isLoading: userOrderItemsLoading,
+  isError: userOrderItemsError,
+  isSuccess: userOrderItemsSuccess,
+ } = useQuery({
+  staleTime: 'static',
+  enabled: !!orderIDQuery,
+  queryKey: [newOrderKey, 'order-items', orderIDQuery],
+  async queryFn({ signal }) {
+   const { data } = await getOrderItems({ signal, orderID: orderIDQuery! });
+   orderItemsDispatch({
+    type: 'insertOrderItems',
+    payload: data,
+   });
+   return data;
+  },
+ });
 
  const ctx: OrderBaseConfig = {
   confirmOrderIsOpen,
@@ -108,6 +129,7 @@ export default function OrderBaseConfigProvider({
   closeConfirmOrder,
   queries: {
    fromSalons: fromSalonsQuery,
+   orderID: orderIDQuery,
   },
   initialDataInfo: {
    data: initData,
@@ -127,6 +149,14 @@ export default function OrderBaseConfigProvider({
    searchedItemName,
    changeSearchedItemName: handleChangeSearchedItemName,
    changeSelectedItemGroup: handleChangeSelectedItemGroup,
+  },
+  userOrder: {
+   orderItems: {
+    data: userOrderItems,
+    isLoading: userOrderItemsLoading,
+    isError: userOrderItemsError,
+    isSuccess: userOrderItemsSuccess,
+   },
   },
   order: {
    orderItems,

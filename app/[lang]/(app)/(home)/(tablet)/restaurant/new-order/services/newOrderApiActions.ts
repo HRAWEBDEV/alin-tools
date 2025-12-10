@@ -85,5 +85,21 @@ function getItemPrograms({
  );
 }
 
+// order
+function getOrderItems({
+ signal,
+ orderID,
+}: {
+ signal: AbortSignal;
+ orderID: number;
+}) {
+ return axios.get<OrderItem[]>(
+  `/Restaurant/SaleInvoice/GetOrderItems?orderID=${orderID}`,
+  {
+   signal,
+  },
+ );
+}
+
 export type { InitialData, ItemGroup, ItemProgram, OrderItem };
-export { newOrderKey, getInitData, getItemPrograms };
+export { newOrderKey, getInitData, getItemPrograms, getOrderItems };

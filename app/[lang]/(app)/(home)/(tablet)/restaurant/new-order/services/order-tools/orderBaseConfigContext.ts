@@ -19,6 +19,7 @@ interface OrderBaseConfig {
  closeConfirmOrder: () => unknown;
  queries: {
   fromSalons: boolean;
+  orderID: number | null;
  };
  initialDataInfo: {
   data?: InitialData;
@@ -38,6 +39,14 @@ interface OrderBaseConfig {
   selectedItemGroup: ItemGroup | null;
   changeSearchedItemName: (newSearch: string) => unknown;
   changeSelectedItemGroup: (newItem: ItemGroup) => unknown;
+ };
+ userOrder: {
+  orderItems: {
+   data?: OrderItem[];
+   isLoading: boolean;
+   isError: boolean;
+   isSuccess: boolean;
+  };
  };
  order: {
   orderItems: OrderItem[];

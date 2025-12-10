@@ -19,6 +19,9 @@ export default function OrderTools({ dic }: { dic: NewOrderDictionary }) {
   initialDataInfo: { isLoading },
   itemsInfo: { searchedItemName, changeSearchedItemName },
   order: { orderItems },
+  userOrder: {
+   orderItems: { isLoading: userOrderItemsLoading },
+  },
  } = useOrderBaseConfigContext();
  return (
   <div className='flex md:items-center md:justify-between gap-2 mb-2 flex-col md:flex-row'>
@@ -39,19 +42,19 @@ export default function OrderTools({ dic }: { dic: NewOrderDictionary }) {
     <Button
      className='md:w-36 text-primary border-primary'
      variant='outline'
-     disabled={isLoading}
+     disabled={isLoading || userOrderItemsLoading}
      onClick={() => showConfirmOrder('orderInfo')}
     >
-     {!isLoading ? <FaCircleInfo /> : <Spinner />}
+     {!isLoading && !userOrderItemsLoading ? <FaCircleInfo /> : <Spinner />}
      <span>{dic.tools.orderInfo}</span>
     </Button>
     <Button
      variant='secondary'
      className='relative md:w-36'
-     disabled={isLoading}
+     disabled={isLoading || userOrderItemsLoading}
      onClick={() => showConfirmOrder('shoppingCard')}
     >
-     {!isLoading ? <FaShoppingBag /> : <Spinner />}
+     {!isLoading && !userOrderItemsLoading ? <FaShoppingBag /> : <Spinner />}
      <span>{dic.tools.shoppingCard}</span>
      {!!orderItems.length && (
       <Badge className='p-1 size-6 bg-orange-600 dark:bg-orange-400 font-medium text-base'>

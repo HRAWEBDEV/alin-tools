@@ -9,6 +9,7 @@ import { useCurrencyFormatter } from '@/hooks/useCurrencyFormatter';
 import { motion } from 'motion/react';
 import Highlighter from 'react-highlight-words';
 import { useOrderBaseConfigContext } from '../services/order-tools/orderBaseConfigContext';
+import { Spinner } from '@/components/ui/spinner';
 
 export default function OrderItem({
  itemProgram,
@@ -18,6 +19,9 @@ export default function OrderItem({
  const {
   itemsInfo: { searchedItemName },
   order: { orderItems, orderItemsDispatch },
+  userOrder: {
+   orderItems: { isLoading: userOrderItemsLoading },
+  },
  } = useOrderBaseConfigContext();
  const { format } = useCurrencyFormatter();
  const targetOrderItem = orderItems.find(
@@ -70,6 +74,7 @@ export default function OrderItem({
         variant='ghost'
         size='icon-lg'
         className='text-primary rounded-full'
+        disabled={userOrderItemsLoading}
         onClick={() => {
          orderItemsDispatch({
           type: 'addOrderItems',
@@ -77,7 +82,11 @@ export default function OrderItem({
          });
         }}
        >
-        <FaCirclePlus className='size-9' />
+        {userOrderItemsLoading ? (
+         <Spinner />
+        ) : (
+         <FaCirclePlus className='size-9' />
+        )}
        </Button>
       </div>
      )}
