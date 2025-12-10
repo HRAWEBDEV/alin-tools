@@ -26,5 +26,15 @@
   "leaveOrderConfirmMessage": "آیا از خروج اطمینان دارید؟",
   "cancel": "انصراف",
   "confirm": "تایید"
+ },
+ "invoice": {
+  "orderItemsCount": "تعداد",
+  "payment": "پرداخت",
+  "other": "سایر",
+  "discount": "تخفیف",
+  "total": "جمع",
+  "tax": "مالیات",
+  "remained": "مانده",
+  "service": "سرویس"
  }
 }

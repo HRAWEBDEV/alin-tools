@@ -19,6 +19,7 @@ import OrderInfo from '../order-info/OrderInfo';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { Badge } from '@/components/ui/badge';
 import { DialogClose } from '@radix-ui/react-dialog';
+import OrderInvoice from '../order-invoice/OrderInvoice';
 
 export default function ConfirmOrderModal({
  dic,
@@ -79,6 +80,9 @@ export default function ConfirmOrderModal({
       </TabsContent>
       <TabsContent value='shoppingCard'>
        <OrderShoppingCard dic={dic} />
+      </TabsContent>
+      <TabsContent value='invoice'>
+       <OrderInvoice dic={dic} />
       </TabsContent>
      </Tabs>
     </div>
