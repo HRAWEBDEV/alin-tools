@@ -20,6 +20,7 @@
  "orderConfirm": {
   "removeOrderItemConfirmMessage": "آیا از حذف این آیتم اطمینان دارید؟",
   "clearOrderItemsConfirmMessage": "آیا از خالی کردن سبد خرید اطمینان دارید؟",
+  "clearOrderItems": "پاک کردن همه",
   "cancel": "انصراف",
   "confirm": "تایید",
   "closeOrder": "بستن سفارش",

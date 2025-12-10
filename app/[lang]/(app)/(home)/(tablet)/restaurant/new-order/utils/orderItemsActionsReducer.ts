@@ -26,6 +26,9 @@ type OrderItemActions =
      itemsIDs: ItemProgram['itemID'][];
      decreaseBy: number;
     };
+   }
+ | {
+    type: 'clearOrderItems';
    };
 
 function removeOrderItems(
@@ -108,6 +111,9 @@ function orderItemsReducer(state: OrderItem[], action: OrderItemActions) {
     type: 'removeOrderItems',
     payload: mustRemoveOrderIDs,
    });
+  // clear order items
+  case 'clearOrderItems':
+   return [];
  }
 }
 

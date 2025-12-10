@@ -111,6 +111,7 @@ export default function OrderBaseConfigProvider({
   isSuccess: userOrderSuccess,
  } = useQuery({
   staleTime: 'static',
+  gcTime: 0,
   enabled: !!orderIDQuery,
   queryKey: [newOrderKey, 'order-info', orderIDQuery],
   async queryFn({ signal }) {
@@ -126,6 +127,7 @@ export default function OrderBaseConfigProvider({
   isSuccess: userOrderItemsSuccess,
  } = useQuery({
   staleTime: 'static',
+  gcTime: 0,
   enabled: !!orderIDQuery,
   queryKey: [newOrderKey, 'order-items', orderIDQuery],
   async queryFn({ signal }) {
