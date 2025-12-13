@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useReducer } from 'react';
 import { ReactNode } from 'react';
+import { type NewOrderDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/new-order/dictionary';
 import {
  type OrderBaseConfig,
  type ConfirmOrderType,
@@ -18,12 +19,31 @@ import { useQuery } from '@tanstack/react-query';
 import { filterItemPrograms } from '../../utils/filterItemPrograms';
 import { orderItemsReducer } from '../../utils/orderItemsActionsReducer';
 import { useSearchParams } from 'next/navigation';
+import { FormProvider, useForm } from 'react-hook-form';
+import {
+ type OrderInfo,
+ defaultOrderInfo,
+ createOrderInfoSchema,
+} from '../../schemas/orderInfoSchema';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 export default function OrderBaseConfigProvider({
  children,
+ dic,
 }: {
  children: ReactNode;
+ dic: NewOrderDictionary;
 }) {
+ // order info
+ const orderInfoForm = useForm<OrderInfo>({
+  resolver: zodResolver(createOrderInfoSchema({ dic })),
+  defaultValues: {
+   ...defaultOrderInfo,
+   orderDate: new Date(),
+   orderTime: new Date(),
+  },
+ });
+ //
  const searchQuery = useSearchParams();
  const fromSalonsQuery = searchQuery.get('fromSalons') === 'true';
  const orderIDQuery = Number(searchQuery.get('orderID')) || null;
@@ -197,7 +217,7 @@ export default function OrderBaseConfigProvider({
 
  return (
   <orderBaseConfigContext.Provider value={ctx}>
-   {children}
+   <FormProvider {...orderInfoForm}>{children}</FormProvider>
   </orderBaseConfigContext.Provider>
  );
 }

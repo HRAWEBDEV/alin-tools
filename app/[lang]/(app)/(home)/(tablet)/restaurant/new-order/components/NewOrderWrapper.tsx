@@ -1,3 +1,4 @@
+'use client';
 import { type NewOrderDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/new-order/dictionary';
 import OrderTools from './OrderTools';
 import NewOrderHeader from './NewOrderHeader';
@@ -8,7 +9,7 @@ import ConfirmOrderModal from './confirm-order/ConfrimOrderModal';
 
 export default function NewOrderWrapper({ dic }: { dic: NewOrderDictionary }) {
  return (
-  <OrderBaseConfigProvider>
+  <OrderBaseConfigProvider dic={dic}>
    <div>
     <div className='p-4 lg:p-8 pb-0!'>
      <NewOrderHeader dic={dic} />
