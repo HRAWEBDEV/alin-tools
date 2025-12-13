@@ -1,12 +1,15 @@
 import { type NewOrderDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/new-order/dictionary';
 import { z } from 'zod';
 
-const defaultOrderInfo: Partial<OrderInfo> = {};
+const defaultOrderInfo: Partial<OrderInfo> = {
+ saleTime: null,
+ saleType: null,
+ comment: '',
+};
 
 function createOrderInfoSchema({ dic }: { dic: NewOrderDictionary }) {
  return z.object({
   orderDate: z.date(),
-  orderTime: z.date(),
   saleTime: z
    .object({
     key: z.string(),
@@ -19,6 +22,20 @@ function createOrderInfoSchema({ dic }: { dic: NewOrderDictionary }) {
     value: z.string(),
    })
    .nullable(),
+  table: z
+   .object({
+    key: z.string(),
+    value: z.string(),
+   })
+   .nullable(),
+  comment: z.string(),
+  persons: z.literal('').or(z.number()),
+  discountRate: z.literal('').or(z.number()),
+  bonNo: z.literal('').or(z.number()),
+  orderType: z.literal('').or(z.number()),
+  rounding: z.literal('').or(z.number()),
+  employeeTip: z.literal('').or(z.number()),
+  deliveryValue: z.literal('').or(z.number()),
  });
 }
 

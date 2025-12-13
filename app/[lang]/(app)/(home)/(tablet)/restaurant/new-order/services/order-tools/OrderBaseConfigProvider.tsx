@@ -40,7 +40,6 @@ export default function OrderBaseConfigProvider({
   defaultValues: {
    ...defaultOrderInfo,
    orderDate: new Date(),
-   orderTime: new Date(),
   },
  });
  //
@@ -84,11 +83,30 @@ export default function OrderBaseConfigProvider({
   isSuccess: initSuccess,
   isFetching: initFetching,
  } = useQuery({
-  staleTime: 'static',
+  gcTime: 0,
   queryKey: [newOrderKey, 'initial-data'],
   async queryFn({ signal }) {
    const res = await getInitData({ signal });
    const data = res.data;
+   if (data.saleTimes) {
+    const activeSaleTime = data.defaultSaleTimeID
+     ? data.saleTimes.find(
+        (item) => item.key === data.defaultSaleTimeID.toString(),
+       ) || data.saleTimes[0]
+     : data.saleTimes[0];
+    orderInfoForm.setValue('saleTime', activeSaleTime);
+   }
+   if (data.saleTypes) {
+    const activeSaleType = data.defaultSaleTypeID
+     ? data.saleTypes.find(
+        (item) => item.key === data.defaultSaleTypeID.toString(),
+       ) || data.saleTypes[0]
+     : data.saleTypes[0];
+    orderInfoForm.setValue('saleType', activeSaleType);
+   }
+   if (data.bonNo) {
+    orderInfoForm.setValue('bonNo', data.bonNo);
+   }
    return data;
   },
  });

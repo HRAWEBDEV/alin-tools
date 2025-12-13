@@ -33,13 +33,11 @@ import { ChevronsUpDown } from 'lucide-react';
 import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseConfigContext';
 
 export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
- const { control, setValue, getValues } = useFormContext<OrderInfo>();
+ const { control, register, getValues } = useFormContext<OrderInfo>();
  const {
   initialDataInfo: { data },
  } = useOrderBaseConfigContext();
  const [showDateTimePicker, setShowDateTimePicker] = useState(false);
- const [showSaleTimeCombo, setShowSaleTimeCombo] = useState(false);
- const [showSaleTypeCombo, setShowSaleTypeCombo] = useState(false);
  const { locale } = useBaseConfig();
 
  return (
@@ -83,7 +81,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
      />
      <Controller
       control={control}
-      name='orderTime'
+      name='orderDate'
       render={({ field }) => (
        <Field>
         <FieldLabel htmlFor='orderTime'>{dic.orderInfo.orderTime}</FieldLabel>
@@ -124,7 +122,6 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            id='saleTime'
            variant='outline'
            role='combobox'
-           aria-expanded={showSaleTimeCombo}
            className='justify-between'
           >
            <span>{field.value?.value || ''}</span>
@@ -187,7 +184,6 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            id='saleType'
            variant='outline'
            role='combobox'
-           aria-expanded={showSaleTypeCombo}
            className='justify-between'
           >
            <span>{field.value?.value || ''}</span>
@@ -238,16 +234,158 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        )}
       />
      </Field>
+     <Field>
+      <FieldLabel htmlFor='subscriber'>{dic.orderInfo.subscriber}</FieldLabel>
+      <InputGroup>
+       <InputGroupInput id='subscriber' />
+      </InputGroup>
+     </Field>
+     <Field>
+      <FieldLabel htmlFor='customer'>{dic.orderInfo.customer}</FieldLabel>
+      <InputGroup>
+       <InputGroupInput id='customer' />
+      </InputGroup>
+     </Field>
+     <Field>
+      <FieldLabel htmlFor='room'>{dic.orderInfo.room}</FieldLabel>
+      <InputGroup>
+       <InputGroupInput id='room' />
+      </InputGroup>
+     </Field>
+     <Field>
+      <FieldLabel htmlFor='tableNo'>{dic.orderInfo.tableNo}</FieldLabel>
+      <Controller
+       control={control}
+       name='table'
+       render={({ field }) => (
+        <Drawer>
+         <DrawerTrigger asChild>
+          <Button
+           id='saleType'
+           variant='outline'
+           role='combobox'
+           className='justify-between'
+          >
+           <span>{field.value?.value || ''}</span>
+           <ChevronsUpDown />
+          </Button>
+         </DrawerTrigger>
+         <DrawerContent className='h-[80svh]'>
+          <DrawerHeader className='hidden'>
+           <DrawerTitle>{dic.orderInfo.tableNo}</DrawerTitle>
+          </DrawerHeader>
+          <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+           <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
+            {dic.orderInfo.tableNo}
+           </h1>
+          </div>
+          <div>
+           {data?.tables.length ? (
+            <ul>
+             {data.tables.map((item) => (
+              <DrawerClose asChild key={item.key}>
+               <li
+                className='flex gap-1 items-center ps-6 py-2'
+                onClick={() => {
+                 field.onChange(item);
+                }}
+               >
+                <Checkbox
+                 className='size-6'
+                 checked={field.value?.value === item.value}
+                />
+                <Button
+                 tabIndex={-1}
+                 variant='ghost'
+                 className='w-full justify-start h-auto text-lg'
+                >
+                 <span>{item.value}</span>
+                </Button>
+               </li>
+              </DrawerClose>
+             ))}
+            </ul>
+           ) : (
+            <div className='text-center font-medium'></div>
+           )}
+          </div>
+         </DrawerContent>
+        </Drawer>
+       )}
+      />
+     </Field>
+     <Field>
+      <FieldLabel htmlFor='persons'>{dic.orderInfo.guestCount}</FieldLabel>
+      <InputGroup>
+       <InputGroupInput id='persons' {...register('persons')} />
+      </InputGroup>
+     </Field>
+     <Field>
+      <FieldLabel htmlFor='invoiceType'>{dic.orderInfo.invoiceType}</FieldLabel>
+      <InputGroup>
+       <InputGroupInput
+        id='invoiceType'
+        readOnly
+        value={
+         getValues('orderDate') <= new Date()
+          ? dic.orderInfo.invoice
+          : dic.orderInfo.bill
+        }
+       />
+      </InputGroup>
+     </Field>
      <Field className='col-span-full'>
       <FieldLabel htmlFor='customer'>{dic.orderInfo.customerName}</FieldLabel>
       <InputGroup>
        <InputGroupInput id='customer' />
       </InputGroup>
      </Field>
+     <Field>
+      <FieldLabel htmlFor='discount-rate'>
+       {dic.orderInfo.discountRate}
+      </FieldLabel>
+      <InputGroup>
+       <InputGroupInput
+        type='number'
+        id='discount-rate'
+        {...register('discountRate')}
+       />
+      </InputGroup>
+     </Field>
+     <Field>
+      <FieldLabel htmlFor='bonNo'>{dic.orderInfo.bonNo}</FieldLabel>
+      <InputGroup>
+       <InputGroupInput type='number' id='bonNo' {...register('bonNo')} />
+      </InputGroup>
+     </Field>
+     <Field>
+      <FieldLabel htmlFor='waiter'>{dic.orderInfo.waiter}</FieldLabel>
+      <InputGroup>
+       <InputGroupInput id='waiter' {...register('employeeTip')} />
+      </InputGroup>
+     </Field>
+     <Field>
+      <FieldLabel htmlFor='rounding'>{dic.orderInfo.roundingValue}</FieldLabel>
+      <InputGroup>
+       <InputGroupInput id='rounding' {...register('rounding')} />
+      </InputGroup>
+     </Field>
+     <Field>
+      <FieldLabel htmlFor='delivery'>{dic.orderInfo.deliveryValue}</FieldLabel>
+      <InputGroup>
+       <InputGroupInput id='delivery' {...register('deliveryValue')} />
+      </InputGroup>
+     </Field>
+     <Field>
+      <FieldLabel htmlFor='employeeTip'>{dic.orderInfo.employeeTip}</FieldLabel>
+      <InputGroup>
+       <InputGroupInput id='employeeTip' {...register('employeeTip')} />
+      </InputGroup>
+     </Field>
      <Field className='col-span-full'>
       <FieldLabel htmlFor='description'>{dic.orderInfo.description}</FieldLabel>
       <InputGroup>
-       <InputGroupTextarea id='description' />
+       <InputGroupTextarea id='description' {...register('comment')} />
       </InputGroup>
      </Field>
     </div>
