@@ -17,13 +17,16 @@ import {
  DialogFooter,
  DialogClose,
 } from '@/components/ui/dialog';
+import HighlightWords from 'react-highlight-words';
 
 export default function OrderShoppingItem({
  dic,
  orderItem,
+ searchedOrder,
 }: {
  dic: NewOrderDictionary;
  orderItem: OrderItem;
+ searchedOrder: string;
 }) {
  const [showRemoveOrderItemConfirm, setShowRemoveOrderItemConfirm] =
   useState(false);
@@ -67,8 +70,11 @@ export default function OrderShoppingItem({
     </div>
     <div className='grow flex flex-col sm:flex-row sm:items-center'>
      <div className='grow'>
-      <h3 className='font-medium text-neutral-700 dark:text-neutral-300 mb-1'>
-       {orderItem.itemName}
+      <h3 className='text-lg font-medium text-neutral-700 dark:text-neutral-300 mb-1'>
+       <HighlightWords
+        textToHighlight={orderItem.itemName || ''}
+        searchWords={[searchedOrder]}
+       />
       </h3>
       <p className='px-2 text-xs text-neutral-600 dark:text-neutral-400 font-light mb-3 w-[min(100%,20rem)]'>
        --

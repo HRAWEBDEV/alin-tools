@@ -106,6 +106,9 @@ export default function OrderBaseConfigProvider({
   async queryFn({ signal }) {
    const res = await getInitData({ signal });
    const data = res.data;
+   if (data.itemGroups.length) {
+    handleChangeSelectedItemGroup(data.itemGroups[0]);
+   }
    if (data.saleTimes) {
     const activeSaleTime = data.defaultSaleTimeID
      ? data.saleTimes.find(
@@ -288,12 +291,6 @@ export default function OrderBaseConfigProvider({
    orderTotals: invoiceShopResult,
   },
  };
-
- useEffect(() => {
-  if (initData?.itemGroups.length && !selectedItemGroup) {
-   handleChangeSelectedItemGroup(initData?.itemGroups[0]);
-  }
- }, [initData?.itemGroups, selectedItemGroup]);
 
  return (
   <orderBaseConfigContext.Provider value={ctx}>

@@ -60,7 +60,7 @@ export default function ConfirmOrderModal({
        changeConfirmType(newValue as ConfirmOrderType)
       }
      >
-      <TabsList className='self-center sticky top-0'>
+      <TabsList className='self-center sticky top-0 min-h-12'>
        <TabsTrigger value='orderInfo' className='w-28'>
         {dic.tools.orderInfo}
        </TabsTrigger>

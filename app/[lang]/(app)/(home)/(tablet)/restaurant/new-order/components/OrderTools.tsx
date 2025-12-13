@@ -27,7 +27,7 @@ export default function OrderTools({ dic }: { dic: NewOrderDictionary }) {
  return (
   <div className='flex md:items-center md:justify-between gap-2 mb-2 flex-col md:flex-row'>
    <div className='md:grid md:grid-cols-[minmax(0,18rem)]'>
-    <InputGroup className='bg-neutral-100 dark:bg-neutral-900'>
+    <InputGroup className='bg-neutral-100 dark:bg-neutral-900 h-10'>
      <InputGroupAddon align='inline-start'>
       <IoSearch className='text-primary size-5' />
      </InputGroupAddon>
@@ -36,12 +36,13 @@ export default function OrderTools({ dic }: { dic: NewOrderDictionary }) {
       onChange={(e) => changeSearchedItemName(e.target.value)}
       type='search'
       placeholder={dic.tools.search + ' ...'}
+      className='placeholder:text-base'
      />
     </InputGroup>
    </div>
    <div className='md:flex md:justify-end grid grid-cols-2 gap-2'>
     <Button
-     className='md:w-36 text-primary border-primary'
+     className='md:w-36 text-primary border-primary h-10'
      variant='outline'
      disabled={isLoading || userOrderItemsLoading || userOrderIsLoading}
      onClick={() => showConfirmOrder('orderInfo')}
@@ -55,7 +56,7 @@ export default function OrderTools({ dic }: { dic: NewOrderDictionary }) {
     </Button>
     <Button
      variant='secondary'
-     className='relative md:w-36'
+     className='relative md:w-36 h-10'
      disabled={isLoading || userOrderItemsLoading || userOrderIsLoading}
      onClick={() => showConfirmOrder('shoppingCard')}
     >
