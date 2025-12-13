@@ -29,7 +29,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
  return orderItems.length ? (
   <div>
    <div className='w-[min(100%,30rem)] mx-auto pt-2'>
-    <div className='p-4 border border-input rounded-md bg-neutral-50 mb-4'>
+    <div className='p-4 border border-input rounded-md bg-neutral-50 dark:bg-neutral-950 mb-4'>
      <div className={invoiceRowClass}>
       <span className={invoiceLabelClass}>
        {'+ '}

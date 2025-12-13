@@ -93,7 +93,7 @@ export default function ConfirmOrderModal({
        {confirmOrderActiveType === 'shoppingCard' && orderItems.length > 1 && (
         <Dialog>
          <DialogTrigger asChild>
-          <Button className='sm:w-24' variant='destructive'>
+          <Button className='w-full sm:min-w-24 h-11' variant='destructive'>
            {dic.orderConfirm.clearOrderItems}
           </Button>
          </DialogTrigger>
@@ -107,13 +107,13 @@ export default function ConfirmOrderModal({
           </div>
           <DialogFooter className='p-4'>
            <DialogClose asChild>
-            <Button className='sm:w-24' variant='outline'>
+            <Button className='sm:w-24 h-11' variant='outline'>
              {dic.orderConfirm.cancel}
             </Button>
            </DialogClose>
            <DialogClose asChild>
             <Button
-             className='sm:w-24'
+             className='sm:w-24 h-11'
              variant='destructive'
              onClick={() => {
               orderItemsDispatch({
@@ -132,7 +132,7 @@ export default function ConfirmOrderModal({
       <div className='flex flex-col-reverse sm:flex-row gap-4'>
        {confirmOrderActiveType === 'shoppingCard' && (
         <Button
-         className='sm:w-24'
+         className='sm:w-24 h-11'
          disabled={!orderItems.length}
          onClick={() => {
           changeConfirmType('invoice');
