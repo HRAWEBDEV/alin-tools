@@ -28,6 +28,7 @@ import {
 } from '../../schemas/orderInfoSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { effectOrderItemsServiceRates } from '../../utils/effectOrderItemsServiceRates';
+import { shopCalculator } from '../../utils/shopCalculator';
 
 export default function OrderBaseConfigProvider({
  children,
@@ -44,8 +45,21 @@ export default function OrderBaseConfigProvider({
    orderDate: new Date(),
   },
  });
- const [saleTypeValue, hasServiceValue, userDiscountValue] =
-  orderInfoForm.watch(['saleType', 'hasService', 'discountRate']);
+ const [
+  saleTypeValue,
+  hasServiceValue,
+  userDiscountValue,
+  deliveryValue,
+  tipValue,
+  roundingValue,
+ ] = orderInfoForm.watch([
+  'saleType',
+  'hasService',
+  'discountRate',
+  'deliveryValue',
+  'employeeTip',
+  'rounding',
+ ]);
  //
  const searchQuery = useSearchParams();
  const fromSalonsQuery = searchQuery.get('fromSalons') === 'true';
@@ -214,6 +228,8 @@ export default function OrderBaseConfigProvider({
   userDiscount: Number(userDiscountValue) || 0,
  });
  //
+ const invoiceShopResult = shopCalculator(pricedOrderItems, 0, 0);
+ //
 
  const ctx: OrderBaseConfig = {
   confirmOrderIsOpen,
@@ -261,6 +277,9 @@ export default function OrderBaseConfigProvider({
   order: {
    orderItems: pricedOrderItems,
    orderItemsDispatch,
+  },
+  invoice: {
+   orderTotals: invoiceShopResult,
   },
  };
 

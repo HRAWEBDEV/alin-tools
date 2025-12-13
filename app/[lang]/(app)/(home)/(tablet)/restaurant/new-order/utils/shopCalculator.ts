@@ -1,6 +1,16 @@
 import { type OrderItem } from '../services/newOrderApiActions';
 
 type ShopCalculator = ReturnType<typeof shopCalculator>;
+interface ShopCalculatorResult {
+ totalSValue: number;
+ totalPrice: number;
+ totalService: number;
+ totalTax: number;
+ other: number;
+ totalDiscount: number;
+ remained: number;
+ payment: number;
+}
 
 const shopCalculator = (
  orderItems: OrderItem[],
@@ -54,4 +64,5 @@ const shopCalculator = (
  );
 };
 
-export { type ShopCalculator, shopCalculator };
+export type { ShopCalculator, ShopCalculatorResult };
+export { shopCalculator };

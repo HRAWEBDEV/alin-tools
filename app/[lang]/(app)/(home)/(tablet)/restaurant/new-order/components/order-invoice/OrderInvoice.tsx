@@ -3,7 +3,6 @@ import { type NewOrderDictionary } from '@/internalization/app/dictionaries/(tab
 import NoItemFound from '@/app/[lang]/(app)/components/NoItemFound';
 import { Button } from '@/components/ui/button';
 import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseConfigContext';
-import { shopCalculator } from '../../utils/shopCalculator';
 import { useCurrencyFormatter } from '@/hooks/useCurrencyFormatter';
 
 const invoiceRowClass =
@@ -13,17 +12,19 @@ const invoiceLabelClass = 'shrink-0 w-32';
 export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
  const {
   order: { orderItems },
+  invoice: {
+   orderTotals: {
+    totalTax,
+    other,
+    payment,
+    remained,
+    totalDiscount,
+    totalService,
+    totalSValue,
+   },
+  },
  } = useOrderBaseConfigContext();
  const { format } = useCurrencyFormatter();
- const {
-  totalTax,
-  other,
-  payment,
-  remained,
-  totalDiscount,
-  totalService,
-  totalSValue,
- } = shopCalculator(orderItems, 0, 0);
 
  return orderItems.length ? (
   <div>

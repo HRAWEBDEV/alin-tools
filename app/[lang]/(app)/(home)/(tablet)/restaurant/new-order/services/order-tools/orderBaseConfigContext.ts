@@ -8,6 +8,7 @@ import {
  type Order,
 } from '../newOrderApiActions';
 import { type OrderItemActions } from '../../utils/orderItemsActionsReducer';
+import { type ShopCalculatorResult } from '../../utils/shopCalculator';
 
 type ConfirmOrderType = (typeof confirmOrderTypes)[number];
 const confirmOrderTypes = ['orderInfo', 'shoppingCard', 'invoice'] as const;
@@ -58,6 +59,9 @@ interface OrderBaseConfig {
  order: {
   orderItems: OrderItem[];
   orderItemsDispatch: ActionDispatch<[action: OrderItemActions]>;
+ };
+ invoice: {
+  orderTotals: ShopCalculatorResult;
  };
 }
 
