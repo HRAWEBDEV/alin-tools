@@ -49,7 +49,11 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
         </Button>
        </PopoverTrigger>
        <PopoverContent className='w-auto overflow-hidden p-0' align='start'>
-        <Calendar mode='single' captionLayout='dropdown' />
+        <Calendar
+         mode='single'
+         captionLayout='dropdown'
+         className='[&]:[--cell-size:2.6rem]'
+        />
        </PopoverContent>
       </Popover>
      </Field>
