@@ -228,7 +228,13 @@ export default function OrderBaseConfigProvider({
   userDiscount: Number(userDiscountValue) || 0,
  });
  //
- const invoiceShopResult = shopCalculator(pricedOrderItems, 0, 0);
+ const invoiceShopResult = shopCalculator(
+  pricedOrderItems,
+  0,
+  (Number(tipValue) || 0) +
+   (Number(deliveryValue) || 0) +
+   (Number(roundingValue) || 0),
+ );
  //
 
  const ctx: OrderBaseConfig = {
