@@ -130,17 +130,6 @@ export default function ConfirmOrderModal({
        )}
       </div>
       <div className='flex flex-col-reverse sm:flex-row gap-4'>
-       <DialogClose asChild>
-        <Button
-         variant='outline'
-         className='sm:w-24 text-rose-700! border-rose-700 dark:text-rose-400! dark:border-rose-400'
-        >
-         {dic.orderConfirm.cancel}
-        </Button>
-       </DialogClose>
-       {confirmOrderActiveType === 'orderInfo' && (
-        <Button className='sm:w-24'>{dic.orderInfo.confirm}</Button>
-       )}
        {confirmOrderActiveType === 'shoppingCard' && (
         <Button
          className='sm:w-24'

@@ -91,7 +91,12 @@ export default function OrderShoppingItem({
      <div className='flex gap-2 justify-end sm:justify-start sm:flex-col items-center shrink-0'>
       <div>
        <p className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
-        {format(orderItem.sValue)}
+        {format(
+         orderItem.sValue -
+          orderItem.discount +
+          orderItem.service +
+          orderItem.tax,
+        )}
         <span className='ms-1 text-sm'>ریال</span>
        </p>
       </div>
