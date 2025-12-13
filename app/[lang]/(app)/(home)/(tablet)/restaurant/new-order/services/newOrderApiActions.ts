@@ -3,6 +3,25 @@ import type { Combo } from '../../utils/apiTypes';
 
 const newOrderKey = 'restaurant-new-order';
 
+interface InitialData {
+ orderId: number;
+ bonNo: number;
+ dailyNo: number;
+ orderNo: number;
+ orderStateID: number;
+ orderCashPrePayment: number;
+ defaultSaleTimeID: number;
+ defaultSaleTypeID: number;
+ itemGroups: ItemGroup[];
+ saleTimes: Combo[];
+ saleTypes: Combo[];
+ salons: Combo[];
+ tables: Combo[];
+ waiters: Combo[];
+ sendToKitchen: boolean;
+ printToCashbox: boolean;
+}
+
 type ItemGroup = Combo;
 interface ItemProgram {
  id: number;
@@ -18,7 +37,52 @@ interface ItemProgram {
 
 interface Order {
  id: number;
+ registerID: number | null;
+ orderTypeID: number;
+ saleTypeID: number;
+ saleTimeID: number | null;
+ customerID: number | null;
+ customerName: string | null;
+ customerCode: string | null;
+ contractMenuID: number | null;
+ contractMenuName: string | null;
+ subscriberPersonID: number | null;
+ employeePersonID: number | null;
+ orderDateTimeOffset: string;
+ dateTimeDateTimeOffset: string;
+ orderNo: number;
+ dailyNo: number;
+ orderStateID: number;
+ name: string | null;
+ discountRate: number | null;
+ tableID: number | null;
+ tableNo: number | null;
+ bonNo: number | null;
+ seatID: number | null;
+ persons: number | null;
+ waiterPersonID: number | null;
+ waiterPersonFullName: string | null;
+ comment: string | null;
+ sValue: number;
+ discount: number;
+ service: number;
+ tax: number;
+ roundingValue: number;
+ delivaryValue: number;
+ tipValue: number;
+ payableValue: number;
+ payment: number;
+ arzID: number;
+ saleTypeName: string | null;
+ saleTimeName: string | null;
+ roomLabel: string | null;
+ subscriberCode: number | null;
+ subscriberPersonFullName: string | null;
+ deliveryByAgent: boolean;
+ occupied: boolean;
+ personID: number | null;
 }
+
 interface OrderItem {
  id: number;
  itemID: number;
@@ -39,24 +103,22 @@ interface OrderItem {
  tagComment: string | null;
 }
 
-interface InitialData {
- orderId: number;
- bonNo: number;
- dailyNo: number;
- orderNo: number;
- orderStateID: number;
- orderCashPrePayment: number;
- defaultSaleTimeID: number;
- defaultSaleTypeID: number;
- itemGroups: ItemGroup[];
- saleTimes: Combo[];
- saleTypes: Combo[];
- salons: Combo[];
- tables: Combo[];
- waiters: Combo[];
- sendToKitchen: boolean;
- printToCashbox: boolean;
-}
+type SaveOrderPackage = {
+ order: Omit<
+  Order,
+  | 'saleTypeName'
+  | 'saleTimeName'
+  | 'waiterPersonFullName'
+  | 'customerName'
+  | 'roomLabel'
+  | 'subscriberCode'
+  | 'subscriberPersonFullName'
+  | 'tableNo'
+  | 'contractMenuName'
+  | 'customerCode'
+ >;
+ orderItems: OrderItem[];
+};
 
 function getInitData({ signal }: { signal: AbortSignal }) {
  return axios.get<InitialData>('/Restaurant/SaleInvoice/GetInitDatas', {
@@ -120,5 +182,45 @@ function getOrderItems({
  );
 }
 
-export type { InitialData, ItemGroup, ItemProgram, OrderItem, Order };
-export { newOrderKey, getInitData, getItemPrograms, getOrderItems, getOrder };
+function saveOrder({
+ orderPackage,
+ sendToKitchen,
+ printToCashBox,
+}: {
+ sendToKitchen: boolean;
+ printToCashBox: boolean;
+ orderPackage: SaveOrderPackage;
+}) {
+ const searchParams = new URLSearchParams([
+  ['sendToKitchen', String(sendToKitchen)],
+  ['printToCashBox', String(printToCashBox)],
+ ]);
+
+ if (orderPackage.order.id) {
+  return axios.put<{
+   orderID: number;
+   message: string;
+  }>(`$/Restaurant/SaleInvoice/UpdateOrder?${searchParams.toString()}`);
+ }
+ return axios.post<{
+  orderID: number;
+  message: string;
+ }>(`$/Restaurant/SaleInvoice/SaveOrder?${searchParams.toString()}`);
+}
+
+export type {
+ InitialData,
+ ItemGroup,
+ ItemProgram,
+ OrderItem,
+ Order,
+ SaveOrderPackage,
+};
+export {
+ newOrderKey,
+ getInitData,
+ getItemPrograms,
+ getOrderItems,
+ getOrder,
+ saveOrder,
+};
