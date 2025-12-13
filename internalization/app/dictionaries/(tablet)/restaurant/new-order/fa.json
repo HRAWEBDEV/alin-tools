@@ -29,7 +29,12 @@
   "room": "شماره اتاق",
   "subscriber": "کد اشتراک",
   "customer": "کد مشتری",
-  "waiter": "پیشخدمت"
+  "waiter": "پیشخدمت",
+  "hasService": "سرویس",
+  "hasTableNo": "شماره میز",
+  "sendToKitchen": "ارسال به آشپزخانه",
+  "printCash": "چاپ رسید صندوق",
+  "deliveryAgent": "تحویل به پیک"
  },
  "orderConfirm": {
   "removeOrderItemConfirmMessage": "آیا از حذف این آیتم اطمینان دارید؟",

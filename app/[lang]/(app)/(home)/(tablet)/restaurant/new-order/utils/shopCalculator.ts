@@ -20,13 +20,15 @@ const shopCalculator = (
    },
    { discount, service, tax, sValue, price },
   ) => {
-   const newSValue = Number(sValue + totalSValue);
-   const newPrice = Number(price + totalPrice);
-   const newService = Number(service + totalService);
-   const newTax = Number(tax + totalTax);
-   const newDiscount = Number(discount + totalDiscount);
+   const newSValue = Number((sValue + totalSValue).toFixed(4));
+   const newPrice = Number((price + totalPrice).toFixed(4));
+   const newService = Number((service + totalService).toFixed(4));
+   const newTax = Number((tax + totalTax).toFixed(4));
+   const newDiscount = Number((discount + totalDiscount).toFixed(4));
    const newRemained = Number(
-    newSValue - newDiscount + newService + newTax + other - payment,
+    (newSValue - newDiscount + newService + newTax + other - payment).toFixed(
+     4,
+    ),
    );
    return {
     totalSValue: newSValue,

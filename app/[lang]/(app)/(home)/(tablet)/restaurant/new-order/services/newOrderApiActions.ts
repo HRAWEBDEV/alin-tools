@@ -22,6 +22,11 @@ interface InitialData {
  printToCashbox: boolean;
 }
 
+type OrderServiceRates = {
+ serviceRate: number;
+ discountRate: number;
+} | null;
+
 type ItemGroup = Combo;
 interface ItemProgram {
  id: number;
@@ -208,12 +213,42 @@ function saveOrder({
  }>(`$/Restaurant/SaleInvoice/SaveOrder?${searchParams.toString()}`);
 }
 
+function getOrderServiceRates({
+ orderID,
+ saleTypeID,
+ registerID,
+ signal,
+}: {
+ orderID: number;
+ saleTypeID: number;
+ registerID: number;
+ signal: AbortSignal;
+}) {
+ const searchParams = new URLSearchParams([
+  ['orderID', orderID.toString()],
+  ['saleTypeID', saleTypeID.toString()],
+ ]);
+ if (registerID) {
+  searchParams.set('registerID', registerID.toString());
+ }
+ return axios.get<{
+  serviceRate: number;
+  discountRate: number;
+ } | null>(
+  `/Restaurant/SaleInvoice/GetServiceDiscountRates?${searchParams.toString()}`,
+  {
+   signal,
+  },
+ );
+}
+
 export type {
  InitialData,
  ItemGroup,
  ItemProgram,
  OrderItem,
  Order,
+ OrderServiceRates,
  SaveOrderPackage,
 };
 export {
@@ -223,4 +258,5 @@ export {
  getOrderItems,
  getOrder,
  saveOrder,
+ getOrderServiceRates,
 };

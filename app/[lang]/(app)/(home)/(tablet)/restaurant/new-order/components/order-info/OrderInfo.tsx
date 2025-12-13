@@ -11,7 +11,7 @@ import {
  InputGroupInput,
  InputGroupTextarea,
 } from '@/components/ui/input-group';
-import { ChevronDownIcon } from 'lucide-react';
+import { Check, ChevronDownIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { FaSearch } from 'react-icons/fa';
@@ -388,6 +388,103 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        <InputGroupTextarea id='description' {...register('comment')} />
       </InputGroup>
      </Field>
+     <div className='col-span-full flex flex-wrap gap-8 mt-4 ps-4'>
+      <Controller
+       control={control}
+       name='hasTableNo'
+       render={({ field }) => (
+        <div className='flex gap-4 items-center'>
+         <Checkbox
+          id='hasTable'
+          className='scale-200'
+          checked={field.value}
+          defaultChecked={field.value}
+          onBlur={field.onBlur}
+          onChange={(e) => field.onChange(e)}
+         />
+         <Label htmlFor='hasTable' className='text-base'>
+          {dic.orderInfo.hasTableNo}
+         </Label>
+        </div>
+       )}
+      />
+      <Controller
+       control={control}
+       name='hasService'
+       render={({ field }) => (
+        <div className='flex gap-4 items-center'>
+         <Checkbox
+          id='hasService'
+          className='scale-200'
+          checked={field.value}
+          defaultChecked={field.value}
+          onBlur={field.onBlur}
+          onChange={(e) => field.onChange(e)}
+         />
+         <Label htmlFor='hasService' className='text-base'>
+          {dic.orderInfo.hasService}
+         </Label>
+        </div>
+       )}
+      />
+      <Controller
+       control={control}
+       name='deliveryAgent'
+       render={({ field }) => (
+        <div className='flex gap-4 items-center'>
+         <Checkbox
+          id='deliveryAgent'
+          className='scale-200'
+          checked={field.value}
+          defaultChecked={field.value}
+          onBlur={field.onBlur}
+          onChange={(e) => field.onChange(e)}
+         />
+         <Label htmlFor='deliveryAgent' className='text-base'>
+          {dic.orderInfo.deliveryAgent}
+         </Label>
+        </div>
+       )}
+      />
+      <Controller
+       control={control}
+       name='sendToKitchen'
+       render={({ field }) => (
+        <div className='flex gap-4 items-center'>
+         <Checkbox
+          id='sendToKitchen'
+          className='scale-200'
+          checked={field.value}
+          defaultChecked={field.value}
+          onBlur={field.onBlur}
+          onChange={(e) => field.onChange(e)}
+         />
+         <Label htmlFor='sendToKitchen' className='text-base'>
+          {dic.orderInfo.sendToKitchen}
+         </Label>
+        </div>
+       )}
+      />
+      <Controller
+       control={control}
+       name='printCash'
+       render={({ field }) => (
+        <div className='flex gap-4 items-center'>
+         <Checkbox
+          id='printCash'
+          className='scale-200'
+          checked={field.value}
+          defaultChecked={field.value}
+          onBlur={field.onBlur}
+          onChange={(e) => field.onChange(e)}
+         />
+         <Label htmlFor='printCash' className='text-base'>
+          {dic.orderInfo.printCash}
+         </Label>
+        </div>
+       )}
+      />
+     </div>
     </div>
    </FieldGroup>
   </form>

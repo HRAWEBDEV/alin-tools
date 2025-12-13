@@ -36,6 +36,11 @@ function createOrderInfoSchema({ dic }: { dic: NewOrderDictionary }) {
   rounding: z.literal('').or(z.number()),
   employeeTip: z.literal('').or(z.number()),
   deliveryValue: z.literal('').or(z.number()),
+  hasService: z.boolean(),
+  hasTableNo: z.boolean(),
+  sendToKitchen: z.boolean(),
+  printCash: z.boolean(),
+  deliveryAgent: z.boolean(),
  });
 }
 
