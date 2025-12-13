@@ -7,6 +7,7 @@
   "search": "جستجو"
  },
  "orderInfo": {
+  "search": "جستجو",
   "orderDate": "تاریخ",
   "orderTime": "ساعت",
   "saleTime": "وعده غذایی",
@@ -17,7 +18,8 @@
   "guestCount": "تعداد مهمان",
   "orderType": "نوع سفارش",
   "description": "توضیحات",
-  "confirm": "تایید"
+  "confirm": "تایید",
+  "noItemFound": "آیتمی یافت نشد"
  },
  "orderConfirm": {
   "removeOrderItemConfirmMessage": "آیا از حذف این آیتم اطمینان دارید؟",
