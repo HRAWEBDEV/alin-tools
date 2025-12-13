@@ -83,9 +83,9 @@ export default function OrderShoppingItem({
        {!!orderItem.discountRate && (
         <div className='text-[0.85rem] font-medium text-red-600 dark:text-red-400 line-through'>
          <Badge variant='destructive' className='p-1 me-2 text-sm'>
-          12%
+          {orderItem.discountRate}%
          </Badge>
-         <span>14,000,000</span>
+         <span>{orderItem.price - orderItem.discount / orderItem.amount}</span>
         </div>
        )}
        <p className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
