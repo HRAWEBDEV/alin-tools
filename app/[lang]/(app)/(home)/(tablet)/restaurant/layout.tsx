@@ -17,17 +17,19 @@ export default async function HomeLayout({
   locale: lang as Locale,
  });
  return (
-  <ResturantShareDictionaryProvider restaurantShareDictionary={shareDic}>
-   <ProfileProvider>
-    <div className='h-svh overflow-hidden flex flex-col'>
-     <Header />
-     <div className='flex grow overflow-hidden'>
-      <Nav />
-      <Main>{children}</Main>
+  <>
+   <ResturantShareDictionaryProvider restaurantShareDictionary={shareDic}>
+    <ProfileProvider>
+     <div className='h-svh overflow-hidden flex flex-col'>
+      <Header />
+      <div className='flex grow overflow-hidden'>
+       <Nav />
+       <Main>{children}</Main>
+      </div>
+      <Tabs />
      </div>
-     <Tabs />
-    </div>
-   </ProfileProvider>
-  </ResturantShareDictionaryProvider>
+    </ProfileProvider>
+   </ResturantShareDictionaryProvider>
+  </>
  );
 }

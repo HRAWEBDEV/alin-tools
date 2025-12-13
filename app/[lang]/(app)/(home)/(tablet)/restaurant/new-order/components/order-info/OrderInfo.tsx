@@ -1,163 +1,103 @@
+import { useState } from 'react';
 import { type NewOrderDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/new-order/dictionary';
-import { FaSearch } from 'react-icons/fa';
-import { Checkbox } from '@/components/ui/checkbox';
+import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { Calendar } from '@/components/ui/calendar';
 import {
  InputGroup,
  InputGroupInput,
- InputGroupAddon,
  InputGroupTextarea,
 } from '@/components/ui/input-group';
+import { ChevronDownIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { ChevronsUpDown } from 'lucide-react';
+import { Label } from '@/components/ui/label';
 import {
- Drawer,
- DrawerTrigger,
- DrawerContent,
- DrawerHeader,
- DrawerTitle,
-} from '@/components/ui/drawer';
-import { FieldGroup, Field, FieldLabel } from '@/components/ui/field';
+ Popover,
+ PopoverContent,
+ PopoverTrigger,
+} from '@/components/ui/popover';
+import { Check, ChevronsUpDown } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import {
+ Command,
+ CommandEmpty,
+ CommandGroup,
+ CommandInput,
+ CommandItem,
+ CommandList,
+} from '@/components/ui/command';
 
 export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
+ const [showDateTimePicker, setShowDateTimePicker] = useState(false);
+ const [showSaleTimeCombo, setShowSaleTimeCombo] = useState(false);
+ const [showSaleTypeCombo, setShowSaleTypeCombo] = useState(false);
+
  return (
   <form onSubmit={(e) => e.preventDefault()} className='py-5 px-1'>
-   <FieldGroup className='grid grid-cols-2 gap-5'>
-    {/* salon name       */}
-    <Drawer>
-     <DrawerTrigger asChild>
-      <Field>
-       <FieldLabel>{dic.orderInfo.salonName}</FieldLabel>
-       <Button
-        variant='outline'
-        role='combobox'
-        className='p-2 pe-1! h-auto text-start grow overflow-hidden'
-        size='lg'
-       >
-        <p className='grow text-ellipsis overflow-hidden'>سالن شماره یک</p>
-        <ChevronsUpDown className='opacity-50 size-6' />
-       </Button>
-      </Field>
-     </DrawerTrigger>
-     <DrawerContent className='h-[80svh]'>
-      <DrawerHeader className='hidden'>
-       <DrawerTitle></DrawerTitle>
-      </DrawerHeader>
-      <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
-       <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
-        {dic.orderInfo.salonName}
-       </h1>
-       <div className='w-[20rem]'>
-        <InputGroup>
-         <InputGroupInput
-          placeholder={dic.orderInfo.search + ' ...'}
-          type='search'
-         />
-         <InputGroupAddon align='inline-end'>
-          <FaSearch className='text-primary size-4' />
-         </InputGroupAddon>
-        </InputGroup>
-       </div>
-      </div>
-      <div>
-       <ul>
-        {Array.from({ length: 3 }, (_, i) => i).map((i) => (
-         <li className='flex gap-1 items-center ps-6 py-2' key={i}>
-          <Checkbox tabIndex={-1} className='size-6' defaultChecked={i === 0} />
-          <Button
-           variant='ghost'
-           className='w-full justify-start h-auto text-lg'
-          >
-           <span>سالن شماره {i + 1}</span>
-          </Button>
-         </li>
-        ))}
-       </ul>
-      </div>
-     </DrawerContent>
-    </Drawer>
-    {/* table name       */}
-    <Drawer>
-     <DrawerTrigger asChild>
-      <Field>
-       <FieldLabel>{dic.orderInfo.table}</FieldLabel>
-       <Button
-        variant='outline'
-        role='combobox'
-        className='p-2 pe-1! h-auto text-start grow overflow-hidden'
-        size='lg'
-       >
-        <p className='grow text-ellipsis overflow-hidden'>سالن شماره یک</p>
-        <ChevronsUpDown className='opacity-50 size-6' />
-       </Button>
-      </Field>
-     </DrawerTrigger>
-     <DrawerContent className='h-[80svh]'>
-      <DrawerHeader className='hidden'>
-       <DrawerTitle></DrawerTitle>
-      </DrawerHeader>
-      <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
-       <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
-        {dic.orderInfo.table}
-       </h1>
-       <div className='w-[20rem]'>
-        <InputGroup>
-         <InputGroupInput
-          placeholder={dic.orderInfo.search + ' ...'}
-          type='search'
-         />
-         <InputGroupAddon align='inline-end'>
-          <FaSearch className='text-primary size-4' />
-         </InputGroupAddon>
-        </InputGroup>
-       </div>
-      </div>
-      <div>
-       <ul>
-        {Array.from({ length: 3 }, (_, i) => i).map((i) => (
-         <li className='flex gap-1 items-center ps-6 py-2' key={i}>
-          <Checkbox tabIndex={-1} className='size-6' defaultChecked={i === 0} />
-          <Button
-           variant='ghost'
-           className='w-full justify-start h-auto text-lg'
-          >
-           <span>سالن شماره {i + 1}</span>
-          </Button>
-         </li>
-        ))}
-       </ul>
-      </div>
-     </DrawerContent>
-    </Drawer>
-    <Field>
-     <FieldLabel htmlFor='customer'>{dic.orderInfo.customer}</FieldLabel>
-     <InputGroup>
-      <InputGroupInput id='customer' />
-     </InputGroup>
-    </Field>
-    <Field>
-     <FieldLabel htmlFor='guestCount'>{dic.orderInfo.guestCount}</FieldLabel>
-     <InputGroup>
-      <InputGroupInput id='guestCount' />
-     </InputGroup>
-    </Field>
-    <Field>
-     <FieldLabel htmlFor='discount'>{dic.orderInfo.discountRate}</FieldLabel>
-     <InputGroup>
-      <InputGroupInput id='discount' />
-     </InputGroup>
-    </Field>
-    <Field>
-     <FieldLabel htmlFor='bonNo'>{dic.orderInfo.bonNo}</FieldLabel>
-     <InputGroup>
-      <InputGroupInput id='bonNo' />
-     </InputGroup>
-    </Field>
-    <Field className='col-span-2'>
-     <FieldLabel htmlFor='description'>{dic.orderInfo.description}</FieldLabel>
-     <InputGroup>
-      <InputGroupTextarea id='description' />
-     </InputGroup>
-    </Field>
+   <FieldGroup>
+    <div className='grid grid-cols-2 gap-5'>
+     <Field>
+      <FieldLabel htmlFor='orderDate'>{dic.orderInfo.orderDate}</FieldLabel>
+      <Popover open={showDateTimePicker} onOpenChange={setShowDateTimePicker}>
+       <PopoverTrigger asChild>
+        <Button
+         variant='outline'
+         id='orderDate'
+         className='justify-between font-normal'
+        >
+         <span></span>
+         <ChevronDownIcon />
+        </Button>
+       </PopoverTrigger>
+       <PopoverContent className='w-auto overflow-hidden p-0' align='start'>
+        <Calendar mode='single' captionLayout='dropdown' />
+       </PopoverContent>
+      </Popover>
+     </Field>
+     <Field>
+      <FieldLabel htmlFor='orderTime'>{dic.orderInfo.orderTime}</FieldLabel>
+      <InputGroup>
+       <InputGroupInput id='orderTime' type='time' />
+      </InputGroup>
+     </Field>
+     <Field>
+      <FieldLabel htmlFor='saleTime'>{dic.orderInfo.saleTime}</FieldLabel>
+      <Button
+       id='saleTime'
+       variant='outline'
+       role='combobox'
+       aria-expanded={showSaleTimeCombo}
+       className='justify-between'
+      >
+       <span></span>
+       <ChevronsUpDown />
+      </Button>
+     </Field>
+     <Field>
+      <FieldLabel htmlFor='saleType'>{dic.orderInfo.saleType}</FieldLabel>
+      <Button
+       id='saleTime'
+       variant='outline'
+       role='combobox'
+       aria-expanded={showSaleTypeCombo}
+       className='justify-between'
+      >
+       <span></span>
+       <ChevronsUpDown />
+      </Button>
+     </Field>
+     <Field className='col-span-full'>
+      <FieldLabel htmlFor='customer'>{dic.orderInfo.customerName}</FieldLabel>
+      <InputGroup>
+       <InputGroupInput id='customer' />
+      </InputGroup>
+     </Field>
+     <Field className='col-span-full'>
+      <FieldLabel htmlFor='description'>{dic.orderInfo.description}</FieldLabel>
+      <InputGroup>
+       <InputGroupTextarea id='description' />
+      </InputGroup>
+     </Field>
+    </div>
    </FieldGroup>
   </form>
  );

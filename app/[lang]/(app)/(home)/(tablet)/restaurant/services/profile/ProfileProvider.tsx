@@ -34,6 +34,7 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
   isOpen,
   toggleProfile: handleToggleProfile,
  };
+
  return (
   <profileContext.Provider value={ctx}>
    {children}

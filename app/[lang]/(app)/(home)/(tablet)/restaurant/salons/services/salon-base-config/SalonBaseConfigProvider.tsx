@@ -58,7 +58,14 @@ export default function SalonBaseConfigProvider({
  >(null);
 
  const {
-  data: initData,
+  data: initData = {
+   salons: [],
+   saleTimes: [],
+   tableStateTypes: [],
+   tableTypes: [],
+   defaultSaleTimeID: 0,
+   defaultPrintCashBox: 0,
+  },
   isFetching: initDataIsFetching,
   isLoading: initDataIsLoading,
   isSuccess: initDataSuccess,

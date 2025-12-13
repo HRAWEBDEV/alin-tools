@@ -7,15 +7,17 @@
   "search": "جستجو"
  },
  "orderInfo": {
-  "search": "جستجو",
-  "salonName": "نام سالن",
-  "customer": "مشتری",
-  "table": "میز",
-  "confirm": "تایید",
-  "description": "توضیحات",
-  "guestCount": "تعداد مهمان",
+  "orderDate": "تاریخ",
+  "orderTime": "ساعت",
+  "saleTime": "وعده غذایی",
+  "saleType": "نوع فروش",
+  "customerName": "نام مشتری",
   "discountRate": "درصد تخفیف",
-  "bonNo": "شماره بن"
+  "bonNo": "شماده بن",
+  "guestCount": "تعداد مهمان",
+  "orderType": "نوع سفارش",
+  "description": "توضیحات",
+  "confirm": "تایید"
  },
  "orderConfirm": {
   "removeOrderItemConfirmMessage": "آیا از حذف این آیتم اطمینان دارید؟",
