@@ -74,12 +74,14 @@ export default function OrderShoppingItem({
        --
       </p>
       <div className='flex mb-6 sm:mb-2 gap-4'>
-       <div className='text-[0.85rem] font-medium text-red-600 dark:text-red-400 line-through'>
-        <Badge variant='destructive' className='p-1 me-2 text-sm'>
-         12%
-        </Badge>
-        <span>14,000,000</span>
-       </div>
+       {!!orderItem.discountRate && (
+        <div className='text-[0.85rem] font-medium text-red-600 dark:text-red-400 line-through'>
+         <Badge variant='destructive' className='p-1 me-2 text-sm'>
+          12%
+         </Badge>
+         <span>14,000,000</span>
+        </div>
+       )}
        <p className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
         {format(orderItem.price)}
         <span className='ms-1 text-sm'>ریال</span>
@@ -89,7 +91,7 @@ export default function OrderShoppingItem({
      <div className='flex gap-2 justify-end sm:justify-start sm:flex-col items-center shrink-0'>
       <div>
        <p className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
-        {format(orderItem.price)}
+        {format(orderItem.sValue)}
         <span className='ms-1 text-sm'>ریال</span>
        </p>
       </div>

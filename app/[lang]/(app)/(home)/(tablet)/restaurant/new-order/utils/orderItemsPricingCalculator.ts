@@ -1,16 +1,16 @@
 import {
- type ItemProgram,
+ type OrderItem,
  type OrderServiceRates,
 } from '../services/newOrderApiActions';
 
 const orderItemsPricingCalculator = ({
- itemProgram,
+ orderItem,
  serviceDiscountRates,
  defaultDiscountRate,
  hasService,
  amount,
 }: {
- itemProgram: ItemProgram;
+ orderItem: OrderItem;
  serviceDiscountRates: OrderServiceRates;
  defaultDiscountRate: number;
  hasService: boolean;
@@ -19,26 +19,26 @@ const orderItemsPricingCalculator = ({
  const serviceRate = serviceDiscountRates
   ? serviceDiscountRates.serviceRate
   : hasService
-    ? itemProgram.serviceRate
+    ? orderItem.serviceRate
     : 0;
  const discountRate = serviceDiscountRates
   ? serviceDiscountRates.discountRate
   : defaultDiscountRate || 0;
- const sValue = itemProgram.price * amount;
+ const sValue = orderItem.price * amount;
  const discount = Number(((sValue * discountRate) / 100).toFixed(4));
  const service = Number((((sValue - discount) * serviceRate) / 100).toFixed(4));
  const tax = Number(
-  (((sValue - discount + service) * itemProgram.taxRate) / 100).toFixed(4),
+  (((sValue - discount + service) * orderItem.taxRate) / 100).toFixed(4),
  );
  return {
   service,
   serviceRate,
   tax,
-  taxRate: itemProgram.taxRate,
+  taxRate: orderItem.taxRate,
   sValue,
   discount,
   discountRate,
-  price: itemProgram.price,
+  price: orderItem.price,
   netValue: sValue - discount + tax + service,
  };
 };

@@ -221,7 +221,7 @@ function getOrderServiceRates({
 }: {
  orderID: number;
  saleTypeID: number;
- registerID: number;
+ registerID?: number;
  signal: AbortSignal;
 }) {
  const searchParams = new URLSearchParams([

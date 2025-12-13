@@ -14,6 +14,7 @@ import {
  getItemPrograms,
  getOrderItems,
  getOrder,
+ getOrderServiceRates,
 } from '../newOrderApiActions';
 import { useQuery } from '@tanstack/react-query';
 import { filterItemPrograms } from '../../utils/filterItemPrograms';
@@ -26,6 +27,7 @@ import {
  createOrderInfoSchema,
 } from '../../schemas/orderInfoSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { effectOrderItemsServiceRates } from '../../utils/effectOrderItemsServiceRates';
 
 export default function OrderBaseConfigProvider({
  children,
@@ -42,6 +44,8 @@ export default function OrderBaseConfigProvider({
    orderDate: new Date(),
   },
  });
+ const [saleTypeValue, hasServiceValue, userDiscountValue] =
+  orderInfoForm.watch(['saleType', 'hasService', 'discountRate']);
  //
  const searchQuery = useSearchParams();
  const fromSalonsQuery = searchQuery.get('fromSalons') === 'true';
@@ -178,6 +182,39 @@ export default function OrderBaseConfigProvider({
   },
  });
 
+ // service rates
+ const {
+  data: serviceRatesData,
+  isLoading: serviceRatesLoading,
+  isError: serviceRatesIsError,
+ } = useQuery({
+  enabled: !!saleTypeValue,
+  queryKey: [
+   newOrderKey,
+   'service-rates',
+   userOrder?.id.toString() || '',
+   saleTypeValue?.key || '',
+  ],
+  staleTime: 'static',
+  gcTime: 0,
+  async queryFn({ signal }) {
+   const res = await getOrderServiceRates({
+    signal,
+    orderID: userOrder?.id || 0,
+    saleTypeID: Number(saleTypeValue!.key),
+   });
+   return res.data;
+  },
+ });
+ //
+ const pricedOrderItems = effectOrderItemsServiceRates({
+  orderItems,
+  hasService: hasServiceValue,
+  serviceRates: serviceRatesData || null,
+  userDiscount: Number(userDiscountValue) || 0,
+ });
+ //
+
  const ctx: OrderBaseConfig = {
   confirmOrderIsOpen,
   changeConfirmType,
@@ -222,7 +259,7 @@ export default function OrderBaseConfigProvider({
    },
   },
   order: {
-   orderItems,
+   orderItems: pricedOrderItems,
    orderItemsDispatch,
   },
  };
