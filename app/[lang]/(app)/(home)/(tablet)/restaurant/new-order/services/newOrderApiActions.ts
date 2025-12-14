@@ -242,6 +242,10 @@ function getOrderServiceRates({
  );
 }
 
+function closeOrder({ orderID }: { orderID: number }) {
+ return axios.post(`/Restaurant/SaleInvoice/CloseOrder?orderID=${orderID}`);
+}
+
 export type {
  InitialData,
  ItemGroup,
@@ -259,4 +263,5 @@ export {
  getOrder,
  saveOrder,
  getOrderServiceRates,
+ closeOrder,
 };

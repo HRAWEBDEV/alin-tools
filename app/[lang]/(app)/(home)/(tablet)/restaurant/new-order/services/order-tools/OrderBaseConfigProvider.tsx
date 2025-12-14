@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useReducer } from 'react';
+import { useState, useReducer } from 'react';
 import { ReactNode } from 'react';
 import { type NewOrderDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/new-order/dictionary';
 import {
@@ -15,8 +15,9 @@ import {
  getOrderItems,
  getOrder,
  getOrderServiceRates,
+ closeOrder,
 } from '../newOrderApiActions';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { filterItemPrograms } from '../../utils/filterItemPrograms';
 import { orderItemsReducer } from '../../utils/orderItemsActionsReducer';
 import { useSearchParams } from 'next/navigation';
@@ -29,6 +30,17 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { effectOrderItemsServiceRates } from '../../utils/effectOrderItemsServiceRates';
 import { shopCalculator } from '../../utils/shopCalculator';
+import { BiError } from 'react-icons/bi';
+import {
+ Dialog,
+ DialogTitle,
+ DialogContent,
+ DialogHeader,
+ DialogFooter,
+ DialogClose,
+ DialogDescription,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 
 export default function OrderBaseConfigProvider({
  children,
@@ -65,6 +77,7 @@ export default function OrderBaseConfigProvider({
  const fromSalonsQuery = searchQuery.get('fromSalons') === 'true';
  const orderIDQuery = Number(searchQuery.get('orderID')) || null;
  //
+ const [showCloseOrder, setShowCloseOrder] = useState(false);
  const [selectedItemGroup, setSelectedItemGroup] = useState<ItemGroup | null>(
   null,
  );
@@ -143,7 +156,6 @@ export default function OrderBaseConfigProvider({
   isFetching: itemProgramsFetching,
   isSuccess: itemProgramsSuccess,
   isError: itemProgramsError,
-  refetch: itemProgramsRefetch,
  } = useQuery({
   enabled: !!selectedItemGroup,
   queryKey: [newOrderKey, 'item-programs', selectedItemGroup?.key || ''],
@@ -238,10 +250,23 @@ export default function OrderBaseConfigProvider({
    (Number(deliveryValue) || 0) +
    (Number(roundingValue) || 0),
  );
+ // close order
+ function onCloseOrder() {
+  setShowCloseOrder(true);
+ }
+ const { mutate: handleConfirmCloseOrder } = useMutation({});
+ // loadings
+ const shopLoading =
+  initLoading ||
+  userOrderItemsLoading ||
+  userOrderLoading ||
+  serviceRatesLoading;
+ const shopInfoLoading = shopLoading;
  //
- console.log(roundingValue);
 
  const ctx: OrderBaseConfig = {
+  shopLoading,
+  shopInfoLoading,
   confirmOrderIsOpen,
   changeConfirmType,
   confirmOrderActiveType,
@@ -285,6 +310,12 @@ export default function OrderBaseConfigProvider({
    },
   },
   order: {
+   onCloseOrder,
+   serviceRates: {
+    data: serviceRatesData,
+    isLoading: serviceRatesLoading,
+    isError: serviceRatesIsError,
+   },
    orderItems: pricedOrderItems,
    orderItemsDispatch,
   },
@@ -296,6 +327,36 @@ export default function OrderBaseConfigProvider({
  return (
   <orderBaseConfigContext.Provider value={ctx}>
    <FormProvider {...orderInfoForm}>{children}</FormProvider>
+   <Dialog
+    open={showCloseOrder}
+    onOpenChange={(newValue) => setShowCloseOrder(newValue)}
+   >
+    <DialogContent className='p-0 gap-0'>
+     <DialogHeader className='p-4'></DialogHeader>
+     <div className='p-4'>
+      <div className='flex gap-1 items-center text-red-700 dark:text-red-400 font-medium'>
+       <BiError className='size-12' />
+       <p>{dic.closeOrder.confirmMessage}</p>
+      </div>
+     </div>
+     <DialogFooter className='p-4'>
+      <DialogClose asChild>
+       <Button className='sm:w-24 h-11' variant='outline'>
+        {dic.closeOrder.cancel}
+       </Button>
+      </DialogClose>
+      <DialogClose asChild>
+       <Button
+        className='sm:w-24 h-11'
+        variant='destructive'
+        onClick={() => handleConfirmCloseOrder()}
+       >
+        {dic.closeOrder.confirm}
+       </Button>
+      </DialogClose>
+     </DialogFooter>
+    </DialogContent>
+   </Dialog>
   </orderBaseConfigContext.Provider>
  );
 }

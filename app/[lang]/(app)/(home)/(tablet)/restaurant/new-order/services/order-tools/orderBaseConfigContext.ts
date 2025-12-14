@@ -6,6 +6,7 @@ import {
  type ItemProgram,
  type OrderItem,
  type Order,
+ type OrderServiceRates,
 } from '../newOrderApiActions';
 import { type OrderItemActions } from '../../utils/orderItemsActionsReducer';
 import { type ShopCalculatorResult } from '../../utils/shopCalculator';
@@ -14,6 +15,8 @@ type ConfirmOrderType = (typeof confirmOrderTypes)[number];
 const confirmOrderTypes = ['orderInfo', 'shoppingCard', 'invoice'] as const;
 
 interface OrderBaseConfig {
+ shopLoading: boolean;
+ shopInfoLoading: boolean;
  confirmOrderIsOpen: boolean;
  confirmOrderActiveType: ConfirmOrderType;
  changeConfirmType: (type: ConfirmOrderType) => unknown;
@@ -58,7 +61,13 @@ interface OrderBaseConfig {
  };
  order: {
   orderItems: OrderItem[];
+  serviceRates: {
+   data?: OrderServiceRates;
+   isLoading: boolean;
+   isError: boolean;
+  };
   orderItemsDispatch: ActionDispatch<[action: OrderItemActions]>;
+  onCloseOrder: () => unknown;
  };
  invoice: {
   orderTotals: ShopCalculatorResult;

@@ -62,5 +62,10 @@
   "confirmOrder": "ثبت سفارش",
   "closeOrder": "بستن سفارش",
   "confirmPayment": "پرداخت"
+ },
+ "closeOrder": {
+  "confirmMessage": "آیا از بستن سفارش اطمینان دارید؟",
+  "confirm": "تایید",
+  "cancel": "انصراف"
  }
 }

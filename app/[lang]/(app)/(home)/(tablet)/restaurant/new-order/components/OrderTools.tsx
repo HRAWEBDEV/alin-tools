@@ -15,14 +15,11 @@ import { IoSearch } from 'react-icons/io5';
 
 export default function OrderTools({ dic }: { dic: NewOrderDictionary }) {
  const {
+  shopInfoLoading,
+  shopLoading,
   showConfirmOrder,
-  initialDataInfo: { isLoading },
   itemsInfo: { searchedItemName, changeSearchedItemName },
   order: { orderItems },
-  userOrder: {
-   order: { isLoading: userOrderIsLoading },
-   orderItems: { isLoading: userOrderItemsLoading },
-  },
  } = useOrderBaseConfigContext();
  return (
   <div className='flex md:items-center md:justify-between gap-2 mb-2 flex-col md:flex-row'>
@@ -44,27 +41,19 @@ export default function OrderTools({ dic }: { dic: NewOrderDictionary }) {
     <Button
      className='md:w-36 text-primary border-primary h-10'
      variant='outline'
-     disabled={isLoading || userOrderItemsLoading || userOrderIsLoading}
+     disabled={shopInfoLoading}
      onClick={() => showConfirmOrder('orderInfo')}
     >
-     {!isLoading && !userOrderItemsLoading && !userOrderIsLoading ? (
-      <FaCircleInfo />
-     ) : (
-      <Spinner />
-     )}
+     {!shopInfoLoading ? <FaCircleInfo /> : <Spinner />}
      <span>{dic.tools.orderInfo}</span>
     </Button>
     <Button
      variant='secondary'
      className='relative md:w-36 h-10'
-     disabled={isLoading || userOrderItemsLoading || userOrderIsLoading}
+     disabled={shopLoading}
      onClick={() => showConfirmOrder('shoppingCard')}
     >
-     {!userOrderIsLoading && !isLoading && !userOrderItemsLoading ? (
-      <FaShoppingBag />
-     ) : (
-      <Spinner />
-     )}
+     {!shopLoading ? <FaShoppingBag /> : <Spinner />}
      <span>{dic.tools.shoppingCard}</span>
      {!!orderItems.length && (
       <Badge className='p-1 size-6 bg-orange-600 dark:bg-orange-400 font-medium text-base'>

@@ -4,6 +4,7 @@ import NoItemFound from '@/app/[lang]/(app)/components/NoItemFound';
 import { Button } from '@/components/ui/button';
 import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseConfigContext';
 import { useCurrencyFormatter } from '@/hooks/useCurrencyFormatter';
+import { Spinner } from '@/components/ui/spinner';
 
 const invoiceRowClass =
  'flex justify-between gap-2 items-center text-base pb-3 mb-3 border-b border-input font-medium';
@@ -11,6 +12,8 @@ const invoiceLabelClass = 'shrink-0 w-32';
 
 export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
  const {
+  shopLoading,
+  queries: { orderID },
   order: { orderItems },
   invoice: {
    orderTotals: {
@@ -93,13 +96,26 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
      </div>
     </div>
     <div className='grid sm:grid-cols-3 gap-3'>
-     <Button size='lg' className='font-medium'>
+     <Button disabled={shopLoading} size='lg' className='font-medium'>
+      {shopLoading && <Spinner />}
       {dic.invoice.confirmOrder}
      </Button>
-     <Button variant='destructive' size='lg' className='font-medium'>
+     <Button
+      disabled={!orderID || shopLoading}
+      variant='destructive'
+      size='lg'
+      className='font-medium disabled:bg-neutral-400 disabled:dark:bg-neutral-600'
+     >
+      {shopLoading && <Spinner />}
       {dic.invoice.closeOrder}
      </Button>
-     <Button variant='secondary' size='lg' className='font-medium'>
+     <Button
+      disabled={shopLoading}
+      variant='secondary'
+      size='lg'
+      className='font-medium'
+     >
+      {shopLoading && <Spinner />}
       {dic.invoice.confirmPayment}
      </Button>
     </div>
