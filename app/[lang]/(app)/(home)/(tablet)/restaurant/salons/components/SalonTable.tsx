@@ -41,6 +41,7 @@ export default function SalonTable({
    changeShowMergeTable,
    mergeTableTo,
    transferTableTo,
+   onCloseOrder,
   },
  } = useSalonBaseConfigContext();
  const tableStyles = getTableStateStyles(table.tableStateTypeID);
@@ -222,7 +223,10 @@ export default function SalonTable({
             {dic.tables.mergeTables}
            </DropdownMenuLabel>
           </DropdownMenuItem>
-          <DropdownMenuItem className='text-rose-700 dark:text-rose-400'>
+          <DropdownMenuItem
+           className='text-rose-700 dark:text-rose-400'
+           onClick={onCloseOrder}
+          >
            <IoMdCloseCircleOutline className='size-8 text-inherit' />
            <DropdownMenuLabel className='text-base'>
             {dic.tables.closeOrder}

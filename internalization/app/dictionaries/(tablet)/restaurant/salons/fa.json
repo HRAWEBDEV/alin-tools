@@ -51,5 +51,10 @@
   "mergeWith": "ادغام با",
   "confirm": "تایید",
   "cancel": "انصراف"
+ },
+ "closeOrder": {
+  "confirmMessage": "آیا از بستن سفارش اطمینان دارید؟",
+  "confirm": "تایید",
+  "cancel": "انصراف"
  }
 }

@@ -1,5 +1,6 @@
 'use client';
 import { ReactNode, useCallback, useEffect, useState } from 'react';
+import { type SalonsDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/salons/dictionary';
 import {
  type SalonBaseConfig,
  type TablesFilters,
@@ -11,7 +12,7 @@ import {
  getHallKey,
  getInitialData,
 } from '../salonsApiActions';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import * as signalR from '@microsoft/signalr';
@@ -19,10 +20,25 @@ import { getUserLoginToken } from '@/app/[lang]/(app)/login/utils/loginTokenMana
 import { getTablesReport } from '../../utils/getTablesReport';
 import { getFilteredTables } from '../../utils/getfilteredTables';
 import { useMainWrapperSetupContext } from '../../../services/main-wrapper-setup/mainWrapperSetupContext';
+import { BiError } from 'react-icons/bi';
+import {
+ Dialog,
+ DialogContent,
+ DialogHeader,
+ DialogFooter,
+ DialogClose,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { AxiosError } from 'axios';
+import { toast } from 'sonner';
+import { Spinner } from '@/components/ui/spinner';
+import { closeOrder } from '../../../new-order/services/newOrderApiActions';
 
 export default function SalonBaseConfigProvider({
  children,
+ dic,
 }: {
+ dic: SalonsDictionary;
  children: ReactNode;
 }) {
  const { scrollToTop } = useMainWrapperSetupContext();
@@ -46,6 +62,7 @@ export default function SalonBaseConfigProvider({
   useState(false);
  const [transferToTable, setTrasnferToTable] = useState<Table | null>(null);
  const [mergeToTable, setMergeToTable] = useState<Table | null>(null);
+ const [showCloseOrder, setShowCloseOrder] = useState(false);
 
  const [connection, setConnection] = useState<signalR.HubConnection | null>(
   null,
@@ -271,6 +288,23 @@ export default function SalonBaseConfigProvider({
   if (!hasPrevHall) return;
   handleChangeHall(initData!.salons[selectedHallIndex - 1]);
  }
+ // close order
+ function onCloseOrder() {
+  setShowCloseOrder(true);
+ }
+ const { mutate: handleConfirmCloseOrder, isPending: isPendingCloseOrder } =
+  useMutation({
+   mutationFn() {
+    return closeOrder({ orderID: selectedTable!.orderID });
+   },
+   onSuccess() {
+    setShowCloseOrder(false);
+    getSalonTables();
+   },
+   onError(err: AxiosError<string>) {
+    toast.error(err.message || '');
+   },
+  });
  // ctx
 
  const ctx: SalonBaseConfig = {
@@ -310,6 +344,7 @@ export default function SalonBaseConfigProvider({
    showMergeTableConfirm,
    selectedMergeToTable: mergeToTable,
    showMergeTable,
+   onCloseOrder,
    refreshTables: getSalonTables,
    onShowChangeTableState: handleShowChangeStateTable,
    changeFilters: handleChangeTableFilters,
@@ -339,6 +374,43 @@ export default function SalonBaseConfigProvider({
  return (
   <salonBaseConfigContext.Provider value={ctx}>
    {children}
+   <Dialog
+    open={showCloseOrder}
+    onOpenChange={(newValue) => setShowCloseOrder(newValue)}
+   >
+    <DialogContent className='p-0 gap-0'>
+     <DialogHeader className='p-4'></DialogHeader>
+     <div className='p-4'>
+      <div className='flex gap-1 items-center text-red-700 dark:text-red-400 font-medium'>
+       <BiError className='size-12' />
+       <p>{dic.closeOrder.confirmMessage}</p>
+      </div>
+     </div>
+     <DialogFooter className='p-4'>
+      <DialogClose asChild>
+       <Button
+        disabled={isPendingCloseOrder}
+        className='sm:w-24 h-11'
+        variant='outline'
+       >
+        {isPendingCloseOrder && <Spinner />}
+        {dic.closeOrder.cancel}
+       </Button>
+      </DialogClose>
+      <DialogClose asChild>
+       <Button
+        disabled={isPendingCloseOrder}
+        className='sm:w-24 h-11'
+        variant='destructive'
+        onClick={() => handleConfirmCloseOrder()}
+       >
+        {isPendingCloseOrder && <Spinner />}
+        {dic.closeOrder.confirm}
+       </Button>
+      </DialogClose>
+     </DialogFooter>
+    </DialogContent>
+   </Dialog>
   </salonBaseConfigContext.Provider>
  );
 }

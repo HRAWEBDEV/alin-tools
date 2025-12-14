@@ -24,7 +24,7 @@ export default async function Salons({
   locale: lang as Locale,
  });
  return (
-  <SalonBaseConfigProvider>
+  <SalonBaseConfigProvider dic={dic}>
    <SalonsWrapper dic={dic} />
   </SalonBaseConfigProvider>
  );

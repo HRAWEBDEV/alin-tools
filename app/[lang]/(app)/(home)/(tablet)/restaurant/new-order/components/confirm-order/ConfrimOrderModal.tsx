@@ -34,7 +34,8 @@ export default function ConfirmOrderModal({
   changeConfirmType,
   showConfirmOrder,
   closeConfirmOrder,
-  order: { orderItems, orderItemsDispatch },
+  order: { orderItems, orderItemsDispatch, onCloseOrder },
+  userOrder: { order },
  } = useOrderBaseConfigContext();
  return (
   <Dialog
@@ -93,7 +94,7 @@ export default function ConfirmOrderModal({
        {confirmOrderActiveType === 'shoppingCard' && orderItems.length > 1 && (
         <Dialog>
          <DialogTrigger asChild>
-          <Button className='w-full sm:min-w-24 h-11' variant='destructive'>
+          <Button className='w-full sm:min-w-24 h-11' variant='outline'>
            {dic.orderConfirm.clearOrderItems}
           </Button>
          </DialogTrigger>
@@ -130,9 +131,21 @@ export default function ConfirmOrderModal({
        )}
       </div>
       <div className='flex flex-col-reverse sm:flex-row gap-4'>
+       {confirmOrderActiveType === 'shoppingCard' &&
+        !!order.data?.id &&
+        !!orderItems.length && (
+         <Button variant='destructive' className='h-11' onClick={onCloseOrder}>
+          {dic.invoice.closeOrder}
+         </Button>
+        )}
+       {confirmOrderActiveType === 'shoppingCard' && !!orderItems.length && (
+        <Button variant='secondary' className='h-11' onClick={() => {}}>
+         {dic.invoice.confirmOrder}
+        </Button>
+       )}
        {confirmOrderActiveType === 'shoppingCard' && (
         <Button
-         className='sm:w-24 h-11'
+         className='h-11'
          disabled={!orderItems.length}
          onClick={() => {
           changeConfirmType('invoice');

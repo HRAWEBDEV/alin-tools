@@ -267,6 +267,7 @@ export default function OrderBaseConfigProvider({
    },
    onSuccess() {
     router.push(`/${locale}/restaurant/salons`);
+    setShowCloseOrder(false);
    },
    onError(err: AxiosError<string>) {
     toast.error(err.message || '');
