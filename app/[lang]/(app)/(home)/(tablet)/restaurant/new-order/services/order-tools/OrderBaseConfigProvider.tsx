@@ -16,6 +16,7 @@ import {
  getOrder,
  getOrderServiceRates,
  closeOrder,
+ getFreeTables,
 } from '../newOrderApiActions';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { filterItemPrograms } from '../../utils/filterItemPrograms';
@@ -54,12 +55,27 @@ export default function OrderBaseConfigProvider({
 }) {
  const router = useRouter();
  const { locale } = useBaseConfig();
+ //
+ const searchQuery = useSearchParams();
+ const fromSalonsQuery = searchQuery.get('fromSalons') === 'true';
+ const orderIDQuery = Number(searchQuery.get('orderID')) || null;
+ const salonIDQuery = searchQuery.get('salonID');
+ const salonNameQuery = searchQuery.get('salonName');
+ const tableIDQuery = Number(searchQuery.get('tableID')) || null;
+ const tableNoQuery = searchQuery.get('tableNo');
  // order info
  const orderInfoForm = useForm<OrderInfo>({
   resolver: zodResolver(createOrderInfoSchema({ dic })),
   defaultValues: {
    ...defaultOrderInfo,
    orderDate: new Date(),
+   table:
+    tableIDQuery && tableNoQuery
+     ? {
+        key: tableIDQuery.toString(),
+        value: tableNoQuery,
+       }
+     : null,
   },
  });
  const [
@@ -69,6 +85,8 @@ export default function OrderBaseConfigProvider({
   deliveryValue,
   tipValue,
   roundingValue,
+  saleTimeValue,
+  orderDateValue,
  ] = orderInfoForm.watch([
   'saleType',
   'hasService',
@@ -76,11 +94,9 @@ export default function OrderBaseConfigProvider({
   'deliveryValue',
   'employeeTip',
   'rounding',
+  'saleTime',
+  'orderDate',
  ]);
- //
- const searchQuery = useSearchParams();
- const fromSalonsQuery = searchQuery.get('fromSalons') === 'true';
- const orderIDQuery = Number(searchQuery.get('orderID')) || null;
  //
  const [showCloseOrder, setShowCloseOrder] = useState(false);
  const [selectedItemGroup, setSelectedItemGroup] = useState<ItemGroup | null>(
@@ -241,6 +257,35 @@ export default function OrderBaseConfigProvider({
    return res.data;
   },
  });
+ // get free tables
+ const { data: freeTables, isLoading: freeTablesIsLoading } = useQuery({
+  enabled: Boolean(saleTimeValue && orderDateValue && salonIDQuery),
+  staleTime: 'static',
+  gcTime: 0,
+  queryKey: [
+   newOrderKey,
+   'free-tables',
+   saleTimeValue?.key,
+   orderDateValue,
+   salonIDQuery,
+  ],
+  async queryFn({ signal }) {
+   const res = await getFreeTables({
+    signal,
+    orderDate: orderDateValue.toISOString(),
+    saleTimeID: saleTimeValue!.key,
+    salonID: salonIDQuery!,
+   });
+   const freeTables = [...res.data];
+   if (tableIDQuery && tableNoQuery) {
+    freeTables.unshift({
+     key: tableIDQuery.toString(),
+     value: tableNoQuery,
+    });
+   }
+   return freeTables;
+  },
+ });
  //
  const pricedOrderItems = effectOrderItemsServiceRates({
   orderItems,
@@ -296,6 +341,8 @@ export default function OrderBaseConfigProvider({
   },
   initialDataInfo: {
    data: initData,
+   freeTables,
+   freeTablesLoading: freeTablesIsLoading,
    isError: initError,
    isSuccess: initSuccess,
    isFetching: initFetching,

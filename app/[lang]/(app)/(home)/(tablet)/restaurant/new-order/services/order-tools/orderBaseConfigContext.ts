@@ -10,6 +10,7 @@ import {
 } from '../newOrderApiActions';
 import { type OrderItemActions } from '../../utils/orderItemsActionsReducer';
 import { type ShopCalculatorResult } from '../../utils/shopCalculator';
+import { type Combo } from '../../../utils/apiTypes';
 
 type ConfirmOrderType = (typeof confirmOrderTypes)[number];
 const confirmOrderTypes = ['orderInfo', 'shoppingCard', 'invoice'] as const;
@@ -28,6 +29,8 @@ interface OrderBaseConfig {
  };
  initialDataInfo: {
   data?: InitialData;
+  freeTables?: Combo[];
+  freeTablesLoading: boolean;
   isLoading: boolean;
   isError: boolean;
   isSuccess: boolean;

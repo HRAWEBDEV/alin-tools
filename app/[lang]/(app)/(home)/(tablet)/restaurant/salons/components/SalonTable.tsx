@@ -31,6 +31,7 @@ export default function SalonTable({
 }) {
  const {
   initData,
+  hallsInfo: { selectedHall },
   tablesInfo: {
    selectedTable,
    showTransferTable,
@@ -59,7 +60,7 @@ export default function SalonTable({
  }
 
  const newOrderRedirectLink =
-  `/${locale}/restaurant/new-order?tableID=${table.tableID}&orderID=${table.orderID}&fromSalons=true` as const;
+  `/${locale}/restaurant/new-order?salonID=${selectedHall?.key}&salonName=${selectedHall?.value}&tableID=${table.tableID}&tableNo=${table.tableNo}&orderID=${table.orderID}&fromSalons=true` as const;
 
  return (
   <motion.div layout className='grid'>

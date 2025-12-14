@@ -154,9 +154,31 @@ function getItemPrograms({
   { signal },
  );
 }
-
+// get Free tables
+function getFreeTables({
+ salonID,
+ saleTimeID,
+ orderDate,
+ signal,
+}: {
+ salonID: string;
+ saleTimeID: string;
+ orderDate: string;
+ signal: AbortSignal;
+}) {
+ const searchPamras = new URLSearchParams([
+  ['salonID', salonID],
+  ['saleTimeID', saleTimeID],
+  ['date', orderDate],
+ ]);
+ return axios.get<Combo[]>(
+  `/Restaurant/SaleInvoice/GetAllocatableTables?${searchPamras.toString()}`,
+  {
+   signal,
+  },
+ );
+}
 // order
-
 function getOrder({
  signal,
  orderID,
@@ -257,6 +279,7 @@ export type {
 };
 export {
  newOrderKey,
+ getFreeTables,
  getInitData,
  getItemPrograms,
  getOrderItems,

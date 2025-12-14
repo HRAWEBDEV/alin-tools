@@ -36,7 +36,7 @@ import { NumericFormat } from 'react-number-format';
 export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
  const { control, register, getValues } = useFormContext<OrderInfo>();
  const {
-  initialDataInfo: { data },
+  initialDataInfo: { data, freeTablesLoading, freeTables },
  } = useOrderBaseConfigContext();
  const [showDateTimePicker, setShowDateTimePicker] = useState(false);
  const { locale } = useBaseConfig();
@@ -281,9 +281,9 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            </h1>
           </div>
           <div>
-           {data?.tables.length ? (
+           {freeTables?.length ? (
             <ul>
-             {data.tables.map((item) => (
+             {freeTables.map((item) => (
               <DrawerClose asChild key={item.key}>
                <li
                 className='flex gap-1 items-center ps-6 py-2'

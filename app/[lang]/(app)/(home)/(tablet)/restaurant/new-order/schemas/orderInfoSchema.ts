@@ -7,7 +7,7 @@ const defaultOrderInfo: Partial<OrderInfo> = {
  comment: '',
 };
 
-function createOrderInfoSchema({ dic }: { dic: NewOrderDictionary }) {
+function createOrderInfoSchema({}: { dic: NewOrderDictionary }) {
  return z.object({
   orderDate: z.date(),
   saleTime: z
@@ -32,7 +32,6 @@ function createOrderInfoSchema({ dic }: { dic: NewOrderDictionary }) {
   persons: z.literal('').or(z.number()),
   discountRate: z.literal('').or(z.number()),
   bonNo: z.literal('').or(z.number()),
-  orderType: z.literal('').or(z.number()),
   rounding: z.literal('').or(z.number()),
   employeeTip: z.literal('').or(z.number()),
   deliveryValue: z.literal('').or(z.number()),
