@@ -32,6 +32,7 @@ import {
 import { ChevronsUpDown } from 'lucide-react';
 import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseConfigContext';
 import { NumericFormat } from 'react-number-format';
+import { Spinner } from '@/components/ui/spinner';
 
 export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
  const { control, register, getValues } = useFormContext<OrderInfo>();
@@ -266,9 +267,13 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            variant='outline'
            role='combobox'
            className='justify-between'
+           disabled={freeTablesLoading}
           >
            <span>{field.value?.value || ''}</span>
-           <ChevronsUpDown />
+           <div className='flex gap-2'>
+            {freeTablesLoading && <Spinner />}
+            <ChevronsUpDown />
+           </div>
           </Button>
          </DrawerTrigger>
          <DrawerContent className='h-[80svh]'>
