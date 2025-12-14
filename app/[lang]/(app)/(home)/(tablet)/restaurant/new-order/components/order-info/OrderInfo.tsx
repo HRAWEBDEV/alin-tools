@@ -367,26 +367,60 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
      </Field>
      <Field>
       <FieldLabel htmlFor='rounding'>{dic.orderInfo.roundingValue}</FieldLabel>
-      <InputGroup>
-       <NumericFormat
-        id='rounding'
-        {...register('rounding')}
-        customInput={InputGroupInput}
-        thousandSeparator
-       />
-      </InputGroup>
+      <Controller
+       control={control}
+       name='rounding'
+       render={({ field: { value, onChange, ...other } }) => (
+        <InputGroup>
+         <NumericFormat
+          id='rounding'
+          {...other}
+          value={value}
+          onValueChange={({ value }) => onChange(value)}
+          customInput={InputGroupInput}
+          thousandSeparator
+         />
+        </InputGroup>
+       )}
+      />
      </Field>
      <Field>
       <FieldLabel htmlFor='delivery'>{dic.orderInfo.deliveryValue}</FieldLabel>
-      <InputGroup>
-       <InputGroupInput id='delivery' {...register('deliveryValue')} />
-      </InputGroup>
+      <Controller
+       control={control}
+       name='deliveryValue'
+       render={({ field: { value, onChange, ...other } }) => (
+        <InputGroup>
+         <NumericFormat
+          id='delivery'
+          {...other}
+          value={value}
+          onValueChange={({ value }) => onChange(value)}
+          customInput={InputGroupInput}
+          thousandSeparator
+         />
+        </InputGroup>
+       )}
+      />
      </Field>
      <Field>
       <FieldLabel htmlFor='employeeTip'>{dic.orderInfo.employeeTip}</FieldLabel>
-      <InputGroup>
-       <InputGroupInput id='employeeTip' {...register('employeeTip')} />
-      </InputGroup>
+      <Controller
+       control={control}
+       name='employeeTip'
+       render={({ field: { value, onChange, ...other } }) => (
+        <InputGroup>
+         <NumericFormat
+          id='employeeTip'
+          {...other}
+          value={value}
+          onValueChange={({ value }) => onChange(value)}
+          customInput={InputGroupInput}
+          thousandSeparator
+         />
+        </InputGroup>
+       )}
+      />
      </Field>
      <Field className='col-span-full'>
       <FieldLabel htmlFor='description'>{dic.orderInfo.description}</FieldLabel>

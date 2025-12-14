@@ -239,6 +239,7 @@ export default function OrderBaseConfigProvider({
    (Number(roundingValue) || 0),
  );
  //
+ console.log(roundingValue);
 
  const ctx: OrderBaseConfig = {
   confirmOrderIsOpen,
