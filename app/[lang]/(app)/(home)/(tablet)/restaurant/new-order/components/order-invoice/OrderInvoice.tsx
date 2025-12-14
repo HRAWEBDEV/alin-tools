@@ -14,7 +14,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
  const {
   shopLoading,
   queries: { orderID },
-  order: { orderItems },
+  order: { orderItems, onCloseOrder },
   invoice: {
    orderTotals: {
     totalTax,
@@ -105,6 +105,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
       variant='destructive'
       size='lg'
       className='font-medium disabled:bg-neutral-400 disabled:dark:bg-neutral-600'
+      onClick={onCloseOrder}
      >
       {shopLoading && <Spinner />}
       {dic.invoice.closeOrder}

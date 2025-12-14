@@ -33,14 +33,17 @@ import { shopCalculator } from '../../utils/shopCalculator';
 import { BiError } from 'react-icons/bi';
 import {
  Dialog,
- DialogTitle,
  DialogContent,
  DialogHeader,
  DialogFooter,
  DialogClose,
- DialogDescription,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { AxiosError } from 'axios';
+import { toast } from 'sonner';
+import { Spinner } from '@/components/ui/spinner';
+import { useRouter } from 'next/navigation';
+import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 
 export default function OrderBaseConfigProvider({
  children,
@@ -49,6 +52,8 @@ export default function OrderBaseConfigProvider({
  children: ReactNode;
  dic: NewOrderDictionary;
 }) {
+ const router = useRouter();
+ const { locale } = useBaseConfig();
  // order info
  const orderInfoForm = useForm<OrderInfo>({
   resolver: zodResolver(createOrderInfoSchema({ dic })),
@@ -114,6 +119,7 @@ export default function OrderBaseConfigProvider({
   isSuccess: initSuccess,
   isFetching: initFetching,
  } = useQuery({
+  staleTime: 'static',
   gcTime: 0,
   queryKey: [newOrderKey, 'initial-data'],
   async queryFn({ signal }) {
@@ -254,7 +260,18 @@ export default function OrderBaseConfigProvider({
  function onCloseOrder() {
   setShowCloseOrder(true);
  }
- const { mutate: handleConfirmCloseOrder } = useMutation({});
+ const { mutate: handleConfirmCloseOrder, isPending: isPendingCloseOrder } =
+  useMutation({
+   mutationFn() {
+    return closeOrder({ orderID: userOrder!.id });
+   },
+   onSuccess() {
+    router.push(`/${locale}/restaurant/salons`);
+   },
+   onError(err: AxiosError<string>) {
+    toast.error(err.message || '');
+   },
+  });
  // loadings
  const shopLoading =
   initLoading ||
@@ -341,16 +358,23 @@ export default function OrderBaseConfigProvider({
      </div>
      <DialogFooter className='p-4'>
       <DialogClose asChild>
-       <Button className='sm:w-24 h-11' variant='outline'>
+       <Button
+        disabled={isPendingCloseOrder}
+        className='sm:w-24 h-11'
+        variant='outline'
+       >
+        {isPendingCloseOrder && <Spinner />}
         {dic.closeOrder.cancel}
        </Button>
       </DialogClose>
       <DialogClose asChild>
        <Button
+        disabled={isPendingCloseOrder}
         className='sm:w-24 h-11'
         variant='destructive'
         onClick={() => handleConfirmCloseOrder()}
        >
+        {isPendingCloseOrder && <Spinner />}
         {dic.closeOrder.confirm}
        </Button>
       </DialogClose>
