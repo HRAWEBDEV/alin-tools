@@ -3,6 +3,7 @@ import { NewOrderDictionary } from '@/internalization/app/dictionaries/(tablet)/
 import OrderShoppingItem from './OrderShoppingItem';
 import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseConfigContext';
 import NoItemFound from '@/app/[lang]/(app)/components/NoItemFound';
+import { AnimatePresence } from 'motion/react';
 
 export default function OrderShoppingList({
  dic,
@@ -21,14 +22,16 @@ export default function OrderShoppingList({
   <>
    {visibleOrderItems.length ? (
     <ul>
-     {visibleOrderItems.map((orderItem) => (
-      <OrderShoppingItem
-       key={orderItem.itemID}
-       dic={dic}
-       orderItem={orderItem}
-       searchedOrder={searchedOrder}
-      />
-     ))}
+     <AnimatePresence>
+      {visibleOrderItems.map((orderItem) => (
+       <OrderShoppingItem
+        key={orderItem.itemID}
+        dic={dic}
+        orderItem={orderItem}
+        searchedOrder={searchedOrder}
+       />
+      ))}
+     </AnimatePresence>
     </ul>
    ) : (
     <div className='flex flex-col items-center'>

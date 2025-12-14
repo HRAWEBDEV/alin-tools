@@ -31,6 +31,7 @@ import {
 } from '@/components/ui/drawer';
 import { ChevronsUpDown } from 'lucide-react';
 import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseConfigContext';
+import { NumericFormat } from 'react-number-format';
 
 export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
  const { control, register, getValues } = useFormContext<OrderInfo>();
@@ -367,7 +368,12 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
      <Field>
       <FieldLabel htmlFor='rounding'>{dic.orderInfo.roundingValue}</FieldLabel>
       <InputGroup>
-       <InputGroupInput id='rounding' {...register('rounding')} />
+       <NumericFormat
+        id='rounding'
+        {...register('rounding')}
+        customInput={InputGroupInput}
+        thousandSeparator
+       />
       </InputGroup>
      </Field>
      <Field>

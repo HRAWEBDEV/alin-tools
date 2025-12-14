@@ -18,6 +18,7 @@ import {
  DialogClose,
 } from '@/components/ui/dialog';
 import HighlightWords from 'react-highlight-words';
+import { motion } from 'motion/react';
 
 export default function OrderShoppingItem({
  dic,
@@ -39,7 +40,7 @@ export default function OrderShoppingItem({
   (item) => item.itemID === orderItem.itemID,
  );
  return (
-  <div className='border-b border-input p-2'>
+  <motion.div layout className='border-b border-input p-2'>
    <div className='flex gap-4 items-center'>
     <div className='flex flex-col items-center'>
      <div className='flex items-center justify-center  shrink-0 rounded-full size-20 bg-neutral-100 dark:bg-neutral-800 overflow-hidden object-center object-contain'>
@@ -188,6 +189,6 @@ export default function OrderShoppingItem({
      </DialogFooter>
     </DialogContent>
    </Dialog>
-  </div>
+  </motion.div>
  );
 }
