@@ -80,7 +80,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
        {'- '}
        {dic.invoice.payment}
       </span>
-      <span>{payment}</span>
+      <span>{format(payment)}</span>
      </div>
      <div
       className={

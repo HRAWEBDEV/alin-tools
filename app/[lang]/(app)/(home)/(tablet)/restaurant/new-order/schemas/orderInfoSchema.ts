@@ -4,6 +4,11 @@ import { z } from 'zod';
 const defaultOrderInfo: Partial<OrderInfo> = {
  saleTime: null,
  saleType: null,
+ waiter: null,
+ contract: null,
+ subscriber: null,
+ customer: null,
+ room: null,
  comment: '',
 };
 
@@ -14,6 +19,38 @@ function createOrderInfoSchema({}: { dic: NewOrderDictionary }) {
    .object({
     key: z.string(),
     value: z.string(),
+   })
+   .nullable(),
+  waiter: z
+   .object({
+    key: z.string(),
+    value: z.string(),
+   })
+   .nullable(),
+  contract: z
+   .object({
+    key: z.string(),
+    value: z.string(),
+   })
+   .nullable(),
+  subscriber: z
+   .object({
+    key: z.string(),
+    value: z.string(),
+   })
+   .nullable(),
+  room: z
+   .object({
+    key: z.string(),
+    value: z.string(),
+   })
+   .nullable(),
+  customer: z
+
+   .object({
+    key: z.string(),
+    value: z.string(),
+    code: z.string(),
    })
    .nullable(),
   saleType: z

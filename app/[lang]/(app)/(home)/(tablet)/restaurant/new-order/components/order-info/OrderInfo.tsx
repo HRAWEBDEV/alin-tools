@@ -238,21 +238,105 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
      </Field>
      <Field>
       <FieldLabel htmlFor='subscriber'>{dic.orderInfo.subscriber}</FieldLabel>
-      <InputGroup>
-       <InputGroupInput id='subscriber' />
-      </InputGroup>
+      <Controller
+       control={control}
+       name='table'
+       render={({ field }) => (
+        <Drawer>
+         <DrawerTrigger asChild>
+          <Button
+           id='subscriber'
+           variant='outline'
+           role='combobox'
+           className='justify-between'
+          >
+           <span>{field.value?.value || ''}</span>
+           <div className='flex gap-2'>
+            <ChevronsUpDown />
+           </div>
+          </Button>
+         </DrawerTrigger>
+         <DrawerContent className='h-[80svh]'>
+          <DrawerHeader className='hidden'>
+           <DrawerTitle>{dic.orderInfo.subscriber}</DrawerTitle>
+          </DrawerHeader>
+          <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+           <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
+            {dic.orderInfo.subscriber}
+           </h1>
+          </div>
+         </DrawerContent>
+        </Drawer>
+       )}
+      />
      </Field>
      <Field>
       <FieldLabel htmlFor='customer'>{dic.orderInfo.customer}</FieldLabel>
-      <InputGroup>
-       <InputGroupInput id='customer' />
-      </InputGroup>
+      <Controller
+       control={control}
+       name='table'
+       render={({ field }) => (
+        <Drawer>
+         <DrawerTrigger asChild>
+          <Button
+           id='customer'
+           variant='outline'
+           role='combobox'
+           className='justify-between'
+          >
+           <span>{field.value?.value || ''}</span>
+           <div className='flex gap-2'>
+            <ChevronsUpDown />
+           </div>
+          </Button>
+         </DrawerTrigger>
+         <DrawerContent className='h-[80svh]'>
+          <DrawerHeader className='hidden'>
+           <DrawerTitle>{dic.orderInfo.customer}</DrawerTitle>
+          </DrawerHeader>
+          <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+           <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
+            {dic.orderInfo.customer}
+           </h1>
+          </div>
+         </DrawerContent>
+        </Drawer>
+       )}
+      />
      </Field>
      <Field>
       <FieldLabel htmlFor='room'>{dic.orderInfo.room}</FieldLabel>
-      <InputGroup>
-       <InputGroupInput id='room' />
-      </InputGroup>
+      <Controller
+       control={control}
+       name='table'
+       render={({ field }) => (
+        <Drawer>
+         <DrawerTrigger asChild>
+          <Button
+           id='room'
+           variant='outline'
+           role='combobox'
+           className='justify-between'
+          >
+           <span>{field.value?.value || ''}</span>
+           <div className='flex gap-2'>
+            <ChevronsUpDown />
+           </div>
+          </Button>
+         </DrawerTrigger>
+         <DrawerContent className='h-[80svh]'>
+          <DrawerHeader className='hidden'>
+           <DrawerTitle>{dic.orderInfo.room}</DrawerTitle>
+          </DrawerHeader>
+          <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+           <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
+            {dic.orderInfo.room}
+           </h1>
+          </div>
+         </DrawerContent>
+        </Drawer>
+       )}
+      />
      </Field>
      <Field>
       <FieldLabel htmlFor='tableNo'>{dic.orderInfo.tableNo}</FieldLabel>
@@ -366,9 +450,37 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
      </Field>
      <Field>
       <FieldLabel htmlFor='waiter'>{dic.orderInfo.waiter}</FieldLabel>
-      <InputGroup>
-       <InputGroupInput id='waiter' {...register('employeeTip')} />
-      </InputGroup>
+      <Controller
+       control={control}
+       name='table'
+       render={({ field }) => (
+        <Drawer>
+         <DrawerTrigger asChild>
+          <Button
+           id='waiter'
+           variant='outline'
+           role='combobox'
+           className='justify-between'
+          >
+           <span>{field.value?.value || ''}</span>
+           <div className='flex gap-2'>
+            <ChevronsUpDown />
+           </div>
+          </Button>
+         </DrawerTrigger>
+         <DrawerContent className='h-[80svh]'>
+          <DrawerHeader className='hidden'>
+           <DrawerTitle>{dic.orderInfo.waiter}</DrawerTitle>
+          </DrawerHeader>
+          <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+           <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
+            {dic.orderInfo.waiter}
+           </h1>
+          </div>
+         </DrawerContent>
+        </Drawer>
+       )}
+      />
      </Field>
      <Field>
       <FieldLabel htmlFor='rounding'>{dic.orderInfo.roundingValue}</FieldLabel>
