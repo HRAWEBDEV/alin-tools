@@ -1,7 +1,7 @@
 'use client';
 
 import { axios } from '@/app/[lang]/(app)/utils/defaultAxios';
-import { ReactNode, useCallback, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { LoginProvider } from './login/LoginProvider';
 
 export default function LoginResponseInterceptor({
@@ -13,32 +13,32 @@ export default function LoginResponseInterceptor({
  function handleToggleModal(open?: boolean) {
   setIsOpen((pre) => (open === undefined ? !pre : open));
  }
- const checkTokenAvailability = useCallback(() => {
-  const interceptor = axios.interceptors.response.use(
-   (response) => {
-    return response;
-   },
-   async (error) => {
-    if (
-     error.response &&
-     (error.response.status === 403 || error.response.status === 401)
-    ) {
-     console.error('Response error :: ', error.response);
-     setIsOpen(true);
-    }
-    return Promise.reject(error);
-   }
-  );
-
-  return () => {
-   axios.interceptors.response.eject(interceptor);
-  };
- }, []);
 
  useEffect(() => {
+  const checkTokenAvailability = () => {
+   const interceptor = axios.interceptors.response.use(
+    (response) => {
+     return response;
+    },
+    async (error) => {
+     if (
+      error.response &&
+      (error.response.status === 403 || error.response.status === 401)
+     ) {
+      console.error('Response error :: ', error.response);
+      setIsOpen(true);
+     }
+     return Promise.reject(error);
+    }
+   );
+
+   return () => {
+    axios.interceptors.response.eject(interceptor);
+   };
+  };
   const eject = checkTokenAvailability();
   return eject;
- }, [checkTokenAvailability]);
+ }, []);
 
  return (
   <LoginProvider
