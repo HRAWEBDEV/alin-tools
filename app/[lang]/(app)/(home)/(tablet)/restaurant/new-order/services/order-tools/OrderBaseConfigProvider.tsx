@@ -18,6 +18,7 @@ import {
  getOrderServiceRates,
  closeOrder,
  getFreeTables,
+ getOrderPayment,
 } from '../newOrderApiActions';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { filterItemPrograms } from '../../utils/filterItemPrograms';
@@ -286,6 +287,17 @@ export default function OrderBaseConfigProvider({
     });
    }
    return freeTables;
+  },
+ });
+ // get order payment
+ const { data: orderPayment } = useQuery({
+  enabled: !!userOrder?.id,
+  queryKey: [newOrderKey, 'order-payment'],
+  async queryFn({ signal }) {
+   getOrderPayment({
+    signal,
+    orderID: userOrder!.id,
+   });
   },
  });
  //

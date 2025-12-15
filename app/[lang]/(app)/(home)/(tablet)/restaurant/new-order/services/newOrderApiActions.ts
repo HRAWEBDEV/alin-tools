@@ -270,6 +270,18 @@ function closeOrder({ orderID }: { orderID: number }) {
  return axios.post(`/Restaurant/SaleInvoice/CloseOrder?orderID=${orderID}`);
 }
 
+function getOrderPayment({
+ orderID,
+ signal,
+}: {
+ orderID: number;
+ signal: AbortSignal;
+}) {
+ return axios.get<number>(
+  `/Restaurant/SaleInvoice/GetOrderCashPrePayment?orderID=${orderID}`,
+ );
+}
+
 export type {
  InitialData,
  ItemGroup,
@@ -289,4 +301,5 @@ export {
  saveOrder,
  getOrderServiceRates,
  closeOrder,
+ getOrderPayment,
 };
