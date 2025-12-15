@@ -5,7 +5,7 @@ import ShareDictionaryProvider from './services/share-dictionary/ShareDictionary
 import { type Locale, locales } from '@/internalization/app/localization';
 import { Toaster } from '@/components/ui/sonner';
 import AxiosBaseConfig from './services/axios-base-config/AxiosBaseConfig';
-import LoginResponseInterceptor from '@/app/[lang]/(app)/login/services/LoginResponseInterceptor';
+import { LoginProvider } from './login/services/login/LoginProvider';
 
 export default async function AppLayout({
  children,
@@ -23,7 +23,7 @@ export default async function AppLayout({
    loginDictionary={loginDic}
   >
    <AxiosBaseConfig />
-   <LoginResponseInterceptor>{children}</LoginResponseInterceptor>
+   <LoginProvider>{children}</LoginProvider>
    <Toaster
     className='font-[inherit]!'
     position={contentDirection === 'rtl' ? 'top-right' : 'top-left'}
