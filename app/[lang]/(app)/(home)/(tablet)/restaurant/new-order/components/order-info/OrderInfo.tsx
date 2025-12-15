@@ -33,6 +33,7 @@ import { ChevronsUpDown } from 'lucide-react';
 import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseConfigContext';
 import { NumericFormat } from 'react-number-format';
 import { Spinner } from '@/components/ui/spinner';
+import { BsTrash } from 'react-icons/bs';
 
 export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
  const { control, register, getValues } = useFormContext<OrderInfo>();
@@ -251,7 +252,10 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            className='justify-between h-11'
           >
            <span>{field.value?.value || ''}</span>
-           <div className='flex gap-2'>
+           <div className='flex gap-2 items-center'>
+            <Button variant={'ghost'} size={'icon-lg'}>
+             <BsTrash className='size-5 text-red-700 dark:text-red-400' />
+            </Button>
             <ChevronsUpDown />
            </div>
           </Button>
@@ -285,7 +289,10 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            className='justify-between h-11'
           >
            <span>{field.value?.value || ''}</span>
-           <div className='flex gap-2'>
+           <div className='flex gap-2 items-center'>
+            <Button variant={'ghost'} size={'icon-lg'}>
+             <BsTrash className='size-5 text-red-700 dark:text-red-400' />
+            </Button>
             <ChevronsUpDown />
            </div>
           </Button>
@@ -319,7 +326,10 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            className='justify-between h-11'
           >
            <span>{field.value?.value || ''}</span>
-           <div className='flex gap-2'>
+           <div className='flex gap-2 items-center'>
+            <Button variant={'ghost'} size={'icon-lg'}>
+             <BsTrash className='size-5 text-red-700 dark:text-red-400' />
+            </Button>
             <ChevronsUpDown />
            </div>
           </Button>
@@ -463,7 +473,10 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            className='justify-between h-11'
           >
            <span>{field.value?.value || ''}</span>
-           <div className='flex gap-2'>
+           <div className='flex gap-2 items-center'>
+            <Button variant={'ghost'} size={'icon-lg'}>
+             <BsTrash className='size-5 text-red-700 dark:text-red-400' />
+            </Button>
             <ChevronsUpDown />
            </div>
           </Button>
