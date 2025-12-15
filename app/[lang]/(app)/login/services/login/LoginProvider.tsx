@@ -43,6 +43,7 @@ function LoginProvider({
 function useLogin() {
  const context = use(loginContext);
  if (!context) throw new OutOfContext('LoginContext');
+ return context;
 }
 
 export { LoginProvider, useLogin };

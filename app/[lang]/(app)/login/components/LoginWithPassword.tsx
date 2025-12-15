@@ -44,7 +44,7 @@ export default function LoginWithPassword({ dic }: { dic: LoginDictionary }) {
  const [showPassword, setShowPassword] = useState(false);
  const { localeInfo } = useBaseConfig();
  const router = useRouter();
- const { handleToggleModal } = useLogin();
+ const { changeLoginModalIsOpen: handleToggleModal } = useLogin();
  const {
   login: {
    withPassword: { form: formDic, formValidation: formValidationDic },
