@@ -57,7 +57,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           <Button
            variant='outline'
            id='orderDate'
-           className='justify-between font-normal'
+           className='justify-between font-normal h-11'
            onBlur={field.onBlur}
           >
            <span>
@@ -87,7 +87,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
       render={({ field }) => (
        <Field>
         <FieldLabel htmlFor='orderTime'>{dic.orderInfo.orderTime}</FieldLabel>
-        <InputGroup>
+        <InputGroup className='h-11'>
          <InputGroupInput
           id='orderTime'
           type='time'
@@ -124,7 +124,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            id='saleTime'
            variant='outline'
            role='combobox'
-           className='justify-between'
+           className='justify-between h-11'
           >
            <span>{field.value?.value || ''}</span>
            <ChevronsUpDown />
@@ -186,7 +186,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            id='saleType'
            variant='outline'
            role='combobox'
-           className='justify-between'
+           className='justify-between h-11'
           >
            <span>{field.value?.value || ''}</span>
            <ChevronsUpDown />
@@ -240,7 +240,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
       <FieldLabel htmlFor='subscriber'>{dic.orderInfo.subscriber}</FieldLabel>
       <Controller
        control={control}
-       name='table'
+       name='subscriber'
        render={({ field }) => (
         <Drawer>
          <DrawerTrigger asChild>
@@ -248,7 +248,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            id='subscriber'
            variant='outline'
            role='combobox'
-           className='justify-between'
+           className='justify-between h-11'
           >
            <span>{field.value?.value || ''}</span>
            <div className='flex gap-2'>
@@ -274,7 +274,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
       <FieldLabel htmlFor='customer'>{dic.orderInfo.customer}</FieldLabel>
       <Controller
        control={control}
-       name='table'
+       name='customer'
        render={({ field }) => (
         <Drawer>
          <DrawerTrigger asChild>
@@ -282,7 +282,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            id='customer'
            variant='outline'
            role='combobox'
-           className='justify-between'
+           className='justify-between h-11'
           >
            <span>{field.value?.value || ''}</span>
            <div className='flex gap-2'>
@@ -308,7 +308,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
       <FieldLabel htmlFor='room'>{dic.orderInfo.room}</FieldLabel>
       <Controller
        control={control}
-       name='table'
+       name='room'
        render={({ field }) => (
         <Drawer>
          <DrawerTrigger asChild>
@@ -316,7 +316,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            id='room'
            variant='outline'
            role='combobox'
-           className='justify-between'
+           className='justify-between h-11'
           >
            <span>{field.value?.value || ''}</span>
            <div className='flex gap-2'>
@@ -350,7 +350,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            id='saleType'
            variant='outline'
            role='combobox'
-           className='justify-between'
+           className='justify-between h-11'
            disabled={freeTablesLoading}
           >
            <span>{field.value?.value || ''}</span>
@@ -406,13 +406,13 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
      </Field>
      <Field>
       <FieldLabel htmlFor='persons'>{dic.orderInfo.guestCount}</FieldLabel>
-      <InputGroup>
+      <InputGroup className='h-11'>
        <InputGroupInput id='persons' {...register('persons')} />
       </InputGroup>
      </Field>
      <Field>
       <FieldLabel htmlFor='invoiceType'>{dic.orderInfo.invoiceType}</FieldLabel>
-      <InputGroup>
+      <InputGroup className='h-11'>
        <InputGroupInput
         id='invoiceType'
         readOnly
@@ -426,7 +426,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
      </Field>
      <Field className='col-span-full'>
       <FieldLabel htmlFor='customer'>{dic.orderInfo.customerName}</FieldLabel>
-      <InputGroup>
+      <InputGroup className='h-11'>
        <InputGroupInput id='customer' />
       </InputGroup>
      </Field>
@@ -434,7 +434,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
       <FieldLabel htmlFor='discount-rate'>
        {dic.orderInfo.discountRate}
       </FieldLabel>
-      <InputGroup>
+      <InputGroup className='h-11'>
        <InputGroupInput
         type='number'
         id='discount-rate'
@@ -444,7 +444,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
      </Field>
      <Field>
       <FieldLabel htmlFor='bonNo'>{dic.orderInfo.bonNo}</FieldLabel>
-      <InputGroup>
+      <InputGroup className='h-11'>
        <InputGroupInput type='number' id='bonNo' {...register('bonNo')} />
       </InputGroup>
      </Field>
@@ -452,7 +452,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
       <FieldLabel htmlFor='waiter'>{dic.orderInfo.waiter}</FieldLabel>
       <Controller
        control={control}
-       name='table'
+       name='waiter'
        render={({ field }) => (
         <Drawer>
          <DrawerTrigger asChild>
@@ -460,7 +460,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            id='waiter'
            variant='outline'
            role='combobox'
-           className='justify-between'
+           className='justify-between h-11'
           >
            <span>{field.value?.value || ''}</span>
            <div className='flex gap-2'>
@@ -488,7 +488,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        control={control}
        name='rounding'
        render={({ field: { value, onChange, ...other } }) => (
-        <InputGroup>
+        <InputGroup className='h-11'>
          <NumericFormat
           id='rounding'
           {...other}
@@ -507,7 +507,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        control={control}
        name='deliveryValue'
        render={({ field: { value, onChange, ...other } }) => (
-        <InputGroup>
+        <InputGroup className='h-11'>
          <NumericFormat
           id='delivery'
           {...other}
@@ -526,7 +526,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        control={control}
        name='employeeTip'
        render={({ field: { value, onChange, ...other } }) => (
-        <InputGroup>
+        <InputGroup className='h-11'>
          <NumericFormat
           id='employeeTip'
           {...other}
