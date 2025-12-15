@@ -9,6 +9,7 @@ import {
 } from './orderBaseConfigContext';
 import {
  type ItemGroup,
+ type Order,
  newOrderKey,
  getInitData,
  getItemPrograms,
@@ -320,7 +321,57 @@ export default function OrderBaseConfigProvider({
    },
   });
 
- // get new order data
+ // get new order save package
+ function getNewOrderSavePackage({
+  userOrder,
+  orderInfo: {},
+ }: {
+  orderInfo: OrderInfo;
+  userOrder?: Order;
+ }) {
+  const newOrderSavePackage = {
+   ...(userOrder || {}),
+   id: userOrder ? userOrder.id : 0,
+   // occupied: isOnTableDisable ? false : onTable,
+   // registerID: room ? Number(room.key) : null,
+   // orderNo: initialData.orderNo,
+   // orderStateID: initialData.orderStateID,
+   // dailyNo: initialData.dailyNo,
+   // customerID: customer ? Number(customer.key) : null,
+   // tableID: table ? Number(table.key) : null,
+   // waiterPersonID: waiter ? Number(waiter.key) : null,
+   // subscriberPersonID: subscriber ? Number(subscriber.key) : null,
+   // saleTimeID: Number(saleTime.key),
+   // saleTypeID: Number(saleType.key),
+   // bonNo: bonNo || null,
+   // orderDateTimeOffset: orderDateTimeOffset.toISOString(),
+   // dateTimeDateTimeOffset: dateTimeDateTimeOffset.toISOString(),
+   // persons: persons || null,
+   // roundingValue: roundingValue || 0,
+   // tipValue: tipValue || 0,
+   // delivaryValue: deliveryValue || 0,
+   // discountRate: discountRate || null,
+   // sValue: totalOrderResult.totalSValue,
+   // tax: totalOrderResult.totalTax,
+   // service: totalOrderResult.totalService,
+   // payment: totalOrderResult.payment,
+   // discount: totalOrderResult.totalDiscount,
+   // payableValue: totalOrderResult.remained,
+   // name: name || null,
+   // comment: comment || null,
+   // personID: orderPersonID,
+   // arzID: 1,
+   // orderTypeID: getOrderTypeID({
+   //  tableID: table ? table.key : null,
+   //  saleTypeID: saleType ? saleType.key : null,
+   // }),
+   // contractMenuID: contract ? Number(contract.key) : null,
+   // seatID: null,
+   // employeePersonID: null,
+   // deliveryByAgent:
+   //  saleType.key == SaleTypes.delivery ? deliveryByAgent : false,
+  };
+ }
 
  // loadings
  const shopLoading =
