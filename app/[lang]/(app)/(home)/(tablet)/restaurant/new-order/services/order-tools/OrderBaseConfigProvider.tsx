@@ -396,7 +396,8 @@ export default function OrderBaseConfigProvider({
   initLoading ||
   userOrderItemsLoading ||
   userOrderLoading ||
-  serviceRatesLoading;
+  serviceRatesLoading ||
+  orderPaymentLoading;
  const shopInfoLoading = shopLoading;
  //
 
