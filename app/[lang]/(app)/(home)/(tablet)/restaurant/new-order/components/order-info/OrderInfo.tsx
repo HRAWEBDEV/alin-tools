@@ -34,6 +34,7 @@ import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseC
 import { NumericFormat } from 'react-number-format';
 import { Spinner } from '@/components/ui/spinner';
 import { BsTrash } from 'react-icons/bs';
+import FindRoom from '../find-room/FindRoom';
 
 export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
  const { control, register, getValues } = useFormContext<OrderInfo>();
@@ -202,7 +203,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
             {dic.orderInfo.saleType}
            </h1>
           </div>
-          <div>
+          <div className='overflow-hidden overflow-y-auto'>
            {data?.saleTypes.length ? (
             <ul>
              {data.saleTypes.map((item) => (
@@ -343,6 +344,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
             {dic.orderInfo.room}
            </h1>
           </div>
+          <FindRoom dic={dic} />
          </DrawerContent>
         </Drawer>
        )}
@@ -417,7 +419,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
      <Field>
       <FieldLabel htmlFor='persons'>{dic.orderInfo.guestCount}</FieldLabel>
       <InputGroup className='h-11'>
-       <InputGroupInput id='persons' {...register('persons')} />
+       <InputGroupInput id='persons' {...register('persons')} disabled />
       </InputGroup>
      </Field>
      <Field>

@@ -112,7 +112,7 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
          </InputGroup>
         </div>
        </div>
-       <div>
+       <div className='overflow-hidden overflow-y-auto'>
         {filteredSalons.length ? (
          <ul>
           {filteredSalons.map((item) => (
