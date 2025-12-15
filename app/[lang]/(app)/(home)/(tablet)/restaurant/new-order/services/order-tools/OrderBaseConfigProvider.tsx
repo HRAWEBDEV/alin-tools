@@ -45,6 +45,7 @@ import { toast } from 'sonner';
 import { Spinner } from '@/components/ui/spinner';
 import { useRouter } from 'next/navigation';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
+import { FaUncharted } from 'react-icons/fa6';
 
 export default function OrderBaseConfigProvider({
  children,
@@ -274,10 +275,10 @@ export default function OrderBaseConfigProvider({
     signal,
     orderDate: orderDateValue.toISOString(),
     saleTimeID: saleTimeValue!.key,
-    salonID: salonIDQuery!,
+    salonID: salonIDQuery || undefined,
    });
    const freeTables = [...res.data];
-   if (tableIDQuery && tableNoQuery) {
+   if (orderIDQuery && tableIDQuery && tableNoQuery) {
     freeTables.unshift({
      key: tableIDQuery.toString(),
      value: tableNoQuery,
@@ -318,6 +319,9 @@ export default function OrderBaseConfigProvider({
     toast.error(err.message || '');
    },
   });
+
+ // get new order data
+
  // loadings
  const shopLoading =
   initLoading ||
@@ -338,6 +342,7 @@ export default function OrderBaseConfigProvider({
   queries: {
    fromSalons: fromSalonsQuery,
    orderID: orderIDQuery,
+   salonName: salonNameQuery,
   },
   initialDataInfo: {
    data: initData,

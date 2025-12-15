@@ -20,7 +20,7 @@ export default function NewOrderHeader({ dic }: { dic: NewOrderDictionary }) {
  const { watch } = useFormContext<OrderInfo>();
  const router = useRouter();
  const {
-  queries: { fromSalons },
+  queries: { fromSalons, salonName },
  } = useOrderBaseConfigContext();
  const [tableValue, saleTimeValue, saleTypeValue] = watch([
   'table',
@@ -80,19 +80,25 @@ export default function NewOrderHeader({ dic }: { dic: NewOrderDictionary }) {
     </div>
     <div>
      <span>{dic.orderInfo.salonName}: </span>
-     <span className='font-medium text-primary'>---</span>
+     <span className='font-medium text-primary'>{salonName || '---'}</span>
     </div>
     <div>
      <span>{dic.orderInfo.tableNo}: </span>
-     <span className='font-medium text-primary'>{tableValue?.value}</span>
+     <span className='font-medium text-primary'>
+      {tableValue?.value || '---'}
+     </span>
     </div>
     <div>
      <span>{dic.orderInfo.saleTime}: </span>
-     <span className='font-medium text-primary'>{saleTimeValue?.value}</span>
+     <span className='font-medium text-primary'>
+      {saleTimeValue?.value || '---'}
+     </span>
     </div>
     <div>
      <span>{dic.orderInfo.saleType}: </span>
-     <span className='font-medium text-primary'>{saleTypeValue?.value}</span>
+     <span className='font-medium text-primary'>
+      {saleTypeValue?.value || '---'}
+     </span>
     </div>
    </div>
   </div>

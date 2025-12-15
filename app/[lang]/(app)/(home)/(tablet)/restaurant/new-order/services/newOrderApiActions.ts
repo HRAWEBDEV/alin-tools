@@ -161,16 +161,18 @@ function getFreeTables({
  orderDate,
  signal,
 }: {
- salonID: string;
+ salonID?: string;
  saleTimeID: string;
  orderDate: string;
  signal: AbortSignal;
 }) {
  const searchPamras = new URLSearchParams([
-  ['salonID', salonID],
   ['saleTimeID', saleTimeID],
   ['date', orderDate],
  ]);
+ if (salonID) {
+  searchPamras.set('salonID', salonID);
+ }
  return axios.get<Combo[]>(
   `/Restaurant/SaleInvoice/GetAllocatableTables?${searchPamras.toString()}`,
   {

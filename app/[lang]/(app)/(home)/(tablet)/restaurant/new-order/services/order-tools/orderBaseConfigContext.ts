@@ -26,6 +26,7 @@ interface OrderBaseConfig {
  queries: {
   fromSalons: boolean;
   orderID: number | null;
+  salonName: string | null;
  };
  initialDataInfo: {
   data?: InitialData;
