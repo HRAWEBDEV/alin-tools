@@ -17,7 +17,13 @@ export default function UnExpectedError() {
     <p className='text-xl font-medium mb-2'>{unExpectedError.title}</p>
     <p>{unExpectedError.pleaseTryAgainLater}</p>
    </div>
-   <Button variant='ghost' size='icon-lg'>
+   <Button
+    variant='ghost'
+    size='icon-lg'
+    onClick={() => {
+     location.reload();
+    }}
+   >
     <IoReload className='size-6' />
    </Button>
   </div>
