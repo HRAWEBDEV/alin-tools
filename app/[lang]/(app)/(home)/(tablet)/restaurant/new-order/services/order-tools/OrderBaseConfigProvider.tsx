@@ -262,7 +262,7 @@ export default function OrderBaseConfigProvider({
  });
  // get free tables
  const { data: freeTables, isLoading: freeTablesIsLoading } = useQuery({
-  enabled: Boolean(saleTimeValue && orderDateValue && salonIDQuery),
+  enabled: Boolean(saleTimeValue && orderDateValue),
   staleTime: 'static',
   gcTime: 0,
   queryKey: [

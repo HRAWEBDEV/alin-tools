@@ -36,6 +36,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { BsTrash } from 'react-icons/bs';
 import FindRooms from '../find-room/FindRooms';
 import FindSubscribers from '../find-subscriber/FindSubscribers';
+import FindCustomer from '../find-customer/FindCustomer';
 import { SaleTypes } from '../../utils/SaleTypes';
 
 export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
@@ -306,7 +307,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            className='justify-between h-11'
            disabled={getValues('saleType')?.key === SaleTypes.room}
           >
-           <span>{field.value?.value || ''}</span>
+           <span>{field.value?.key || ''}</span>
            <div className='flex gap-2 items-center'>
             {getValues('customer') && (
              <Button
@@ -324,16 +325,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            </div>
           </Button>
          </DrawerTrigger>
-         <DrawerContent className='h-[min(80svh,35rem)]'>
-          <DrawerHeader className='hidden'>
-           <DrawerTitle>{dic.orderInfo.customer}</DrawerTitle>
-          </DrawerHeader>
-          <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
-           <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
-            {dic.orderInfo.customer}
-           </h1>
-          </div>
-         </DrawerContent>
+         <FindCustomer dic={dic} />
         </Drawer>
        )}
       />

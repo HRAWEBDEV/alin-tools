@@ -76,6 +76,13 @@
   "nationalCode": "کد ملی",
   "phoneNumber": "شماره تماس"
  },
+ "findCustomer": {
+  "search": "جستجو",
+  "code": "کد",
+  "name": "نام",
+  "nationalCode": "کد ملی",
+  "phoneNumber": "شماره تماس"
+ },
  "findRooms": {
   "search": "جستجو",
   "roomNo": "شماره اتاق",
