@@ -38,7 +38,7 @@ import FindRooms from '../find-room/FindRooms';
 import FindSubscribers from '../find-subscriber/FindSubscribers';
 
 export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
- const { control, register, getValues } = useFormContext<OrderInfo>();
+ const { control, register, getValues, setValue } = useFormContext<OrderInfo>();
  const {
   initialDataInfo: { data, freeTablesLoading, freeTables },
  } = useOrderBaseConfigContext();
@@ -320,9 +320,18 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           >
            <span>{field.value?.value || ''}</span>
            <div className='flex gap-2 items-center'>
-            <Button variant={'ghost'} size={'icon-lg'}>
-             <BsTrash className='size-5 text-red-700 dark:text-red-400' />
-            </Button>
+            {!!getValues('room') && (
+             <Button
+              variant={'ghost'}
+              size={'icon-lg'}
+              onClick={(e) => {
+               e.stopPropagation();
+               setValue('room', null);
+              }}
+             >
+              <BsTrash className='size-5 text-red-700 dark:text-red-400' />
+             </Button>
+            )}
             <ChevronsUpDown />
            </div>
           </Button>

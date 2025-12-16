@@ -5,6 +5,7 @@ import {
  DrawerContent,
  DrawerHeader,
  DrawerTitle,
+ DrawerClose,
 } from '@/components/ui/drawer';
 import { FaSearch } from 'react-icons/fa';
 import {
@@ -19,8 +20,11 @@ import { IoReloadOutline } from 'react-icons/io5';
 import NoItemFound from '@/app/[lang]/(app)/components/NoItemFound';
 import Highlighter from 'react-highlight-words';
 import { useDebouncedValue } from '@tanstack/react-pacer';
+import { useFormContext } from 'react-hook-form';
+import { OrderInfo } from '../../schemas/orderInfoSchema';
 
 export default function FindRooms({ dic }: { dic: NewOrderDictionary }) {
+ const { setValue } = useFormContext<OrderInfo>();
  const containerRef = useRef<HTMLDivElement>(null);
  const [searchedText, setSearchedText] = useState('');
  const [debouncedSearch] = useDebouncedValue(searchedText, {
@@ -118,33 +122,41 @@ export default function FindRooms({ dic }: { dic: NewOrderDictionary }) {
           )
           .map(({ id, guestFullName, roomLabel }) => (
            <li key={id}>
-            <Button
-             variant={'outline'}
-             className='min-h-20 items-start justify-start text-start h-auto w-full bg-background shadow-md'
-            >
-             <div className='grid gap-1'>
-              <div>
-               <span className='text-sm text-neutral-600 dark:text-neutral-400'>
-                {dic.findRooms.roomNo}:{' '}
-               </span>
-               <Highlighter
-                className='text-sm'
-                searchWords={[debouncedSearch]}
-                textToHighlight={roomLabel}
-               />
+            <DrawerClose asChild>
+             <Button
+              variant={'outline'}
+              className='py-4 items-start justify-start text-start h-auto w-full bg-background shadow-md'
+              onClick={() => {
+               setValue('room', {
+                key: id.toString(),
+                value: roomLabel,
+               });
+              }}
+             >
+              <div className='grid gap-1'>
+               <div>
+                <span className='text-sm text-neutral-600 dark:text-neutral-400'>
+                 {dic.findRooms.roomNo}:{' '}
+                </span>
+                <Highlighter
+                 className='text-sm'
+                 searchWords={[debouncedSearch]}
+                 textToHighlight={roomLabel}
+                />
+               </div>
+               <div>
+                <span className='text-sm text-neutral-600 dark:text-neutral-400'>
+                 {dic.findRooms.guestName}:{' '}
+                </span>
+                <Highlighter
+                 className='text-sm'
+                 searchWords={[debouncedSearch]}
+                 textToHighlight={guestFullName}
+                />
+               </div>
               </div>
-              <div>
-               <span className='text-sm text-neutral-600 dark:text-neutral-400'>
-                {dic.findRooms.guestName}:{' '}
-               </span>
-               <Highlighter
-                className='text-sm'
-                searchWords={[debouncedSearch]}
-                textToHighlight={guestFullName}
-               />
-              </div>
-             </div>
-            </Button>
+             </Button>
+            </DrawerClose>
            </li>
           ))}
         </Fragment>
