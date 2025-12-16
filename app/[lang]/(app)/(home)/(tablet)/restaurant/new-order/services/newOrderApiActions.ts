@@ -1,5 +1,5 @@
 import { axios } from '@/app/[lang]/(app)/utils/defaultAxios';
-import type { Combo } from '../../utils/apiTypes';
+import type { Combo, PagedData } from '../../utils/apiTypes';
 
 const newOrderKey = 'restaurant-new-order';
 
@@ -125,6 +125,19 @@ type SaveOrderPackage = {
  orderItems: OrderItem[];
 };
 
+interface Subscriber {
+ personID: number;
+ disabled: boolean;
+ code: number;
+ name: string;
+ address: string | null;
+ email: string | null;
+ fatherName: string | null;
+ genderID: number | null;
+ mobileNo: string | null;
+ nationalCode: string | null;
+}
+
 function getInitData({ signal }: { signal: AbortSignal }) {
  return axios.get<InitialData>('/Restaurant/SaleInvoice/GetInitDatas', {
   signal,
@@ -237,6 +250,7 @@ function saveOrder({
  }>(`$/Restaurant/SaleInvoice/SaveOrder?${searchParams.toString()}`);
 }
 
+// service rates
 function getOrderServiceRates({
  orderID,
  saleTypeID,
@@ -270,6 +284,7 @@ function closeOrder({ orderID }: { orderID: number }) {
  return axios.post(`/Restaurant/SaleInvoice/CloseOrder?orderID=${orderID}`);
 }
 
+// order payment
 function getOrderPayment({
  orderID,
  signal,
@@ -279,6 +294,41 @@ function getOrderPayment({
 }) {
  return axios.get<number>(
   `/Restaurant/SaleInvoice/GetOrderCashPrePayment?orderID=${orderID}`,
+  {
+   signal,
+  },
+ );
+}
+
+// subscribers
+function getSubscribers({
+ signal,
+ offset,
+ limit,
+ programID,
+ searchPhrase,
+}: {
+ signal: AbortSignal;
+ offset: number;
+ limit: number;
+ programID?: number;
+ searchPhrase?: string;
+}) {
+ const searchParams = new URLSearchParams([
+  ['limit', limit.toString()],
+  ['offset', offset.toString()],
+ ]);
+ if (searchPhrase) {
+  searchParams.set('searchParams', searchPhrase);
+ }
+ if (programID) {
+  searchParams.set('programID', programID.toString());
+ }
+ return axios.get<PagedData<Subscriber[]>>(
+  `/Restaurant/Subscriber/GetPagedSubscribers?${searchParams.toString()}`,
+  {
+   signal,
+  },
  );
 }
 
@@ -302,4 +352,5 @@ export {
  getOrderServiceRates,
  closeOrder,
  getOrderPayment,
+ getSubscribers,
 };

@@ -3,4 +3,11 @@ interface Combo {
  value: string;
 }
 
-export type { Combo };
+interface PagedData<T> {
+ rowsCount: number;
+ limit: number;
+ offset: number;
+ rows: T;
+}
+
+export type { Combo, PagedData };

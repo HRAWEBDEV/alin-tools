@@ -68,5 +68,10 @@
   "confirmMessage": "آیا از بستن سفارش اطمینان دارید؟",
   "confirm": "تایید",
   "cancel": "انصراف"
+ },
+ "findSubscribers": {
+  "search": "جستجو",
+  "code": "کد",
+  "name": "نام"
  }
 }
