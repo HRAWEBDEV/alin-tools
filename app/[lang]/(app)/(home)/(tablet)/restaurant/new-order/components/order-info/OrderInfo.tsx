@@ -34,7 +34,7 @@ import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseC
 import { NumericFormat } from 'react-number-format';
 import { Spinner } from '@/components/ui/spinner';
 import { BsTrash } from 'react-icons/bs';
-import FindRoom from '../find-room/FindRoom';
+import FindRooms from '../find-room/FindRooms';
 import FindSubscribers from '../find-subscriber/FindSubscribers';
 
 export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
@@ -327,17 +327,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            </div>
           </Button>
          </DrawerTrigger>
-         <DrawerContent className='h-[80svh]'>
-          <DrawerHeader className='hidden'>
-           <DrawerTitle>{dic.orderInfo.room}</DrawerTitle>
-          </DrawerHeader>
-          <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
-           <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
-            {dic.orderInfo.room}
-           </h1>
-          </div>
-          <FindRoom dic={dic} />
-         </DrawerContent>
+         <FindRooms dic={dic} />
         </Drawer>
        )}
       />

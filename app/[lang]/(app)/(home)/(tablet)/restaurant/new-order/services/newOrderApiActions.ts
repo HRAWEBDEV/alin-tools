@@ -138,6 +138,19 @@ interface Subscriber {
  nationalCode: string | null;
 }
 
+interface Customer {
+ id: number;
+ name: string;
+ code: string;
+}
+
+interface Room {
+ id: number;
+ registerID: number;
+ roomLabel: string;
+ guestFullName: string;
+}
+
 function getInitData({ signal }: { signal: AbortSignal }) {
  return axios.get<InitialData>('/Restaurant/SaleInvoice/GetInitDatas', {
   signal,
@@ -332,14 +345,71 @@ function getSubscribers({
  );
 }
 
+// customers
+function getCustomers({
+ signal,
+ offset,
+ limit,
+ searchPhrase,
+ registerID,
+}: {
+ signal: AbortSignal;
+ offset: number;
+ limit: number;
+ registerID?: number;
+ searchPhrase?: string;
+}) {
+ const searchParams = new URLSearchParams([
+  ['limit', limit.toString()],
+  ['offset', offset.toString()],
+ ]);
+ if (searchPhrase) {
+  searchParams.set('searchText', searchPhrase);
+ }
+ if (registerID) {
+  searchParams.set('registerID', registerID.toString());
+ }
+ return axios.get<PagedData<Customer[]>>(
+  `/Restaurant/SaleInvoice/GetPagedCustomers?${searchParams.toString()}`,
+  {
+   signal,
+  },
+ );
+}
+// rooms
+
+function getRooms({
+ signal,
+ offset,
+ limit,
+}: {
+ signal: AbortSignal;
+ offset: number;
+ limit: number;
+}) {
+ const searchParams = new URLSearchParams([
+  ['limit', limit.toString()],
+  ['offset', offset.toString()],
+ ]);
+ return axios.get<PagedData<Room[]>>(
+  `/Restaurant/SaleInvoice/GetRegisterGuests?${searchParams.toString()}`,
+  {
+   signal,
+  },
+ );
+}
+
 export type {
  InitialData,
+ Subscriber,
+ Customer,
  ItemGroup,
  ItemProgram,
  OrderItem,
  Order,
  OrderServiceRates,
  SaveOrderPackage,
+ Room,
 };
 export {
  newOrderKey,
@@ -353,4 +423,6 @@ export {
  closeOrder,
  getOrderPayment,
  getSubscribers,
+ getCustomers,
+ getRooms,
 };

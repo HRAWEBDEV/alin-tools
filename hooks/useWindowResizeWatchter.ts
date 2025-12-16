@@ -14,13 +14,13 @@ const breakpoints = {
 
 function useWindowResizeWatchter() {
  const [innerWidth, setInnerWidth] = useState(() => {
-  if (typeof window) {
+  if (typeof window !== undefined) {
    return window.innerWidth;
   }
   return 0;
  });
  const [innerHeight, setInnerHeight] = useState(() => {
-  if (typeof window) {
+  if (typeof window !== undefined) {
    return window.innerHeight;
   }
   return 0;
