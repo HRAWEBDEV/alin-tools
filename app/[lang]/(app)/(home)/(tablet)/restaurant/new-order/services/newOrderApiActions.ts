@@ -151,6 +151,11 @@ interface Room {
  guestFullName: string;
 }
 
+interface Tag {
+ id: number;
+ comment: string;
+}
+
 function getInitData({ signal }: { signal: AbortSignal }) {
  return axios.get<InitialData>('/Restaurant/SaleInvoice/GetInitDatas', {
   signal,
@@ -377,7 +382,6 @@ function getCustomers({
  );
 }
 // rooms
-
 function getRooms({
  signal,
  offset,
@@ -399,6 +403,33 @@ function getRooms({
  );
 }
 
+// get tags
+function getTags({
+ signal,
+ offset,
+ limit,
+ programID,
+}: {
+ signal: AbortSignal;
+ offset: number;
+ limit: number;
+ programID?: number;
+}) {
+ const searchParams = new URLSearchParams([
+  ['limit', limit.toString()],
+  ['offset', offset.toString()],
+ ]);
+ if (programID) {
+  searchParams.set('programID', programID.toString());
+ }
+ return axios.get<PagedData<Tag[]>>(
+  `/Restaurant/SaleInvoice/GetPagedTags?${searchParams.toString()}`,
+  {
+   signal,
+  },
+ );
+}
+
 export type {
  InitialData,
  Subscriber,
@@ -410,6 +441,7 @@ export type {
  OrderServiceRates,
  SaveOrderPackage,
  Room,
+ Tag,
 };
 export {
  newOrderKey,
@@ -425,4 +457,5 @@ export {
  getSubscribers,
  getCustomers,
  getRooms,
+ getTags,
 };

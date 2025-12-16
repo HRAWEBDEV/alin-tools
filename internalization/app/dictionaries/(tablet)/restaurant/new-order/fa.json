@@ -35,7 +35,8 @@
   "hasTableNo": "شماره میز",
   "sendToKitchen": "ارسال به آشپزخانه",
   "printCash": "چاپ رسید صندوق",
-  "deliveryAgent": "تحویل به پیک"
+  "deliveryAgent": "تحویل به پیک",
+  "addTag": "تگ"
  },
  "orderConfirm": {
   "removeOrderItemConfirmMessage": "آیا از حذف این آیتم اطمینان دارید؟",
@@ -89,5 +90,6 @@
   "guestName": "نام مهمان",
   "reload": "بروزرسانی مجدد",
   "loadMore": "موارد بیشتر"
- }
+ },
+ "findTags": {}
 }

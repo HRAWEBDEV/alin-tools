@@ -1,6 +1,7 @@
 import {
  type OrderItem,
  type ItemProgram,
+ type Tag,
 } from '../services/newOrderApiActions';
 
 type OrderItemActions =
@@ -29,6 +30,20 @@ type OrderItemActions =
    }
  | {
     type: 'clearOrderItems';
+   }
+ | {
+    type: 'addTag';
+    payload: {
+     itemID: ItemProgram['itemID'];
+     tag: Tag;
+    };
+   }
+ | {
+    type: 'removeTag';
+    payload: {
+     itemID: ItemProgram['itemID'];
+     tagID: number;
+    };
    };
 
 function removeOrderItems(
@@ -110,6 +125,29 @@ function orderItemsReducer(state: OrderItem[], action: OrderItemActions) {
    return removeOrderItems(newOrderItems, {
     type: 'removeOrderItems',
     payload: mustRemoveOrderIDs,
+   });
+  // tags
+  case 'addTag':
+   return state.map((order) => {
+    if (order.itemID === action.payload.itemID) {
+     return {
+      ...order,
+      tagID: action.payload.tag.id,
+      tagComment: action.payload.tag.comment,
+     };
+    }
+    return order;
+   });
+  case 'removeTag':
+   return state.map((order) => {
+    if (order.itemID === action.payload.itemID) {
+     return {
+      ...order,
+      tagID: null,
+      tagComment: null,
+     };
+    }
+    return order;
    });
   // clear order items
   case 'clearOrderItems':
