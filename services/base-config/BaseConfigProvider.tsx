@@ -1,5 +1,6 @@
 'use client';
 import { ReactNode, useEffect } from 'react';
+import { useWindowResizeWatchter } from '@/hooks/useWindowResizeWatchter';
 import {
  type BaseConfig,
  baseConfigContext,
@@ -17,6 +18,7 @@ interface Props {
 }
 
 export default function BaseConfigProvider({ children, activeLocale }: Props) {
+ const windowWatcher = useWindowResizeWatchter();
  // locale handler
  function onChangeLocale(newLocale: Locale) {
   if (newLocale === activeLocale) return;
@@ -33,6 +35,7 @@ export default function BaseConfigProvider({ children, activeLocale }: Props) {
   localeInfo: activeLocaleInfo,
   appVersion,
   appBirthDate,
+  windowWatcher,
   setLocale: onChangeLocale,
  };
 
