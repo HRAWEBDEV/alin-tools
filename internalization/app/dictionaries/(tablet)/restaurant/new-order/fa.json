@@ -79,6 +79,8 @@
  "findRooms": {
   "search": "جستجو",
   "roomNo": "شماره اتاق",
-  "guestName": "نام مهمان"
+  "guestName": "نام مهمان",
+  "reload": "بروزرسانی مجدد",
+  "loadMore": "موارد بیشتر"
  }
 }

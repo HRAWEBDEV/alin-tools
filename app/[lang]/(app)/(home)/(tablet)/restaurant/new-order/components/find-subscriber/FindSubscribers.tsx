@@ -16,7 +16,7 @@ import {
 export default function FindSubscribers({ dic }: { dic: NewOrderDictionary }) {
  const containerRef = useRef<HTMLDivElement>(null);
  return (
-  <DrawerContent className='h-[80svh]'>
+  <DrawerContent className='h-[min(80svh,35rem)]'>
    <DrawerHeader className='hidden'>
     <DrawerTitle>{dic.orderInfo.subscriber}</DrawerTitle>
    </DrawerHeader>

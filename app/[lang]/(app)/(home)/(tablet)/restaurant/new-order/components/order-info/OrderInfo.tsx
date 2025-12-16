@@ -133,7 +133,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            <ChevronsUpDown />
           </Button>
          </DrawerTrigger>
-         <DrawerContent className='h-[80svh]'>
+         <DrawerContent className='h-[min(80svh,35rem)]'>
           <DrawerHeader className='hidden'>
            <DrawerTitle>{dic.orderInfo.saleTime}</DrawerTitle>
           </DrawerHeader>
@@ -195,7 +195,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            <ChevronsUpDown />
           </Button>
          </DrawerTrigger>
-         <DrawerContent className='h-[80svh]'>
+         <DrawerContent className='h-[min(80svh,35rem)]'>
           <DrawerHeader className='hidden'>
            <DrawerTitle>{dic.orderInfo.saleType}</DrawerTitle>
           </DrawerHeader>
@@ -290,7 +290,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            </div>
           </Button>
          </DrawerTrigger>
-         <DrawerContent className='h-[80svh]'>
+         <DrawerContent className='h-[min(80svh,35rem)]'>
           <DrawerHeader className='hidden'>
            <DrawerTitle>{dic.orderInfo.customer}</DrawerTitle>
           </DrawerHeader>
@@ -354,7 +354,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            </div>
           </Button>
          </DrawerTrigger>
-         <DrawerContent className='h-[80svh]'>
+         <DrawerContent className='h-[min(80svh,35rem)]'>
           <DrawerHeader className='hidden'>
            <DrawerTitle>{dic.orderInfo.tableNo}</DrawerTitle>
           </DrawerHeader>
@@ -465,7 +465,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            </div>
           </Button>
          </DrawerTrigger>
-         <DrawerContent className='h-[80svh]'>
+         <DrawerContent className='h-[min(80svh,35rem)]'>
           <DrawerHeader className='hidden'>
            <DrawerTitle>{dic.orderInfo.waiter}</DrawerTitle>
           </DrawerHeader>
