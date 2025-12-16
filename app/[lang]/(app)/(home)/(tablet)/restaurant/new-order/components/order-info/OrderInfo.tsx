@@ -36,6 +36,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { BsTrash } from 'react-icons/bs';
 import FindRooms from '../find-room/FindRooms';
 import FindSubscribers from '../find-subscriber/FindSubscribers';
+import { SaleTypes } from '../../utils/SaleTypes';
 
 export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
  const { control, register, getValues, setValue } = useFormContext<OrderInfo>();
@@ -48,7 +49,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
  return (
   <form onSubmit={(e) => e.preventDefault()} className='py-5 px-1'>
    <FieldGroup>
-    <div className='grid grid-cols-2 gap-5'>
+    <div className='grid sm:grid-cols-2 gap-5'>
      <Controller
       control={control}
       name='orderDate'
@@ -213,6 +214,11 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
                 className='flex gap-1 items-center ps-6 py-2'
                 onClick={() => {
                  field.onChange(item);
+                 setValue('room', null);
+                 setValue('subscriber', null);
+                 setValue('contract', null);
+                 setValue('customer', null);
+                 setValue('deliveryAgent', item?.key === SaleTypes.delivery);
                 }}
                >
                 <Checkbox
@@ -239,7 +245,12 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        )}
       />
      </Field>
-     <Field>
+     <Field
+      data-disabled={
+       getValues('saleType')?.key !== SaleTypes.delivery &&
+       getValues('saleType')?.key !== SaleTypes.contract
+      }
+     >
       <FieldLabel htmlFor='subscriber'>{dic.orderInfo.subscriber}</FieldLabel>
       <Controller
        control={control}
@@ -252,12 +263,25 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            variant='outline'
            role='combobox'
            className='justify-between h-11'
+           disabled={
+            getValues('saleType')?.key !== SaleTypes.delivery &&
+            getValues('saleType')?.key !== SaleTypes.contract
+           }
           >
            <span>{field.value?.value || ''}</span>
            <div className='flex gap-2 items-center'>
-            <Button variant={'ghost'} size={'icon-lg'}>
-             <BsTrash className='size-5 text-red-700 dark:text-red-400' />
-            </Button>
+            {getValues('subscriber') && (
+             <Button
+              variant={'ghost'}
+              size={'icon-lg'}
+              onClick={(e) => {
+               e.stopPropagation();
+               setValue('subscriber', null);
+              }}
+             >
+              <BsTrash className='size-5 text-red-700 dark:text-red-400' />
+             </Button>
+            )}
             <ChevronsUpDown />
            </div>
           </Button>
@@ -267,7 +291,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        )}
       />
      </Field>
-     <Field>
+     <Field data-disabled={getValues('saleType')?.key === SaleTypes.room}>
       <FieldLabel htmlFor='customer'>{dic.orderInfo.customer}</FieldLabel>
       <Controller
        control={control}
@@ -280,12 +304,22 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            variant='outline'
            role='combobox'
            className='justify-between h-11'
+           disabled={getValues('saleType')?.key === SaleTypes.room}
           >
            <span>{field.value?.value || ''}</span>
            <div className='flex gap-2 items-center'>
-            <Button variant={'ghost'} size={'icon-lg'}>
-             <BsTrash className='size-5 text-red-700 dark:text-red-400' />
-            </Button>
+            {getValues('customer') && (
+             <Button
+              variant={'ghost'}
+              size={'icon-lg'}
+              onClick={(e) => {
+               e.stopPropagation();
+               setValue('customer', null);
+              }}
+             >
+              <BsTrash className='size-5 text-red-700 dark:text-red-400' />
+             </Button>
+            )}
             <ChevronsUpDown />
            </div>
           </Button>
@@ -304,7 +338,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        )}
       />
      </Field>
-     <Field>
+     <Field data-disabled={getValues('saleType')?.key !== SaleTypes.room}>
       <FieldLabel htmlFor='room'>{dic.orderInfo.room}</FieldLabel>
       <Controller
        control={control}
@@ -317,6 +351,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            variant='outline'
            role='combobox'
            className='justify-between h-11'
+           disabled={getValues('saleType')?.key !== SaleTypes.room}
           >
            <span>{field.value?.value || ''}</span>
            <div className='flex gap-2 items-center'>

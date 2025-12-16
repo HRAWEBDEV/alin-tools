@@ -22,9 +22,10 @@ import Highlighter from 'react-highlight-words';
 import { useDebouncedValue } from '@tanstack/react-pacer';
 import { useFormContext } from 'react-hook-form';
 import { OrderInfo } from '../../schemas/orderInfoSchema';
+import { SaleTypes } from '../../utils/SaleTypes';
 
 export default function FindRooms({ dic }: { dic: NewOrderDictionary }) {
- const { setValue } = useFormContext<OrderInfo>();
+ const { setValue, getValues } = useFormContext<OrderInfo>();
  const containerRef = useRef<HTMLDivElement>(null);
  const [searchedText, setSearchedText] = useState('');
  const [debouncedSearch] = useDebouncedValue(searchedText, {
@@ -33,6 +34,7 @@ export default function FindRooms({ dic }: { dic: NewOrderDictionary }) {
 
  const { data, hasNextPage, fetchNextPage, isFetching, refetch, isSuccess } =
   useInfiniteQuery({
+   enabled: getValues('saleType')?.key === SaleTypes.room,
    queryKey: [newOrderKey, 'rooms'],
    initialPageParam: {
     limit: 300,
