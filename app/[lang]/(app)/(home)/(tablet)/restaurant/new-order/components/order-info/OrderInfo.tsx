@@ -514,13 +514,28 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
       <FieldLabel htmlFor='discount-rate'>
        {dic.orderInfo.discountRate}
       </FieldLabel>
-      <InputGroup className='h-11'>
-       <InputGroupInput
-        type='number'
-        id='discount-rate'
-        {...register('discountRate')}
-       />
-      </InputGroup>
+      <Controller
+       control={control}
+       name='discountRate'
+       render={({ field: { value, onChange, ...other } }) => (
+        <InputGroup className='h-11'>
+         <NumericFormat
+          {...other}
+          value={value}
+          onValueChange={({ value }) => onChange(Number(value) || '')}
+          id='discount-rate'
+          customInput={InputGroupInput}
+          allowNegative={false}
+          decimalScale={0}
+          allowLeadingZeros
+          isAllowed={({ floatValue }) => {
+           if (!floatValue) return true;
+           return floatValue <= 100;
+          }}
+         />
+        </InputGroup>
+       )}
+      />
      </Field>
      <Field>
       <FieldLabel htmlFor='bonNo'>{dic.orderInfo.bonNo}</FieldLabel>
