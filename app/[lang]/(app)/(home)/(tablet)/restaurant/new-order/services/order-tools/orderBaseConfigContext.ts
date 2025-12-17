@@ -72,6 +72,7 @@ interface OrderBaseConfig {
    isLoading: boolean;
    isError: boolean;
   };
+  onSaveOrder: () => unknown;
   orderItemsDispatch: ActionDispatch<[action: OrderItemActions]>;
   onCloseOrder: () => unknown;
  };

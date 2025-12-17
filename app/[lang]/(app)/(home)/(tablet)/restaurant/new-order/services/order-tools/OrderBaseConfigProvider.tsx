@@ -9,7 +9,7 @@ import {
 } from './orderBaseConfigContext';
 import {
  type ItemGroup,
- type Order,
+ type SaveOrderPackage,
  newOrderKey,
  getInitData,
  getItemPrograms,
@@ -19,6 +19,7 @@ import {
  closeOrder,
  getFreeTables,
  getOrderPayment,
+ saveOrder,
 } from '../newOrderApiActions';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { filterItemPrograms } from '../../utils/filterItemPrograms';
@@ -47,10 +48,8 @@ import { toast } from 'sonner';
 import { Spinner } from '@/components/ui/spinner';
 import { useRouter } from 'next/navigation';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
-import { FaUncharted } from 'react-icons/fa6';
-import { unstable_getStaticPaths } from 'next/dist/build/templates/pages';
-import { init } from 'next/dist/compiled/webpack/webpack';
-import { SelectValue } from '@radix-ui/react-select';
+import { getOrderTypeID } from '../../utils/getOrderTypeID';
+import { SaleTypes } from '../../utils/SaleTypes';
 
 export default function OrderBaseConfigProvider({
  children,
@@ -326,17 +325,64 @@ export default function OrderBaseConfigProvider({
   });
 
  // get new order save package
- function getNewOrderSavePackage({
-  userOrder,
-  orderInfo: {},
- }: {
-  orderInfo: OrderInfo;
-  userOrder?: Order;
- }) {
-  const newOrderSavePackage = {
-   ...(userOrder || {}),
-   id: userOrder ? userOrder.id : 0,
-  };
+ async function handleConfirmSaveOrder() {
+  if (!initData) return;
+  orderInfoForm.handleSubmit((data) => {
+   const newOrder = {
+    ...(userOrder || {}),
+    id: userOrder?.id || 0,
+    occupied: data.table ? false : data.hasTableNo,
+    registerID: data.room ? Number(data.room.key) : null,
+    orderNo: initData.orderNo,
+    orderStateID: initData.orderStateID,
+    dailyNo: initData.dailyNo,
+    customerID: data.customer ? Number(data.customer.key) : null,
+    tableID: data.table ? Number(data.table.key) : null,
+    waiterPersonID: data.waiter ? Number(data.waiter.key) : null,
+    subscriberPersonID: data.subscriber ? Number(data.subscriber.key) : null,
+    saleTimeID: data.saleTime ? Number(data.saleTime.key) : null,
+    saleTypeID: Number(data.saleType!.key),
+    bonNo: data.bonNo || null,
+
+    orderDateTimeOffset: data.orderDate.toISOString(),
+    persons: data.persons || null,
+    roundingValue: data.rounding || 0,
+    tipValue: data.employeeTip || 0,
+    delivaryValue: deliveryValue || 0,
+    discountRate: data.discountRate || null,
+    sValue: invoiceShopResult.totalSValue,
+    tax: invoiceShopResult.totalTax,
+    service: invoiceShopResult.totalService,
+    payment: invoiceShopResult.payment,
+    discount: invoiceShopResult.totalDiscount,
+    payableValue: invoiceShopResult.remained,
+    comment: data.comment || null,
+    arzID: 1,
+    orderTypeID: getOrderTypeID({
+     tableID: data.table ? data.table.key : null,
+     saleTypeID: data.saleType ? data.saleType.key : null,
+    }),
+    contractMenuID: data.contract ? Number(data.contract.key) : null,
+    seatID: null,
+    employeePersonID: null,
+    deliveryByAgent:
+     data.saleType && data.saleType.key == SaleTypes.delivery
+      ? data.deliveryAgent
+      : false,
+    name: '',
+    personID: null,
+    dateTimeDateTimeOffset:
+     userOrder?.dateTimeDateTimeOffset || new Date().toISOString(),
+   } as SaveOrderPackage['order'];
+   saveOrder({
+    orderPackage: {
+     order: newOrder,
+     orderItems,
+    },
+    sendToKitchen: data.sendToKitchen,
+    printToCashBox: data.printCash,
+   });
+  })();
  }
 
  // loadings
@@ -522,13 +568,14 @@ export default function OrderBaseConfigProvider({
    },
   },
   order: {
-   onCloseOrder,
    serviceRates: {
     data: serviceRatesData,
     isLoading: serviceRatesLoading,
     isError: serviceRatesIsError,
    },
    orderItems: pricedOrderItems,
+   onCloseOrder,
+   onSaveOrder: handleConfirmSaveOrder,
    orderItemsDispatch,
   },
   invoice: {
