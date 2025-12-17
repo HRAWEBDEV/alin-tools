@@ -32,6 +32,8 @@ interface OrderBaseConfig {
   data?: InitialData;
   freeTables?: Combo[];
   freeTablesLoading: boolean;
+  freeTablesFetching: boolean;
+  freeTablesRefetch: () => unknown;
   isLoading: boolean;
   isError: boolean;
   isSuccess: boolean;

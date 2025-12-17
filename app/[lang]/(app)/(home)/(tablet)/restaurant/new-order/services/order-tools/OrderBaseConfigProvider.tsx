@@ -1,5 +1,5 @@
 'use client';
-import { useState, useReducer } from 'react';
+import { useState, useReducer, useEffect } from 'react';
 import { ReactNode } from 'react';
 import { type NewOrderDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/new-order/dictionary';
 import {
@@ -48,6 +48,8 @@ import { Spinner } from '@/components/ui/spinner';
 import { useRouter } from 'next/navigation';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { FaUncharted } from 'react-icons/fa6';
+import { unstable_getStaticPaths } from 'next/dist/build/templates/pages';
+import { init } from 'next/dist/compiled/webpack/webpack';
 
 export default function OrderBaseConfigProvider({
  children,
@@ -143,32 +145,35 @@ export default function OrderBaseConfigProvider({
   queryKey: [newOrderKey, 'initial-data'],
   async queryFn({ signal }) {
    const res = await getInitData({ signal });
-   const data = res.data;
-   if (data.itemGroups.length) {
-    handleChangeSelectedItemGroup(data.itemGroups[0]);
-   }
-   if (data.saleTimes) {
-    const activeSaleTime = data.defaultSaleTimeID
-     ? data.saleTimes.find(
-        (item) => item.key === data.defaultSaleTimeID.toString(),
-       ) || data.saleTimes[0]
-     : data.saleTimes[0];
-    orderInfoForm.setValue('saleTime', activeSaleTime);
-   }
-   if (data.saleTypes) {
-    const activeSaleType = data.defaultSaleTypeID
-     ? data.saleTypes.find(
-        (item) => item.key === data.defaultSaleTypeID.toString(),
-       ) || data.saleTypes[0]
-     : data.saleTypes[0];
-    orderInfoForm.setValue('saleType', activeSaleType);
-   }
-   if (data.bonNo) {
-    orderInfoForm.setValue('bonNo', data.bonNo);
-   }
-   return data;
+   return res.data;
   },
  });
+
+ useEffect(() => {
+  if (!initData) return;
+  if (initData.itemGroups.length) {
+   handleChangeSelectedItemGroup(initData.itemGroups[0]);
+  }
+  if (initData.saleTimes) {
+   const activeSaleTime = initData.defaultSaleTimeID
+    ? initData.saleTimes.find(
+       (item) => item.key === initData.defaultSaleTimeID.toString(),
+      ) || initData.saleTimes[0]
+    : initData.saleTimes[0];
+   orderInfoForm.setValue('saleTime', activeSaleTime);
+  }
+  if (initData.saleTypes) {
+   const activeSaleType = initData.defaultSaleTypeID
+    ? initData.saleTypes.find(
+       (item) => item.key === initData.defaultSaleTypeID.toString(),
+      ) || initData.saleTypes[0]
+    : initData.saleTypes[0];
+   orderInfoForm.setValue('saleType', activeSaleType);
+  }
+  if (initData.bonNo) {
+   orderInfoForm.setValue('bonNo', initData.bonNo);
+  }
+ }, [initData, orderInfoForm]);
 
  // item program search
  function handleChangeSearchedItemName(newSearch: string) {
@@ -261,7 +266,12 @@ export default function OrderBaseConfigProvider({
   },
  });
  // get free tables
- const { data: freeTables, isLoading: freeTablesIsLoading } = useQuery({
+ const {
+  data: freeTables,
+  isLoading: freeTablesIsLoading,
+  isFetching: freeTablesIsFetching,
+  refetch: freeTablesRefetch,
+ } = useQuery({
   enabled: Boolean(saleTimeValue && orderDateValue),
   staleTime: 'static',
   gcTime: 0,
@@ -289,6 +299,7 @@ export default function OrderBaseConfigProvider({
    return freeTables;
   },
  });
+
  // get order payment
  const {
   data: orderPaymentValue = 0,
@@ -418,6 +429,8 @@ export default function OrderBaseConfigProvider({
    data: initData,
    freeTables,
    freeTablesLoading: freeTablesIsLoading,
+   freeTablesRefetch,
+   freeTablesFetching: freeTablesIsFetching,
    isError: initError,
    isSuccess: initSuccess,
    isFetching: initFetching,

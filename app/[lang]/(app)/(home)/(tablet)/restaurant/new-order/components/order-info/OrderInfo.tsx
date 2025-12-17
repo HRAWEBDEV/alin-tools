@@ -37,11 +37,18 @@ import FindSubscribers from '../find-subscriber/FindSubscribers';
 import FindCustomer from '../find-customer/FindCustomer';
 import FindWaiters from '../find-waiters/FindWaiters';
 import { SaleTypes } from '../../utils/SaleTypes';
+import { IoReloadOutline } from 'react-icons/io5';
 
 export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
  const { control, register, getValues, setValue } = useFormContext<OrderInfo>();
  const {
-  initialDataInfo: { data, freeTablesLoading, freeTables },
+  initialDataInfo: {
+   data,
+   freeTablesLoading,
+   freeTables,
+   freeTablesRefetch,
+   freeTablesFetching,
+  },
  } = useOrderBaseConfigContext();
  const [showDateTimePicker, setShowDateTimePicker] = useState(false);
  const { locale } = useBaseConfig();
@@ -399,12 +406,21 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           <DrawerHeader className='hidden'>
            <DrawerTitle>{dic.orderInfo.tableNo}</DrawerTitle>
           </DrawerHeader>
-          <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+          <div className='p-4 pb-4 mb-4 border-b border-input flex flex-wrap justify-between gap-4 items-center'>
            <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
             {dic.orderInfo.tableNo}
            </h1>
+           <Button
+            disabled={freeTablesFetching}
+            variant='outline'
+            size='icon'
+            className='text-primary'
+            onClick={() => freeTablesRefetch()}
+           >
+            <IoReloadOutline className='size-5' />
+           </Button>
           </div>
-          <div>
+          <div className='grow overflow-hidden overflow-y-auto'>
            {freeTables?.length ? (
             <ul>
              {freeTables.map((item) => (
