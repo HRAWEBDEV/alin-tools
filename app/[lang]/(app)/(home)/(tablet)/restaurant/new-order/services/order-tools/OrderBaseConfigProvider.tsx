@@ -345,6 +345,9 @@ export default function OrderBaseConfigProvider({
   onSuccess() {
    router.push(`/${locale}/restaurant/salons`);
   },
+  onError(err: AxiosError<string>) {
+   toast.error(err.response?.data || '');
+  },
  });
 
  async function handleSaveOrder() {
