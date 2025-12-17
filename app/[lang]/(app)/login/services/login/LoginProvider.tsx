@@ -1,15 +1,43 @@
 'use client';
-import { ReactNode, useState } from 'react';
 import { type Login, loginContext } from './loginContext';
 import LoginModal from '../../components/login-dialog/LoginModal';
 import { Dialog, DialogContent, DialogHeader } from '@/components/ui/dialog';
+import { axios } from '@/app/[lang]/(app)/utils/defaultAxios';
+import { ReactNode, use, useEffect, useState } from 'react';
+import { OutOfContext } from '@/utils/OutOfContext';
 
-export default function LoginProvider({ children }: { children: ReactNode }) {
+function LoginProvider({ children }: { children: ReactNode }) {
  const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
 
  function handleChangeLoginModalIsOpen(open?: boolean) {
   setLoginModalIsOpen((pre) => (open === undefined ? !pre : open));
  }
+
+ useEffect(() => {
+  const checkTokenAvailability = () => {
+   const interceptor = axios.interceptors.response.use(
+    (response) => {
+     return response;
+    },
+    async (error) => {
+     if (
+      error.response &&
+      (error.response.status === 403 || error.response.status === 401)
+     ) {
+      setLoginModalIsOpen(true);
+      console.error('Response error:', error.response);
+     }
+     return Promise.reject(error);
+    }
+   );
+
+   return () => {
+    axios.interceptors.response.eject(interceptor);
+   };
+  };
+  const eject = checkTokenAvailability();
+  return eject;
+ }, []);
 
  const ctx: Login = {
   loginModalIsOpen,
@@ -34,3 +62,11 @@ export default function LoginProvider({ children }: { children: ReactNode }) {
   </loginContext.Provider>
  );
 }
+
+function useLogin() {
+ const context = use(loginContext);
+ if (!context) throw new OutOfContext('LoginContext');
+ return context;
+}
+
+export { LoginProvider, useLogin };

@@ -32,6 +32,7 @@ import { AxiosError } from 'axios';
 import { toast } from 'sonner';
 import { setUserLoginToken } from '../utils/loginTokenManager';
 import { useLoginContext } from '../services/login/loginContext';
+import { useLogin } from '../services/login/LoginProvider';
 
 const formDefaults: LoginWithPasswordCredentials = {
  userName: '',
@@ -43,6 +44,8 @@ export default function LoginWithPassword({ dic }: { dic: LoginDictionary }) {
  const [showPassword, setShowPassword] = useState(false);
  const { localeInfo } = useBaseConfig();
  const router = useRouter();
+ const { changeLoginModalIsOpen: handleToggleModal, loginModalIsOpen } =
+  useLogin();
  const {
   login: {
    withPassword: { form: formDic, formValidation: formValidationDic },
@@ -55,7 +58,11 @@ export default function LoginWithPassword({ dic }: { dic: LoginDictionary }) {
   },
   onSuccess({ data }) {
    setUserLoginToken(data.item1);
-   router.push(`/${localeInfo.locale}/restaurant`);
+   if (loginModalIsOpen) {
+    handleToggleModal(false);
+   } else {
+    router.push(`/${localeInfo.locale}/restaurant`);
+   }
   },
   onError(err: AxiosError<string>) {
    toast.error(err.response?.data);

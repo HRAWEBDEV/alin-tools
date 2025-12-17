@@ -5,7 +5,7 @@ import ShareDictionaryProvider from './services/share-dictionary/ShareDictionary
 import { type Locale, locales } from '@/internalization/app/localization';
 import { Toaster } from '@/components/ui/sonner';
 import AxiosBaseConfig from './services/axios-base-config/AxiosBaseConfig';
-import LoginProvider from './login/services/login/LoginProvider';
+import { LoginProvider } from './login/services/login/LoginProvider';
 
 export default async function AppLayout({
  children,
