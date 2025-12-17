@@ -133,6 +133,7 @@ export default function FindRooms({ dic }: { dic: NewOrderDictionary }) {
                setValue('room', {
                 key: id.toString(),
                 value: roomLabel,
+                customerName: guestFullName,
                });
               }}
              >

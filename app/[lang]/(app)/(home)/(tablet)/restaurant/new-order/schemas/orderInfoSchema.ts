@@ -44,6 +44,7 @@ function createOrderInfoSchema({}: { dic: NewOrderDictionary }) {
    .object({
     key: z.string(),
     value: z.string(),
+    customerName: z.string(),
    })
    .nullable(),
   customer: z

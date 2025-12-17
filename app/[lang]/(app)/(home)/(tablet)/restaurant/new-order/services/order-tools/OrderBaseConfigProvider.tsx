@@ -50,6 +50,7 @@ import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { FaUncharted } from 'react-icons/fa6';
 import { unstable_getStaticPaths } from 'next/dist/build/templates/pages';
 import { init } from 'next/dist/compiled/webpack/webpack';
+import { SelectValue } from '@radix-ui/react-select';
 
 export default function OrderBaseConfigProvider({
  children,
@@ -148,32 +149,6 @@ export default function OrderBaseConfigProvider({
    return res.data;
   },
  });
-
- useEffect(() => {
-  if (!initData) return;
-  if (initData.itemGroups.length) {
-   handleChangeSelectedItemGroup(initData.itemGroups[0]);
-  }
-  if (initData.saleTimes) {
-   const activeSaleTime = initData.defaultSaleTimeID
-    ? initData.saleTimes.find(
-       (item) => item.key === initData.defaultSaleTimeID.toString(),
-      ) || initData.saleTimes[0]
-    : initData.saleTimes[0];
-   orderInfoForm.setValue('saleTime', activeSaleTime);
-  }
-  if (initData.saleTypes) {
-   const activeSaleType = initData.defaultSaleTypeID
-    ? initData.saleTypes.find(
-       (item) => item.key === initData.defaultSaleTypeID.toString(),
-      ) || initData.saleTypes[0]
-    : initData.saleTypes[0];
-   orderInfoForm.setValue('saleType', activeSaleType);
-  }
-  if (initData.bonNo) {
-   orderInfoForm.setValue('bonNo', initData.bonNo);
-  }
- }, [initData, orderInfoForm]);
 
  // item program search
  function handleChangeSearchedItemName(newSearch: string) {
@@ -361,44 +336,6 @@ export default function OrderBaseConfigProvider({
   const newOrderSavePackage = {
    ...(userOrder || {}),
    id: userOrder ? userOrder.id : 0,
-   // occupied: isOnTableDisable ? false : onTable,
-   // registerID: room ? Number(room.key) : null,
-   // orderNo: initialData.orderNo,
-   // orderStateID: initialData.orderStateID,
-   // dailyNo: initialData.dailyNo,
-   // customerID: customer ? Number(customer.key) : null,
-   // tableID: table ? Number(table.key) : null,
-   // waiterPersonID: waiter ? Number(waiter.key) : null,
-   // subscriberPersonID: subscriber ? Number(subscriber.key) : null,
-   // saleTimeID: Number(saleTime.key),
-   // saleTypeID: Number(saleType.key),
-   // bonNo: bonNo || null,
-   // orderDateTimeOffset: orderDateTimeOffset.toISOString(),
-   // dateTimeDateTimeOffset: dateTimeDateTimeOffset.toISOString(),
-   // persons: persons || null,
-   // roundingValue: roundingValue || 0,
-   // tipValue: tipValue || 0,
-   // delivaryValue: deliveryValue || 0,
-   // discountRate: discountRate || null,
-   // sValue: totalOrderResult.totalSValue,
-   // tax: totalOrderResult.totalTax,
-   // service: totalOrderResult.totalService,
-   // payment: totalOrderResult.payment,
-   // discount: totalOrderResult.totalDiscount,
-   // payableValue: totalOrderResult.remained,
-   // name: name || null,
-   // comment: comment || null,
-   // personID: orderPersonID,
-   // arzID: 1,
-   // orderTypeID: getOrderTypeID({
-   //  tableID: table ? table.key : null,
-   //  saleTypeID: saleType ? saleType.key : null,
-   // }),
-   // contractMenuID: contract ? Number(contract.key) : null,
-   // seatID: null,
-   // employeePersonID: null,
-   // deliveryByAgent:
-   //  saleType.key == SaleTypes.delivery ? deliveryByAgent : false,
   };
  }
 
@@ -410,6 +347,128 @@ export default function OrderBaseConfigProvider({
   serviceRatesLoading ||
   orderPaymentLoading;
  const shopInfoLoading = shopLoading;
+ // set defaults
+ useEffect(() => {
+  if (!initData || !initSuccess) return;
+  if (initData.itemGroups.length) {
+   handleChangeSelectedItemGroup(initData.itemGroups[0]);
+  }
+  orderInfoForm.setValue('sendToKitchen', initData.sendToKitchen);
+  if (!!orderIDQuery) return;
+  if (initData.saleTimes) {
+   const activeSaleTime = initData.defaultSaleTimeID
+    ? initData.saleTimes.find(
+       (item) => item.key === initData.defaultSaleTimeID.toString(),
+      ) || initData.saleTimes[0]
+    : initData.saleTimes[0];
+   orderInfoForm.setValue('saleTime', activeSaleTime);
+  }
+  if (initData.saleTypes) {
+   const activeSaleType = initData.defaultSaleTypeID
+    ? initData.saleTypes.find(
+       (item) => item.key === initData.defaultSaleTypeID.toString(),
+      ) || initData.saleTypes[0]
+    : initData.saleTypes[0];
+   orderInfoForm.setValue('saleType', activeSaleType);
+  }
+  if (initData.bonNo) {
+   orderInfoForm.setValue('bonNo', initData.bonNo);
+  }
+ }, [initData, orderInfoForm, orderIDQuery, initSuccess]);
+
+ useEffect(() => {
+  if (!userOrder || !userOrderSuccess) return;
+  const {
+   tableID,
+   tableNo,
+   discountRate,
+   roundingValue,
+   subscriberPersonID,
+   subscriberCode,
+   customerID,
+   customerName,
+   customerCode,
+   contractMenuID,
+   contractMenuName,
+   registerID,
+   roomLabel,
+   bonNo,
+   persons,
+   delivaryValue,
+   tipValue,
+   orderDateTimeOffset,
+   saleTimeID,
+   saleTimeName,
+   saleTypeID,
+   saleTypeName,
+   waiterPersonFullName,
+   waiterPersonID,
+   deliveryByAgent,
+   occupied,
+   comment,
+  } = userOrder;
+  if (tableID && tableNo) {
+   orderInfoForm.setValue('table', {
+    key: tableID.toString(),
+    value: tableNo.toString(),
+   });
+  }
+  orderInfoForm.setValue('discountRate', discountRate || '');
+  orderInfoForm.setValue('rounding', roundingValue || '');
+  if (subscriberPersonID && subscriberCode) {
+   orderInfoForm.setValue('subscriber', {
+    key: subscriberPersonID.toString(),
+    value: subscriberCode.toString(),
+    customerName: '',
+   });
+  }
+  if (customerID) {
+   orderInfoForm.setValue('customer', {
+    key: customerID.toString(),
+    code: customerCode || '',
+    value: customerName || '',
+   });
+  }
+  if (contractMenuID) {
+   orderInfoForm.setValue('contract', {
+    key: contractMenuID.toString(),
+    value: contractMenuName || '',
+   });
+  }
+  if (registerID) {
+   orderInfoForm.setValue('room', {
+    key: registerID.toString(),
+    value: roomLabel || '',
+    customerName: '',
+   });
+  }
+  orderInfoForm.setValue('bonNo', bonNo || '');
+  orderInfoForm.setValue('comment', comment || '');
+  orderInfoForm.setValue('persons', persons || '');
+  orderInfoForm.setValue('deliveryValue', delivaryValue || '');
+  orderInfoForm.setValue('employeeTip', tipValue || '');
+  orderInfoForm.setValue('orderDate', new Date(orderDateTimeOffset));
+  orderInfoForm.setValue('deliveryAgent', !!deliveryByAgent);
+  orderInfoForm.setValue('hasTableNo', occupied);
+  if (saleTimeID && saleTimeName) {
+   orderInfoForm.setValue('saleTime', {
+    key: saleTimeID.toString(),
+    value: saleTimeName,
+   });
+  }
+  if (saleTypeID && saleTypeName) {
+   orderInfoForm.setValue('saleType', {
+    key: saleTypeID.toString(),
+    value: saleTypeName,
+   });
+  }
+  if (waiterPersonID && waiterPersonFullName) {
+   orderInfoForm.setValue('waiter', {
+    key: waiterPersonID.toString(),
+    value: waiterPersonFullName,
+   });
+  }
+ }, [userOrder, userOrderSuccess, orderInfoForm]);
  //
 
  const ctx: OrderBaseConfig = {
