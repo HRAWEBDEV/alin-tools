@@ -91,7 +91,7 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
         </div>
        </Button>
       </DrawerTrigger>
-      <DrawerContent className='h-[80svh]'>
+      <DrawerContent className='h-[min(80svh,35rem)]'>
        <DrawerHeader className='hidden'>
         <DrawerTitle>{dic.filters.selectSalon}</DrawerTitle>
        </DrawerHeader>
@@ -112,7 +112,7 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
          </InputGroup>
         </div>
        </div>
-       <div>
+       <div className='overflow-hidden overflow-y-auto'>
         {filteredSalons.length ? (
          <ul>
           {filteredSalons.map((item) => (

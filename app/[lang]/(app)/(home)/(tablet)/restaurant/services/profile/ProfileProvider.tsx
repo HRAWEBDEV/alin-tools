@@ -39,7 +39,7 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
   <profileContext.Provider value={ctx}>
    {children}
    <Drawer open={isOpen} onOpenChange={setIsOpen}>
-    <DrawerContent className='h-[70svh]'>
+    <DrawerContent className='h-[min(80svh,35rem)]'>
      <DrawerHeader className='hidden'>
       <DrawerTitle>{profile.title}</DrawerTitle>
      </DrawerHeader>

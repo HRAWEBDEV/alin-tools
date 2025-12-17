@@ -35,7 +35,8 @@
   "hasTableNo": "شماره میز",
   "sendToKitchen": "ارسال به آشپزخانه",
   "printCash": "چاپ رسید صندوق",
-  "deliveryAgent": "تحویل به پیک"
+  "deliveryAgent": "تحویل به پیک",
+  "addTag": "تگ"
  },
  "orderConfirm": {
   "removeOrderItemConfirmMessage": "آیا از حذف این آیتم اطمینان دارید؟",
@@ -68,5 +69,28 @@
   "confirmMessage": "آیا از بستن سفارش اطمینان دارید؟",
   "confirm": "تایید",
   "cancel": "انصراف"
- }
+ },
+ "findSubscribers": {
+  "search": "جستجو",
+  "code": "کد",
+  "name": "نام",
+  "nationalCode": "کد ملی",
+  "phoneNumber": "شماره تماس"
+ },
+ "findCustomer": {
+  "search": "جستجو",
+  "code": "کد",
+  "name": "نام",
+  "nationalCode": "کد ملی",
+  "phoneNumber": "شماره تماس"
+ },
+ "findRooms": {
+  "search": "جستجو",
+  "roomNo": "شماره اتاق",
+  "guestName": "نام مهمان",
+  "reload": "بروزرسانی مجدد",
+  "loadMore": "موارد بیشتر"
+ },
+ "findTags": {},
+ "findWaiters": {}
 }

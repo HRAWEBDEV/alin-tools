@@ -262,7 +262,7 @@ export default function OrderBaseConfigProvider({
  });
  // get free tables
  const { data: freeTables, isLoading: freeTablesIsLoading } = useQuery({
-  enabled: Boolean(saleTimeValue && orderDateValue && salonIDQuery),
+  enabled: Boolean(saleTimeValue && orderDateValue),
   staleTime: 'static',
   gcTime: 0,
   queryKey: [
@@ -290,14 +290,20 @@ export default function OrderBaseConfigProvider({
   },
  });
  // get order payment
- const { data: orderPayment } = useQuery({
+ const {
+  data: orderPaymentValue = 0,
+  isLoading: orderPaymentLoading,
+  isError: orderPaymentError,
+ } = useQuery({
   enabled: !!userOrder?.id,
   queryKey: [newOrderKey, 'order-payment'],
+  gcTime: 0,
   async queryFn({ signal }) {
-   getOrderPayment({
+   const res = await getOrderPayment({
     signal,
     orderID: userOrder!.id,
    });
+   return res.data;
   },
  });
  //
@@ -310,7 +316,7 @@ export default function OrderBaseConfigProvider({
  //
  const invoiceShopResult = shopCalculator(
   pricedOrderItems,
-  0,
+  orderPaymentValue,
   (Number(tipValue) || 0) +
    (Number(deliveryValue) || 0) +
    (Number(roundingValue) || 0),
@@ -390,7 +396,8 @@ export default function OrderBaseConfigProvider({
   initLoading ||
   userOrderItemsLoading ||
   userOrderLoading ||
-  serviceRatesLoading;
+  serviceRatesLoading ||
+  orderPaymentLoading;
  const shopInfoLoading = shopLoading;
  //
 
@@ -454,6 +461,11 @@ export default function OrderBaseConfigProvider({
   },
   invoice: {
    orderTotals: invoiceShopResult,
+   payment: {
+    data: orderPaymentValue,
+    isLoading: orderPaymentLoading,
+    isError: orderPaymentError,
+   },
   },
  };
 

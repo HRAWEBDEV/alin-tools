@@ -74,6 +74,11 @@ interface OrderBaseConfig {
   onCloseOrder: () => unknown;
  };
  invoice: {
+  payment: {
+   data?: number;
+   isLoading: boolean;
+   isError: boolean;
+  };
   orderTotals: ShopCalculatorResult;
  };
 }

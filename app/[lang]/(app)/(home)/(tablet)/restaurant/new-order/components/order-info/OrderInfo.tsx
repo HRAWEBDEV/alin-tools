@@ -6,15 +6,13 @@ import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Calendar } from '@/components/ui/calendar';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
- InputGroupAddon,
  InputGroup,
  InputGroupInput,
  InputGroupTextarea,
 } from '@/components/ui/input-group';
-import { Check, ChevronDownIcon } from 'lucide-react';
+import { ChevronDownIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
-import { FaSearch } from 'react-icons/fa';
 import { Label } from '@/components/ui/label';
 import {
  Popover,
@@ -33,9 +31,15 @@ import { ChevronsUpDown } from 'lucide-react';
 import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseConfigContext';
 import { NumericFormat } from 'react-number-format';
 import { Spinner } from '@/components/ui/spinner';
+import { BsTrash } from 'react-icons/bs';
+import FindRooms from '../find-room/FindRooms';
+import FindSubscribers from '../find-subscriber/FindSubscribers';
+import FindCustomer from '../find-customer/FindCustomer';
+import FindWaiters from '../find-waiters/FindWaiters';
+import { SaleTypes } from '../../utils/SaleTypes';
 
 export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
- const { control, register, getValues } = useFormContext<OrderInfo>();
+ const { control, register, getValues, setValue } = useFormContext<OrderInfo>();
  const {
   initialDataInfo: { data, freeTablesLoading, freeTables },
  } = useOrderBaseConfigContext();
@@ -45,7 +49,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
  return (
   <form onSubmit={(e) => e.preventDefault()} className='py-5 px-1'>
    <FieldGroup>
-    <div className='grid grid-cols-2 gap-5'>
+    <div className='grid sm:grid-cols-2 gap-5'>
      <Controller
       control={control}
       name='orderDate'
@@ -57,7 +61,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           <Button
            variant='outline'
            id='orderDate'
-           className='justify-between font-normal'
+           className='justify-between font-normal h-11'
            onBlur={field.onBlur}
           >
            <span>
@@ -87,7 +91,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
       render={({ field }) => (
        <Field>
         <FieldLabel htmlFor='orderTime'>{dic.orderInfo.orderTime}</FieldLabel>
-        <InputGroup>
+        <InputGroup className='h-11'>
          <InputGroupInput
           id='orderTime'
           type='time'
@@ -124,13 +128,13 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            id='saleTime'
            variant='outline'
            role='combobox'
-           className='justify-between'
+           className='justify-between h-11'
           >
            <span>{field.value?.value || ''}</span>
            <ChevronsUpDown />
           </Button>
          </DrawerTrigger>
-         <DrawerContent className='h-[80svh]'>
+         <DrawerContent className='h-[min(80svh,35rem)]'>
           <DrawerHeader className='hidden'>
            <DrawerTitle>{dic.orderInfo.saleTime}</DrawerTitle>
           </DrawerHeader>
@@ -186,13 +190,13 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            id='saleType'
            variant='outline'
            role='combobox'
-           className='justify-between'
+           className='justify-between h-11'
           >
            <span>{field.value?.value || ''}</span>
            <ChevronsUpDown />
           </Button>
          </DrawerTrigger>
-         <DrawerContent className='h-[80svh]'>
+         <DrawerContent className='h-[min(80svh,35rem)]'>
           <DrawerHeader className='hidden'>
            <DrawerTitle>{dic.orderInfo.saleType}</DrawerTitle>
           </DrawerHeader>
@@ -201,7 +205,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
             {dic.orderInfo.saleType}
            </h1>
           </div>
-          <div>
+          <div className='overflow-hidden overflow-y-auto'>
            {data?.saleTypes.length ? (
             <ul>
              {data.saleTypes.map((item) => (
@@ -210,6 +214,11 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
                 className='flex gap-1 items-center ps-6 py-2'
                 onClick={() => {
                  field.onChange(item);
+                 setValue('room', null);
+                 setValue('subscriber', null);
+                 setValue('contract', null);
+                 setValue('customer', null);
+                 setValue('deliveryAgent', item?.key === SaleTypes.delivery);
                 }}
                >
                 <Checkbox
@@ -236,23 +245,133 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        )}
       />
      </Field>
-     <Field>
+     <Field
+      data-disabled={
+       getValues('saleType')?.key !== SaleTypes.delivery &&
+       getValues('saleType')?.key !== SaleTypes.contract
+      }
+     >
       <FieldLabel htmlFor='subscriber'>{dic.orderInfo.subscriber}</FieldLabel>
-      <InputGroup>
-       <InputGroupInput id='subscriber' />
-      </InputGroup>
+      <Controller
+       control={control}
+       name='subscriber'
+       render={({ field }) => (
+        <Drawer>
+         <DrawerTrigger asChild>
+          <Button
+           id='subscriber'
+           variant='outline'
+           role='combobox'
+           className='justify-between h-11'
+           disabled={
+            getValues('saleType')?.key !== SaleTypes.delivery &&
+            getValues('saleType')?.key !== SaleTypes.contract
+           }
+          >
+           <span className='grow text-ellipsis overflow-hidden text-start'>
+            {field.value?.value || ''}
+           </span>
+           <div className='flex gap-2 items-center'>
+            {getValues('subscriber') && (
+             <Button
+              variant={'ghost'}
+              size={'icon-lg'}
+              onClick={(e) => {
+               e.stopPropagation();
+               setValue('subscriber', null);
+              }}
+             >
+              <BsTrash className='size-5 text-red-700 dark:text-red-400' />
+             </Button>
+            )}
+            <ChevronsUpDown />
+           </div>
+          </Button>
+         </DrawerTrigger>
+         <FindSubscribers dic={dic} />
+        </Drawer>
+       )}
+      />
      </Field>
-     <Field>
+     <Field data-disabled={getValues('saleType')?.key === SaleTypes.room}>
       <FieldLabel htmlFor='customer'>{dic.orderInfo.customer}</FieldLabel>
-      <InputGroup>
-       <InputGroupInput id='customer' />
-      </InputGroup>
+      <Controller
+       control={control}
+       name='customer'
+       render={({ field }) => (
+        <Drawer>
+         <DrawerTrigger asChild>
+          <Button
+           id='customer'
+           variant='outline'
+           role='combobox'
+           className='justify-between h-11'
+           disabled={getValues('saleType')?.key === SaleTypes.room}
+          >
+           <span className='grow text-ellipsis overflow-hidden text-start'>
+            {field.value?.key || ''}
+           </span>
+           <div className='flex gap-2 items-center'>
+            {getValues('customer') && (
+             <Button
+              variant={'ghost'}
+              size={'icon-lg'}
+              onClick={(e) => {
+               e.stopPropagation();
+               setValue('customer', null);
+              }}
+             >
+              <BsTrash className='size-5 text-red-700 dark:text-red-400' />
+             </Button>
+            )}
+            <ChevronsUpDown />
+           </div>
+          </Button>
+         </DrawerTrigger>
+         <FindCustomer dic={dic} />
+        </Drawer>
+       )}
+      />
      </Field>
-     <Field>
+     <Field data-disabled={getValues('saleType')?.key !== SaleTypes.room}>
       <FieldLabel htmlFor='room'>{dic.orderInfo.room}</FieldLabel>
-      <InputGroup>
-       <InputGroupInput id='room' />
-      </InputGroup>
+      <Controller
+       control={control}
+       name='room'
+       render={({ field }) => (
+        <Drawer>
+         <DrawerTrigger asChild>
+          <Button
+           id='room'
+           variant='outline'
+           role='combobox'
+           className='justify-between h-11'
+           disabled={getValues('saleType')?.key !== SaleTypes.room}
+          >
+           <span className='grow text-ellipsis overflow-hidden text-start'>
+            {field.value?.value || ''}
+           </span>
+           <div className='flex gap-2 items-center'>
+            {!!getValues('room') && (
+             <Button
+              variant={'ghost'}
+              size={'icon-lg'}
+              onClick={(e) => {
+               e.stopPropagation();
+               setValue('room', null);
+              }}
+             >
+              <BsTrash className='size-5 text-red-700 dark:text-red-400' />
+             </Button>
+            )}
+            <ChevronsUpDown />
+           </div>
+          </Button>
+         </DrawerTrigger>
+         <FindRooms dic={dic} />
+        </Drawer>
+       )}
+      />
      </Field>
      <Field>
       <FieldLabel htmlFor='tableNo'>{dic.orderInfo.tableNo}</FieldLabel>
@@ -266,7 +385,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            id='saleType'
            variant='outline'
            role='combobox'
-           className='justify-between'
+           className='justify-between h-11'
            disabled={freeTablesLoading}
           >
            <span>{field.value?.value || ''}</span>
@@ -276,7 +395,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            </div>
           </Button>
          </DrawerTrigger>
-         <DrawerContent className='h-[80svh]'>
+         <DrawerContent className='h-[min(80svh,35rem)]'>
           <DrawerHeader className='hidden'>
            <DrawerTitle>{dic.orderInfo.tableNo}</DrawerTitle>
           </DrawerHeader>
@@ -322,13 +441,13 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
      </Field>
      <Field>
       <FieldLabel htmlFor='persons'>{dic.orderInfo.guestCount}</FieldLabel>
-      <InputGroup>
-       <InputGroupInput id='persons' {...register('persons')} />
+      <InputGroup className='h-11'>
+       <InputGroupInput id='persons' {...register('persons')} disabled />
       </InputGroup>
      </Field>
      <Field>
       <FieldLabel htmlFor='invoiceType'>{dic.orderInfo.invoiceType}</FieldLabel>
-      <InputGroup>
+      <InputGroup className='h-11'>
        <InputGroupInput
         id='invoiceType'
         readOnly
@@ -342,7 +461,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
      </Field>
      <Field className='col-span-full'>
       <FieldLabel htmlFor='customer'>{dic.orderInfo.customerName}</FieldLabel>
-      <InputGroup>
+      <InputGroup className='h-11'>
        <InputGroupInput id='customer' />
       </InputGroup>
      </Field>
@@ -350,7 +469,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
       <FieldLabel htmlFor='discount-rate'>
        {dic.orderInfo.discountRate}
       </FieldLabel>
-      <InputGroup>
+      <InputGroup className='h-11'>
        <InputGroupInput
         type='number'
         id='discount-rate'
@@ -360,15 +479,48 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
      </Field>
      <Field>
       <FieldLabel htmlFor='bonNo'>{dic.orderInfo.bonNo}</FieldLabel>
-      <InputGroup>
+      <InputGroup className='h-11'>
        <InputGroupInput type='number' id='bonNo' {...register('bonNo')} />
       </InputGroup>
      </Field>
      <Field>
       <FieldLabel htmlFor='waiter'>{dic.orderInfo.waiter}</FieldLabel>
-      <InputGroup>
-       <InputGroupInput id='waiter' {...register('employeeTip')} />
-      </InputGroup>
+      <Controller
+       control={control}
+       name='waiter'
+       render={({ field }) => (
+        <Drawer>
+         <DrawerTrigger asChild>
+          <Button
+           id='waiter'
+           variant='outline'
+           role='combobox'
+           className='justify-between h-11 overflow-hidden'
+          >
+           <span className='grow text-ellipsis overflow-hidden text-start'>
+            {field.value?.value || ''}
+           </span>
+           <div className='flex gap-2 items-center'>
+            {getValues('waiter') && (
+             <Button
+              variant={'ghost'}
+              size={'icon-lg'}
+              onClick={(e) => {
+               e.stopPropagation();
+               setValue('waiter', null);
+              }}
+             >
+              <BsTrash className='size-5 text-red-700 dark:text-red-400' />
+             </Button>
+            )}
+            <ChevronsUpDown />
+           </div>
+          </Button>
+         </DrawerTrigger>
+         <FindWaiters dic={dic} />
+        </Drawer>
+       )}
+      />
      </Field>
      <Field>
       <FieldLabel htmlFor='rounding'>{dic.orderInfo.roundingValue}</FieldLabel>
@@ -376,7 +528,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        control={control}
        name='rounding'
        render={({ field: { value, onChange, ...other } }) => (
-        <InputGroup>
+        <InputGroup className='h-11'>
          <NumericFormat
           id='rounding'
           {...other}
@@ -395,7 +547,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        control={control}
        name='deliveryValue'
        render={({ field: { value, onChange, ...other } }) => (
-        <InputGroup>
+        <InputGroup className='h-11'>
          <NumericFormat
           id='delivery'
           {...other}
@@ -414,7 +566,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        control={control}
        name='employeeTip'
        render={({ field: { value, onChange, ...other } }) => (
-        <InputGroup>
+        <InputGroup className='h-11'>
          <NumericFormat
           id='employeeTip'
           {...other}
