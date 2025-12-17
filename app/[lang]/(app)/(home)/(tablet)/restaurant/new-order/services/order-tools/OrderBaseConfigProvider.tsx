@@ -342,6 +342,9 @@ export default function OrderBaseConfigProvider({
     printToCashBox: data.printCash,
    });
   },
+  onSuccess() {
+   router.push(`/${locale}/restaurant/salons`);
+  },
  });
 
  async function handleSaveOrder() {

@@ -482,9 +482,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           id='persons'
           {...other}
           value={value}
-          onValueChange={({ formattedValue }) =>
-           onChange(Number(formattedValue) || '')
-          }
+          onValueChange={({ value }) => onChange(Number(value) || '')}
           customInput={InputGroupInput}
           allowNegative={false}
          />
@@ -580,7 +578,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           id='rounding'
           {...other}
           value={value}
-          onValueChange={({ value }) => onChange(value)}
+          onValueChange={({ value }) => onChange(Number(value) || '')}
           customInput={InputGroupInput}
           thousandSeparator
          />
@@ -599,7 +597,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           id='delivery'
           {...other}
           value={value}
-          onValueChange={({ value }) => onChange(value)}
+          onValueChange={({ value }) => onChange(Number(value) || '')}
           customInput={InputGroupInput}
           thousandSeparator
          />
@@ -618,7 +616,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           id='employeeTip'
           {...other}
           value={value}
-          onValueChange={({ value }) => onChange(value)}
+          onValueChange={({ value }) => onChange(Number(value) || '')}
           customInput={InputGroupInput}
           thousandSeparator
          />
