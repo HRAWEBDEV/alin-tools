@@ -100,6 +100,7 @@ export default function FindTags({
       disabled={isFetching}
       variant='outline'
       size='icon'
+      className='text-primary'
       onClick={() => refetch()}
      >
       <IoReloadOutline className='size-5' />

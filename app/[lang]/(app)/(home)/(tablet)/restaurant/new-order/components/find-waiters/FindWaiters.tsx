@@ -93,6 +93,7 @@ export default function FindWaiters({ dic }: { dic: NewOrderDictionary }) {
       variant='outline'
       size='icon'
       onClick={() => refetch()}
+      className='text-primary'
      >
       <IoReloadOutline className='size-5' />
      </Button>
