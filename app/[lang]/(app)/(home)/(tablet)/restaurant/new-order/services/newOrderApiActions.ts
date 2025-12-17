@@ -265,12 +265,18 @@ function saveOrder({
   return axios.put<{
    orderID: number;
    message: string;
-  }>(`$/Restaurant/SaleInvoice/UpdateOrder?${searchParams.toString()}`);
+  }>(
+   `/Restaurant/SaleInvoice/UpdateOrder?${searchParams.toString()}`,
+   orderPackage,
+  );
  }
  return axios.post<{
   orderID: number;
   message: string;
- }>(`$/Restaurant/SaleInvoice/SaveOrder?${searchParams.toString()}`);
+ }>(
+  `/Restaurant/SaleInvoice/SaveOrder?${searchParams.toString()}`,
+  orderPackage,
+ );
 }
 
 // service rates

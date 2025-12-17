@@ -34,7 +34,7 @@ export default function ConfirmOrderModal({
   changeConfirmType,
   showConfirmOrder,
   closeConfirmOrder,
-  order: { orderItems, orderItemsDispatch, onCloseOrder },
+  order: { orderItems, orderItemsDispatch, onCloseOrder, onSaveOrder },
   userOrder: { order },
  } = useOrderBaseConfigContext();
  return (
@@ -139,7 +139,13 @@ export default function ConfirmOrderModal({
          </Button>
         )}
        {confirmOrderActiveType === 'shoppingCard' && !!orderItems.length && (
-        <Button variant='secondary' className='h-11' onClick={() => {}}>
+        <Button
+         variant='secondary'
+         className='h-11'
+         onClick={() => {
+          onSaveOrder();
+         }}
+        >
          {dic.invoice.confirmOrder}
         </Button>
        )}

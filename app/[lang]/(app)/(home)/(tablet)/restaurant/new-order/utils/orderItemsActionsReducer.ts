@@ -80,10 +80,10 @@ function orderItemsReducer(state: OrderItem[], action: OrderItemActions) {
       sValue: 0,
       service: 0,
       serviceRate: 0,
-      tagID: 0,
+      tagID: null,
       tax: 0,
       taxRate: 0,
-      tagComment: '',
+      tagComment: null,
      };
      return newOrder;
     }),

@@ -10,6 +10,17 @@ const defaultOrderInfo: Partial<OrderInfo> = {
  customer: null,
  room: null,
  comment: '',
+ hasService: false,
+ hasTableNo: true,
+ sendToKitchen: false,
+ printCash: false,
+ deliveryAgent: false,
+ persons: '',
+ discountRate: '',
+ bonNo: '',
+ rounding: '',
+ employeeTip: '',
+ deliveryValue: '',
 };
 
 function createOrderInfoSchema({}: { dic: NewOrderDictionary }) {

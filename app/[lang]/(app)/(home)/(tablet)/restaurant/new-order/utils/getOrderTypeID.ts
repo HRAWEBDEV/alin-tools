@@ -1,4 +1,4 @@
-import { SaleTypes } from './saleTypes';
+import { SaleTypes } from './SaleTypes';
 
 const getOrderTypeID = ({
  tableID,

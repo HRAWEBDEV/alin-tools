@@ -325,16 +325,35 @@ export default function OrderBaseConfigProvider({
   });
 
  // get new order save package
- async function handleConfirmSaveOrder() {
+ const { mutate: confirmSaveOrder, isPending: saveOrderPending } = useMutation({
+  async mutationFn({
+   order,
+   data,
+  }: {
+   order: SaveOrderPackage['order'];
+   data: OrderInfo;
+  }) {
+   return saveOrder({
+    orderPackage: {
+     order,
+     orderItems: pricedOrderItems,
+    },
+    sendToKitchen: data.sendToKitchen,
+    printToCashBox: data.printCash,
+   });
+  },
+ });
+
+ async function handleSaveOrder() {
   if (!initData) return;
   orderInfoForm.handleSubmit((data) => {
    const newOrder = {
     ...(userOrder || {}),
     id: userOrder?.id || 0,
-    occupied: data.table ? false : data.hasTableNo,
+    orderStateID: initData.orderStateID || 1,
+    occupied: data.table ? data.hasTableNo : false,
     registerID: data.room ? Number(data.room.key) : null,
     orderNo: initData.orderNo,
-    orderStateID: initData.orderStateID,
     dailyNo: initData.dailyNo,
     customerID: data.customer ? Number(data.customer.key) : null,
     tableID: data.table ? Number(data.table.key) : null,
@@ -343,7 +362,6 @@ export default function OrderBaseConfigProvider({
     saleTimeID: data.saleTime ? Number(data.saleTime.key) : null,
     saleTypeID: Number(data.saleType!.key),
     bonNo: data.bonNo || null,
-
     orderDateTimeOffset: data.orderDate.toISOString(),
     persons: data.persons || null,
     roundingValue: data.rounding || 0,
@@ -369,18 +387,14 @@ export default function OrderBaseConfigProvider({
      data.saleType && data.saleType.key == SaleTypes.delivery
       ? data.deliveryAgent
       : false,
-    name: '',
-    personID: null,
+    name: null,
+    personID: userOrder?.personID || null,
     dateTimeDateTimeOffset:
      userOrder?.dateTimeDateTimeOffset || new Date().toISOString(),
    } as SaveOrderPackage['order'];
-   saveOrder({
-    orderPackage: {
-     order: newOrder,
-     orderItems,
-    },
-    sendToKitchen: data.sendToKitchen,
-    printToCashBox: data.printCash,
+   confirmSaveOrder({
+    data,
+    order: newOrder,
    });
   })();
  }
@@ -391,7 +405,8 @@ export default function OrderBaseConfigProvider({
   userOrderItemsLoading ||
   userOrderLoading ||
   serviceRatesLoading ||
-  orderPaymentLoading;
+  orderPaymentLoading ||
+  saveOrderPending;
  const shopInfoLoading = shopLoading;
  // set defaults
  useEffect(() => {
@@ -575,7 +590,7 @@ export default function OrderBaseConfigProvider({
    },
    orderItems: pricedOrderItems,
    onCloseOrder,
-   onSaveOrder: handleConfirmSaveOrder,
+   onSaveOrder: handleSaveOrder,
    orderItemsDispatch,
   },
   invoice: {
