@@ -29,7 +29,7 @@ export default function NavProfile() {
     onClick={() => toggleProfile()}
    >
     <Avatar className='size-14'>
-     <AvatarImage src='https://github.com/shadcn.png' alt='@shadcn' />
+     {/* <AvatarImage src='https://github.com/shadcn.png' alt='@shadcn' /> */}
      <AvatarFallback className='bg-neutral-200'>H</AvatarFallback>
     </Avatar>
     <div className='grow text-start overflow-hidden'>
