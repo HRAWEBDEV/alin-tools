@@ -3,6 +3,11 @@ import type { Combo, PagedData } from '../../utils/apiTypes';
 
 const newOrderKey = 'restaurant-new-order';
 
+interface Waiter {
+ personID: number;
+ personName: string;
+}
+
 interface InitialData {
  orderId: number;
  bonNo: number;
@@ -430,6 +435,28 @@ function getTags({
  );
 }
 
+function getWaiters({
+ signal,
+ offset,
+ limit,
+}: {
+ signal: AbortSignal;
+ limit: number;
+ offset: number;
+}) {
+ const searchParams = new URLSearchParams([
+  ['limit', limit.toString()],
+  ['offset', offset.toString()],
+ ]);
+
+ return axios.get<PagedData<Waiter[]>>(
+  `/Restaurant/SaleInvoice/GetPagedWaiters?${searchParams.toString()}`,
+  {
+   signal,
+  },
+ );
+}
+
 export type {
  InitialData,
  Subscriber,
@@ -458,4 +485,5 @@ export {
  getCustomers,
  getRooms,
  getTags,
+ getWaiters,
 };

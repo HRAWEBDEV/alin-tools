@@ -95,6 +95,7 @@ export default function FindCustomer({ dic }: { dic: NewOrderDictionary }) {
       disabled={isFetching}
       variant='outline'
       size='icon'
+      className='text-primary'
       onClick={() => refetch()}
      >
       <IoReloadOutline className='size-5' />
@@ -118,11 +119,11 @@ export default function FindCustomer({ dic }: { dic: NewOrderDictionary }) {
        {data?.pages.map((group, i) => (
         <Fragment key={i}>
          {group.rows.map(({ id, name, code }) => (
-          <li key={id}>
+          <li key={id} className='bg-background shadow-md rounded-lg'>
            <DrawerClose asChild>
             <Button
              variant={'outline'}
-             className='items-start justify-start text-start h-auto w-full bg-background shadow-md'
+             className='py-4 items-start justify-start text-start w-full whitespace-normal bg-background shadow-md rounded-lg h-full'
              onClick={() => {
               setValue('customer', {
                key: id.toString(),
@@ -137,7 +138,6 @@ export default function FindCustomer({ dic }: { dic: NewOrderDictionary }) {
                 {dic.findCustomer.code}:{' '}
                </span>
                <Highlighter
-                className='text-sm'
                 searchWords={[debouncedSearch]}
                 textToHighlight={code.toString()}
                />
@@ -147,7 +147,6 @@ export default function FindCustomer({ dic }: { dic: NewOrderDictionary }) {
                 {dic.findCustomer.name}:{' '}
                </span>
                <Highlighter
-                className='text-sm'
                 searchWords={[debouncedSearch]}
                 textToHighlight={name.toString()}
                />

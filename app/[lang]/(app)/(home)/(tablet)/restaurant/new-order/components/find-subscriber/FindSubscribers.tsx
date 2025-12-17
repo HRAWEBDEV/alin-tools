@@ -124,7 +124,7 @@ export default function FindSubscriber({ dic }: { dic: NewOrderDictionary }) {
            <DrawerClose asChild>
             <Button
              variant={'outline'}
-             className='items-start justify-start text-start h-auto w-full bg-background shadow-md'
+             className='py-4 items-start justify-start text-start w-full whitespace-normal bg-background shadow-md rounded-lg h-full'
              onClick={() => {
               setValue('subscriber', {
                key: personID.toString(),
@@ -139,7 +139,6 @@ export default function FindSubscriber({ dic }: { dic: NewOrderDictionary }) {
                 {dic.findSubscribers.code}:{' '}
                </span>
                <Highlighter
-                className='text-sm'
                 searchWords={[debouncedSearch]}
                 textToHighlight={code.toString()}
                />
@@ -149,7 +148,6 @@ export default function FindSubscriber({ dic }: { dic: NewOrderDictionary }) {
                 {dic.findSubscribers.name}:{' '}
                </span>
                <Highlighter
-                className='text-sm'
                 searchWords={[debouncedSearch]}
                 textToHighlight={name.toString()}
                />
@@ -159,7 +157,6 @@ export default function FindSubscriber({ dic }: { dic: NewOrderDictionary }) {
                 {dic.findSubscribers.nationalCode}:{' '}
                </span>
                <Highlighter
-                className='text-sm'
                 searchWords={[debouncedSearch]}
                 textToHighlight={nationalCode?.toString() || '---'}
                />
@@ -169,7 +166,6 @@ export default function FindSubscriber({ dic }: { dic: NewOrderDictionary }) {
                 {dic.findSubscribers.phoneNumber}:{' '}
                </span>
                <Highlighter
-                className='text-sm'
                 searchWords={[debouncedSearch]}
                 textToHighlight={mobileNo?.toString() || '---'}
                />

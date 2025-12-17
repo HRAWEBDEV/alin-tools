@@ -91,5 +91,6 @@
   "reload": "بروزرسانی مجدد",
   "loadMore": "موارد بیشتر"
  },
- "findTags": {}
+ "findTags": {},
+ "findWaiters": {}
 }

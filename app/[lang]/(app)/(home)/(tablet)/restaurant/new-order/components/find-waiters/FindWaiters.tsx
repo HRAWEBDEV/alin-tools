@@ -13,26 +13,18 @@ import {
  InputGroupInput,
  InputGroupAddon,
 } from '@/components/ui/input-group';
-import { newOrderKey, getTags } from '../../services/newOrderApiActions';
+import { newOrderKey, getWaiters } from '../../services/newOrderApiActions';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
 import { IoReloadOutline } from 'react-icons/io5';
 import NoItemFound from '@/app/[lang]/(app)/components/NoItemFound';
 import Highlighter from 'react-highlight-words';
 import { useDebouncedValue } from '@tanstack/react-pacer';
-import { type OrderItem } from '../../services/newOrderApiActions';
-import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseConfigContext';
+import { OrderInfo } from '../../schemas/orderInfoSchema';
+import { useFormContext } from 'react-hook-form';
 
-export default function FindTags({
- dic,
- itemID,
-}: {
- dic: NewOrderDictionary;
- itemID: OrderItem['itemID'];
-}) {
- const {
-  order: { orderItemsDispatch },
- } = useOrderBaseConfigContext();
+export default function FindWaiters({ dic }: { dic: NewOrderDictionary }) {
+ const { setValue } = useFormContext<OrderInfo>();
  const containerRef = useRef<HTMLDivElement>(null);
  const [searchedText, setSearchedText] = useState('');
  const [debouncedSearch] = useDebouncedValue(searchedText, {
@@ -41,13 +33,13 @@ export default function FindTags({
 
  const { data, hasNextPage, fetchNextPage, isFetching, refetch, isSuccess } =
   useInfiniteQuery({
-   queryKey: [newOrderKey, 'tags'],
+   queryKey: [newOrderKey, 'waiters'],
    initialPageParam: {
     limit: 300,
     offset: 1,
    },
    async queryFn({ signal, pageParam }) {
-    const res = await getTags({
+    const res = await getWaiters({
      signal,
      limit: pageParam.limit,
      offset: pageParam.offset,
@@ -78,11 +70,11 @@ export default function FindTags({
  return (
   <DrawerContent className='h-[min(80svh,35rem)]'>
    <DrawerHeader className='hidden'>
-    <DrawerTitle>{dic.orderInfo.addTag}</DrawerTitle>
+    <DrawerTitle>{dic.orderInfo.waiter}</DrawerTitle>
    </DrawerHeader>
    <div className='p-4 pt-2 pb-4 border-b border-input flex flex-wrap justify-between gap-4'>
     <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
-     {dic.orderInfo.addTag}
+     {dic.orderInfo.waiter}
     </h1>
     <div className='w-[20rem] grid grid-cols-[1fr_max-content] gap-2'>
      <InputGroup>
@@ -122,28 +114,24 @@ export default function FindTags({
       <ul className='grid gap-2 md:grid-cols-3'>
        {data?.pages.map((group, i) => (
         <Fragment key={i}>
-         {group.rows.map((tag) => (
-          <li key={tag.id}>
+         {group.rows.map(({ personID, personName }) => (
+          <li key={personID}>
            <DrawerClose asChild>
             <Button
              variant={'outline'}
              className='py-4 items-start justify-start text-start w-full whitespace-normal bg-background shadow-md rounded-lg h-full'
-             onClick={() => {
-              orderItemsDispatch({
-               type: 'addTag',
-               payload: {
-                itemID,
-                tag,
-               },
-              });
-             }}
+             onClick={() =>
+              setValue('waiter', {
+               key: personID.toString(),
+               value: personName,
+              })
+             }
             >
              <div>
               <p>
                <Highlighter
-                className='text-sm'
                 searchWords={[debouncedSearch]}
-                textToHighlight={tag.comment}
+                textToHighlight={personName}
                />
               </p>
              </div>

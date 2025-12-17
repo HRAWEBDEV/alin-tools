@@ -28,7 +28,7 @@ function LoginProvider({ children }: { children: ReactNode }) {
       console.error('Response error:', error.response);
      }
      return Promise.reject(error);
-    }
+    },
    );
 
    return () => {

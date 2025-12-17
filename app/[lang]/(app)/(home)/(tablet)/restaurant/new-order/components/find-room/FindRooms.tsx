@@ -127,7 +127,7 @@ export default function FindRooms({ dic }: { dic: NewOrderDictionary }) {
             <DrawerClose asChild>
              <Button
               variant={'outline'}
-              className='py-4 items-start justify-start text-start h-auto w-full bg-background shadow-md'
+              className='py-4 items-start justify-start text-start w-full whitespace-normal bg-background shadow-md rounded-lg h-full'
               onClick={() => {
                setValue('room', {
                 key: id.toString(),
@@ -141,7 +141,6 @@ export default function FindRooms({ dic }: { dic: NewOrderDictionary }) {
                  {dic.findRooms.roomNo}:{' '}
                 </span>
                 <Highlighter
-                 className='text-sm'
                  searchWords={[debouncedSearch]}
                  textToHighlight={roomLabel}
                 />
@@ -151,7 +150,6 @@ export default function FindRooms({ dic }: { dic: NewOrderDictionary }) {
                  {dic.findRooms.guestName}:{' '}
                 </span>
                 <Highlighter
-                 className='text-sm'
                  searchWords={[debouncedSearch]}
                  textToHighlight={guestFullName}
                 />

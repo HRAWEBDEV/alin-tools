@@ -6,15 +6,13 @@ import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Calendar } from '@/components/ui/calendar';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
- InputGroupAddon,
  InputGroup,
  InputGroupInput,
  InputGroupTextarea,
 } from '@/components/ui/input-group';
-import { Check, ChevronDownIcon } from 'lucide-react';
+import { ChevronDownIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
-import { FaSearch } from 'react-icons/fa';
 import { Label } from '@/components/ui/label';
 import {
  Popover,
@@ -37,6 +35,7 @@ import { BsTrash } from 'react-icons/bs';
 import FindRooms from '../find-room/FindRooms';
 import FindSubscribers from '../find-subscriber/FindSubscribers';
 import FindCustomer from '../find-customer/FindCustomer';
+import FindWaiters from '../find-waiters/FindWaiters';
 import { SaleTypes } from '../../utils/SaleTypes';
 
 export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
@@ -269,7 +268,9 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
             getValues('saleType')?.key !== SaleTypes.contract
            }
           >
-           <span>{field.value?.value || ''}</span>
+           <span className='grow text-ellipsis overflow-hidden text-start'>
+            {field.value?.value || ''}
+           </span>
            <div className='flex gap-2 items-center'>
             {getValues('subscriber') && (
              <Button
@@ -307,7 +308,9 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            className='justify-between h-11'
            disabled={getValues('saleType')?.key === SaleTypes.room}
           >
-           <span>{field.value?.key || ''}</span>
+           <span className='grow text-ellipsis overflow-hidden text-start'>
+            {field.value?.key || ''}
+           </span>
            <div className='flex gap-2 items-center'>
             {getValues('customer') && (
              <Button
@@ -345,7 +348,9 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            className='justify-between h-11'
            disabled={getValues('saleType')?.key !== SaleTypes.room}
           >
-           <span>{field.value?.value || ''}</span>
+           <span className='grow text-ellipsis overflow-hidden text-start'>
+            {field.value?.value || ''}
+           </span>
            <div className='flex gap-2 items-center'>
             {!!getValues('room') && (
              <Button
@@ -490,27 +495,29 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            id='waiter'
            variant='outline'
            role='combobox'
-           className='justify-between h-11'
+           className='justify-between h-11 overflow-hidden'
           >
-           <span>{field.value?.value || ''}</span>
+           <span className='grow text-ellipsis overflow-hidden text-start'>
+            {field.value?.value || ''}
+           </span>
            <div className='flex gap-2 items-center'>
-            <Button variant={'ghost'} size={'icon-lg'}>
-             <BsTrash className='size-5 text-red-700 dark:text-red-400' />
-            </Button>
+            {getValues('waiter') && (
+             <Button
+              variant={'ghost'}
+              size={'icon-lg'}
+              onClick={(e) => {
+               e.stopPropagation();
+               setValue('waiter', null);
+              }}
+             >
+              <BsTrash className='size-5 text-red-700 dark:text-red-400' />
+             </Button>
+            )}
             <ChevronsUpDown />
            </div>
           </Button>
          </DrawerTrigger>
-         <DrawerContent className='h-[min(80svh,35rem)]'>
-          <DrawerHeader className='hidden'>
-           <DrawerTitle>{dic.orderInfo.waiter}</DrawerTitle>
-          </DrawerHeader>
-          <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
-           <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
-            {dic.orderInfo.waiter}
-           </h1>
-          </div>
-         </DrawerContent>
+         <FindWaiters dic={dic} />
         </Drawer>
        )}
       />
