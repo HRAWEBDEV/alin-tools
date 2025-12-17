@@ -40,7 +40,7 @@ import { SaleTypes } from '../../utils/SaleTypes';
 import { IoReloadOutline } from 'react-icons/io5';
 
 export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
- const { control, register, getValues, setValue } = useFormContext<OrderInfo>();
+ const { control, register, setValue, watch } = useFormContext<OrderInfo>();
  const {
   initialDataInfo: {
    data,
@@ -52,6 +52,22 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
  } = useOrderBaseConfigContext();
  const [showDateTimePicker, setShowDateTimePicker] = useState(false);
  const { locale } = useBaseConfig();
+
+ const [
+  saleTypeValue,
+  subscriberValue,
+  customerValue,
+  roomValue,
+  orderDateValue,
+  waiterValue,
+ ] = watch([
+  'saleType',
+  'subscriber',
+  'customer',
+  'room',
+  'orderDate',
+  'waiter',
+ ]);
 
  return (
   <form onSubmit={(e) => e.preventDefault()} className='py-5 px-1'>
@@ -254,8 +270,8 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
      </Field>
      <Field
       data-disabled={
-       getValues('saleType')?.key !== SaleTypes.delivery &&
-       getValues('saleType')?.key !== SaleTypes.contract
+       saleTypeValue?.key !== SaleTypes.delivery &&
+       saleTypeValue?.key !== SaleTypes.contract
       }
      >
       <FieldLabel htmlFor='subscriber'>{dic.orderInfo.subscriber}</FieldLabel>
@@ -271,15 +287,15 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            role='combobox'
            className='justify-between h-11'
            disabled={
-            getValues('saleType')?.key !== SaleTypes.delivery &&
-            getValues('saleType')?.key !== SaleTypes.contract
+            saleTypeValue?.key !== SaleTypes.delivery &&
+            saleTypeValue?.key !== SaleTypes.contract
            }
           >
            <span className='grow text-ellipsis overflow-hidden text-start'>
             {field.value?.value || ''}
            </span>
            <div className='flex gap-2 items-center'>
-            {getValues('subscriber') && (
+            {subscriberValue && (
              <Button
               variant={'ghost'}
               size={'icon-lg'}
@@ -300,7 +316,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        )}
       />
      </Field>
-     <Field data-disabled={getValues('saleType')?.key === SaleTypes.room}>
+     <Field data-disabled={saleTypeValue?.key === SaleTypes.room}>
       <FieldLabel htmlFor='customer'>{dic.orderInfo.customer}</FieldLabel>
       <Controller
        control={control}
@@ -313,13 +329,13 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            variant='outline'
            role='combobox'
            className='justify-between h-11'
-           disabled={getValues('saleType')?.key === SaleTypes.room}
+           disabled={saleTypeValue?.key === SaleTypes.room}
           >
            <span className='grow text-ellipsis overflow-hidden text-start'>
             {field.value?.key || ''}
            </span>
            <div className='flex gap-2 items-center'>
-            {getValues('customer') && (
+            {customerValue && (
              <Button
               variant={'ghost'}
               size={'icon-lg'}
@@ -340,7 +356,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        )}
       />
      </Field>
-     <Field data-disabled={getValues('saleType')?.key !== SaleTypes.room}>
+     <Field data-disabled={saleTypeValue?.key !== SaleTypes.room}>
       <FieldLabel htmlFor='room'>{dic.orderInfo.room}</FieldLabel>
       <Controller
        control={control}
@@ -353,13 +369,13 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            variant='outline'
            role='combobox'
            className='justify-between h-11'
-           disabled={getValues('saleType')?.key !== SaleTypes.room}
+           disabled={saleTypeValue?.key !== SaleTypes.room}
           >
            <span className='grow text-ellipsis overflow-hidden text-start'>
             {field.value?.value || ''}
            </span>
            <div className='flex gap-2 items-center'>
-            {!!getValues('room') && (
+            {!!roomValue && (
              <Button
               variant={'ghost'}
               size={'icon-lg'}
@@ -457,9 +473,24 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
      </Field>
      <Field>
       <FieldLabel htmlFor='persons'>{dic.orderInfo.guestCount}</FieldLabel>
-      <InputGroup className='h-11'>
-       <InputGroupInput id='persons' {...register('persons')} disabled />
-      </InputGroup>
+      <Controller
+       control={control}
+       name='persons'
+       render={({ field: { value, onChange, ...other } }) => (
+        <InputGroup className='h-11'>
+         <NumericFormat
+          id='persons'
+          {...other}
+          value={value}
+          onValueChange={({ formattedValue }) =>
+           onChange(Number(formattedValue) || '')
+          }
+          customInput={InputGroupInput}
+          allowNegative={false}
+         />
+        </InputGroup>
+       )}
+      />
      </Field>
      <Field>
       <FieldLabel htmlFor='invoiceType'>{dic.orderInfo.invoiceType}</FieldLabel>
@@ -468,7 +499,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
         id='invoiceType'
         readOnly
         value={
-         getValues('orderDate') <= new Date()
+         orderDateValue.getTime() <= new Date().getTime()
           ? dic.orderInfo.invoice
           : dic.orderInfo.bill
         }
@@ -517,7 +548,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
             {field.value?.value || ''}
            </span>
            <div className='flex gap-2 items-center'>
-            {getValues('waiter') && (
+            {waiterValue && (
              <Button
               variant={'ghost'}
               size={'icon-lg'}
@@ -613,7 +644,9 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           checked={field.value}
           defaultChecked={field.value}
           onBlur={field.onBlur}
-          onChange={(e) => field.onChange(e)}
+          onCheckedChange={(e) => {
+           field.onChange(e);
+          }}
          />
          <Label htmlFor='hasTable' className='text-base'>
           {dic.orderInfo.hasTableNo}
@@ -632,7 +665,9 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           checked={field.value}
           defaultChecked={field.value}
           onBlur={field.onBlur}
-          onChange={(e) => field.onChange(e)}
+          onCheckedChange={(e) => {
+           field.onChange(e);
+          }}
          />
          <Label htmlFor='hasService' className='text-base'>
           {dic.orderInfo.hasService}
@@ -651,7 +686,9 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           checked={field.value}
           defaultChecked={field.value}
           onBlur={field.onBlur}
-          onChange={(e) => field.onChange(e)}
+          onCheckedChange={(e) => {
+           field.onChange(e);
+          }}
          />
          <Label htmlFor='deliveryAgent' className='text-base'>
           {dic.orderInfo.deliveryAgent}
@@ -670,7 +707,9 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           checked={field.value}
           defaultChecked={field.value}
           onBlur={field.onBlur}
-          onChange={(e) => field.onChange(e)}
+          onCheckedChange={(e) => {
+           field.onChange(e);
+          }}
          />
          <Label htmlFor='sendToKitchen' className='text-base'>
           {dic.orderInfo.sendToKitchen}
@@ -689,7 +728,9 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           checked={field.value}
           defaultChecked={field.value}
           onBlur={field.onBlur}
-          onChange={(e) => field.onChange(e)}
+          onCheckedChange={(e) => {
+           field.onChange(e);
+          }}
          />
          <Label htmlFor='printCash' className='text-base'>
           {dic.orderInfo.printCash}

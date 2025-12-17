@@ -25,16 +25,18 @@ import { OrderInfo } from '../../schemas/orderInfoSchema';
 import { SaleTypes } from '../../utils/SaleTypes';
 
 export default function FindCustomer({ dic }: { dic: NewOrderDictionary }) {
- const { setValue, getValues } = useFormContext<OrderInfo>();
+ const { setValue, watch } = useFormContext<OrderInfo>();
  const containerRef = useRef<HTMLDivElement>(null);
  const [searchedText, setSearchedText] = useState('');
  const [debouncedSearch] = useDebouncedValue(searchedText, {
   wait: 200,
  });
 
+ const saleTypeValue = watch('saleType');
+
  const { data, hasNextPage, fetchNextPage, isFetching, refetch, isSuccess } =
   useInfiniteQuery({
-   enabled: getValues('saleType')?.key !== SaleTypes.room,
+   enabled: saleTypeValue?.key !== SaleTypes.room,
    queryKey: [newOrderKey, 'customers', debouncedSearch],
    initialPageParam: {
     limit: 300,

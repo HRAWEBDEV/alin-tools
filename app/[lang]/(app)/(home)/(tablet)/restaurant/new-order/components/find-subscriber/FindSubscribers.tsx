@@ -25,18 +25,19 @@ import { OrderInfo } from '../../schemas/orderInfoSchema';
 import { SaleTypes } from '../../utils/SaleTypes';
 
 export default function FindSubscriber({ dic }: { dic: NewOrderDictionary }) {
- const { setValue, getValues } = useFormContext<OrderInfo>();
+ const { setValue, watch } = useFormContext<OrderInfo>();
  const containerRef = useRef<HTMLDivElement>(null);
  const [searchedText, setSearchedText] = useState('');
  const [debouncedSearch] = useDebouncedValue(searchedText, {
   wait: 200,
  });
+ const saleTypeValue = watch('saleType');
 
  const { data, hasNextPage, fetchNextPage, isFetching, refetch, isSuccess } =
   useInfiniteQuery({
    enabled:
-    getValues('saleType')?.key === SaleTypes.delivery ||
-    getValues('saleType')?.key === SaleTypes.contract,
+    saleTypeValue?.key === SaleTypes.delivery ||
+    saleTypeValue?.key === SaleTypes.contract,
    queryKey: [newOrderKey, 'subscribers', debouncedSearch],
    initialPageParam: {
     limit: 300,

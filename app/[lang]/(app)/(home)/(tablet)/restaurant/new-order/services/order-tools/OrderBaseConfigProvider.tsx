@@ -415,6 +415,7 @@ export default function OrderBaseConfigProvider({
    handleChangeSelectedItemGroup(initData.itemGroups[0]);
   }
   orderInfoForm.setValue('sendToKitchen', initData.sendToKitchen);
+  orderInfoForm.setValue('printCash', initData.printToCashbox);
   if (!!orderIDQuery) return;
   if (initData.saleTimes) {
    const activeSaleTime = initData.defaultSaleTimeID
