@@ -10,7 +10,7 @@ const defaultOrderInfo: Partial<OrderInfo> = {
  customer: null,
  room: null,
  comment: '',
- hasService: false,
+ hasService: true,
  hasTableNo: true,
  sendToKitchen: false,
  printCash: false,
