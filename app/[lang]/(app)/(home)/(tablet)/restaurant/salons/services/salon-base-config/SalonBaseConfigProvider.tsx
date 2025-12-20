@@ -307,6 +307,8 @@ export default function SalonBaseConfigProvider({
   });
  // ctx
 
+ //
+
  const ctx: SalonBaseConfig = {
   initData: initData!,
   hallsInfo: {
