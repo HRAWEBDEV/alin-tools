@@ -482,9 +482,11 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           id='persons'
           {...other}
           value={value}
-          onValueChange={({ value }) => onChange(Number(value) || '')}
+          onValueChange={({ floatValue }) => onChange(floatValue || '')}
           customInput={InputGroupInput}
           allowNegative={false}
+          decimalScale={0}
+          allowLeadingZeros={false}
          />
         </InputGroup>
        )}
@@ -522,12 +524,12 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
          <NumericFormat
           {...other}
           value={value}
-          onValueChange={({ value }) => onChange(Number(value) || '')}
+          onValueChange={({ floatValue }) => onChange(floatValue || '')}
           id='discount-rate'
           customInput={InputGroupInput}
           allowNegative={false}
           decimalScale={0}
-          allowLeadingZeros
+          allowLeadingZeros={false}
           isAllowed={({ floatValue }) => {
            if (!floatValue) return true;
            return floatValue <= 100;
@@ -539,9 +541,24 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
      </Field>
      <Field>
       <FieldLabel htmlFor='bonNo'>{dic.orderInfo.bonNo}</FieldLabel>
-      <InputGroup className='h-11'>
-       <InputGroupInput type='number' id='bonNo' {...register('bonNo')} />
-      </InputGroup>
+      <Controller
+       control={control}
+       name='bonNo'
+       render={({ field: { value, onChange, ...other } }) => (
+        <InputGroup className='h-11'>
+         <NumericFormat
+          {...other}
+          value={value}
+          onValueChange={({ floatValue }) => onChange(floatValue || '')}
+          id='bonNo'
+          customInput={InputGroupInput}
+          allowNegative={false}
+          decimalScale={0}
+          allowLeadingZeros={false}
+         />
+        </InputGroup>
+       )}
+      />
      </Field>
      <Field>
       <FieldLabel htmlFor='waiter'>{dic.orderInfo.waiter}</FieldLabel>
@@ -593,9 +610,10 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           id='rounding'
           {...other}
           value={value}
-          onValueChange={({ value }) => onChange(Number(value) || '')}
+          onValueChange={({ floatValue }) => onChange(floatValue || '')}
           customInput={InputGroupInput}
           thousandSeparator
+          allowLeadingZeros={false}
          />
         </InputGroup>
        )}
@@ -612,9 +630,10 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           id='delivery'
           {...other}
           value={value}
-          onValueChange={({ value }) => onChange(Number(value) || '')}
+          onValueChange={({ floatValue }) => onChange(floatValue || '')}
           customInput={InputGroupInput}
           thousandSeparator
+          allowLeadingZeros={false}
          />
         </InputGroup>
        )}
