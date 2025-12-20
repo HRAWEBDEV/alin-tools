@@ -126,7 +126,10 @@ export default function SalonTable({
         </h3>
        </div>
        <div>
-        <p className='text-neutral-500 dark:text-neutral-400 text-wrap'>
+        <p className='text-sm text-primary text-wrap mb-1'>
+         {table.saleTypeName || ''}
+        </p>
+        <p className='text-md text-neutral-500 dark:text-neutral-400 text-wrap'>
          {table.customerName || ''}
         </p>
        </div>

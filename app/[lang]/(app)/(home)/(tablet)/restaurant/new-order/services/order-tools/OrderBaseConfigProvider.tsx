@@ -368,12 +368,18 @@ export default function OrderBaseConfigProvider({
   },
  });
 
- const orderInfoName =
-  userOrder?.name ||
-  customerValue?.value ||
-  subscriberValue?.customerName ||
+ let orderInfoName =
   roomValue?.customerName ||
+  subscriberValue?.customerName ||
+  customerValue?.value ||
   '';
+ if (
+  (roomValue || subscriberValue || customerValue) &&
+  !orderInfoName &&
+  userOrder?.name
+ ) {
+  orderInfoName = userOrder.name;
+ }
 
  async function handleSaveOrder() {
   if (!initData) return;

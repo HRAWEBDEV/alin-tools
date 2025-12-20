@@ -125,7 +125,7 @@ export default function FindRooms({ dic }: { dic: NewOrderDictionary }) {
             item.roomLabel.includes(debouncedSearch) ||
             item.guestFullName.includes(debouncedSearch),
           )
-          .map(({ id, guestFullName, roomLabel }) => (
+          .map(({ id, registerID, guestFullName, roomLabel }) => (
            <li key={id}>
             <DrawerClose asChild>
              <Button
@@ -133,7 +133,7 @@ export default function FindRooms({ dic }: { dic: NewOrderDictionary }) {
               className='py-4 items-start justify-start text-start w-full whitespace-normal bg-background shadow-md rounded-lg h-full'
               onClick={() => {
                setValue('room', {
-                key: id.toString(),
+                key: registerID.toString(),
                 value: roomLabel,
                 customerName: guestFullName,
                });

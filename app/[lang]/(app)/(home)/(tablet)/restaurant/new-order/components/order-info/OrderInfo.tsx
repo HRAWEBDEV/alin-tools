@@ -101,7 +101,16 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            className='[&]:[--cell-size:2.6rem]'
            selected={field.value}
            onSelect={(newValue) => {
-            field.onChange(newValue);
+            if (newValue) {
+             const now = new Date();
+             const newDate = newValue;
+             newDate.setHours(now.getHours());
+             newDate.setMinutes(now.getMinutes());
+             newDate.setSeconds(now.getSeconds());
+             field.onChange(newDate);
+            } else {
+             field.onChange(newValue);
+            }
            }}
           />
          </PopoverContent>

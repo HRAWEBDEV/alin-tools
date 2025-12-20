@@ -32,7 +32,7 @@ export default function FindCustomer({ dic }: { dic: NewOrderDictionary }) {
   wait: 200,
  });
 
- const saleTypeValue = watch('saleType');
+ const [saleTypeValue, roomValue] = watch(['saleType', 'room']);
 
  const { data, hasNextPage, fetchNextPage, isFetching, refetch, isSuccess } =
   useInfiniteQuery({
@@ -48,6 +48,7 @@ export default function FindCustomer({ dic }: { dic: NewOrderDictionary }) {
      limit: pageParam.limit,
      offset: pageParam.offset,
      searchPhrase: debouncedSearch,
+     registerID: roomValue?.key,
     });
     return res.data;
    },

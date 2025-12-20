@@ -372,7 +372,7 @@ function getCustomers({
  signal: AbortSignal;
  offset: number;
  limit: number;
- registerID?: number;
+ registerID?: string;
  searchPhrase?: string;
 }) {
  const searchParams = new URLSearchParams([
