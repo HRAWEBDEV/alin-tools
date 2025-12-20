@@ -246,7 +246,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
                >
                 <Checkbox
                  className='size-6'
-                 checked={field.value?.value === item.value}
+                 checked={field.value?.key === item.key}
                 />
                 <Button
                  tabIndex={-1}
@@ -274,7 +274,10 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        saleTypeValue?.key !== SaleTypes.contract
       }
      >
-      <FieldLabel htmlFor='subscriber'>{dic.orderInfo.subscriber}</FieldLabel>
+      <FieldLabel htmlFor='subscriber'>
+       {dic.orderInfo.subscriber}{' '}
+       {saleTypeValue?.key === SaleTypes.delivery && '*'}
+      </FieldLabel>
       <Controller
        control={control}
        name='subscriber'
@@ -357,7 +360,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
       />
      </Field>
      <Field data-disabled={saleTypeValue?.key !== SaleTypes.room}>
-      <FieldLabel htmlFor='room'>{dic.orderInfo.room}</FieldLabel>
+      <FieldLabel htmlFor='room'>{dic.orderInfo.room} *</FieldLabel>
       <Controller
        control={control}
        name='room'
