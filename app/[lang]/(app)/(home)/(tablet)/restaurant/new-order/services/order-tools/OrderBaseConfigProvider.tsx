@@ -21,7 +21,7 @@ import {
  getOrderPayment,
  saveOrder,
 } from '../newOrderApiActions';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { filterItemPrograms } from '../../utils/filterItemPrograms';
 import { orderItemsReducer } from '../../utils/orderItemsActionsReducer';
 import { useSearchParams } from 'next/navigation';
@@ -58,6 +58,8 @@ export default function OrderBaseConfigProvider({
  children: ReactNode;
  dic: NewOrderDictionary;
 }) {
+ const queryClient = useQueryClient();
+ //
  const router = useRouter();
  const { locale } = useBaseConfig();
  //
@@ -316,6 +318,11 @@ export default function OrderBaseConfigProvider({
     return closeOrder({ orderID: userOrder!.id });
    },
    onSuccess() {
+    if (orderIDQuery) {
+     queryClient.invalidateQueries({
+      queryKey: [newOrderKey, 'order-items', orderIDQuery],
+     });
+    }
     router.push(`/${locale}/restaurant/salons`);
     setShowCloseOrder(false);
    },
@@ -343,6 +350,11 @@ export default function OrderBaseConfigProvider({
    });
   },
   onSuccess() {
+   if (orderIDQuery) {
+    queryClient.invalidateQueries({
+     queryKey: [newOrderKey, 'order-items', orderIDQuery],
+    });
+   }
    router.push(`/${locale}/restaurant/salons`);
   },
   onError(err: AxiosError<string>) {
@@ -393,6 +405,7 @@ export default function OrderBaseConfigProvider({
      data.saleType && data.saleType.key == SaleTypes.delivery
       ? data.deliveryAgent
       : false,
+    // fixed it
     name: null,
     personID: userOrder?.personID || null,
     dateTimeDateTimeOffset:
