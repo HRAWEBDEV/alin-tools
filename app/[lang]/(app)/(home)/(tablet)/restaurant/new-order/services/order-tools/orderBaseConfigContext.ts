@@ -66,6 +66,7 @@ interface OrderBaseConfig {
   };
  };
  order: {
+  orderInfoName: string;
   orderItems: OrderItem[];
   serviceRates: {
    data?: OrderServiceRates;

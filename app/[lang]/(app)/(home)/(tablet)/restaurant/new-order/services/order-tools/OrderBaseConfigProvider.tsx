@@ -94,6 +94,9 @@ export default function OrderBaseConfigProvider({
   roundingValue,
   saleTimeValue,
   orderDateValue,
+  subscriberValue,
+  customerValue,
+  roomValue,
  ] = orderInfoForm.watch([
   'saleType',
   'hasService',
@@ -103,6 +106,9 @@ export default function OrderBaseConfigProvider({
   'rounding',
   'saleTime',
   'orderDate',
+  'subscriber',
+  'customer',
+  'room',
  ]);
  //
  const [showCloseOrder, setShowCloseOrder] = useState(false);
@@ -362,6 +368,13 @@ export default function OrderBaseConfigProvider({
   },
  });
 
+ const orderInfoName =
+  userOrder?.name ||
+  customerValue?.value ||
+  subscriberValue?.customerName ||
+  roomValue?.customerName ||
+  '';
+
  async function handleSaveOrder() {
   if (!initData) return;
   orderInfoForm.handleSubmit((data) => {
@@ -406,7 +419,7 @@ export default function OrderBaseConfigProvider({
       ? data.deliveryAgent
       : false,
     // fixed it
-    name: null,
+    name: orderInfoName || null,
     personID: userOrder?.personID || null,
     dateTimeDateTimeOffset:
      userOrder?.dateTimeDateTimeOffset || new Date().toISOString(),
@@ -603,6 +616,7 @@ export default function OrderBaseConfigProvider({
    },
   },
   order: {
+   orderInfoName,
    serviceRates: {
     data: serviceRatesData,
     isLoading: serviceRatesLoading,

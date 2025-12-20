@@ -49,6 +49,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
    freeTablesRefetch,
    freeTablesFetching,
   },
+  order: { orderInfoName },
  } = useOrderBaseConfigContext();
  const [showDateTimePicker, setShowDateTimePicker] = useState(false);
  const { locale } = useBaseConfig();
@@ -512,7 +513,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
      <Field className='col-span-full'>
       <FieldLabel htmlFor='customer'>{dic.orderInfo.customerName}</FieldLabel>
       <InputGroup className='h-11'>
-       <InputGroupInput id='customer' />
+       <InputGroupInput id='customer' value={orderInfoName} readOnly />
       </InputGroup>
      </Field>
      <Field>

@@ -21,6 +21,7 @@ export default function NewOrderHeader({ dic }: { dic: NewOrderDictionary }) {
  const router = useRouter();
  const {
   queries: { fromSalons, salonName },
+  order: { orderInfoName },
  } = useOrderBaseConfigContext();
  const [tableValue, saleTimeValue, saleTypeValue] = watch([
   'table',
@@ -76,7 +77,7 @@ export default function NewOrderHeader({ dic }: { dic: NewOrderDictionary }) {
    <div className='text-sm grid grid-cols-2 md:grid-cols-5 gap-2'>
     <div className='col-span-full md:col-span-1'>
      <span>{dic.orderInfo.customerName}: </span>
-     <span className='font-medium text-primary'>---</span>
+     <span className='font-medium text-primary'>{orderInfoName || '---'}</span>
     </div>
     <div>
      <span>{dic.orderInfo.salonName}: </span>
