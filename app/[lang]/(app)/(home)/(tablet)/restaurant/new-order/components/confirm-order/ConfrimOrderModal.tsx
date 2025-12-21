@@ -146,7 +146,7 @@ export default function ConfirmOrderModal({
        )}
       </div>
       <div className='flex flex-col-reverse sm:flex-row gap-4'>
-       {confirmOrderActiveType === 'shoppingCard' && (
+       {confirmOrderActiveType === 'shoppingCard' && !!orderItems.length && (
         <Button
          disabled={shopInfoLoading}
          variant='destructive'
