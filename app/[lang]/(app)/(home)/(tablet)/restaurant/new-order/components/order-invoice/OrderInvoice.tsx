@@ -162,9 +162,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
             role='combobox'
             className='justify-between h-11 overflow-hidden'
            >
-            <span className='grow text-ellipsis overflow-hidden text-start'>
-             حمیدر حمیدر حمیدر شسیابمس مشسیبت
-            </span>
+            <span className='grow text-ellipsis overflow-hidden text-start'></span>
             <div className='flex gap-2 items-center'>
              <Button
               variant={'ghost'}
@@ -217,9 +215,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
            role='combobox'
            className='justify-between h-11 overflow-hidden'
           >
-           <span className='grow text-ellipsis overflow-hidden text-start'>
-            حمیدر حمیدر حمیدر شسیابمس مشسیبت
-           </span>
+           <span className='grow text-ellipsis overflow-hidden text-start'></span>
            <div className='flex gap-2 items-center'>
             <Button
              variant={'ghost'}
@@ -240,7 +236,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
         <FieldLabel htmlFor='paymentRefNo'>
          {dic.invoice.paymentRefNo}
         </FieldLabel>
-        <InputGroup>
+        <InputGroup className='h-11'>
          <InputGroupInput />
         </InputGroup>
        </Field>

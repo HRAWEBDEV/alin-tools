@@ -71,7 +71,10 @@
   "cardReader": "کارت خوان",
   "paymentRefNo": "شماره مرجع",
   "confirmInvoicePayment": "ثبت پرداخت",
-  "sendToCardReader": "ارسال به کارتخوان"
+  "sendToCardReader": "ارسال به کارتخوان",
+  "enterPaymentRefNo": "شماره مرجع را وارد کنید",
+  "selectCardReader": "کارت خوان انتخاب نشده است",
+  "selectBank": "بانک انتخاب ندشه است"
  },
  "closeOrder": {
   "confirmMessage": "آیا از بستن سفارش اطمینان دارید؟",
