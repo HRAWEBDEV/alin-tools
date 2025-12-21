@@ -96,10 +96,6 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
      </div>
     </div>
     <div className='grid sm:grid-cols-3 gap-3'>
-     <Button disabled={shopLoading} size='lg' className='font-medium'>
-      {shopLoading && <Spinner />}
-      {dic.invoice.confirmOrder}
-     </Button>
      <Button
       disabled={!orderID || shopLoading}
       variant='destructive'
@@ -109,6 +105,10 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
      >
       {shopLoading && <Spinner />}
       {dic.invoice.closeOrder}
+     </Button>
+     <Button disabled={shopLoading} size='lg' className='font-medium'>
+      {shopLoading && <Spinner />}
+      {dic.invoice.confirmOrder}
      </Button>
      <Button
       disabled={shopLoading}
