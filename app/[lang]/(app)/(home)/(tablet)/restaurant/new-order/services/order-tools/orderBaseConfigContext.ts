@@ -11,6 +11,7 @@ import {
 import { type OrderItemActions } from '../../utils/orderItemsActionsReducer';
 import { type ShopCalculatorResult } from '../../utils/shopCalculator';
 import { type Combo } from '../../../utils/apiTypes';
+import { type OrderInvoicePayment } from '../../schemas/orderInvoicePaymentSchema';
 
 type ConfirmOrderType = (typeof confirmOrderTypes)[number];
 const confirmOrderTypes = ['orderInfo', 'shoppingCard', 'invoice'] as const;
@@ -84,6 +85,8 @@ interface OrderBaseConfig {
    isError: boolean;
   };
   orderTotals: ShopCalculatorResult;
+  onPayment: (paymentData: OrderInvoicePayment) => unknown;
+  onPaymentPcPos: (paymentData: OrderInvoicePayment) => unknown;
  };
 }
 

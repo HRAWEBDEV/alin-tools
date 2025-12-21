@@ -39,6 +39,29 @@ function getOrderInvoicePaymentInitData({ signal }: { signal: AbortSignal }) {
  );
 }
 
+function sendToPcPos({
+ bankID,
+ posID,
+ order,
+ orderItems,
+ sendToKitchen,
+ printToCashBox,
+}: {
+ bankID: number;
+ posID: number;
+ sendToKitchen: boolean;
+ printToCashBox: boolean;
+} & SaveOrderPackage) {
+ return axios.post<{ refNumber: string; remained: number; message: string }>(
+  `/Restaurant/CloseOrder/SendToPosWithSave?BankID=${bankID}&PosID=${posID}&sendToKitchen=${sendToKitchen}&printToCashBox=${printToCashBox}`,
+  {
+   order,
+   orderItems,
+   cash: null,
+  },
+ );
+}
+
 function saveAndCloseOrder({
  order,
  orderItems,
@@ -65,4 +88,5 @@ export {
  newOrderPaymentKey,
  getOrderInvoicePaymentInitData,
  saveAndCloseOrder,
+ sendToPcPos,
 };

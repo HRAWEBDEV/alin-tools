@@ -20,7 +20,10 @@ import {
  getOrderPayment,
  saveOrder,
 } from '../newOrderApiActions';
-import { saveAndCloseOrder } from '../orderInvoicePaymentApiActions';
+import {
+ saveAndCloseOrder,
+ sendToPcPos,
+} from '../orderInvoicePaymentApiActions';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { filterItemPrograms } from '../../utils/filterItemPrograms';
 import { orderItemsReducer } from '../../utils/orderItemsActionsReducer';
@@ -50,6 +53,7 @@ import { useRouter } from 'next/navigation';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { getOrderTypeID } from '../../utils/getOrderTypeID';
 import { SaleTypes } from '../../utils/SaleTypes';
+import { type OrderInvoicePayment } from '../../schemas/orderInvoicePaymentSchema';
 
 export default function OrderBaseConfigProvider({
  children,
@@ -345,6 +349,7 @@ export default function OrderBaseConfigProvider({
     }
     router.push(`/${locale}/restaurant/salons`);
     setShowCloseOrder(false);
+    setConfirmOrderIsOpen(false);
    },
    onError(err: AxiosError<string>) {
     toast.error(err.message || '');
@@ -476,7 +481,66 @@ export default function OrderBaseConfigProvider({
    order: orderInfoRes.newOrderData,
   });
  }
+ // payment
+ const { mutate: handleConfirmPayment, isPending: isPendingConfirmPayment } =
+  useMutation({
+   async mutationFn({
+    newOrder,
+    orderInfo,
+    paymentData,
+   }: {
+    paymentData: OrderInvoicePayment;
+    newOrder: SaveOrderPackage['order'];
+    orderInfo: OrderInfo;
+   }) {
+    return paymentData.paymentType?.key === '2'
+     ? sendToPcPos({
+        order: newOrder,
+        orderItems: pricedOrderItems,
+        sendToKitchen: orderInfo.sendToKitchen,
+        printToCashBox: orderInfo.sendToKitchen,
+        bankID: Number(paymentData.bank!.key),
+        posID: Number(paymentData.cardReader!.key),
+       })
+     : saveAndCloseOrder({
+        order: newOrder,
+        orderItems: pricedOrderItems,
+        sendToKitchen: orderInfo.sendToKitchen,
+        printToCashBox: orderInfo.sendToKitchen,
+        cash: {
+         bankAccountID: Number(paymentData.bank?.key) || null,
+         payRefNo: paymentData.paymentRefNo || null,
+         payTypeID: Number(paymentData.paymentType?.key) || null,
+         sValue: invoiceShopResult.remained,
+        },
+       });
+   },
+   onSuccess(res) {
+    if (orderIDQuery) {
+     queryClient.invalidateQueries({
+      queryKey: [newOrderKey, 'order-items', orderIDQuery],
+     });
+    }
+    if (res.data.message) {
+     toast.warning(res.data.message);
+    }
+    router.push(`/${locale}/restaurant/salons`);
+    setConfirmOrderIsOpen(false);
+   },
+   onError(err: AxiosError<string>) {
+    toast.error(err.message || '');
+   },
+  });
 
+ async function handlePayment(paymentData: OrderInvoicePayment) {
+  const newOrderRes = await validateOrderInfo();
+  if (!newOrderRes) return;
+  handleConfirmPayment({
+   newOrder: newOrderRes.newOrderData,
+   orderInfo: newOrderRes.orderInfoData,
+   paymentData,
+  });
+ }
  // loadings
  const shopLoading =
   initLoading ||
@@ -485,7 +549,8 @@ export default function OrderBaseConfigProvider({
   serviceRatesLoading ||
   orderPaymentLoading ||
   saveOrderPending ||
-  isPendingCloseOrder;
+  isPendingCloseOrder ||
+  isPendingConfirmPayment;
  const shopInfoLoading = shopLoading;
  // set defaults
  useEffect(() => {
@@ -683,6 +748,8 @@ export default function OrderBaseConfigProvider({
     isLoading: orderPaymentLoading,
     isError: orderPaymentError,
    },
+   onPayment: handlePayment,
+   onPaymentPcPos: handlePayment,
   },
  };
 

@@ -36,6 +36,7 @@ import {
  newOrderPaymentKey,
  getOrderInvoicePaymentInitData,
 } from '../../services/orderInvoicePaymentApiActions';
+import { toast } from 'sonner';
 
 const invoiceRowClass =
  'flex justify-between gap-2 items-center text-base pb-3 mb-3 border-b border-input font-medium';
@@ -63,7 +64,6 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
  const {
   shopLoading,
   confirmOrderActiveType,
-  queries: { orderID },
   order: { orderItems, onCloseOrder, onSaveOrder },
   invoice: {
    orderTotals: {
@@ -75,6 +75,8 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
     totalService,
     totalSValue,
    },
+   onPayment,
+   onPaymentPcPos,
   },
  } = useOrderBaseConfigContext();
  const { format } = useCurrencyFormatter();
@@ -90,7 +92,20 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
 
  function handleConfirmPayment(e: MouseEvent<HTMLButtonElement>) {
   e.preventDefault();
-  handleSubmit(() => {})();
+  handleSubmit(
+   (data) => {
+    if (data.paymentType?.key === '2') {
+     onPaymentPcPos(data);
+     return;
+    }
+    onPayment(data);
+   },
+   (err) => {
+    Object.keys(err).forEach((errKey) => {
+     toast.error(err[errKey as keyof typeof err]?.message);
+    });
+   },
+  )();
  }
 
  useEffect(() => {
@@ -113,38 +128,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
  return orderItems.length ? (
   <div>
    <div className='w-[min(100%,35rem)] mx-auto pt-2'>
-    <div className='grid sm:grid-cols-3 gap-3 mb-2'>
-     <Button
-      disabled={shopLoading}
-      variant='destructive'
-      size='lg'
-      className='font-medium disabled:bg-neutral-400 disabled:dark:bg-neutral-600'
-      onClick={onCloseOrder}
-     >
-      {shopLoading && <Spinner />}
-      {dic.invoice.closeOrder}
-     </Button>
-     <Button
-      disabled={shopLoading}
-      size='lg'
-      className='font-medium'
-      onClick={onSaveOrder}
-     >
-      {shopLoading && <Spinner />}
-      {dic.invoice.confirmOrder}
-     </Button>
-     <Button
-      disabled={shopLoading}
-      variant='secondary'
-      size='lg'
-      className='font-medium'
-      onClick={() => invoicePaymentRef.current?.scrollIntoView()}
-     >
-      {shopLoading && <Spinner />}
-      {dic.invoice.confirmPayment}
-     </Button>
-    </div>
-    <div className='p-4 border border-input rounded-md bg-neutral-50 dark:bg-neutral-950 mb-4'>
+    <div className='p-4 border border-input rounded-md bg-neutral-50 dark:bg-neutral-950 mb-2'>
      <div className={invoiceRowClass}>
       <span className={invoiceLabelClass}>
        {'+ '}
@@ -206,6 +190,37 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
       </span>
       <span>{format(remained)}</span>
      </div>
+    </div>
+    <div className='grid sm:grid-cols-3 gap-3 mb-6 border-b border-input pb-6'>
+     <Button
+      disabled={shopLoading}
+      variant='destructive'
+      size='lg'
+      className='font-medium disabled:bg-neutral-400 disabled:dark:bg-neutral-600'
+      onClick={onCloseOrder}
+     >
+      {shopLoading && <Spinner />}
+      {dic.invoice.closeOrder}
+     </Button>
+     <Button
+      disabled={shopLoading}
+      size='lg'
+      className='font-medium'
+      onClick={onSaveOrder}
+     >
+      {shopLoading && <Spinner />}
+      {dic.invoice.confirmOrder}
+     </Button>
+     <Button
+      disabled={shopLoading}
+      variant='secondary'
+      size='lg'
+      className='font-medium'
+      onClick={() => invoicePaymentRef.current?.scrollIntoView()}
+     >
+      {shopLoading && <Spinner />}
+      {dic.invoice.confirmPayment}
+     </Button>
     </div>
     {/* payment setup */}
     <div className='rounded-md border border-input p-4' ref={invoicePaymentRef}>
@@ -455,11 +470,12 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
          </FieldContent>
         )}
        </Field>
-       <div className='flex lg:justify-end gap-3 flex-col lg:flex-row'>
+       <div className='grid sm:grid-cols-3 gap-3 sm:justify-end'>
+        <div></div>
+        <div></div>
         {paymentTypeValue?.key === '2' ? (
          <Button
           disabled={isFetching || shopLoading}
-          className='h-11'
           type='submit'
           onClick={handleConfirmPayment}
          >
