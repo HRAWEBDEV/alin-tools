@@ -65,7 +65,13 @@
   "service": "سرویس",
   "confirmOrder": "ثبت سفارش",
   "closeOrder": "بستن سفارش",
-  "confirmPayment": "پرداخت"
+  "confirmPayment": "پرداخت",
+  "paymentType": "نوع پرداخت",
+  "bank": "بانک",
+  "cardReader": "کارت خوان",
+  "paymentRefNo": "شماره مرجع",
+  "confirmInvoicePayment": "ثبت پرداخت",
+  "sendToCardReader": "ارسال به کارتخوان"
  },
  "closeOrder": {
   "confirmMessage": "آیا از بستن سفارش اطمینان دارید؟",

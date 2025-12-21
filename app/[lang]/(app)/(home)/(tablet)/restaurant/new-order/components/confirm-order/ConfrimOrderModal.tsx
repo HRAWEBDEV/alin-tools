@@ -53,7 +53,7 @@ export default function ConfirmOrderModal({
      <DialogTitle className='hidden'></DialogTitle>
      <DialogDescription className='hidden'></DialogDescription>
     </DialogHeader>
-    <div className='grow overflow-auto p-4 pt-0'>
+    <div className='grow overflow-auto p-4 pt-0 scroll-smooth'>
      <Tabs
       dir={localeInfo.contentDirection}
       value={confirmOrderActiveType}
