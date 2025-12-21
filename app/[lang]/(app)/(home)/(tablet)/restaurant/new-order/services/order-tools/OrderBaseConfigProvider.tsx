@@ -425,8 +425,7 @@ export default function OrderBaseConfigProvider({
       data.saleType && data.saleType.key == SaleTypes.delivery
        ? data.deliveryAgent
        : false,
-     // fixed it
-     name: orderInfoName || null,
+     name: data.customerName || orderInfoName || null,
      personID: userOrder?.personID || null,
      dateTimeDateTimeOffset:
       userOrder?.dateTimeDateTimeOffset || new Date().toISOString(),
@@ -513,6 +512,7 @@ export default function OrderBaseConfigProvider({
    deliveryByAgent,
    occupied,
    comment,
+   name,
   } = userOrder;
   if (tableID && tableNo) {
    orderInfoForm.setValue('table', {
@@ -549,6 +549,7 @@ export default function OrderBaseConfigProvider({
     customerName: '',
    });
   }
+  orderInfoForm.setValue('customerName', name || '');
   orderInfoForm.setValue('bonNo', bonNo || '');
   orderInfoForm.setValue('comment', comment || '');
   orderInfoForm.setValue('persons', persons || '');

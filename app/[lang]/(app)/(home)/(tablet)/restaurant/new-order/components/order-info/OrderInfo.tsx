@@ -564,9 +564,20 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
      </Field>
      <Field className='col-span-full'>
       <FieldLabel htmlFor='customer'>{dic.orderInfo.customerName}</FieldLabel>
-      <InputGroup className='h-11'>
-       <InputGroupInput id='customer' value={orderInfoName} readOnly />
-      </InputGroup>
+      <Controller
+       control={control}
+       name='customerName'
+       render={({ field: { value, ...other } }) => (
+        <InputGroup className='h-11'>
+         <InputGroupInput
+          id='customer'
+          placeholder={orderInfoName}
+          value={value}
+          {...other}
+         />
+        </InputGroup>
+       )}
+      />
      </Field>
      <Field>
       <FieldLabel htmlFor='discount-rate'>
