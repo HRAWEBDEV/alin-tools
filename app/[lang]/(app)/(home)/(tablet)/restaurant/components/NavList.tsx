@@ -27,7 +27,7 @@ export default function NavList() {
      asChild
     >
      <Link
-      href={`/${locale}/restaurant/salons`}
+      href={activePath === 'salons' ? '#' : `/${locale}/restaurant/salons`}
       className='flex w-auto h-auto items-center gap-4'
      >
       <DinnerIcon className='size-12' />
@@ -43,7 +43,9 @@ export default function NavList() {
      asChild
     >
      <Link
-      href={`/${locale}/restaurant/new-order`}
+      href={
+       activePath === 'new-order' ? '#' : `/${locale}/restaurant/new-order`
+      }
       className='flex w-auto h-auto items-center gap-4'
      >
       <DishIcon className='size-12' />

@@ -61,6 +61,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
   roomValue,
   orderDateValue,
   waiterValue,
+  tableValue,
  ] = watch([
   'saleType',
   'subscriber',
@@ -68,6 +69,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
   'room',
   'orderDate',
   'waiter',
+  'table',
  ]);
 
  return (
@@ -686,9 +688,10 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
          <Checkbox
           id='hasTable'
           className='scale-200'
-          checked={field.value}
+          checked={!tableValue ? false : field.value}
           defaultChecked={field.value}
           onBlur={field.onBlur}
+          disabled={!tableValue}
           onCheckedChange={(e) => {
            field.onChange(e);
           }}
@@ -727,6 +730,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
         <div className='flex gap-4 items-center'>
          <Checkbox
           id='deliveryAgent'
+          disabled={saleTypeValue?.key !== SaleTypes.delivery}
           className='scale-200'
           checked={field.value}
           defaultChecked={field.value}

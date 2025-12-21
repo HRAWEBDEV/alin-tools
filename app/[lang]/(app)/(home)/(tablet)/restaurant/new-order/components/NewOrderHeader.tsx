@@ -74,7 +74,7 @@ export default function NewOrderHeader({ dic }: { dic: NewOrderDictionary }) {
      </Dialog>
     </div>
    </div>
-   <div className='text-sm grid grid-cols-2 md:grid-cols-5 gap-2'>
+   <div className='text-md grid grid-cols-2 md:grid-cols-5 gap-2'>
     <div className='col-span-full md:col-span-1'>
      <span>{dic.orderInfo.customerName}: </span>
      <span className='font-medium text-primary'>{orderInfoName || '---'}</span>
