@@ -22,6 +22,7 @@ const defaultOrderInfo: Partial<OrderInfo> = {
  rounding: '',
  employeeTip: '',
  deliveryValue: '',
+ customerName: '',
 };
 
 function createOrderInfoSchema({ dic }: { dic: NewOrderDictionary }) {
