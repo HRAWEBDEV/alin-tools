@@ -74,29 +74,39 @@ export default function NewOrderHeader({ dic }: { dic: NewOrderDictionary }) {
      </Dialog>
     </div>
    </div>
-   <div className='text-md grid grid-cols-2 md:grid-cols-5 gap-2'>
+   <div className='text-sm grid grid-cols-2 md:grid-cols-5 gap-2'>
     <div className='col-span-full md:col-span-1'>
-     <span>{dic.orderInfo.customerName}: </span>
+     <span className='text-neutral-600 dark:text-neutral-400'>
+      {dic.orderInfo.customerName}:{' '}
+     </span>
      <span className='font-medium text-primary'>{orderInfoName || '---'}</span>
     </div>
     <div>
-     <span>{dic.orderInfo.salonName}: </span>
+     <span className='text-neutral-600 dark:text-neutral-400'>
+      {dic.orderInfo.salonName}:{' '}
+     </span>
      <span className='font-medium text-primary'>{salonName || '---'}</span>
     </div>
     <div>
-     <span>{dic.orderInfo.tableNo}: </span>
+     <span className='text-neutral-600 dark:text-neutral-400'>
+      {dic.orderInfo.tableNo}:{' '}
+     </span>
      <span className='font-medium text-primary'>
       {tableValue?.value || '---'}
      </span>
     </div>
     <div>
-     <span>{dic.orderInfo.saleTime}: </span>
+     <span className='text-neutral-600 dark:text-neutral-400'>
+      {dic.orderInfo.saleTime}:{' '}
+     </span>
      <span className='font-medium text-primary'>
       {saleTimeValue?.value || '---'}
      </span>
     </div>
     <div>
-     <span>{dic.orderInfo.saleType}: </span>
+     <span className='text-neutral-600 dark:text-neutral-400'>
+      {dic.orderInfo.saleType}:{' '}
+     </span>
      <span className='font-medium text-primary'>
       {saleTypeValue?.value || '---'}
      </span>
