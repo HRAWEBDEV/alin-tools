@@ -233,15 +233,15 @@ export default function SalonTable({
             {dic.tables.mergeTables}
            </DropdownMenuLabel>
           </DropdownMenuItem>
-          <DropdownMenuItem
-           className='text-rose-700 dark:text-rose-400'
-           onClick={onCloseOrder}
-          >
-           <IoMdCloseCircleOutline className='size-8 text-inherit' />
-           <DropdownMenuLabel className='text-base'>
-            {dic.tables.closeOrder}
-           </DropdownMenuLabel>
-          </DropdownMenuItem>
+          {/* <DropdownMenuItem */}
+          {/*  className='text-rose-700 dark:text-rose-400' */}
+          {/*  onClick={onCloseOrder} */}
+          {/* > */}
+          {/*  <IoMdCloseCircleOutline className='size-8 text-inherit' /> */}
+          {/*  <DropdownMenuLabel className='text-base'> */}
+          {/*   {dic.tables.closeOrder} */}
+          {/*  </DropdownMenuLabel> */}
+          {/* </DropdownMenuItem> */}
          </>
         )}
       </DropdownMenuGroup>
