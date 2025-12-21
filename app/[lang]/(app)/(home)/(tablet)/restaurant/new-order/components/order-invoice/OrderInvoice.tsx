@@ -7,7 +7,14 @@ import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseC
 import { useCurrencyFormatter } from '@/hooks/useCurrencyFormatter';
 import { Spinner } from '@/components/ui/spinner';
 import { ChevronsUpDown } from 'lucide-react';
-import { Drawer, DrawerTrigger } from '@/components/ui/drawer';
+import {
+ Drawer,
+ DrawerTrigger,
+ DrawerContent,
+ DrawerClose,
+ DrawerHeader,
+ DrawerTitle,
+} from '@/components/ui/drawer';
 import {
  FieldGroup,
  FieldError,
@@ -15,8 +22,8 @@ import {
  Field,
  FieldLabel,
 } from '@/components/ui/field';
-import { BsTrash } from 'react-icons/bs';
 import { InputGroup, InputGroupInput } from '@/components/ui/input-group';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useForm, Controller } from 'react-hook-form';
 import {
  type OrderInvoicePayment,
@@ -24,12 +31,24 @@ import {
  createOrderInvoicePaymentSchema,
 } from '../../schemas/orderInvoicePaymentSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQuery } from '@tanstack/react-query';
+import {
+ newOrderPaymentKey,
+ getOrderInvoicePaymentInitData,
+} from '../../services/orderInvoicePaymentApiActions';
 
 const invoiceRowClass =
  'flex justify-between gap-2 items-center text-base pb-3 mb-3 border-b border-input font-medium';
 const invoiceLabelClass = 'shrink-0 w-32';
 
 export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
+ const { data, isSuccess, isFetching } = useQuery({
+  queryKey: [newOrderPaymentKey, 'init-data'],
+  async queryFn({ signal }) {
+   const res = await getOrderInvoicePaymentInitData({ signal });
+   return res.data;
+  },
+ });
  const {
   control,
   formState: { errors },
@@ -191,6 +210,46 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
               <FieldError>{errors.paymentType.message}</FieldError>
              </FieldContent>
             )}
+            <DrawerContent className='h-[min(80svh,35rem)]'>
+             <DrawerHeader className='hidden'>
+              <DrawerTitle>{dic.invoice.paymentType}</DrawerTitle>
+             </DrawerHeader>
+             <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+              <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
+               {dic.invoice.paymentType}
+              </h1>
+             </div>
+             <div className='overflow-hidden overflow-y-auto'>
+              {data?.payTypes.length ? (
+               <ul>
+                {data.payTypes.map((item) => (
+                 <DrawerClose asChild key={item.key}>
+                  <li
+                   className='flex gap-1 items-center ps-6 py-2'
+                   onClick={() => {
+                    field.onChange(item);
+                   }}
+                  >
+                   <Checkbox
+                    className='size-6'
+                    checked={field.value?.key === item.key}
+                   />
+                   <Button
+                    tabIndex={-1}
+                    variant='ghost'
+                    className='w-full justify-start h-auto text-lg'
+                   >
+                    <span>{item.value}</span>
+                   </Button>
+                  </li>
+                 </DrawerClose>
+                ))}
+               </ul>
+              ) : (
+               <NoItemFound />
+              )}
+             </div>
+            </DrawerContent>
            </Drawer>
           )}
          />
@@ -224,6 +283,46 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
               <FieldError>{errors.bank.message}</FieldError>
              </FieldContent>
             )}
+            <DrawerContent className='h-[min(80svh,35rem)]'>
+             <DrawerHeader className='hidden'>
+              <DrawerTitle>{dic.invoice.bank}</DrawerTitle>
+             </DrawerHeader>
+             <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+              <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
+               {dic.invoice.bank}
+              </h1>
+             </div>
+             <div className='overflow-hidden overflow-y-auto'>
+              {data?.banks.length ? (
+               <ul>
+                {data.banks.map((item) => (
+                 <DrawerClose asChild key={item.key}>
+                  <li
+                   className='flex gap-1 items-center ps-6 py-2'
+                   onClick={() => {
+                    field.onChange(item);
+                   }}
+                  >
+                   <Checkbox
+                    className='size-6'
+                    checked={field.value?.key === item.key}
+                   />
+                   <Button
+                    tabIndex={-1}
+                    variant='ghost'
+                    className='w-full justify-start h-auto text-lg'
+                   >
+                    <span>{item.value}</span>
+                   </Button>
+                  </li>
+                 </DrawerClose>
+                ))}
+               </ul>
+              ) : (
+               <NoItemFound />
+              )}
+             </div>
+            </DrawerContent>
            </Drawer>
           )}
          />
@@ -258,6 +357,46 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
              <FieldError>{errors.cardReader.message}</FieldError>
             </FieldContent>
            )}
+           <DrawerContent className='h-[min(80svh,35rem)]'>
+            <DrawerHeader className='hidden'>
+             <DrawerTitle>{dic.invoice.cardReader}</DrawerTitle>
+            </DrawerHeader>
+            <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+             <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
+              {dic.invoice.cardReader}
+             </h1>
+            </div>
+            <div className='overflow-hidden overflow-y-auto'>
+             {data?.payTypes.length ? (
+              <ul>
+               {data.payTypes.map((item) => (
+                <DrawerClose asChild key={item.key}>
+                 <li
+                  className='flex gap-1 items-center ps-6 py-2'
+                  onClick={() => {
+                   field.onChange(item);
+                  }}
+                 >
+                  <Checkbox
+                   className='size-6'
+                   checked={field.value?.key === item.key}
+                  />
+                  <Button
+                   tabIndex={-1}
+                   variant='ghost'
+                   className='w-full justify-start h-auto text-lg'
+                  >
+                   <span>{item.value}</span>
+                  </Button>
+                 </li>
+                </DrawerClose>
+               ))}
+              </ul>
+             ) : (
+              <NoItemFound />
+             )}
+            </div>
+           </DrawerContent>
           </Drawer>
          )}
         />
@@ -271,8 +410,14 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
         </InputGroup>
        </Field>
        <div className='flex lg:justify-end gap-3 flex-col lg:flex-row'>
-        <Button className='h-11'>{dic.invoice.sendToCardReader}</Button>
-        <Button className='h-11'>{dic.invoice.confirmInvoicePayment}</Button>
+        <Button disabled={isFetching || shopLoading} className='h-11'>
+         {(isFetching || shopLoading) && <Spinner />}
+         {dic.invoice.sendToCardReader}
+        </Button>
+        <Button disabled={isFetching || shopLoading} className='h-11'>
+         {(isFetching || shopLoading) && <Spinner />}
+         {dic.invoice.confirmInvoicePayment}
+        </Button>
        </div>
       </FieldGroup>
      </form>
