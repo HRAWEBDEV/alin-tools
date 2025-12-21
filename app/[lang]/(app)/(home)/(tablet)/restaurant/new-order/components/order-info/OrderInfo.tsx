@@ -2,7 +2,13 @@ import { useState } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import { type OrderInfo } from '../../schemas/orderInfoSchema';
 import { type NewOrderDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/new-order/dictionary';
-import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
+import {
+ Field,
+ FieldGroup,
+ FieldLabel,
+ FieldError,
+ FieldContent,
+} from '@/components/ui/field';
 import { Calendar } from '@/components/ui/calendar';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -40,7 +46,14 @@ import { SaleTypes } from '../../utils/SaleTypes';
 import { IoReloadOutline } from 'react-icons/io5';
 
 export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
- const { control, register, setValue, watch } = useFormContext<OrderInfo>();
+ const {
+  control,
+  register,
+  setValue,
+  watch,
+  formState: { errors },
+  clearErrors,
+ } = useFormContext<OrderInfo>();
  const {
   initialDataInfo: {
    data,
@@ -254,6 +267,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
                  setValue('contract', null);
                  setValue('customer', null);
                  setValue('deliveryAgent', item?.key === SaleTypes.delivery);
+                 clearErrors(['room', 'subscriber']);
                 }}
                >
                 <Checkbox
@@ -281,6 +295,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
       />
      </Field>
      <Field
+      data-invalid={!!errors.subscriber}
       data-disabled={
        saleTypeValue?.key !== SaleTypes.delivery &&
        saleTypeValue?.key !== SaleTypes.contract
@@ -326,6 +341,11 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            </div>
           </Button>
          </DrawerTrigger>
+         {!!errors.subscriber && (
+          <FieldContent>
+           <FieldLabel>{errors.subscriber.message}</FieldLabel>
+          </FieldContent>
+         )}
          <FindSubscribers dic={dic} />
         </Drawer>
        )}
@@ -371,7 +391,10 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        )}
       />
      </Field>
-     <Field data-disabled={saleTypeValue?.key !== SaleTypes.room}>
+     <Field
+      data-invalid={!!errors.room}
+      data-disabled={saleTypeValue?.key !== SaleTypes.room}
+     >
       <FieldLabel htmlFor='room'>{dic.orderInfo.room} *</FieldLabel>
       <Controller
        control={control}
@@ -406,6 +429,11 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            </div>
           </Button>
          </DrawerTrigger>
+         {!!errors.room && (
+          <FieldContent>
+           <FieldError>{errors.room.message}</FieldError>
+          </FieldContent>
+         )}
          <FindRooms dic={dic} />
         </Drawer>
        )}

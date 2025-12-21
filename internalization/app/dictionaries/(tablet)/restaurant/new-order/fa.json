@@ -36,7 +36,9 @@
   "sendToKitchen": "ارسال به آشپزخانه",
   "printCash": "چاپ رسید صندوق",
   "deliveryAgent": "تحویل به پیک",
-  "addTag": "تگ"
+  "addTag": "تگ",
+  "noRoomSelected": "شماره اتاق انتخاب نشده است",
+  "noSubscriberSelected": "کد اشتراک انتخاب نشده است"
  },
  "orderConfirm": {
   "removeOrderItemConfirmMessage": "آیا از حذف این آیتم اطمینان دارید؟",

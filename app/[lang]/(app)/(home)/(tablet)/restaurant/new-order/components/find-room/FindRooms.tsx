@@ -25,7 +25,7 @@ import { OrderInfo } from '../../schemas/orderInfoSchema';
 import { SaleTypes } from '../../utils/SaleTypes';
 
 export default function FindRooms({ dic }: { dic: NewOrderDictionary }) {
- const { setValue, watch } = useFormContext<OrderInfo>();
+ const { setValue, watch, clearErrors } = useFormContext<OrderInfo>();
  const containerRef = useRef<HTMLDivElement>(null);
  const [searchedText, setSearchedText] = useState('');
  const [debouncedSearch] = useDebouncedValue(searchedText, {
@@ -137,6 +137,7 @@ export default function FindRooms({ dic }: { dic: NewOrderDictionary }) {
                 value: roomLabel,
                 customerName: guestFullName,
                });
+               clearErrors(['room']);
               }}
              >
               <div className='grid gap-1'>
