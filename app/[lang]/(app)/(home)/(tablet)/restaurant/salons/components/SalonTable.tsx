@@ -96,7 +96,13 @@ export default function SalonTable({
      }}
     >
      <Link
-      href={showTransferTable || showMergeTable ? '#' : newOrderRedirectLink}
+      href={
+       showTransferTable ||
+       showMergeTable ||
+       table.tableStateTypeID === TableStateTypes.outOfService
+        ? '#'
+        : newOrderRedirectLink
+      }
       className='relative flex! flex-col grow items-stretch bg-background! p-2'
      >
       {table.vip && (
