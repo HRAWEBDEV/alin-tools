@@ -41,8 +41,12 @@ export default function NewOrderHeader({ dic }: { dic: NewOrderDictionary }) {
      <Dialog>
       {fromSalons && (
        <DialogTrigger asChild>
-        <Button size='icon-lg' variant='outline' className='ltr:rotate-180'>
-         <FaArrowLeft />
+        <Button
+         size='icon-lg'
+         variant='outline'
+         className='ltr:rotate-180 border-rose-600 dark:border-rose-400'
+        >
+         <FaArrowLeft className='size-5 text-rose-600 dark:text-rose-400' />
         </Button>
        </DialogTrigger>
       )}

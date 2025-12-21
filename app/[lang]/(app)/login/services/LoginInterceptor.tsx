@@ -21,7 +21,7 @@ export default function LoginInterceptor() {
       console.error('Response error:', error.response);
      }
      return Promise.reject(error);
-    }
+    },
    );
 
    return () => {
