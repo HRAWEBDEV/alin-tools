@@ -44,15 +44,6 @@ function createOrderInvoicePaymentSchema({ dic }: { dic: NewOrderDictionary }) {
    },
   )
   .refine(
-   ({ paymentType, bank }) => {
-    return paymentType?.key !== '1' ? !!bank : true;
-   },
-   {
-    path: ['bank'],
-    message: dic.invoice.selectBank,
-   },
-  )
-  .refine(
    ({ paymentType, paymentRefNo }) => {
     return paymentType?.key !== '1' && paymentType?.key !== '2'
      ? !!paymentRefNo
@@ -60,7 +51,16 @@ function createOrderInvoicePaymentSchema({ dic }: { dic: NewOrderDictionary }) {
    },
    {
     path: ['paymentRefNo'],
-    message: dic.invoice.paymentRefNo,
+    message: dic.invoice.enterPaymentRefNo,
+   },
+  )
+  .refine(
+   ({ paymentType, bank }) => {
+    return paymentType?.key !== '1' ? !!bank : true;
+   },
+   {
+    path: ['bank'],
+    message: dic.invoice.selectBank,
    },
   );
 }
