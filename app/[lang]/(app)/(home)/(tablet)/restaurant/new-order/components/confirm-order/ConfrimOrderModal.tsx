@@ -1,4 +1,5 @@
 'use client';
+import { useRef } from 'react';
 import {
  Dialog,
  DialogTitle,
@@ -13,7 +14,7 @@ import {
  type ConfirmOrderType,
  useOrderBaseConfigContext,
 } from '../../services/order-tools/orderBaseConfigContext';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import OrderShoppingCard from '../order-shop/OrderShoppingCard';
 import OrderInfo from '../order-info/OrderInfo';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
@@ -28,6 +29,7 @@ export default function ConfirmOrderModal({
 }: {
  dic: NewOrderDictionary;
 }) {
+ const dialogBodyRef = useRef<HTMLDivElement>(null);
  const { localeInfo } = useBaseConfig();
  const {
   confirmOrderIsOpen,
@@ -54,13 +56,19 @@ export default function ConfirmOrderModal({
      <DialogTitle className='hidden'></DialogTitle>
      <DialogDescription className='hidden'></DialogDescription>
     </DialogHeader>
-    <div className='grow overflow-auto p-4 pt-0 scroll-smooth'>
+    <div
+     ref={dialogBodyRef}
+     className='grow overflow-auto p-4 pt-0 scroll-smooth'
+    >
      <Tabs
       dir={localeInfo.contentDirection}
       value={confirmOrderActiveType}
-      onValueChange={(newValue) =>
-       changeConfirmType(newValue as ConfirmOrderType)
-      }
+      onValueChange={(newValue) => {
+       changeConfirmType(newValue as ConfirmOrderType);
+       if (dialogBodyRef.current) {
+        dialogBodyRef.current.scrollTop = 0;
+       }
+      }}
      >
       <TabsList className='self-center sticky top-0 min-h-12 z-2'>
        <TabsTrigger value='orderInfo' className='w-28'>
