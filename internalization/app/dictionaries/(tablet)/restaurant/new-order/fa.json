@@ -74,7 +74,8 @@
   "sendToCardReader": "ارسال به کارتخوان",
   "enterPaymentRefNo": "شماره مرجع را وارد کنید",
   "selectCardReader": "کارت خوان انتخاب نشده است",
-  "selectBank": "بانک انتخاب ندشه است"
+  "selectBank": "بانک انتخاب ندشه است",
+  "selectPayType": "نوع پرداخت را انتخاب کنید"
  },
  "closeOrder": {
   "confirmMessage": "آیا از بستن سفارش اطمینان دارید؟",

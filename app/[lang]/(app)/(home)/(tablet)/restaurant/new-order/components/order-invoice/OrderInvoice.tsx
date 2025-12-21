@@ -7,29 +7,38 @@ import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseC
 import { useCurrencyFormatter } from '@/hooks/useCurrencyFormatter';
 import { Spinner } from '@/components/ui/spinner';
 import { ChevronsUpDown } from 'lucide-react';
-import {
- Drawer,
- DrawerTrigger,
- DrawerContent,
- DrawerHeader,
- DrawerTitle,
- DrawerClose,
-} from '@/components/ui/drawer';
+import { Drawer, DrawerTrigger } from '@/components/ui/drawer';
 import {
  FieldGroup,
  FieldError,
+ FieldContent,
  Field,
  FieldLabel,
 } from '@/components/ui/field';
 import { BsTrash } from 'react-icons/bs';
 import { InputGroup, InputGroupInput } from '@/components/ui/input-group';
-import { NumericFormat } from 'react-number-format';
+import { useForm, Controller } from 'react-hook-form';
+import {
+ type OrderInvoicePayment,
+ defaultValues,
+ createOrderInvoicePaymentSchema,
+} from '../../schemas/orderInvoicePaymentSchema';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 const invoiceRowClass =
  'flex justify-between gap-2 items-center text-base pb-3 mb-3 border-b border-input font-medium';
 const invoiceLabelClass = 'shrink-0 w-32';
 
 export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
+ const {
+  control,
+  formState: { errors },
+ } = useForm<OrderInvoicePayment>({
+  resolver: zodResolver(createOrderInvoicePaymentSchema({ dic })),
+  defaultValues: {
+   ...defaultValues,
+  },
+ });
  const invoicePaymentRef = useRef<HTMLDivElement>(null);
  const {
   shopLoading,
@@ -150,87 +159,108 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
     <div className='rounded-md border border-input p-4' ref={invoicePaymentRef}>
      <form>
       <FieldGroup className='gap-5'>
-       <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
+       <div className='grid grid-cols-1 gap-5'>
         <Field>
          <FieldLabel htmlFor='paymentType'>
-          {dic.invoice.paymentType}
+          {dic.invoice.paymentType} *
          </FieldLabel>
-         <Drawer>
-          <DrawerTrigger asChild>
-           <Button
-            variant='outline'
-            role='combobox'
-            className='justify-between h-11 overflow-hidden'
-           >
-            <span className='grow text-ellipsis overflow-hidden text-start'></span>
-            <div className='flex gap-2 items-center'>
+         <Controller
+          control={control}
+          name='paymentType'
+          render={({ field }) => (
+           <Drawer>
+            <DrawerTrigger asChild>
              <Button
-              variant={'ghost'}
-              size={'icon-lg'}
-              onClick={(e) => {
-               e.stopPropagation();
-              }}
+              id='paymentType'
+              variant='outline'
+              role='combobox'
+              className='justify-between h-11 overflow-hidden'
+              onBlur={field.onBlur}
+              ref={field.ref}
              >
-              <BsTrash className='size-5 text-red-700 dark:text-red-400' />
+              <span className='grow text-ellipsis overflow-hidden text-start'>
+               {field.value?.value || ''}
+              </span>
+              <div className='flex gap-2 items-center'>
+               <ChevronsUpDown />
+              </div>
              </Button>
-             <ChevronsUpDown />
-            </div>
-           </Button>
-          </DrawerTrigger>
-         </Drawer>
+            </DrawerTrigger>
+            {!!errors.paymentType && (
+             <FieldContent>
+              <FieldError>{errors.paymentType.message}</FieldError>
+             </FieldContent>
+            )}
+           </Drawer>
+          )}
+         />
         </Field>
         <Field>
-         <FieldLabel htmlFor='bank'>{dic.invoice.bank}</FieldLabel>
-         <Drawer>
-          <DrawerTrigger asChild>
-           <Button
-            variant='outline'
-            role='combobox'
-            className='justify-between h-11 overflow-hidden'
-           >
-            <span className='grow text-ellipsis overflow-hidden text-start'></span>
-            <div className='flex gap-2 items-center'>
+         <FieldLabel htmlFor='bank'>{dic.invoice.bank} *</FieldLabel>
+         <Controller
+          control={control}
+          name='bank'
+          render={({ field }) => (
+           <Drawer>
+            <DrawerTrigger asChild>
              <Button
-              variant={'ghost'}
-              size={'icon-lg'}
-              onClick={(e) => {
-               e.stopPropagation();
-              }}
+              id='bank'
+              variant='outline'
+              role='combobox'
+              className='justify-between h-11 overflow-hidden'
+              onBlur={field.onBlur}
+              ref={field.ref}
              >
-              <BsTrash className='size-5 text-red-700 dark:text-red-400' />
+              <span className='grow text-ellipsis overflow-hidden text-start'>
+               {field.value?.value || ''}
+              </span>
+              <div className='flex gap-2 items-center'>
+               <ChevronsUpDown />
+              </div>
              </Button>
-             <ChevronsUpDown />
-            </div>
-           </Button>
-          </DrawerTrigger>
-         </Drawer>
+            </DrawerTrigger>
+            {!!errors.bank && (
+             <FieldContent>
+              <FieldError>{errors.bank.message}</FieldError>
+             </FieldContent>
+            )}
+           </Drawer>
+          )}
+         />
         </Field>
        </div>
        <Field>
-        <FieldLabel htmlFor='cardReader'>{dic.invoice.cardReader}</FieldLabel>
-        <Drawer>
-         <DrawerTrigger asChild>
-          <Button
-           variant='outline'
-           role='combobox'
-           className='justify-between h-11 overflow-hidden'
-          >
-           <span className='grow text-ellipsis overflow-hidden text-start'></span>
-           <div className='flex gap-2 items-center'>
+        <FieldLabel htmlFor='cardReader'>{dic.invoice.cardReader} *</FieldLabel>
+        <Controller
+         control={control}
+         name='cardReader'
+         render={({ field }) => (
+          <Drawer>
+           <DrawerTrigger asChild>
             <Button
-             variant={'ghost'}
-             size={'icon-lg'}
-             onClick={(e) => {
-              e.stopPropagation();
-             }}
+             id='cardReader'
+             variant='outline'
+             role='combobox'
+             className='justify-between h-11 overflow-hidden'
+             onBlur={field.onBlur}
+             ref={field.ref}
             >
-             <BsTrash className='size-5 text-red-700 dark:text-red-400' />
+             <span className='grow text-ellipsis overflow-hidden text-start'>
+              {field.value?.value || ''}
+             </span>
+             <div className='flex gap-2 items-center'>
+              <ChevronsUpDown />
+             </div>
             </Button>
-            <ChevronsUpDown />
-           </div>
-          </Button>
-         </DrawerTrigger>
-        </Drawer>
+           </DrawerTrigger>
+           {!!errors.cardReader && (
+            <FieldContent>
+             <FieldError>{errors.cardReader.message}</FieldError>
+            </FieldContent>
+           )}
+          </Drawer>
+         )}
+        />
        </Field>
        <Field>
         <FieldLabel htmlFor='paymentRefNo'>

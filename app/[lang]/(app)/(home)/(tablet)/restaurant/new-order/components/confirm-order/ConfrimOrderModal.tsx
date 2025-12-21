@@ -21,6 +21,7 @@ import { Badge } from '@/components/ui/badge';
 import { DialogClose, DialogTrigger } from '@radix-ui/react-dialog';
 import OrderInvoice from '../order-invoice/OrderInvoice';
 import { BiError } from 'react-icons/bi';
+import { Activity } from 'react';
 
 export default function ConfirmOrderModal({
  dic,
@@ -77,15 +78,21 @@ export default function ConfirmOrderModal({
         {dic.tools.invoice}
        </TabsTrigger>
       </TabsList>
-      <TabsContent value='orderInfo'>
+      <Activity
+       mode={confirmOrderActiveType === 'orderInfo' ? 'visible' : 'hidden'}
+      >
        <OrderInfo dic={dic} />
-      </TabsContent>
-      <TabsContent value='shoppingCard'>
+      </Activity>
+      <Activity
+       mode={confirmOrderActiveType === 'shoppingCard' ? 'visible' : 'hidden'}
+      >
        <OrderShoppingCard dic={dic} />
-      </TabsContent>
-      <TabsContent value='invoice'>
+      </Activity>
+      <Activity
+       mode={confirmOrderActiveType === 'invoice' ? 'visible' : 'hidden'}
+      >
        <OrderInvoice dic={dic} />
-      </TabsContent>
+      </Activity>
      </Tabs>
     </div>
     <DialogFooter className='p-4'>
