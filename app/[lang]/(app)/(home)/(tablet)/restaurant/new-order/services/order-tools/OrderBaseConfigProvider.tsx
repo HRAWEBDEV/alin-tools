@@ -16,11 +16,11 @@ import {
  getOrderItems,
  getOrder,
  getOrderServiceRates,
- closeOrder,
  getFreeTables,
  getOrderPayment,
  saveOrder,
 } from '../newOrderApiActions';
+import { saveAndCloseOrder } from '../orderInvoicePaymentApiActions';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { filterItemPrograms } from '../../utils/filterItemPrograms';
 import { orderItemsReducer } from '../../utils/orderItemsActionsReducer';
@@ -320,14 +320,28 @@ export default function OrderBaseConfigProvider({
  }
  const { mutate: handleConfirmCloseOrder, isPending: isPendingCloseOrder } =
   useMutation({
-   mutationFn() {
-    return closeOrder({ orderID: userOrder!.id });
+   mutationFn({
+    newOrder,
+    orderInfo,
+   }: {
+    orderInfo: OrderInfo;
+    newOrder: SaveOrderPackage['order'];
+   }) {
+    return saveAndCloseOrder({
+     order: newOrder,
+     orderItems: pricedOrderItems,
+     printToCashBox: orderInfo.printCash,
+     sendToKitchen: orderInfo.sendToKitchen,
+    });
    },
-   onSuccess() {
+   onSuccess(res) {
     if (orderIDQuery) {
      queryClient.invalidateQueries({
       queryKey: [newOrderKey, 'order-items', orderIDQuery],
      });
+    }
+    if (res.data.message) {
+     toast.warning(res.data.message);
     }
     router.push(`/${locale}/restaurant/salons`);
     setShowCloseOrder(false);
@@ -355,11 +369,14 @@ export default function OrderBaseConfigProvider({
     printToCashBox: data.printCash,
    });
   },
-  onSuccess() {
+  onSuccess(res) {
    if (orderIDQuery) {
     queryClient.invalidateQueries({
      queryKey: [newOrderKey, 'order-items', orderIDQuery],
     });
+   }
+   if (res.data.message) {
+    toast.warning(res.data.message);
    }
    router.push(`/${locale}/restaurant/salons`);
   },
@@ -381,9 +398,14 @@ export default function OrderBaseConfigProvider({
   orderInfoName = userOrder.name;
  }
 
- async function handleSaveOrder() {
-  if (!initData) return;
-  orderInfoForm.handleSubmit(
+ async function validateOrderInfo(): Promise<{
+  newOrderData: SaveOrderPackage['order'];
+  orderInfoData: OrderInfo;
+ } | null> {
+  let newOrderData: SaveOrderPackage['order'] | null = null;
+  let orderInfoData: OrderInfo | null = null;
+  if (!initData) return null;
+  await orderInfoForm.handleSubmit(
    (data) => {
     const newOrder = {
      ...(userOrder || {}),
@@ -430,10 +452,8 @@ export default function OrderBaseConfigProvider({
      dateTimeDateTimeOffset:
       userOrder?.dateTimeDateTimeOffset || new Date().toISOString(),
     } as SaveOrderPackage['order'];
-    confirmSaveOrder({
-     data,
-     order: newOrder,
-    });
+    newOrderData = newOrder;
+    orderInfoData = data;
    },
    (err) => {
     const errorKeys = Object.keys(err) as (keyof typeof err)[];
@@ -441,6 +461,20 @@ export default function OrderBaseConfigProvider({
     errorKeys.forEach((errKey) => toast.error(err[errKey]?.message));
    },
   )();
+  if (!orderInfoData || !newOrderData) return null;
+  return {
+   orderInfoData,
+   newOrderData,
+  };
+ }
+
+ async function handleSaveOrder() {
+  const orderInfoRes = await validateOrderInfo();
+  if (!orderInfoRes) return;
+  confirmSaveOrder({
+   data: orderInfoRes.orderInfoData,
+   order: orderInfoRes.newOrderData,
+  });
  }
 
  // loadings
@@ -450,7 +484,8 @@ export default function OrderBaseConfigProvider({
   userOrderLoading ||
   serviceRatesLoading ||
   orderPaymentLoading ||
-  saveOrderPending;
+  saveOrderPending ||
+  isPendingCloseOrder;
  const shopInfoLoading = shopLoading;
  // set defaults
  useEffect(() => {
@@ -682,7 +717,14 @@ export default function OrderBaseConfigProvider({
         disabled={isPendingCloseOrder}
         className='sm:w-24 h-11'
         variant='destructive'
-        onClick={() => handleConfirmCloseOrder()}
+        onClick={async () => {
+         const newOrderRes = await validateOrderInfo();
+         if (!newOrderRes) return;
+         handleConfirmCloseOrder({
+          newOrder: newOrderRes.newOrderData,
+          orderInfo: newOrderRes.orderInfoData,
+         });
+        }}
        >
         {isPendingCloseOrder && <Spinner />}
         {dic.closeOrder.confirm}

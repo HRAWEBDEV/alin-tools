@@ -37,8 +37,8 @@ export default function ConfirmOrderModal({
   changeConfirmType,
   showConfirmOrder,
   closeConfirmOrder,
+  shopInfoLoading,
   order: { orderItems, orderItemsDispatch, onCloseOrder, onSaveOrder },
-  userOrder: { order },
  } = useOrderBaseConfigContext();
  return (
   <Dialog
@@ -146,17 +146,21 @@ export default function ConfirmOrderModal({
        )}
       </div>
       <div className='flex flex-col-reverse sm:flex-row gap-4'>
-       {confirmOrderActiveType === 'shoppingCard' &&
-        !!order.data?.id &&
-        !!orderItems.length && (
-         <Button variant='destructive' className='h-11' onClick={onCloseOrder}>
-          {dic.invoice.closeOrder}
-         </Button>
-        )}
+       {confirmOrderActiveType === 'shoppingCard' && (
+        <Button
+         disabled={shopInfoLoading}
+         variant='destructive'
+         className='h-11'
+         onClick={onCloseOrder}
+        >
+         {dic.invoice.closeOrder}
+        </Button>
+       )}
        {confirmOrderActiveType === 'shoppingCard' && !!orderItems.length && (
         <Button
          variant='secondary'
          className='h-11'
+         disabled={shopInfoLoading}
          onClick={() => {
           onSaveOrder();
          }}
@@ -167,7 +171,7 @@ export default function ConfirmOrderModal({
        {confirmOrderActiveType === 'shoppingCard' && (
         <Button
          className='h-11'
-         disabled={!orderItems.length}
+         disabled={!orderItems.length || shopInfoLoading}
          onClick={() => {
           changeConfirmType('invoice');
          }}

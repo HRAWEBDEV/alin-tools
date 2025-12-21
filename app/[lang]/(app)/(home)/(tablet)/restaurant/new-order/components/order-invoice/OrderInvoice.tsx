@@ -49,6 +49,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
   getValues,
   watch,
   handleSubmit,
+  clearErrors,
  } = useForm<OrderInvoicePayment>({
   resolver: zodResolver(createOrderInvoicePaymentSchema({ dic })),
   defaultValues: {
@@ -114,7 +115,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
    <div className='w-[min(100%,35rem)] mx-auto pt-2'>
     <div className='grid sm:grid-cols-3 gap-3 mb-2'>
      <Button
-      disabled={!orderID || shopLoading}
+      disabled={shopLoading}
       variant='destructive'
       size='lg'
       className='font-medium disabled:bg-neutral-400 disabled:dark:bg-neutral-600'
@@ -260,6 +261,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
                    className='flex gap-1 items-center ps-6 py-2'
                    onClick={() => {
                     field.onChange(item);
+                    clearErrors();
                    }}
                   >
                    <Checkbox
