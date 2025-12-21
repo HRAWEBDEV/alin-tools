@@ -383,58 +383,65 @@ export default function OrderBaseConfigProvider({
 
  async function handleSaveOrder() {
   if (!initData) return;
-  orderInfoForm.handleSubmit((data) => {
-   const newOrder = {
-    ...(userOrder || {}),
-    id: userOrder?.id || 0,
-    orderStateID: initData.orderStateID || 1,
-    occupied: data.table ? data.hasTableNo : false,
-    registerID: data.room ? Number(data.room.key) : null,
-    orderNo: initData.orderNo,
-    dailyNo: initData.dailyNo,
-    customerID: data.customer ? Number(data.customer.key) : null,
-    tableID: data.table ? Number(data.table.key) : null,
-    waiterPersonID: data.waiter ? Number(data.waiter.key) : null,
-    subscriberPersonID: data.subscriber ? Number(data.subscriber.key) : null,
-    saleTimeID: data.saleTime ? Number(data.saleTime.key) : null,
-    saleTypeID: Number(data.saleType!.key),
-    bonNo: data.bonNo || null,
-    orderDateTimeOffset: data.orderDate.toISOString(),
-    persons: data.persons || null,
-    roundingValue: data.rounding || 0,
-    tipValue: data.employeeTip || 0,
-    delivaryValue: deliveryValue || 0,
-    discountRate: data.discountRate || null,
-    sValue: invoiceShopResult.totalSValue,
-    tax: invoiceShopResult.totalTax,
-    service: invoiceShopResult.totalService,
-    payment: invoiceShopResult.payment,
-    discount: invoiceShopResult.totalDiscount,
-    payableValue: invoiceShopResult.remained,
-    comment: data.comment || null,
-    arzID: 1,
-    orderTypeID: getOrderTypeID({
-     tableID: data.table ? data.table.key : null,
-     saleTypeID: data.saleType ? data.saleType.key : null,
-    }),
-    contractMenuID: data.contract ? Number(data.contract.key) : null,
-    seatID: null,
-    employeePersonID: null,
-    deliveryByAgent:
-     data.saleType && data.saleType.key == SaleTypes.delivery
-      ? data.deliveryAgent
-      : false,
-    // fixed it
-    name: orderInfoName || null,
-    personID: userOrder?.personID || null,
-    dateTimeDateTimeOffset:
-     userOrder?.dateTimeDateTimeOffset || new Date().toISOString(),
-   } as SaveOrderPackage['order'];
-   confirmSaveOrder({
-    data,
-    order: newOrder,
-   });
-  })();
+  orderInfoForm.handleSubmit(
+   (data) => {
+    const newOrder = {
+     ...(userOrder || {}),
+     id: userOrder?.id || 0,
+     orderStateID: initData.orderStateID || 1,
+     occupied: data.table ? data.hasTableNo : false,
+     registerID: data.room ? Number(data.room.key) : null,
+     orderNo: initData.orderNo,
+     dailyNo: initData.dailyNo,
+     customerID: data.customer ? Number(data.customer.key) : null,
+     tableID: data.table ? Number(data.table.key) : null,
+     waiterPersonID: data.waiter ? Number(data.waiter.key) : null,
+     subscriberPersonID: data.subscriber ? Number(data.subscriber.key) : null,
+     saleTimeID: data.saleTime ? Number(data.saleTime.key) : null,
+     saleTypeID: Number(data.saleType!.key),
+     bonNo: data.bonNo || null,
+     orderDateTimeOffset: data.orderDate.toISOString(),
+     persons: data.persons || null,
+     roundingValue: data.rounding || 0,
+     tipValue: data.employeeTip || 0,
+     delivaryValue: deliveryValue || 0,
+     discountRate: data.discountRate || null,
+     sValue: invoiceShopResult.totalSValue,
+     tax: invoiceShopResult.totalTax,
+     service: invoiceShopResult.totalService,
+     payment: invoiceShopResult.payment,
+     discount: invoiceShopResult.totalDiscount,
+     payableValue: invoiceShopResult.remained,
+     comment: data.comment || null,
+     arzID: 1,
+     orderTypeID: getOrderTypeID({
+      tableID: data.table ? data.table.key : null,
+      saleTypeID: data.saleType ? data.saleType.key : null,
+     }),
+     contractMenuID: data.contract ? Number(data.contract.key) : null,
+     seatID: null,
+     employeePersonID: null,
+     deliveryByAgent:
+      data.saleType && data.saleType.key == SaleTypes.delivery
+       ? data.deliveryAgent
+       : false,
+     // fixed it
+     name: orderInfoName || null,
+     personID: userOrder?.personID || null,
+     dateTimeDateTimeOffset:
+      userOrder?.dateTimeDateTimeOffset || new Date().toISOString(),
+    } as SaveOrderPackage['order'];
+    confirmSaveOrder({
+     data,
+     order: newOrder,
+    });
+   },
+   (err) => {
+    const errorKeys = Object.keys(err) as (keyof typeof err)[];
+    showConfirmOrder('orderInfo');
+    errorKeys.forEach((errKey) => toast.error(err[errKey]?.message));
+   },
+  )();
  }
 
  // loadings

@@ -102,6 +102,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            id='orderDate'
            className='justify-between font-normal h-11'
            onBlur={field.onBlur}
+           ref={field.ref}
           >
            <span>
             {field.value ? field.value.toLocaleDateString(locale) : ''}
@@ -177,6 +178,8 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            variant='outline'
            role='combobox'
            className='justify-between h-11'
+           onBlur={field.onBlur}
+           ref={field.ref}
           >
            <span>{field.value?.value || ''}</span>
            <ChevronsUpDown />
@@ -239,6 +242,8 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            variant='outline'
            role='combobox'
            className='justify-between h-11'
+           onBlur={field.onBlur}
+           ref={field.ref}
           >
            <span>{field.value?.value || ''}</span>
            <ChevronsUpDown />
@@ -320,6 +325,8 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
             saleTypeValue?.key !== SaleTypes.delivery &&
             saleTypeValue?.key !== SaleTypes.contract
            }
+           onBlur={field.onBlur}
+           ref={field.ref}
           >
            <span className='grow text-ellipsis overflow-hidden text-start'>
             {field.value?.value || ''}
@@ -365,6 +372,8 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            role='combobox'
            className='justify-between h-11'
            disabled={saleTypeValue?.key === SaleTypes.room}
+           onBlur={field.onBlur}
+           ref={field.ref}
           >
            <span className='grow text-ellipsis overflow-hidden text-start'>
             {field.value?.key || ''}
@@ -408,6 +417,8 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            role='combobox'
            className='justify-between h-11'
            disabled={saleTypeValue?.key !== SaleTypes.room}
+           onBlur={field.onBlur}
+           ref={field.ref}
           >
            <span className='grow text-ellipsis overflow-hidden text-start'>
             {field.value?.value || ''}
@@ -453,6 +464,8 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            role='combobox'
            className='justify-between h-11'
            disabled={freeTablesLoading}
+           onBlur={field.onBlur}
+           ref={field.ref}
           >
            <span>{field.value?.value || ''}</span>
            <div className='flex gap-2'>
