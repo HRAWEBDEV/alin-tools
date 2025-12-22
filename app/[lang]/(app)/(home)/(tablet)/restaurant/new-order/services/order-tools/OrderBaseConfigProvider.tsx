@@ -101,6 +101,7 @@ export default function OrderBaseConfigProvider({
   subscriberValue,
   customerValue,
   roomValue,
+  contractValue,
  ] = orderInfoForm.watch([
   'saleType',
   'hasService',
@@ -113,6 +114,7 @@ export default function OrderBaseConfigProvider({
   'subscriber',
   'customer',
   'room',
+  'contract',
  ]);
  //
  const [showCloseOrder, setShowCloseOrder] = useState(false);
@@ -173,14 +175,25 @@ export default function OrderBaseConfigProvider({
   isSuccess: itemProgramsSuccess,
   isError: itemProgramsError,
  } = useQuery({
-  enabled: !!selectedItemGroup,
-  queryKey: [newOrderKey, 'item-programs', selectedItemGroup?.key || ''],
+  enabled: !!selectedItemGroup && !!saleTypeValue,
+  queryKey: [
+   newOrderKey,
+   'item-programs',
+   saleTypeValue?.key || '',
+   selectedItemGroup?.key || '',
+   String(hasServiceValue),
+   roomValue?.key || 'all',
+   contractValue?.key || 'all',
+  ],
   async queryFn({ signal }) {
    const res = await getItemPrograms({
     signal,
-    contractMenuID: null,
-    itemGroupID: Number(selectedItemGroup!.key),
+    contractMenuID: contractValue?.key,
+    itemGroupID: selectedItemGroup!.key,
     orderDateTime: new Date().toISOString(),
+    saleTypeID: saleTypeValue!.key,
+    hasService: hasServiceValue,
+    registerID: roomValue?.key,
    });
    return res.data;
   },
@@ -227,30 +240,6 @@ export default function OrderBaseConfigProvider({
   },
  });
 
- // service rates
- const {
-  data: serviceRatesData,
-  isLoading: serviceRatesLoading,
-  isError: serviceRatesIsError,
- } = useQuery({
-  enabled: !!saleTypeValue,
-  queryKey: [
-   newOrderKey,
-   'service-rates',
-   userOrder?.id.toString() || '',
-   saleTypeValue?.key || '',
-  ],
-  staleTime: 'static',
-  gcTime: 0,
-  async queryFn({ signal }) {
-   const res = await getOrderServiceRates({
-    signal,
-    orderID: userOrder?.id || 0,
-    saleTypeID: Number(saleTypeValue!.key),
-   });
-   return res.data;
-  },
- });
  // get free tables
  const {
   data: freeTables,
@@ -307,7 +296,6 @@ export default function OrderBaseConfigProvider({
  const pricedOrderItems = effectOrderItemsServiceRates({
   orderItems,
   hasService: hasServiceValue,
-  serviceRates: serviceRatesData || null,
   userDiscount: Number(userDiscountValue) || 0,
  });
  //
@@ -546,7 +534,6 @@ export default function OrderBaseConfigProvider({
   initLoading ||
   userOrderItemsLoading ||
   userOrderLoading ||
-  serviceRatesLoading ||
   orderPaymentLoading ||
   saveOrderPending ||
   isPendingCloseOrder ||
@@ -731,11 +718,6 @@ export default function OrderBaseConfigProvider({
   },
   order: {
    orderInfoName,
-   serviceRates: {
-    data: serviceRatesData,
-    isLoading: serviceRatesLoading,
-    isError: serviceRatesIsError,
-   },
    orderItems: pricedOrderItems,
    onCloseOrder,
    onSaveOrder: handleSaveOrder,

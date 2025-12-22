@@ -1,17 +1,12 @@
-import {
- type OrderItem,
- type OrderServiceRates,
-} from '../services/newOrderApiActions';
+import { type OrderItem } from '../services/newOrderApiActions';
 import { orderItemsPricingCalculator } from './orderItemsPricingCalculator';
 
 export function effectOrderItemsServiceRates({
  orderItems,
- serviceRates,
  userDiscount,
  hasService,
 }: {
  orderItems: OrderItem[];
- serviceRates: OrderServiceRates;
  userDiscount: number;
  hasService: boolean;
 }) {
@@ -19,7 +14,6 @@ export function effectOrderItemsServiceRates({
   const pricing = orderItemsPricingCalculator({
    orderItem,
    hasService,
-   serviceDiscountRates: serviceRates,
    defaultDiscountRate: userDiscount,
    amount: orderItem.amount,
   });

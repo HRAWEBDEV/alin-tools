@@ -6,7 +6,6 @@ import {
  type ItemProgram,
  type OrderItem,
  type Order,
- type OrderServiceRates,
 } from '../newOrderApiActions';
 import { type OrderItemActions } from '../../utils/orderItemsActionsReducer';
 import { type ShopCalculatorResult } from '../../utils/shopCalculator';
@@ -69,11 +68,6 @@ interface OrderBaseConfig {
  order: {
   orderInfoName: string;
   orderItems: OrderItem[];
-  serviceRates: {
-   data?: OrderServiceRates;
-   isLoading: boolean;
-   isError: boolean;
-  };
   onSaveOrder: () => unknown;
   orderItemsDispatch: ActionDispatch<[action: OrderItemActions]>;
   onCloseOrder: () => unknown;

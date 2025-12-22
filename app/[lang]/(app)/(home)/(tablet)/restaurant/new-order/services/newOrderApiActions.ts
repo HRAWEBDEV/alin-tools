@@ -171,22 +171,33 @@ function getItemPrograms({
  signal,
  itemGroupID,
  contractMenuID,
+ saleTypeID,
  orderDateTime,
+ registerID,
+ hasService,
 }: {
  signal: AbortSignal;
- itemGroupID: number;
- contractMenuID: number | null;
+ itemGroupID: string;
+ contractMenuID?: string;
  orderDateTime: string;
+ saleTypeID: string;
+ registerID?: string;
+ hasService: boolean;
 }) {
  const searchParams = new URLSearchParams([
   ['itemGroupID', itemGroupID.toString()],
   ['orderDateTime', orderDateTime],
+  ['saleTypeID', saleTypeID.toString()],
+  ['service', String(hasService)],
  ]);
  if (contractMenuID) {
   searchParams.set('contractMenuID', contractMenuID.toString());
  }
+ if (registerID) {
+  searchParams.set('registerID', registerID.toString());
+ }
  return axios.get<ItemProgram[]>(
-  `/Restaurant/tablet/GetItemPrograms?${searchParams.toString()}`,
+  `/Restaurant/SaleInvoice/GetAllItemPrograms?${searchParams.toString()}`,
   { signal },
  );
 }
