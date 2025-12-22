@@ -1,6 +1,5 @@
 import AxiosCredentials from './services/axios-credentials/AxiosCredentials';
-import DepartmentRouter from '@/app/[lang]/(app)/login/services/DepartmentRouter';
-import DepartmentRouterProvider from '@/app/[lang]/(app)/login/services/department-router/DepartmentRouterProvider';
+import UserInfoRouterProvider from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterProvider';
 export default function TableLayout({
  children,
 }: {
@@ -9,10 +8,10 @@ export default function TableLayout({
  return (
   <>
    <AxiosCredentials />
-   <DepartmentRouterProvider>
-    <DepartmentRouter />
-   </DepartmentRouterProvider>
-   {children}
+   <UserInfoRouterProvider>
+    {/* <DepartmentRouter /> */}
+    {children}
+   </UserInfoRouterProvider>
   </>
  );
 }
