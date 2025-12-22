@@ -38,7 +38,8 @@
   "deliveryAgent": "تحویل به پیک",
   "addTag": "تگ",
   "noRoomSelected": "شماره اتاق انتخاب نشده است",
-  "noSubscriberSelected": "کد اشتراک انتخاب نشده است"
+  "noSubscriberSelected": "کد اشتراک انتخاب نشده است",
+  "contractNo": "شماره قرارداد"
  },
  "orderConfirm": {
   "removeOrderItemConfirmMessage": "آیا از حذف این آیتم اطمینان دارید؟",
@@ -102,6 +103,9 @@
   "guestName": "نام مهمان",
   "reload": "بروزرسانی مجدد",
   "loadMore": "موارد بیشتر"
+ },
+ "findContarct": {
+  "title": "عنوان"
  },
  "findTags": {},
  "findWaiters": {}

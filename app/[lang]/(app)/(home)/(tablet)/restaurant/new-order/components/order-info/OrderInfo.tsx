@@ -44,6 +44,7 @@ import FindCustomer from '../find-customer/FindCustomer';
 import FindWaiters from '../find-waiters/FindWaiters';
 import { SaleTypes } from '../../utils/SaleTypes';
 import { IoReloadOutline } from 'react-icons/io5';
+import FindContract from '../find-contract/FindContract';
 
 export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
  const {
@@ -75,6 +76,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
   orderDateValue,
   waiterValue,
   tableValue,
+  contractValue,
  ] = watch([
   'saleType',
   'subscriber',
@@ -83,6 +85,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
   'orderDate',
   'waiter',
   'table',
+  'contract',
  ]);
 
  return (
@@ -561,6 +564,53 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
         }
        />
       </InputGroup>
+     </Field>
+     <Field data-invalid={!!errors.contract} className='col-span-full'>
+      <FieldLabel htmlFor='contract'>{dic.orderInfo.contractNo}</FieldLabel>
+      <Controller
+       control={control}
+       name='contract'
+       render={({ field }) => (
+        <Drawer>
+         <DrawerTrigger asChild>
+          <Button
+           id='contract'
+           variant='outline'
+           role='combobox'
+           className='justify-between h-11'
+           onBlur={field.onBlur}
+           ref={field.ref}
+          >
+           <span className='grow text-ellipsis overflow-hidden text-start'>
+            {field.value?.value || ''}
+           </span>
+           <div className='flex gap-2 items-center'>
+            {!!contractValue && (
+             <Button
+              variant={'ghost'}
+              size={'icon-lg'}
+              onClick={(e) => {
+               e.stopPropagation();
+               setValue('contract', null);
+              }}
+             >
+              <BsTrash className='size-5 text-red-700 dark:text-red-400' />
+             </Button>
+            )}
+            <ChevronsUpDown />
+           </div>
+          </Button>
+         </DrawerTrigger>
+         {!!errors.contract && (
+          <FieldContent>
+           <FieldError>{errors.contract.message}</FieldError>
+          </FieldContent>
+         )}
+         {/* todo */}
+         <FindContract dic={dic} />
+        </Drawer>
+       )}
+      />
      </Field>
      <Field className='col-span-full'>
       <FieldLabel htmlFor='customer'>{dic.orderInfo.customerName}</FieldLabel>

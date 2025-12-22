@@ -8,6 +8,11 @@ interface Waiter {
  personName: string;
 }
 
+interface Contract {
+ id: number;
+ name: string;
+}
+
 interface InitialData {
  orderId: number;
  bonNo: number;
@@ -397,6 +402,28 @@ function getCustomers({
   },
  );
 }
+
+// contracts
+function getContracts({
+ signal,
+ offset,
+ limit,
+}: {
+ signal: AbortSignal;
+ offset: number;
+ limit: number;
+}) {
+ const searchParams = new URLSearchParams([
+  ['limit', limit.toString()],
+  ['offset', offset.toString()],
+ ]);
+ return axios.get<PagedData<Contract[]>>(
+  `/Restaurant/SaleInvoice/GetPagedContractMenus?${searchParams.toString()}`,
+  {
+   signal,
+  },
+ );
+}
 // rooms
 function getRooms({
  signal,
@@ -497,4 +524,5 @@ export {
  getRooms,
  getTags,
  getWaiters,
+ getContracts,
 };
