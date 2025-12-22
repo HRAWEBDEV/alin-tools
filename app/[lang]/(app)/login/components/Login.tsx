@@ -6,7 +6,7 @@ export default function Login({ dic }: { dic: LoginDictionary }) {
  return (
   <div>
    <LoginWithPassword dic={dic} />
-   <LoginOptions dic={dic} />
+   {/* <LoginOptions dic={dic} /> */}
   </div>
  );
 }
