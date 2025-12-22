@@ -27,8 +27,9 @@ export default function DepartmentRouterProvider({
 
  return (
   <DepartmentRouterContext.Provider value={values}>
+   {children}
    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-    <DialogContent className='gap-0 p-0 max-h-[90svh] overflow-hidden flex flex-col'>
+    <DialogContent className='gap-0 p-0 max-h-[90svh] overflow-hidden flex flex-col dark:border-gray-50 dark:bg-gray-800'>
      <DialogHeader className='p-4 flex items-center justify-start gap-4'>
       <span>{owner ? owner : 'مالک'}</span>
       <Hotel />
@@ -41,7 +42,6 @@ export default function DepartmentRouterProvider({
        ))}
       </div>
      </div>
-     {children}
     </DialogContent>
    </Dialog>
   </DepartmentRouterContext.Provider>

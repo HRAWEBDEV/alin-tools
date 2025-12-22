@@ -5,7 +5,7 @@ import {
 } from '../utils/LoginDepartmentContext';
 import { nanoid } from 'nanoid';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
+import { ButtonGroup } from '@/components/ui/button-group';
 type item = [string, string];
 
 function departmentIconMapper(item: item) {
@@ -26,7 +26,6 @@ function handleStoreProgram(
 export default function DepartmentSections({ item }: { item: item }) {
  const itemObj = departmentIconMapper(item);
  const { department } = useDepartmentContext();
- //  const { setJustLoggedIn } = useLoginContext();
  const filteredDepartmentPrograms = department?.value.programs.filter(
   (program) => program.departmentID === Number(item[0])
  );
@@ -37,17 +36,17 @@ export default function DepartmentSections({ item }: { item: item }) {
     <span>{itemObj?.name}</span>
     <span>{itemObj?.icon}</span>
    </div>
-   <Button className='rounded-xl p-4'>
+   <div className='rounded-xl p-4 flex flex-wrap gap-4'>
     {filteredDepartmentPrograms?.map((program) => (
-     <Link
-      href={'#'}
+     <Button
+      className='rounded-2xl'
       key={nanoid()}
       onClick={() => handleStoreProgram(program)}
      >
       {program.name}
-     </Link>
+     </Button>
     ))}
-   </Button>
+   </div>
   </div>
  );
 }

@@ -37,7 +37,7 @@ const DepartmentRouterContext =
  createContext<DepartmentRouterContextType | null>(null);
 async function fetchDepartmentData(): Promise<DepartmentData> {
  const response = await axios.get<DepartmentData>(
-  '/API/Restaurant/Tablet/GetUIDatas'
+  '/Restaurant/Tablet/GetUIDatas'
  );
 
  return response.data;

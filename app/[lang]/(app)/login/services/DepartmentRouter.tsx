@@ -5,7 +5,7 @@ import { useDepartmentContext } from '../utils/LoginDepartmentContext';
 import { fetchDepartmentData } from '@/app/[lang]/(app)/login/utils/LoginDepartmentContext';
 
 export default function DepartmentRouter() {
- const { department, setDepartment, setIsOpen } = useDepartmentContext();
+ const { setDepartment, setIsOpen } = useDepartmentContext();
  useEffect(() => {
   async function getDepartmentAndSet() {
    const res = await fetchDepartmentData();
@@ -21,6 +21,6 @@ export default function DepartmentRouter() {
   if (!isDepartmentSet) {
    getDepartmentAndSet();
   } else return;
- }, [department, setDepartment, setIsOpen]);
+ }, [setDepartment, setIsOpen]);
  return <></>;
 }
