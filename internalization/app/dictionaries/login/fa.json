@@ -8,7 +8,13 @@
   "forgetPassword": {
    "title": "فراموشی رمز عبور",
    "phoneNo": "شماره همراه",
-   "sendOTPCode": "ارسال رمز فراموشی"
+   "sendOTPCode": "ارسال رمز فراموشی",
+   "password": "رمز عبور",
+   "confirmPassword": "تکرار رمز عبور",
+   "editPhoneNo": "ویرایش شماره همراه",
+   "fillRequiredFields": "فیلدهای الزامی را پر کنید",
+   "invalidConfirmPassword": "تکرار رمز عبور اشتباه است",
+   "confirm": "تایید"
   },
   "withPassword": {
    "form": {

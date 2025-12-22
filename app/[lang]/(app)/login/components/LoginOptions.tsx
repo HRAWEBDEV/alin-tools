@@ -9,14 +9,16 @@ export default function LoginOptions({ dic }: { dic: LoginDictionary }) {
  const { loginModalIsOpen } = useLoginContext();
  const { locale } = useBaseConfig();
  return (
-  <div className='mt-3'>
+  <>
    {loginModalIsOpen ? null : (
-    <Button variant='link' asChild className='px-0 text-md'>
-     <Link href={`/${locale}/login/forget-password`}>
-      {dic.login.loginOptions.forgetPassword}
-     </Link>
-    </Button>
+    <div className='mt-3'>
+     <Button variant='link' asChild className='px-0 text-md'>
+      <Link href={`/${locale}/login/forget-password`}>
+       {dic.login.loginOptions.forgetPassword}
+      </Link>
+     </Button>
+    </div>
    )}
-  </div>
+  </>
  );
 }
