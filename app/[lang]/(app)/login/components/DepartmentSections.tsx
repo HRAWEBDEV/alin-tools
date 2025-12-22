@@ -5,7 +5,6 @@ import {
 } from '../utils/LoginDepartmentContext';
 import { nanoid } from 'nanoid';
 import { Button } from '@/components/ui/button';
-import { ButtonGroup } from '@/components/ui/button-group';
 type item = [string, string];
 
 function departmentIconMapper(item: item) {
