@@ -162,7 +162,7 @@ interface Tag {
 }
 
 function getInitData({ signal }: { signal: AbortSignal }) {
- return axios.get<InitialData>('/Restaurant/SaleInvoice/GetInitDatas', {
+ return axios.get<InitialData>('/Restaurant/tablet/GetInitDatas', {
   signal,
  });
 }
@@ -186,7 +186,7 @@ function getItemPrograms({
   searchParams.set('contractMenuID', contractMenuID.toString());
  }
  return axios.get<ItemProgram[]>(
-  `/Restaurant/SaleInvoice/GetItemPrograms?${searchParams.toString()}`,
+  `/Restaurant/tablet/GetItemPrograms?${searchParams.toString()}`,
   { signal },
  );
 }
@@ -210,7 +210,7 @@ function getFreeTables({
   searchPamras.set('salonID', salonID);
  }
  return axios.get<Combo[]>(
-  `/Restaurant/SaleInvoice/GetAllocatableTables?${searchPamras.toString()}`,
+  `/Restaurant/tablet/GetAllocatableTables?${searchPamras.toString()}`,
   {
    signal,
   },
@@ -224,12 +224,9 @@ function getOrder({
  signal: AbortSignal;
  orderID: number;
 }) {
- return axios.get<Order>(
-  `/Restaurant/SaleInvoice/GetOrder?orderID=${orderID}`,
-  {
-   signal,
-  },
- );
+ return axios.get<Order>(`/Restaurant/tablet/getOrderInfo?orderID=${orderID}`, {
+  signal,
+ });
 }
 
 function getOrderItems({
@@ -265,18 +262,12 @@ function saveOrder({
   return axios.put<{
    orderID: number;
    message: string;
-  }>(
-   `/Restaurant/SaleInvoice/UpdateOrder?${searchParams.toString()}`,
-   orderPackage,
-  );
+  }>(`/Restaurant/tablet/UpdateOrder?${searchParams.toString()}`, orderPackage);
  }
  return axios.post<{
   orderID: number;
   message: string;
- }>(
-  `/Restaurant/SaleInvoice/SaveOrder?${searchParams.toString()}`,
-  orderPackage,
- );
+ }>(`/Restaurant/tablet/SaveOrder?${searchParams.toString()}`, orderPackage);
 }
 
 // service rates
