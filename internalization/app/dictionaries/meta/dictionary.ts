@@ -1,5 +1,8 @@
 'server-only';
-import { type Locale } from '@/internalization/app/localization';
+import {
+ type Locale,
+ getLocaleOrDefault,
+} from '@/internalization/app/localization';
 
 type MetaDictionary = typeof import('./fa.json');
 
@@ -9,7 +12,8 @@ const dictionaries: Record<Locale, () => Promise<MetaDictionary>> = {
 };
 
 function getMetaDictionary({ locale }: { locale: Locale }) {
- return dictionaries[locale]();
+ const activeLocale = getLocaleOrDefault(locale);
+ return dictionaries[activeLocale]();
 }
 
 export type { MetaDictionary };

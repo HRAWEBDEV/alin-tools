@@ -41,6 +41,11 @@ function getLocalInfo(locale: Locale): LocaleInfo {
  return locales['en'];
 }
 
+function getLocaleOrDefault(locale: Locale): Locale {
+ if (locale in locales) return locale;
+ return 'en';
+}
+
 const localesList = Object.keys(locales);
 
 const supportedDateFns = {
@@ -49,4 +54,10 @@ const supportedDateFns = {
 };
 
 export type { ContentDirection, Calendar, Locale, LocaleInfo };
-export { locales, getLocalInfo, localesList, supportedDateFns };
+export {
+ locales,
+ getLocalInfo,
+ localesList,
+ supportedDateFns,
+ getLocaleOrDefault,
+};
