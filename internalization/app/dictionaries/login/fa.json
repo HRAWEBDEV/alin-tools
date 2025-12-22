@@ -2,6 +2,7 @@
  "title": "احراز هویت",
  "login": {
   "loginOptions": {
+   "goToLogin": "برو به صفحه‌ی ورود",
    "forgetPassword": "فراموشی رمز عبور؟"
   },
   "withPassword": {
