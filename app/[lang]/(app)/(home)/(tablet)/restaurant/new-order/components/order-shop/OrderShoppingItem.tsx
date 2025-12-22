@@ -123,11 +123,13 @@ export default function OrderShoppingItem({
          <Badge variant='destructive' className='p-1 me-2 text-sm'>
           {orderItem.discountRate}%
          </Badge>
-         <span>{orderItem.price - orderItem.discount / orderItem.amount}</span>
+         <span>{format(orderItem.price)}</span>
         </div>
        )}
        <p className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
-        {format(orderItem.price)}
+        {format(
+         orderItem.price - (orderItem.discountRate * orderItem.price) / 100,
+        )}
         <span className='ms-1 text-sm'>ریال</span>
        </p>
       </div>
