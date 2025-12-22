@@ -5,6 +5,11 @@
    "goToLogin": "برو به صفحه‌ی ورود",
    "forgetPassword": "فراموشی رمز عبور؟"
   },
+  "forgetPassword": {
+   "title": "فراموشی رمز عبور",
+   "phoneNo": "شماره همراه",
+   "sendOTPCode": "ارسال رمز فراموشی"
+  },
   "withPassword": {
    "form": {
     "userName": "نام کاربری",
