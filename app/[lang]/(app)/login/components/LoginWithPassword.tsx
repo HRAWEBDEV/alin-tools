@@ -41,6 +41,7 @@ const formDefaults: LoginWithPasswordCredentials = {
 export default function LoginWithPassword({ dic }: { dic: LoginDictionary }) {
  const { loginModalIsOpen, changeLoginModalIsOpen } = useLoginContext();
  const [showPassword, setShowPassword] = useState(false);
+
  const { localeInfo } = useBaseConfig();
  const router = useRouter();
 
@@ -56,6 +57,7 @@ export default function LoginWithPassword({ dic }: { dic: LoginDictionary }) {
   },
   onSuccess({ data }) {
    setUserLoginToken(data.item1);
+   //  setJustLoggedIn(true);
    if (loginModalIsOpen) {
     changeLoginModalIsOpen(false);
    } else {
@@ -64,6 +66,7 @@ export default function LoginWithPassword({ dic }: { dic: LoginDictionary }) {
   },
   onError(err: AxiosError<string>) {
    toast.error(err.response?.data);
+   //  setJustLoggedIn(false);
   },
  });
  // form setup
