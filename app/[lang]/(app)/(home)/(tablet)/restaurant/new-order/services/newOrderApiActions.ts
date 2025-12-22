@@ -167,7 +167,7 @@ interface Tag {
 }
 
 function getInitData({ signal }: { signal: AbortSignal }) {
- return axios.get<InitialData>('/Restaurant/tablet/GetInitDatas', {
+ return axios.get<InitialData>('/Restaurant/SaleInvoice/GetInitDatas', {
   signal,
  });
 }
