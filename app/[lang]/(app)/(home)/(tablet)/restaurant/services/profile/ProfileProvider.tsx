@@ -69,16 +69,16 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
      </div>
      <div>
       <ul>
-       <li>
-        <Button
-         variant='ghost'
-         size={'icon-lg'}
-         className='text-base p-4 px-8 w-full justify-start h-[unset] gap-4 items-center text-neutral-600 dark:text-neutral-400'
-        >
-         <IoMdSettings className='size-8' />
-         <span>{profile.sttings}</span>
-        </Button>
-       </li>
+       {/* <li> */}
+       {/*  <Button */}
+       {/*   variant='ghost' */}
+       {/*   size={'icon-lg'} */}
+       {/*   className='text-base p-4 px-8 w-full justify-start h-[unset] gap-4 items-center text-neutral-600 dark:text-neutral-400' */}
+       {/*  > */}
+       {/*   <IoMdSettings className='size-8' /> */}
+       {/*   <span>{profile.sttings}</span> */}
+       {/*  </Button> */}
+       {/* </li> */}
        <li>
         <Button
          variant='ghost'
