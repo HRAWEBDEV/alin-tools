@@ -7,7 +7,7 @@ interface LoginWithPasswordCredentials {
 
 interface RecoverPass {
  phoneNumber: string;
- otpCode: number;
+ otpCode: string;
  newPassword: string;
  confirmNewPassword: string;
 }
@@ -22,7 +22,7 @@ function loginWithPassword(credentials: LoginWithPasswordCredentials) {
 }
 
 function getForgotPasswordOTP(phoneNo: string) {
- return axios.get<number>(
+ return axios.get<boolean>(
   `/Public/User/SendForgetPasswordOTPCode?PhoneNumber=${phoneNo}`,
  );
 }

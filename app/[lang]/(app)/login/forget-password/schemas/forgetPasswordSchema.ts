@@ -10,6 +10,7 @@ function getOTPSchema({ dic }: { dic: LoginDictionary }) {
 function getConfirmPasswordSchema({ dic }: { dic: LoginDictionary }) {
  return z
   .object({
+   confirmOTP: z.string().min(1, dic.login.forgetPassword.fillRequiredFields),
    password: z.string().min(1, dic.login.forgetPassword.fillRequiredFields),
    confirmPassword: z
     .string()

@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, Activity } from 'react';
 import { type LoginDictionary } from '@/internalization/app/dictionaries/login/dictionary';
 import {
  Field,
@@ -20,25 +20,39 @@ import { NumericFormat } from 'react-number-format';
 import { IoEye, IoEyeOff } from 'react-icons/io5';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import {
  type CofirmPasswordSchema,
  type OTPSchema,
  getOTPSchema,
  getConfirmPasswordSchema,
 } from '../schemas/forgetPasswordSchema';
+import {
+ getForgotPasswordOTP,
+ confirmLoginRecoveryWithPassword,
+} from '../../services/loginApiActions';
+import { Spinner } from '@/components/ui/spinner';
+import { toast } from 'sonner';
+import { AxiosError } from 'axios';
+import { useBaseConfig } from '@/services/base-config/baseConfigContext';
+import { useRouter } from 'next/navigation';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export default function ForgetPasswordWrapper({
  dic,
 }: {
  dic: LoginDictionary;
 }) {
- const [stage, setStage] = useState<'OTP' | 'editPassword'>('editPassword');
+ const { locale } = useBaseConfig();
+ const router = useRouter();
+ const [stage, setStage] = useState<'OTP' | 'editPassword'>('OTP');
  const [showPassword, setShowPassword] = useState(false);
 
  const {
   control: OTPControl,
   formState: { errors: OTPErrors },
   handleSubmit: OTPHandleSubmit,
+  getValues,
  } = useForm<OTPSchema>({
   resolver: zodResolver(getOTPSchema({ dic })),
   defaultValues: {
@@ -55,14 +69,85 @@ export default function ForgetPasswordWrapper({
   defaultValues: {
    confirmPassword: '',
    password: '',
+   confirmOTP: '',
+  },
+ });
+
+ const {
+  mutate: confirmSendOTPCode,
+  isPending: OTPIsPending,
+  isError: OTPIsError,
+  error: OTPError,
+ } = useMutation({
+  async mutationFn(data: OTPSchema) {
+   return getForgotPasswordOTP(data.phoneNo);
+  },
+  onSuccess(res) {
+   if (res.data) {
+    setStage('editPassword');
+   }
+  },
+  onError(err: AxiosError<string>) {
+   toast.error(err.response?.data);
+  },
+ });
+
+ const {
+  mutate: confirmPassword,
+  isPending: confirmPasswordPending,
+  isError: confirmPasswordIsError,
+  error: confirmPasswordError,
+ } = useMutation({
+  async mutationFn(data: CofirmPasswordSchema) {
+   const phoneNo = getValues('phoneNo');
+   return confirmLoginRecoveryWithPassword({
+    phoneNumber: phoneNo,
+    otpCode: data.confirmOTP,
+    confirmNewPassword: data.confirmPassword,
+    newPassword: data.password,
+   });
+  },
+  onSuccess() {
+   router.push(`/${locale}/login`);
+  },
+  onError(err: AxiosError<string>) {
+   toast.error(err.response?.data);
   },
  });
 
  return (
   <>
-   {stage === 'editPassword' ? (
+   <Activity mode={stage === 'editPassword' ? 'visible' : 'hidden'}>
     <form>
-     <FieldGroup className='mb-3'>
+     <FieldGroup className='mb-3 gap-4'>
+      <Field data-invalid={!!confirmPasswordErrors.confirmOTP}>
+       <FieldLabel htmlFor='confirmOTP' className='text-md'>
+        {dic.login.forgetPassword.OTPCode}
+       </FieldLabel>
+       <Controller
+        control={confirmPasswordControl}
+        name='confirmOTP'
+        render={({ field: { value, onChange, ...other } }) => (
+         <InputGroup className='h-11'>
+          <InputGroupAddon align={'inline-start'}>
+           <RiLockPasswordLine className='size-6 text-primary' />
+          </InputGroupAddon>
+          <NumericFormat
+           id='confirmOTP'
+           data-invalid={!!confirmPasswordErrors.confirmOTP}
+           {...other}
+           value={value}
+           onValueChange={({ value }) => onChange(value || '')}
+           allowNegative={false}
+           customInput={InputGroupInput}
+          />
+         </InputGroup>
+        )}
+       />
+       {!!confirmPasswordErrors.confirmOTP && (
+        <FieldError>{confirmPasswordErrors.confirmOTP.message}</FieldError>
+       )}
+      </Field>
       <Field data-invalid={!!confirmPasswordErrors.password}>
        <FieldLabel htmlFor='password' className='text-md'>
         {dic.login.forgetPassword.password}
@@ -75,14 +160,12 @@ export default function ForgetPasswordWrapper({
           <InputGroupAddon align={'inline-start'}>
            <RiLockPasswordLine className='size-6 text-primary' />
           </InputGroupAddon>
-          <NumericFormat
+          <InputGroupInput
            data-invalid={!!confirmPasswordErrors.password}
            {...other}
            value={value}
-           onValueChange={({ value }) => onChange(value || '')}
-           allowNegative={false}
+           onChange={(e) => onChange(e.target.value || '')}
            id='password'
-           customInput={InputGroupInput}
           />
          </InputGroup>
         )}
@@ -97,21 +180,19 @@ export default function ForgetPasswordWrapper({
        </FieldLabel>
        <Controller
         control={confirmPasswordControl}
-        name='password'
+        name='confirmPassword'
         render={({ field: { value, onChange, ...other } }) => (
          <InputGroup className='h-11'>
           <InputGroupAddon align={'inline-start'}>
            <RiLockPasswordFill className='size-6 text-primary' />
           </InputGroupAddon>
-          <NumericFormat
+          <InputGroupInput
            data-invalid={!!confirmPasswordErrors.confirmPassword}
            value={value}
-           onValueChange={({ value }) => onChange(value || '')}
+           onChange={(e) => onChange(e.target.value || '')}
            {...other}
-           allowNegative={false}
            id='confirmPassword'
            type={showPassword ? 'text' : 'password'}
-           customInput={InputGroupInput}
           />
           <InputGroupAddon align='inline-end' className='-me-2'>
            <Button
@@ -135,20 +216,32 @@ export default function ForgetPasswordWrapper({
        )}
       </Field>
       <div>
+       {confirmPasswordIsError && (
+        <Alert variant='destructive'>
+         <AlertDescription className='text-base'>
+          {confirmPasswordError.response?.data}
+         </AlertDescription>
+        </Alert>
+       )}
        <Button
         className='w-full mt-4 text-base h-11'
+        disabled={confirmPasswordPending}
         type='submit'
         onClick={(e) => {
          e.preventDefault();
-         confirmPasswordHandleSubmit(() => {})();
+         confirmPasswordHandleSubmit((data) => {
+          confirmPassword(data);
+         })();
         }}
        >
+        {confirmPasswordPending && <Spinner />}
         {dic.login.forgetPassword.confirm}
        </Button>
       </div>
      </FieldGroup>
      <div>
       <Button
+       type='button'
        variant='ghost'
        className='text-rose-700 dark:text-rose-700'
        onClick={() => {
@@ -159,7 +252,8 @@ export default function ForgetPasswordWrapper({
       </Button>
      </div>
     </form>
-   ) : (
+   </Activity>
+   <Activity mode={stage === 'OTP' ? 'visible' : 'hidden'}>
     <form>
      <FieldGroup>
       <Field data-invalid={!!OTPErrors.phoneNo}>
@@ -176,11 +270,15 @@ export default function ForgetPasswordWrapper({
           </InputGroupAddon>
           <NumericFormat
            data-invalid={!!OTPErrors.phoneNo}
+           id='phoneNo'
+           valueIsNumericString
+           allowLeadingZeros
            {...other}
            value={value}
-           onValueChange={({ value }) => onChange(value || '')}
+           onValueChange={({ value }) => {
+            onChange(value || '');
+           }}
            allowNegative={false}
-           id='phoneNo'
            customInput={InputGroupInput}
           />
          </InputGroup>
@@ -191,12 +289,22 @@ export default function ForgetPasswordWrapper({
        )}
       </Field>
       <div>
+       {OTPIsError && (
+        <Alert variant='destructive'>
+         <AlertDescription className='text-base'>
+          {OTPError.response?.data}
+         </AlertDescription>
+        </Alert>
+       )}
        <Button
         className='w-full mt-4 text-base h-11'
         type='submit'
+        disabled={OTPIsPending}
         onClick={(e) => {
          e.preventDefault();
-         OTPHandleSubmit(() => {})();
+         OTPHandleSubmit((data) => {
+          confirmSendOTPCode(data);
+         })();
         }}
        >
         {dic.login.forgetPassword.sendOTPCode}
@@ -204,7 +312,7 @@ export default function ForgetPasswordWrapper({
       </div>
      </FieldGroup>
     </form>
-   )}
+   </Activity>
   </>
  );
 }
