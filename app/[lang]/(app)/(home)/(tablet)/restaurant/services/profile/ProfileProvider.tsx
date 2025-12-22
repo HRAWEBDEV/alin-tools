@@ -53,18 +53,18 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
        <p className='text-base truncate w-full text-primary mb-3 font-medium'>
         هتل عباسی
        </p>
-       <p className='text-sm text-neutral-600 dark:text-neutral-300'>
-        <span>{profile.lastLoginDate}: </span>
-        <span>
-         {date.toLocaleDateString(locale, {
-          year: 'numeric',
-          month: 'long',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-         })}
-        </span>
-       </p>
+       {/* <p className='text-sm text-neutral-600 dark:text-neutral-300'> */}
+       {/*  <span>{profile.lastLoginDate}: </span> */}
+       {/*  <span> */}
+       {/*   {date.toLocaleDateString(locale, { */}
+       {/*    year: 'numeric', */}
+       {/*    month: 'long', */}
+       {/*    day: '2-digit', */}
+       {/*    hour: '2-digit', */}
+       {/*    minute: '2-digit', */}
+       {/*   })} */}
+       {/*  </span> */}
+       {/* </p> */}
       </div>
      </div>
      <div>
