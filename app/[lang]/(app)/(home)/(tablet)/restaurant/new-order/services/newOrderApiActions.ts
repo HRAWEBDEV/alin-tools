@@ -224,9 +224,12 @@ function getOrder({
  signal: AbortSignal;
  orderID: number;
 }) {
- return axios.get<Order>(`/Restaurant/tablet/getOrderInfo?orderID=${orderID}`, {
-  signal,
- });
+ return axios.get<Order>(
+  `/Restaurant/SaleInvoice/GetOrder?orderID=${orderID}`,
+  {
+   signal,
+  },
+ );
 }
 
 function getOrderItems({
