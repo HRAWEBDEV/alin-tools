@@ -206,6 +206,9 @@ export default function UserInfoRouterProvider({
               ownerID: data.owners[0].id,
               programID: program.id,
               systemID: program.systemID,
+              ownerName: data.owners[0].name,
+              departmentName: selectedDialogDepartment!.name,
+              programName: program.name || '',
              };
              setUserInfoRouterStorageValue(selectedUserInfo);
              setUserInfoRouterStorage(selectedUserInfo);

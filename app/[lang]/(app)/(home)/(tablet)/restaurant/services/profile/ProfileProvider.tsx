@@ -8,18 +8,16 @@ import {
  DrawerHeader,
  DrawerTitle,
 } from '@/components/ui/drawer';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useRestaurantShareDictionary } from '../share-dictionary/restaurantShareDictionaryContext';
 import { Button } from '@/components/ui/button';
 import { RiLogoutBoxRLine } from 'react-icons/ri';
-import { IoMdSettings } from 'react-icons/io';
 import { useLogout } from '@/app/[lang]/(app)/login/hooks/useLogout';
-import { useBaseConfig } from '@/services/base-config/baseConfigContext';
+import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
 
 export default function ProfileProvider({ children }: { children: ReactNode }) {
- const { locale } = useBaseConfig();
+ const { userInfoRouterStorage, data } = useUserInfoRouter();
  const logout = useLogout();
- const date = new Date();
  const {
   restaurantShareDictionary: {
    components: { profile },
@@ -49,9 +47,15 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
        <AvatarFallback className='bg-neutral-200'>H</AvatarFallback>
       </Avatar>
       <div className='grow text-start overflow-hidden'>
-       <p className='text-lg truncate w-full font-medium'>حمیدرضا اکبری</p>
-       <p className='text-base truncate w-full text-primary mb-3 font-medium'>
-        هتل عباسی
+       <p className='text-lg truncate w-full font-medium'>
+        {data.user.personFullName}
+       </p>
+       <p className='text-base truncate w-full text-primary mb-1 font-medium'>
+        {userInfoRouterStorage.ownerName}
+       </p>
+       <p className='text-sm truncate w-full mb-3 font-medium'>
+        {userInfoRouterStorage.departmentName} -{' '}
+        {userInfoRouterStorage.programName}
        </p>
        {/* <p className='text-sm text-neutral-600 dark:text-neutral-300'> */}
        {/*  <span>{profile.lastLoginDate}: </span> */}

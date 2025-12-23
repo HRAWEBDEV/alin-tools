@@ -1,21 +1,18 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { IoMdArrowDropdown } from 'react-icons/io';
-import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { useRestaurantShareDictionary } from '../services/share-dictionary/restaurantShareDictionaryContext';
 import HeaderDate from './HeaderDate';
 import { useProfileContext } from '../services/profile/profileContext';
+import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
 
 export default function NavProfile() {
+ const { data, userInfoRouterStorage } = useUserInfoRouter();
  const { toggleProfile } = useProfileContext();
- const { locale } = useBaseConfig();
- const date = new Date();
  const {
   restaurantShareDictionary: {
-   components: {
-    profile: { lastLoginDate },
-   },
+   components: {},
   },
  } = useRestaurantShareDictionary();
  return (
@@ -33,8 +30,14 @@ export default function NavProfile() {
      <AvatarFallback className='bg-neutral-200'>H</AvatarFallback>
     </Avatar>
     <div className='grow text-start overflow-hidden'>
-     <p className='text-sm truncate w-full'>حمیدرضا اکبری</p>
-     <p className='text-xs truncate w-full text-primary mb-1'>هتل عباسی</p>
+     <p className='text-md truncate w-full'>{data.user.personFullName}</p>
+     <p className='text-sm truncate w-full text-primary mb-1'>
+      {userInfoRouterStorage.ownerName}
+     </p>
+     <p className='text-xs truncate w-full mb-1'>
+      {userInfoRouterStorage.departmentName} -{' '}
+      {userInfoRouterStorage.programName}
+     </p>
     </div>
     <IoMdArrowDropdown className='size-6 text-neutral-500' />
    </Button>
