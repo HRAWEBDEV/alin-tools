@@ -2,6 +2,7 @@ interface UserInfoRouterStorage {
  ownerID: number;
  programID: number;
  departmentID: number;
+ systemID: number;
 }
 
 const userInfoRouterStorageKey = 'user-info-router';

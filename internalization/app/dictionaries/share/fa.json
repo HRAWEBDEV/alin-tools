@@ -16,6 +16,8 @@
    "description": "تغییر حالت"
   },
   "userInfoRouter": {
+   "selectProgram": "انتخاب برنامه",
+   "selectActiveProgram": "برنامه مورد نظر را انتخاب کنید",
    "errorOccuredTryAgainLater": "خطایی رخ داده است لطفا دوباره تلاش کنید"
   }
  }

@@ -9,10 +9,6 @@ export default function AxiosCredentials() {
  useEffect(() => {
   const reqID = axios.interceptors.request.use((config) => {
    config.headers.set('Authorization', `Bearer ${getUserLoginToken()}`);
-   config.headers.set('Ownerid', '1');
-   config.headers.set('Departmentid', '4');
-   config.headers.set('Programid', '15');
-   config.headers.set('Systemid', '111');
    return config;
   });
   return () => {

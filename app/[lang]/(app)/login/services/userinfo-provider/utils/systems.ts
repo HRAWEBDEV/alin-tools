@@ -1,3 +1,8 @@
+enum Departments {
+ roomDivision = 3,
+ foodAndBeverage,
+}
+
 enum Systems {
  houseKeeping = 107,
  restaurant = 111,
@@ -5,4 +10,4 @@ enum Systems {
 
 enum SystemTypes {}
 
-export { Systems, SystemTypes };
+export { Systems, SystemTypes, Departments };
