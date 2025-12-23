@@ -1,83 +1,49 @@
 'use client';
-import { Dialog, DialogContent, DialogHeader } from '@/components/ui/dialog';
-import { useEffect, useEffectEvent, useState } from 'react';
-import { CornerUpRight, Hotel } from 'lucide-react';
+import { useEffect } from 'react';
 import {
+ type UserInfoStoreContext,
  userInfoRouterContext,
- type UserInfoStore,
 } from './UserInfoRouterContext';
 import { userInfoBaseKey, getApiUserInfo } from './userInfoApiActions';
 import { useQuery } from '@tanstack/react-query';
 import Loading from '@/components/Loading';
-import DepartmentSections from './components/DepartmentSections';
-import { checkInfoStore } from './utils/UserInfoStorageService';
-import { DialogTitle } from '@radix-ui/react-dialog';
-import { AnimatePresence, motion } from 'motion/react';
-import { ProgramCards } from './components/ProgramCards';
-import { useShareDictionary } from '../../../services/share-dictionary/shareDictionaryContext';
+import { convertToUserInfoStore } from './userInfoApiActions';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+import { useBaseConfig } from '@/services/base-config/baseConfigContext';
+import { useLogout } from '../../hooks/useLogout';
 
 export default function UserInfoRouterProvider({
  children,
 }: {
  children: React.ReactNode;
 }) {
- const [isOpen, setIsOpen] = useState(false);
- const [currentStep, setCurrentStep] = useState(1);
- const [selectedDepartmentID, setSelectedDepartmentID] = useState<
-  number | null
- >(null);
+ const logout = useLogout();
+ const router = useRouter();
+ const { locale } = useBaseConfig();
  // user query
- const { data, isFetching, isLoading, isError, isSuccess } = useQuery({
+ const { data, isFetching, isLoading, isError, isSuccess, error } = useQuery({
   queryKey: [userInfoBaseKey],
   staleTime: 'static',
   gcTime: 0,
   async queryFn({ signal }) {
    const res = await getApiUserInfo({ signal });
-   const { departments, programs, owners } = res.data.value;
-   const departmentsWithPrograms = Object.entries(departments).map(
-    ([id, name]) => ({
-     id,
-     name,
-     programs: programs.filter((p) => p.departmentID === Number(id)),
-    })
-   );
-   return {
-    ownerName: Object.values(owners)[0],
-    departments: departmentsWithPrograms,
-   };
+   return convertToUserInfoStore(res.data);
   },
  });
- const { shareDictionary } = useShareDictionary();
- const dict = shareDictionary.components.userInfoRouterDialog;
+ console.log(data);
 
- const toggleModal = useEffectEvent(() => {
-  const storageStatus = checkInfoStore();
-  if (!storageStatus) {
-   setIsOpen(true);
-  }
- });
- useEffect(() => {
-  if (data) {
-   toggleModal();
-  }
- }, [data]);
-
- const selectedDepartment = data?.departments.find(
-  (item) => Number(item.id) === selectedDepartmentID
- );
-
- const ctx: UserInfoStore = {
-  isLoading,
+ const ctx: UserInfoStoreContext = {
+  data: data!,
   isError,
+  isLoading,
   isFetching,
-  data,
-  isOpen,
-  setIsOpen,
-  currentStep,
-  setCurrentStep,
-  selectedDepartmentID,
-  setSelectedDepartmentID,
  };
+
+ useEffect(() => {
+  if (!isError) return;
+  logout();
+ }, [isError, logout]);
 
  if (isLoading)
   return (
@@ -89,45 +55,6 @@ export default function UserInfoRouterProvider({
  return (
   <userInfoRouterContext.Provider value={ctx}>
    {isSuccess && children}
-   <AnimatePresence mode='popLayout'>
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-     <DialogHeader>
-      <DialogTitle>{dict.dialogTitle}</DialogTitle>
-     </DialogHeader>
-     <DialogContent className='gap-0 p-0 max-h-[90svh] overflow-hidden rounded-3xl flex flex-col border border-solid dark:border-gray-600!'>
-      <DialogHeader className='p-4 flex items-center justify-start gap-2'>
-       <Hotel size={24} className='text-primary' />
-       <h4 className='text-xl font-bold text-primary'>
-        {data?.ownerName ? data?.ownerName : dict.ownerNoName}
-       </h4>
-       {currentStep === 2 && (
-        <motion.button
-         className='text-right my-4 flex justify-start ml-auto gap-1 items-center text-gray-600 dark:text-gray-300 bg-transparent border-b border-b-gray-800 hover:border-b-gray-200 hover:dark:border-b-gray-300 cursor-pointer w-fit transition-all'
-         onClick={() => setCurrentStep(1)}
-        >
-         <CornerUpRight size={20} />
-         <span>{dict.returnButton}</span>
-        </motion.button>
-       )}
-      </DialogHeader>
-      <div className='overflow-y-auto overflow-x-hidden!'>
-       <h4 className='text-lg flex px-4'>
-        {currentStep === 1 ? dict.step1Title : dict.step2Title}
-       </h4>
-       <div className='flex flex-wrap items-center justify-evenly mt-4 gap-4 p-4'>
-        {data?.departments.map((item, index) => (
-         <DepartmentSections key={item.id} item={item} index={index} />
-        ))}
-       </div>
-       <AnimatePresence>
-        {currentStep === 2 && selectedDepartment && (
-         <ProgramCards programs={selectedDepartment.programs} />
-        )}
-       </AnimatePresence>
-      </div>
-     </DialogContent>
-    </Dialog>
-   </AnimatePresence>
   </userInfoRouterContext.Provider>
  );
 }
