@@ -39,13 +39,13 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
   <profileContext.Provider value={ctx}>
    {children}
    <Drawer open={isOpen} onOpenChange={setIsOpen}>
-    <DrawerContent className='h-[70svh]'>
+    <DrawerContent className='h-[min(80svh,35rem)]'>
      <DrawerHeader className='hidden'>
       <DrawerTitle>{profile.title}</DrawerTitle>
      </DrawerHeader>
      <div className='flex gap-4 border-b border-input p-4 mb-2'>
       <Avatar className='size-20'>
-       <AvatarImage src='https://github.com/shadcn.png' alt='@shadcn' />
+       {/* <AvatarImage src='https://github.com/shadcn.png' alt='@shadcn' /> */}
        <AvatarFallback className='bg-neutral-200'>H</AvatarFallback>
       </Avatar>
       <div className='grow text-start overflow-hidden'>
@@ -53,32 +53,32 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
        <p className='text-base truncate w-full text-primary mb-3 font-medium'>
         هتل عباسی
        </p>
-       <p className='text-sm text-neutral-600 dark:text-neutral-300'>
-        <span>{profile.lastLoginDate}: </span>
-        <span>
-         {date.toLocaleDateString(locale, {
-          year: 'numeric',
-          month: 'long',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-         })}
-        </span>
-       </p>
+       {/* <p className='text-sm text-neutral-600 dark:text-neutral-300'> */}
+       {/*  <span>{profile.lastLoginDate}: </span> */}
+       {/*  <span> */}
+       {/*   {date.toLocaleDateString(locale, { */}
+       {/*    year: 'numeric', */}
+       {/*    month: 'long', */}
+       {/*    day: '2-digit', */}
+       {/*    hour: '2-digit', */}
+       {/*    minute: '2-digit', */}
+       {/*   })} */}
+       {/*  </span> */}
+       {/* </p> */}
       </div>
      </div>
      <div>
       <ul>
-       <li>
-        <Button
-         variant='ghost'
-         size={'icon-lg'}
-         className='text-base p-4 px-8 w-full justify-start h-[unset] gap-4 items-center text-neutral-600 dark:text-neutral-400'
-        >
-         <IoMdSettings className='size-8' />
-         <span>{profile.sttings}</span>
-        </Button>
-       </li>
+       {/* <li> */}
+       {/*  <Button */}
+       {/*   variant='ghost' */}
+       {/*   size={'icon-lg'} */}
+       {/*   className='text-base p-4 px-8 w-full justify-start h-[unset] gap-4 items-center text-neutral-600 dark:text-neutral-400' */}
+       {/*  > */}
+       {/*   <IoMdSettings className='size-8' /> */}
+       {/*   <span>{profile.sttings}</span> */}
+       {/*  </Button> */}
+       {/* </li> */}
        <li>
         <Button
          variant='ghost'

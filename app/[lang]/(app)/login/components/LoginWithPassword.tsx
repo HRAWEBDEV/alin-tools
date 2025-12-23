@@ -89,7 +89,9 @@ export default function LoginWithPassword({ dic }: { dic: LoginDictionary }) {
     <form.Field name='userName'>
      {(field) => (
       <Field data-invalid={!field.state.meta.isValid}>
-       <FieldLabel htmlFor='userName'>{formDic.userName}</FieldLabel>
+       <FieldLabel htmlFor='userName' className='text-md'>
+        {formDic.userName}
+       </FieldLabel>
        <InputGroup className='h-11'>
         <InputGroupAddon align='inline-start'>
          <FaUser className='text-primary size-5' />
@@ -120,7 +122,9 @@ export default function LoginWithPassword({ dic }: { dic: LoginDictionary }) {
     <form.Field name='password'>
      {(field) => (
       <Field data-invalid={!field.state.meta.isValid}>
-       <FieldLabel htmlFor='password'>{formDic.password}</FieldLabel>
+       <FieldLabel htmlFor='password' className='text-md'>
+        {formDic.password}
+       </FieldLabel>
        <InputGroup className='h-11'>
         <InputGroupAddon align='inline-start'>
          <TbLockPassword className='text-primary size-6' />

@@ -1,7 +1,17 @@
 import { axios } from '@/app/[lang]/(app)/utils/defaultAxios';
-import type { Combo } from '../../utils/apiTypes';
+import type { Combo, PagedData } from '../../utils/apiTypes';
 
 const newOrderKey = 'restaurant-new-order';
+
+interface Waiter {
+ personID: number;
+ personName: string;
+}
+
+interface Contract {
+ id: number;
+ name: string;
+}
 
 interface InitialData {
  orderId: number;
@@ -125,6 +135,37 @@ type SaveOrderPackage = {
  orderItems: OrderItem[];
 };
 
+interface Subscriber {
+ personID: number;
+ disabled: boolean;
+ code: number;
+ name: string;
+ address: string | null;
+ email: string | null;
+ fatherName: string | null;
+ genderID: number | null;
+ mobileNo: string | null;
+ nationalCode: string | null;
+}
+
+interface Customer {
+ id: number;
+ name: string;
+ code: string;
+}
+
+interface Room {
+ id: number;
+ registerID: number;
+ roomLabel: string;
+ guestFullName: string;
+}
+
+interface Tag {
+ id: number;
+ comment: string;
+}
+
 function getInitData({ signal }: { signal: AbortSignal }) {
  return axios.get<InitialData>('/Restaurant/SaleInvoice/GetInitDatas', {
   signal,
@@ -135,22 +176,33 @@ function getItemPrograms({
  signal,
  itemGroupID,
  contractMenuID,
+ saleTypeID,
  orderDateTime,
+ registerID,
+ hasService,
 }: {
  signal: AbortSignal;
- itemGroupID: number;
- contractMenuID: number | null;
+ itemGroupID: string;
+ contractMenuID?: string;
  orderDateTime: string;
+ saleTypeID: string;
+ registerID?: string;
+ hasService: boolean;
 }) {
  const searchParams = new URLSearchParams([
   ['itemGroupID', itemGroupID.toString()],
   ['orderDateTime', orderDateTime],
+  ['saleTypeID', saleTypeID.toString()],
+  ['service', String(hasService)],
  ]);
  if (contractMenuID) {
   searchParams.set('contractMenuID', contractMenuID.toString());
  }
+ if (registerID) {
+  searchParams.set('registerID', registerID.toString());
+ }
  return axios.get<ItemProgram[]>(
-  `/Restaurant/SaleInvoice/GetItemPrograms?${searchParams.toString()}`,
+  `/Restaurant/SaleInvoice/GetAllItemPrograms?${searchParams.toString()}`,
   { signal },
  );
 }
@@ -174,7 +226,7 @@ function getFreeTables({
   searchPamras.set('salonID', salonID);
  }
  return axios.get<Combo[]>(
-  `/Restaurant/SaleInvoice/GetAllocatableTables?${searchPamras.toString()}`,
+  `/Restaurant/tablet/GetAllocatableTables?${searchPamras.toString()}`,
   {
    signal,
   },
@@ -229,14 +281,15 @@ function saveOrder({
   return axios.put<{
    orderID: number;
    message: string;
-  }>(`$/Restaurant/SaleInvoice/UpdateOrder?${searchParams.toString()}`);
+  }>(`/Restaurant/tablet/UpdateOrder?${searchParams.toString()}`, orderPackage);
  }
  return axios.post<{
   orderID: number;
   message: string;
- }>(`$/Restaurant/SaleInvoice/SaveOrder?${searchParams.toString()}`);
+ }>(`/Restaurant/tablet/SaveOrder?${searchParams.toString()}`, orderPackage);
 }
 
+// service rates
 function getOrderServiceRates({
  orderID,
  saleTypeID,
@@ -270,6 +323,7 @@ function closeOrder({ orderID }: { orderID: number }) {
  return axios.post(`/Restaurant/SaleInvoice/CloseOrder?orderID=${orderID}`);
 }
 
+// order payment
 function getOrderPayment({
  orderID,
  signal,
@@ -279,17 +333,180 @@ function getOrderPayment({
 }) {
  return axios.get<number>(
   `/Restaurant/SaleInvoice/GetOrderCashPrePayment?orderID=${orderID}`,
+  {
+   signal,
+  },
+ );
+}
+
+// subscribers
+function getSubscribers({
+ signal,
+ offset,
+ limit,
+ programID,
+ searchPhrase,
+}: {
+ signal: AbortSignal;
+ offset: number;
+ limit: number;
+ programID?: number;
+ searchPhrase?: string;
+}) {
+ const searchParams = new URLSearchParams([
+  ['limit', limit.toString()],
+  ['offset', offset.toString()],
+ ]);
+ if (searchPhrase) {
+  searchParams.set('searchParams', searchPhrase);
+ }
+ if (programID) {
+  searchParams.set('programID', programID.toString());
+ }
+ return axios.get<PagedData<Subscriber[]>>(
+  `/Restaurant/Subscriber/GetPagedSubscribers?${searchParams.toString()}`,
+  {
+   signal,
+  },
+ );
+}
+
+// customers
+function getCustomers({
+ signal,
+ offset,
+ limit,
+ searchPhrase,
+ registerID,
+}: {
+ signal: AbortSignal;
+ offset: number;
+ limit: number;
+ registerID?: string;
+ searchPhrase?: string;
+}) {
+ const searchParams = new URLSearchParams([
+  ['limit', limit.toString()],
+  ['offset', offset.toString()],
+ ]);
+ if (searchPhrase) {
+  searchParams.set('searchText', searchPhrase);
+ }
+ if (registerID) {
+  searchParams.set('registerID', registerID.toString());
+ }
+ return axios.get<PagedData<Customer[]>>(
+  `/Restaurant/SaleInvoice/GetPagedCustomers?${searchParams.toString()}`,
+  {
+   signal,
+  },
+ );
+}
+
+// contracts
+function getContracts({
+ signal,
+ offset,
+ limit,
+}: {
+ signal: AbortSignal;
+ offset: number;
+ limit: number;
+}) {
+ const searchParams = new URLSearchParams([
+  ['limit', limit.toString()],
+  ['offset', offset.toString()],
+ ]);
+ return axios.get<PagedData<Contract[]>>(
+  `/Restaurant/SaleInvoice/GetPagedContractMenus?${searchParams.toString()}`,
+  {
+   signal,
+  },
+ );
+}
+// rooms
+function getRooms({
+ signal,
+ offset,
+ limit,
+}: {
+ signal: AbortSignal;
+ offset: number;
+ limit: number;
+}) {
+ const searchParams = new URLSearchParams([
+  ['limit', limit.toString()],
+  ['offset', offset.toString()],
+ ]);
+ return axios.get<PagedData<Room[]>>(
+  `/Restaurant/SaleInvoice/GetRegisterGuests?${searchParams.toString()}`,
+  {
+   signal,
+  },
+ );
+}
+
+// get tags
+function getTags({
+ signal,
+ offset,
+ limit,
+ programID,
+}: {
+ signal: AbortSignal;
+ offset: number;
+ limit: number;
+ programID?: number;
+}) {
+ const searchParams = new URLSearchParams([
+  ['limit', limit.toString()],
+  ['offset', offset.toString()],
+ ]);
+ if (programID) {
+  searchParams.set('programID', programID.toString());
+ }
+ return axios.get<PagedData<Tag[]>>(
+  `/Restaurant/SaleInvoice/GetPagedTags?${searchParams.toString()}`,
+  {
+   signal,
+  },
+ );
+}
+
+function getWaiters({
+ signal,
+ offset,
+ limit,
+}: {
+ signal: AbortSignal;
+ limit: number;
+ offset: number;
+}) {
+ const searchParams = new URLSearchParams([
+  ['limit', limit.toString()],
+  ['offset', offset.toString()],
+ ]);
+
+ return axios.get<PagedData<Waiter[]>>(
+  `/Restaurant/SaleInvoice/GetPagedWaiters?${searchParams.toString()}`,
+  {
+   signal,
+  },
  );
 }
 
 export type {
  InitialData,
+ Subscriber,
+ Customer,
  ItemGroup,
  ItemProgram,
  OrderItem,
  Order,
  OrderServiceRates,
  SaveOrderPackage,
+ Room,
+ Tag,
 };
 export {
  newOrderKey,
@@ -302,4 +519,10 @@ export {
  getOrderServiceRates,
  closeOrder,
  getOrderPayment,
+ getSubscribers,
+ getCustomers,
+ getRooms,
+ getTags,
+ getWaiters,
+ getContracts,
 };

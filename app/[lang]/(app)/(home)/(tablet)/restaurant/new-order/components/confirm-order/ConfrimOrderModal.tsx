@@ -1,4 +1,5 @@
 'use client';
+import { useRef } from 'react';
 import {
  Dialog,
  DialogTitle,
@@ -13,7 +14,7 @@ import {
  type ConfirmOrderType,
  useOrderBaseConfigContext,
 } from '../../services/order-tools/orderBaseConfigContext';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import OrderShoppingCard from '../order-shop/OrderShoppingCard';
 import OrderInfo from '../order-info/OrderInfo';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
@@ -21,12 +22,14 @@ import { Badge } from '@/components/ui/badge';
 import { DialogClose, DialogTrigger } from '@radix-ui/react-dialog';
 import OrderInvoice from '../order-invoice/OrderInvoice';
 import { BiError } from 'react-icons/bi';
+import { Activity } from 'react';
 
 export default function ConfirmOrderModal({
  dic,
 }: {
  dic: NewOrderDictionary;
 }) {
+ const dialogBodyRef = useRef<HTMLDivElement>(null);
  const { localeInfo } = useBaseConfig();
  const {
   confirmOrderIsOpen,
@@ -34,8 +37,8 @@ export default function ConfirmOrderModal({
   changeConfirmType,
   showConfirmOrder,
   closeConfirmOrder,
-  order: { orderItems, orderItemsDispatch, onCloseOrder },
-  userOrder: { order },
+  shopInfoLoading,
+  order: { orderItems, orderItemsDispatch, onCloseOrder, onSaveOrder },
  } = useOrderBaseConfigContext();
  return (
   <Dialog
@@ -53,13 +56,19 @@ export default function ConfirmOrderModal({
      <DialogTitle className='hidden'></DialogTitle>
      <DialogDescription className='hidden'></DialogDescription>
     </DialogHeader>
-    <div className='grow overflow-auto p-4 pt-0'>
+    <div
+     ref={dialogBodyRef}
+     className='grow overflow-auto p-4 pt-0 scroll-smooth'
+    >
      <Tabs
       dir={localeInfo.contentDirection}
       value={confirmOrderActiveType}
-      onValueChange={(newValue) =>
-       changeConfirmType(newValue as ConfirmOrderType)
-      }
+      onValueChange={(newValue) => {
+       changeConfirmType(newValue as ConfirmOrderType);
+       if (dialogBodyRef.current) {
+        dialogBodyRef.current.scrollTop = 0;
+       }
+      }}
      >
       <TabsList className='self-center sticky top-0 min-h-12 z-2'>
        <TabsTrigger value='orderInfo' className='w-28'>
@@ -77,15 +86,21 @@ export default function ConfirmOrderModal({
         {dic.tools.invoice}
        </TabsTrigger>
       </TabsList>
-      <TabsContent value='orderInfo'>
+      <Activity
+       mode={confirmOrderActiveType === 'orderInfo' ? 'visible' : 'hidden'}
+      >
        <OrderInfo dic={dic} />
-      </TabsContent>
-      <TabsContent value='shoppingCard'>
+      </Activity>
+      <Activity
+       mode={confirmOrderActiveType === 'shoppingCard' ? 'visible' : 'hidden'}
+      >
        <OrderShoppingCard dic={dic} />
-      </TabsContent>
-      <TabsContent value='invoice'>
+      </Activity>
+      <Activity
+       mode={confirmOrderActiveType === 'invoice' ? 'visible' : 'hidden'}
+      >
        <OrderInvoice dic={dic} />
-      </TabsContent>
+      </Activity>
      </Tabs>
     </div>
     <DialogFooter className='p-4'>
@@ -131,22 +146,32 @@ export default function ConfirmOrderModal({
        )}
       </div>
       <div className='flex flex-col-reverse sm:flex-row gap-4'>
-       {confirmOrderActiveType === 'shoppingCard' &&
-        !!order.data?.id &&
-        !!orderItems.length && (
-         <Button variant='destructive' className='h-11' onClick={onCloseOrder}>
-          {dic.invoice.closeOrder}
-         </Button>
-        )}
        {confirmOrderActiveType === 'shoppingCard' && !!orderItems.length && (
-        <Button variant='secondary' className='h-11' onClick={() => {}}>
+        <Button
+         disabled={shopInfoLoading}
+         variant='destructive'
+         className='h-11'
+         onClick={onCloseOrder}
+        >
+         {dic.invoice.closeOrder}
+        </Button>
+       )}
+       {confirmOrderActiveType === 'shoppingCard' && !!orderItems.length && (
+        <Button
+         variant='secondary'
+         className='h-11'
+         disabled={shopInfoLoading}
+         onClick={() => {
+          onSaveOrder();
+         }}
+        >
          {dic.invoice.confirmOrder}
         </Button>
        )}
        {confirmOrderActiveType === 'shoppingCard' && (
         <Button
          className='h-11'
-         disabled={!orderItems.length}
+         disabled={!orderItems.length || shopInfoLoading}
          onClick={() => {
           changeConfirmType('invoice');
          }}

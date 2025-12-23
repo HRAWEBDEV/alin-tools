@@ -29,24 +29,12 @@ export default function NavProfile() {
     onClick={() => toggleProfile()}
    >
     <Avatar className='size-14'>
-     <AvatarImage src='https://github.com/shadcn.png' alt='@shadcn' />
+     {/* <AvatarImage src='https://github.com/shadcn.png' alt='@shadcn' /> */}
      <AvatarFallback className='bg-neutral-200'>H</AvatarFallback>
     </Avatar>
     <div className='grow text-start overflow-hidden'>
      <p className='text-sm truncate w-full'>حمیدرضا اکبری</p>
      <p className='text-xs truncate w-full text-primary mb-1'>هتل عباسی</p>
-     <p className='text-[0.65rem] text-neutral-600 dark:text-neutral-300'>
-      <span>{lastLoginDate}: </span>
-      <span>
-       {date.toLocaleDateString(locale, {
-        year: 'numeric',
-        month: 'long',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-       })}
-      </span>
-     </p>
     </div>
     <IoMdArrowDropdown className='size-6 text-neutral-500' />
    </Button>

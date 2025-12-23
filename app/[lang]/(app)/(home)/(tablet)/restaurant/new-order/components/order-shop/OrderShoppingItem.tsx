@@ -17,8 +17,12 @@ import {
  DialogFooter,
  DialogClose,
 } from '@/components/ui/dialog';
+import { Drawer, DrawerTrigger } from '@/components/ui/drawer';
+import FindTags from '../find-tags/FindTags';
 import HighlightWords from 'react-highlight-words';
 import { motion } from 'motion/react';
+import { GoPlus } from 'react-icons/go';
+import { IoTrashOutline } from 'react-icons/io5';
 
 export default function OrderShoppingItem({
  dic,
@@ -41,9 +45,9 @@ export default function OrderShoppingItem({
  );
  return (
   <motion.div layout className='border-b border-input p-2'>
-   <div className='flex gap-4 items-center'>
+   <div className='flex flex-col sm:flex-row gap-4 items-center'>
     <div className='flex flex-col items-center'>
-     <div className='flex items-center justify-center  shrink-0 rounded-full size-20 bg-neutral-100 dark:bg-neutral-800 overflow-hidden object-center object-contain'>
+     <div className='flex items-center justify-center  shrink-0 rounded-full size-36 sm:size-24 bg-neutral-100 dark:bg-neutral-800 overflow-hidden object-center object-contain'>
       {targetItemProgram?.imageURL ? (
        <img
         alt={orderItem.itemName || 'food image'}
@@ -66,10 +70,10 @@ export default function OrderShoppingItem({
        });
       }}
      >
-      <BsTrash className='size-5' />
+      <BsTrash className='size-6 sm:size-5' />
      </Button>
     </div>
-    <div className='grow flex flex-col sm:flex-row sm:items-center'>
+    <div className='text-center sm:text-start grow flex flex-col sm:flex-row sm:items-center'>
      <div className='grow'>
       <h3 className='text-lg font-medium text-neutral-700 dark:text-neutral-300 mb-1'>
        <HighlightWords
@@ -77,25 +81,60 @@ export default function OrderShoppingItem({
         searchWords={[searchedOrder]}
        />
       </h3>
-      <p className='px-2 text-xs text-neutral-600 dark:text-neutral-400 font-light mb-3 w-[min(100%,20rem)]'>
-       --
+      <p className='px-2 text-sm text-neutral-600 dark:text-neutral-400 font-light mb-2 w-[min(100%,20rem)]'>
+       {orderItem.tagComment || '---'}
       </p>
-      <div className='flex mb-6 sm:mb-2 gap-4'>
+      <div className='mb-1'>
+       {orderItem.tagID ? (
+        <Button
+         variant='outline'
+         className='text-sm p-0.5 py-1 gap-1 text-red-700 border-red-700 dark:text-red-400 dark:border-red-400 h-auto'
+         onClick={() => {
+          orderItemsDispatch({
+           type: 'removeTag',
+           payload: {
+            itemID: orderItem.itemID,
+            tagID: orderItem.tagID!,
+           },
+          });
+         }}
+        >
+         <IoTrashOutline />
+         {dic.orderInfo.addTag}
+        </Button>
+       ) : (
+        <Drawer>
+         <DrawerTrigger>
+          <Button
+           variant='outline'
+           className='text-sm p-0.5 py-1 gap-1 text-primary border-primary h-auto'
+          >
+           <GoPlus />
+           {dic.orderInfo.addTag}
+          </Button>
+         </DrawerTrigger>
+         <FindTags itemID={orderItem.itemID} dic={dic} />
+        </Drawer>
+       )}
+      </div>
+      <div className='flex justify-center sm:justify-start mb-6 sm:mb-2 gap-4'>
        {!!orderItem.discountRate && (
         <div className='text-[0.85rem] font-medium text-red-600 dark:text-red-400 line-through'>
          <Badge variant='destructive' className='p-1 me-2 text-sm'>
           {orderItem.discountRate}%
          </Badge>
-         <span>{orderItem.price - orderItem.discount / orderItem.amount}</span>
+         <span>{format(orderItem.price)}</span>
         </div>
        )}
        <p className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
-        {format(orderItem.price)}
+        {format(
+         orderItem.price - (orderItem.discountRate * orderItem.price) / 100,
+        )}
         <span className='ms-1 text-sm'>ریال</span>
        </p>
       </div>
      </div>
-     <div className='flex gap-2 justify-end sm:justify-start sm:flex-col items-center shrink-0'>
+     <div className='flex gap-2 justify-between sm:justify-start sm:flex-col items-center shrink-0'>
       <div>
        <p className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
         {format(

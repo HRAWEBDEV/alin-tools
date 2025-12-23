@@ -96,7 +96,13 @@ export default function SalonTable({
      }}
     >
      <Link
-      href={showTransferTable || showMergeTable ? '#' : newOrderRedirectLink}
+      href={
+       showTransferTable ||
+       showMergeTable ||
+       table.tableStateTypeID === TableStateTypes.outOfService
+        ? '#'
+        : newOrderRedirectLink
+      }
       className='relative flex! flex-col grow items-stretch bg-background! p-2'
      >
       {table.vip && (
@@ -126,7 +132,10 @@ export default function SalonTable({
         </h3>
        </div>
        <div>
-        <p className='text-neutral-500 dark:text-neutral-400 text-wrap'>
+        <p className='text-sm text-primary text-wrap'>
+         {table.saleTypeName || ''}
+        </p>
+        <p className='text-md text-neutral-500 dark:text-neutral-400 text-wrap'>
          {table.customerName || ''}
         </p>
        </div>
@@ -224,15 +233,15 @@ export default function SalonTable({
             {dic.tables.mergeTables}
            </DropdownMenuLabel>
           </DropdownMenuItem>
-          <DropdownMenuItem
-           className='text-rose-700 dark:text-rose-400'
-           onClick={onCloseOrder}
-          >
-           <IoMdCloseCircleOutline className='size-8 text-inherit' />
-           <DropdownMenuLabel className='text-base'>
-            {dic.tables.closeOrder}
-           </DropdownMenuLabel>
-          </DropdownMenuItem>
+          {/* <DropdownMenuItem */}
+          {/*  className='text-rose-700 dark:text-rose-400' */}
+          {/*  onClick={onCloseOrder} */}
+          {/* > */}
+          {/*  <IoMdCloseCircleOutline className='size-8 text-inherit' /> */}
+          {/*  <DropdownMenuLabel className='text-base'> */}
+          {/*   {dic.tables.closeOrder} */}
+          {/*  </DropdownMenuLabel> */}
+          {/* </DropdownMenuItem> */}
          </>
         )}
       </DropdownMenuGroup>

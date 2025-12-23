@@ -67,7 +67,7 @@ export default function OrderCategories({}: { dic: NewOrderDictionary }) {
         }}
        >
         {scrollDirection === 'up' && <DishIcon className='size-10 shrink-0' />}
-        <p className='text-wrap text-xs font-medium'>{value}</p>
+        <p className='text-wrap text-sm font-medium'>{value}</p>
        </button>
       </div>
      ))

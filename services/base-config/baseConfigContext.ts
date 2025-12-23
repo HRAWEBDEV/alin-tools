@@ -4,12 +4,14 @@ import {
  type LocaleInfo,
 } from '@/internalization/app/localization';
 import { OutOfContext } from '@/utils/OutOfContext';
+import { WindowResizeWatcherUtils } from '@/hooks/useWindowResizeWatchter';
 
 interface BaseConfig {
  locale: Locale;
  localeInfo: LocaleInfo;
  appVersion: string;
  appBirthDate: Date;
+ windowWatcher: WindowResizeWatcherUtils;
  setLocale: (newLocale: Locale) => unknown;
 }
 

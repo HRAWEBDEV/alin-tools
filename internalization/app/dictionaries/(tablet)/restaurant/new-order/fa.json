@@ -35,7 +35,11 @@
   "hasTableNo": "شماره میز",
   "sendToKitchen": "ارسال به آشپزخانه",
   "printCash": "چاپ رسید صندوق",
-  "deliveryAgent": "تحویل به پیک"
+  "deliveryAgent": "تحویل به پیک",
+  "addTag": "تگ",
+  "noRoomSelected": "شماره اتاق انتخاب نشده است",
+  "noSubscriberSelected": "کد اشتراک انتخاب نشده است",
+  "contractNo": "شماره قرارداد"
  },
  "orderConfirm": {
   "removeOrderItemConfirmMessage": "آیا از حذف این آیتم اطمینان دارید؟",
@@ -62,11 +66,47 @@
   "service": "سرویس",
   "confirmOrder": "ثبت سفارش",
   "closeOrder": "بستن سفارش",
-  "confirmPayment": "پرداخت"
+  "confirmPayment": "پرداخت",
+  "paymentType": "نوع پرداخت",
+  "bank": "بانک",
+  "cardReader": "کارت خوان",
+  "paymentRefNo": "شماره مرجع",
+  "confirmInvoicePayment": "ثبت پرداخت",
+  "sendToCardReader": "ارسال به کارتخوان",
+  "enterPaymentRefNo": "شماره مرجع را وارد کنید",
+  "selectCardReader": "کارت خوان انتخاب نشده است",
+  "selectBank": "بانک انتخاب نشده است",
+  "selectPayType": "نوع پرداخت انتخاب نشده است"
  },
  "closeOrder": {
   "confirmMessage": "آیا از بستن سفارش اطمینان دارید؟",
   "confirm": "تایید",
   "cancel": "انصراف"
- }
+ },
+ "findSubscribers": {
+  "search": "جستجو",
+  "code": "کد",
+  "name": "نام",
+  "nationalCode": "کد ملی",
+  "phoneNumber": "شماره تماس"
+ },
+ "findCustomer": {
+  "search": "جستجو",
+  "code": "کد",
+  "name": "نام",
+  "nationalCode": "کد ملی",
+  "phoneNumber": "شماره تماس"
+ },
+ "findRooms": {
+  "search": "جستجو",
+  "roomNo": "شماره اتاق",
+  "guestName": "نام مهمان",
+  "reload": "بروزرسانی مجدد",
+  "loadMore": "موارد بیشتر"
+ },
+ "findContarct": {
+  "title": "عنوان"
+ },
+ "findTags": {},
+ "findWaiters": {}
 }

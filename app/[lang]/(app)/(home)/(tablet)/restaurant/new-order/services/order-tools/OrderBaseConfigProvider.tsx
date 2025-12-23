@@ -1,5 +1,5 @@
 'use client';
-import { useState, useReducer } from 'react';
+import { useState, useReducer, useEffect } from 'react';
 import { ReactNode } from 'react';
 import { type NewOrderDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/new-order/dictionary';
 import {
@@ -9,18 +9,21 @@ import {
 } from './orderBaseConfigContext';
 import {
  type ItemGroup,
- type Order,
+ type SaveOrderPackage,
  newOrderKey,
  getInitData,
  getItemPrograms,
  getOrderItems,
  getOrder,
- getOrderServiceRates,
- closeOrder,
  getFreeTables,
  getOrderPayment,
+ saveOrder,
 } from '../newOrderApiActions';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import {
+ saveAndCloseOrder,
+ sendToPcPos,
+} from '../orderInvoicePaymentApiActions';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { filterItemPrograms } from '../../utils/filterItemPrograms';
 import { orderItemsReducer } from '../../utils/orderItemsActionsReducer';
 import { useSearchParams } from 'next/navigation';
@@ -47,7 +50,9 @@ import { toast } from 'sonner';
 import { Spinner } from '@/components/ui/spinner';
 import { useRouter } from 'next/navigation';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
-import { FaUncharted } from 'react-icons/fa6';
+import { getOrderTypeID } from '../../utils/getOrderTypeID';
+import { SaleTypes } from '../../utils/SaleTypes';
+import { type OrderInvoicePayment } from '../../schemas/orderInvoicePaymentSchema';
 
 export default function OrderBaseConfigProvider({
  children,
@@ -56,6 +61,8 @@ export default function OrderBaseConfigProvider({
  children: ReactNode;
  dic: NewOrderDictionary;
 }) {
+ const queryClient = useQueryClient();
+ //
  const router = useRouter();
  const { locale } = useBaseConfig();
  //
@@ -90,6 +97,10 @@ export default function OrderBaseConfigProvider({
   roundingValue,
   saleTimeValue,
   orderDateValue,
+  subscriberValue,
+  customerValue,
+  roomValue,
+  contractValue,
  ] = orderInfoForm.watch([
   'saleType',
   'hasService',
@@ -99,6 +110,10 @@ export default function OrderBaseConfigProvider({
   'rounding',
   'saleTime',
   'orderDate',
+  'subscriber',
+  'customer',
+  'room',
+  'contract',
  ]);
  //
  const [showCloseOrder, setShowCloseOrder] = useState(false);
@@ -143,30 +158,7 @@ export default function OrderBaseConfigProvider({
   queryKey: [newOrderKey, 'initial-data'],
   async queryFn({ signal }) {
    const res = await getInitData({ signal });
-   const data = res.data;
-   if (data.itemGroups.length) {
-    handleChangeSelectedItemGroup(data.itemGroups[0]);
-   }
-   if (data.saleTimes) {
-    const activeSaleTime = data.defaultSaleTimeID
-     ? data.saleTimes.find(
-        (item) => item.key === data.defaultSaleTimeID.toString(),
-       ) || data.saleTimes[0]
-     : data.saleTimes[0];
-    orderInfoForm.setValue('saleTime', activeSaleTime);
-   }
-   if (data.saleTypes) {
-    const activeSaleType = data.defaultSaleTypeID
-     ? data.saleTypes.find(
-        (item) => item.key === data.defaultSaleTypeID.toString(),
-       ) || data.saleTypes[0]
-     : data.saleTypes[0];
-    orderInfoForm.setValue('saleType', activeSaleType);
-   }
-   if (data.bonNo) {
-    orderInfoForm.setValue('bonNo', data.bonNo);
-   }
-   return data;
+   return res.data;
   },
  });
 
@@ -182,14 +174,25 @@ export default function OrderBaseConfigProvider({
   isSuccess: itemProgramsSuccess,
   isError: itemProgramsError,
  } = useQuery({
-  enabled: !!selectedItemGroup,
-  queryKey: [newOrderKey, 'item-programs', selectedItemGroup?.key || ''],
+  enabled: !!selectedItemGroup && !!saleTypeValue,
+  queryKey: [
+   newOrderKey,
+   'item-programs',
+   saleTypeValue?.key || '',
+   selectedItemGroup?.key || '',
+   String(hasServiceValue),
+   roomValue?.key || 'all',
+   contractValue?.key || 'all',
+  ],
   async queryFn({ signal }) {
    const res = await getItemPrograms({
     signal,
-    contractMenuID: null,
-    itemGroupID: Number(selectedItemGroup!.key),
+    contractMenuID: contractValue?.key,
+    itemGroupID: selectedItemGroup!.key,
     orderDateTime: new Date().toISOString(),
+    saleTypeID: saleTypeValue!.key,
+    hasService: hasServiceValue,
+    registerID: roomValue?.key,
    });
    return res.data;
   },
@@ -236,33 +239,14 @@ export default function OrderBaseConfigProvider({
   },
  });
 
- // service rates
- const {
-  data: serviceRatesData,
-  isLoading: serviceRatesLoading,
-  isError: serviceRatesIsError,
- } = useQuery({
-  enabled: !!saleTypeValue,
-  queryKey: [
-   newOrderKey,
-   'service-rates',
-   userOrder?.id.toString() || '',
-   saleTypeValue?.key || '',
-  ],
-  staleTime: 'static',
-  gcTime: 0,
-  async queryFn({ signal }) {
-   const res = await getOrderServiceRates({
-    signal,
-    orderID: userOrder?.id || 0,
-    saleTypeID: Number(saleTypeValue!.key),
-   });
-   return res.data;
-  },
- });
  // get free tables
- const { data: freeTables, isLoading: freeTablesIsLoading } = useQuery({
-  enabled: Boolean(saleTimeValue && orderDateValue && salonIDQuery),
+ const {
+  data: freeTables,
+  isLoading: freeTablesIsLoading,
+  isFetching: freeTablesIsFetching,
+  refetch: freeTablesRefetch,
+ } = useQuery({
+  enabled: Boolean(saleTimeValue && orderDateValue),
   staleTime: 'static',
   gcTime: 0,
   queryKey: [
@@ -289,28 +273,34 @@ export default function OrderBaseConfigProvider({
    return freeTables;
   },
  });
+
  // get order payment
- const { data: orderPayment } = useQuery({
+ const {
+  data: orderPaymentValue = 0,
+  isLoading: orderPaymentLoading,
+  isError: orderPaymentError,
+ } = useQuery({
   enabled: !!userOrder?.id,
   queryKey: [newOrderKey, 'order-payment'],
+  gcTime: 0,
   async queryFn({ signal }) {
-   getOrderPayment({
+   const res = await getOrderPayment({
     signal,
     orderID: userOrder!.id,
    });
+   return res.data;
   },
  });
  //
  const pricedOrderItems = effectOrderItemsServiceRates({
   orderItems,
   hasService: hasServiceValue,
-  serviceRates: serviceRatesData || null,
   userDiscount: Number(userDiscountValue) || 0,
  });
  //
  const invoiceShopResult = shopCalculator(
   pricedOrderItems,
-  0,
+  orderPaymentValue,
   (Number(tipValue) || 0) +
    (Number(deliveryValue) || 0) +
    (Number(roundingValue) || 0),
@@ -321,12 +311,32 @@ export default function OrderBaseConfigProvider({
  }
  const { mutate: handleConfirmCloseOrder, isPending: isPendingCloseOrder } =
   useMutation({
-   mutationFn() {
-    return closeOrder({ orderID: userOrder!.id });
+   mutationFn({
+    newOrder,
+    orderInfo,
+   }: {
+    orderInfo: OrderInfo;
+    newOrder: SaveOrderPackage['order'];
+   }) {
+    return saveAndCloseOrder({
+     order: newOrder,
+     orderItems: pricedOrderItems,
+     printToCashBox: orderInfo.printCash,
+     sendToKitchen: orderInfo.sendToKitchen,
+    });
    },
-   onSuccess() {
+   onSuccess(res) {
+    if (orderIDQuery) {
+     queryClient.invalidateQueries({
+      queryKey: [newOrderKey, 'order-items', orderIDQuery],
+     });
+    }
+    if (res.data.message) {
+     toast.warning(res.data.message);
+    }
     router.push(`/${locale}/restaurant/salons`);
     setShowCloseOrder(false);
+    setConfirmOrderIsOpen(false);
    },
    onError(err: AxiosError<string>) {
     toast.error(err.message || '');
@@ -334,64 +344,325 @@ export default function OrderBaseConfigProvider({
   });
 
  // get new order save package
- function getNewOrderSavePackage({
-  userOrder,
-  orderInfo: {},
- }: {
-  orderInfo: OrderInfo;
-  userOrder?: Order;
- }) {
-  const newOrderSavePackage = {
-   ...(userOrder || {}),
-   id: userOrder ? userOrder.id : 0,
-   // occupied: isOnTableDisable ? false : onTable,
-   // registerID: room ? Number(room.key) : null,
-   // orderNo: initialData.orderNo,
-   // orderStateID: initialData.orderStateID,
-   // dailyNo: initialData.dailyNo,
-   // customerID: customer ? Number(customer.key) : null,
-   // tableID: table ? Number(table.key) : null,
-   // waiterPersonID: waiter ? Number(waiter.key) : null,
-   // subscriberPersonID: subscriber ? Number(subscriber.key) : null,
-   // saleTimeID: Number(saleTime.key),
-   // saleTypeID: Number(saleType.key),
-   // bonNo: bonNo || null,
-   // orderDateTimeOffset: orderDateTimeOffset.toISOString(),
-   // dateTimeDateTimeOffset: dateTimeDateTimeOffset.toISOString(),
-   // persons: persons || null,
-   // roundingValue: roundingValue || 0,
-   // tipValue: tipValue || 0,
-   // delivaryValue: deliveryValue || 0,
-   // discountRate: discountRate || null,
-   // sValue: totalOrderResult.totalSValue,
-   // tax: totalOrderResult.totalTax,
-   // service: totalOrderResult.totalService,
-   // payment: totalOrderResult.payment,
-   // discount: totalOrderResult.totalDiscount,
-   // payableValue: totalOrderResult.remained,
-   // name: name || null,
-   // comment: comment || null,
-   // personID: orderPersonID,
-   // arzID: 1,
-   // orderTypeID: getOrderTypeID({
-   //  tableID: table ? table.key : null,
-   //  saleTypeID: saleType ? saleType.key : null,
-   // }),
-   // contractMenuID: contract ? Number(contract.key) : null,
-   // seatID: null,
-   // employeePersonID: null,
-   // deliveryByAgent:
-   //  saleType.key == SaleTypes.delivery ? deliveryByAgent : false,
+ const { mutate: confirmSaveOrder, isPending: saveOrderPending } = useMutation({
+  async mutationFn({
+   order,
+   data,
+  }: {
+   order: SaveOrderPackage['order'];
+   data: OrderInfo;
+  }) {
+   return saveOrder({
+    orderPackage: {
+     order,
+     orderItems: pricedOrderItems,
+    },
+    sendToKitchen: data.sendToKitchen,
+    printToCashBox: data.printCash,
+   });
+  },
+  onSuccess(res) {
+   if (orderIDQuery) {
+    queryClient.invalidateQueries({
+     queryKey: [newOrderKey, 'order-items', orderIDQuery],
+    });
+   }
+   if (res.data.message) {
+    toast.warning(res.data.message);
+   }
+   router.push(`/${locale}/restaurant/salons`);
+  },
+  onError(err: AxiosError<string>) {
+   toast.error(err.response?.data || '');
+  },
+ });
+
+ let orderInfoName =
+  roomValue?.customerName ||
+  subscriberValue?.customerName ||
+  customerValue?.value ||
+  '';
+ if (
+  (roomValue || subscriberValue || customerValue) &&
+  !orderInfoName &&
+  userOrder?.name
+ ) {
+  orderInfoName = userOrder.name;
+ }
+
+ async function validateOrderInfo(): Promise<{
+  newOrderData: SaveOrderPackage['order'];
+  orderInfoData: OrderInfo;
+ } | null> {
+  let newOrderData: SaveOrderPackage['order'] | null = null;
+  let orderInfoData: OrderInfo | null = null;
+  if (!initData) return null;
+  await orderInfoForm.handleSubmit(
+   (data) => {
+    const newOrder = {
+     ...(userOrder || {}),
+     id: userOrder?.id || 0,
+     orderStateID: initData.orderStateID || 1,
+     occupied: data.table ? data.hasTableNo : false,
+     registerID: data.room ? Number(data.room.key) : null,
+     orderNo: newOrderData?.orderNo || initData.orderNo,
+     dailyNo: initData.dailyNo,
+     customerID: data.customer ? Number(data.customer.key) : null,
+     tableID: data.table ? Number(data.table.key) : null,
+     waiterPersonID: data.waiter ? Number(data.waiter.key) : null,
+     subscriberPersonID: data.subscriber ? Number(data.subscriber.key) : null,
+     saleTimeID: data.saleTime ? Number(data.saleTime.key) : null,
+     saleTypeID: Number(data.saleType!.key),
+     bonNo: data.bonNo || null,
+     orderDateTimeOffset: data.orderDate.toISOString(),
+     persons: data.persons || null,
+     roundingValue: data.rounding || 0,
+     tipValue: data.employeeTip || 0,
+     delivaryValue: deliveryValue || 0,
+     discountRate: data.discountRate || null,
+     sValue: invoiceShopResult.totalSValue,
+     tax: invoiceShopResult.totalTax,
+     service: invoiceShopResult.totalService,
+     payment: invoiceShopResult.payment,
+     discount: invoiceShopResult.totalDiscount,
+     payableValue: invoiceShopResult.remained,
+     comment: data.comment || null,
+     arzID: 1,
+     orderTypeID: getOrderTypeID({
+      tableID: data.table ? data.table.key : null,
+      saleTypeID: data.saleType ? data.saleType.key : null,
+     }),
+     contractMenuID: data.contract ? Number(data.contract.key) : null,
+     seatID: null,
+     employeePersonID: null,
+     deliveryByAgent:
+      data.saleType && data.saleType.key == SaleTypes.delivery
+       ? data.deliveryAgent
+       : false,
+     name: data.customerName || orderInfoName || null,
+     personID: userOrder?.personID || null,
+     dateTimeDateTimeOffset:
+      userOrder?.dateTimeDateTimeOffset || new Date().toISOString(),
+    } as SaveOrderPackage['order'];
+    newOrderData = newOrder;
+    orderInfoData = data;
+   },
+   (err) => {
+    const errorKeys = Object.keys(err) as (keyof typeof err)[];
+    showConfirmOrder('orderInfo');
+    errorKeys.forEach((errKey) => toast.error(err[errKey]?.message));
+   },
+  )();
+  if (!orderInfoData || !newOrderData) return null;
+  return {
+   orderInfoData,
+   newOrderData,
   };
  }
 
+ async function handleSaveOrder() {
+  const orderInfoRes = await validateOrderInfo();
+  if (!orderInfoRes) return;
+  confirmSaveOrder({
+   data: orderInfoRes.orderInfoData,
+   order: orderInfoRes.newOrderData,
+  });
+ }
+ // payment
+ const { mutate: handleConfirmPayment, isPending: isPendingConfirmPayment } =
+  useMutation({
+   async mutationFn({
+    newOrder,
+    orderInfo,
+    paymentData,
+   }: {
+    paymentData: OrderInvoicePayment;
+    newOrder: SaveOrderPackage['order'];
+    orderInfo: OrderInfo;
+   }) {
+    return paymentData.paymentType?.key === '2'
+     ? sendToPcPos({
+        order: newOrder,
+        orderItems: pricedOrderItems,
+        sendToKitchen: orderInfo.sendToKitchen,
+        printToCashBox: orderInfo.sendToKitchen,
+        bankID: Number(paymentData.bank!.key),
+        posID: Number(paymentData.cardReader!.key),
+       })
+     : saveAndCloseOrder({
+        order: newOrder,
+        orderItems: pricedOrderItems,
+        sendToKitchen: orderInfo.sendToKitchen,
+        printToCashBox: orderInfo.sendToKitchen,
+        cash: {
+         bankAccountID: Number(paymentData.bank?.key) || null,
+         payRefNo: paymentData.paymentRefNo || null,
+         payTypeID: Number(paymentData.paymentType?.key) || null,
+         sValue: invoiceShopResult.remained,
+        },
+       });
+   },
+   onSuccess(res) {
+    if (orderIDQuery) {
+     queryClient.invalidateQueries({
+      queryKey: [newOrderKey, 'order-items', orderIDQuery],
+     });
+    }
+    if (res.data.message) {
+     toast.warning(res.data.message);
+    }
+    router.push(`/${locale}/restaurant/salons`);
+    setConfirmOrderIsOpen(false);
+   },
+   onError(err: AxiosError<string>) {
+    toast.error(err.message || '');
+   },
+  });
+
+ async function handlePayment(paymentData: OrderInvoicePayment) {
+  const newOrderRes = await validateOrderInfo();
+  if (!newOrderRes) return;
+  handleConfirmPayment({
+   newOrder: newOrderRes.newOrderData,
+   orderInfo: newOrderRes.orderInfoData,
+   paymentData,
+  });
+ }
  // loadings
  const shopLoading =
   initLoading ||
   userOrderItemsLoading ||
   userOrderLoading ||
-  serviceRatesLoading;
+  orderPaymentLoading ||
+  saveOrderPending ||
+  isPendingCloseOrder ||
+  isPendingConfirmPayment;
  const shopInfoLoading = shopLoading;
+ // set defaults
+ useEffect(() => {
+  if (!initData || !initSuccess) return;
+  if (initData.itemGroups.length) {
+   handleChangeSelectedItemGroup(initData.itemGroups[0]);
+  }
+  orderInfoForm.setValue('sendToKitchen', initData.sendToKitchen);
+  orderInfoForm.setValue('printCash', initData.printToCashbox);
+  if (!!orderIDQuery) return;
+  if (initData.saleTimes) {
+   const activeSaleTime = initData.defaultSaleTimeID
+    ? initData.saleTimes.find(
+       (item) => item.key === initData.defaultSaleTimeID.toString(),
+      ) || initData.saleTimes[0]
+    : initData.saleTimes[0];
+   orderInfoForm.setValue('saleTime', activeSaleTime);
+  }
+  if (initData.saleTypes) {
+   const activeSaleType = initData.defaultSaleTypeID
+    ? initData.saleTypes.find(
+       (item) => item.key === initData.defaultSaleTypeID.toString(),
+      ) || initData.saleTypes[0]
+    : initData.saleTypes[0];
+   orderInfoForm.setValue('saleType', activeSaleType);
+  }
+  if (initData.bonNo) {
+   orderInfoForm.setValue('bonNo', initData.bonNo);
+  }
+ }, [initData, orderInfoForm, orderIDQuery, initSuccess]);
+
+ useEffect(() => {
+  if (!userOrder || !userOrderSuccess) return;
+  const {
+   tableID,
+   tableNo,
+   discountRate,
+   roundingValue,
+   subscriberPersonID,
+   subscriberCode,
+   customerID,
+   customerName,
+   customerCode,
+   contractMenuID,
+   contractMenuName,
+   registerID,
+   roomLabel,
+   bonNo,
+   persons,
+   delivaryValue,
+   tipValue,
+   orderDateTimeOffset,
+   saleTimeID,
+   saleTimeName,
+   saleTypeID,
+   saleTypeName,
+   waiterPersonFullName,
+   waiterPersonID,
+   deliveryByAgent,
+   occupied,
+   comment,
+   name,
+  } = userOrder;
+  if (tableID && tableNo) {
+   orderInfoForm.setValue('table', {
+    key: tableID.toString(),
+    value: tableNo.toString(),
+   });
+  }
+  orderInfoForm.setValue('discountRate', discountRate || '');
+  orderInfoForm.setValue('rounding', roundingValue || '');
+  if (subscriberPersonID && subscriberCode) {
+   orderInfoForm.setValue('subscriber', {
+    key: subscriberPersonID.toString(),
+    value: subscriberCode.toString(),
+    customerName: '',
+   });
+  }
+  if (customerID) {
+   orderInfoForm.setValue('customer', {
+    key: customerID.toString(),
+    code: customerCode || '',
+    value: customerName || '',
+   });
+  }
+  if (contractMenuID) {
+   orderInfoForm.setValue('contract', {
+    key: contractMenuID.toString(),
+    value: contractMenuName || '',
+   });
+  }
+  if (registerID) {
+   orderInfoForm.setValue('room', {
+    key: registerID.toString(),
+    value: roomLabel || '',
+    customerName: '',
+   });
+  }
+  orderInfoForm.setValue('customerName', name || '');
+  orderInfoForm.setValue('bonNo', bonNo || '');
+  orderInfoForm.setValue('comment', comment || '');
+  orderInfoForm.setValue('persons', persons || '');
+  orderInfoForm.setValue('deliveryValue', delivaryValue || '');
+  orderInfoForm.setValue('employeeTip', tipValue || '');
+  orderInfoForm.setValue('orderDate', new Date(orderDateTimeOffset));
+  orderInfoForm.setValue('deliveryAgent', !!deliveryByAgent);
+  orderInfoForm.setValue('hasTableNo', occupied);
+  if (saleTimeID && saleTimeName) {
+   orderInfoForm.setValue('saleTime', {
+    key: saleTimeID.toString(),
+    value: saleTimeName,
+   });
+  }
+  if (saleTypeID && saleTypeName) {
+   orderInfoForm.setValue('saleType', {
+    key: saleTypeID.toString(),
+    value: saleTypeName,
+   });
+  }
+  if (waiterPersonID && waiterPersonFullName) {
+   orderInfoForm.setValue('waiter', {
+    key: waiterPersonID.toString(),
+    value: waiterPersonFullName,
+   });
+  }
+ }, [userOrder, userOrderSuccess, orderInfoForm]);
  //
 
  const ctx: OrderBaseConfig = {
@@ -411,6 +682,8 @@ export default function OrderBaseConfigProvider({
    data: initData,
    freeTables,
    freeTablesLoading: freeTablesIsLoading,
+   freeTablesRefetch,
+   freeTablesFetching: freeTablesIsFetching,
    isError: initError,
    isSuccess: initSuccess,
    isFetching: initFetching,
@@ -443,17 +716,21 @@ export default function OrderBaseConfigProvider({
    },
   },
   order: {
-   onCloseOrder,
-   serviceRates: {
-    data: serviceRatesData,
-    isLoading: serviceRatesLoading,
-    isError: serviceRatesIsError,
-   },
+   orderInfoName,
    orderItems: pricedOrderItems,
+   onCloseOrder,
+   onSaveOrder: handleSaveOrder,
    orderItemsDispatch,
   },
   invoice: {
    orderTotals: invoiceShopResult,
+   payment: {
+    data: orderPaymentValue,
+    isLoading: orderPaymentLoading,
+    isError: orderPaymentError,
+   },
+   onPayment: handlePayment,
+   onPaymentPcPos: handlePayment,
   },
  };
 
@@ -488,7 +765,14 @@ export default function OrderBaseConfigProvider({
         disabled={isPendingCloseOrder}
         className='sm:w-24 h-11'
         variant='destructive'
-        onClick={() => handleConfirmCloseOrder()}
+        onClick={async () => {
+         const newOrderRes = await validateOrderInfo();
+         if (!newOrderRes) return;
+         handleConfirmCloseOrder({
+          newOrder: newOrderRes.newOrderData,
+          orderInfo: newOrderRes.orderInfoData,
+         });
+        }}
        >
         {isPendingCloseOrder && <Spinner />}
         {dic.closeOrder.confirm}

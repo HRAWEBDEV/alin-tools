@@ -2,7 +2,20 @@
  "title": "احراز هویت",
  "login": {
   "loginOptions": {
+   "goToLogin": "برو به صفحه‌ی ورود",
    "forgetPassword": "فراموشی رمز عبور؟"
+  },
+  "forgetPassword": {
+   "title": "فراموشی رمز عبور",
+   "phoneNo": "شماره همراه",
+   "OTPCode": "رمز یکبار مصرف",
+   "sendOTPCode": "ارسال کد یکبار مصرف",
+   "password": "رمز عبور",
+   "confirmPassword": "تکرار رمز عبور",
+   "editPhoneNo": "ویرایش شماره همراه",
+   "fillRequiredFields": "فیلدهای الزامی را پر کنید",
+   "invalidConfirmPassword": "تکرار رمز عبور اشتباه است",
+   "confirm": "تایید"
   },
   "withPassword": {
    "form": {
