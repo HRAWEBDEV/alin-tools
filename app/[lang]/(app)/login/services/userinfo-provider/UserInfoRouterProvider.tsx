@@ -146,41 +146,38 @@ export default function UserInfoRouterProvider({
         <Button
          key={dep.id}
          variant='outline'
-         className={`relative h-auto w-auto flex-col ${selectedDialogDepartment ? 'size-32' : 'size-40 lg:size-48 '} max-h-none ${dep.id === Departments.roomDivision ? 'bg-sky-100 dark:bg-sky-950 text-primary' : 'bg-teal-100 dark:bg-teal-950 text-secondary'}`}
+         className={`transition-none relative h-auto w-auto flex-col ${selectedDialogDepartment ? 'size-32' : 'size-40 lg:size-48 '} max-h-none ${dep.id === Departments.roomDivision ? 'bg-sky-100 dark:bg-sky-950 text-primary' : 'bg-teal-100 dark:bg-teal-950 text-secondary'}`}
          onClick={() => {
           setSelectedDialogDepartmentID(dep.id);
          }}
-         asChild
         >
-         <motion.div>
-          {selectedDialogDepartmentID === dep.id && (
-           <div className='absolute top-0 right-0'>
-            <FaCheckCircle className='text-secondary size-6' />
-           </div>
-          )}
-          {!selectedDialogDepartment && (
-           <div className='absolute bottom-0 end-0 z-0'>
-            <MdTouchApp className='size-24 text-neutral-200/70 dark:text-neutral-800/70' />
-           </div>
-          )}
-          <div className='flex flex-col items-center z-1 gap-4'>
-           {dep.id == Departments.roomDivision && (
-            <FaHotel
-             className={`${selectedDialogDepartment ? 'size-10' : 'size-12 lg:size-14'}`}
-            />
-           )}
-           {dep.id == Departments.foodAndBeverage && (
-            <ServeDishIcon
-             className={`${selectedDialogDepartment ? 'size-10' : 'size-12 lg:size-14'}`}
-            />
-           )}
-           <span
-            className={`${selectedDialogDepartment ? 'text-base' : 'text-base lg:text-lg'} font-medium`}
-           >
-            {dep.name}
-           </span>
+         {selectedDialogDepartmentID === dep.id && (
+          <div className='absolute top-0 right-0'>
+           <FaCheckCircle className='text-secondary size-6' />
           </div>
-         </motion.div>
+         )}
+         {!selectedDialogDepartment && (
+          <div className='absolute bottom-0 end-0 z-0'>
+           <MdTouchApp className='size-24 text-neutral-200/70 dark:text-neutral-800/70' />
+          </div>
+         )}
+         <div className='flex flex-col items-center z-1 gap-4'>
+          {dep.id == Departments.roomDivision && (
+           <FaHotel
+            className={`${selectedDialogDepartment ? 'size-10' : 'size-12 lg:size-14'}`}
+           />
+          )}
+          {dep.id == Departments.foodAndBeverage && (
+           <ServeDishIcon
+            className={`${selectedDialogDepartment ? 'size-10' : 'size-12 lg:size-14'}`}
+           />
+          )}
+          <span
+           className={`${selectedDialogDepartment ? 'text-base' : 'text-base lg:text-lg'} font-medium`}
+          >
+           {dep.name}
+          </span>
+         </div>
         </Button>
        ))}
       </div>
@@ -215,22 +212,19 @@ export default function UserInfoRouterProvider({
              setShowUserRouter(false);
              redirectUser(selectedDialogDepartmentID!);
             }}
-            asChild
            >
-            <motion.div layout>
-             <div className='absolute bottom-0 end-0 z-0'>
-              <MdTouchApp className='size-24 text-neutral-200/70 dark:text-neutral-800/70' />
-             </div>
-             <div className='flex flex-col items-center z-1 gap-4'>
-              {selectedDialogDepartment.id == Departments.roomDivision && (
-               <HouseKeepingIcon className='size-12' fill='currentColor' />
-              )}
-              {selectedDialogDepartment.id == Departments.foodAndBeverage && (
-               <DishIcon className='size-12' />
-              )}
-              <span className='text-lg font-medium'>{program.name}</span>
-             </div>
-            </motion.div>
+            <div className='absolute bottom-0 end-0 z-0'>
+             <MdTouchApp className='size-24 text-neutral-200/70 dark:text-neutral-800/70' />
+            </div>
+            <div className='flex flex-col items-center z-1 gap-4'>
+             {selectedDialogDepartment.id == Departments.roomDivision && (
+              <HouseKeepingIcon className='size-12' fill='currentColor' />
+             )}
+             {selectedDialogDepartment.id == Departments.foodAndBeverage && (
+              <DishIcon className='size-12' />
+             )}
+             <span className='text-lg font-medium'>{program.name}</span>
+            </div>
            </Button>
           ))}
          </div>
