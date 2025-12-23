@@ -9,16 +9,16 @@ import {
  DrawerTitle,
 } from '@/components/ui/drawer';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { useRestaurantShareDictionary } from '../share-dictionary/restaurantShareDictionaryContext';
 import { Button } from '@/components/ui/button';
 import { RiLogoutBoxRLine } from 'react-icons/ri';
 import { IoMdSettings } from 'react-icons/io';
-import { useRouter } from 'next/navigation';
+import { useLogout } from '@/app/[lang]/(app)/login/hooks/useLogout';
+import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 
 export default function ProfileProvider({ children }: { children: ReactNode }) {
- const router = useRouter();
  const { locale } = useBaseConfig();
+ const logout = useLogout();
  const date = new Date();
  const {
   restaurantShareDictionary: {
@@ -85,7 +85,7 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
          size={'icon-lg'}
          className='text-base p-4 px-8 w-full justify-start h-[unset] gap-4 items-center text-rose-600 dark:text-rose-400'
          onClick={() => {
-          router.push('/fa/login');
+          logout();
          }}
         >
          <RiLogoutBoxRLine className='size-8' />

@@ -1,11 +1,17 @@
 import AxiosCredentials from './services/axios-credentials/AxiosCredentials';
-import LoginInterceptor from '../../login/services/LoginInterceptor';
-export default function TableLayout({ children }: LayoutProps<'/[lang]'>) {
+import UserInfoRouterProvider from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterProvider';
+export default function TableLayout({
+ children,
+}: {
+ children: React.ReactNode;
+}) {
  return (
   <>
    <AxiosCredentials />
-   <LoginInterceptor />
-   {children}
+   <UserInfoRouterProvider>
+    {/* <DepartmentRouter /> */}
+    {children}
+   </UserInfoRouterProvider>
   </>
  );
 }

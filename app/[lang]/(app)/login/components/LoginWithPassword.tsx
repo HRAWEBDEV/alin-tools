@@ -41,6 +41,7 @@ const formDefaults: LoginWithPasswordCredentials = {
 export default function LoginWithPassword({ dic }: { dic: LoginDictionary }) {
  const { loginModalIsOpen, changeLoginModalIsOpen } = useLoginContext();
  const [showPassword, setShowPassword] = useState(false);
+
  const { localeInfo } = useBaseConfig();
  const router = useRouter();
 

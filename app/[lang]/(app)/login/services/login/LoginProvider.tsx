@@ -6,7 +6,6 @@ import { ReactNode, useState } from 'react';
 
 export default function LoginProvider({ children }: { children: ReactNode }) {
  const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
-
  function handleChangeLoginModalIsOpen(open?: boolean) {
   setLoginModalIsOpen((pre) => (open === undefined ? !pre : open));
  }

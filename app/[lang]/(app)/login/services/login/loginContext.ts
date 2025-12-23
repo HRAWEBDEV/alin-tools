@@ -4,6 +4,8 @@ import { use, createContext } from 'react';
 interface Login {
  loginModalIsOpen: boolean;
  changeLoginModalIsOpen: (open?: boolean) => unknown;
+ //  justLoggedIn: boolean;
+ //  setJustLoggedIn: Dispatch<SetStateAction<boolean>>;
 }
 
 const loginContext = createContext<Login | null>(null);

@@ -14,6 +14,9 @@
   },
   "modeController": {
    "description": "تغییر حالت"
+  },
+  "userInfoRouter": {
+   "errorOccuredTryAgainLater": "خطایی رخ داده است لطفا دوباره تلاش کنید"
   }
  }
 }
