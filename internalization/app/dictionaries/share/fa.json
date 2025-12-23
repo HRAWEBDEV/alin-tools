@@ -10,6 +10,13 @@
  "components": {
   "modeController": {
    "description": "تغییر حالت"
+  },
+  "userInfoRouterDialog": {
+   "dialogTitle": "برنامه خود را انتخاب کنید",
+   "ownerNoName": "مالک",
+   "returnButton": "بازگشت",
+   "step1Title": "دپارتمان ها",
+   "step2Title": "برنامه ها"
   }
  }
 }

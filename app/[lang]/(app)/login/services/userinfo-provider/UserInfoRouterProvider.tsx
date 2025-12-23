@@ -14,6 +14,7 @@ import { checkInfoStore } from './utils/UserInfoStorageService';
 import { DialogTitle } from '@radix-ui/react-dialog';
 import { AnimatePresence, motion } from 'motion/react';
 import { ProgramCards } from './components/ProgramCards';
+import { useShareDictionary } from '../../../services/share-dictionary/shareDictionaryContext';
 
 export default function UserInfoRouterProvider({
  children,
@@ -25,7 +26,6 @@ export default function UserInfoRouterProvider({
  const [selectedDepartmentID, setSelectedDepartmentID] = useState<
   number | null
  >(null);
-
  // user query
  const { data, isFetching, isLoading, isError, isSuccess } = useQuery({
   queryKey: [userInfoBaseKey],
@@ -47,6 +47,8 @@ export default function UserInfoRouterProvider({
    };
   },
  });
+ const { shareDictionary } = useShareDictionary();
+ const dict = shareDictionary.components.userInfoRouterDialog;
 
  const toggleModal = useEffectEvent(() => {
   const storageStatus = checkInfoStore();
@@ -89,12 +91,12 @@ export default function UserInfoRouterProvider({
    {isSuccess && children}
    <AnimatePresence mode='popLayout'>
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-     <DialogTitle>برنامه خود را انتخاب کنید</DialogTitle>
+     <DialogTitle>{dict.dialogTitle}</DialogTitle>
      <DialogContent className='gap-0 p-0 max-h-[90svh] overflow-hidden rounded-3xl flex flex-col border border-solid dark:border-gray-600!'>
       <DialogHeader className='p-4 flex items-center justify-start gap-2'>
        <Hotel size={24} className='text-primary' />
        <h4 className='text-xl font-bold text-primary'>
-        {data?.ownerName ? data?.ownerName : 'مالک'}
+        {data?.ownerName ? data?.ownerName : dict.ownerNoName}
        </h4>
        {currentStep === 2 && (
         <motion.button
@@ -108,7 +110,7 @@ export default function UserInfoRouterProvider({
       </DialogHeader>
       <div className='overflow-y-auto overflow-x-hidden!'>
        <h4 className='text-lg flex px-4'>
-        {currentStep === 1 ? 'دپارتمان ها' : 'برنامه ها'}
+        {currentStep === 1 ? dict.step1Title : dict.step2Title}
        </h4>
        <div className='flex flex-wrap items-center justify-evenly mt-4 gap-4 p-4'>
         {data?.departments.map((item, index) => (
