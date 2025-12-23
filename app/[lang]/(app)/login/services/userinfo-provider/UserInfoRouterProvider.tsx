@@ -91,7 +91,9 @@ export default function UserInfoRouterProvider({
    {isSuccess && children}
    <AnimatePresence mode='popLayout'>
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-     <DialogTitle>{dict.dialogTitle}</DialogTitle>
+     <DialogHeader>
+      <DialogTitle>{dict.dialogTitle}</DialogTitle>
+     </DialogHeader>
      <DialogContent className='gap-0 p-0 max-h-[90svh] overflow-hidden rounded-3xl flex flex-col border border-solid dark:border-gray-600!'>
       <DialogHeader className='p-4 flex items-center justify-start gap-2'>
        <Hotel size={24} className='text-primary' />
@@ -104,7 +106,7 @@ export default function UserInfoRouterProvider({
          onClick={() => setCurrentStep(1)}
         >
          <CornerUpRight size={20} />
-         <span>بازگشت</span>
+         <span>{dict.returnButton}</span>
         </motion.button>
        )}
       </DialogHeader>
