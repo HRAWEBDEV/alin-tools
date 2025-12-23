@@ -11,12 +11,19 @@ import { convertToUserInfoStore } from './userInfoApiActions';
 import { toast } from 'sonner';
 import { useLogout } from '../../hooks/useLogout';
 import { useShareDictionary } from '../../../services/share-dictionary/shareDictionaryContext';
+import { useRouter } from 'next/navigation';
+import { useBaseConfig } from '@/services/base-config/baseConfigContext';
+import { useIsHomePage } from '../../hooks/useIsHomePage';
+import { Dialog, DialogContent, DialogHeader } from '@/components/ui/dialog';
 
 export default function UserInfoRouterProvider({
  children,
 }: {
  children: React.ReactNode;
 }) {
+ const isHomePage = useIsHomePage();
+ const { locale } = useBaseConfig();
+ const router = useRouter();
  const {
   shareDictionary: {
    components: { userInfoRouter: userInfoRouterDic },
@@ -33,7 +40,6 @@ export default function UserInfoRouterProvider({
    return convertToUserInfoStore(res.data);
   },
  });
- console.log(data);
 
  const ctx: UserInfoStoreContext = {
   data: data!,
@@ -58,6 +64,13 @@ export default function UserInfoRouterProvider({
  return (
   <userInfoRouterContext.Provider value={ctx}>
    {isSuccess && children}
+
+   <Dialog>
+    <DialogContent className='gap-0 p-0 max-h-[90svh] overflow-hidden flex flex-col'>
+     <DialogHeader className='p-4'></DialogHeader>
+     <div className='p-4 overflow-auto'></div>
+    </DialogContent>
+   </Dialog>
   </userInfoRouterContext.Provider>
  );
 }

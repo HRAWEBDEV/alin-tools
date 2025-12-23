@@ -60,7 +60,7 @@ export default function LoginWithPassword({ dic }: { dic: LoginDictionary }) {
    if (loginModalIsOpen) {
     changeLoginModalIsOpen(false);
    } else {
-    router.push(`/${localeInfo.locale}/restaurant`);
+    router.push(`/${localeInfo.locale}`);
    }
   },
   onError(err: AxiosError<string>) {

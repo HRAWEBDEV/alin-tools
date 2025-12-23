@@ -1,6 +1,7 @@
 import { useRouter } from 'next/navigation';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { clearUserLoginToken } from '../utils/loginTokenManager';
+import { clearUserInfoRouterStorageValue } from '../services/userinfo-provider/utils/userInfoRouterStorageManager';
 
 export function useLogout() {
  const router = useRouter();
@@ -9,5 +10,6 @@ export function useLogout() {
  return () => {
   router.push(`/${locale}/login`);
   clearUserLoginToken();
+  clearUserInfoRouterStorageValue();
  };
 }

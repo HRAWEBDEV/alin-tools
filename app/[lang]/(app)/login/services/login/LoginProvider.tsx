@@ -6,7 +6,6 @@ import { ReactNode, useState } from 'react';
 
 export default function LoginProvider({ children }: { children: ReactNode }) {
  const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
- //  const [justLoggedIn, setJustLoggedIn] = useState(false);
  function handleChangeLoginModalIsOpen(open?: boolean) {
   setLoginModalIsOpen((pre) => (open === undefined ? !pre : open));
  }
@@ -14,8 +13,6 @@ export default function LoginProvider({ children }: { children: ReactNode }) {
  const ctx: Login = {
   loginModalIsOpen,
   changeLoginModalIsOpen: handleChangeLoginModalIsOpen,
-  // justLoggedIn,
-  // setJustLoggedIn,
  };
 
  return (
