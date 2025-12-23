@@ -33,6 +33,7 @@ import { AxiosError } from 'axios';
 import { toast } from 'sonner';
 import { Spinner } from '@/components/ui/spinner';
 import { closeOrder } from '../../../new-order/services/newOrderApiActions';
+import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
 
 export default function SalonBaseConfigProvider({
  children,
@@ -41,6 +42,7 @@ export default function SalonBaseConfigProvider({
  dic: SalonsDictionary;
  children: ReactNode;
 }) {
+ const { userInfoRouterStorage } = useUserInfoRouter();
  const { scrollToTop } = useMainWrapperSetupContext();
  const [tableFilters, setTableFilters] = useState<TablesFilters>({
   showEmptyTables: true,
@@ -155,7 +157,7 @@ export default function SalonBaseConfigProvider({
    .withUrl(
     `${
      process.env.NEXT_PUBLIC_API_URI
-    }/tablerackchangenotifhub?token=${getUserLoginToken()}&programid=15&departmentid=4&ownerid=1&systemid=111`,
+    }/tablerackchangenotifhub?token=${getUserLoginToken()}&programid=${userInfoRouterStorage.programID}&departmentid=${userInfoRouterStorage.departmentID}&ownerid=${userInfoRouterStorage.ownerID}&systemid=${userInfoRouterStorage.systemID}`,
    )
    .configureLogging(signalR.LogLevel.Information)
    .build();
