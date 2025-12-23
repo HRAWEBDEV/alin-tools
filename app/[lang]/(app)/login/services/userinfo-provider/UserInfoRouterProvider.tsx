@@ -9,18 +9,20 @@ import { useQuery } from '@tanstack/react-query';
 import Loading from '@/components/Loading';
 import { convertToUserInfoStore } from './userInfoApiActions';
 import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
-import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { useLogout } from '../../hooks/useLogout';
+import { useShareDictionary } from '../../../services/share-dictionary/shareDictionaryContext';
 
 export default function UserInfoRouterProvider({
  children,
 }: {
  children: React.ReactNode;
 }) {
+ const {
+  shareDictionary: {
+   components: { userInfoRouter: userInfoRouterDic },
+  },
+ } = useShareDictionary();
  const logout = useLogout();
- const router = useRouter();
- const { locale } = useBaseConfig();
  // user query
  const { data, isFetching, isLoading, isError, isSuccess, error } = useQuery({
   queryKey: [userInfoBaseKey],
@@ -43,9 +45,10 @@ export default function UserInfoRouterProvider({
  useEffect(() => {
   if (!isError) return;
   logout();
- }, [isError, logout]);
+  toast.error(userInfoRouterDic.errorOccuredTryAgainLater);
+ }, [isError, logout, userInfoRouterDic]);
 
- if (isLoading)
+ if (isLoading || !isSuccess)
   return (
    <div>
     <Loading />

@@ -11,12 +11,8 @@
   "modeController": {
    "description": "تغییر حالت"
   },
-  "userInfoRouterDialog": {
-   "dialogTitle": "برنامه خود را انتخاب کنید",
-   "ownerNoName": "مالک",
-   "returnButton": "بازگشت",
-   "step1Title": "دپارتمان ها",
-   "step2Title": "برنامه ها"
+  "userInfoRouter": {
+   "errorOccuredTryAgainLater": "خطایی رخ داده است لطفا دوباره تلاش کنید"
   }
  }
 }
