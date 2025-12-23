@@ -22,6 +22,7 @@ import Highlighter from 'react-highlight-words';
 import { useDebouncedValue } from '@tanstack/react-pacer';
 import { type OrderItem } from '../../services/newOrderApiActions';
 import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseConfigContext';
+import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
 
 export default function FindTags({
  dic,
@@ -30,6 +31,7 @@ export default function FindTags({
  dic: NewOrderDictionary;
  itemID: OrderItem['itemID'];
 }) {
+ const { userInfoRouterStorage } = useUserInfoRouter();
  const {
   order: { orderItemsDispatch },
  } = useOrderBaseConfigContext();
@@ -41,7 +43,7 @@ export default function FindTags({
 
  const { data, hasNextPage, fetchNextPage, isFetching, refetch, isSuccess } =
   useInfiniteQuery({
-   queryKey: [newOrderKey, 'tags'],
+   queryKey: [newOrderKey, userInfoRouterStorage.programID, 'tags'],
    initialPageParam: {
     limit: 300,
     offset: 1,
@@ -51,6 +53,7 @@ export default function FindTags({
      signal,
      limit: pageParam.limit,
      offset: pageParam.offset,
+     programID: userInfoRouterStorage.programID,
     });
     return res.data;
    },

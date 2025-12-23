@@ -16,7 +16,7 @@ const tablesGridClass =
 
 export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
  const {
-  initData: { defaultSaleTimeID },
+  initData: { defaultSaleTimeID, salons },
   hallsInfo: {
    isLoading: isLoadingHalls,
    isError: hallsInfoError,
@@ -49,6 +49,10 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
     <UnExpectedError />
    </>
   );
+ }
+
+ if (isSuccess && !salons.length) {
+  return <NoItemFound />;
  }
 
  return (

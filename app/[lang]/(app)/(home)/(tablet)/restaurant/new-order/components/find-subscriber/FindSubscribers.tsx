@@ -23,8 +23,10 @@ import { useDebouncedValue } from '@tanstack/react-pacer';
 import { useFormContext } from 'react-hook-form';
 import { OrderInfo } from '../../schemas/orderInfoSchema';
 import { SaleTypes } from '../../utils/SaleTypes';
+import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
 
 export default function FindSubscriber({ dic }: { dic: NewOrderDictionary }) {
+ const { userInfoRouterStorage } = useUserInfoRouter();
  const { setValue, watch, clearErrors } = useFormContext<OrderInfo>();
  const containerRef = useRef<HTMLDivElement>(null);
  const [searchedText, setSearchedText] = useState('');
@@ -38,7 +40,12 @@ export default function FindSubscriber({ dic }: { dic: NewOrderDictionary }) {
    enabled:
     saleTypeValue?.key === SaleTypes.delivery ||
     saleTypeValue?.key === SaleTypes.contract,
-   queryKey: [newOrderKey, 'subscribers', debouncedSearch],
+   queryKey: [
+    newOrderKey,
+    userInfoRouterStorage.programID,
+    'subscribers',
+    debouncedSearch,
+   ],
    initialPageParam: {
     limit: 300,
     offset: 1,
@@ -49,6 +56,7 @@ export default function FindSubscriber({ dic }: { dic: NewOrderDictionary }) {
      limit: pageParam.limit,
      offset: pageParam.offset,
      searchPhrase: debouncedSearch,
+     programID: userInfoRouterStorage.programID,
     });
     return res.data;
    },

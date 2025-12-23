@@ -2,12 +2,10 @@
 import { VscSearchStop } from 'react-icons/vsc';
 import { Button } from '@/components/ui/button';
 import { useShareDictionary } from '../services/share-dictionary/shareDictionaryContext';
-import { useRouter } from 'next/navigation';
-import { useBaseConfig } from '@/services/base-config/baseConfigContext';
+import { useLogout } from '../login/hooks/useLogout';
 
 export default function NotFound() {
- const router = useRouter();
- const { locale } = useBaseConfig();
+ const logout = useLogout();
  const {
   shareDictionary: {
    components: { notFound },
@@ -24,7 +22,7 @@ export default function NotFound() {
     className='h-12 w-32 text-xl'
     variant='destructive'
     onClick={() => {
-     router.push(`/${locale}/login`);
+     logout();
     }}
    >
     {notFound.goHome}
