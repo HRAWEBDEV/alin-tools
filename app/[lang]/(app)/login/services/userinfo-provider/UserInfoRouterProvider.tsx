@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import {
  type UserInfoStoreContext,
  userInfoRouterContext,
@@ -29,13 +29,14 @@ import ServeDishIcon from '../../../components/icons/ServeDishIcon';
 import DishIcon from '../../../components/icons/DishIcon';
 import HouseKeepingIcon from '../../../components/icons/HouseKeepingIcon';
 import { FaCheckCircle } from 'react-icons/fa';
-import { AnimatePresence } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import {
  type UserInfoRouterStorage,
  setUserInfoRouterStorageValue,
  getUserInfoRouterStorageValue,
 } from './utils/userInfoRouterStorageManager';
 import { useQueryClient } from '@tanstack/react-query';
+import { handleScroll } from './utils/handleScroll';
 
 export default function UserInfoRouterProvider({
  children,
@@ -49,6 +50,7 @@ export default function UserInfoRouterProvider({
  const isHomePage = useIsHomePage();
  const { locale } = useBaseConfig();
  const router = useRouter();
+ const programsRef = useRef<HTMLDivElement | null>(null);
  const {
   shareDictionary: {
    components: { userInfoRouter: userInfoRouterDic },
@@ -82,7 +84,7 @@ export default function UserInfoRouterProvider({
     return;
    }
   },
-  [locale, router, queryClient],
+  [locale, router, queryClient]
  );
 
  const ctx: UserInfoStoreContext = {
@@ -110,6 +112,13 @@ export default function UserInfoRouterProvider({
    }
   }
  }, [isHomePage, redirectUser]);
+ useEffect(() => {
+  if (programsRef.current && selectedDialogDepartmentID) {
+   setTimeout(() => {
+    handleScroll({ ref: programsRef, block: 'start' });
+   }, 350);
+  }
+ }, [selectedDialogDepartmentID]);
 
  if (isLoading || !isSuccess || !data.owners.length)
   return (
@@ -120,7 +129,7 @@ export default function UserInfoRouterProvider({
 
  const selectedDialogDepartment = selectedDialogDepartmentID
   ? data.owners[0].departments.find(
-     (dep) => dep.id === selectedDialogDepartmentID,
+     (dep) => dep.id === selectedDialogDepartmentID
     ) || null
   : null;
 
@@ -140,96 +149,146 @@ export default function UserInfoRouterProvider({
         {data.owners[0].name}
        </h1>
       </div>
-      <div className='flex justify-center gap-4 flex-wrap mb-6'>
-       {data.owners[0].departments.map((dep) => (
-        <Button
-         key={dep.id}
-         variant='outline'
-         className={`transition-none relative h-auto w-auto flex-col ${selectedDialogDepartment ? 'size-32' : 'size-40 lg:size-48 '} max-h-none ${dep.id === Departments.roomDivision ? 'bg-sky-100 dark:bg-sky-950 text-primary' : 'bg-teal-100 dark:bg-teal-950 text-secondary'}`}
-         onClick={() => {
-          setSelectedDialogDepartmentID(dep.id);
-         }}
-        >
-         {selectedDialogDepartmentID === dep.id && (
-          <div className='absolute top-0 right-0'>
-           <FaCheckCircle className='text-secondary size-6' />
-          </div>
-         )}
-         {!selectedDialogDepartment && (
-          <div className='absolute bottom-0 end-0 z-0'>
-           <MdTouchApp className='size-24 text-neutral-200/70 dark:text-neutral-800/70' />
-          </div>
-         )}
-         <div className='flex flex-col items-center z-1 gap-4'>
-          {dep.id == Departments.roomDivision && (
-           <FaHotel
-            className={`${selectedDialogDepartment ? 'size-10' : 'size-12 lg:size-14'}`}
-           />
-          )}
-          {dep.id == Departments.foodAndBeverage && (
-           <ServeDishIcon
-            className={`${selectedDialogDepartment ? 'size-10' : 'size-12 lg:size-14'}`}
-           />
-          )}
-          <span
-           className={`${selectedDialogDepartment ? 'text-base' : 'text-base lg:text-lg'} font-medium`}
+      <AnimatePresence mode='popLayout'>
+       <div className='flex justify-center gap-4 flex-wrap mb-6'>
+        {data.owners[0].departments.map((dep) => (
+         <motion.div
+          layout
+          key={dep.id}
+          initial={{ opacity: 0, rotateY: -50, scale: 0.8 }}
+          animate={{ opacity: 1, rotateY: 0, scale: 1 }}
+          exit={{ opacity: 0, rotateY: 50, scale: 0.8 }}
+          whileHover={{ scale: 1.1 }}
+          transition={{
+           default: {
+            type: 'keyframes',
+            duration: 0.3,
+            delay: 0.3,
+           },
+           layout: {
+            delay: 0,
+            duration: 0.3,
+           },
+          }}
+         >
+          <Button
+           variant='outline'
+           className={`relative h-auto w-auto flex-col ${
+            selectedDialogDepartment ? 'size-32' : 'size-40 lg:size-48 '
+           } max-h-none ${
+            dep.id === Departments.roomDivision
+             ? 'bg-sky-100 dark:bg-sky-950 text-primary'
+             : 'bg-teal-100 dark:bg-teal-950 text-secondary'
+           }`}
+           onClick={() => {
+            setSelectedDialogDepartmentID(dep.id);
+           }}
           >
-           {dep.name}
-          </span>
-         </div>
-        </Button>
-       ))}
-      </div>
-      <AnimatePresence>
-       {selectedDialogDepartment && (
-        <div>
-         <h2 className='mb-4 font-lg font-medium text-rose-700 dark:text-rose-400'>
-          {userInfoRouterDic.selectActiveProgram}:
-         </h2>
-         <div className='flex justify-center gap-4 flex-wrap'>
-          {selectedDialogDepartment.programs.map((program) => (
-           <Button
-            key={program.id}
-            variant='outline'
-            disabled={selectedDialogDepartment.id === Departments.roomDivision}
-            data-disabled={
-             selectedDialogDepartment.id === Departments.roomDivision
-            }
-            className={`relative h-auto w-auto flex-col size-40 max-h-none ${selectedDialogDepartment.id === Departments.roomDivision ? 'bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-400' : 'bg-orange-100 dark:bg-orange-950 text-orange-700 dark:text-orange-400'} data-[disabled="true"]:bg-neutral-100 data-[disabled="true"]:text-neutral-400 dark:data-[disabled="true"]:bg-neutral-100 dark:data-[disabled="true"]:text-neutral-400 data-[disabled="true"]:cursor-not-allowed`}
-            onClick={() => {
-             const selectedUserInfo = {
-              departmentID: selectedDialogDepartmentID!,
-              ownerID: data.owners[0].id,
-              programID: program.id,
-              systemID: program.systemID,
-              ownerName: data.owners[0].name,
-              departmentName: selectedDialogDepartment!.name,
-              programName: program.name || '',
-             };
-             setUserInfoRouterStorageValue(selectedUserInfo);
-             setUserInfoRouterStorage(selectedUserInfo);
-             setShowUserRouter(false);
-             redirectUser(selectedDialogDepartmentID!);
-            }}
-           >
+           {selectedDialogDepartmentID === dep.id && (
+            <div className='absolute top-0 right-0'>
+             <FaCheckCircle className='text-secondary size-6' />
+            </div>
+           )}
+           {!selectedDialogDepartment && (
             <div className='absolute bottom-0 end-0 z-0'>
              <MdTouchApp className='size-24 text-neutral-200/70 dark:text-neutral-800/70' />
             </div>
-            <div className='flex flex-col items-center z-1 gap-4'>
-             {selectedDialogDepartment.id == Departments.roomDivision && (
-              <HouseKeepingIcon className='size-12' fill='currentColor' />
-             )}
-             {selectedDialogDepartment.id == Departments.foodAndBeverage && (
-              <DishIcon className='size-12' />
-             )}
-             <span className='text-lg font-medium'>{program.name}</span>
-            </div>
-           </Button>
-          ))}
-         </div>
-        </div>
-       )}
+           )}
+           <div className='flex flex-col items-center z-1 gap-4'>
+            {dep.id == Departments.roomDivision && (
+             <FaHotel
+              className={`${
+               selectedDialogDepartment ? 'size-10' : 'size-12 lg:size-14'
+              }`}
+             />
+            )}
+            {dep.id == Departments.foodAndBeverage && (
+             <ServeDishIcon
+              className={`${
+               selectedDialogDepartment ? 'size-10' : 'size-12 lg:size-14'
+              }`}
+             />
+            )}
+            <span
+             className={`${
+              selectedDialogDepartment ? 'text-base' : 'text-base lg:text-lg'
+             } font-medium`}
+            >
+             {dep.name}
+            </span>
+           </div>
+          </Button>
+         </motion.div>
+        ))}
+       </div>
       </AnimatePresence>
+      {selectedDialogDepartment && (
+       <motion.div>
+        <h2 className='mb-4 font-lg font-medium text-rose-700 dark:text-rose-400'>
+         {userInfoRouterDic.selectActiveProgram}:
+        </h2>
+        <div ref={programsRef} className='flex justify-center gap-4 flex-wrap'>
+         <AnimatePresence mode='popLayout'>
+          {selectedDialogDepartment.programs.map((program) => (
+           <motion.div
+            key={program.id}
+            layout
+            initial={{ scale: 0.8, opacity: 0, rotateY: 50 }}
+            animate={{ scale: 1, opacity: 1, rotateY: 0 }}
+            exit={{ scale: 0.8, opacity: 0, rotateY: -50 }}
+            whileHover={{ scale: 1.1 }}
+            transition={{
+             duration: 0.3,
+             delay: 0.3,
+             type: 'keyframes',
+            }}
+           >
+            <Button
+             variant='outline'
+             disabled={selectedDialogDepartment.id === Departments.roomDivision}
+             data-disabled={
+              selectedDialogDepartment.id === Departments.roomDivision
+             }
+             className={`relative h-auto w-auto flex-col size-40 max-h-none ${
+              selectedDialogDepartment.id === Departments.roomDivision
+               ? 'bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-400'
+               : 'bg-orange-100 dark:bg-orange-950 text-orange-700 dark:text-orange-400'
+             } data-[disabled="true"]:bg-neutral-100 data-[disabled="true"]:text-neutral-400 dark:data-[disabled="true"]:bg-neutral-100 dark:data-[disabled="true"]:text-neutral-400 data-[disabled="true"]:cursor-not-allowed`}
+             onClick={() => {
+              const selectedUserInfo = {
+               departmentID: selectedDialogDepartmentID!,
+               ownerID: data.owners[0].id,
+               programID: program.id,
+               systemID: program.systemID,
+               ownerName: data.owners[0].name,
+               departmentName: selectedDialogDepartment!.name,
+               programName: program.name || '',
+              };
+              setUserInfoRouterStorageValue(selectedUserInfo);
+              setUserInfoRouterStorage(selectedUserInfo);
+              setShowUserRouter(false);
+              redirectUser(selectedDialogDepartmentID!);
+             }}
+            >
+             <div className='absolute bottom-0 end-0 z-0'>
+              <MdTouchApp className='size-24 text-neutral-200/70 dark:text-neutral-800/70' />
+             </div>
+             <div className='flex flex-col items-center z-1 gap-4'>
+              {selectedDialogDepartment.id == Departments.roomDivision && (
+               <HouseKeepingIcon className='size-12' fill='currentColor' />
+              )}
+              {selectedDialogDepartment.id == Departments.foodAndBeverage && (
+               <DishIcon className='size-12' />
+              )}
+              <span className='text-lg font-medium'>{program.name}</span>
+             </div>
+            </Button>
+           </motion.div>
+          ))}
+         </AnimatePresence>
+        </div>
+       </motion.div>
+      )}
      </div>
     </DialogContent>
    </Dialog>
