@@ -29,7 +29,7 @@ import ServeDishIcon from '../../../components/icons/ServeDishIcon';
 import DishIcon from '../../../components/icons/DishIcon';
 import HouseKeepingIcon from '../../../components/icons/HouseKeepingIcon';
 import { FaCheckCircle } from 'react-icons/fa';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence } from 'motion/react';
 import {
  type UserInfoRouterStorage,
  setUserInfoRouterStorageValue,
@@ -96,8 +96,7 @@ export default function UserInfoRouterProvider({
  useEffect(() => {
   if (!isError) return;
   logout();
-  toast.error(userInfoRouterDic.errorOccuredTryAgainLater);
- }, [isError, logout, userInfoRouterDic]);
+ }, [isError, logout]);
 
  useEffect(() => {
   const val = getUserInfoRouterStorageValue();
