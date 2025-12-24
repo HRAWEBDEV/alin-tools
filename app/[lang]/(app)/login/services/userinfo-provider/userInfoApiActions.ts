@@ -6,6 +6,19 @@ interface User {
  personFullName: string;
 }
 
+interface Owner {
+ id: number;
+ name: string;
+ departments: Department[];
+}
+
+interface Department {
+ id: number;
+ name: string;
+ ownerID: number;
+ programs: Program[];
+}
+
 interface Program {
  id: number;
  ownerID: number;
@@ -26,19 +39,6 @@ interface UserInfoApiResponse {
   departments: Record<string, string>;
   systems: Record<string, string>;
  };
-}
-
-interface Owner {
- id: number;
- name: string;
- departments: Department[];
-}
-
-interface Department {
- id: number;
- name: string;
- ownerID: number;
- programs: Program[];
 }
 
 interface UserInfoStore {
