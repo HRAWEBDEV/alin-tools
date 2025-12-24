@@ -50,7 +50,7 @@ export default function UserInfoRouterProvider({
  const isHomePage = useIsHomePage();
  const { locale } = useBaseConfig();
  const router = useRouter();
- const targetRef = useRef<HTMLDivElement | null>(null);
+ const programsRef = useRef<HTMLDivElement | null>(null);
  const {
   shareDictionary: {
    components: { userInfoRouter: userInfoRouterDic },
@@ -113,12 +113,13 @@ export default function UserInfoRouterProvider({
   }
  }, [isHomePage, redirectUser]);
  useEffect(() => {
-  if (targetRef.current && selectedDialogDepartmentID) {
+  if (programsRef.current && selectedDialogDepartmentID) {
    setTimeout(() => {
-    handleScroll(targetRef);
+    handleScroll({ ref: programsRef, block: 'start' });
    }, 350);
   }
  }, [selectedDialogDepartmentID]);
+
  if (isLoading || !isSuccess || !data.owners.length)
   return (
    <div>
@@ -226,7 +227,7 @@ export default function UserInfoRouterProvider({
         <h2 className='mb-4 font-lg font-medium text-rose-700 dark:text-rose-400'>
          {userInfoRouterDic.selectActiveProgram}:
         </h2>
-        <div ref={targetRef} className='flex justify-center gap-4 flex-wrap'>
+        <div ref={programsRef} className='flex justify-center gap-4 flex-wrap'>
          <AnimatePresence mode='popLayout'>
           {selectedDialogDepartment.programs.map((program) => (
            <motion.div
