@@ -74,6 +74,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
     totalDiscount,
     totalService,
     totalSValue,
+    totalPrice,
    },
    onPayment,
    onPaymentPcPos,
@@ -157,6 +158,13 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
       </span>
       <span>{format(totalDiscount)}</span>
      </div>
+     <div className={invoiceRowClass}>
+      <span className={invoiceLabelClass}>
+       {'+ '}
+       {dic.invoice.itemsTotalPrice}
+      </span>
+      <span>{format(totalSValue)}</span>
+     </div>
      <div
       className={
        invoiceRowClass +
@@ -164,7 +172,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
       }
      >
       <span className={invoiceLabelClass}>{dic.invoice.total}</span>
-      <span>{format(totalSValue)}</span>
+      <span>{format(remained + payment)}</span>
      </div>
      <div
       className={
