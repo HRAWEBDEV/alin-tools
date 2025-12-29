@@ -45,6 +45,14 @@ import FindWaiters from '../find-waiters/FindWaiters';
 import { SaleTypes } from '../../utils/SaleTypes';
 import { IoReloadOutline } from 'react-icons/io5';
 import FindContract from '../find-contract/FindContract';
+import {
+ TimePickerRoot,
+ TimePickerTitle,
+ TimePickerWheels,
+ TimePickerWheel,
+ TimePickerSeparator,
+ TimePickerButton,
+} from '@poursha98/react-ios-time-picker';
 
 export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
  const {
@@ -66,6 +74,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
   order: { orderInfoName },
  } = useOrderBaseConfigContext();
  const [showDateTimePicker, setShowDateTimePicker] = useState(false);
+ const [showTimePicker, setShowTimePicker] = useState(false);
  const { locale } = useBaseConfig();
 
  const [
@@ -143,28 +152,89 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
       render={({ field }) => (
        <Field>
         <FieldLabel htmlFor='orderTime'>{dic.orderInfo.orderTime}</FieldLabel>
-        <InputGroup className='h-11'>
-         <InputGroupInput
-          id='orderTime'
-          type='time'
-          value={field.value.toLocaleTimeString('en', {
-           hour: '2-digit',
-           minute: '2-digit',
-           hour12: false,
-          })}
-          onChange={(e) => {
-           const newValue = e.target.value;
-           const parts = newValue.split(':').map((item) => Number(item));
-           const hours = parts[0];
-           const minutes = parts[1];
-           const date = field.value;
-           date.setHours(hours);
-           date.setMinutes(minutes);
-           field.onChange(date);
-          }}
-          onBlur={field.onBlur}
-         />
-        </InputGroup>
+        <Popover open={showTimePicker} onOpenChange={setShowTimePicker}>
+         <PopoverTrigger asChild>
+          <Button
+           variant='outline'
+           id='orderDate'
+           className='justify-between font-normal h-11'
+           onBlur={field.onBlur}
+           ref={field.ref}
+          >
+           <span>
+            {field.value
+             ? field.value.toLocaleTimeString('en', {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false,
+               })
+             : ''}
+           </span>
+           <ChevronDownIcon />
+          </Button>
+         </PopoverTrigger>
+         <PopoverContent
+          className='overflow-hidden p-0'
+          style={{ width: '320px' }}
+          align='start'
+          onWheel={(e) => e.stopPropagation()}
+          onTouchMove={(e) => e.stopPropagation()}
+         >
+          <TimePickerRoot
+           value={field.value.toLocaleTimeString('en', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+           })}
+           onChange={(timeString) => {
+            if (typeof timeString === 'string') {
+             const [hour, minute] = timeString
+              .split(':')
+              .map((item) => Number(item));
+             const newDate = new Date(field.value || new Date());
+             newDate.setHours(hour);
+             newDate.setMinutes(minute);
+             field.onChange(newDate);
+            }
+           }}
+           numerals='fa'
+           className='w-full rounded-3xl!'
+           loop
+          >
+           <TimePickerTitle className='text-primary text-xl font-bold mb-4'>
+            ساعت سفارش
+           </TimePickerTitle>
+           <TimePickerWheels className='flex justify-center items-center gap-2'>
+            <TimePickerWheel
+             type='hour'
+             classNames={{
+              item: 'text-gray-400',
+              selectedItem: 'text-primary',
+             }}
+            />
+
+            <TimePickerSeparator className='text-primary! text-2xl font-bold'>
+             :
+            </TimePickerSeparator>
+
+            <TimePickerWheel
+             type='minute'
+             classNames={{
+              item: 'text-gray-400',
+              selectedItem: 'text-primary',
+             }}
+            />
+           </TimePickerWheels>
+
+           <TimePickerButton
+            className='mt-6 w-full bg-primary text-white py-3 rounded-2xl'
+            onClick={() => setShowTimePicker(!showTimePicker)}
+           >
+            تائید
+           </TimePickerButton>
+          </TimePickerRoot>
+         </PopoverContent>
+        </Popover>
        </Field>
       )}
      />
