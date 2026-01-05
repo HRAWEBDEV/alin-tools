@@ -202,7 +202,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            loop
           >
            <TimePickerTitle className='text-primary text-xl font-bold mb-4'>
-            ساعت سفارش
+            {dic.orderInfo.orderTime}
            </TimePickerTitle>
            <TimePickerWheels className='flex justify-center items-center gap-2'>
             <TimePickerWheel
