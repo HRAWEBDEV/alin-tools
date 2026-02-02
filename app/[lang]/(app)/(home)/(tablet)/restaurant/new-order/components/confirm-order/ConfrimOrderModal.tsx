@@ -23,6 +23,7 @@ import { DialogClose, DialogTrigger } from '@radix-ui/react-dialog';
 import OrderInvoice from '../order-invoice/OrderInvoice';
 import { BiError } from 'react-icons/bi';
 import { Activity } from 'react';
+import { Spinner } from '@/components/ui/spinner';
 
 export default function ConfirmOrderModal({
  dic,
@@ -153,6 +154,7 @@ export default function ConfirmOrderModal({
          className='h-11'
          onClick={onCloseOrder}
         >
+         {shopInfoLoading && <Spinner />}
          {dic.invoice.closeOrder}
         </Button>
        )}
@@ -165,6 +167,7 @@ export default function ConfirmOrderModal({
           onSaveOrder();
          }}
         >
+         {shopInfoLoading && <Spinner />}
          {dic.invoice.confirmOrder}
         </Button>
        )}
@@ -176,6 +179,7 @@ export default function ConfirmOrderModal({
           changeConfirmType('invoice');
          }}
         >
+         {shopInfoLoading && <Spinner />}
          {dic.orderConfirm.invoice}
         </Button>
        )}
