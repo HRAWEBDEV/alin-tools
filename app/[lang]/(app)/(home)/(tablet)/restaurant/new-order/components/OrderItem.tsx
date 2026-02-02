@@ -1,6 +1,5 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import ServeDishIcon from '@/app/[lang]/(app)/components/icons/ServeDishIcon';
 import { CiCircleMinus } from 'react-icons/ci';
 import { FaCirclePlus } from 'react-icons/fa6';
 import { CiCirclePlus } from 'react-icons/ci';
@@ -10,6 +9,8 @@ import { motion } from 'motion/react';
 import Highlighter from 'react-highlight-words';
 import { useOrderBaseConfigContext } from '../services/order-tools/orderBaseConfigContext';
 import { Spinner } from '@/components/ui/spinner';
+import OrderItemImage from './OrderItemImage';
+import ServeDishIcon from '@/app/[lang]/(app)/components/icons/ServeDishIcon';
 
 export default function OrderItem({
  itemProgram,
@@ -33,16 +34,12 @@ export default function OrderItem({
    <div className='grow rounded-xl shadow-xl dark:bg-neutral-900'>
     <div className='grid place-content-center -mt-17 mb-2'>
      <div className='flex items-center justify-center rounded-full size-34 bg-neutral-100 dark:bg-neutral-800 overflow-hidden object-center object-contain'>
-      {itemProgram.imageURL ? (
-       <img
-        alt={itemProgram.itemName || 'food image'}
-        src={itemProgram.imageURL}
-        loading='lazy'
-        className='object-center object-cover w-full h-full'
-       />
-      ) : (
+      <OrderItemImage
+       src={itemProgram.imageURL || undefined}
+       alt={itemProgram.itemName || undefined}
+      >
        <ServeDishIcon className='size-20 text-neutral-300 dark:text-neutral-700' />
-      )}
+      </OrderItemImage>
      </div>
     </div>
     <div className='text-center'>
