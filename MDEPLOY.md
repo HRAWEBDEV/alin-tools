@@ -31,7 +31,7 @@ npm install
 ui program uses api base address which is saved in .env.production . you can change the address to whatever address that alin backend is running on.
 
 ```env
-NEXT_PUBLIC_ALIN_API_URI=http://192.168.100.8/API
+NEXT_PUBLIC_API_URI=http://192.168.100.8/API
 ```
 
 ### npm run build
