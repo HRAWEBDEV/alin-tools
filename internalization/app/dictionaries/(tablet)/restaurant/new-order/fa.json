@@ -68,6 +68,7 @@
   "confirmOrder": "ثبت سفارش",
   "closeOrder": "بستن سفارش",
   "confirmPayment": "پرداخت",
+  "paymentInfo": "اطلاعات پرداخت",
   "paymentType": "نوع پرداخت",
   "bank": "بانک",
   "cardReader": "کارت خوان",

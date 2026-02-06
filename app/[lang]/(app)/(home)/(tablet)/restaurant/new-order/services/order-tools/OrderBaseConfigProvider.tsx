@@ -723,6 +723,7 @@ export default function OrderBaseConfigProvider({
    orderItemsDispatch,
   },
   invoice: {
+   isPayable: saleTypeValue?.key !== SaleTypes.room,
    orderTotals: invoiceShopResult,
    payment: {
     data: orderPaymentValue,

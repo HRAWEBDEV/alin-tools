@@ -73,6 +73,7 @@ interface OrderBaseConfig {
   onCloseOrder: () => unknown;
  };
  invoice: {
+  isPayable: boolean;
   payment: {
    data?: number;
    isLoading: boolean;

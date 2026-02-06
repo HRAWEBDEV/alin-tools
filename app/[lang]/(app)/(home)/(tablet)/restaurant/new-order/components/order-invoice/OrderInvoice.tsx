@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseConfigContext';
 import { useCurrencyFormatter } from '@/hooks/useCurrencyFormatter';
 import { Spinner } from '@/components/ui/spinner';
-import { ChevronsUpDown } from 'lucide-react';
+import { ChevronsUpDown, ArrowDown } from 'lucide-react';
 import {
  Drawer,
  DrawerTrigger,
@@ -66,6 +66,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
   confirmOrderActiveType,
   order: { orderItems, onCloseOrder, onSaveOrder },
   invoice: {
+   isPayable,
    orderTotals: {
     totalTax,
     other,
@@ -220,108 +221,38 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
       {dic.invoice.confirmOrder}
      </Button>
      <Button
-      disabled={shopLoading}
+      disabled={shopLoading || !isPayable}
       variant='secondary'
       size='lg'
       className='font-medium'
       onClick={() => invoicePaymentRef.current?.scrollIntoView()}
      >
       {shopLoading && <Spinner />}
-      {dic.invoice.confirmPayment}
+      {dic.invoice.paymentInfo}
+      <ArrowDown />
      </Button>
     </div>
     {/* payment setup */}
-    <div className='rounded-md border border-input p-4' ref={invoicePaymentRef}>
-     <form>
-      <FieldGroup className='gap-5'>
-       <div className='grid grid-cols-1 gap-5'>
-        <Field data-invalid={!!errors.paymentType}>
-         <FieldLabel htmlFor='paymentType'>
-          {dic.invoice.paymentType} *
-         </FieldLabel>
-         <Controller
-          control={control}
-          name='paymentType'
-          render={({ field }) => (
-           <Drawer>
-            <DrawerTrigger asChild>
-             <Button
-              id='paymentType'
-              variant='outline'
-              role='combobox'
-              className='justify-between h-11 overflow-hidden'
-              onBlur={field.onBlur}
-              ref={field.ref}
-             >
-              <span className='grow text-ellipsis overflow-hidden text-start'>
-               {field.value?.value || ''}
-              </span>
-              <div className='flex gap-2 items-center'>
-               <ChevronsUpDown />
-              </div>
-             </Button>
-            </DrawerTrigger>
-            {!!errors.paymentType && (
-             <FieldContent>
-              <FieldError>{errors.paymentType.message}</FieldError>
-             </FieldContent>
-            )}
-            <DrawerContent className='h-[min(80svh,35rem)]'>
-             <DrawerHeader className='hidden'>
-              <DrawerTitle>{dic.invoice.paymentType}</DrawerTitle>
-             </DrawerHeader>
-             <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
-              <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
-               {dic.invoice.paymentType}
-              </h1>
-             </div>
-             <div className='overflow-hidden overflow-y-auto'>
-              {data?.payTypes.length ? (
-               <ul>
-                {data.payTypes.map((item) => (
-                 <DrawerClose asChild key={item.key}>
-                  <li
-                   className='flex gap-1 items-center ps-6 py-2'
-                   onClick={() => {
-                    field.onChange(item);
-                    clearErrors();
-                   }}
-                  >
-                   <Checkbox
-                    className='size-6'
-                    checked={field.value?.key === item.key}
-                   />
-                   <Button
-                    tabIndex={-1}
-                    variant='ghost'
-                    className='w-full justify-start h-auto text-lg'
-                   >
-                    <span>{item.value}</span>
-                   </Button>
-                  </li>
-                 </DrawerClose>
-                ))}
-               </ul>
-              ) : (
-               <NoItemFound />
-              )}
-             </div>
-            </DrawerContent>
-           </Drawer>
-          )}
-         />
-        </Field>
-        {paymentTypeValue?.key !== '1' && (
-         <Field data-invalid={!!errors.bank}>
-          <FieldLabel htmlFor='bank'>{dic.invoice.bank} *</FieldLabel>
+    {isPayable && (
+     <div
+      className='rounded-md border border-input p-4'
+      ref={invoicePaymentRef}
+     >
+      <form>
+       <FieldGroup className='gap-5'>
+        <div className='grid grid-cols-1 gap-5'>
+         <Field data-invalid={!!errors.paymentType}>
+          <FieldLabel htmlFor='paymentType'>
+           {dic.invoice.paymentType} *
+          </FieldLabel>
           <Controller
            control={control}
-           name='bank'
+           name='paymentType'
            render={({ field }) => (
             <Drawer>
              <DrawerTrigger asChild>
               <Button
-               id='bank'
+               id='paymentType'
                variant='outline'
                role='combobox'
                className='justify-between h-11 overflow-hidden'
@@ -336,24 +267,178 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
                </div>
               </Button>
              </DrawerTrigger>
-             {!!errors.bank && (
+             {!!errors.paymentType && (
               <FieldContent>
-               <FieldError>{errors.bank.message}</FieldError>
+               <FieldError>{errors.paymentType.message}</FieldError>
               </FieldContent>
              )}
              <DrawerContent className='h-[min(80svh,35rem)]'>
               <DrawerHeader className='hidden'>
-               <DrawerTitle>{dic.invoice.bank}</DrawerTitle>
+               <DrawerTitle>{dic.invoice.paymentType}</DrawerTitle>
               </DrawerHeader>
               <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
                <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
-                {dic.invoice.bank}
+                {dic.invoice.paymentType}
                </h1>
               </div>
               <div className='overflow-hidden overflow-y-auto'>
-               {data?.banks.length ? (
+               {data?.payTypes.length ? (
                 <ul>
-                 {data.banks.map((item) => (
+                 {data.payTypes.map((item) => (
+                  <DrawerClose asChild key={item.key}>
+                   <li
+                    className='flex gap-1 items-center ps-6 py-2'
+                    onClick={() => {
+                     field.onChange(item);
+                     clearErrors();
+                    }}
+                   >
+                    <Checkbox
+                     className='size-6'
+                     checked={field.value?.key === item.key}
+                    />
+                    <Button
+                     tabIndex={-1}
+                     variant='ghost'
+                     className='w-full justify-start h-auto text-lg'
+                    >
+                     <span>{item.value}</span>
+                    </Button>
+                   </li>
+                  </DrawerClose>
+                 ))}
+                </ul>
+               ) : (
+                <NoItemFound />
+               )}
+              </div>
+             </DrawerContent>
+            </Drawer>
+           )}
+          />
+         </Field>
+         {paymentTypeValue?.key !== '1' && (
+          <Field data-invalid={!!errors.bank}>
+           <FieldLabel htmlFor='bank'>{dic.invoice.bank} *</FieldLabel>
+           <Controller
+            control={control}
+            name='bank'
+            render={({ field }) => (
+             <Drawer>
+              <DrawerTrigger asChild>
+               <Button
+                id='bank'
+                variant='outline'
+                role='combobox'
+                className='justify-between h-11 overflow-hidden'
+                onBlur={field.onBlur}
+                ref={field.ref}
+               >
+                <span className='grow text-ellipsis overflow-hidden text-start'>
+                 {field.value?.value || ''}
+                </span>
+                <div className='flex gap-2 items-center'>
+                 <ChevronsUpDown />
+                </div>
+               </Button>
+              </DrawerTrigger>
+              {!!errors.bank && (
+               <FieldContent>
+                <FieldError>{errors.bank.message}</FieldError>
+               </FieldContent>
+              )}
+              <DrawerContent className='h-[min(80svh,35rem)]'>
+               <DrawerHeader className='hidden'>
+                <DrawerTitle>{dic.invoice.bank}</DrawerTitle>
+               </DrawerHeader>
+               <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+                <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
+                 {dic.invoice.bank}
+                </h1>
+               </div>
+               <div className='overflow-hidden overflow-y-auto'>
+                {data?.banks.length ? (
+                 <ul>
+                  {data.banks.map((item) => (
+                   <DrawerClose asChild key={item.key}>
+                    <li
+                     className='flex gap-1 items-center ps-6 py-2'
+                     onClick={() => {
+                      field.onChange(item);
+                     }}
+                    >
+                     <Checkbox
+                      className='size-6'
+                      checked={field.value?.key === item.key}
+                     />
+                     <Button
+                      tabIndex={-1}
+                      variant='ghost'
+                      className='w-full justify-start h-auto text-lg'
+                     >
+                      <span>{item.value}</span>
+                     </Button>
+                    </li>
+                   </DrawerClose>
+                  ))}
+                 </ul>
+                ) : (
+                 <NoItemFound />
+                )}
+               </div>
+              </DrawerContent>
+             </Drawer>
+            )}
+           />
+          </Field>
+         )}
+        </div>
+        {paymentTypeValue?.key === '2' && (
+         <Field data-invalid={!!errors.cardReader} data-disabled={!bankValue}>
+          <FieldLabel htmlFor='cardReader'>
+           {dic.invoice.cardReader} *
+          </FieldLabel>
+          <Controller
+           control={control}
+           name='cardReader'
+           render={({ field }) => (
+            <Drawer>
+             <DrawerTrigger asChild>
+              <Button
+               disabled={!bankValue}
+               id='cardReader'
+               variant='outline'
+               role='combobox'
+               className='justify-between h-11 overflow-hidden'
+               onBlur={field.onBlur}
+               ref={field.ref}
+              >
+               <span className='grow text-ellipsis overflow-hidden text-start'>
+                {field.value?.value || ''}
+               </span>
+               <div className='flex gap-2 items-center'>
+                <ChevronsUpDown />
+               </div>
+              </Button>
+             </DrawerTrigger>
+             {!!errors.cardReader && (
+              <FieldContent>
+               <FieldError>{errors.cardReader.message}</FieldError>
+              </FieldContent>
+             )}
+             <DrawerContent className='h-[min(80svh,35rem)]'>
+              <DrawerHeader className='hidden'>
+               <DrawerTitle>{dic.invoice.cardReader}</DrawerTitle>
+              </DrawerHeader>
+              <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+               <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
+                {dic.invoice.cardReader}
+               </h1>
+              </div>
+              <div className='overflow-hidden overflow-y-auto'>
+               {data?.payTypes.length ? (
+                <ul>
+                 {data.payTypes.map((item) => (
                   <DrawerClose asChild key={item.key}>
                    <li
                     className='flex gap-1 items-center ps-6 py-2'
@@ -386,127 +471,49 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
           />
          </Field>
         )}
-       </div>
-       {paymentTypeValue?.key === '2' && (
-        <Field data-invalid={!!errors.cardReader} data-disabled={!bankValue}>
-         <FieldLabel htmlFor='cardReader'>
-          {dic.invoice.cardReader} *
-         </FieldLabel>
-         <Controller
-          control={control}
-          name='cardReader'
-          render={({ field }) => (
-           <Drawer>
-            <DrawerTrigger asChild>
-             <Button
-              disabled={!bankValue}
-              id='cardReader'
-              variant='outline'
-              role='combobox'
-              className='justify-between h-11 overflow-hidden'
-              onBlur={field.onBlur}
-              ref={field.ref}
-             >
-              <span className='grow text-ellipsis overflow-hidden text-start'>
-               {field.value?.value || ''}
-              </span>
-              <div className='flex gap-2 items-center'>
-               <ChevronsUpDown />
-              </div>
-             </Button>
-            </DrawerTrigger>
-            {!!errors.cardReader && (
-             <FieldContent>
-              <FieldError>{errors.cardReader.message}</FieldError>
-             </FieldContent>
-            )}
-            <DrawerContent className='h-[min(80svh,35rem)]'>
-             <DrawerHeader className='hidden'>
-              <DrawerTitle>{dic.invoice.cardReader}</DrawerTitle>
-             </DrawerHeader>
-             <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
-              <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
-               {dic.invoice.cardReader}
-              </h1>
-             </div>
-             <div className='overflow-hidden overflow-y-auto'>
-              {data?.payTypes.length ? (
-               <ul>
-                {data.payTypes.map((item) => (
-                 <DrawerClose asChild key={item.key}>
-                  <li
-                   className='flex gap-1 items-center ps-6 py-2'
-                   onClick={() => {
-                    field.onChange(item);
-                   }}
-                  >
-                   <Checkbox
-                    className='size-6'
-                    checked={field.value?.key === item.key}
-                   />
-                   <Button
-                    tabIndex={-1}
-                    variant='ghost'
-                    className='w-full justify-start h-auto text-lg'
-                   >
-                    <span>{item.value}</span>
-                   </Button>
-                  </li>
-                 </DrawerClose>
-                ))}
-               </ul>
-              ) : (
-               <NoItemFound />
-              )}
-             </div>
-            </DrawerContent>
-           </Drawer>
+        {paymentTypeValue?.key !== '1' && (
+         <Field data-invalid={!!errors.paymentRefNo}>
+          <FieldLabel htmlFor='paymentRefNo'>
+           {dic.invoice.paymentRefNo}
+          </FieldLabel>
+          <InputGroup className='h-11'>
+           <InputGroupInput />
+          </InputGroup>
+          {!!errors.paymentRefNo && (
+           <FieldContent>
+            <FieldError>{errors.paymentRefNo.message}</FieldError>
+           </FieldContent>
           )}
-         />
-        </Field>
-       )}
-       {paymentTypeValue?.key !== '1' && (
-        <Field data-invalid={!!errors.paymentRefNo}>
-         <FieldLabel htmlFor='paymentRefNo'>
-          {dic.invoice.paymentRefNo}
-         </FieldLabel>
-         <InputGroup className='h-11'>
-          <InputGroupInput />
-         </InputGroup>
-         {!!errors.paymentRefNo && (
-          <FieldContent>
-           <FieldError>{errors.paymentRefNo.message}</FieldError>
-          </FieldContent>
-         )}
-        </Field>
-       )}
-       <div className='grid sm:grid-cols-3 gap-3 sm:justify-end'>
-        <div></div>
-        <div></div>
-        {paymentTypeValue?.key === '2' ? (
-         <Button
-          disabled={isFetching || shopLoading}
-          type='submit'
-          onClick={handleConfirmPayment}
-         >
-          {(isFetching || shopLoading) && <Spinner />}
-          {dic.invoice.sendToCardReader}
-         </Button>
-        ) : (
-         <Button
-          type='submit'
-          disabled={isFetching || shopLoading}
-          className='h-11'
-          onClick={handleConfirmPayment}
-         >
-          {(isFetching || shopLoading) && <Spinner />}
-          {dic.invoice.confirmInvoicePayment}
-         </Button>
+         </Field>
         )}
-       </div>
-      </FieldGroup>
-     </form>
-    </div>
+        <div className='grid sm:grid-cols-3 gap-3 sm:justify-end'>
+         <div></div>
+         <div></div>
+         {paymentTypeValue?.key === '2' ? (
+          <Button
+           disabled={isFetching || shopLoading}
+           type='submit'
+           onClick={handleConfirmPayment}
+          >
+           {(isFetching || shopLoading) && <Spinner />}
+           {dic.invoice.sendToCardReader}
+          </Button>
+         ) : (
+          <Button
+           type='submit'
+           disabled={isFetching || shopLoading}
+           className='h-11'
+           onClick={handleConfirmPayment}
+          >
+           {(isFetching || shopLoading) && <Spinner />}
+           {dic.invoice.confirmInvoicePayment}
+          </Button>
+         )}
+        </div>
+       </FieldGroup>
+      </form>
+     </div>
+    )}
    </div>
   </div>
  ) : (
