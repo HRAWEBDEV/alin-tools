@@ -73,12 +73,12 @@ export default function SalonTable({
       className='absolute inset-0 z-[-1] py-2 grid gap-1 content-center'
      >
       {tableRows.map((row) => (
-       <div key={row.id} className='h-5 rounded-2xl flex justify-between'>
+       <div key={row.id} className='h-6 rounded-2xl flex justify-between'>
         {Array.from({ length: row.seats }, (_, i) => i).map((seat) => (
          <div
           data-occupied={row.occupiedSeats >= seat + 1}
           key={seat}
-          className='size-5 rounded-full bg-neutral-200 dark:bg-neutral-800 data-[occupied="true"]:bg-rose-300 data-[occupied="true"]:dark:bg-rose-800'
+          className='size-6 rounded-full bg-neutral-200 dark:bg-neutral-800 data-[occupied="true"]:bg-rose-300 data-[occupied="true"]:dark:bg-rose-800'
          ></div>
         ))}
        </div>
@@ -87,7 +87,7 @@ export default function SalonTable({
     )}
     <Button
      variant={'outline'}
-     className='z-1 rounded-2xl h-full flex-col justify-start text-start p-0 overflow-hidden mx-2 shadow-lg'
+     className='z-1 rounded-2xl h-full flex-col justify-start text-start p-0 overflow-hidden mx-3 shadow-lg'
      asChild
      onClick={() => {
       if (selectedTable?.tableNo === table.tableNo) return;
@@ -163,7 +163,7 @@ export default function SalonTable({
      </Link>
     </Button>
    </div>
-   <div className='mx-2 -mt-4'>
+   <div className='mx-3 -mt-4'>
     <DropdownMenu
      dir={localeInfo.contentDirection}
      onOpenChange={(newValue) => {
