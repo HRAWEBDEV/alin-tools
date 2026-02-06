@@ -465,19 +465,21 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
          />
         </Field>
        )}
-       <Field data-invalid={!!errors.paymentRefNo}>
-        <FieldLabel htmlFor='paymentRefNo'>
-         {dic.invoice.paymentRefNo}
-        </FieldLabel>
-        <InputGroup className='h-11'>
-         <InputGroupInput />
-        </InputGroup>
-        {!!errors.paymentRefNo && (
-         <FieldContent>
-          <FieldError>{errors.paymentRefNo.message}</FieldError>
-         </FieldContent>
-        )}
-       </Field>
+       {paymentTypeValue?.key !== '1' && (
+        <Field data-invalid={!!errors.paymentRefNo}>
+         <FieldLabel htmlFor='paymentRefNo'>
+          {dic.invoice.paymentRefNo}
+         </FieldLabel>
+         <InputGroup className='h-11'>
+          <InputGroupInput />
+         </InputGroup>
+         {!!errors.paymentRefNo && (
+          <FieldContent>
+           <FieldError>{errors.paymentRefNo.message}</FieldError>
+          </FieldContent>
+         )}
+        </Field>
+       )}
        <div className='grid sm:grid-cols-3 gap-3 sm:justify-end'>
         <div></div>
         <div></div>
