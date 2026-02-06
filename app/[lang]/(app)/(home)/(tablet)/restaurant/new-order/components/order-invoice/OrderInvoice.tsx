@@ -35,6 +35,7 @@ import { useQuery } from '@tanstack/react-query';
 import {
  newOrderPaymentKey,
  getOrderInvoicePaymentInitData,
+ getPcPoses,
 } from '../../services/orderInvoicePaymentApiActions';
 import { toast } from 'sonner';
 
@@ -92,6 +93,15 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
   },
  });
 
+ const { data: pcPoseData, isLoading: pcPosesLoading } = useQuery({
+  enabled: confirmOrderActiveType === 'invoice' && !!bankValue,
+  queryKey: [newOrderPaymentKey, 'pc-poses', bankValue?.key || ''],
+  async queryFn({ signal }) {
+   const res = await getPcPoses({ signal, bankID: bankValue!.key });
+   return res.data;
+  },
+ });
+
  function handleConfirmPayment(e: MouseEvent<HTMLButtonElement>) {
   e.preventDefault();
   handleSubmit(
@@ -126,6 +136,15 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
    setValue('bank', activeBank);
   }
  }, [isSuccess, data, getValues, setValue]);
+
+ useEffect(() => {
+  if (!pcPoseData?.pcPoses.length || !pcPoseData.defualtPosID) return;
+  const activePos =
+   pcPoseData.pcPoses.find(
+    (item) => item.key === pcPoseData.defualtPosID.toString(),
+   ) || pcPoseData.pcPoses[0];
+  setValue('cardReader', activePos);
+ }, [pcPoseData]);
 
  return orderItems.length ? (
   <div>
@@ -417,6 +436,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
                 {field.value?.value || ''}
                </span>
                <div className='flex gap-2 items-center'>
+                {pcPosesLoading && <Spinner />}
                 <ChevronsUpDown />
                </div>
               </Button>
@@ -436,9 +456,9 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
                </h1>
               </div>
               <div className='overflow-hidden overflow-y-auto'>
-               {data?.payTypes.length ? (
+               {pcPoseData?.pcPoses?.length ? (
                 <ul>
-                 {data.payTypes.map((item) => (
+                 {pcPoseData.pcPoses?.map((item) => (
                   <DrawerClose asChild key={item.key}>
                    <li
                     className='flex gap-1 items-center ps-6 py-2'

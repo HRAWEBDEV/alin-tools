@@ -39,6 +39,21 @@ function getOrderInvoicePaymentInitData({ signal }: { signal: AbortSignal }) {
  );
 }
 
+function getPcPoses({
+ signal,
+ bankID,
+}: {
+ signal: AbortSignal;
+ bankID: string;
+}) {
+ return axios.get<{
+  pcPoses: (Combo & { posTablet: boolean })[];
+  defualtPosID: number;
+ }>(`/Restaurant/Tablet/GetPCPos?bankID=${bankID}`, {
+  signal,
+ });
+}
+
 function sendToPcPos({
  bankID,
  posID,
@@ -89,4 +104,5 @@ export {
  getOrderInvoicePaymentInitData,
  saveAndCloseOrder,
  sendToPcPos,
+ getPcPoses,
 };
