@@ -62,6 +62,24 @@ function createOrderInvoicePaymentSchema({ dic }: { dic: NewOrderDictionary }) {
     path: ['bank'],
     message: dic.invoice.selectBank,
    },
+  )
+  .refine(
+   ({ paymentType, bank }) => {
+    return paymentType?.key !== '1' ? !!bank : true;
+   },
+   {
+    path: ['bank'],
+    message: dic.invoice.selectBank,
+   },
+  )
+  .refine(
+   ({ paymentType, cardReader }) => {
+    return paymentType?.key === '2' ? !!cardReader : true;
+   },
+   {
+    path: ['cardReader'],
+    message: dic.invoice.selectCardReader,
+   },
   );
 }
 
