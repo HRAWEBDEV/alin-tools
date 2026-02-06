@@ -383,6 +383,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
                     <li
                      className='flex gap-1 items-center ps-6 py-2'
                      onClick={() => {
+                      setValue('cardReader', null);
                       field.onChange(item);
                      }}
                     >
@@ -513,6 +514,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
           <Button
            disabled={isFetching || shopLoading}
            type='submit'
+           className='h-11'
            onClick={handleConfirmPayment}
           >
            {(isFetching || shopLoading) && <Spinner />}
