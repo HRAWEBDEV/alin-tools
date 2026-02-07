@@ -155,35 +155,35 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
        {'+ '}
        {dic.invoice.service}
       </span>
-      <span>{format(totalService)}</span>
+      <span>{format(totalService)} ریال</span>
      </div>
      <div className={invoiceRowClass}>
       <span className={invoiceLabelClass}>
        {'+ '}
        {dic.invoice.tax}
       </span>
-      <span>{format(totalTax)}</span>
+      <span>{format(totalTax)} ریال</span>
      </div>
      <div className={invoiceRowClass}>
       <span className={invoiceLabelClass}>
        {'+ '}
        {dic.invoice.other}
       </span>
-      <span>{format(other)}</span>
+      <span>{format(other)} ریال</span>
      </div>
      <div className={invoiceRowClass}>
       <span className={invoiceLabelClass}>
        {'- '}
        {dic.invoice.discount}
       </span>
-      <span>{format(totalDiscount)}</span>
+      <span>{format(totalDiscount)} ریال</span>
      </div>
      <div className={invoiceRowClass}>
       <span className={invoiceLabelClass}>
        {'+ '}
        {dic.invoice.itemsTotalPrice}
       </span>
-      <span>{format(totalSValue)}</span>
+      <span>{format(totalSValue)} ریال</span>
      </div>
      <div
       className={
@@ -192,7 +192,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
       }
      >
       <span className={invoiceLabelClass}>{dic.invoice.total}</span>
-      <span>{format(remained + payment)}</span>
+      <span>{format(remained + payment)} ریال</span>
      </div>
      <div
       className={
@@ -204,7 +204,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
        {'- '}
        {dic.invoice.payment}
       </span>
-      <span>{format(payment)}</span>
+      <span>{format(payment)} ریال</span>
      </div>
      <div
       className={
@@ -216,7 +216,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
        {'= '}
        {dic.invoice.remained}
       </span>
-      <span>{format(remained)}</span>
+      <span>{format(remained)} ریال</span>
      </div>
     </div>
     <div className='grid sm:grid-cols-3 gap-3 mb-6 border-b border-input pb-6'>
