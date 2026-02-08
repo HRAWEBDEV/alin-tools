@@ -136,8 +136,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
              newDate.setMinutes(now.getMinutes());
              newDate.setSeconds(now.getSeconds());
              field.onChange(newDate);
-            } else {
-             field.onChange(newValue);
+             setShowDateTimePicker(false);
             }
            }}
           />
