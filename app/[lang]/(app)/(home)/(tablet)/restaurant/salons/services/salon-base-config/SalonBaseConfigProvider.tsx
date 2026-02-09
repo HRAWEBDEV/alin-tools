@@ -157,7 +157,7 @@ export default function SalonBaseConfigProvider({
    .withUrl(
     `${
      process.env.NEXT_PUBLIC_API_URI
-    }/tablerackchangenotifhub?token=${getUserLoginToken()}&programid=${userInfoRouterStorage.programID}&departmentid=${userInfoRouterStorage.departmentID}&ownerid=${userInfoRouterStorage.ownerID}&systemid=${userInfoRouterStorage.systemID}`,
+    }/tablerackchangenotifhub?token=${getUserLoginToken()}&programid=${userInfoRouterStorage?.programID}&departmentid=${userInfoRouterStorage?.departmentID}&ownerid=${userInfoRouterStorage?.ownerID}&systemid=${userInfoRouterStorage?.systemID}`,
    )
    .configureLogging(signalR.LogLevel.Information)
    .build();

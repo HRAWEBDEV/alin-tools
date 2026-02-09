@@ -43,7 +43,7 @@ export default function FindTags({
 
  const { data, hasNextPage, fetchNextPage, isFetching, refetch, isSuccess } =
   useInfiniteQuery({
-   queryKey: [newOrderKey, userInfoRouterStorage.programID, 'tags'],
+   queryKey: [newOrderKey, userInfoRouterStorage?.programID, 'tags'],
    initialPageParam: {
     limit: 300,
     offset: 1,
@@ -53,7 +53,7 @@ export default function FindTags({
      signal,
      limit: pageParam.limit,
      offset: pageParam.offset,
-     programID: userInfoRouterStorage.programID,
+     programID: userInfoRouterStorage?.programID,
     });
     return res.data;
    },

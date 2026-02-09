@@ -9,10 +9,10 @@ export default function AxiosApiPackage() {
  const { userInfoRouterStorage } = useUserInfoRouter();
  useEffect(() => {
   const reqID = axios.interceptors.request.use((config) => {
-   config.headers.set('Ownerid', userInfoRouterStorage.ownerID);
-   config.headers.set('Departmentid', userInfoRouterStorage.departmentID);
-   config.headers.set('Programid', userInfoRouterStorage.programID);
-   config.headers.set('Systemid', userInfoRouterStorage.systemID);
+   config.headers.set('Ownerid', userInfoRouterStorage?.ownerID);
+   config.headers.set('Departmentid', userInfoRouterStorage?.departmentID);
+   config.headers.set('Programid', userInfoRouterStorage?.programID);
+   config.headers.set('Systemid', userInfoRouterStorage?.systemID);
    return config;
   });
   return () => {

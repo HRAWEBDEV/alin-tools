@@ -42,7 +42,7 @@ export default function FindSubscriber({ dic }: { dic: NewOrderDictionary }) {
     saleTypeValue?.key === SaleTypes.contract,
    queryKey: [
     newOrderKey,
-    userInfoRouterStorage.programID,
+    userInfoRouterStorage?.programID,
     'subscribers',
     debouncedSearch,
    ],
@@ -56,7 +56,7 @@ export default function FindSubscriber({ dic }: { dic: NewOrderDictionary }) {
      limit: pageParam.limit,
      offset: pageParam.offset,
      searchPhrase: debouncedSearch,
-     programID: userInfoRouterStorage.programID,
+     programID: userInfoRouterStorage?.programID,
     });
     return res.data;
    },
