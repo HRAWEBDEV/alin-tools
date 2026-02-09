@@ -32,11 +32,11 @@ export default function NavProfile() {
     <div className='grow text-start overflow-hidden'>
      <p className='text-md truncate w-full'>{data.user.personFullName}</p>
      <p className='text-sm truncate w-full text-primary mb-1'>
-      {userInfoRouterStorage.ownerName}
+      {userInfoRouterStorage?.ownerName}
      </p>
      <p className='text-xs truncate w-full mb-1'>
-      {userInfoRouterStorage.departmentName} -{' '}
-      {userInfoRouterStorage.programName}
+      {userInfoRouterStorage?.departmentName} -{' '}
+      {userInfoRouterStorage?.programName}
      </p>
     </div>
     <IoMdArrowDropdown className='size-6 text-neutral-500' />

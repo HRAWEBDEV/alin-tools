@@ -8,7 +8,6 @@ import { userInfoBaseKey, getApiUserInfo } from './userInfoApiActions';
 import { useQuery } from '@tanstack/react-query';
 import Loading from '@/components/Loading';
 import { convertToUserInfoStore } from './userInfoApiActions';
-import { toast } from 'sonner';
 import { useLogout } from '../../hooks/useLogout';
 import { useShareDictionary } from '../../../services/share-dictionary/shareDictionaryContext';
 import { useRouter } from 'next/navigation';
@@ -21,7 +20,6 @@ import {
  DialogHeader,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Spinner } from '@/components/ui/spinner';
 import { MdTouchApp } from 'react-icons/md';
 import { Departments } from './utils/systems';
 import { FaHotel } from 'react-icons/fa';
@@ -34,6 +32,7 @@ import {
  type UserInfoRouterStorage,
  setUserInfoRouterStorageValue,
  getUserInfoRouterStorageValue,
+ clearUserInfoRouterStorageValue,
 } from './utils/userInfoRouterStorageManager';
 import { useQueryClient } from '@tanstack/react-query';
 import { handleScroll } from './utils/handleScroll';
@@ -84,8 +83,14 @@ export default function UserInfoRouterProvider({
     return;
    }
   },
-  [locale, router, queryClient]
+  [locale, router, queryClient],
  );
+
+ const changeProgram = useCallback(() => {
+  clearUserInfoRouterStorageValue();
+  setSelectedDialogDepartmentID(null);
+  setShowUserRouter(true);
+ }, []);
 
  const ctx: UserInfoStoreContext = {
   data: data!,
@@ -93,6 +98,7 @@ export default function UserInfoRouterProvider({
   isLoading,
   isFetching,
   userInfoRouterStorage: userInfoRouterStorage!,
+  changeProgram: changeProgram,
  };
 
  useEffect(() => {
@@ -129,7 +135,7 @@ export default function UserInfoRouterProvider({
 
  const selectedDialogDepartment = selectedDialogDepartmentID
   ? data.owners[0].departments.find(
-     (dep) => dep.id === selectedDialogDepartmentID
+     (dep) => dep.id === selectedDialogDepartmentID,
     ) || null
   : null;
 

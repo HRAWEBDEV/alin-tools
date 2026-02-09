@@ -5,10 +5,11 @@ import { type UserInfoRouterStorage } from './utils/userInfoRouterStorageManager
 
 interface UserInfoStoreContext {
  data: UserInfoStore;
- userInfoRouterStorage: UserInfoRouterStorage;
+ userInfoRouterStorage: UserInfoRouterStorage | null;
  isLoading: boolean;
  isFetching: boolean;
  isError: boolean;
+ changeProgram: () => void;
 }
 
 const userInfoRouterContext = createContext<UserInfoStoreContext | null>(null);

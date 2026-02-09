@@ -4,7 +4,8 @@
    "title": "پروفایل کاربر",
    "lastLoginDate": "آخرین ورود",
    "sttings": "تنظیمات",
-   "logout": "خروج"
+   "logout": "خروج",
+   "changeProgram": "تغییر برنامه"
   },
   "tabs": {
    "salons": "سالن‌ها",
