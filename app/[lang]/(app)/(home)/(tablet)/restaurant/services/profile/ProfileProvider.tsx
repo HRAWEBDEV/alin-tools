@@ -11,7 +11,7 @@ import {
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useRestaurantShareDictionary } from '../share-dictionary/restaurantShareDictionaryContext';
 import { Button } from '@/components/ui/button';
-import { RiLogoutBoxRLine } from 'react-icons/ri';
+import { RiLogoutBoxRLine, RiSettings5Line } from 'react-icons/ri';
 import { useLogout } from '@/app/[lang]/(app)/login/hooks/useLogout';
 import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
 
@@ -94,6 +94,19 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
         >
          <RiLogoutBoxRLine className='size-8' />
          <span>{profile.logout}</span>
+        </Button>
+       </li>
+       <li>
+        <Button
+         variant='ghost'
+         size={'icon-lg'}
+         className='text-base p-4 px-8 w-full justify-start h-[unset] gap-4 items-center text-gray-500 dark:text-gray-600'
+         //  onClick={() => {
+         //   logout();
+         //  }}
+        >
+         <RiSettings5Line className='size-8' />
+         <span>{profile.settings}</span>
         </Button>
        </li>
       </ul>
