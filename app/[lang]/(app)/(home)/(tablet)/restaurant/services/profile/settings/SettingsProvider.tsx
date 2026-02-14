@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode, useState } from 'react';
-import { SettingsContext, type Settings } from './settingsContext';
+import { SettingsContext, type Settings, ActiveView } from './settingsContext';
 import {
  Drawer,
  DrawerContent,
@@ -17,18 +17,24 @@ import {
  RiKeyboardFill,
  RiPaintFill,
 } from 'react-icons/ri';
-
-type ActiveView =
- | 'initial-order-config'
- | 'tables-display-mode'
- | 'table-theme';
+import SpinnerLoading from './components/SpinnerLoading';
 
 const views: Record<ActiveView, React.ComponentType> = {
  'initial-order-config': dynamic(
   () => import('./components/InitialOrderConfig'),
+  {
+   loading: () => <SpinnerLoading />,
+  },
  ),
- 'tables-display-mode': dynamic(() => import('./components/TableDisplayMode')),
- 'table-theme': dynamic(() => import('./components/TableTheme')),
+ 'tables-display-mode': dynamic(() => import('./components/TableDisplayMode'), {
+  loading: () => <SpinnerLoading />,
+ }),
+ 'table-theme': dynamic(() => import('./components/TableTheme'), {
+  loading: () => <SpinnerLoading />,
+ }),
+ 'theme-toggler': dynamic(() => import('./components/AppThemeToggler'), {
+  loading: () => <SpinnerLoading />,
+ }),
 };
 
 export default function SettingsProvider({
@@ -46,6 +52,7 @@ export default function SettingsProvider({
   isOpen,
   toggleIsOpen,
   activeView,
+  setActiveView,
  };
 
  const {
@@ -62,7 +69,7 @@ export default function SettingsProvider({
       variant='ghost'
       size={'icon-lg'}
       className='text-base text-pink-600 hover:text-pink-500 hover:bg-pink-600/10 p-4 px-8 w-full justify-start h-[unset] gap-4 items-center  transition-colors'
-      onClick={() => setActiveView(null)}
+      onClick={() => setActiveView('theme-toggler')}
      >
       <RiSunLine className='size-8' />
       <span>{settings.buttons.themeToggler}</span>
@@ -111,22 +118,13 @@ export default function SettingsProvider({
    {children}
 
    <Drawer open={isOpen} onOpenChange={setIsOpen}>
-    <DrawerContent className='p-4 [&_div.bg-muted]:bg-primary!'>
+    <DrawerContent className='p-4 [&_div.bg-muted]:bg-primary! min-h-[400px]'>
      <DrawerHeader className='text-right px-0'>
       <DrawerTitle className='dark:text-gray-300 text-gray-700 text-xl'>
        {settings.title}
       </DrawerTitle>
      </DrawerHeader>
-     {optionsList()}
-    </DrawerContent>
-   </Drawer>
-
-   <Drawer open={!!activeView} onOpenChange={() => setActiveView(null)}>
-    <DrawerContent className='flex flex-col p-0 max-h-[95svh]! overflow-hidden gap-0'>
-     <DrawerHeader className='text-right'>
-      <DrawerTitle className='dark:text-gray-300 text-gray-700 text-xl'></DrawerTitle>
-     </DrawerHeader>
-     {ActiveComponent && <ActiveComponent />}
+     {ActiveComponent ? <ActiveComponent /> : optionsList()}
     </DrawerContent>
    </Drawer>
   </SettingsContext.Provider>

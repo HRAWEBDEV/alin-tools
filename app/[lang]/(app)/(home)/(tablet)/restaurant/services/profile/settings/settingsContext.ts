@@ -1,10 +1,15 @@
 import { OutOfContext } from '@/utils/OutOfContext';
 import { use, createContext, Dispatch, SetStateAction } from 'react';
-
+export type ActiveView =
+ | 'initial-order-config'
+ | 'tables-display-mode'
+ | 'table-theme'
+ | 'theme-toggler';
 interface Settings {
  isOpen: boolean;
  toggleIsOpen: () => void;
  activeView: string | null;
+ setActiveView: Dispatch<SetStateAction<ActiveView | null>>;
 }
 
 const SettingsContext = createContext<null | Settings>(null);
