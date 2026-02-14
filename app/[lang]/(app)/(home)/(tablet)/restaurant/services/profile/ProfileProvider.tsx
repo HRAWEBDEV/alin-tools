@@ -11,12 +11,12 @@ import {
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useRestaurantShareDictionary } from '../share-dictionary/restaurantShareDictionaryContext';
 import { Button } from '@/components/ui/button';
-import { RiLogoutBoxRLine } from 'react-icons/ri';
+import { RiLogoutBoxRLine, RiExchangeBoxLine } from 'react-icons/ri';
 import { useLogout } from '@/app/[lang]/(app)/login/hooks/useLogout';
 import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
 
 export default function ProfileProvider({ children }: { children: ReactNode }) {
- const { userInfoRouterStorage, data } = useUserInfoRouter();
+ const { userInfoRouterStorage, data, changeProgram } = useUserInfoRouter();
  const logout = useLogout();
  const {
   restaurantShareDictionary: {
@@ -83,6 +83,20 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
        {/*   <span>{profile.sttings}</span> */}
        {/*  </Button> */}
        {/* </li> */}
+       <li>
+        <Button
+         variant='ghost'
+         size={'icon-lg'}
+         onClick={() => {
+          setIsOpen(false);
+          changeProgram();
+         }}
+         className='text-base p-4 px-8 w-full justify-start h-[unset] gap-4 items-center text-primary'
+        >
+         <RiExchangeBoxLine className='size-8 ' />
+         <span>{profile.changeProgram}</span>
+        </Button>
+       </li>
        <li>
         <Button
          variant='ghost'
