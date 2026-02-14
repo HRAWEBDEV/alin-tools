@@ -7,6 +7,7 @@ import { getRestaurantShareDictionary } from '@/internalization/app/dictionaries
 import ResturantShareDictionaryProvider from './services/share-dictionary/RestaurantShareDictionaryProvider';
 import ProfileProvider from './services/profile/ProfileProvider';
 import 'keen-slider/keen-slider.min.css';
+import SettingsProvider from './services/profile/SettingsProvider';
 
 export default async function HomeLayout({
  children,
@@ -19,16 +20,18 @@ export default async function HomeLayout({
  return (
   <>
    <ResturantShareDictionaryProvider restaurantShareDictionary={shareDic}>
-    <ProfileProvider>
-     <div className='h-svh overflow-hidden flex flex-col'>
-      <Header />
-      <div className='flex grow overflow-hidden'>
-       <Nav />
-       <Main>{children}</Main>
+    <SettingsProvider>
+     <ProfileProvider>
+      <div className='h-svh overflow-hidden flex flex-col'>
+       <Header />
+       <div className='flex grow overflow-hidden'>
+        <Nav />
+        <Main>{children}</Main>
+       </div>
+       <Tabs />
       </div>
-      <Tabs />
-     </div>
-    </ProfileProvider>
+     </ProfileProvider>
+    </SettingsProvider>
    </ResturantShareDictionaryProvider>
   </>
  );
