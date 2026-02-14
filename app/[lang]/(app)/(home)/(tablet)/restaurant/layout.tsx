@@ -7,7 +7,7 @@ import { getRestaurantShareDictionary } from '@/internalization/app/dictionaries
 import ResturantShareDictionaryProvider from './services/share-dictionary/RestaurantShareDictionaryProvider';
 import ProfileProvider from './services/profile/ProfileProvider';
 import 'keen-slider/keen-slider.min.css';
-import SettingsProvider from './services/profile/SettingsProvider';
+import SettingsProvider from './services/profile/settings/SettingsProvider';
 
 export default async function HomeLayout({
  children,

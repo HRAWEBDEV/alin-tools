@@ -1,8 +1,9 @@
 import { OutOfContext } from '@/utils/OutOfContext';
-import { use, createContext } from 'react';
+import { use, createContext, Dispatch, SetStateAction } from 'react';
 
 interface Settings {
  isOpen: boolean;
+ toggleIsOpen: () => void;
  activeView: string | null;
 }
 
