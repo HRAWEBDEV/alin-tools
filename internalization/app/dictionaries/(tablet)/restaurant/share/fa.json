@@ -16,7 +16,10 @@
    },
    "backBtn": "بازگشت",
    "components": {
-    "themeToggler": ""
+    "themeToggler": "",
+    "initialOrderConfig": {
+     "title": "نمایش منوی اطلاعات سفارش در هر بار بازدید از صفحه سفارش جدید:"
+    }
    }
   },
   "tabs": {
