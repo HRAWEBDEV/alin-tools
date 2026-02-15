@@ -70,7 +70,7 @@ export default function InitialOrderConfigView() {
     inactiveBgColor='bg-gray-200 dark:bg-gray-400'
    />
 
-   <p className=' text-sm text-muted-foreground'>
+   <p className='text-sm text-muted-foreground'>
     Initial order type: <strong>{initialOrderConfig}</strong>
    </p>
   </motion.div>
