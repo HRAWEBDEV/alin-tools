@@ -16,6 +16,10 @@ interface AnimatedTabsProps {
  onTabChange: (value: string) => void;
  disabled?: boolean;
  className?: string;
+ activeBgColor?: string;
+ activeTextColor?: string;
+ inactiveBgColor?: string;
+ inactiveTextColor?: string;
 }
 
 export function AnimatedTabs({
@@ -24,9 +28,19 @@ export function AnimatedTabs({
  onTabChange,
  disabled = false,
  className,
+ activeBgColor = 'bg-primary',
+ activeTextColor = 'text-primary-foreground',
+ inactiveBgColor = 'bg-muted',
+ inactiveTextColor = 'text-muted-foreground',
 }: AnimatedTabsProps) {
  return (
-  <div className={cn('w-full p-1 bg-muted rounded-3xl flex', className)}>
+  <div
+   className={cn(
+    'w-full p-1 rounded-2xl flex border border-gray-700 dark:border-gray-300',
+    inactiveBgColor,
+    className,
+   )}
+  >
    {tabs.map((tab) => {
     const Icon = tab.icon;
     const isActive = tab.value === activeTab;
@@ -37,18 +51,18 @@ export function AnimatedTabs({
       onClick={() => onTabChange(tab.value)}
       disabled={disabled}
       className={cn(
-       'flex-1 relative py-2.5 px-4 rounded-3xl text-sm font-medium',
+       'flex-1 relative py-2.5 px-4 rounded-2xl text-sm font-medium',
        'flex items-center justify-center gap-1.5 transition-all cursor-pointer',
        isActive
-        ? 'text-primary-foreground'
-        : 'text-muted-foreground hover:text-foreground',
+        ? activeTextColor
+        : cn(inactiveTextColor, 'hover:text-foreground'),
        disabled && 'opacity-50 cursor-not-allowed',
       )}
      >
       {isActive && (
        <motion.div
         layoutId='activeTabBg'
-        className='absolute inset-0 bg-primary rounded-3xl shadow-lg'
+        className={cn('absolute inset-0 rounded-2xl shadow-lg', activeBgColor)}
         transition={{ type: 'spring', stiffness: 500, damping: 30 }}
        />
       )}
