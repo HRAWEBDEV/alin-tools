@@ -4,9 +4,7 @@ import { Button } from '@/components/ui/button';
 import { useTheme } from 'next-themes';
 import { useShareDictionary } from '@/app/[lang]/(app)/services/share-dictionary/shareDictionaryContext';
 import { useMounted } from '@/hooks/useMounted';
-import { RiArrowGoForwardFill } from 'react-icons/ri';
-import BackBtn from './BackBtn';
-
+import { motion } from 'motion/react';
 export default function AppThemeToggler() {
  const mounted = useMounted();
 
@@ -15,7 +13,6 @@ export default function AppThemeToggler() {
  const {
   shareDictionary: {
    system: { modes },
-   components: { modeController },
   },
  } = useShareDictionary();
 
@@ -32,9 +29,12 @@ export default function AppThemeToggler() {
  if (!mounted) return <>{modeButton}</>;
 
  return (
-  <div>
-   <BackBtn />
-   <h4 className='ps-4 font-medium text-xl'>{modeController.description}</h4>
+  <motion.div
+   initial={{ x: -200, y: 10, opacity: 0 }}
+   animate={{ x: 0, y: 0, opacity: 1 }}
+   exit={{ x: -200, y: 10, opacity: 0 }}
+   transition={{ duration: 0.3 }}
+  >
    <ul className='py-2'>
     {appModes.map((mode) => (
      <li key={mode}>
@@ -50,6 +50,6 @@ export default function AppThemeToggler() {
      </li>
     ))}
    </ul>
-  </div>
+  </motion.div>
  );
 }

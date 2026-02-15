@@ -1,10 +1,10 @@
 import { OutOfContext } from '@/utils/OutOfContext';
 import { use, createContext, Dispatch, SetStateAction } from 'react';
 export type ActiveView =
- | 'initial-order-config'
- | 'tables-display-mode'
- | 'table-theme'
- | 'theme-toggler';
+ | 'initialOrderConfig'
+ | 'tablesDisplayMode'
+ | 'tableTheme'
+ | 'themeToggler';
 interface Settings {
  isOpen: boolean;
  toggleIsOpen: () => void;

@@ -13,7 +13,7 @@ export default function BackBtn() {
  } = useRestaurantShareDictionary();
  return (
   <Button
-   className='rounded-none border-b-2  border-b-primary'
+   className='rounded-none hover:bg-transparent'
    onClick={() => setActiveView(null)}
    variant='ghost'
   >

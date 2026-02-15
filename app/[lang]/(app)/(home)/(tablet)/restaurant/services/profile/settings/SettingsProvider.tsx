@@ -18,21 +18,21 @@ import {
  RiPaintFill,
 } from 'react-icons/ri';
 import SpinnerLoading from './components/SpinnerLoading';
+import { AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
+import BackBtn from './components/BackBtn';
 
 const views: Record<ActiveView, React.ComponentType> = {
- 'initial-order-config': dynamic(
-  () => import('./components/InitialOrderConfig'),
-  {
-   loading: () => <SpinnerLoading />,
-  },
- ),
- 'tables-display-mode': dynamic(() => import('./components/TableDisplayMode'), {
+ initialOrderConfig: dynamic(() => import('./components/InitialOrderConfig'), {
   loading: () => <SpinnerLoading />,
  }),
- 'table-theme': dynamic(() => import('./components/TableTheme'), {
+ tablesDisplayMode: dynamic(() => import('./components/TableDisplayMode'), {
   loading: () => <SpinnerLoading />,
  }),
- 'theme-toggler': dynamic(() => import('./components/AppThemeToggler'), {
+ tableTheme: dynamic(() => import('./components/TableTheme'), {
+  loading: () => <SpinnerLoading />,
+ }),
+ themeToggler: dynamic(() => import('./components/AppThemeToggler'), {
   loading: () => <SpinnerLoading />,
  }),
 };
@@ -45,6 +45,12 @@ export default function SettingsProvider({
  const [isOpen, setIsOpen] = useState(false);
  const [activeView, setActiveView] = useState<ActiveView | null>(null);
 
+ const {
+  restaurantShareDictionary: {
+   components: { settings },
+  },
+ } = useRestaurantShareDictionary();
+
  function toggleIsOpen() {
   setIsOpen(!isOpen);
  }
@@ -55,21 +61,20 @@ export default function SettingsProvider({
   setActiveView,
  };
 
- const {
-  restaurantShareDictionary: {
-   components: { settings },
-  },
- } = useRestaurantShareDictionary();
-
  function optionsList() {
   return (
-   <ul>
+   <motion.ul
+    initial={{ x: 200, y: 10, opacity: 0 }}
+    animate={{ x: 0, y: 0, opacity: 1 }}
+    exit={{ x: 200, y: 10, opacity: 0 }}
+    transition={{ duration: 0.3 }}
+   >
     <li>
      <Button
       variant='ghost'
       size={'icon-lg'}
       className='text-base text-pink-600 hover:text-pink-500 hover:bg-pink-600/10 p-4 px-8 w-full justify-start h-[unset] gap-4 items-center  transition-colors'
-      onClick={() => setActiveView('theme-toggler')}
+      onClick={() => setActiveView('themeToggler')}
      >
       <RiSunLine className='size-8' />
       <span>{settings.buttons.themeToggler}</span>
@@ -80,7 +85,7 @@ export default function SettingsProvider({
       variant='ghost'
       size={'icon-lg'}
       className='text-base p-4 px-8 w-full justify-start h-[unset] gap-4 items-center text-primary hover:text-primary/80 hover:bg-primary/10 transition-colors'
-      onClick={() => setActiveView('initial-order-config')}
+      onClick={() => setActiveView('initialOrderConfig')}
      >
       <RiListSettingsFill className='size-8' />
       <span>{settings.buttons.initialOrderConfig}</span>
@@ -91,7 +96,7 @@ export default function SettingsProvider({
       variant='ghost'
       size={'icon-lg'}
       className='text-base p-4 px-8 w-full justify-start h-[unset] gap-4 items-center text-orange-600 hover:text-orange-500 hover:bg-orange-600/10 transition-colors'
-      onClick={() => setActiveView('tables-display-mode')}
+      onClick={() => setActiveView('tablesDisplayMode')}
      >
       <RiKeyboardFill className='size-8' />
       <span>{settings.buttons.tablesDisplayMode}</span>
@@ -102,15 +107,17 @@ export default function SettingsProvider({
       variant='ghost'
       size={'icon-lg'}
       className='text-base p-4 px-8 w-full justify-start h-[unset] gap-4 items-center text-secondary hover:text-secondary/80 hover:bg-secondary/10 transition-colors'
-      onClick={() => setActiveView('table-theme')}
+      onClick={() => setActiveView('tableTheme')}
      >
       <RiPaintFill className='size-8' />
       <span>{settings.buttons.tableTheme}</span>
      </Button>
     </li>
-   </ul>
+   </motion.ul>
   );
  }
+
+ const activeTitle = activeView ? settings.buttons[activeView] : settings.title;
  const ActiveComponent = activeView ? views[activeView] : null;
 
  return (
@@ -119,12 +126,19 @@ export default function SettingsProvider({
 
    <Drawer open={isOpen} onOpenChange={setIsOpen}>
     <DrawerContent className='p-4 [&_div.bg-muted]:bg-primary! min-h-[400px]'>
-     <DrawerHeader className='text-right px-0'>
+     <DrawerHeader className='px-0 relative flex items-center justify-center'>
+      {activeView && (
+       <div className='absolute right-6 hover:border-b hover:border-b-primary border-b border-b-transparent transition-colors'>
+        <BackBtn />
+       </div>
+      )}
       <DrawerTitle className='dark:text-gray-300 text-gray-700 text-xl'>
-       {settings.title}
+       {activeTitle}
       </DrawerTitle>
      </DrawerHeader>
-     {ActiveComponent ? <ActiveComponent /> : optionsList()}
+     <AnimatePresence mode='wait'>
+      {ActiveComponent ? <ActiveComponent /> : optionsList()}
+     </AnimatePresence>
     </DrawerContent>
    </Drawer>
   </SettingsContext.Provider>
