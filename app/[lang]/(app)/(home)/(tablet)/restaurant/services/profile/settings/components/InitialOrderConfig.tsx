@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useRestaurantShareDictionary } from '../../../share-dictionary/restaurantShareDictionaryContext';
 import { AnimatedTabs } from '@/app/[lang]/(app)/components/AnimatedTabs';
 import { motion } from 'motion/react';
+import { RiQuestionLine } from 'react-icons/ri';
 
 const STORAGE_KEY = 'initialOrderConfig';
 
@@ -16,7 +17,10 @@ export default function InitialOrderConfigView() {
 
  const activeValue = settings.components.initialOrderConfig.tabs.active;
  const inactiveValue = settings.components.initialOrderConfig.tabs.inactive;
-
+ const activeTabMessage =
+  settings.components.initialOrderConfig.tabs.activeMessage;
+ const inactiveTabMessage =
+  settings.components.initialOrderConfig.tabs.inactiveMesage;
  const [initialOrderConfig, setInitialOrderConfig] = useState(() => {
   if (typeof window !== 'undefined') {
    const stored = localStorage.getItem(STORAGE_KEY);
@@ -24,14 +28,22 @@ export default function InitialOrderConfigView() {
   }
   return inactiveValue;
  });
+ const [tabGuideMessage, setTabGuideMessage] = useState(() => {
+  if (typeof window !== 'undefined') {
+   const stored = localStorage.getItem(STORAGE_KEY);
+   return stored === 'active' ? activeTabMessage : inactiveTabMessage;
+  }
+  return inactiveTabMessage;
+ });
 
  const handleTabChange = (value: string) => {
   setInitialOrderConfig(value);
-
   if (typeof window !== 'undefined') {
    if (value === activeValue) {
+    setTabGuideMessage(activeTabMessage);
     localStorage.setItem(STORAGE_KEY, 'active');
    } else {
+    setTabGuideMessage(inactiveTabMessage);
     localStorage.setItem(STORAGE_KEY, 'inactive');
    }
   }
@@ -54,7 +66,7 @@ export default function InitialOrderConfigView() {
    animate={{ y: 0, opacity: 1 }}
    exit={{ y: 300, opacity: 0 }}
    transition={{ duration: 0.3 }}
-   className='flex flex-col justify-start gap-4 px-8 mt-4'
+   className='flex flex-col justify-start gap-4 px-4 mt-4'
   >
    <h4 className='font-medium text-lg'>
     {settings.components.initialOrderConfig.title}
@@ -70,8 +82,9 @@ export default function InitialOrderConfigView() {
     inactiveBgColor='bg-gray-200 dark:bg-gray-400'
    />
 
-   <p className='text-sm text-muted-foreground'>
-    Initial order type: <strong>{initialOrderConfig}</strong>
+   <p className='flex items-center justify-start gap-2'>
+    <RiQuestionLine className='size-6 text-primary' />
+    <strong className='text-md text-destructive '>{tabGuideMessage}</strong>
    </p>
   </motion.div>
  );

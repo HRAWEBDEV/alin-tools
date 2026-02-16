@@ -128,7 +128,7 @@ export default function SettingsProvider({
     <DrawerContent className='p-4 [&_div.bg-muted]:bg-primary! min-h-[400px]'>
      <DrawerHeader className='px-0 relative flex items-center justify-center'>
       {activeView && (
-       <div className='absolute right-6 hover:border-b hover:border-b-primary border-b border-b-transparent transition-colors'>
+       <div className='absolute right-4 hover:border-b hover:border-b-primary border-b border-b-transparent transition-colors'>
         <BackBtn />
        </div>
       )}

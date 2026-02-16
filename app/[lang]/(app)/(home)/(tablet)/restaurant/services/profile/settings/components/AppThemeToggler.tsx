@@ -35,7 +35,7 @@ export default function AppThemeToggler() {
    exit={{ x: -200, y: 10, opacity: 0 }}
    transition={{ duration: 0.3 }}
   >
-   <ul className='py-2 px-4'>
+   <ul className='py-2 px-0'>
     {appModes.map((mode) => (
      <li key={mode}>
       <Button
