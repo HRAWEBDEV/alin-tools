@@ -103,7 +103,7 @@ const mockTables = [
 export default function SalonTableDemoShowcase() {
  return (
   <div dir='rtl'>
-   <div className='grid gap-4 grid-cols-[repeat(auto-fill,minmax(9rem,10rem))] sm:grid-cols-[repeat(auto-fill,minmax(9rem,10rem))] justify-center'>
+   <div className='grid gap-4 grid-cols-[repeat(auto-fill,minmax(11rem,12rem))] sm:grid-cols-[repeat(auto-fill,minmax(11rem,12rem))] justify-center'>
     {mockTables.map((table) => (
      <SalonTableDemo key={table.tableNo} table={table} />
     ))}
