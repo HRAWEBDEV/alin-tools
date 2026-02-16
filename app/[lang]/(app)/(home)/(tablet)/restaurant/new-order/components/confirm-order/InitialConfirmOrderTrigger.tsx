@@ -6,7 +6,7 @@ import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseC
 const STORAGE_KEY = 'initialOrderConfig';
 
 export default function InitialOrderTrigger() {
- const { showConfirmOrder } = useOrderBaseConfigContext();
+ const { openQuickOrderInfo } = useOrderBaseConfigContext();
  const hasTriggeredRef = useRef(false);
  useEffect(() => {
   if (hasTriggeredRef.current) return;
@@ -14,11 +14,11 @@ export default function InitialOrderTrigger() {
    const stored = localStorage.getItem(STORAGE_KEY);
 
    if (stored === 'active') {
-    showConfirmOrder();
+    openQuickOrderInfo();
     hasTriggeredRef.current = true;
    }
   }
- }, [showConfirmOrder]);
+ }, [openQuickOrderInfo]);
 
  return null;
 }

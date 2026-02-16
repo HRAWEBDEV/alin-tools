@@ -23,6 +23,9 @@ interface OrderBaseConfig {
  changeConfirmType: (type: ConfirmOrderType) => unknown;
  showConfirmOrder: (type?: ConfirmOrderType) => unknown;
  closeConfirmOrder: () => unknown;
+ quickOrderInfoIsOpen: boolean;
+ openQuickOrderInfo: () => unknown;
+ closeQuickOrderInfo: () => unknown;
  queries: {
   fromSalons: boolean;
   orderID: number | null;
