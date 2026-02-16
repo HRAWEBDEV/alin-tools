@@ -179,15 +179,18 @@ export default function QuickOrderInfoDialog({
       )}
      </div>
 
-     <DialogFooter className='pt-4'>
+     <DialogFooter className='pt-4 felx items-center justify-between'>
       <Button
        type='button'
        variant='outline'
        onClick={() => closeQuickOrderInfo()}
+       className='flex-1'
       >
        {dic.orderConfirm.cancel}
       </Button>
-      <Button type='submit'>{dic.orderConfirm.confirm}</Button>
+      <Button className='flex-1' type='submit'>
+       {dic.orderConfirm.confirm}
+      </Button>
      </DialogFooter>
     </form>
    </DialogContent>
