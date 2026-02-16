@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { motion } from 'motion/react';
 import { SlOptions } from 'react-icons/sl';
-import { useRestaurantShareDictionary } from '../../../share-dictionary/restaurantShareDictionaryContext';
 
 function getTableStateStyles(state: number): {
  type: 'readyToService' | 'outOfService' | 'reserved' | 'occupied';
@@ -72,38 +71,76 @@ export default function SalonTableDemo({ table }: { table: MockTable }) {
  const tableStyles = getTableStateStyles(table.tableStateTypeID);
 
  return (
-  <motion.div layout className='flex flex-col gap-2'>
-   <div className='bg-white dark:bg-neutral-900 rounded-2xl shadow-md p-4 flex flex-col items-center gap-3 min-h-[180px] justify-between'>
-    {/* State Badge */}
-    <div
-     className={`px-4 py-1.5 rounded-full border border-dashed text-sm font-medium ${tableStyles.backgroundColor} ${tableStyles.border} ${tableStyles.text}`}
-    >
-     {tableStyles.badgeText}
-    </div>
+  <motion.div layout className='grid h-full grid-rows-[1fr_auto]'>
+   <div className='relative min-h-40'>
+    <div className='z-1 rounded-2xl h-full flex flex-col justify-start text-start p-0 overflow-hidden mx-3 shadow-lg bg-gray-50 border-2 border-transparent hover:border-2 hover:border-gray-500 border-dotted dark:bg-neutral-900 transition-colors'>
+     <div className='relative flex flex-col grow items-stretch p-2 gap-4'>
+      {table.vip && (
+       <div className='absolute top-11 start-0 end-0.5 text-end text-4xl text-amber-400/40 dark:text-amber-500/40 font-en-roboto'>
+        VIP
+       </div>
+      )}
 
-    {/* Table Number */}
-    <div className='flex-1 flex items-center justify-center'>
-     <h2 className={`text-5xl font-bold font-en-roboto ${tableStyles.text}`}>
-      {table.tableNo.toString().padStart(2, '0')}
-     </h2>
-    </div>
+      {/* State Badge */}
+      <div
+       className={`p-1 rounded-2xl border border-dashed text-center ${tableStyles.backgroundColor} ${tableStyles.border} ${tableStyles.text}`}
+      >
+       <span className='text-base font-medium'>{tableStyles.badgeText}</span>
+      </div>
 
-    {/* Capacity */}
-    <div
-     className={`text-lg font-medium ${tableStyles.text}`}
-     style={{ direction: 'ltr' }}
-    >
-     -{table.occupiedPerson || 0}/{table.tableCapacity}
+      {/* Table Number */}
+      <div className='text-start ps-2 grow'>
+       <div className='flex items-center gap-2'>
+        <h3
+         className={`text-2xl lg:text-3xl ${tableStyles.text} font-en-roboto`}
+        >
+         {table.tableNo.toString().padStart(2, '0')}
+        </h3>
+       </div>
+       <div>
+        <p className='text-sm text-primary text-wrap'>
+         {table.saleTypeName || ''}
+        </p>
+        <p className='text-md text-neutral-500 dark:text-neutral-400 text-wrap'>
+         {table.customerName || ''}
+        </p>
+       </div>
+      </div>
+
+      {/* Footer */}
+      <div className='flex items-center justify-between gap-4'>
+       <div className='flex items-center gap-1 text-base text-neutral-600 dark:text-neutral-400 font-medium'>
+        <span>
+         {table.OccupiedDateTimeOffset
+          ? new Date(table.OccupiedDateTimeOffset).toLocaleTimeString('fa-IR', {
+             hour: '2-digit',
+             minute: '2-digit',
+            })
+          : ''}
+        </span>
+       </div>
+       <div
+        style={{
+         direction: 'ltr',
+        }}
+        className={`font-medium text-base ${tableStyles.text}`}
+       >
+        {table.occupiedPerson || '-'}/{table.tableCapacity}
+       </div>
+      </div>
+     </div>
     </div>
    </div>
 
    {/* Options Button */}
-   <Button
-    variant='ghost'
-    className='w-full h-10 bg-neutral-50 dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700 text-neutral-600 dark:text-neutral-400 rounded-xl pointer-events-none'
-   >
-    <SlOptions className='size-5' />
-   </Button>
+   <div className='mx-3 -mt-4'>
+    <Button
+     variant='ghost'
+     className='w-full h-auto pt-5 pb-1 bg-neutral-50 dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700 text-neutral-600 dark:text-neutral-400 rounded-xl rounded-ss-none rounded-se-none pointer-events-none'
+    >
+     <SlOptions className='size-6' />
+    </Button>
+   </div>
   </motion.div>
  );
 }
