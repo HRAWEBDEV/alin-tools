@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useRestaurantShareDictionary } from '../../../share-dictionary/restaurantShareDictionaryContext';
 import { AnimatedTabs } from '@/app/[lang]/(app)/components/AnimatedTabs';
-import { motion } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import { RiQuestionLine } from 'react-icons/ri';
 
 const STORAGE_KEY = 'initialOrderConfig';
@@ -66,15 +66,15 @@ export default function InitialOrderConfigView() {
    animate={{ y: 0, opacity: 1 }}
    exit={{ y: -200, opacity: 0 }}
    transition={{ duration: 0.3 }}
-   className='flex flex-col justify-start gap-6  px-0 mt-4'
+   className='flex flex-col justify-start gap-6  px-0 mt-8'
   >
-   <div className='flex items-center justify-between flex-1 gap-8'>
+   <div className='flex flex-wrap items-center flex-1 gap-8'>
     <h4 className='text-lg text-right '>
      {settings.components.initialOrderConfig.title}
     </h4>
 
     <AnimatedTabs
-     className='max-w-[40%]'
+     className='max-w-100 w-full'
      tabs={tabs}
      activeTab={initialOrderConfig}
      onTabChange={handleTabChange}

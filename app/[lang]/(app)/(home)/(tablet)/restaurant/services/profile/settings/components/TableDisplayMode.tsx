@@ -3,7 +3,6 @@ import { useRestaurantShareDictionary } from '../../../share-dictionary/restaura
 import { AnimatedTabs } from '@/app/[lang]/(app)/components/AnimatedTabs';
 import { motion } from 'motion/react';
 import SalonTableDemoShowcase from './SalonTableModeShowcase';
-import DinnerIcon from '@/app/[lang]/(app)/components/icons/DinnerIcon';
 
 const TABLE_VIEW_MODE_KEY = 'tablesDisplayMode';
 export default function TableDisplayMode() {

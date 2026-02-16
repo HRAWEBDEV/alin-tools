@@ -14,7 +14,6 @@ import { Button } from '@/components/ui/button';
 import {
  RiSunLine,
  RiListSettingsFill,
- RiPaintFill,
  RiSettings4Fill,
  RiMenu3Fill,
 } from 'react-icons/ri';

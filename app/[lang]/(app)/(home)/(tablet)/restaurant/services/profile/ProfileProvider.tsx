@@ -92,6 +92,7 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
          className='text-base p-4 px-8 w-full justify-start h-[unset] gap-4 items-center text-gray-500 dark:text-gray-600'
          onClick={() => {
           toggleIsSettingsOpen();
+          handleToggleProfile();
          }}
         >
          <RiSettings5Line className='size-8' />
