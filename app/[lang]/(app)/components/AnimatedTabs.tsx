@@ -51,7 +51,7 @@ export function AnimatedTabs({
       onClick={() => onTabChange(tab.value)}
       disabled={disabled}
       className={cn(
-       'flex-1 relative py-2.5 px-4 rounded-2xl text-sm font-medium',
+       'flex-1 relative py-2 px-4 rounded-2xl text-sm font-medium',
        'flex items-center justify-center gap-1.5 transition-all cursor-pointer',
        isActive
         ? activeTextColor
