@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useRestaurantShareDictionary } from '../../../share-dictionary/restaurantShareDictionaryContext';
 import { AnimatedTabs } from '@/app/[lang]/(app)/components/AnimatedTabs';
-import { AnimatePresence, motion } from 'motion/react';
+import { motion } from 'motion/react';
 import { RiQuestionLine } from 'react-icons/ri';
 
 const STORAGE_KEY = 'initialOrderConfig';

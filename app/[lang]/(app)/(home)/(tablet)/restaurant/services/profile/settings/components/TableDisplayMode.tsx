@@ -32,14 +32,16 @@ export default function TableDisplayMode() {
  const [activeTab, setActiveTab] = useState(() => {
   if (typeof window !== 'undefined') {
    const stored = localStorage.getItem(TABLE_VIEW_MODE_KEY);
-   return stored === 'minimal' ? minimalMode : normalMode;
+   return stored === 'minimalMode' ? minimalMode : normalMode;
   }
   return normalMode;
  });
  const [activeTabDescription, setActiveTabDescription] = useState(() => {
   if (typeof window !== 'undefined') {
    const stored = localStorage.getItem(TABLE_VIEW_MODE_KEY);
-   return stored === 'minimal' ? minimalModeDescription : normalModeDescription;
+   return stored === 'minimalMode'
+    ? minimalModeDescription
+    : normalModeDescription;
   }
   return normalModeDescription;
  });

@@ -66,81 +66,130 @@ interface MockTable {
  OccupiedDateTimeOffset: string | null;
  orderID: number | null;
 }
+const TABLE_VIEW_MODE_KEY = 'tablesDisplayMode';
 
 export default function SalonTableDemo({ table }: { table: MockTable }) {
  const tableStyles = getTableStateStyles(table.tableStateTypeID);
+ const displayMode =
+  localStorage.getItem(TABLE_VIEW_MODE_KEY) &&
+  localStorage.getItem(TABLE_VIEW_MODE_KEY) === 'minimalMode'
+   ? 'minimal'
+   : 'normal';
+
+ const isMinimal = displayMode === 'minimal';
 
  return (
-  <motion.div layout className='grid h-full grid-rows-[1fr_auto]'>
-   <div className='relative min-h-40'>
-    <div className='z-1 rounded-2xl h-full flex flex-col justify-start text-start p-0 overflow-hidden mx-3 shadow-lg bg-gray-50 border-2 border-transparent hover:border-2 hover:border-gray-500 border-dotted dark:bg-neutral-900 transition-colors'>
-     <div className='relative flex flex-col grow items-stretch p-2 gap-4'>
-      {table.vip && (
+  <motion.div
+   data-minimal={isMinimal}
+   layout
+   className='grid h-full group  data-[minimal=true]:max-w-[96px]'
+   style={{ gridTemplateRows: isMinimal ? '1fr' : '1fr auto' }}
+  >
+   <div className='relative min-h-40 group-data-[minimal=true]:min-h-0 '>
+    <div
+     className={`z-1 rounded-2xl h-full flex flex-col justify-start text-start p-0 overflow-hidden shadow-lg bg-gray-50 dark:bg-neutral-900 transition-colors ${isMinimal ? `mx-1 aspect-square border-2 ${tableStyles.border} ${tableStyles.backgroundColor} max-w-24 max-h-24` : 'mx-3 border-2 border-transparent hover:border-2 hover:border-gray-500 border-dotted'}`}
+    >
+     <div
+      className={`relative flex flex-col grow items-stretch ${isMinimal ? 'p-1.5 gap-0.5 justify-center' : 'p-2 gap-4'}`}
+     >
+      {table.vip && !isMinimal && (
        <div className='absolute top-11 start-0 end-0.5 text-end text-4xl text-amber-400/40 dark:text-amber-500/40 font-en-roboto'>
         VIP
        </div>
       )}
 
-      {/* State Badge */}
-      <div
-       className={`p-1 rounded-2xl border border-dashed text-center ${tableStyles.backgroundColor} ${tableStyles.border} ${tableStyles.text}`}
-      >
-       <span className='text-base font-medium'>{tableStyles.badgeText}</span>
-      </div>
+      {/* State Badge - Only in normal mode */}
+      {!isMinimal && (
+       <div
+        className={`p-1 rounded-2xl border border-dashed text-center ${tableStyles.backgroundColor} ${tableStyles.border} ${tableStyles.text}`}
+       >
+        <span className='text-base font-medium'>{tableStyles.badgeText}</span>
+       </div>
+      )}
 
       {/* Table Number */}
-      <div className='text-start ps-2 grow'>
+      <div
+       className={`text-start ${isMinimal ? 'text-center' : 'ps-2'} grow flex flex-col justify-center`}
+      >
        <div className='flex items-center gap-2'>
         <h3
-         className={`text-2xl lg:text-3xl ${tableStyles.text} font-en-roboto`}
+         className={`${tableStyles.text} font-en-roboto ${isMinimal ? 'text-lg lg:text-xl mx-auto' : 'text-2xl lg:text-3xl'}`}
         >
          {table.tableNo.toString().padStart(2, '0')}
         </h3>
        </div>
-       <div>
-        <p className='text-sm text-primary text-wrap'>
-         {table.saleTypeName || ''}
-        </p>
-        <p className='text-md text-neutral-500 dark:text-neutral-400 text-wrap'>
-         {table.customerName || ''}
-        </p>
-       </div>
+       {!isMinimal && (
+        <div>
+         <p className='text-sm text-primary text-wrap'>
+          {table.saleTypeName || ''}
+         </p>
+         <p className='text-md text-neutral-500 dark:text-neutral-400 text-wrap'>
+          {table.customerName || ''}
+         </p>
+        </div>
+       )}
       </div>
 
       {/* Footer */}
-      <div className='flex items-center justify-between gap-4'>
-       <div className='flex items-center gap-1 text-base text-neutral-600 dark:text-neutral-400 font-medium'>
-        <span>
-         {table.OccupiedDateTimeOffset
-          ? new Date(table.OccupiedDateTimeOffset).toLocaleTimeString('fa-IR', {
-             hour: '2-digit',
-             minute: '2-digit',
-            })
-          : ''}
-        </span>
+      {!isMinimal && (
+       <div className='flex items-center justify-between gap-4'>
+        <div className='flex items-center gap-1 text-base text-neutral-600 dark:text-neutral-400 font-medium'>
+         <span>
+          {table.OccupiedDateTimeOffset
+           ? new Date(table.OccupiedDateTimeOffset).toLocaleTimeString(
+              'fa-IR',
+              {
+               hour: '2-digit',
+               minute: '2-digit',
+              },
+             )
+           : ''}
+         </span>
+        </div>
+        <div
+         style={{
+          direction: 'ltr',
+         }}
+         className={`font-medium text-base ${tableStyles.text}`}
+        >
+         {table.occupiedPerson || '-'}/{table.tableCapacity}
+        </div>
        </div>
-       <div
-        style={{
-         direction: 'ltr',
-        }}
-        className={`font-medium text-base ${tableStyles.text}`}
-       >
-        {table.occupiedPerson || '-'}/{table.tableCapacity}
+      )}
+
+      {/* Minimal mode footer */}
+      {isMinimal && (
+       <div className='flex flex-col items-center gap-0'>
+        <div
+         style={{
+          direction: 'ltr',
+         }}
+         className={`font-medium text-[10px] ${tableStyles.text}`}
+        >
+         {table.occupiedPerson || '-'}/{table.tableCapacity}
+        </div>
+        {table.vip && (
+         <span className='text-[8px] text-amber-500 dark:text-amber-400'>
+          VIP
+         </span>
+        )}
        </div>
-      </div>
+      )}
      </div>
     </div>
    </div>
 
-   {/* Options Button */}
-   <div className='mx-3 -mt-4'>
-    <Button
-     variant='ghost'
-     className='w-full h-auto pt-5 pb-1 bg-neutral-50 dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700 text-neutral-600 dark:text-neutral-400 rounded-xl rounded-ss-none rounded-se-none pointer-events-none'
-    >
-     <SlOptions className='size-6' />
-    </Button>
-   </div>
+   {/* Options Button - Hidden in minimal mode */}
+   {!isMinimal && (
+    <div className='mx-3 -mt-4'>
+     <Button
+      variant='ghost'
+      className='w-full h-auto pt-5 pb-1 bg-neutral-50 dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700 text-neutral-600 dark:text-neutral-400 rounded-xl rounded-ss-none rounded-se-none pointer-events-none'
+     >
+      <SlOptions className='size-6' />
+     </Button>
+    </div>
+   )}
   </motion.div>
  );
 }
