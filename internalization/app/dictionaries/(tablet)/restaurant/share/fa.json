@@ -10,7 +10,7 @@
    "title": "تنظیمات",
    "backBtn": "بازگشت",
    "buttons": {
-    "initialOrderConfig": "تنظیمات اولیه سفارش",
+    "initialOrderConfig": "تنظیمات ثبت سفارش",
     "tablesDisplayMode": "طرز نمایش میز‌ها",
     "tableTheme": "ظاهر نمایش میز",
     "themeToggler": "پوسته رنگی"

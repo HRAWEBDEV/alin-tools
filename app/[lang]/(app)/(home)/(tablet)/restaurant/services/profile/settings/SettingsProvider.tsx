@@ -5,7 +5,6 @@ import { SettingsContext, type Settings, ActiveView } from './settingsContext';
 import {
  Drawer,
  DrawerContent,
- DrawerFooter,
  DrawerHeader,
  DrawerTitle,
 } from '@/components/ui/drawer';
@@ -15,13 +14,15 @@ import { Button } from '@/components/ui/button';
 import {
  RiSunLine,
  RiListSettingsFill,
- RiKeyboardFill,
  RiPaintFill,
+ RiSettings4Fill,
+ RiMenu3Fill,
 } from 'react-icons/ri';
 import SpinnerLoading from './components/SpinnerLoading';
 import { AnimatePresence } from 'motion/react';
 import { motion } from 'motion/react';
 import BackBtn from './components/BackBtn';
+import DishIcon from '@/app/[lang]/(app)/components/icons/DishIcon';
 
 const views: Record<ActiveView, React.ComponentType> = {
  initialOrderConfig: dynamic(() => import('./components/InitialOrderConfig'), {
@@ -99,11 +100,11 @@ export default function SettingsProvider({
       className='text-base p-4 px-8 w-full justify-start h-[unset] gap-4 items-center text-orange-600 hover:text-orange-500 hover:bg-orange-600/10 transition-colors'
       onClick={() => setActiveView('tablesDisplayMode')}
      >
-      <RiKeyboardFill className='size-8' />
+      <DishIcon className='size-8' />
       <span>{settings.buttons.tablesDisplayMode}</span>
      </Button>
     </li>
-    <li>
+    {/* <li>
      <Button
       variant='ghost'
       size={'icon-lg'}
@@ -113,11 +114,65 @@ export default function SettingsProvider({
       <RiPaintFill className='size-8' />
       <span>{settings.buttons.tableTheme}</span>
      </Button>
-    </li>
+    </li> */}
    </motion.ul>
   );
  }
 
+ function getActiveHeader(title: string) {
+  switch (activeView) {
+   default:
+    return (
+     <DrawerHeader className='px-0 relative border-b border-b-gray-400 dark:border-b-gray-300 '>
+      <DrawerTitle className='dark:text-gray-300 text-gray-600 sm:text-xl text-md flex items-center justify-start gap-4 px-8'>
+       <RiSettings4Fill className='text-gray-400 size-12' />
+       {title}
+      </DrawerTitle>
+     </DrawerHeader>
+    );
+
+   case 'themeToggler':
+    return (
+     <DrawerHeader className='px-2 flex-row items-center justify-between relative border-b border-b-gray-400 dark:border-b-gray-300 '>
+      <DrawerTitle className='dark:text-gray-300 text-gray-600 sm:text-xl text-md flex items-center justify-start gap-4 px-0'>
+       <div className='relative'>
+        <RiSunLine className='text-pink-600 size-12' />
+        <RiSettings4Fill className='text-gray-500 dark:text-gray-400 size-6 absolute left-0 -bottom-1.5 ' />
+       </div>
+       {title}
+      </DrawerTitle>
+      <BackBtn bgClasses='bg-pink-600/80 hover:bg-pink-600' />
+     </DrawerHeader>
+    );
+
+   case 'initialOrderConfig':
+    return (
+     <DrawerHeader className='px-0 flex-row items-center justify-between relative border-b border-b-gray-400 dark:border-b-gray-300 '>
+      <DrawerTitle className='dark:text-gray-300 text-gray-600 sm:text-xl text-md flex items-center justify-start gap-4 px-0'>
+       <div className='relative'>
+        <RiMenu3Fill className='text-primary size-12' />
+        <RiSettings4Fill className='text-gray-500 dark:text-gray-400 size-6 absolute -left-[5px] bottom-[11px] ' />
+       </div>
+       {title}
+      </DrawerTitle>
+      <BackBtn />
+     </DrawerHeader>
+    );
+   case 'tablesDisplayMode':
+    return (
+     <DrawerHeader className='px-2 flex-row items-center justify-between relative border-b border-b-gray-400 dark:border-b-gray-300 '>
+      <DrawerTitle className='dark:text-gray-300 text-gray-600 sm:text-xl text-md flex items-center justify-start gap-4 px-0'>
+       <div className='relative'>
+        <DishIcon className='text-orange-600 hover:text-orange-500 size-12' />
+        <RiSettings4Fill className='text-gray-500 dark:text-gray-400 size-6 absolute -left-1.5 -bottom-1.5 ' />
+       </div>
+       {title}
+      </DrawerTitle>
+      <BackBtn bgClasses='bg-orange-600 hover:bg-orange-500' />
+     </DrawerHeader>
+    );
+  }
+ }
  const activeTitle = activeView ? settings.buttons[activeView] : settings.title;
  const ActiveComponent = activeView ? views[activeView] : null;
 
@@ -126,17 +181,14 @@ export default function SettingsProvider({
    {children}
 
    <Drawer open={isOpen} onOpenChange={setIsOpen}>
-    <DrawerContent className='p-4 [&_div.bg-muted]:bg-primary! min-h-[400px]'>
-     <DrawerHeader className='px-0 relative flex items-center justify-center'>
-      <DrawerTitle className='dark:text-gray-300 text-gray-700 sm:text-xl text-md'>
-       {activeTitle}
-      </DrawerTitle>
-     </DrawerHeader>
-     <AnimatePresence mode='wait'>
+    <AnimatePresence mode='wait'>
+     <DrawerContent
+      className={`p-4 [&_div.bg-muted]:bg-primary!  ${activeView ? 'min-h-svh' : 'min-h-[400px]'} transition-all! ease-in-out! duration-300!`}
+     >
+      {getActiveHeader(activeTitle)}
       {ActiveComponent ? <ActiveComponent /> : optionsList()}
-     </AnimatePresence>
-     <DrawerFooter className='px-0'>{activeView && <BackBtn />}</DrawerFooter>
-    </DrawerContent>
+     </DrawerContent>
+    </AnimatePresence>
    </Drawer>
   </SettingsContext.Provider>
  );

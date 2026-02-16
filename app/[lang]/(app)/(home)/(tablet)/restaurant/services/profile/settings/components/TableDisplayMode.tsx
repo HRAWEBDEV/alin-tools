@@ -3,6 +3,7 @@ import { useRestaurantShareDictionary } from '../../../share-dictionary/restaura
 import { AnimatedTabs } from '@/app/[lang]/(app)/components/AnimatedTabs';
 import { motion } from 'motion/react';
 import SalonTableDemoShowcase from './SalonTableModeShowcase';
+import DinnerIcon from '@/app/[lang]/(app)/components/icons/DinnerIcon';
 
 const TABLE_VIEW_MODE_KEY = 'tablesDisplayMode';
 export default function TableDisplayMode() {
@@ -62,21 +63,24 @@ export default function TableDisplayMode() {
    animate={{ y: 0, opacity: 1 }}
    exit={{ y: 100, opacity: 0 }}
    transition={{ duration: 0.3 }}
-   className='flex flex-col justify-start gap-6 sm:px-4 px-0 mt-4 overflow-y-auto overflow-x-hidden'
+   className='flex flex-col justify-start gap-6 px-0 mt-4 overflow-y-auto overflow-x-hidden'
   >
-   <h4 className='text-xl font-medium text-right'>
-    {settings.components.tablesDisplayMode.title}
-   </h4>
+   <div className='flex items-center justify-between flex-1 gap-8 px-6'>
+    <h4 className='text-xl font-medium text-right '>
+     {settings.components.tablesDisplayMode.title}
+    </h4>
 
-   <AnimatedTabs
-    tabs={tabs}
-    activeTab={activeTab}
-    onTabChange={handleModeChange}
-    activeBgColor='bg-primary'
-    activeTextColor='text-white'
-    inactiveTextColor='text-gray-700 dark:text-gray-400'
-    inactiveBgColor='bg-gray-200 dark:bg-gray-400'
-   />
+    <AnimatedTabs
+     className='flex-1 w-full max-w-[40%]'
+     tabs={tabs}
+     activeTab={activeTab}
+     onTabChange={handleModeChange}
+     activeBgColor='bg-orange-600'
+     activeTextColor='text-white'
+     inactiveTextColor='text-gray-700 dark:text-gray-400'
+     inactiveBgColor='bg-gray-200 dark:bg-gray-400'
+    />
+   </div>
    <SalonTableDemoShowcase />
   </motion.div>
  );

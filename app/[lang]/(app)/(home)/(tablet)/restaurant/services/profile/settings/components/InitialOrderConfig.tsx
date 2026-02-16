@@ -66,21 +66,24 @@ export default function InitialOrderConfigView() {
    animate={{ y: 0, opacity: 1 }}
    exit={{ y: -200, opacity: 0 }}
    transition={{ duration: 0.3 }}
-   className='flex flex-col justify-start gap-6 sm:px-4 px-0 mt-4'
+   className='flex flex-col justify-start gap-6  px-0 mt-4'
   >
-   <h4 className='font-medium sm:text-lg text-sm'>
-    {settings.components.tablesDisplayMode.title}
-   </h4>
+   <div className='flex items-center justify-between flex-1 gap-8'>
+    <h4 className='text-xl font-medium text-right '>
+     {settings.components.initialOrderConfig.title}
+    </h4>
 
-   <AnimatedTabs
-    tabs={tabs}
-    activeTab={initialOrderConfig}
-    onTabChange={handleTabChange}
-    activeBgColor='bg-primary'
-    activeTextColor='text-white'
-    inactiveTextColor='text-gray-700 dark:text-gray-400'
-    inactiveBgColor='bg-gray-200 dark:bg-gray-400'
-   />
+    <AnimatedTabs
+     className='max-w-[40%]'
+     tabs={tabs}
+     activeTab={initialOrderConfig}
+     onTabChange={handleTabChange}
+     activeBgColor='bg-primary'
+     activeTextColor='text-white'
+     inactiveTextColor='text-gray-700 dark:text-gray-400'
+     inactiveBgColor='bg-gray-200 dark:bg-gray-400'
+    />
+   </div>
 
    <p className='flex sm:flex-row flex-col sm:items-center items-start justify-start gap-2'>
     <RiQuestionLine className='sm:size-6 size-5 text-primary' />

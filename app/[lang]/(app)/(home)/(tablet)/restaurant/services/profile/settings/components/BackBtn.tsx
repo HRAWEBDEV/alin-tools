@@ -4,7 +4,7 @@ import { RiArrowGoForwardFill } from 'react-icons/ri';
 import { useSettingsContext } from '../settingsContext';
 import { useRestaurantShareDictionary } from '../../../share-dictionary/restaurantShareDictionaryContext';
 
-export default function BackBtn() {
+export default function BackBtn({ bgClasses }: { bgClasses?: string }) {
  const { setActiveView } = useSettingsContext();
  const {
   restaurantShareDictionary: {
@@ -13,7 +13,7 @@ export default function BackBtn() {
  } = useRestaurantShareDictionary();
  return (
   <Button
-   className='px-0! py-2! h-full flex items-center justify-center gap-2 rounded-lg bg-primary/80 hover:bg-primary text-gray-200 hover:text-gray-200! dark:text-gray-500 dark:hover:text-gray-500 '
+   className={`px-8! py-3! h-full flex items-center justify-center gap-2 rounded-lg text-gray-200 hover:text-gray-200! dark:text-gray-500 dark:hover:text-gray-500 ${bgClasses ? bgClasses : ' bg-primary/80 hover:bg-primary '}`}
    onClick={() => setActiveView(null)}
    variant='ghost'
   >
