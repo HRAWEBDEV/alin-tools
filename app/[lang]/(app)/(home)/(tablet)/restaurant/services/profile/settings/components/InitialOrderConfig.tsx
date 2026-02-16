@@ -69,7 +69,7 @@ export default function InitialOrderConfigView() {
    className='flex flex-col justify-start gap-6  px-0 mt-4'
   >
    <div className='flex items-center justify-between flex-1 gap-8'>
-    <h4 className='text-xl font-medium text-right '>
+    <h4 className='text-lg text-right '>
      {settings.components.initialOrderConfig.title}
     </h4>
 
@@ -87,9 +87,9 @@ export default function InitialOrderConfigView() {
 
    <p className='flex sm:flex-row flex-col sm:items-center items-start justify-start gap-2'>
     <RiQuestionLine className='sm:size-6 size-5 text-primary' />
-    <strong className='sm:text-base text-xs text-destructive '>
+    <span className='sm:text-base text-xs text-destructive '>
      {tabGuideMessage}
-    </strong>
+    </span>
    </p>
   </motion.div>
  );

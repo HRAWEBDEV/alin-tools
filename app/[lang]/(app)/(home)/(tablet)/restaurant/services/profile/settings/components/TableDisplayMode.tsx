@@ -66,7 +66,7 @@ export default function TableDisplayMode() {
    className='flex flex-col justify-start gap-6 px-0 mt-4 overflow-y-auto overflow-x-hidden'
   >
    <div className='flex items-center justify-between flex-1 gap-8 px-6'>
-    <h4 className='text-xl font-medium text-right '>
+    <h4 className='text-xl text-right '>
      {settings.components.tablesDisplayMode.title}
     </h4>
 
