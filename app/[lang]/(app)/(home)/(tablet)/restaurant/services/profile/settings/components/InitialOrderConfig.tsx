@@ -62,14 +62,14 @@ export default function InitialOrderConfigView() {
 
  return (
   <motion.div
-   initial={{ y: 100, opacity: 0 }}
+   initial={{ y: -200, opacity: 0 }}
    animate={{ y: 0, opacity: 1 }}
-   exit={{ y: 100, opacity: 0 }}
+   exit={{ y: -200, opacity: 0 }}
    transition={{ duration: 0.3 }}
    className='flex flex-col justify-start gap-6 sm:px-4 px-0 mt-4'
   >
    <h4 className='font-medium sm:text-lg text-sm'>
-    {settings.components.initialOrderConfig.title}
+    {settings.components.tablesDisplayMode.title}
    </h4>
 
    <AnimatedTabs

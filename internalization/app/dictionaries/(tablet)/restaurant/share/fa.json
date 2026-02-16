@@ -25,6 +25,38 @@
       "inactive": "غیر فعال",
       "inactiveMesage": "با انتخاب این حالت، هنگام ورود به قسمت سفارش جدید، باید پنجره اطلاعات اولیه سفارش را به صورت دستی باز کنید."
      }
+    },
+    "tablesDisplayMode": {
+     "title": "حالت نمایش میز سالن‌ها",
+     "normalMode": "حالت عادی",
+     "minimalMode": "حالت مینیمال",
+     "minimalModeDescription": "",
+     "normalModeDescription": "",
+     "demo": {
+      "title": "نمایش حالت‌های مختلف میزهای رستوران",
+      "legendTitle": "راهنمای رنگ‌ها:",
+      "visualFeaturesTitle": "ویژگی‌های بصری:",
+      "states": {
+       "readyToService": "آماده سرویس",
+       "outOfService": "خارج از سرویس",
+       "reserved": "رزرو شده",
+       "occupied": "اشغال شده",
+       "vip": "VIP",
+       "room": "مهمان اتاق"
+      },
+      "features": {
+       "seatIndicators": "نشانگر صندلی‌ها:",
+       "seatIndicatorsDesc": "دایره‌های کوچک نشان دهنده صندلی‌های اشغال شده (صورتی) و خالی (خاکستری)",
+       "vipWatermark": "واترمارک VIP:",
+       "vipWatermarkDesc": "متن بزرگ \"VIP\" روی میزهای مشتریان ویژه نمایش داده می‌شود",
+       "occupancyRatio": "نسبت اشغال:",
+       "occupancyRatioDesc": "پایین سمت راست تعداد نفرات اشغال شده/ظرفیت را نشان می‌دهد",
+       "timestamp": "زمان:",
+       "timestampDesc": "زمان اشغال میز را نشان می‌دهد (برای سفارشات فعال)",
+       "customerInfo": "اطلاعات مشتری:",
+       "customerInfoDesc": "نوع فروش و نام مشتری را در صورت وجود نمایش می‌دهد"
+      }
+     }
     }
    }
   },
