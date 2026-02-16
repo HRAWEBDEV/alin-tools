@@ -140,7 +140,7 @@ export default function SettingsProvider({
        </div>
        {title}
       </DrawerTitle>
-      <BackBtn bgClasses='bg-pink-600/80 hover:bg-pink-600' />
+      <BackBtn className='border-pink-600/80 hover:border-pink-600 text-pink-600 hover:text-pink-800' />
      </DrawerHeader>
     );
 
@@ -154,7 +154,7 @@ export default function SettingsProvider({
        </div>
        {title}
       </DrawerTitle>
-      <BackBtn />
+      <BackBtn className='text-primary/80 hover:text-primary border-primary' />
      </DrawerHeader>
     );
    case 'tablesDisplayMode':
@@ -167,7 +167,7 @@ export default function SettingsProvider({
        </div>
        {title}
       </DrawerTitle>
-      <BackBtn bgClasses='bg-orange-600 hover:bg-orange-500' />
+      <BackBtn className='border-orange-600 hover:border-orange-500 text-orange-600 hover:text-orange-700' />
      </DrawerHeader>
     );
   }
