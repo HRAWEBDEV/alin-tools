@@ -1,4 +1,3 @@
-import { useRestaurantShareDictionary } from '../../../share-dictionary/restaurantShareDictionaryContext';
 import SalonTableDemo from './SalonTableDemo';
 
 const mockTables = [
@@ -102,18 +101,8 @@ const mockTables = [
 ];
 
 export default function SalonTableDemoShowcase() {
- const {
-  restaurantShareDictionary: {
-   components: { settings },
-  },
- } = useRestaurantShareDictionary();
-
- const dic = settings.components.tablesDisplayMode.demo;
-
  return (
   <div dir='rtl'>
-   <h1 className='text-3xl font-bold mb-8 text-center'>{dic.title}</h1>
-
    <div className='grid gap-4 grid-cols-[repeat(auto-fill,minmax(9rem,10rem))] sm:grid-cols-[repeat(auto-fill,minmax(9rem,10rem))] justify-center'>
     {mockTables.map((table) => (
      <SalonTableDemo key={table.tableNo} table={table} />

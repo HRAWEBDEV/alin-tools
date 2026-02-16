@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useRestaurantShareDictionary } from '../../../share-dictionary/restaurantShareDictionaryContext';
-import { RiQuestionLine } from 'react-icons/ri';
 import { AnimatedTabs } from '@/app/[lang]/(app)/components/AnimatedTabs';
 import { motion } from 'motion/react';
 import SalonTableDemoShowcase from './SalonTableModeShowcase';
@@ -63,10 +62,10 @@ export default function TableDisplayMode() {
    animate={{ y: 0, opacity: 1 }}
    exit={{ y: 100, opacity: 0 }}
    transition={{ duration: 0.3 }}
-   className='flex flex-col justify-start gap-6 sm:px-4 px-0 mt-4 overflow-y-auto'
+   className='flex flex-col justify-start gap-6 sm:px-4 px-0 mt-4 overflow-y-auto overflow-x-hidden'
   >
-   <h4 className='font-medium sm:text-lg text-sm'>
-    {settings.components.initialOrderConfig.title}
+   <h4 className='text-xl font-medium text-right'>
+    {settings.components.tablesDisplayMode.title}
    </h4>
 
    <AnimatedTabs
