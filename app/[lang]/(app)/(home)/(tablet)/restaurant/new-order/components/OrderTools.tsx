@@ -18,7 +18,6 @@ export default function OrderTools({ dic }: { dic: NewOrderDictionary }) {
   shopInfoLoading,
   shopLoading,
   showConfirmOrder,
-  openQuickOrderInfo,
   itemsInfo: { searchedItemName, changeSearchedItemName },
   order: { orderItems },
  } = useOrderBaseConfigContext();
