@@ -62,13 +62,13 @@ export default function InitialOrderConfigView() {
 
  return (
   <motion.div
-   initial={{ y: 300, opacity: 0 }}
+   initial={{ y: 100, opacity: 0 }}
    animate={{ y: 0, opacity: 1 }}
-   exit={{ y: 300, opacity: 0 }}
+   exit={{ y: 100, opacity: 0 }}
    transition={{ duration: 0.3 }}
-   className='flex flex-col justify-start gap-4 px-4 mt-4'
+   className='flex flex-col justify-start gap-6 sm:px-4 px-0 mt-4'
   >
-   <h4 className='font-medium text-lg'>
+   <h4 className='font-medium sm:text-lg text-sm'>
     {settings.components.initialOrderConfig.title}
    </h4>
 
@@ -82,9 +82,11 @@ export default function InitialOrderConfigView() {
     inactiveBgColor='bg-gray-200 dark:bg-gray-400'
    />
 
-   <p className='flex items-center justify-start gap-2'>
-    <RiQuestionLine className='size-6 text-primary' />
-    <strong className='text-md text-destructive '>{tabGuideMessage}</strong>
+   <p className='flex sm:flex-row flex-col sm:items-center items-start justify-start gap-2'>
+    <RiQuestionLine className='sm:size-6 size-5 text-primary' />
+    <strong className='sm:text-base text-xs text-destructive '>
+     {tabGuideMessage}
+    </strong>
    </p>
   </motion.div>
  );
