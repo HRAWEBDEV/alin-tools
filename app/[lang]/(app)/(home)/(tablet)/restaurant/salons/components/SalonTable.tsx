@@ -214,7 +214,7 @@ export default function SalonTable({
     )}
     <Button
      variant={'outline'}
-     className='z-1 rounded-2xl h-full flex-col justify-start text-start p-0 overflow-hidden mx-3 shadow-lg group-data-[bold=true]:border-4'
+     className='z-1 rounded-2xl h-full flex-col justify-start text-start p-0 overflow-hidden mx-3 shadow-lg'
      asChild={!isMinimal}
      onClick={() => {
       if (selectedTable?.tableNo === table.tableNo) return;

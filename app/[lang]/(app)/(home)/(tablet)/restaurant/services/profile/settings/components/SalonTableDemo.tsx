@@ -89,7 +89,7 @@ export default function SalonTableDemo({
   >
    <div className='relative min-h-32 group-data-[minimal=true]:min-h-0 '>
     <div
-     className={`z-1 rounded-2xl h-full flex flex-col justify-start text-start p-0 overflow-hidden shadow-lg bg-gray-50 dark:bg-neutral-900 transition-colors ${isMinimal ? `mx-1 aspect-square border-2 ${tableStyles.border} ${tableStyles.backgroundColor} max-w-24 max-h-24` : 'mx-3 border-2 border-transparent hover:border-2 hover:border-gray-500 border-dotted'} group-data-[bold=true]:border-4`}
+     className={`z-1 rounded-2xl h-full flex flex-col justify-start text-start p-0 overflow-hidden shadow-lg bg-gray-50 dark:bg-neutral-900 transition-colors ${isMinimal ? `mx-1 aspect-square border-2 ${tableStyles.border} ${tableStyles.backgroundColor} max-w-24 max-h-24` : 'mx-3 border-2 border-transparent hover:border-2 hover:border-gray-500 border-dotted'} `}
     >
      <div
       className={`relative flex flex-col grow items-stretch ${isMinimal ? 'p-1.5 gap-0.5 justify-center' : 'p-2'}`}
