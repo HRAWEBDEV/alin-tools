@@ -25,10 +25,12 @@ export default function SalonTable({
  table,
  dic,
  isMinimal,
+ isBold,
 }: {
  dic: SalonsDictionary;
  table: Table;
  isMinimal?: boolean;
+ isBold?: boolean;
 }) {
  const {
   initData,
@@ -136,6 +138,7 @@ export default function SalonTable({
     layout
     className='grid group data-[minimal=true]:max-w-[96px]'
     data-minimal={true}
+    data-bold={isBold}
     style={{ gridTemplateRows: '1fr' }}
    >
     <DropdownMenu
@@ -149,13 +152,13 @@ export default function SalonTable({
      <DropdownMenuTrigger asChild>
       <Button
        variant={'outline'}
-       className={`z-1 rounded-2xl h-full flex-col justify-start text-start p-0 overflow-hidden shadow-lg transition-colors mx-1 aspect-square border-2 ${tableStyles.border} ${tableStyles.backgoundColor} max-w-24 max-h-24`}
+       className={`z-1 rounded-2xl h-full flex-col justify-start text-start p-0 overflow-hidden shadow-lg transition-colors mx-1 aspect-square border-2 ${tableStyles.border} ${tableStyles.backgoundColor} max-w-24 max-h-24 group-data-[bold=true]:border-4`}
       >
        <div className='relative flex flex-col grow items-stretch p-1.5 gap-0.5 justify-center w-full h-full'>
         <div className='text-center flex flex-col justify-center grow'>
          <div className='flex items-center gap-2'>
           <h3
-           className={`${tableStyles.text} font-en-roboto text-lg lg:text-xl mx-auto`}
+           className={`${tableStyles.text} font-en-roboto text-lg lg:text-xl mx-auto group-data-[bold=true]:font-black`}
           >
            {table.tableNo.toString().padStart(2, '0')}
           </h3>
@@ -167,12 +170,12 @@ export default function SalonTable({
           style={{
            direction: 'ltr',
           }}
-          className={`font-medium text-[10px] ${tableStyles.text}`}
+          className={`font-medium text-[10px] ${tableStyles.text} group-data-[bold=true]:font-bold`}
          >
           {table.occupiedPerson || '-'}/{table.tableCapacity}
          </div>
          {table.vip && (
-          <span className='text-[8px] text-amber-500 dark:text-amber-400'>
+          <span className='text-[8px] text-amber-500 dark:text-amber-400 group-data-[bold=true]:font-bold'>
            VIP
           </span>
          )}
@@ -187,7 +190,7 @@ export default function SalonTable({
  }
 
  return (
-  <motion.div layout className='grid'>
+  <motion.div layout className='grid group' data-bold={isBold}>
    <div className='relative min-h-40'>
     {!!tableRows.length && (
      <div
@@ -211,12 +214,19 @@ export default function SalonTable({
     )}
     <Button
      variant={'outline'}
-     className='z-1 rounded-2xl h-full flex-col justify-start text-start p-0 overflow-hidden mx-3 shadow-lg'
-     asChild
+     className='z-1 rounded-2xl h-full flex-col justify-start text-start p-0 overflow-hidden mx-3 shadow-lg group-data-[bold=true]:border-4'
+     asChild={!isMinimal}
      onClick={() => {
       if (selectedTable?.tableNo === table.tableNo) return;
       if (showTransferTable) transferTableTo(table);
       if (showMergeTable) mergeTableTo(table);
+     }}
+     style={{
+      borderColor:
+       tableStyles.border.replace('border-', '') === 'rose-300'
+        ? '#fda4af'
+        : undefined, // Quick fix for border color mapping if needed, or rely on class names
+      //    backgroundColor: tableStyles.backgoundColor, // This should be a class name, not style
      }}
     >
      <Link
@@ -230,17 +240,18 @@ export default function SalonTable({
       className='relative flex! flex-col grow items-stretch bg-background! p-2'
      >
       {table.vip && (
-       <div className='absolute top-11 start-0 end-0 text-end text-4xl text-amber-400/40 dark:text-amber-500/40 font-en-roboto'>
+       <div className='absolute top-11 start-0 end-0 text-end text-4xl text-amber-400/40 dark:text-amber-500/40 font-en-roboto group-data-[bold=true]:font-bold'>
         VIP
        </div>
       )}
       <div
-       className={`p-1 rounded-2xl border border-dashed text-center ${tableStyles.backgoundColor} ${tableStyles.border} ${tableStyles.text}`}
+       className={`p-1 rounded-2xl border border-dashed text-center ${tableStyles.backgoundColor} ${tableStyles.border} ${tableStyles.text} `}
       >
-       <span className='text-base font-medium'>
+       <span className='text-base font-medium group-data-[bold=true]:font-bold'>
         <span>
          {initData.tableTypes.find(
-          (item) => item.key === table.tableTypeID.toString(),
+          (item: { key: string; value: string }) =>
+           item.key === table.tableTypeID.toString(),
          )?.value || ''}{' '}
         </span>
         {dic.tables[tableStyles.type]}
@@ -250,22 +261,22 @@ export default function SalonTable({
       <div className='text-start ps-2 grow'>
        <div className='flex items-center gap-2'>
         <h3
-         className={`text-2xl lg:text-3xl ${tableStyles.text} font-en-roboto`}
+         className={`text-2xl lg:text-3xl ${tableStyles.text} font-en-roboto group-data-[bold=true]:font-black`}
         >
          {table.tableNo.toString().padStart(2, '0')}
         </h3>
        </div>
        <div>
-        <p className='text-sm text-primary text-wrap'>
+        <p className='text-sm text-primary text-wrap group-data-[bold=true]:font-medium'>
          {table.saleTypeName || ''}
         </p>
-        <p className='text-md text-neutral-500 dark:text-neutral-400 text-wrap'>
+        <p className='text-md text-neutral-500 dark:text-neutral-400 text-wrap group-data-[bold=true]:font-medium'>
          {table.customerName || ''}
         </p>
        </div>
       </div>
       <div className='flex items-center justify-between gap-4'>
-       <div className='flex items-center gap-1 text-base text-neutral-600 dark:text-neutral-400 font-medium'>
+       <div className='flex items-center gap-1 text-base text-neutral-600 dark:text-neutral-400 font-medium group-data-[bold=true]:font-bold'>
         <span>
          {table.OccupiedDateTimeOffset
           ? new Date(table.OccupiedDateTimeOffset).toLocaleTimeString(locale, {
@@ -279,7 +290,7 @@ export default function SalonTable({
         style={{
          direction: 'ltr',
         }}
-        className={`font-medium text-base ${tableStyles.text}`}
+        className={`font-medium text-base ${tableStyles.text} group-data-[bold=true]:font-bold`}
        >
         {table.occupiedPerson || '-'}/{table.tableCapacity}
        </div>

@@ -16,7 +16,7 @@ const defaultSnapshot = () => null;
  * Handles hydration mismatch by returning null on server.
  * Returns null if key doesn't exist.
  */
-export function useLocalStorageSync(key: string) {
+export function useLocalStorageSync(key: string): string | boolean | null {
  const getSnapshot = () => localStorage.getItem(key);
 
  const storedValue = useSyncExternalStore(

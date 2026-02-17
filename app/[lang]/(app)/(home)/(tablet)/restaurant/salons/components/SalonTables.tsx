@@ -11,13 +11,12 @@ import UnExpectedError from '@/app/[lang]/(app)/components/UnExpectedError';
 import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
 import { Button } from '@/components/ui/button';
 
-import { useLocalStorageSync } from '@/hooks/useLocalStorageSync';
+import { useTablePreferences } from '@/app/[lang]/(app)/(home)/(tablet)/restaurant/hooks/useTablePreferences';
 
-const TABLE_VIEW_MODE_KEY = 'tablesDisplayMode';
+// const TABLE_VIEW_MODE_KEY = 'tablesDisplayMode';
 
 export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
- const displayMode = useLocalStorageSync(TABLE_VIEW_MODE_KEY);
- const isMinimal = displayMode === 'minimalMode';
+ const { isMinimal, isBold } = useTablePreferences();
 
  const tablesGridClass = isMinimal
   ? 'grid gap-4 justify-center grid-cols-[repeat(auto-fill,minmax(6rem,1fr))]'
@@ -132,6 +131,7 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
          dic={dic}
          table={table}
          isMinimal={isMinimal}
+         isBold={isBold}
         />
        ))}
       </div>

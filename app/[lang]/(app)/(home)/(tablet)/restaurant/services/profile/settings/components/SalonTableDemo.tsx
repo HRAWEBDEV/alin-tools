@@ -66,50 +66,47 @@ interface MockTable {
  OccupiedDateTimeOffset: string | null;
  orderID: number | null;
 }
-const TABLE_VIEW_MODE_KEY = 'tablesDisplayMode';
-
 export default function SalonTableDemo({
  table,
  mode,
+ isBold,
 }: {
  table: MockTable;
  mode?: 'normal' | 'minimal';
+ isBold?: boolean;
 }) {
  const tableStyles = getTableStateStyles(table.tableStateTypeID);
- const displayMode =
-  mode ||
-  (localStorage.getItem(TABLE_VIEW_MODE_KEY) &&
-  localStorage.getItem(TABLE_VIEW_MODE_KEY) === 'minimalMode'
-   ? 'minimal'
-   : 'normal');
 
- const isMinimal = displayMode === 'minimal';
+ const isMinimal = mode === 'minimal';
 
  return (
   <motion.div
    data-minimal={isMinimal}
+   data-bold={isBold}
    layout
    className='grid h-full group  data-[minimal=true]:max-w-[96px]'
    style={{ gridTemplateRows: isMinimal ? '1fr' : '1fr auto' }}
   >
    <div className='relative min-h-32 group-data-[minimal=true]:min-h-0 '>
     <div
-     className={`z-1 rounded-2xl h-full flex flex-col justify-start text-start p-0 overflow-hidden shadow-lg bg-gray-50 dark:bg-neutral-900 transition-colors ${isMinimal ? `mx-1 aspect-square border-2 ${tableStyles.border} ${tableStyles.backgroundColor} max-w-24 max-h-24` : 'mx-3 border-2 border-transparent hover:border-2 hover:border-gray-500 border-dotted'}`}
+     className={`z-1 rounded-2xl h-full flex flex-col justify-start text-start p-0 overflow-hidden shadow-lg bg-gray-50 dark:bg-neutral-900 transition-colors ${isMinimal ? `mx-1 aspect-square border-2 ${tableStyles.border} ${tableStyles.backgroundColor} max-w-24 max-h-24` : 'mx-3 border-2 border-transparent hover:border-2 hover:border-gray-500 border-dotted'} group-data-[bold=true]:border-4`}
     >
      <div
       className={`relative flex flex-col grow items-stretch ${isMinimal ? 'p-1.5 gap-0.5 justify-center' : 'p-2'}`}
      >
       {table.vip && !isMinimal && (
-       <div className='absolute top-11 start-0 end-0.5 text-end text-4xl text-amber-400/40 dark:text-amber-500/40 font-en-roboto'>
+       <div className='absolute top-11 start-0 end-0.5 text-end text-4xl text-amber-400/40 dark:text-amber-500/40 font-en-roboto group-data-[bold=true]:font-bold'>
         VIP
        </div>
       )}
 
       {!isMinimal && (
        <div
-        className={`p-1 rounded-2xl border border-dashed text-center ${tableStyles.backgroundColor} ${tableStyles.border} ${tableStyles.text}`}
+        className={`p-1 rounded-2xl border border-dashed text-center ${tableStyles.backgroundColor} ${tableStyles.border} ${tableStyles.text} `}
        >
-        <span className='text-base font-medium'>{tableStyles.badgeText}</span>
+        <span className='text-base font-medium group-data-[bold=true]:font-bold'>
+         {tableStyles.badgeText}
+        </span>
        </div>
       )}
 
@@ -118,17 +115,17 @@ export default function SalonTableDemo({
       >
        <div className='flex items-center gap-2'>
         <h3
-         className={`${tableStyles.text} font-en-roboto ${isMinimal ? 'text-lg lg:text-xl mx-auto' : 'text-2xl lg:text-3xl'}`}
+         className={`${tableStyles.text} font-en-roboto ${isMinimal ? 'text-lg lg:text-xl mx-auto' : 'text-2xl lg:text-3xl'} group-data-[bold=true]:font-black`}
         >
          {table.tableNo.toString().padStart(2, '0')}
         </h3>
        </div>
        {!isMinimal && (
         <div>
-         <p className='text-sm text-primary text-wrap'>
+         <p className='text-sm text-primary text-wrap group-data-[bold=true]:font-medium'>
           {table.saleTypeName || ''}
          </p>
-         <p className='text-md text-neutral-500 dark:text-neutral-400 text-wrap'>
+         <p className='text-md text-neutral-500 dark:text-neutral-400 text-wrap group-data-[bold=true]:font-medium'>
           {table.customerName || ''}
          </p>
         </div>
@@ -137,7 +134,7 @@ export default function SalonTableDemo({
 
       {!isMinimal && (
        <div className='flex items-center justify-between gap-4'>
-        <div className='flex items-center gap-1 text-base text-neutral-600 dark:text-neutral-400 font-medium'>
+        <div className='flex items-center gap-1 text-base text-neutral-600 dark:text-neutral-400 font-medium group-data-[bold=true]:font-bold'>
          <span>
           {table.OccupiedDateTimeOffset
            ? new Date(table.OccupiedDateTimeOffset).toLocaleTimeString(
@@ -154,7 +151,7 @@ export default function SalonTableDemo({
          style={{
           direction: 'ltr',
          }}
-         className={`font-medium text-base ${tableStyles.text}`}
+         className={`font-medium text-base ${tableStyles.text} group-data-[bold=true]:font-bold`}
         >
          {table.occupiedPerson || '-'}/{table.tableCapacity}
         </div>
@@ -167,12 +164,12 @@ export default function SalonTableDemo({
          style={{
           direction: 'ltr',
          }}
-         className={`font-medium text-[10px] ${tableStyles.text}`}
+         className={`font-medium text-[10px] ${tableStyles.text} group-data-[bold=true]:font-bold`}
         >
          {table.occupiedPerson || '-'}/{table.tableCapacity}
         </div>
         {table.vip && (
-         <span className='text-[8px] text-amber-500 dark:text-amber-400'>
+         <span className='text-[8px] text-amber-500 dark:text-amber-400 group-data-[bold=true]:font-bold'>
           VIP
          </span>
         )}

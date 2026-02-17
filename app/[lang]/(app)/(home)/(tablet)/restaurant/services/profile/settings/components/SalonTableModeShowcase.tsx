@@ -103,10 +103,12 @@ const mockTables = [
 
 interface SalonTableDemoShowcaseProps {
  mode: 'normal' | 'minimal';
+ isBold?: boolean;
 }
 
 export default function SalonTableDemoShowcase({
  mode,
+ isBold,
 }: SalonTableDemoShowcaseProps) {
  return (
   <div dir='rtl'>
@@ -119,7 +121,12 @@ export default function SalonTableDemoShowcase({
     }`}
    >
     {mockTables.map((table) => (
-     <SalonTableDemo key={table.tableNo} table={table} mode={mode} />
+     <SalonTableDemo
+      key={table.tableNo}
+      table={table}
+      mode={mode}
+      isBold={isBold}
+     />
     ))}
    </motion.div>
   </div>
