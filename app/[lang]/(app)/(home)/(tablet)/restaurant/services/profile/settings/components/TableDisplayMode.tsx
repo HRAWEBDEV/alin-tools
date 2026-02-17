@@ -85,6 +85,9 @@ export default function TableDisplayMode() {
    <SalonTableDemoShowcase
     mode={activeTab === minimalMode ? 'minimal' : 'normal'}
    />
+   <p className='w-fit p-6 mt-8 mx-auto font-medium rounded-2xl bg-orange-600/10 text-orange-950'>
+    {activeTabDescription}
+   </p>
   </motion.div>
  );
 }
