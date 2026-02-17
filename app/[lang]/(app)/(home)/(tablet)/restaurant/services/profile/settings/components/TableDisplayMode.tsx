@@ -82,7 +82,9 @@ export default function TableDisplayMode() {
      inactiveBgColor='bg-gray-200 dark:bg-gray-400'
     />
    </div>
-   <SalonTableDemoShowcase />
+   <SalonTableDemoShowcase
+    mode={activeTab === minimalMode ? 'minimal' : 'normal'}
+   />
   </motion.div>
  );
 }

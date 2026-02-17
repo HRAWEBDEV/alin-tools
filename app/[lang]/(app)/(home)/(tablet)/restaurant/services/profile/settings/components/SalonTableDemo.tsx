@@ -68,13 +68,20 @@ interface MockTable {
 }
 const TABLE_VIEW_MODE_KEY = 'tablesDisplayMode';
 
-export default function SalonTableDemo({ table }: { table: MockTable }) {
+export default function SalonTableDemo({
+ table,
+ mode,
+}: {
+ table: MockTable;
+ mode?: 'normal' | 'minimal';
+}) {
  const tableStyles = getTableStateStyles(table.tableStateTypeID);
  const displayMode =
-  localStorage.getItem(TABLE_VIEW_MODE_KEY) &&
+  mode ||
+  (localStorage.getItem(TABLE_VIEW_MODE_KEY) &&
   localStorage.getItem(TABLE_VIEW_MODE_KEY) === 'minimalMode'
    ? 'minimal'
-   : 'normal';
+   : 'normal');
 
  const isMinimal = displayMode === 'minimal';
 
@@ -85,12 +92,12 @@ export default function SalonTableDemo({ table }: { table: MockTable }) {
    className='grid h-full group  data-[minimal=true]:max-w-[96px]'
    style={{ gridTemplateRows: isMinimal ? '1fr' : '1fr auto' }}
   >
-   <div className='relative min-h-40 group-data-[minimal=true]:min-h-0 '>
+   <div className='relative min-h-32 group-data-[minimal=true]:min-h-0 '>
     <div
      className={`z-1 rounded-2xl h-full flex flex-col justify-start text-start p-0 overflow-hidden shadow-lg bg-gray-50 dark:bg-neutral-900 transition-colors ${isMinimal ? `mx-1 aspect-square border-2 ${tableStyles.border} ${tableStyles.backgroundColor} max-w-24 max-h-24` : 'mx-3 border-2 border-transparent hover:border-2 hover:border-gray-500 border-dotted'}`}
     >
      <div
-      className={`relative flex flex-col grow items-stretch ${isMinimal ? 'p-1.5 gap-0.5 justify-center' : 'p-2 gap-4'}`}
+      className={`relative flex flex-col grow items-stretch ${isMinimal ? 'p-1.5 gap-0.5 justify-center' : 'p-2'}`}
      >
       {table.vip && !isMinimal && (
        <div className='absolute top-11 start-0 end-0.5 text-end text-4xl text-amber-400/40 dark:text-amber-500/40 font-en-roboto'>
@@ -98,7 +105,6 @@ export default function SalonTableDemo({ table }: { table: MockTable }) {
        </div>
       )}
 
-      {/* State Badge - Only in normal mode */}
       {!isMinimal && (
        <div
         className={`p-1 rounded-2xl border border-dashed text-center ${tableStyles.backgroundColor} ${tableStyles.border} ${tableStyles.text}`}
@@ -107,9 +113,8 @@ export default function SalonTableDemo({ table }: { table: MockTable }) {
        </div>
       )}
 
-      {/* Table Number */}
       <div
-       className={`text-start ${isMinimal ? 'text-center' : 'ps-2'} grow flex flex-col justify-center`}
+       className={`text-start ${isMinimal ? 'text-center' : 'ps-2'} flex flex-col justify-center grow`}
       >
        <div className='flex items-center gap-2'>
         <h3
@@ -130,7 +135,6 @@ export default function SalonTableDemo({ table }: { table: MockTable }) {
        )}
       </div>
 
-      {/* Footer */}
       {!isMinimal && (
        <div className='flex items-center justify-between gap-4'>
         <div className='flex items-center gap-1 text-base text-neutral-600 dark:text-neutral-400 font-medium'>
@@ -157,7 +161,6 @@ export default function SalonTableDemo({ table }: { table: MockTable }) {
        </div>
       )}
 
-      {/* Minimal mode footer */}
       {isMinimal && (
        <div className='flex flex-col items-center gap-0'>
         <div
@@ -179,7 +182,6 @@ export default function SalonTableDemo({ table }: { table: MockTable }) {
     </div>
    </div>
 
-   {/* Options Button - Hidden in minimal mode */}
    {!isMinimal && (
     <div className='mx-3 -mt-4'>
      <Button

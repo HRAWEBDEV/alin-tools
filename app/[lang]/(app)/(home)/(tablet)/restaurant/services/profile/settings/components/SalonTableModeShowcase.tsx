@@ -1,4 +1,5 @@
 import SalonTableDemo from './SalonTableDemo';
+import { motion } from 'motion/react';
 
 const mockTables = [
  {
@@ -13,18 +14,18 @@ const mockTables = [
   OccupiedDateTimeOffset: null,
   orderID: null,
  },
- {
-  tableNo: 2,
-  tableCapacity: 6,
-  occupiedPerson: 0,
-  tableStateTypeID: 2,
-  tableTypeID: 1,
-  vip: false,
-  saleTypeName: '',
-  customerName: '',
-  OccupiedDateTimeOffset: null,
-  orderID: null,
- },
+ //  {
+ //   tableNo: 2,
+ //   tableCapacity: 6,
+ //   occupiedPerson: 0,
+ //   tableStateTypeID: 2,
+ //   tableTypeID: 1,
+ //   vip: false,
+ //   saleTypeName: '',
+ //   customerName: '',
+ //   OccupiedDateTimeOffset: null,
+ //   orderID: null,
+ //  },
  {
   tableNo: 3,
   tableCapacity: 4,
@@ -37,18 +38,18 @@ const mockTables = [
   OccupiedDateTimeOffset: null,
   orderID: null,
  },
- {
-  tableNo: 4,
-  tableCapacity: 6,
-  occupiedPerson: 4,
-  tableStateTypeID: 4,
-  tableTypeID: 1,
-  vip: false,
-  saleTypeName: 'سرو در محل',
-  customerName: 'سارا محمدی',
-  OccupiedDateTimeOffset: new Date().toISOString(),
-  orderID: 123,
- },
+ //  {
+ //   tableNo: 4,
+ //   tableCapacity: 6,
+ //   occupiedPerson: 4,
+ //   tableStateTypeID: 4,
+ //   tableTypeID: 1,
+ //   vip: false,
+ //   saleTypeName: 'سرو در محل',
+ //   customerName: 'سارا محمدی',
+ //   OccupiedDateTimeOffset: new Date().toISOString(),
+ //   orderID: 123,
+ //  },
  {
   tableNo: 5,
   tableCapacity: 4,
@@ -61,53 +62,66 @@ const mockTables = [
   OccupiedDateTimeOffset: new Date(Date.now() - 30 * 60000).toISOString(),
   orderID: 124,
  },
- {
-  tableNo: 6,
-  tableCapacity: 8,
-  occupiedPerson: 6,
-  tableStateTypeID: 6,
-  tableTypeID: 1,
-  vip: false,
-  saleTypeName: 'سرویس اتاق',
-  customerName: 'مریم حسینی',
-  OccupiedDateTimeOffset: new Date(Date.now() - 45 * 60000).toISOString(),
-  orderID: 125,
- },
+ //  {
+ //   tableNo: 6,
+ //   tableCapacity: 8,
+ //   occupiedPerson: 6,
+ //   tableStateTypeID: 6,
+ //   tableTypeID: 1,
+ //   vip: false,
+ //   saleTypeName: 'سرویس اتاق',
+ //   customerName: 'مریم حسینی',
+ //   OccupiedDateTimeOffset: new Date(Date.now() - 45 * 60000).toISOString(),
+ //   orderID: 125,
+ //  },
 
- {
-  tableNo: 7,
-  tableCapacity: 8,
-  occupiedPerson: 0,
-  tableStateTypeID: 1,
-  tableTypeID: 1,
-  vip: false,
-  saleTypeName: '',
-  customerName: '',
-  OccupiedDateTimeOffset: null,
-  orderID: null,
- },
- {
-  tableNo: 8,
-  tableCapacity: 4,
-  occupiedPerson: 3,
-  tableStateTypeID: 4,
-  tableTypeID: 1,
-  vip: false,
-  saleTypeName: 'بیرون بر',
-  customerName: 'حسین رضایی',
-  OccupiedDateTimeOffset: new Date(Date.now() - 15 * 60000).toISOString(),
-  orderID: 126,
- },
+ //  {
+ //   tableNo: 7,
+ //   tableCapacity: 8,
+ //   occupiedPerson: 0,
+ //   tableStateTypeID: 1,
+ //   tableTypeID: 1,
+ //   vip: false,
+ //   saleTypeName: '',
+ //   customerName: '',
+ //   OccupiedDateTimeOffset: null,
+ //   orderID: null,
+ //  },
+ //  {
+ //   tableNo: 8,
+ //   tableCapacity: 4,
+ //   occupiedPerson: 3,
+ //   tableStateTypeID: 4,
+ //   tableTypeID: 1,
+ //   vip: false,
+ //   saleTypeName: 'بیرون بر',
+ //   customerName: 'حسین رضایی',
+ //   OccupiedDateTimeOffset: new Date(Date.now() - 15 * 60000).toISOString(),
+ //   orderID: 126,
+ //  },
 ];
 
-export default function SalonTableDemoShowcase() {
+interface SalonTableDemoShowcaseProps {
+ mode: 'normal' | 'minimal';
+}
+
+export default function SalonTableDemoShowcase({
+ mode,
+}: SalonTableDemoShowcaseProps) {
  return (
   <div dir='rtl'>
-   <div className='grid gap-4 grid-cols-[repeat(auto-fill,minmax(11rem,12rem))] sm:grid-cols-[repeat(auto-fill,minmax(11rem,12rem))] justify-center'>
+   <motion.div
+    layout
+    className={`grid gap-4 justify-center overflow-hidden min-h-56   ${
+     mode === 'minimal'
+      ? 'grid-cols-[repeat(auto-fill,minmax(6rem,1fr))]'
+      : 'grid-cols-[repeat(auto-fill,minmax(11rem,12rem))] sm:grid-cols-[repeat(auto-fill,minmax(11rem,12rem))]'
+    }`}
+   >
     {mockTables.map((table) => (
-     <SalonTableDemo key={table.tableNo} table={table} />
+     <SalonTableDemo key={table.tableNo} table={table} mode={mode} />
     ))}
-   </div>
+   </motion.div>
   </div>
  );
 }
