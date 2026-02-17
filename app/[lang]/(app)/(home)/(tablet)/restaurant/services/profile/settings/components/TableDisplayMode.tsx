@@ -52,9 +52,11 @@ export default function TableDisplayMode() {
    if (value === normalMode) {
     setActiveTabDescription(normalModeDescription);
     localStorage.setItem(TABLE_VIEW_MODE_KEY, 'normalMode');
+    window.dispatchEvent(new Event('local-storage'));
    } else {
     setActiveTabDescription(minimalModeDescription);
     localStorage.setItem(TABLE_VIEW_MODE_KEY, 'minimalMode');
+    window.dispatchEvent(new Event('local-storage'));
    }
   }
  };
