@@ -201,7 +201,7 @@ export default function SettingsProvider({
        </div>
        {title}
       </DrawerTitle>
-      <BackBtn className='text-primary/80  hover:text-primary dark:border-primary' />
+      <BackBtn className='text-primary/80  hover:text-primary dark:border-primary border-primary' />
      </DrawerHeader>
     );
    case 'salonsConfig':
