@@ -3,7 +3,6 @@ import { ReactNode, useState } from 'react';
 import { SettingsContext, type Settings, ActiveView } from './settingsContext';
 import {
  Drawer,
- DrawerClose,
  DrawerContent,
  DrawerHeader,
  DrawerTitle,
@@ -11,12 +10,7 @@ import {
 import dynamic from 'next/dynamic';
 import { useRestaurantShareDictionary } from '../../share-dictionary/restaurantShareDictionaryContext';
 import { Button } from '@/components/ui/button';
-import {
- RiSunLine,
- RiSettings4Fill,
- RiCloseFill,
- RiCloseLargeFill,
-} from 'react-icons/ri';
+import { RiSunLine, RiSettings4Fill } from 'react-icons/ri';
 import SpinnerLoading from './components/SpinnerLoading';
 import { AnimatePresence } from 'motion/react';
 import { motion } from 'motion/react';

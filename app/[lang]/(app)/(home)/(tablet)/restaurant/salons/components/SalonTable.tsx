@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { type SalonsDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/salons/dictionary';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -48,6 +49,12 @@ export default function SalonTable({
    // onCloseOrder,
   },
  } = useSalonBaseConfigContext();
+ const [isOpen, setIsOpen] = useState(false);
+
+ const handleOpenChange = (newOpen: boolean) => {
+  setIsOpen(newOpen);
+  if (newOpen) changeSelectedTable(table);
+ };
  const tableStyles = getTableStateStyles(table.tableStateTypeID);
  const { locale, localeInfo } = useBaseConfig();
  const tableRows = getTableRows(table.tableCapacity, table.occupiedPerson || 0);
@@ -142,16 +149,15 @@ export default function SalonTable({
     style={{ gridTemplateRows: '1fr' }}
    >
     <DropdownMenu
+     open={isOpen}
      dir={localeInfo.contentDirection}
-     onOpenChange={(newValue) => {
-      if (newValue) {
-       changeSelectedTable(table);
-      }
-     }}
+     onOpenChange={handleOpenChange}
     >
      <DropdownMenuTrigger asChild>
       <Button
        variant={'outline'}
+       onPointerDown={(e) => e.preventDefault()}
+       onClick={() => setIsOpen((prev) => !prev)}
        className={`z-1 rounded-2xl h-full flex-col justify-start text-start p-0 overflow-hidden shadow-lg transition-colors mx-1 aspect-square border-2 ${tableStyles.border} ${tableStyles.backgoundColor} max-w-24 max-h-24 group-data-[bold=true]:border-4`}
       >
        <div className='relative flex flex-col grow items-stretch p-1.5 gap-0.5 justify-center w-full h-full'>
@@ -299,17 +305,16 @@ export default function SalonTable({
    </div>
    <div className='mx-3 -mt-4'>
     <DropdownMenu
+     open={isOpen}
      dir={localeInfo.contentDirection}
-     onOpenChange={(newValue) => {
-      if (newValue) {
-       changeSelectedTable(table);
-      }
-     }}
+     onOpenChange={handleOpenChange}
     >
      {!showTransferTable && !showMergeTable && (
       <DropdownMenuTrigger asChild>
        <Button
         variant='outline'
+        onPointerDown={(e) => e.preventDefault()}
+        onClick={() => setIsOpen((prev) => !prev)}
         className='w-full h-auto pt-5 pb-1 bg-neutral-50 dark:bg-neutral-900 text-primary rounded-xl rounded-ss-none rounded-se-none'
        >
         <SlOptions className='size-6' />
