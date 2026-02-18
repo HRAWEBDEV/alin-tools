@@ -11,13 +11,13 @@ import {
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useRestaurantShareDictionary } from '../share-dictionary/restaurantShareDictionaryContext';
 import { Button } from '@/components/ui/button';
-import { RiLogoutBoxRLine, RiSettings5Line } from 'react-icons/ri';
+import { RiLogoutBoxRLine, RiExchangeBoxLine } from 'react-icons/ri';
 import { useLogout } from '@/app/[lang]/(app)/login/hooks/useLogout';
 import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
 import { useSettingsContext } from './settings/settingsContext';
 
 export default function ProfileProvider({ children }: { children: ReactNode }) {
- const { userInfoRouterStorage, data } = useUserInfoRouter();
+ const { userInfoRouterStorage, data, changeProgram } = useUserInfoRouter();
  const logout = useLogout();
  const {
   restaurantShareDictionary: {
@@ -89,14 +89,14 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
         <Button
          variant='ghost'
          size={'icon-lg'}
-         className='text-base p-4 px-8 w-full justify-start h-[unset] gap-4 items-center text-gray-500 dark:text-gray-600'
          onClick={() => {
-          toggleIsSettingsOpen();
-          handleToggleProfile();
+          setIsOpen(false);
+          changeProgram();
          }}
+         className='text-base p-4 px-8 w-full justify-start h-[unset] gap-4 items-center text-primary'
         >
-         <RiSettings5Line className='size-8 dark:text-gray-200' />
-         <span className='dark:text-gray-200'>{profile.settings}</span>
+         <RiExchangeBoxLine className='size-8 ' />
+         <span>{profile.changeProgram}</span>
         </Button>
        </li>
        <li>

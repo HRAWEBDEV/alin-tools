@@ -9,6 +9,7 @@ interface UserInfoStoreContext {
  isLoading: boolean;
  isFetching: boolean;
  isError: boolean;
+ changeProgram: () => void;
 }
 
 const userInfoRouterContext = createContext<UserInfoStoreContext | null>(null);
