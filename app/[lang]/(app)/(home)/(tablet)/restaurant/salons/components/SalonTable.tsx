@@ -157,7 +157,17 @@ export default function SalonTable({
       <Button
        variant={'outline'}
        onPointerDown={(e) => e.preventDefault()}
-       onClick={() => setIsOpen((prev) => !prev)}
+       onClick={() => {
+        if (showTransferTable) {
+         transferTableTo(table);
+         return;
+        }
+        if (showMergeTable) {
+         mergeTableTo(table);
+         return;
+        }
+        handleOpenChange(true);
+       }}
        className={`z-1 rounded-2xl h-full flex-col justify-start text-start p-0 overflow-hidden shadow-lg transition-colors mx-1 aspect-square border-2 ${tableStyles.border} ${tableStyles.backgoundColor} max-w-24 max-h-24 group-data-[bold=true]:border-4`}
       >
        <div className='relative flex flex-col grow items-stretch p-1.5 gap-0.5 justify-center w-full h-full'>
@@ -314,7 +324,7 @@ export default function SalonTable({
        <Button
         variant='outline'
         onPointerDown={(e) => e.preventDefault()}
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={() => handleOpenChange(true)}
         className='w-full h-auto pt-5 pb-1 bg-neutral-50 dark:bg-neutral-900 text-primary rounded-xl rounded-ss-none rounded-se-none'
        >
         <SlOptions className='size-6' />
