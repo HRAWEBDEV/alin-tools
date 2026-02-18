@@ -18,7 +18,7 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
  } = useSettingsContext();
  const tablesGridClass =
   salonsConfig.displayMode === 'minimal'
-   ? 'grid gap-4 justify-center grid-cols-[repeat(auto-fill,minmax(6rem,1fr))]'
+   ? 'grid gap-2 gap-y-4 justify-center grid-cols-[repeat(auto-fill,minmax(6rem,1fr))]'
    : 'grid gap-6 grid-cols-[repeat(auto-fill,minmax(9rem,10rem))] sm:grid-cols-[repeat(auto-fill,minmax(10rem,11rem))] justify-center';
 
  const {

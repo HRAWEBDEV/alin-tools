@@ -158,19 +158,18 @@ export default function SalonTable({
         <div className='text-center flex flex-col justify-center grow'>
          <div className='flex items-center gap-2'>
           <h3
-           className={`${tableStyles.text} font-en-roboto text-2xl mx-auto group-data-[bold=true]:font-black`}
+           className={`${tableStyles.text} font-en-roboto text-3xl mx-auto group-data-[bold=true]:font-black`}
           >
            {table.tableNo.toString().padStart(2, '0')}
           </h3>
          </div>
         </div>
-
         <div className='flex flex-col items-center gap-0'>
          <div
           style={{
            direction: 'ltr',
           }}
-          className={`font-medium text-[10px] ${tableStyles.text} group-data-[bold=true]:font-bold`}
+          className={`font-medium text-[0.9rem] ${tableStyles.text} group-data-[bold=true]:font-bold`}
          >
           {table.occupiedPerson || '-'}/{table.tableCapacity}
          </div>
@@ -237,7 +236,7 @@ export default function SalonTable({
         ? '#'
         : newOrderRedirectLink
       }
-      className='relative flex! flex-col grow items-stretch bg-background! p-2'
+      className={`relative flex! flex-col grow items-stretch ${isBold ? tableStyles.backgoundColor : 'bg-background!'} p-2`}
      >
       {table.vip && (
        <div className='absolute top-11 start-0 end-0 text-end text-4xl text-amber-400/40 dark:text-amber-500/40 font-en-roboto group-data-[bold=true]:font-bold'>
