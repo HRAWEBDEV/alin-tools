@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { type SalonsDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/salons/dictionary';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -7,7 +8,6 @@ import { SlOptions } from 'react-icons/sl';
 import { TableStateTypes, getTableStateStyles } from '../utils/tableStates';
 import { getTableRows } from '../utils/getTableRows';
 import { motion } from 'motion/react';
-import { IoMdCloseCircleOutline } from 'react-icons/io';
 import { AiOutlineMergeCells } from 'react-icons/ai';
 import {
  DropdownMenu,
@@ -25,9 +25,13 @@ import { useSalonBaseConfigContext } from '../services/salon-base-config/salonBa
 export default function SalonTable({
  table,
  dic,
+ isMinimal,
+ isBold,
 }: {
  dic: SalonsDictionary;
  table: Table;
+ isMinimal?: boolean;
+ isBold?: boolean;
 }) {
  const {
   initData,
@@ -42,9 +46,15 @@ export default function SalonTable({
    changeShowMergeTable,
    mergeTableTo,
    transferTableTo,
-   onCloseOrder,
+   // onCloseOrder,
   },
  } = useSalonBaseConfigContext();
+ const [isOpen, setIsOpen] = useState(false);
+
+ const handleOpenChange = (newOpen: boolean) => {
+  setIsOpen(newOpen);
+  if (newOpen) changeSelectedTable(table);
+ };
  const tableStyles = getTableStateStyles(table.tableStateTypeID);
  const { locale, localeInfo } = useBaseConfig();
  const tableRows = getTableRows(table.tableCapacity, table.occupiedPerson || 0);
@@ -62,8 +72,130 @@ export default function SalonTable({
  const newOrderRedirectLink =
   `/${locale}/restaurant/new-order?salonID=${selectedHall?.key}&salonName=${selectedHall?.value}&tableID=${table.tableID}&tableNo=${table.tableNo}&orderID=${table.orderID}&fromSalons=true` as const;
 
+ const menuContent = (
+  <DropdownMenuContent align='start' className='w-56'>
+   <DropdownMenuGroup>
+    {table.tableStateTypeID !== TableStateTypes.outOfService && (
+     <DropdownMenuItem className='text-sky-700 dark:text-sky-400' asChild>
+      <Link href={newOrderRedirectLink}>
+       <IoMdAddCircle className='size-8 text-inherit' />
+       <DropdownMenuLabel className='text-base'>
+        {dic.tables.order}
+       </DropdownMenuLabel>
+      </Link>
+     </DropdownMenuItem>
+    )}
+    {(table.tableStateTypeID === TableStateTypes.outOfService ||
+     table.tableStateTypeID === TableStateTypes.readyToService) && (
+     <DropdownMenuItem
+      className='text-yellow-600 dark:text-yellow-400'
+      onClick={() => {
+       onShowChangeTableState(true);
+      }}
+     >
+      <GrStatusUnknown className='size-8 text-inherit' />
+      <DropdownMenuLabel className='text-base'>
+       {dic.tables.changeTableState}
+      </DropdownMenuLabel>
+     </DropdownMenuItem>
+    )}
+    {table.tableStateTypeID !== TableStateTypes.outOfService &&
+     table.tableStateTypeID !== TableStateTypes.readyToService && (
+      <>
+       <DropdownMenuItem
+        className='text-teal-700 dark:text-teal-400'
+        onClick={() => {
+         changeShowTransferTable(true);
+        }}
+       >
+        <TbTransfer className='size-8 text-inherit' />
+        <DropdownMenuLabel className='text-base'>
+         {dic.tables.transferTable}
+        </DropdownMenuLabel>
+       </DropdownMenuItem>
+       <DropdownMenuItem
+        className='text-orange-700 dark:text-orange-400'
+        onClick={() => {
+         changeShowMergeTable(true);
+        }}
+       >
+        <AiOutlineMergeCells className='size-8 text-inherit' />
+        <DropdownMenuLabel className='text-base'>
+         {dic.tables.mergeTables}
+        </DropdownMenuLabel>
+       </DropdownMenuItem>
+       {/* <DropdownMenuItem */}
+       {/*  className='text-rose-700 dark:text-rose-400' */}
+       {/*  onClick={onCloseOrder} */}
+       {/* > */}
+       {/*  <IoMdCloseCircleOutline className='size-8 text-inherit' /> */}
+       {/*  <DropdownMenuLabel className='text-base'> */}
+       {/*   {dic.tables.closeOrder} */}
+       {/*  </DropdownMenuLabel> */}
+       {/* </DropdownMenuItem> */}
+      </>
+     )}
+   </DropdownMenuGroup>
+  </DropdownMenuContent>
+ );
+
+ if (isMinimal) {
+  return (
+   <motion.div
+    layout
+    className='grid group data-[minimal=true]:max-w-[96px]'
+    data-minimal={true}
+    data-bold={isBold}
+    style={{ gridTemplateRows: '1fr' }}
+   >
+    <DropdownMenu
+     open={isOpen}
+     dir={localeInfo.contentDirection}
+     onOpenChange={handleOpenChange}
+    >
+     <DropdownMenuTrigger asChild>
+      <Button
+       variant={'outline'}
+       onPointerDown={(e) => e.preventDefault()}
+       onClick={() => setIsOpen((prev) => !prev)}
+       className={`z-1 rounded-2xl h-full flex-col justify-start text-start p-0 overflow-hidden shadow-lg transition-colors mx-1 aspect-square border-2 ${tableStyles.border} ${tableStyles.backgoundColor} max-w-24 max-h-24 group-data-[bold=true]:border-4`}
+      >
+       <div className='relative flex flex-col grow items-stretch p-1.5 gap-0.5 justify-center w-full h-full'>
+        <div className='text-center flex flex-col justify-center grow'>
+         <div className='flex items-center gap-2'>
+          <h3
+           className={`${tableStyles.text} font-en-roboto text-3xl mx-auto group-data-[bold=true]:font-black`}
+          >
+           {table.tableNo.toString().padStart(2, '0')}
+          </h3>
+         </div>
+        </div>
+        <div className='flex flex-col items-center gap-0'>
+         <div
+          style={{
+           direction: 'ltr',
+          }}
+          className={`font-medium text-[0.9rem] ${tableStyles.text} group-data-[bold=true]:font-bold`}
+         >
+          {table.occupiedPerson || '-'}/{table.tableCapacity}
+         </div>
+         {table.vip && (
+          <span className='text-[8px] text-amber-500 dark:text-amber-400 group-data-[bold=true]:font-bold'>
+           VIP
+          </span>
+         )}
+        </div>
+       </div>
+      </Button>
+     </DropdownMenuTrigger>
+     {menuContent}
+    </DropdownMenu>
+   </motion.div>
+  );
+ }
+
  return (
-  <motion.div layout className='grid'>
+  <motion.div layout className='grid group' data-bold={isBold}>
    <div className='relative min-h-40'>
     {!!tableRows.length && (
      <div
@@ -88,11 +220,18 @@ export default function SalonTable({
     <Button
      variant={'outline'}
      className='z-1 rounded-2xl h-full flex-col justify-start text-start p-0 overflow-hidden mx-3 shadow-lg'
-     asChild
+     asChild={!isMinimal}
      onClick={() => {
       if (selectedTable?.tableNo === table.tableNo) return;
       if (showTransferTable) transferTableTo(table);
       if (showMergeTable) mergeTableTo(table);
+     }}
+     style={{
+      borderColor:
+       tableStyles.border.replace('border-', '') === 'rose-300'
+        ? '#fda4af'
+        : undefined, // Quick fix for border color mapping if needed, or rely on class names
+      //    backgroundColor: tableStyles.backgoundColor, // This should be a class name, not style
      }}
     >
      <Link
@@ -103,20 +242,21 @@ export default function SalonTable({
         ? '#'
         : newOrderRedirectLink
       }
-      className='relative flex! flex-col grow items-stretch bg-background! p-2'
+      className={`relative flex! flex-col grow items-stretch ${isBold ? tableStyles.backgoundColor : 'bg-background!'} p-2`}
      >
       {table.vip && (
-       <div className='absolute top-11 start-0 end-0 text-end text-4xl text-amber-400/40 dark:text-amber-500/40 font-en-roboto'>
+       <div className='absolute top-11 start-0 end-0 text-end text-4xl text-amber-400/40 dark:text-amber-500/40 font-en-roboto group-data-[bold=true]:font-bold'>
         VIP
        </div>
       )}
       <div
-       className={`p-1 rounded-2xl border border-dashed text-center ${tableStyles.backgoundColor} ${tableStyles.border} ${tableStyles.text}`}
+       className={`p-1 rounded-2xl border border-dashed text-center ${tableStyles.backgoundColor} ${tableStyles.border} ${tableStyles.text} `}
       >
-       <span className='text-base font-medium'>
+       <span className='text-base font-medium group-data-[bold=true]:font-bold'>
         <span>
          {initData.tableTypes.find(
-          (item) => item.key === table.tableTypeID.toString(),
+          (item: { key: string; value: string }) =>
+           item.key === table.tableTypeID.toString(),
          )?.value || ''}{' '}
         </span>
         {dic.tables[tableStyles.type]}
@@ -126,22 +266,22 @@ export default function SalonTable({
       <div className='text-start ps-2 grow'>
        <div className='flex items-center gap-2'>
         <h3
-         className={`text-2xl lg:text-3xl ${tableStyles.text} font-en-roboto`}
+         className={`text-2xl lg:text-3xl ${tableStyles.text} font-en-roboto group-data-[bold=true]:font-black`}
         >
          {table.tableNo.toString().padStart(2, '0')}
         </h3>
        </div>
        <div>
-        <p className='text-sm text-primary text-wrap'>
+        <p className='text-sm text-primary text-wrap group-data-[bold=true]:font-medium'>
          {table.saleTypeName || ''}
         </p>
-        <p className='text-md text-neutral-500 dark:text-neutral-400 text-wrap'>
+        <p className='text-md text-neutral-500 dark:text-neutral-400 text-wrap group-data-[bold=true]:font-medium'>
          {table.customerName || ''}
         </p>
        </div>
       </div>
       <div className='flex items-center justify-between gap-4'>
-       <div className='flex items-center gap-1 text-base text-neutral-600 dark:text-neutral-400 font-medium'>
+       <div className='flex items-center gap-1 text-base text-neutral-600 dark:text-neutral-400 font-medium group-data-[bold=true]:font-bold'>
         <span>
          {table.OccupiedDateTimeOffset
           ? new Date(table.OccupiedDateTimeOffset).toLocaleTimeString(locale, {
@@ -155,7 +295,7 @@ export default function SalonTable({
         style={{
          direction: 'ltr',
         }}
-        className={`font-medium text-base ${tableStyles.text}`}
+        className={`font-medium text-base ${tableStyles.text} group-data-[bold=true]:font-bold`}
        >
         {table.occupiedPerson || '-'}/{table.tableCapacity}
        </div>
@@ -165,87 +305,23 @@ export default function SalonTable({
    </div>
    <div className='mx-3 -mt-4'>
     <DropdownMenu
+     open={isOpen}
      dir={localeInfo.contentDirection}
-     onOpenChange={(newValue) => {
-      if (newValue) {
-       changeSelectedTable(table);
-      }
-     }}
+     onOpenChange={handleOpenChange}
     >
      {!showTransferTable && !showMergeTable && (
       <DropdownMenuTrigger asChild>
        <Button
         variant='outline'
+        onPointerDown={(e) => e.preventDefault()}
+        onClick={() => setIsOpen((prev) => !prev)}
         className='w-full h-auto pt-5 pb-1 bg-neutral-50 dark:bg-neutral-900 text-primary rounded-xl rounded-ss-none rounded-se-none'
        >
         <SlOptions className='size-6' />
        </Button>
       </DropdownMenuTrigger>
      )}
-     <DropdownMenuContent align='start' className='w-56'>
-      <DropdownMenuGroup>
-       {table.tableStateTypeID !== TableStateTypes.outOfService && (
-        <DropdownMenuItem className='text-sky-700 dark:text-sky-400' asChild>
-         <Link href={newOrderRedirectLink}>
-          <IoMdAddCircle className='size-8 text-inherit' />
-          <DropdownMenuLabel className='text-base'>
-           {dic.tables.order}
-          </DropdownMenuLabel>
-         </Link>
-        </DropdownMenuItem>
-       )}
-       {(table.tableStateTypeID === TableStateTypes.outOfService ||
-        table.tableStateTypeID === TableStateTypes.readyToService) && (
-        <DropdownMenuItem
-         className='text-yellow-600 dark:text-yellow-400'
-         onClick={() => {
-          onShowChangeTableState(true);
-         }}
-        >
-         <GrStatusUnknown className='size-8 text-inherit' />
-         <DropdownMenuLabel className='text-base'>
-          {dic.tables.changeTableState}
-         </DropdownMenuLabel>
-        </DropdownMenuItem>
-       )}
-       {table.tableStateTypeID !== TableStateTypes.outOfService &&
-        table.tableStateTypeID !== TableStateTypes.readyToService && (
-         <>
-          <DropdownMenuItem
-           className='text-teal-700 dark:text-teal-400'
-           onClick={() => {
-            changeShowTransferTable(true);
-           }}
-          >
-           <TbTransfer className='size-8 text-inherit' />
-           <DropdownMenuLabel className='text-base'>
-            {dic.tables.transferTable}
-           </DropdownMenuLabel>
-          </DropdownMenuItem>
-          <DropdownMenuItem
-           className='text-orange-700 dark:text-orange-400'
-           onClick={() => {
-            changeShowMergeTable(true);
-           }}
-          >
-           <AiOutlineMergeCells className='size-8 text-inherit' />
-           <DropdownMenuLabel className='text-base'>
-            {dic.tables.mergeTables}
-           </DropdownMenuLabel>
-          </DropdownMenuItem>
-          {/* <DropdownMenuItem */}
-          {/*  className='text-rose-700 dark:text-rose-400' */}
-          {/*  onClick={onCloseOrder} */}
-          {/* > */}
-          {/*  <IoMdCloseCircleOutline className='size-8 text-inherit' /> */}
-          {/*  <DropdownMenuLabel className='text-base'> */}
-          {/*   {dic.tables.closeOrder} */}
-          {/*  </DropdownMenuLabel> */}
-          {/* </DropdownMenuItem> */}
-         </>
-        )}
-      </DropdownMenuGroup>
-     </DropdownMenuContent>
+     {menuContent}
     </DropdownMenu>
    </div>
   </motion.div>

@@ -10,7 +10,19 @@ import {
 import { Button } from '@/components/ui/button';
 import { type OrderInfo } from '../../schemas/orderInfoSchema';
 import { type NewOrderDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/new-order/dictionary';
-import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseConfigContext';
+import {
+ Field,
+ FieldGroup,
+ FieldLabel,
+ FieldError,
+ FieldContent,
+} from '@/components/ui/field';
+import {
+ InputGroup,
+ InputGroupInput,
+ InputGroupTextarea,
+} from '@/components/ui/input-group';
+import { NumericFormat } from 'react-number-format';
 import {
  Drawer,
  DrawerTrigger,
@@ -22,18 +34,19 @@ import {
 import { ChevronsUpDown } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { SaleTypes } from '../../utils/SaleTypes';
+import { useSettingsContext } from '../../../services/profile/settings/settingsContext';
+import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseConfigContext';
 
 export default function QuickOrderInfoDialog({
  dic,
 }: {
  dic: NewOrderDictionary;
 }) {
+ const { orderConfigSetup } = useSettingsContext();
  const {
-  quickOrderInfoIsOpen,
-  closeQuickOrderInfo,
+  queries: { orderID },
   initialDataInfo: { data },
  } = useOrderBaseConfigContext();
-
  const {
   register,
   control,
@@ -42,19 +55,17 @@ export default function QuickOrderInfoDialog({
   formState: { errors },
  } = useFormContext<OrderInfo>();
 
- const handleSubmit = (e: React.FormEvent) => {
-  e.preventDefault();
-  closeQuickOrderInfo();
- };
-
  return (
-  <Dialog open={quickOrderInfoIsOpen} onOpenChange={closeQuickOrderInfo}>
+  <Dialog
+   defaultOpen={
+    !orderID && orderConfigSetup.orderConfig.getInitInfo === 'active'
+   }
+  >
    <DialogContent className='w-[min(95%,35rem)] max-w-none p-0'>
     <DialogHeader className='p-4'>
      <DialogTitle>{dic.tools.orderInfo}</DialogTitle>
     </DialogHeader>
-
-    <form onSubmit={handleSubmit} className='p-4 pt-0 space-y-4'>
+    <form onSubmit={(e) => e.preventDefault()} className='p-4 pt-0 space-y-4'>
      <div>
       <label className='block mb-2 font-medium'>{dic.orderInfo.saleType}</label>
       <Controller
@@ -125,72 +136,73 @@ export default function QuickOrderInfoDialog({
        )}
       />
      </div>
-
-     <div>
-      <label className='block mb-2 font-medium'>
-       {dic.orderInfo.guestCount}
-      </label>
-      <input
-       type='number'
-       {...register('persons')}
-       className='w-full border rounded p-2 h-11'
+     <Field>
+      <FieldLabel htmlFor='persons'>{dic.orderInfo.guestCount}</FieldLabel>
+      <Controller
+       control={control}
+       name='persons'
+       render={({ field: { value, onChange, ...other } }) => (
+        <InputGroup className='h-11'>
+         <NumericFormat
+          id='persons'
+          {...other}
+          value={value}
+          onValueChange={({ floatValue }) => onChange(floatValue || '')}
+          customInput={InputGroupInput}
+          allowNegative={false}
+          decimalScale={0}
+          allowLeadingZeros={false}
+         />
+        </InputGroup>
+       )}
       />
-      {errors.persons && (
-       <p className='text-red-500 text-sm mt-1'>{errors.persons.message}</p>
-      )}
-     </div>
-     <div>
-      <label className='block mb-2 font-medium'>
-       {dic.orderInfo.customerName}
-      </label>
-      <input
-       type='text'
-       {...register('customerName')}
-       className='w-full border rounded p-2 h-11'
+     </Field>
+     <Field>
+      <FieldLabel htmlFor='customer'>{dic.orderInfo.customerName}</FieldLabel>
+      <Controller
+       control={control}
+       name='customerName'
+       render={({ field: { value, ...other } }) => (
+        <InputGroup className='h-11'>
+         <InputGroupInput id='customer' value={value} {...other} />
+        </InputGroup>
+       )}
       />
-      {errors.customerName && (
-       <p className='text-red-500 text-sm mt-1'>
-        {errors.customerName.message}
-       </p>
-      )}
-     </div>
-     <div>
-      <label className='block mb-2 font-medium'>{dic.orderInfo.bonNo}</label>
-      <input
-       type='text'
-       {...register('bonNo')}
-       className='w-full border rounded p-2 h-11'
+     </Field>
+     <Field>
+      <FieldLabel htmlFor='bonNo'>{dic.orderInfo.bonNo}</FieldLabel>
+      <Controller
+       control={control}
+       name='bonNo'
+       render={({ field: { value, onChange, ...other } }) => (
+        <InputGroup className='h-11'>
+         <NumericFormat
+          {...other}
+          value={value}
+          onValueChange={({ floatValue }) => onChange(floatValue || '')}
+          id='bonNo'
+          customInput={InputGroupInput}
+          allowNegative={false}
+          decimalScale={0}
+          allowLeadingZeros={false}
+         />
+        </InputGroup>
+       )}
       />
-      {errors.bonNo && (
-       <p className='text-red-500 text-sm mt-1'>{errors.bonNo.message}</p>
-      )}
-     </div>
-     <div>
-      <label className='block mb-2 font-medium'>
-       {dic.orderInfo.description}
-      </label>
-      <textarea
-       {...register('comment')}
-       className='w-full border rounded p-2'
-       rows={3}
-      />
-      {errors.comment && (
-       <p className='text-red-500 text-sm mt-1'>{errors.comment.message}</p>
-      )}
-     </div>
+     </Field>
+     <Field className='col-span-full'>
+      <FieldLabel htmlFor='description'>{dic.orderInfo.description}</FieldLabel>
+      <InputGroup>
+       <InputGroupTextarea id='description' {...register('comment')} />
+      </InputGroup>
+     </Field>
 
      <DialogFooter className='pt-4 felx items-center justify-between'>
-      <Button
-       type='button'
-       variant='outline'
-       onClick={() => closeQuickOrderInfo()}
-       className='flex-1'
-      >
-       {dic.orderConfirm.cancel}
-      </Button>
-      <Button className='flex-1' type='submit'>
-       {dic.orderConfirm.confirm}
-      </Button>
+      <DrawerClose asChild>
+       <Button type='button' variant='outline' className='flex-1'>
+        {dic.orderConfirm.close}
+       </Button>
+      </DrawerClose>
      </DialogFooter>
     </form>
    </DialogContent>

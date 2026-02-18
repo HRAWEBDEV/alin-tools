@@ -10,11 +10,17 @@ import NoItemFound from '@/app/[lang]/(app)/components/NoItemFound';
 import UnExpectedError from '@/app/[lang]/(app)/components/UnExpectedError';
 import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
 import { Button } from '@/components/ui/button';
-
-const tablesGridClass =
- 'grid gap-6 grid-cols-[repeat(auto-fill,minmax(9rem,10rem))] sm:grid-cols-[repeat(auto-fill,minmax(10rem,11rem))] justify-center';
+import { useSettingsContext } from '../../services/profile/settings/settingsContext';
 
 export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
+ const {
+  salonsConfigSetup: { salonsConfig },
+ } = useSettingsContext();
+ const tablesGridClass =
+  salonsConfig.displayMode === 'minimal'
+   ? 'grid gap-2 gap-y-4 justify-center grid-cols-[repeat(auto-fill,minmax(6rem,1fr))]'
+   : 'grid gap-6 grid-cols-[repeat(auto-fill,minmax(9rem,10rem))] sm:grid-cols-[repeat(auto-fill,minmax(10rem,11rem))] justify-center';
+
  const {
   initData: { defaultSaleTimeID, salons },
   hallsInfo: {
@@ -66,7 +72,12 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
    </div>
    {showMergeTable && selectedTable && (
     <div className={tablesGridClass + ' pb-4 mb-2 border-b border-input'}>
-     <SalonTable dic={dic} table={selectedTable} />
+     <SalonTable
+      dic={dic}
+      table={selectedTable}
+      isMinimal={salonsConfig.displayMode === 'minimal'}
+      isBold={salonsConfig.boldStyle}
+     />
      <div className='col-span-2 flex flex-col'>
       <p className='text-lg font-medium text-rose-700 dark:text-rose-400 mb-6'>
        {dic.toMergeTableSelectSelectAvailableTables}
@@ -86,7 +97,12 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
    )}
    {showTransferTable && selectedTable && (
     <div className={tablesGridClass + ' pb-4 mb-2 border-b border-input'}>
-     <SalonTable dic={dic} table={selectedTable} />
+     <SalonTable
+      dic={dic}
+      table={selectedTable}
+      isMinimal={salonsConfig.displayMode === 'minimal'}
+      isBold={salonsConfig.boldStyle}
+     />
      <div className='col-span-2 flex flex-col'>
       <p className='text-lg font-medium text-rose-700 dark:text-rose-400 mb-6'>
        {dic.toTransferTableSelectSelectAvailableTables}
@@ -120,7 +136,13 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
      <AnimatePresence>
       <div className={tablesGridClass}>
        {filteredData.map((table) => (
-        <SalonTable key={table.tableID} dic={dic} table={table} />
+        <SalonTable
+         key={table.tableID}
+         dic={dic}
+         table={table}
+         isMinimal={salonsConfig.displayMode === 'minimal'}
+         isBold={salonsConfig.boldStyle}
+        />
        ))}
       </div>
      </AnimatePresence>
