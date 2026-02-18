@@ -37,10 +37,7 @@ export default function SalonsConfig() {
    className='flex flex-col justify-start gap-6 px-0 mt-4 overflow-y-auto overflow-x-hidden'
   >
    <div className='flex items-center flex-wrap gap-4 px-6'>
-    <h4 className='text-xl text-right '>
-     {settings.components.tablesDisplayMode.title}:
-    </h4>
-
+    <h4 className='text-lg'>{settings.components.tablesDisplayMode.title}:</h4>
     <AnimatedTabs
      className='basis-[20rem]'
      tabs={salonsDisplayOptions}
@@ -66,9 +63,9 @@ export default function SalonsConfig() {
        onChangeSalonsConfig('boldStyle', newValue)
       }
       dir='ltr'
-      className='cursor-pointer'
+      className='cursor-pointer scale-125'
      />
-     <Label htmlFor='bold-mode-switch' className='text-lg'>
+     <Label htmlFor='bold-mode-switch' className='text-base'>
       {settings.components.tablesDisplayMode.boldStyle}
      </Label>
     </div>

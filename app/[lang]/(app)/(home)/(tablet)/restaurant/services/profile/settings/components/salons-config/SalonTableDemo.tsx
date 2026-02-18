@@ -90,7 +90,7 @@ export default function SalonTableDemo({
   >
    <div className='relative min-h-32 group-data-[minimal=true]:min-h-0 '>
     <div
-     className={`z-1 rounded-2xl h-full flex flex-col justify-start text-start p-0 overflow-hidden shadow-lg bg-gray-50 dark:bg-neutral-900 transition-colors ${isMinimal ? `mx-1 aspect-square border-2 ${tableStyles.border} ${tableStyles.backgroundColor} max-w-24 max-h-24` : 'mx-3 border-2 border-transparent hover:border-2 hover:border-gray-500 border-dotted'} `}
+     className={`z-1 rounded-2xl h-full flex flex-col justify-start text-start p-0 overflow-hidden shadow-lg ${isBold || isMinimal ? tableStyles.backgroundColor : 'bg-gray-50 dark:bg-neutral-900'}  transition-colors ${isMinimal ? `mx-1 aspect-square border-2 ${tableStyles.border} max-w-24 max-h-24` : 'mx-3 border-2 border-transparent hover:border-2 hover:border-gray-500 border-dotted'} `}
     >
      <div
       className={`relative flex flex-col grow items-stretch ${isMinimal ? 'p-1.5 gap-0.5 justify-center' : 'p-2'}`}
@@ -112,42 +112,19 @@ export default function SalonTableDemo({
       )}
 
       <div
-       className={`text-start ${isMinimal ? 'text-center' : 'ps-2'} flex flex-col justify-center grow`}
+       className={`text-start ${isMinimal ? 'text-center' : 'ps-2'} flex flex-col mt-5 grow`}
       >
        <div className='flex items-center gap-2'>
         <h3
-         className={`${tableStyles.text} font-en-roboto ${isMinimal ? 'text-2xl mx-auto' : 'text-2xl lg:text-3xl'} group-data-[bold=true]:font-black`}
+         className={`${tableStyles.text} font-en-roboto ${isMinimal ? 'text-3xl mx-auto' : 'text-2xl lg:text-3xl'} group-data-[bold=true]:font-black`}
         >
          {table.tableNo.toString().padStart(2, '0')}
         </h3>
        </div>
-       {!isMinimal && (
-        <div>
-         <p className='text-sm text-primary text-wrap group-data-[bold=true]:font-medium'>
-          {table.saleTypeName || ''}
-         </p>
-         <p className='text-md text-neutral-500 dark:text-neutral-400 text-wrap group-data-[bold=true]:font-medium'>
-          {table.customerName || ''}
-         </p>
-        </div>
-       )}
       </div>
-
       {!isMinimal && (
        <div className='flex items-center justify-between gap-4'>
-        <div className='flex items-center gap-1 text-base text-neutral-600 dark:text-neutral-400 font-medium group-data-[bold=true]:font-bold'>
-         <span>
-          {table.OccupiedDateTimeOffset
-           ? new Date(table.OccupiedDateTimeOffset).toLocaleTimeString(
-              'fa-IR',
-              {
-               hour: '2-digit',
-               minute: '2-digit',
-              },
-             )
-           : ''}
-         </span>
-        </div>
+        <div></div>
         <div
          style={{
           direction: 'ltr',
@@ -165,7 +142,7 @@ export default function SalonTableDemo({
          style={{
           direction: 'ltr',
          }}
-         className={`font-medium text-[10px] ${tableStyles.text} group-data-[bold=true]:font-bold`}
+         className={`font-medium text-[0.8rem] ${tableStyles.text} group-data-[bold=true]:font-bold`}
         >
          {table.occupiedPerson || '-'}/{table.tableCapacity}
         </div>
