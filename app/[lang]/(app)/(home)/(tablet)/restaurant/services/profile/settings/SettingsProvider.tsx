@@ -1,5 +1,4 @@
 'use client';
-
 import { ReactNode, useState } from 'react';
 import { SettingsContext, type Settings, ActiveView } from './settingsContext';
 import {
@@ -22,15 +21,18 @@ import { AnimatePresence } from 'motion/react';
 import { motion } from 'motion/react';
 import BackBtn from './components/BackBtn';
 import DishIcon from '@/app/[lang]/(app)/components/icons/DishIcon';
+import {
+ type OrderConfig,
+ defaultStorageOrderConfig,
+ getStorageOrderConfig,
+ setStorageOrderConfig,
+} from './utils/OrderConfigSetting';
 
 const views: Record<ActiveView, React.ComponentType> = {
- initialOrderConfig: dynamic(() => import('./components/InitialOrderConfig'), {
+ orderConfig: dynamic(() => import('./components/InitialOrderConfig'), {
   loading: () => <SpinnerLoading />,
  }),
- tablesDisplayMode: dynamic(() => import('./components/TableDisplayMode'), {
-  loading: () => <SpinnerLoading />,
- }),
- tableTheme: dynamic(() => import('./components/TableTheme'), {
+ salonsConfig: dynamic(() => import('./components/TableDisplayMode'), {
   loading: () => <SpinnerLoading />,
  }),
  themeToggler: dynamic(() => import('./components/AppThemeToggler'), {
@@ -43,6 +45,12 @@ export default function SettingsProvider({
 }: {
  children: ReactNode;
 }) {
+ const [orderConfig, setOrderConfig] = useState(() => {
+  if (typeof window !== 'undefined') {
+   return getStorageOrderConfig();
+  }
+  return defaultStorageOrderConfig;
+ });
  const [isOpen, setIsOpen] = useState(false);
  const [activeView, setActiveView] = useState<ActiveView | null>(null);
 
@@ -52,14 +60,31 @@ export default function SettingsProvider({
   },
  } = useRestaurantShareDictionary();
 
+ function handleChangeOrderConfig<T extends keyof OrderConfig>(
+  key: T,
+  value: OrderConfig[T],
+ ) {
+  const newConfig = {
+   ...orderConfig,
+   [key]: value,
+  };
+  setOrderConfig(newConfig);
+  setStorageOrderConfig(newConfig);
+ }
+
  function toggleIsOpen() {
   setIsOpen(!isOpen);
  }
+
  const ctx: Settings = {
   isOpen,
   toggleIsOpen,
   activeView,
   setActiveView,
+  orderConfigSetup: {
+   orderConfig,
+   onChangeOrderConfig: handleChangeOrderConfig,
+  },
  };
 
  function optionsList() {
@@ -86,10 +111,10 @@ export default function SettingsProvider({
       variant='ghost'
       size={'icon-lg'}
       className='text-base p-4 px-8 w-full justify-start h-[unset] gap-4 items-center text-primary hover:text-primary/80 hover:bg-primary/10 transition-colors'
-      onClick={() => setActiveView('initialOrderConfig')}
+      onClick={() => setActiveView('orderConfig')}
      >
       <RiListSettingsFill className='size-8' />
-      <span>{settings.buttons.initialOrderConfig}</span>
+      <span>{settings.buttons.orderConfig}</span>
      </Button>
     </li>
     <li>
@@ -97,23 +122,12 @@ export default function SettingsProvider({
       variant='ghost'
       size={'icon-lg'}
       className='text-base p-4 px-8 w-full justify-start h-[unset] gap-4 items-center text-orange-600 hover:text-orange-500 hover:bg-orange-600/10 transition-colors'
-      onClick={() => setActiveView('tablesDisplayMode')}
+      onClick={() => setActiveView('salonsConfig')}
      >
       <DishIcon className='size-8' />
-      <span>{settings.buttons.tablesDisplayMode}</span>
+      <span>{settings.buttons.salonsConfig}</span>
      </Button>
     </li>
-    {/* <li>
-     <Button
-      variant='ghost'
-      size={'icon-lg'}
-      className='text-base p-4 px-8 w-full justify-start h-[unset] gap-4 items-center text-secondary hover:text-secondary/80 hover:bg-secondary/10 transition-colors'
-      onClick={() => setActiveView('tableTheme')}
-     >
-      <RiPaintFill className='size-8' />
-      <span>{settings.buttons.tableTheme}</span>
-     </Button>
-    </li> */}
    </motion.ul>
   );
  }
@@ -144,7 +158,7 @@ export default function SettingsProvider({
      </DrawerHeader>
     );
 
-   case 'initialOrderConfig':
+   case 'orderConfig':
     return (
      <DrawerHeader className='px-0 flex-row items-center justify-between relative border-b border-b-gray-400 dark:border-b-gray-300 '>
       <DrawerTitle className='dark:text-gray-300 text-gray-600 sm:text-xl text-md flex items-center justify-start gap-4 px-0'>
@@ -157,7 +171,7 @@ export default function SettingsProvider({
       <BackBtn className='text-primary/80 hover:text-primary border-primary' />
      </DrawerHeader>
     );
-   case 'tablesDisplayMode':
+   case 'salonsConfig':
     return (
      <DrawerHeader className='px-2 flex-row items-center justify-between relative border-b border-b-gray-400 dark:border-b-gray-300 '>
       <DrawerTitle className='dark:text-gray-300 text-gray-600 sm:text-xl text-md flex items-center justify-start gap-4 px-0'>
@@ -179,7 +193,13 @@ export default function SettingsProvider({
   <SettingsContext.Provider value={ctx}>
    {children}
 
-   <Drawer open={isOpen} onOpenChange={setIsOpen}>
+   <Drawer
+    open={isOpen}
+    onOpenChange={() => {
+     setActiveView(null);
+     setIsOpen(false);
+    }}
+   >
     <AnimatePresence mode='wait'>
      <DrawerContent
       className={`p-4 [&_div.bg-muted]:bg-primary!  ${activeView ? 'min-h-svh' : 'min-h-[400px]'} transition-all! ease-in-out! duration-300!`}

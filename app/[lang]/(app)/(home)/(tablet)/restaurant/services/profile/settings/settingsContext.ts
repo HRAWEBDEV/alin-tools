@@ -1,15 +1,21 @@
 import { OutOfContext } from '@/utils/OutOfContext';
 import { use, createContext, Dispatch, SetStateAction } from 'react';
-export type ActiveView =
- | 'initialOrderConfig'
- | 'tablesDisplayMode'
- | 'tableTheme'
- | 'themeToggler';
+import { type OrderConfig } from './utils/OrderConfigSetting';
+
+export type ActiveView = 'orderConfig' | 'salonsConfig' | 'themeToggler';
+
 interface Settings {
  isOpen: boolean;
  toggleIsOpen: () => void;
  activeView: string | null;
  setActiveView: Dispatch<SetStateAction<ActiveView | null>>;
+ orderConfigSetup: {
+  orderConfig: OrderConfig;
+  onChangeOrderConfig: <T extends keyof OrderConfig>(
+   key: T,
+   value: OrderConfig[T],
+  ) => unknown;
+ };
 }
 
 const SettingsContext = createContext<null | Settings>(null);

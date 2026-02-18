@@ -1,64 +1,41 @@
 'use client';
-
-import React, { useState } from 'react';
 import { useRestaurantShareDictionary } from '../../../share-dictionary/restaurantShareDictionaryContext';
 import { AnimatedTabs } from '@/app/[lang]/(app)/components/AnimatedTabs';
 import { motion } from 'motion/react';
-import { RiQuestionLine } from 'react-icons/ri';
-
-const STORAGE_KEY = 'initialOrderConfig';
+import { getInitInfoOptions } from '../utils/OrderConfigSetting';
+import { useSettingsContext } from '../settingsContext';
 
 export default function InitialOrderConfigView() {
+ const {
+  orderConfigSetup: { orderConfig, onChangeOrderConfig },
+ } = useSettingsContext();
  const {
   restaurantShareDictionary: {
    components: { settings },
   },
  } = useRestaurantShareDictionary();
 
- const activeValue = settings.components.initialOrderConfig.tabs.active;
- const inactiveValue = settings.components.initialOrderConfig.tabs.inactive;
- const activeTabMessage =
-  settings.components.initialOrderConfig.tabs.activeMessage;
- const inactiveTabMessage =
-  settings.components.initialOrderConfig.tabs.inactiveMesage;
- const [initialOrderConfig, setInitialOrderConfig] = useState(() => {
-  if (typeof window !== 'undefined') {
-   const stored = localStorage.getItem(STORAGE_KEY);
-   return stored === 'active' ? activeValue : inactiveValue;
+ const orderConfigGetInitGuide = (() => {
+  switch (orderConfig.getInitInfo) {
+   case 'active':
+    return settings.components.initialOrderConfig.tabs.activeMessage;
+   case 'inactive':
+    return settings.components.initialOrderConfig.tabs.inactiveMesage;
+   default:
+    return settings.components.initialOrderConfig.tabs.activeMessage;
   }
-  return inactiveValue;
- });
- const [tabGuideMessage, setTabGuideMessage] = useState(() => {
-  if (typeof window !== 'undefined') {
-   const stored = localStorage.getItem(STORAGE_KEY);
-   return stored === 'active' ? activeTabMessage : inactiveTabMessage;
-  }
-  return inactiveTabMessage;
+ })();
+
+ const orderGetInfoOptions = getInitInfoOptions.map((item) => {
+  return {
+   key: item,
+   value: settings.components.initialOrderConfig.tabs[item],
+  };
  });
 
- const handleTabChange = (value: string) => {
-  setInitialOrderConfig(value);
-  if (typeof window !== 'undefined') {
-   if (value === activeValue) {
-    setTabGuideMessage(activeTabMessage);
-    localStorage.setItem(STORAGE_KEY, 'active');
-   } else {
-    setTabGuideMessage(inactiveTabMessage);
-    localStorage.setItem(STORAGE_KEY, 'inactive');
-   }
-  }
- };
-
- const tabs = [
-  {
-   value: activeValue,
-   label: activeValue,
-  },
-  {
-   value: inactiveValue,
-   label: inactiveValue,
-  },
- ];
+ const orderInfoActiveOption = orderGetInfoOptions.find(
+  (option) => option.key === orderConfig.getInitInfo,
+ );
 
  return (
   <motion.div
@@ -68,26 +45,23 @@ export default function InitialOrderConfigView() {
    transition={{ duration: 0.3 }}
    className='flex flex-col justify-start gap-6  px-0 mt-8'
   >
-   <div className='flex flex-wrap items-center flex-1 gap-8'>
-    <h4 className='text-lg text-right '>
-     {settings.components.initialOrderConfig.title}
-    </h4>
-
+   <div className='flex flex-wrap items-center flex-1 gap-4'>
+    <h4 className='text-lg'>{settings.components.initialOrderConfig.title}</h4>
     <AnimatedTabs
-     className='sm:max-w-100 w-full'
-     tabs={tabs}
-     activeTab={initialOrderConfig}
-     onTabChange={handleTabChange}
+     className='basis-[20rem]'
+     tabs={orderGetInfoOptions}
+     activeTab={orderInfoActiveOption}
+     onTabChange={(tab) => {
+      onChangeOrderConfig('getInitInfo', tab.key);
+     }}
+     getTabId={(tab) => tab.key}
+     getTabLabel={(tab) => tab.value}
      activeBgColor='bg-primary'
      activeTextColor='text-white'
      inactiveTextColor='text-gray-700 dark:text-gray-400'
      inactiveBgColor='bg-gray-200 dark:bg-gray-400'
     />
    </div>
-
-   <p className='w-fit p-6 sm:mt-8 mt-4 mb-4 mx-auto font-medium rounded-2xl bg-primary/10 text-primary'>
-    {tabGuideMessage}
-   </p>
   </motion.div>
  );
 }

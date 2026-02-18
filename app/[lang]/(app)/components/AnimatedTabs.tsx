@@ -4,16 +4,12 @@ import { motion } from 'motion/react';
 import { cn } from '@/lib/utils';
 import { ReactNode } from 'react';
 
-interface TabConfig {
- value: string;
- label: string;
- icon?: React.ComponentType<{ className?: string }>;
-}
-
-interface AnimatedTabsProps {
- tabs: TabConfig[];
- activeTab: string;
- onTabChange: (value: string) => void;
+interface AnimatedTabsProps<T> {
+ tabs: T[];
+ activeTab?: T;
+ onTabChange?: (value: T) => void;
+ getTabLabel: (value: T) => string;
+ getTabId: (value: T) => string | number;
  disabled?: boolean;
  className?: string;
  activeBgColor?: string;
@@ -22,17 +18,19 @@ interface AnimatedTabsProps {
  inactiveTextColor?: string;
 }
 
-export function AnimatedTabs({
+export function AnimatedTabs<T>({
  tabs,
  activeTab,
  onTabChange,
+ getTabLabel,
+ getTabId,
  disabled = false,
  className,
  activeBgColor = 'bg-primary',
  activeTextColor = 'text-primary-foreground',
  inactiveBgColor = 'bg-muted',
  inactiveTextColor = 'text-muted-foreground',
-}: AnimatedTabsProps) {
+}: AnimatedTabsProps<T>) {
  return (
   <div
    className={cn(
@@ -42,13 +40,11 @@ export function AnimatedTabs({
    )}
   >
    {tabs.map((tab) => {
-    const Icon = tab.icon;
-    const isActive = tab.value === activeTab;
-
+    const isActive = tab === activeTab;
     return (
      <button
-      key={tab.value}
-      onClick={() => onTabChange(tab.value)}
+      key={getTabId(tab)}
+      onClick={() => onTabChange?.(tab)}
       disabled={disabled}
       className={cn(
        'flex-1 relative py-2 px-4 rounded-2xl text-sm font-medium',
@@ -66,10 +62,8 @@ export function AnimatedTabs({
         transition={{ type: 'spring', stiffness: 500, damping: 30 }}
        />
       )}
-
       <span className='relative z-10 flex items-center gap-1.5'>
-       {Icon && <Icon className='w-4 h-4' />}
-       {tab.label}
+       {getTabLabel(tab)}
       </span>
      </button>
     );
@@ -78,16 +72,16 @@ export function AnimatedTabs({
  );
 }
 
-interface AnimatedTabsWithContentProps extends AnimatedTabsProps {
+interface AnimatedTabsWithContentProps<T> extends AnimatedTabsProps<T> {
  children: ReactNode;
  contentClassName?: string;
 }
 
-export function AnimatedTabsWithContent({
+export function AnimatedTabsWithContent<T>({
  children,
  contentClassName,
  ...tabsProps
-}: AnimatedTabsWithContentProps) {
+}: AnimatedTabsWithContentProps<T>) {
  return (
   <div className='w-full'>
    <AnimatedTabs {...tabsProps} />
