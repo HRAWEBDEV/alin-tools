@@ -10,12 +10,7 @@ import {
 import dynamic from 'next/dynamic';
 import { useRestaurantShareDictionary } from '../../share-dictionary/restaurantShareDictionaryContext';
 import { Button } from '@/components/ui/button';
-import {
- RiSunLine,
- RiListSettingsFill,
- RiSettings4Fill,
- RiMenu3Fill,
-} from 'react-icons/ri';
+import { RiSunLine, RiSettings4Fill, RiMenu3Fill } from 'react-icons/ri';
 import SpinnerLoading from './components/SpinnerLoading';
 import { AnimatePresence } from 'motion/react';
 import { motion } from 'motion/react';
@@ -33,6 +28,7 @@ import {
  getStorageSalonsConfig,
  setStorageSalonsConfig,
 } from './utils/SalonsConfigSetting';
+import DinnerIcon from '@/app/[lang]/(app)/components/icons/DinnerIcon';
 
 const views: Record<ActiveView, React.ComponentType> = {
  orderConfig: dynamic(() => import('./components/order-config/OrderConfig'), {
@@ -146,7 +142,7 @@ export default function SettingsProvider({
       className='text-base p-4 px-8 w-full justify-start h-[unset] gap-4 items-center text-primary hover:text-primary/80 hover:bg-primary/10 transition-colors'
       onClick={() => setActiveView('orderConfig')}
      >
-      <RiListSettingsFill className='size-8' />
+      <DishIcon className='size-8' />
       <span>{settings.buttons.orderConfig}</span>
      </Button>
     </li>
@@ -157,7 +153,7 @@ export default function SettingsProvider({
       className='text-base p-4 px-8 w-full justify-start h-[unset] gap-4 items-center text-orange-600 hover:text-orange-500 hover:bg-orange-600/10 transition-colors'
       onClick={() => setActiveView('salonsConfig')}
      >
-      <DishIcon className='size-8' />
+      <DinnerIcon className='size-8' />
       <span>{settings.buttons.salonsConfig}</span>
      </Button>
     </li>
@@ -196,8 +192,8 @@ export default function SettingsProvider({
      <DrawerHeader className='px-0 flex-row items-center justify-between relative border-b border-b-gray-400 dark:border-b-gray-300 '>
       <DrawerTitle className='dark:text-gray-300 text-gray-600 sm:text-xl text-md flex items-center justify-start gap-4 px-0'>
        <div className='relative'>
-        <RiMenu3Fill className='text-primary size-12' />
-        <RiSettings4Fill className='text-gray-500 dark:text-gray-400 size-6 absolute -left-[5px] bottom-[11px] ' />
+        <DishIcon className='text-primary size-12' />
+        <RiSettings4Fill className='text-gray-500 dark:text-gray-400 size-6 absolute -left-1.5 -bottom-1.5' />
        </div>
        {title}
       </DrawerTitle>
@@ -209,8 +205,8 @@ export default function SettingsProvider({
      <DrawerHeader className='px-2 flex-row items-center justify-between relative border-b border-b-gray-400 dark:border-b-gray-300 '>
       <DrawerTitle className='dark:text-gray-300 text-gray-600 sm:text-xl text-md flex items-center justify-start gap-4 px-0'>
        <div className='relative'>
-        <DishIcon className='text-orange-600 hover:text-orange-500 size-12' />
-        <RiSettings4Fill className='text-gray-500 dark:text-gray-400 size-6 absolute -left-1.5 -bottom-1.5 ' />
+        <DinnerIcon className='text-orange-600 hover:text-orange-500 size-12' />
+        <RiSettings4Fill className='text-gray-500 dark:text-gray-400 size-6 absolute -left-1.5 -bottom-1.5' />
        </div>
        {title}
       </DrawerTitle>

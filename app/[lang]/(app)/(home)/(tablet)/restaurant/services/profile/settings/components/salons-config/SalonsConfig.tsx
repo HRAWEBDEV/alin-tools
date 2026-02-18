@@ -1,7 +1,7 @@
 import { useRestaurantShareDictionary } from '../../../../share-dictionary/restaurantShareDictionaryContext';
 import { AnimatedTabs } from '@/app/[lang]/(app)/components/AnimatedTabs';
 import { motion } from 'motion/react';
-import SalonTableDemoShowcase from '../SalonTableModeShowcase';
+import SalonTableDemoShowcase from './SalonTableModeShowcase';
 import { useSettingsContext } from '../../settingsContext';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
