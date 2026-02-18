@@ -84,6 +84,7 @@ export default function SalonTableDemo({
    data-minimal={isMinimal}
    data-bold={isBold}
    layout
+   transition={{ type: 'spring', stiffness: 300, damping: 30 }}
    className='grid h-full group  data-[minimal=true]:max-w-[96px]'
    style={{ gridTemplateRows: isMinimal ? '1fr' : '1fr auto' }}
   >
