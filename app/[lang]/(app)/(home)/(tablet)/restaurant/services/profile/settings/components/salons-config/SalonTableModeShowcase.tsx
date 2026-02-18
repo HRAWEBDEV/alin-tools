@@ -1,6 +1,6 @@
 import SalonTableDemo from './SalonTableDemo';
 import { motion } from 'motion/react';
-import { SalonsConfig } from '../utils/SalonsConfigSetting';
+import { type SalonsConfig } from '../../utils/SalonsConfigSetting';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 
 const mockTables = [
