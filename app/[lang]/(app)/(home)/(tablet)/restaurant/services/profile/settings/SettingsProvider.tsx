@@ -27,14 +27,24 @@ import {
  getStorageOrderConfig,
  setStorageOrderConfig,
 } from './utils/OrderConfigSetting';
+import {
+ type SalonsConfig,
+ defaultStorageSalonsConfig,
+ getStorageSalonsConfig,
+ setStorageSalonsConfig,
+} from './utils/SalonsConfigSetting';
+import { getSalonsDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/salons/dictionary';
 
 const views: Record<ActiveView, React.ComponentType> = {
- orderConfig: dynamic(() => import('./components/InitialOrderConfig'), {
+ orderConfig: dynamic(() => import('./components/order-config/OrderConfig'), {
   loading: () => <SpinnerLoading />,
  }),
- salonsConfig: dynamic(() => import('./components/TableDisplayMode'), {
-  loading: () => <SpinnerLoading />,
- }),
+ salonsConfig: dynamic(
+  () => import('./components/salons-config/SalonsConfig'),
+  {
+   loading: () => <SpinnerLoading />,
+  },
+ ),
  themeToggler: dynamic(() => import('./components/AppThemeToggler'), {
   loading: () => <SpinnerLoading />,
  }),
@@ -51,6 +61,14 @@ export default function SettingsProvider({
   }
   return defaultStorageOrderConfig;
  });
+
+ const [salonsConfig, setSalonsConfig] = useState(() => {
+  if (typeof window !== 'undefined') {
+   return getStorageSalonsConfig();
+  }
+  return defaultStorageSalonsConfig;
+ });
+
  const [isOpen, setIsOpen] = useState(false);
  const [activeView, setActiveView] = useState<ActiveView | null>(null);
 
@@ -72,6 +90,18 @@ export default function SettingsProvider({
   setStorageOrderConfig(newConfig);
  }
 
+ function handleChangeSalonsConfig<T extends keyof SalonsConfig>(
+  key: T,
+  value: SalonsConfig[T],
+ ) {
+  const newConfig = {
+   ...salonsConfig,
+   [key]: value,
+  };
+  setSalonsConfig(newConfig);
+  setStorageSalonsConfig(newConfig);
+ }
+
  function toggleIsOpen() {
   setIsOpen(!isOpen);
  }
@@ -84,6 +114,10 @@ export default function SettingsProvider({
   orderConfigSetup: {
    orderConfig,
    onChangeOrderConfig: handleChangeOrderConfig,
+  },
+  salonsConfigSetup: {
+   salonsConfig,
+   onChangeSalonsConfig: handleChangeSalonsConfig,
   },
  };
 

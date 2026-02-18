@@ -1,6 +1,7 @@
 import { OutOfContext } from '@/utils/OutOfContext';
 import { use, createContext, Dispatch, SetStateAction } from 'react';
 import { type OrderConfig } from './utils/OrderConfigSetting';
+import { type SalonsConfig } from './utils/SalonsConfigSetting';
 
 export type ActiveView = 'orderConfig' | 'salonsConfig' | 'themeToggler';
 
@@ -14,6 +15,13 @@ interface Settings {
   onChangeOrderConfig: <T extends keyof OrderConfig>(
    key: T,
    value: OrderConfig[T],
+  ) => unknown;
+ };
+ salonsConfigSetup: {
+  salonsConfig: SalonsConfig;
+  onChangeSalonsConfig: <T extends keyof SalonsConfig>(
+   key: T,
+   value: SalonsConfig[T],
   ) => unknown;
  };
 }

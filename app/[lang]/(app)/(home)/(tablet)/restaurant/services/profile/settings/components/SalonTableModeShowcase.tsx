@@ -1,5 +1,7 @@
 import SalonTableDemo from './SalonTableDemo';
 import { motion } from 'motion/react';
+import { SalonsConfig } from '../utils/SalonsConfigSetting';
+import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 
 const mockTables = [
  {
@@ -102,7 +104,7 @@ const mockTables = [
 ];
 
 interface SalonTableDemoShowcaseProps {
- mode: 'normal' | 'minimal';
+ mode: SalonsConfig['displayMode'];
  isBold?: boolean;
 }
 
@@ -110,8 +112,9 @@ export default function SalonTableDemoShowcase({
  mode,
  isBold,
 }: SalonTableDemoShowcaseProps) {
+ const { localeInfo } = useBaseConfig();
  return (
-  <div dir='rtl'>
+  <div dir={localeInfo.contentDirection}>
    <motion.div
     layout
     className={`grid gap-4 justify-center overflow-hidden min-h-56   ${

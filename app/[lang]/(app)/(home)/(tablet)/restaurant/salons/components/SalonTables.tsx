@@ -10,17 +10,17 @@ import NoItemFound from '@/app/[lang]/(app)/components/NoItemFound';
 import UnExpectedError from '@/app/[lang]/(app)/components/UnExpectedError';
 import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
 import { Button } from '@/components/ui/button';
-
-import { useTablePreferences } from '@/app/[lang]/(app)/(home)/(tablet)/restaurant/hooks/useTablePreferences';
-
-// const TABLE_VIEW_MODE_KEY = 'tablesDisplayMode';
+import { useSettingsContext } from '../../services/profile/settings/settingsContext';
 
 export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
- const { isMinimal, isBold } = useTablePreferences();
+ const {
+  salonsConfigSetup: { salonsConfig },
+ } = useSettingsContext();
+ const tablesGridClass =
+  salonsConfig.displayMode === 'minimal'
+   ? 'grid gap-4 justify-center grid-cols-[repeat(auto-fill,minmax(6rem,1fr))]'
+   : 'grid gap-6 grid-cols-[repeat(auto-fill,minmax(9rem,10rem))] sm:grid-cols-[repeat(auto-fill,minmax(10rem,11rem))] justify-center';
 
- const tablesGridClass = isMinimal
-  ? 'grid gap-4 justify-center grid-cols-[repeat(auto-fill,minmax(6rem,1fr))]'
-  : 'grid gap-6 grid-cols-[repeat(auto-fill,minmax(9rem,10rem))] sm:grid-cols-[repeat(auto-fill,minmax(10rem,11rem))] justify-center';
  const {
   initData: { defaultSaleTimeID, salons },
   hallsInfo: {
@@ -130,8 +130,8 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
          key={table.tableID}
          dic={dic}
          table={table}
-         isMinimal={isMinimal}
-         isBold={isBold}
+         isMinimal={salonsConfig.displayMode === 'minimal'}
+         isBold={salonsConfig.boldStyle}
         />
        ))}
       </div>

@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'initialOrderConfig';
+const STORAGE_KEY = 'orderConfig';
 
 interface OrderConfig {
  getInitInfo: (typeof getInitInfoOptions)[number];

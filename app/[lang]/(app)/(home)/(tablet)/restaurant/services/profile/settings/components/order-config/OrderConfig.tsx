@@ -1,11 +1,11 @@
 'use client';
-import { useRestaurantShareDictionary } from '../../../share-dictionary/restaurantShareDictionaryContext';
+import { useRestaurantShareDictionary } from '../../../../share-dictionary/restaurantShareDictionaryContext';
 import { AnimatedTabs } from '@/app/[lang]/(app)/components/AnimatedTabs';
 import { motion } from 'motion/react';
-import { getInitInfoOptions } from '../utils/OrderConfigSetting';
-import { useSettingsContext } from '../settingsContext';
+import { getInitInfoOptions } from '../../utils/OrderConfigSetting';
+import { useSettingsContext } from '../../settingsContext';
 
-export default function InitialOrderConfigView() {
+export default function OrderConfig() {
  const {
   orderConfigSetup: { orderConfig, onChangeOrderConfig },
  } = useSettingsContext();
@@ -14,17 +14,6 @@ export default function InitialOrderConfigView() {
    components: { settings },
   },
  } = useRestaurantShareDictionary();
-
- const orderConfigGetInitGuide = (() => {
-  switch (orderConfig.getInitInfo) {
-   case 'active':
-    return settings.components.initialOrderConfig.tabs.activeMessage;
-   case 'inactive':
-    return settings.components.initialOrderConfig.tabs.inactiveMesage;
-   default:
-    return settings.components.initialOrderConfig.tabs.activeMessage;
-  }
- })();
 
  const orderGetInfoOptions = getInitInfoOptions.map((item) => {
   return {
