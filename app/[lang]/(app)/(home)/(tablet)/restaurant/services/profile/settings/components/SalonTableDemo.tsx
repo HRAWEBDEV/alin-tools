@@ -115,7 +115,7 @@ export default function SalonTableDemo({
       >
        <div className='flex items-center gap-2'>
         <h3
-         className={`${tableStyles.text} font-en-roboto ${isMinimal ? 'text-lg lg:text-xl mx-auto' : 'text-2xl lg:text-3xl'} group-data-[bold=true]:font-black`}
+         className={`${tableStyles.text} font-en-roboto ${isMinimal ? 'text-2xl mx-auto' : 'text-2xl lg:text-3xl'} group-data-[bold=true]:font-black`}
         >
          {table.tableNo.toString().padStart(2, '0')}
         </h3>

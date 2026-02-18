@@ -49,13 +49,13 @@ export default function TableDisplayMode() {
    transition={{ duration: 0.3 }}
    className='flex flex-col justify-start gap-6 px-0 mt-4 overflow-y-auto overflow-x-hidden'
   >
-   <div className='flex items-center justify-between flex-1 gap-8 px-6'>
+   <div className='flex items-center justify-between sm:flex-row flex-col flex-1 gap-8 px-6'>
     <h4 className='text-xl text-right '>
      {settings.components.tablesDisplayMode.title}
     </h4>
 
     <AnimatedTabs
-     className='flex-1 w-full max-w-[40%]'
+     className='flex-1 w-full sm:max-w-[40%]'
      tabs={tabs}
      activeTab={displayMode as string}
      onTabChange={setDisplayMode}
@@ -85,7 +85,7 @@ export default function TableDisplayMode() {
     mode={displayMode === TABLE_DISPLAY_MODES.MINIMAL ? 'minimal' : 'normal'}
     isBold={isBold}
    />
-   <p className='w-fit p-6 mt-8 mx-auto font-medium rounded-2xl bg-orange-600/10 text-orange-950'>
+   <p className='w-fit p-6 sm:mt-8 mt-4 mb-4 mx-auto font-medium rounded-2xl bg-orange-600/10 text-orange-950'>
     {activeTabDescription}
    </p>
   </motion.div>

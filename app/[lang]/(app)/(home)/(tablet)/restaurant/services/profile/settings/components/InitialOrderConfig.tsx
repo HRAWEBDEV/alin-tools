@@ -74,7 +74,7 @@ export default function InitialOrderConfigView() {
     </h4>
 
     <AnimatedTabs
-     className='max-w-100 w-full'
+     className='sm:max-w-100 w-full'
      tabs={tabs}
      activeTab={initialOrderConfig}
      onTabChange={handleTabChange}
@@ -85,11 +85,8 @@ export default function InitialOrderConfigView() {
     />
    </div>
 
-   <p className='flex sm:flex-row flex-col sm:items-center items-start justify-start gap-2'>
-    <RiQuestionLine className='sm:size-6 size-5 text-primary' />
-    <span className='sm:text-base text-xs text-destructive '>
-     {tabGuideMessage}
-    </span>
+   <p className='w-fit p-6 sm:mt-8 mt-4 mb-4 mx-auto font-medium rounded-2xl bg-primary/10 text-primary'>
+    {tabGuideMessage}
    </p>
   </motion.div>
  );
