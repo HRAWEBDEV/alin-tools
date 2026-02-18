@@ -3,6 +3,7 @@ import { ReactNode, useState } from 'react';
 import { SettingsContext, type Settings, ActiveView } from './settingsContext';
 import {
  Drawer,
+ DrawerClose,
  DrawerContent,
  DrawerHeader,
  DrawerTitle,
@@ -10,7 +11,12 @@ import {
 import dynamic from 'next/dynamic';
 import { useRestaurantShareDictionary } from '../../share-dictionary/restaurantShareDictionaryContext';
 import { Button } from '@/components/ui/button';
-import { RiSunLine, RiSettings4Fill, RiMenu3Fill } from 'react-icons/ri';
+import {
+ RiSunLine,
+ RiSettings4Fill,
+ RiCloseFill,
+ RiCloseLargeFill,
+} from 'react-icons/ri';
 import SpinnerLoading from './components/SpinnerLoading';
 import { AnimatePresence } from 'motion/react';
 import { motion } from 'motion/react';
@@ -29,6 +35,7 @@ import {
  setStorageSalonsConfig,
 } from './utils/SalonsConfigSetting';
 import DinnerIcon from '@/app/[lang]/(app)/components/icons/DinnerIcon';
+import CloseButton from './components/CloseButton';
 
 const views: Record<ActiveView, React.ComponentType> = {
  orderConfig: dynamic(() => import('./components/order-config/OrderConfig'), {
@@ -183,7 +190,10 @@ export default function SettingsProvider({
        </div>
        {title}
       </DrawerTitle>
-      <BackBtn className='border-pink-600/80 hover:border-pink-600 text-pink-600 hover:text-pink-800' />
+      <div className='flex items-center justify-center gap-2'>
+       <BackBtn className='border-pink-600/80 hover:border-pink-600 dark:border-pink-600 text-pink-600 hover:text-pink-700' />
+       <CloseButton className='border-pink-600/80 hover:border-pink-600 text-pink-600 hover:text-pink-800 ' />
+      </div>
      </DrawerHeader>
     );
 
@@ -197,7 +207,10 @@ export default function SettingsProvider({
        </div>
        {title}
       </DrawerTitle>
-      <BackBtn className='text-primary/80  hover:text-primary dark:border-primary border-primary' />
+      <div className='flex items-center justify-center gap-2'>
+       <BackBtn className='text-primary/80  hover:text-primary dark:border-primary border-primary' />
+       <CloseButton className='text-primary/80  hover:text-primary dark:border-primary border-primary' />
+      </div>
      </DrawerHeader>
     );
    case 'salonsConfig':
@@ -210,7 +223,10 @@ export default function SettingsProvider({
        </div>
        {title}
       </DrawerTitle>
-      <BackBtn className='border-orange-600 hover:border-orange-500 dark:border-orange-500 text-orange-600 hover:text-orange-700' />
+      <div className='flex items-center justify-center gap-2'>
+       <BackBtn className='border-orange-600 hover:border-orange-500 dark:border-orange-500 text-orange-600 hover:text-orange-700' />
+       <CloseButton className='border-orange-600 hover:border-orange-500 dark:border-orange-500 text-orange-600 hover:text-orange-700' />
+      </div>
      </DrawerHeader>
     );
   }

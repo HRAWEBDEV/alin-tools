@@ -9,6 +9,7 @@
   "settings": {
    "title": "تنظیمات",
    "backBtn": "بازگشت",
+   "closeBtn": "بستن",
    "buttons": {
     "orderConfig": "تنظیمات ثبت سفارش",
     "salonsConfig": "تنظیمات سالن ها",
