@@ -3,8 +3,9 @@
   "profile": {
    "title": "پروفایل کاربر",
    "lastLoginDate": "آخرین ورود",
-   "settings": "تنظیمات",
-   "logout": "خروج"
+   "sttings": "تنظیمات",
+   "logout": "خروج",
+   "changeProgram": "تغییر برنامه"
   },
   "settings": {
    "title": "تنظیمات",
