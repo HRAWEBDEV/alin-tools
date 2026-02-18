@@ -48,7 +48,7 @@ export default function OrderConfig() {
      activeBgColor='bg-primary'
      activeTextColor='text-white'
      inactiveTextColor='text-gray-700 dark:text-gray-400'
-     inactiveBgColor='bg-gray-200 dark:bg-gray-400'
+     inactiveBgColor='bg-gray-200 dark:bg-gray-600'
     />
    </div>
   </motion.div>

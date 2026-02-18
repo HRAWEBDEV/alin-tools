@@ -95,8 +95,8 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
           handleToggleProfile();
          }}
         >
-         <RiSettings5Line className='size-8' />
-         <span>{profile.settings}</span>
+         <RiSettings5Line className='size-8 dark:text-gray-200' />
+         <span className='dark:text-gray-200'>{profile.settings}</span>
         </Button>
        </li>
        <li>
