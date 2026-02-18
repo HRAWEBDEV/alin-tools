@@ -11,7 +11,11 @@ import {
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useRestaurantShareDictionary } from '../share-dictionary/restaurantShareDictionaryContext';
 import { Button } from '@/components/ui/button';
-import { RiLogoutBoxRLine, RiExchangeBoxLine } from 'react-icons/ri';
+import {
+ RiLogoutBoxRLine,
+ RiExchangeBoxLine,
+ RiSettings5Line,
+} from 'react-icons/ri';
 import { useLogout } from '@/app/[lang]/(app)/login/hooks/useLogout';
 import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
 import { useSettingsContext } from './settings/settingsContext';
@@ -75,16 +79,20 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
      </div>
      <div>
       <ul>
-       {/* <li> */}
-       {/*  <Button */}
-       {/*   variant='ghost' */}
-       {/*   size={'icon-lg'} */}
-       {/*   className='text-base p-4 px-8 w-full justify-start h-[unset] gap-4 items-center text-neutral-600 dark:text-neutral-400' */}
-       {/*  > */}
-       {/*   <IoMdSettings className='size-8' /> */}
-       {/*   <span>{profile.sttings}</span> */}
-       {/*  </Button> */}
-       {/* </li> */}
+       <li>
+        <Button
+         variant='ghost'
+         size={'icon-lg'}
+         className='text-base p-4 px-8 w-full justify-start h-[unset] gap-4 items-center text-gray-500 dark:text-gray-600'
+         onClick={() => {
+          toggleIsSettingsOpen();
+          handleToggleProfile();
+         }}
+        >
+         <RiSettings5Line className='size-8 dark:text-gray-200' />
+         <span className='dark:text-gray-200'>{profile.settings}</span>
+        </Button>
+       </li>
        <li>
         <Button
          variant='ghost'
