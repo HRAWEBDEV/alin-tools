@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button';
 import { RiLogoutBoxRLine, RiExchangeBoxLine } from 'react-icons/ri';
 import { useLogout } from '@/app/[lang]/(app)/login/hooks/useLogout';
 import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
+import { useSettingsContext } from './settings/settingsContext';
 
 export default function ProfileProvider({ children }: { children: ReactNode }) {
  const { userInfoRouterStorage, data, changeProgram } = useUserInfoRouter();
@@ -33,6 +34,7 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
   toggleProfile: handleToggleProfile,
  };
 
+ const { toggleIsOpen: toggleIsSettingsOpen } = useSettingsContext();
  return (
   <profileContext.Provider value={ctx}>
    {children}
