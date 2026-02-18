@@ -62,10 +62,8 @@ export default function OrderBaseConfigProvider({
  dic: NewOrderDictionary;
 }) {
  const queryClient = useQueryClient();
- //
  const router = useRouter();
  const { locale } = useBaseConfig();
- //
  const searchQuery = useSearchParams();
  const fromSalonsQuery = searchQuery.get('fromSalons') === 'true';
  const orderIDQuery = Number(searchQuery.get('orderID')) || null;
@@ -73,7 +71,6 @@ export default function OrderBaseConfigProvider({
  const salonNameQuery = searchQuery.get('salonName');
  const tableIDQuery = Number(searchQuery.get('tableID')) || null;
  const tableNoQuery = searchQuery.get('tableNo');
- // order info
  const orderInfoForm = useForm<OrderInfo>({
   resolver: zodResolver(createOrderInfoSchema({ dic })),
   defaultValues: {
@@ -124,9 +121,7 @@ export default function OrderBaseConfigProvider({
  const [confirmOrderIsOpen, setConfirmOrderIsOpen] = useState(false);
  const [confirmOrderActiveType, setConfirmOrderActiveType] =
   useState<ConfirmOrderType>('orderInfo');
- // order items reducer
  const [orderItems, orderItemsDispatch] = useReducer(orderItemsReducer, []);
- //
  function showConfirmOrder(confirmType?: ConfirmOrderType) {
   setConfirmOrderIsOpen(true);
   setConfirmOrderActiveType(confirmType || 'orderInfo');
@@ -140,12 +135,20 @@ export default function OrderBaseConfigProvider({
  function changeConfirmType(type: ConfirmOrderType) {
   setConfirmOrderActiveType(type);
  }
- // selected group item
+
+ const [quickOrderInfoIsOpen, setQuickOrderInfoIsOpen] = useState(false);
+
+ function openQuickOrderInfo() {
+  setQuickOrderInfoIsOpen(true);
+ }
+
+ function closeQuickOrderInfo() {
+  setQuickOrderInfoIsOpen(false);
+ }
  function handleChangeSelectedItemGroup(newItemGroup: ItemGroup) {
   setSelectedItemGroup(newItemGroup);
  }
 
- // initial Data
  const {
   data: initData,
   isLoading: initLoading,
@@ -162,11 +165,9 @@ export default function OrderBaseConfigProvider({
   },
  });
 
- // item program search
  function handleChangeSearchedItemName(newSearch: string) {
   setSearchedItemName(newSearch);
  }
- // get item get item programs
  const {
   data: itemProgramsData,
   isLoading: itemProgramsLoading,
@@ -201,7 +202,6 @@ export default function OrderBaseConfigProvider({
   items: itemProgramsData,
   searchedItemName,
  });
- // get Order
 
  const {
   data: userOrder,
@@ -239,7 +239,6 @@ export default function OrderBaseConfigProvider({
   },
  });
 
- // get free tables
  const {
   data: freeTables,
   isLoading: freeTablesIsLoading,
@@ -274,7 +273,6 @@ export default function OrderBaseConfigProvider({
   },
  });
 
- // get order payment
  const {
   data: orderPaymentValue = 0,
   isLoading: orderPaymentLoading,
@@ -291,13 +289,11 @@ export default function OrderBaseConfigProvider({
    return res.data;
   },
  });
- //
  const pricedOrderItems = effectOrderItemsServiceRates({
   orderItems,
   hasService: hasServiceValue,
   userDiscount: Number(userDiscountValue) || 0,
  });
- //
  const invoiceShopResult = shopCalculator(
   pricedOrderItems,
   orderPaymentValue,
@@ -305,7 +301,6 @@ export default function OrderBaseConfigProvider({
    (Number(deliveryValue) || 0) +
    (Number(roundingValue) || 0),
  );
- // close order
  function onCloseOrder() {
   setShowCloseOrder(true);
  }
@@ -343,7 +338,6 @@ export default function OrderBaseConfigProvider({
    },
   });
 
- // get new order save package
  const { mutate: confirmSaveOrder, isPending: saveOrderPending } = useMutation({
   async mutationFn({
    order,
@@ -468,7 +462,6 @@ export default function OrderBaseConfigProvider({
    order: orderInfoRes.newOrderData,
   });
  }
- // payment
  const { mutate: handleConfirmPayment, isPending: isPendingConfirmPayment } =
   useMutation({
    async mutationFn({
@@ -528,7 +521,6 @@ export default function OrderBaseConfigProvider({
    paymentData,
   });
  }
- // loadings
  const shopLoading =
   initLoading ||
   userOrderItemsLoading ||
@@ -538,7 +530,6 @@ export default function OrderBaseConfigProvider({
   isPendingCloseOrder ||
   isPendingConfirmPayment;
  const shopInfoLoading = shopLoading;
- // set defaults
  useEffect(() => {
   if (!initData || !initSuccess) return;
   if (initData.itemGroups.length) {
@@ -663,7 +654,6 @@ export default function OrderBaseConfigProvider({
    });
   }
  }, [userOrder, userOrderSuccess, orderInfoForm]);
- //
 
  const ctx: OrderBaseConfig = {
   shopLoading,
@@ -673,6 +663,9 @@ export default function OrderBaseConfigProvider({
   confirmOrderActiveType,
   showConfirmOrder,
   closeConfirmOrder,
+  quickOrderInfoIsOpen,
+  openQuickOrderInfo,
+  closeQuickOrderInfo,
   queries: {
    fromSalons: fromSalonsQuery,
    orderID: orderIDQuery,

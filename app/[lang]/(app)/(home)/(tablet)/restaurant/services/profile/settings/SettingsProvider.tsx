@@ -5,6 +5,7 @@ import { SettingsContext, type Settings, ActiveView } from './settingsContext';
 import {
  Drawer,
  DrawerContent,
+ DrawerFooter,
  DrawerHeader,
  DrawerTitle,
 } from '@/components/ui/drawer';
@@ -127,18 +128,14 @@ export default function SettingsProvider({
    <Drawer open={isOpen} onOpenChange={setIsOpen}>
     <DrawerContent className='p-4 [&_div.bg-muted]:bg-primary! min-h-[400px]'>
      <DrawerHeader className='px-0 relative flex items-center justify-center'>
-      {activeView && (
-       <div className='absolute right-6 hover:border-b hover:border-b-primary border-b border-b-transparent transition-colors'>
-        <BackBtn />
-       </div>
-      )}
-      <DrawerTitle className='dark:text-gray-300 text-gray-700 text-xl'>
+      <DrawerTitle className='dark:text-gray-300 text-gray-700 sm:text-xl text-md'>
        {activeTitle}
       </DrawerTitle>
      </DrawerHeader>
      <AnimatePresence mode='wait'>
       {ActiveComponent ? <ActiveComponent /> : optionsList()}
      </AnimatePresence>
+     <DrawerFooter className='px-0'>{activeView && <BackBtn />}</DrawerFooter>
     </DrawerContent>
    </Drawer>
   </SettingsContext.Provider>
