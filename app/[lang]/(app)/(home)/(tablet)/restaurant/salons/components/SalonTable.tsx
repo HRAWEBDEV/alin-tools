@@ -158,6 +158,8 @@ export default function SalonTable({
        variant={'outline'}
        onPointerDown={(e) => e.preventDefault()}
        onClick={() => {
+        const isSameTable = selectedTable?.tableNo === table.tableNo;
+        if ((showTransferTable || showMergeTable) && isSameTable) return;
         if (showTransferTable) {
          transferTableTo(table);
          return;
