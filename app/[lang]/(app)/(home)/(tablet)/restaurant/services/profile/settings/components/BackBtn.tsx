@@ -13,7 +13,7 @@ export default function BackBtn({ className }: { className?: string }) {
  } = useRestaurantShareDictionary();
  return (
   <Button
-   className={`px-8! py-3! h-full flex items-center justify-center gap-2 rounded-lg  ${className ? className : ' border border-primary/90 dark:border-primary dark:border-primary/90 dark:hover:border-primary hover:border-primary text-gray-200 hover:text-gray-200! dark:text-gray-500 dark:hover:text-gray-500'}`}
+   className={`px-8! py-3! h-full flex items-center justify-center gap-2 rounded-lg  ${className ? className : ' border border-primary/90 dark:border-primary/90 dark:hover:border-primary hover:border-primary text-gray-200 hover:text-gray-200! dark:text-gray-500 dark:hover:text-gray-500'}`}
    onClick={() => setActiveView(null)}
    variant='outline'
   >
