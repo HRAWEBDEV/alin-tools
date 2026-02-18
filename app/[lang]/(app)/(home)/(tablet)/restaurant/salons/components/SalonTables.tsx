@@ -72,7 +72,12 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
    </div>
    {showMergeTable && selectedTable && (
     <div className={tablesGridClass + ' pb-4 mb-2 border-b border-input'}>
-     <SalonTable dic={dic} table={selectedTable} />
+     <SalonTable
+      dic={dic}
+      table={selectedTable}
+      isMinimal={salonsConfig.displayMode === 'minimal'}
+      isBold={salonsConfig.boldStyle}
+     />
      <div className='col-span-2 flex flex-col'>
       <p className='text-lg font-medium text-rose-700 dark:text-rose-400 mb-6'>
        {dic.toMergeTableSelectSelectAvailableTables}
@@ -92,7 +97,12 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
    )}
    {showTransferTable && selectedTable && (
     <div className={tablesGridClass + ' pb-4 mb-2 border-b border-input'}>
-     <SalonTable dic={dic} table={selectedTable} />
+     <SalonTable
+      dic={dic}
+      table={selectedTable}
+      isMinimal={salonsConfig.displayMode === 'minimal'}
+      isBold={salonsConfig.boldStyle}
+     />
      <div className='col-span-2 flex flex-col'>
       <p className='text-lg font-medium text-rose-700 dark:text-rose-400 mb-6'>
        {dic.toTransferTableSelectSelectAvailableTables}
