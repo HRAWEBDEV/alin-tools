@@ -113,7 +113,6 @@ export default function SalonTableDemoShowcase({
  return (
   <div dir='rtl'>
    <motion.div
-    layout
     className={`grid gap-4 justify-center overflow-hidden min-h-56   ${
      mode === 'minimal'
       ? 'grid-cols-[repeat(auto-fill,minmax(6rem,1fr))]'
