@@ -33,7 +33,6 @@ import {
  getStorageSalonsConfig,
  setStorageSalonsConfig,
 } from './utils/SalonsConfigSetting';
-import { getSalonsDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/salons/dictionary';
 
 const views: Record<ActiveView, React.ComponentType> = {
  orderConfig: dynamic(() => import('./components/order-config/OrderConfig'), {
@@ -202,7 +201,7 @@ export default function SettingsProvider({
        </div>
        {title}
       </DrawerTitle>
-      <BackBtn className='text-primary/80 hover:text-primary border-primary' />
+      <BackBtn className='text-primary/80  hover:text-primary dark:border-primary' />
      </DrawerHeader>
     );
    case 'salonsConfig':
@@ -215,7 +214,7 @@ export default function SettingsProvider({
        </div>
        {title}
       </DrawerTitle>
-      <BackBtn className='border-orange-600 hover:border-orange-500 text-orange-600 hover:text-orange-700' />
+      <BackBtn className='border-orange-600 hover:border-orange-500 dark:border-orange-500 text-orange-600 hover:text-orange-700' />
      </DrawerHeader>
     );
   }

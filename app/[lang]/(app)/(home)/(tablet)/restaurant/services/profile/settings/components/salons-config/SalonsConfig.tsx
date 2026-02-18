@@ -53,7 +53,7 @@ export default function SalonsConfig() {
      activeBgColor='bg-orange-600'
      activeTextColor='text-white'
      inactiveTextColor='text-gray-700 dark:text-gray-400'
-     inactiveBgColor='bg-gray-200 dark:bg-gray-400'
+     inactiveBgColor='bg-gray-200 dark:bg-gray-600'
     />
    </div>
 
