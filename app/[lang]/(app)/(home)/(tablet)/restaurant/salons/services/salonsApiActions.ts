@@ -41,6 +41,36 @@ interface Table {
  OccupiedDateTimeOffset: string | null;
 }
 
+function generateTableMockData(updateTable: Partial<Table> = {}): Table {
+ return {
+  vip: true,
+  tableID: 0,
+  tableNo: 1,
+  expired: false,
+  tableStateDataID: 0,
+  tableStateID: 1,
+  tableStateTypeID: 1,
+  tableCapacity: 2,
+  startTime: null,
+  salonID: 0,
+  saleTimeID: 1,
+  orderID: 0,
+  orderNo: 0,
+  endTime: null,
+  date: '',
+  maxCapicity: 4,
+  salonName: null,
+  tableTypeID: 1,
+  roomLable: 1,
+  customerID: null,
+  saleTypeID: null,
+  remained: null,
+  occupiedPerson: null,
+  OccupiedDateTimeOffset: null,
+  ...updateTable,
+ };
+}
+
 const getHallKey = 'restaurant-halls';
 
 // change table state type
@@ -115,4 +145,5 @@ export {
  getInitialData,
  changeTableStateType,
  mergeTable,
+ generateTableMockData,
 };

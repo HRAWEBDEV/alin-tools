@@ -20,15 +20,17 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
   salonsConfig.displayMode === 'minimal'
    ? 'grid gap-2 gap-y-4 justify-center grid-cols-[repeat(auto-fill,minmax(6rem,1fr))]'
    : 'grid gap-6 grid-cols-[repeat(auto-fill,minmax(9rem,10rem))] sm:grid-cols-[repeat(auto-fill,minmax(10rem,11rem))] justify-center';
-
  const {
-  initData: { defaultSaleTimeID, salons },
+  initData: { defaultSaleTimeID, salons, tableTypes },
   hallsInfo: {
+   selectedHall,
    isLoading: isLoadingHalls,
    isError: hallsInfoError,
    isSuccess: hallsInfoSuccess,
   },
   tablesInfo: {
+   mergeTableTo,
+   transferTableTo,
    filteredData,
    isSuccess,
    isLoading,
@@ -78,8 +80,22 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
       table={selectedTable}
       isMinimal={salonsConfig.displayMode === 'minimal'}
       isBold={salonsConfig.boldStyle}
+      tableType='normal'
+      changeSelectedTable={changeSelectedTable}
+      changeShowMergeTable={changeShowMergeTable}
+      changeShowTransferTable={changeShowTransferTable}
+      mergeTableTo={mergeTableTo}
+      onShowChangeTableState={onShowChangeTableState}
+      selectedHall={selectedHall}
+      selectedTable={selectedTable}
+      showMergeTable={showMergeTable}
+      showTransferTable={showTransferTable}
+      tableTypes={tableTypes}
+      transferTableTo={transferTableTo}
      />
-     <div className='col-span-2 flex flex-col'>
+     <div
+      className={`${salonsConfig.displayMode === 'minimal' ? 'col-span-3' : 'col-span-2'} flex flex-col`}
+     >
       <p className='text-lg font-medium text-rose-700 dark:text-rose-400 mb-6'>
        {dic.toMergeTableSelectSelectAvailableTables}
       </p>
@@ -104,8 +120,22 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
       table={selectedTable}
       isMinimal={salonsConfig.displayMode === 'minimal'}
       isBold={salonsConfig.boldStyle}
+      tableType='normal'
+      changeSelectedTable={changeSelectedTable}
+      changeShowMergeTable={changeShowMergeTable}
+      changeShowTransferTable={changeShowTransferTable}
+      mergeTableTo={mergeTableTo}
+      onShowChangeTableState={onShowChangeTableState}
+      selectedHall={selectedHall}
+      selectedTable={selectedTable}
+      showMergeTable={showMergeTable}
+      showTransferTable={showTransferTable}
+      tableTypes={tableTypes}
+      transferTableTo={transferTableTo}
      />
-     <div className='col-span-2 flex flex-col'>
+     <div
+      className={`${salonsConfig.displayMode === 'minimal' ? 'col-span-3' : 'col-span-2'} flex flex-col`}
+     >
       <p className='text-lg font-medium text-rose-700 dark:text-rose-400 mb-6'>
        {dic.toTransferTableSelectSelectAvailableTables}
       </p>
@@ -143,8 +173,20 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
          key={table.tableID}
          dic={dic}
          table={table}
+         tableType='normal'
          isMinimal={salonsConfig.displayMode === 'minimal'}
          isBold={salonsConfig.boldStyle}
+         changeSelectedTable={changeSelectedTable}
+         changeShowMergeTable={changeShowMergeTable}
+         changeShowTransferTable={changeShowTransferTable}
+         mergeTableTo={mergeTableTo}
+         onShowChangeTableState={onShowChangeTableState}
+         selectedHall={selectedHall}
+         selectedTable={selectedTable}
+         showMergeTable={showMergeTable}
+         showTransferTable={showTransferTable}
+         tableTypes={tableTypes}
+         transferTableTo={transferTableTo}
         />
        ))}
       </div>

@@ -3,7 +3,7 @@ import { type SalonsDictionary } from '@/internalization/app/dictionaries/(table
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
-import { type Table } from '../services/salonsApiActions';
+import { type InitiData, type Table } from '../services/salonsApiActions';
 import { SlOptions } from 'react-icons/sl';
 import { TableStateTypes, getTableStateStyles } from '../utils/tableStates';
 import { getTableRows } from '../utils/getTableRows';
@@ -20,128 +20,136 @@ import {
 import { TbTransfer } from 'react-icons/tb';
 import { IoMdAddCircle } from 'react-icons/io';
 import { GrStatusUnknown } from 'react-icons/gr';
-import { useSalonBaseConfigContext } from '../services/salon-base-config/salonBaseConfigContext';
+import { type SalonBaseConfig } from '../services/salon-base-config/salonBaseConfigContext';
 
 export default function SalonTable({
  table,
- dic,
  isMinimal,
  isBold,
+ ...tableUtils
 }: {
- dic: SalonsDictionary;
  table: Table;
  isMinimal?: boolean;
  isBold?: boolean;
-}) {
- const {
-  initData,
-  hallsInfo: { selectedHall },
-  tablesInfo: {
-   selectedTable,
-   showTransferTable,
-   showMergeTable,
-   changeSelectedTable,
-   onShowChangeTableState,
-   changeShowTransferTable,
-   changeShowMergeTable,
-   mergeTableTo,
-   transferTableTo,
-   // onCloseOrder,
-  },
- } = useSalonBaseConfigContext();
+} & (
+ | {
+    tableType: 'normal';
+    dic: SalonsDictionary;
+    tableTypes: InitiData['tableTypes'];
+    selectedHall: SalonBaseConfig['hallsInfo']['selectedHall'];
+    selectedTable: SalonBaseConfig['tablesInfo']['selectedTable'];
+    showTransferTable: SalonBaseConfig['tablesInfo']['showTransferTable'];
+    showMergeTable: SalonBaseConfig['tablesInfo']['showMergeTable'];
+    changeSelectedTable: SalonBaseConfig['tablesInfo']['changeSelectedTable'];
+    onShowChangeTableState: SalonBaseConfig['tablesInfo']['onShowChangeTableState'];
+    changeShowTransferTable: SalonBaseConfig['tablesInfo']['changeShowTransferTable'];
+    changeShowMergeTable: SalonBaseConfig['tablesInfo']['changeShowMergeTable'];
+    mergeTableTo: SalonBaseConfig['tablesInfo']['mergeTableTo'];
+    transferTableTo: SalonBaseConfig['tablesInfo']['transferTableTo'];
+   }
+ | { tableType: 'mock' }
+)) {
  const [isOpen, setIsOpen] = useState(false);
 
  const handleOpenChange = (newOpen: boolean) => {
+  if (tableUtils.tableType === 'mock') return;
   setIsOpen(newOpen);
-  if (newOpen) changeSelectedTable(table);
+  if (newOpen) tableUtils.changeSelectedTable(table);
  };
  const tableStyles = getTableStateStyles(table.tableStateTypeID);
  const { locale, localeInfo } = useBaseConfig();
  const tableRows = getTableRows(table.tableCapacity, table.occupiedPerson || 0);
 
  function getTableExtensionTitle() {
+  if (tableUtils.tableType === 'mock') return;
   switch (table.tableStateTypeID) {
    case TableStateTypes.VIPCustomer:
-    return ` (${dic.tables.vip})`;
+    return ` (${tableUtils.dic.tables.vip})`;
    case TableStateTypes.roomGuest:
-    return ` (${dic.tables.room})`;
+    return ` (${tableUtils.dic.tables.room})`;
   }
   return '';
  }
 
  const newOrderRedirectLink =
-  `/${locale}/restaurant/new-order?salonID=${selectedHall?.key}&salonName=${selectedHall?.value}&tableID=${table.tableID}&tableNo=${table.tableNo}&orderID=${table.orderID}&fromSalons=true` as const;
+  tableUtils.tableType === 'mock'
+   ? '#'
+   : (`/${locale}/restaurant/new-order?salonID=${tableUtils.selectedHall?.key}&salonName=${tableUtils.selectedHall?.value}&tableID=${table.tableID}&tableNo=${table.tableNo}&orderID=${table.orderID}&fromSalons=true` as const);
 
- const menuContent = (
-  <DropdownMenuContent align='start' className='w-56'>
-   <DropdownMenuGroup>
-    {table.tableStateTypeID !== TableStateTypes.outOfService && (
-     <DropdownMenuItem className='text-sky-700 dark:text-sky-400' asChild>
-      <Link href={newOrderRedirectLink}>
-       <IoMdAddCircle className='size-8 text-inherit' />
-       <DropdownMenuLabel className='text-base'>
-        {dic.tables.order}
-       </DropdownMenuLabel>
-      </Link>
-     </DropdownMenuItem>
-    )}
-    {(table.tableStateTypeID === TableStateTypes.outOfService ||
-     table.tableStateTypeID === TableStateTypes.readyToService) && (
-     <DropdownMenuItem
-      className='text-yellow-600 dark:text-yellow-400'
-      onClick={() => {
-       onShowChangeTableState(true);
-       setIsOpen(false);
-      }}
-     >
-      <GrStatusUnknown className='size-8 text-inherit' />
-      <DropdownMenuLabel className='text-base'>
-       {dic.tables.changeTableState}
-      </DropdownMenuLabel>
-     </DropdownMenuItem>
-    )}
-    {table.tableStateTypeID !== TableStateTypes.outOfService &&
-     table.tableStateTypeID !== TableStateTypes.readyToService && (
-      <>
-       <DropdownMenuItem
-        className='text-teal-700 dark:text-teal-400'
-        onClick={() => {
-         changeShowTransferTable(true);
-         setIsOpen(false);
-        }}
-       >
-        <TbTransfer className='size-8 text-inherit' />
+ const menuContent =
+  tableUtils.tableType === 'mock' ? null : (
+   <DropdownMenuContent align='start' className='w-56'>
+    <DropdownMenuGroup>
+     {table.tableStateTypeID !== TableStateTypes.outOfService && (
+      <DropdownMenuItem className='text-sky-700 dark:text-sky-400' asChild>
+       <Link href={newOrderRedirectLink}>
+        <IoMdAddCircle className='size-8 text-inherit' />
         <DropdownMenuLabel className='text-base'>
-         {dic.tables.transferTable}
+         {tableUtils.dic.tables.order}
         </DropdownMenuLabel>
-       </DropdownMenuItem>
-       <DropdownMenuItem
-        className='text-orange-700 dark:text-orange-400'
-        onClick={() => {
-         changeShowMergeTable(true);
-        }}
-       >
-        <AiOutlineMergeCells className='size-8 text-inherit' />
-        <DropdownMenuLabel className='text-base'>
-         {dic.tables.mergeTables}
-        </DropdownMenuLabel>
-       </DropdownMenuItem>
-       {/* <DropdownMenuItem */}
-       {/*  className='text-rose-700 dark:text-rose-400' */}
-       {/*  onClick={onCloseOrder} */}
-       {/* > */}
-       {/*  <IoMdCloseCircleOutline className='size-8 text-inherit' /> */}
-       {/*  <DropdownMenuLabel className='text-base'> */}
-       {/*   {dic.tables.closeOrder} */}
-       {/*  </DropdownMenuLabel> */}
-       {/* </DropdownMenuItem> */}
-      </>
+       </Link>
+      </DropdownMenuItem>
      )}
-   </DropdownMenuGroup>
-  </DropdownMenuContent>
- );
+     {(table.tableStateTypeID === TableStateTypes.outOfService ||
+      table.tableStateTypeID === TableStateTypes.readyToService) && (
+      <DropdownMenuItem
+       className='text-yellow-600 dark:text-yellow-400'
+       onClick={() => {
+        tableUtils.onShowChangeTableState(true);
+        setIsOpen(false);
+       }}
+      >
+       <GrStatusUnknown className='size-8 text-inherit' />
+       <DropdownMenuLabel className='text-base'>
+        {tableUtils.dic.tables.changeTableState}
+       </DropdownMenuLabel>
+      </DropdownMenuItem>
+     )}
+     {table.tableStateTypeID !== TableStateTypes.outOfService &&
+      table.tableStateTypeID !== TableStateTypes.readyToService && (
+       <>
+        <DropdownMenuItem
+         className='text-teal-700 dark:text-teal-400'
+         onClick={() => {
+          tableUtils.changeShowTransferTable(true);
+          setIsOpen(false);
+         }}
+        >
+         <TbTransfer className='size-8 text-inherit' />
+         <DropdownMenuLabel className='text-base'>
+          {tableUtils.dic.tables.transferTable}
+         </DropdownMenuLabel>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+         className='text-orange-700 dark:text-orange-400'
+         onClick={() => {
+          tableUtils.changeShowMergeTable(true);
+         }}
+        >
+         <AiOutlineMergeCells className='size-8 text-inherit' />
+         <DropdownMenuLabel className='text-base'>
+          {tableUtils.dic.tables.mergeTables}
+         </DropdownMenuLabel>
+        </DropdownMenuItem>
+        {/* <DropdownMenuItem */}
+        {/*  className='text-rose-700 dark:text-rose-400' */}
+        {/*  onClick={onCloseOrder} */}
+        {/* > */}
+        {/*  <IoMdCloseCircleOutline className='size-8 text-inherit' /> */}
+        {/*  <DropdownMenuLabel className='text-base'> */}
+        {/*   {dic.tables.closeOrder} */}
+        {/*  </DropdownMenuLabel> */}
+        {/* </DropdownMenuItem> */}
+       </>
+      )}
+    </DropdownMenuGroup>
+   </DropdownMenuContent>
+  );
 
- const salonsInAction = showMergeTable || showTransferTable;
+ const salonsInAction =
+  tableUtils.tableType === 'mock'
+   ? false
+   : tableUtils.showMergeTable || tableUtils.showTransferTable;
 
  return (
   <motion.div
@@ -176,13 +184,15 @@ export default function SalonTable({
      className='z-1 rounded-2xl h-full flex-col justify-start text-start p-0 overflow-hidden shadow-lg mx-3 group-data-[layout-minimal="true"]:mx-0 group-data-[layout-minimal="true"]:w-full'
      asChild={!isMinimal}
      onClick={() => {
-      if (salonsInAction && selectedTable?.tableNo === table.tableNo) return;
-      if (showTransferTable) {
-       transferTableTo(table);
+      if (tableUtils.tableType === 'mock') return;
+      if (salonsInAction && tableUtils.selectedTable?.tableNo === table.tableNo)
+       return;
+      if (tableUtils.showTransferTable) {
+       tableUtils.transferTableTo(table);
        return;
       }
-      if (showMergeTable) {
-       mergeTableTo(table);
+      if (tableUtils.showMergeTable) {
+       tableUtils.mergeTableTo(table);
        return;
       }
       if (isMinimal) handleOpenChange(true);
@@ -197,12 +207,14 @@ export default function SalonTable({
     >
      <Link
       href={
-       showTransferTable ||
-       showMergeTable ||
-       table.tableStateTypeID === TableStateTypes.outOfService ||
-       isMinimal
+       tableUtils.tableType === 'mock'
         ? '#'
-        : newOrderRedirectLink
+        : tableUtils.showTransferTable ||
+            tableUtils.showMergeTable ||
+            table.tableStateTypeID === TableStateTypes.outOfService ||
+            isMinimal
+          ? '#'
+          : newOrderRedirectLink
       }
       className={`relative flex! flex-col grow items-stretch ${isBold ? tableStyles.backgoundColor : 'bg-background!'} p-2 group-data-[layout-minimal="true"]:w-full`}
      >
@@ -217,12 +229,16 @@ export default function SalonTable({
        >
         <span className='text-base font-medium group-data-[bold=true]:font-bold'>
          <span>
-          {initData.tableTypes.find(
-           (item: { key: string; value: string }) =>
-            item.key === table.tableTypeID.toString(),
-          )?.value || ''}{' '}
+          {tableUtils.tableType === 'mock'
+           ? '---'
+           : tableUtils.tableTypes.find(
+              (item: { key: string; value: string }) =>
+               item.key === table.tableTypeID.toString(),
+             )?.value || ''}{' '}
          </span>
-         {dic.tables[tableStyles.type]}
+         {tableUtils.tableType === 'mock'
+          ? ''
+          : tableUtils.dic.tables[tableStyles.type]}
          {getTableExtensionTitle()}
         </span>
        </div>
@@ -275,18 +291,20 @@ export default function SalonTable({
      dir={localeInfo.contentDirection}
      onOpenChange={handleOpenChange}
     >
-     {!showTransferTable && !showMergeTable && (
-      <DropdownMenuTrigger asChild>
-       <Button
-        variant='outline'
-        onPointerDown={(e) => e.preventDefault()}
-        onClick={() => handleOpenChange(true)}
-        className='w-full h-auto pt-5 pb-1 bg-neutral-50 dark:bg-neutral-900 text-primary rounded-xl rounded-ss-none rounded-se-none group-data-[layout-minimal="true"]:opacity-0 group-data-[layout-minimal="true"]:m-0 group-data-[layout-minimal="true"]:h-0 group-data-[layout-minimal="true"]:p-0'
-       >
-        <SlOptions className='size-6' />
-       </Button>
-      </DropdownMenuTrigger>
-     )}
+     {tableUtils.tableType === 'normal' &&
+      !tableUtils.showTransferTable &&
+      !tableUtils.showMergeTable && (
+       <DropdownMenuTrigger asChild>
+        <Button
+         variant='outline'
+         onPointerDown={(e) => e.preventDefault()}
+         onClick={() => handleOpenChange(true)}
+         className='w-full h-auto pt-5 pb-1 bg-neutral-50 dark:bg-neutral-900 text-primary rounded-xl rounded-ss-none rounded-se-none group-data-[layout-minimal="true"]:opacity-0 group-data-[layout-minimal="true"]:m-0 group-data-[layout-minimal="true"]:h-0 group-data-[layout-minimal="true"]:p-0'
+        >
+         <SlOptions className='size-6' />
+        </Button>
+       </DropdownMenuTrigger>
+      )}
      {menuContent}
     </DropdownMenu>
    </div>

@@ -71,10 +71,7 @@ export default function SalonsConfig() {
     </div>
    </div>
 
-   <SalonTableDemoShowcase
-    mode={salonsConfig.displayMode}
-    isBold={salonsConfig.boldStyle}
-   />
+   <SalonTableDemoShowcase mode={salonsConfig.displayMode} />
    {/*<p className='w-fit p-6 sm:mt-8 mt-4 mb-4 mx-auto font-medium rounded-2xl bg-orange-600/10 text-orange-950'>
     {activeTabDescription}
    </p>*/}
