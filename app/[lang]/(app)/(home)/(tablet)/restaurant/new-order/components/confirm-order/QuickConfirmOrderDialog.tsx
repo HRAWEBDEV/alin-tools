@@ -196,8 +196,7 @@ export default function QuickOrderInfoDialog({
        <InputGroupTextarea id='description' {...register('comment')} />
       </InputGroup>
      </Field>
-
-     <DialogFooter className='pt-4 felx items-center justify-between'>
+     <DialogFooter className='pt-4'>
       <DrawerClose asChild>
        <Button type='button' variant='outline' className='flex-1'>
         {dic.orderConfirm.close}
