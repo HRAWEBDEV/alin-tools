@@ -14,8 +14,16 @@ import ServeDishIcon from '@/app/[lang]/(app)/components/icons/ServeDishIcon';
 
 export default function OrderItem({
  itemProgram,
+ activeImageModalID,
+ onChangeModalID,
+ overlayVisible,
+ onOverlayChange,
 }: {
  itemProgram: ItemProgram;
+ activeImageModalID: null | number;
+ onChangeModalID: (id: number | null) => void;
+ overlayVisible: null | number;
+ onOverlayChange: (id: number | null) => void;
 }) {
  const {
   itemsInfo: { searchedItemName },
@@ -37,6 +45,11 @@ export default function OrderItem({
       <OrderItemImage
        src={itemProgram.imageURL || undefined}
        alt={itemProgram.itemName || undefined}
+       id={itemProgram.id}
+       activeID={activeImageModalID}
+       onChangeID={onChangeModalID}
+       overlayVisible={overlayVisible}
+       onOverlayChange={onOverlayChange}
       >
        <ServeDishIcon className='size-20 text-neutral-300 dark:text-neutral-700' />
       </OrderItemImage>
