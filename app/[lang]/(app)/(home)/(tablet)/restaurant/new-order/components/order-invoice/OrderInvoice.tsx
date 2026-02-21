@@ -219,7 +219,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
       <span>{format(remained)} ریال</span>
      </div>
     </div>
-    <div className='grid sm:grid-cols-3 gap-3 mb-6 border-b border-input pb-6'>
+    <div className='grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6 border-b border-input pb-6'>
      <Button
       disabled={shopLoading}
       variant='destructive'
@@ -243,7 +243,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
       disabled={shopLoading || !isPayable}
       variant='secondary'
       size='lg'
-      className='font-medium'
+      className='font-medium col-span-2 sm:col-span-1'
       onClick={() => invoicePaymentRef.current?.scrollIntoView()}
      >
       {shopLoading && <Spinner />}

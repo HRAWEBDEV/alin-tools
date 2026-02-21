@@ -146,12 +146,12 @@ export default function ConfirmOrderModal({
         </Dialog>
        )}
       </div>
-      <div className='flex flex-col-reverse sm:flex-row gap-4'>
+      <div className='flex gap-2 sm:gap-4'>
        {confirmOrderActiveType === 'shoppingCard' && !!orderItems.length && (
         <Button
          disabled={shopInfoLoading}
          variant='destructive'
-         className='h-11'
+         className='h-11 max-sm:p-3 max-sm:grow'
          onClick={onCloseOrder}
         >
          {shopInfoLoading && <Spinner />}
@@ -161,7 +161,7 @@ export default function ConfirmOrderModal({
        {confirmOrderActiveType === 'shoppingCard' && !!orderItems.length && (
         <Button
          variant='secondary'
-         className='h-11'
+         className='h-11 max-sm:p-3 max-sm:grow'
          disabled={shopInfoLoading}
          onClick={() => {
           onSaveOrder();
@@ -173,7 +173,7 @@ export default function ConfirmOrderModal({
        )}
        {confirmOrderActiveType === 'shoppingCard' && (
         <Button
-         className='h-11'
+         className='h-11 max-sm:p-3 max-sm:grow'
          disabled={!orderItems.length || shopInfoLoading}
          onClick={() => {
           changeConfirmType('invoice');
