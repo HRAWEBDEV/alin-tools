@@ -22,8 +22,8 @@ export default function OrderTools({ dic }: { dic: NewOrderDictionary }) {
   order: { orderItems },
  } = useOrderBaseConfigContext();
  return (
-  <div className='flex md:items-center md:justify-between gap-2 mb-2 flex-col md:flex-row'>
-   <div className='md:grid md:grid-cols-[minmax(0,18rem)]'>
+  <div className='flex md:items-center md:justify-between gap-2 mb-2'>
+   <div className='md:grid md:grid-cols-[minmax(0,18rem)] grow md:grow-0'>
     <InputGroup className='bg-neutral-100 dark:bg-neutral-900 h-10'>
      <InputGroupAddon align='inline-start'>
       <IoSearch className='text-primary size-5' />
@@ -39,22 +39,30 @@ export default function OrderTools({ dic }: { dic: NewOrderDictionary }) {
    </div>
    <div className='md:flex md:justify-end grid grid-cols-2 gap-2'>
     <Button
-     className='md:w-36 text-primary border-primary h-10'
+     className='md:w-40 text-primary border-primary h-10'
      variant='outline'
      disabled={shopInfoLoading}
      onClick={() => showConfirmOrder('orderInfo')}
     >
-     {!shopInfoLoading ? <FaCircleInfo /> : <Spinner />}
-     <span>{dic.tools.orderInfo}</span>
+     {!shopInfoLoading ? (
+      <FaCircleInfo className='size-6' />
+     ) : (
+      <Spinner className='size-6' />
+     )}
+     <span className='hidden md:inline-block'>{dic.tools.orderInfo}</span>
     </Button>
     <Button
      variant='secondary'
-     className='relative md:w-36 h-10'
+     className='relative md:w-40 h-10'
      disabled={shopLoading}
      onClick={() => showConfirmOrder('shoppingCard')}
     >
-     {!shopLoading ? <FaShoppingBag /> : <Spinner />}
-     <span>{dic.tools.shoppingCard}</span>
+     {!shopLoading ? (
+      <FaShoppingBag className='size-6' />
+     ) : (
+      <Spinner className='size-6' />
+     )}
+     <span className='hidden md:inline-block'>{dic.tools.shoppingCard}</span>
      {!!orderItems.length && (
       <Badge className='p-1 size-6 bg-orange-600 dark:bg-orange-400 font-medium text-base'>
        {orderItems.length}
