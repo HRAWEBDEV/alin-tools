@@ -91,6 +91,7 @@ export default function SalonTable({
       className='text-yellow-600 dark:text-yellow-400'
       onClick={() => {
        onShowChangeTableState(true);
+       setIsOpen(false);
       }}
      >
       <GrStatusUnknown className='size-8 text-inherit' />
@@ -106,6 +107,7 @@ export default function SalonTable({
         className='text-teal-700 dark:text-teal-400'
         onClick={() => {
          changeShowTransferTable(true);
+         setIsOpen(false);
         }}
        >
         <TbTransfer className='size-8 text-inherit' />
@@ -139,77 +141,17 @@ export default function SalonTable({
   </DropdownMenuContent>
  );
 
- if (isMinimal) {
-  return (
-   <motion.div
-    layout
-    className='grid group data-[minimal=true]:max-w-[96px]'
-    data-minimal={true}
-    data-bold={isBold}
-    style={{ gridTemplateRows: '1fr' }}
-   >
-    <DropdownMenu
-     open={isOpen}
-     dir={localeInfo.contentDirection}
-     onOpenChange={handleOpenChange}
-    >
-     <DropdownMenuTrigger asChild>
-      <Button
-       variant={'outline'}
-       onPointerDown={(e) => e.preventDefault()}
-       onClick={() => {
-        const isSameTable = selectedTable?.tableNo === table.tableNo;
-        if ((showTransferTable || showMergeTable) && isSameTable) return;
-        if (showTransferTable) {
-         transferTableTo(table);
-         return;
-        }
-        if (showMergeTable) {
-         mergeTableTo(table);
-         return;
-        }
-        handleOpenChange(true);
-       }}
-       className={`z-1 rounded-2xl h-full flex-col justify-start text-start p-0 overflow-hidden shadow-lg transition-colors mx-1 aspect-square border-2 ${tableStyles.border} ${tableStyles.backgoundColor} max-w-24 max-h-24 group-data-[bold=true]:border-4`}
-      >
-       <div className='relative flex flex-col grow items-stretch p-1.5 gap-0.5 justify-center w-full h-full'>
-        <div className='text-center flex flex-col justify-center grow'>
-         <div className='flex items-center gap-2'>
-          <h3
-           className={`${tableStyles.text} font-en-roboto text-3xl mx-auto group-data-[bold=true]:font-black`}
-          >
-           {table.tableNo.toString().padStart(2, '0')}
-          </h3>
-         </div>
-        </div>
-        <div className='flex flex-col items-center gap-0'>
-         <div
-          style={{
-           direction: 'ltr',
-          }}
-          className={`font-medium text-[0.9rem] ${tableStyles.text} group-data-[bold=true]:font-bold`}
-         >
-          {table.occupiedPerson || '-'}/{table.tableCapacity}
-         </div>
-         {table.vip && (
-          <span className='text-[8px] text-amber-500 dark:text-amber-400 group-data-[bold=true]:font-bold'>
-           VIP
-          </span>
-         )}
-        </div>
-       </div>
-      </Button>
-     </DropdownMenuTrigger>
-     {menuContent}
-    </DropdownMenu>
-   </motion.div>
-  );
- }
+ const salonsInAction = showMergeTable || showTransferTable;
 
  return (
-  <motion.div layout className='grid group' data-bold={isBold}>
-   <div className='relative min-h-40'>
-    {!!tableRows.length && (
+  <motion.div
+   layout
+   className='grid group'
+   data-bold={isBold}
+   data-layout-minimal={isMinimal}
+  >
+   <div className='relative min-h-40 group-data-[layout-minimal="true"]:min-h-auto'>
+    {!isMinimal && !!tableRows.length && (
      <div
       style={{
        direction: 'ltr',
@@ -231,12 +173,19 @@ export default function SalonTable({
     )}
     <Button
      variant={'outline'}
-     className='z-1 rounded-2xl h-full flex-col justify-start text-start p-0 overflow-hidden mx-3 shadow-lg'
+     className='z-1 rounded-2xl h-full flex-col justify-start text-start p-0 overflow-hidden shadow-lg mx-3 group-data-[layout-minimal="true"]:mx-0 group-data-[layout-minimal="true"]:w-full'
      asChild={!isMinimal}
      onClick={() => {
-      if (selectedTable?.tableNo === table.tableNo) return;
-      if (showTransferTable) transferTableTo(table);
-      if (showMergeTable) mergeTableTo(table);
+      if (salonsInAction && selectedTable?.tableNo === table.tableNo) return;
+      if (showTransferTable) {
+       transferTableTo(table);
+       return;
+      }
+      if (showMergeTable) {
+       mergeTableTo(table);
+       return;
+      }
+      if (isMinimal) handleOpenChange(true);
      }}
      style={{
       borderColor:
@@ -250,31 +199,34 @@ export default function SalonTable({
       href={
        showTransferTable ||
        showMergeTable ||
-       table.tableStateTypeID === TableStateTypes.outOfService
+       table.tableStateTypeID === TableStateTypes.outOfService ||
+       isMinimal
         ? '#'
         : newOrderRedirectLink
       }
-      className={`relative flex! flex-col grow items-stretch ${isBold ? tableStyles.backgoundColor : 'bg-background!'} p-2`}
+      className={`relative flex! flex-col grow items-stretch ${isBold ? tableStyles.backgoundColor : 'bg-background!'} p-2 group-data-[layout-minimal="true"]:w-full`}
      >
       {table.vip && (
-       <div className='absolute top-11 start-0 end-0 text-end text-4xl text-amber-400/40 dark:text-amber-500/40 font-en-roboto group-data-[bold=true]:font-bold'>
+       <div className='absolute top-11 group-data-[layout-minimal="true"]:top-0 group-data-[layout-minimal="true"]:bottom-11 start-0 end-0 text-end text-4xl text-amber-400/40 dark:text-amber-500/40 font-en-roboto group-data-[bold=true]:font-bold group-data-[layout-minimal="true"]:text-3xl'>
         VIP
        </div>
       )}
-      <div
-       className={`p-1 rounded-2xl border border-dashed text-center ${tableStyles.backgoundColor} ${tableStyles.border} ${tableStyles.text} `}
-      >
-       <span className='text-base font-medium group-data-[bold=true]:font-bold'>
-        <span>
-         {initData.tableTypes.find(
-          (item: { key: string; value: string }) =>
-           item.key === table.tableTypeID.toString(),
-         )?.value || ''}{' '}
+      {!isMinimal && (
+       <div
+        className={`p-1 rounded-2xl border border-dashed text-center ${tableStyles.backgoundColor} ${tableStyles.border} ${tableStyles.text} `}
+       >
+        <span className='text-base font-medium group-data-[bold=true]:font-bold'>
+         <span>
+          {initData.tableTypes.find(
+           (item: { key: string; value: string }) =>
+            item.key === table.tableTypeID.toString(),
+          )?.value || ''}{' '}
+         </span>
+         {dic.tables[tableStyles.type]}
+         {getTableExtensionTitle()}
         </span>
-        {dic.tables[tableStyles.type]}
-        {getTableExtensionTitle()}
-       </span>
-      </div>
+       </div>
+      )}
       <div className='text-start ps-2 grow'>
        <div className='flex items-center gap-2'>
         <h3
@@ -283,14 +235,16 @@ export default function SalonTable({
          {table.tableNo.toString().padStart(2, '0')}
         </h3>
        </div>
-       <div>
-        <p className='text-sm text-primary text-wrap group-data-[bold=true]:font-medium'>
-         {table.saleTypeName || ''}
-        </p>
-        <p className='text-md text-neutral-500 dark:text-neutral-400 text-wrap group-data-[bold=true]:font-medium'>
-         {table.customerName || ''}
-        </p>
-       </div>
+       {!isMinimal && (
+        <div>
+         <p className='text-sm text-primary text-wrap group-data-[bold=true]:font-medium'>
+          {table.saleTypeName || ''}
+         </p>
+         <p className='text-md text-neutral-500 dark:text-neutral-400 text-wrap group-data-[bold=true]:font-medium'>
+          {table.customerName || ''}
+         </p>
+        </div>
+       )}
       </div>
       <div className='flex items-center justify-between gap-4'>
        <div className='flex items-center gap-1 text-base text-neutral-600 dark:text-neutral-400 font-medium group-data-[bold=true]:font-bold'>
@@ -315,7 +269,7 @@ export default function SalonTable({
      </Link>
     </Button>
    </div>
-   <div className='mx-3 -mt-4'>
+   <div className='mx-3 -mt-4 group-data-[layout-minimal="true"]:m-0 group-data-[layout-minimal="true"]:h-0 group-data-[layout-minimal="true"]:overflow-hidden'>
     <DropdownMenu
      open={isOpen}
      dir={localeInfo.contentDirection}
@@ -327,7 +281,7 @@ export default function SalonTable({
         variant='outline'
         onPointerDown={(e) => e.preventDefault()}
         onClick={() => handleOpenChange(true)}
-        className='w-full h-auto pt-5 pb-1 bg-neutral-50 dark:bg-neutral-900 text-primary rounded-xl rounded-ss-none rounded-se-none'
+        className='w-full h-auto pt-5 pb-1 bg-neutral-50 dark:bg-neutral-900 text-primary rounded-xl rounded-ss-none rounded-se-none group-data-[layout-minimal="true"]:opacity-0 group-data-[layout-minimal="true"]:m-0 group-data-[layout-minimal="true"]:h-0 group-data-[layout-minimal="true"]:p-0'
        >
         <SlOptions className='size-6' />
        </Button>

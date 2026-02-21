@@ -36,6 +36,7 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
    showTransferTable,
    showChangeTableState,
    selectedTable,
+   changeSelectedTable,
    selectedTransferToTable,
    showTransferTableConfirm,
    showMergeTable,
@@ -87,6 +88,7 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
         variant='destructive'
         onClick={() => {
          changeShowMergeTable(false);
+         changeSelectedTable(null);
         }}
        >
         <span className='font-medium text-base'>{dic.cancelMerge}</span>
@@ -112,6 +114,7 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
         variant='destructive'
         onClick={() => {
          changeShowTransferTable(false);
+         changeSelectedTable(null);
         }}
        >
         <span className='font-medium text-base'>{dic.cancelTransfer}</span>
