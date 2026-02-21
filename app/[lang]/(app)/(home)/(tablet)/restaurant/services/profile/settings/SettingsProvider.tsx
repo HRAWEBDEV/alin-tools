@@ -180,7 +180,7 @@ export default function SettingsProvider({
       <DrawerTitle className='dark:text-gray-300 text-gray-600 sm:text-xl text-md flex items-center justify-start gap-4 px-0'>
        <div className='relative'>
         <RiSunLine className='text-pink-600 size-12' />
-        <RiSettings4Fill className='text-gray-500 dark:text-gray-400 size-6 absolute left-0 -bottom-1.5 ' />
+        <RiSettings4Fill className='text-pink-600 size-6 absolute left-0 -bottom-1.5 ' />
        </div>
        {title}
       </DrawerTitle>
@@ -197,7 +197,7 @@ export default function SettingsProvider({
       <DrawerTitle className='dark:text-gray-300 text-gray-600 sm:text-xl text-md flex items-center justify-start gap-4 px-0'>
        <div className='relative'>
         <DishIcon className='text-primary size-12' />
-        <RiSettings4Fill className='text-gray-500 dark:text-gray-400 size-6 absolute -left-1.5 -bottom-1.5' />
+        <RiSettings4Fill className='text-primary size-6 absolute -left-1.5 -bottom-1.5' />
        </div>
        {title}
       </DrawerTitle>
@@ -213,7 +213,7 @@ export default function SettingsProvider({
       <DrawerTitle className='dark:text-gray-300 text-gray-600 sm:text-xl text-md flex items-center justify-start gap-4 px-0'>
        <div className='relative'>
         <DinnerIcon className='text-orange-600 hover:text-orange-500 size-12' />
-        <RiSettings4Fill className='text-gray-500 dark:text-gray-400 size-6 absolute -left-1.5 -bottom-1.5' />
+        <RiSettings4Fill className='text-orange-600 size-6 absolute -left-1.5 -bottom-1.5' />
        </div>
        {title}
       </DrawerTitle>

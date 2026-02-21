@@ -1,8 +1,7 @@
 import { Button } from '@/components/ui/button';
-import React from 'react';
-import { RiArrowGoForwardFill } from 'react-icons/ri';
 import { useSettingsContext } from '../settingsContext';
 import { useRestaurantShareDictionary } from '../../../share-dictionary/restaurantShareDictionaryContext';
+import { FaArrowRight } from 'react-icons/fa6';
 
 export default function BackBtn({ className }: { className?: string }) {
  const { setActiveView } = useSettingsContext();
@@ -17,7 +16,7 @@ export default function BackBtn({ className }: { className?: string }) {
    onClick={() => setActiveView(null)}
    variant='outline'
   >
-   <RiArrowGoForwardFill className='font-medium sm:size-5 size-4' />
+   <FaArrowRight className='font-medium sm:size-5 size-4' />
    <span className='font-medium sm:text-sm text-xs sm:block hidden'>
     {settings.backBtn}
    </span>
