@@ -17,17 +17,19 @@ export default function OrderItemImage({
 }: {
  src?: string;
  alt?: string;
- activeID: number | null;
- id: number;
- overlayVisible: number | null;
- onOverlayChange: (id: number | null) => void;
- onChangeID: (id: number | null) => void;
+ activeID?: number | null;
+ id?: number;
+ overlayVisible?: number | null;
+ onOverlayChange?: (id: number | null) => void;
+ onChangeID?: (id: number | null) => void;
  children?: ReactNode;
 }) {
  const [showImage, setShowImage] = useState(true);
  const imageRef = useRef<HTMLButtonElement>(null);
 
  useEffect(() => {
+  if (id === undefined || overlayVisible === undefined || !onOverlayChange)
+   return;
   if (id !== overlayVisible) return;
   const callbackFn = (e: Event) => {
    const target = e.target as Node;
@@ -42,7 +44,8 @@ export default function OrderItemImage({
   return () => document.removeEventListener('click', callbackFn);
  }, [id, onOverlayChange, overlayVisible]);
 
- function handleToggleImageDialog(id: number) {
+ function handleToggleImageDialog() {
+  if (id === undefined || !onChangeID || !onOverlayChange) return;
   const isDesktopDevice = isHoverable();
   if (isDesktopDevice) {
    return onChangeID(id);
@@ -61,8 +64,11 @@ export default function OrderItemImage({
     <Button
      ref={imageRef}
      variant='ghost'
-     className='order-item-image-btn w-full h-full p-0 relative cursor-pointer group'
-     onClick={() => handleToggleImageDialog(id)}
+     className={cx(
+      'order-item-image-btn w-full h-full p-0 relative group',
+      id !== undefined && onChangeID ? 'cursor-pointer' : 'cursor-default',
+     )}
+     onClick={handleToggleImageDialog}
     >
      <img
       alt={alt || 'image'}
@@ -73,14 +79,16 @@ export default function OrderItemImage({
        setShowImage(false);
       }}
      />
-     <div
-      className={cx(
-       `rounded-full flex items-center justify-center  absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-5 w-full h-full transition backdrop-blur-xs opacity-0 [@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100`,
-       id === overlayVisible ? 'opacity-100!' : 'opacity-0',
-      )}
-     >
-      <RiEyeLine className='w-full  text-gray-800 dark:text-gray-400 size-8' />
-     </div>
+     {id !== undefined && onChangeID && (
+      <div
+       className={cx(
+        `rounded-full flex items-center justify-center  absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-5 w-full h-full transition backdrop-blur-xs opacity-0 [@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100`,
+        id === overlayVisible ? 'opacity-100!' : 'opacity-0',
+       )}
+      >
+       <RiEyeLine className='w-full  text-gray-800 dark:text-gray-400 size-8' />
+      </div>
+     )}
     </Button>
    ) : (
     <>{children}</>
