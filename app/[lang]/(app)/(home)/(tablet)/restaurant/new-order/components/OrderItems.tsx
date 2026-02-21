@@ -1,4 +1,5 @@
 'use client';
+import { useRef } from 'react';
 import { type NewOrderDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/new-order/dictionary';
 import OrderItem from './OrderItem';
 import { useOrderBaseConfigContext } from '../services/order-tools/orderBaseConfigContext';
@@ -6,6 +7,7 @@ import { AnimatePresence } from 'motion/react';
 import { Spinner } from '@/components/ui/spinner';
 import NoItemFound from '@/app/[lang]/(app)/components/NoItemFound';
 import UnExpectedError from '@/app/[lang]/(app)/components/UnExpectedError';
+import { useVirtualizer } from '@tanstack/react-virtual';
 
 export default function OrderItems({ dic }: { dic: NewOrderDictionary }) {
  const {
