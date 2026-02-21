@@ -86,7 +86,7 @@ export default function OrderItemImage({
         id === overlayVisible ? 'opacity-100!' : 'opacity-0',
        )}
       >
-       <RiEyeLine className='w-full  text-gray-800 dark:text-gray-400 size-8' />
+       <RiEyeLine className='w-full text-gray-900 size-10' />
       </div>
      )}
     </Button>
