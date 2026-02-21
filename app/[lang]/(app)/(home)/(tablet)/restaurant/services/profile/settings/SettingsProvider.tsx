@@ -209,7 +209,7 @@ export default function SettingsProvider({
     );
    case 'salonsConfig':
     return (
-     <DrawerHeader className='px-2 flex-row items-center justify-between relative border-b border-b-gray-400 dark:border-b-gray-300 '>
+     <DrawerHeader className='px-2 flex-row items-center justify-between relative border-b border-input'>
       <DrawerTitle className='dark:text-gray-300 text-gray-600 sm:text-xl text-md flex items-center justify-start gap-4 px-0'>
        <div className='relative'>
         <DinnerIcon className='text-orange-600 hover:text-orange-500 size-12' />
