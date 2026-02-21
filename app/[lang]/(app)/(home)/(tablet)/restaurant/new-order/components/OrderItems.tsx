@@ -6,6 +6,8 @@ import { AnimatePresence } from 'motion/react';
 import { Spinner } from '@/components/ui/spinner';
 import NoItemFound from '@/app/[lang]/(app)/components/NoItemFound';
 import UnExpectedError from '@/app/[lang]/(app)/components/UnExpectedError';
+import { useState } from 'react';
+import FoodImageDialog from './FoodImageDialog';
 
 export default function OrderItems({ dic }: { dic: NewOrderDictionary }) {
  const {
@@ -16,6 +18,18 @@ export default function OrderItems({ dic }: { dic: NewOrderDictionary }) {
    orderItems: { isError: userOrderItemsError },
   },
  } = useOrderBaseConfigContext();
+
+ const [activeImageModalID, setActiveImageModalID] = useState<null | number>(
+  null,
+ );
+ const [overlayVisible, setOverlayVisible] = useState<null | number>(null);
+
+ function handlleChangeActiveID(id: number | null) {
+  return setActiveImageModalID(id);
+ }
+ function handleToggleOverlayVisible(id: number | null) {
+  return setOverlayVisible(id);
+ }
 
  if (userOrderItemsError || userOrderIsError) {
   return <UnExpectedError />;
@@ -34,6 +48,7 @@ export default function OrderItems({ dic }: { dic: NewOrderDictionary }) {
    </div>
   );
  }
+ const activeItem = filteredData.find((item) => item.id === activeImageModalID);
 
  return (
   <div className='p-4 pb-10 pt-0 overflow-hidden'>
@@ -44,9 +59,24 @@ export default function OrderItems({ dic }: { dic: NewOrderDictionary }) {
        <Spinner className='size-16 text-primary' />
       </div>
      ) : (
-      filteredData?.map((itemProgram) => (
-       <OrderItem key={itemProgram.id} itemProgram={itemProgram} />
-      ))
+      <>
+       {filteredData?.map((itemProgram) => (
+        <OrderItem
+         key={itemProgram.id}
+         itemProgram={itemProgram}
+         activeImageModalID={activeImageModalID}
+         onChangeModalID={handlleChangeActiveID}
+         overlayVisible={overlayVisible}
+         onOverlayChange={handleToggleOverlayVisible}
+        />
+       ))}
+       <FoodImageDialog
+        activeID={activeImageModalID}
+        onChangeID={handlleChangeActiveID}
+        alt={activeItem?.itemName || undefined}
+        src={activeItem?.imageURL || undefined}
+       />
+      </>
      )}
     </div>
    </AnimatePresence>
