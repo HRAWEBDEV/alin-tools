@@ -10,7 +10,7 @@ import {
 import dynamic from 'next/dynamic';
 import { useRestaurantShareDictionary } from '../../share-dictionary/restaurantShareDictionaryContext';
 import { Button } from '@/components/ui/button';
-import { RiSunLine, RiSettings4Fill } from 'react-icons/ri';
+import { RiSettings4Fill } from 'react-icons/ri';
 import SpinnerLoading from './components/SpinnerLoading';
 import { AnimatePresence } from 'motion/react';
 import { motion } from 'motion/react';
@@ -31,6 +31,9 @@ import {
 } from './utils/SalonsConfigSetting';
 import DinnerIcon from '@/app/[lang]/(app)/components/icons/DinnerIcon';
 import CloseButton from './components/CloseButton';
+import { getModeIcon } from '@/app/[lang]/(app)/utils/getModeIcons';
+import { useTheme } from 'next-themes';
+import { AppModes } from '@/theme/appModes';
 
 const views: Record<ActiveView, React.ComponentType> = {
  orderConfig: dynamic(() => import('./components/order-config/OrderConfig'), {
@@ -72,6 +75,8 @@ export default function SettingsProvider({
   }
   return defaultStorageSalonsConfig;
  });
+
+ const { theme } = useTheme();
 
  const [isOpen, setIsOpen] = useState(false);
  const [activeView, setActiveView] = useState<ActiveView | null>(null);
@@ -151,7 +156,7 @@ export default function SettingsProvider({
       className='text-base text-pink-600 hover:text-pink-500 hover:bg-pink-600/10 p-4 px-8 w-full justify-start h-[unset] gap-4 items-center  transition-colors'
       onClick={() => setActiveView('themeToggler')}
      >
-      <RiSunLine className='size-8' />
+      {getModeIcon(theme as AppModes, { className: 'size-8' })}
       <span>{settings.buttons.themeToggler}</span>
      </Button>
     </li>
@@ -198,8 +203,8 @@ export default function SettingsProvider({
      <DrawerHeader className='px-2 flex-row items-center justify-between relative border-b border-input'>
       <DrawerTitle className='dark:text-gray-300 text-gray-600 sm:text-xl text-md flex items-center justify-start gap-4 px-0'>
        <div className='relative'>
-        <RiSunLine className='text-pink-600 size-12' />
-        <RiSettings4Fill className='text-pink-600 size-6 absolute left-0 -bottom-1.5 ' />
+        {getModeIcon(theme as AppModes, { className: 'size-12 text-pink-600' })}
+        <RiSettings4Fill className='text-pink-400 size-6 absolute -left-1 -bottom-2 ' />
        </div>
        {title}
       </DrawerTitle>
