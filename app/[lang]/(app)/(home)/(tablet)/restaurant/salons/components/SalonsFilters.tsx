@@ -27,7 +27,7 @@ import { useSalonBaseConfigContext } from '../services/salon-base-config/salonBa
 import { getTableStateStyles } from '../utils/tableStates';
 import { TableStateTypes } from '../utils/tableStates';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
-
+import { useSettingsContext } from '../../services/profile/settings/settingsContext';
 export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
  const [searchedSalon, setSearchedSalon] = useState('');
  const { locale } = useBaseConfig();
@@ -56,6 +56,9 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
  const filteredSalons = data.filter((item) =>
   item.value.includes(searchedSalon),
  );
+
+ const { tempDisplayMode, handleToggleDisplayMode, handleToggleBoldStyle } =
+  useSettingsContext();
 
  return (
   <>
@@ -233,6 +236,40 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
         {dic.filters.reserved} ({tablesReport.reservedTables})
        </Label>
       </div>
+      <div className='flex gap-2 items-center'>
+       <Switch
+        id='displayMode'
+        style={{
+         direction: 'ltr',
+        }}
+        className='scale-125'
+        checked={tempDisplayMode['displayMode'] === 'minimal'}
+        onCheckedChange={(newVal) =>
+         handleToggleDisplayMode(newVal ? 'minimal' : 'normal')
+        }
+       />
+       <Label htmlFor='displayMode' className={' font-medium text-orange-500'}>
+        {dic.filters.displayMode.title}{' '}
+        {tempDisplayMode['displayMode'] === 'minimal'
+         ? dic.filters.displayMode.minimal
+         : dic.filters.displayMode.normal}
+       </Label>
+      </div>
+      <div className='flex gap-2 items-center'>
+       <Switch
+        id='isBold'
+        style={{
+         direction: 'ltr',
+        }}
+        className='scale-125'
+        checked={tempDisplayMode['boldStyle']}
+        onCheckedChange={(newVal) => handleToggleBoldStyle(newVal)}
+       />
+       <Label htmlFor='isBold' className={' font-medium text-orange-500'}>
+        {dic.filters.boldStyle}
+       </Label>
+      </div>
+
       {/* <div className='flex gap-2 items-center'> */}
       {/*  <Switch */}
       {/*   id='outOfService' */}

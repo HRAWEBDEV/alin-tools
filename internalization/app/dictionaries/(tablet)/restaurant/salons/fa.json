@@ -17,7 +17,13 @@
   "outOfService": "خارج از سرویس",
   "next": "بعدی",
   "prev": "قبلی",
-  "lastUpdate": "آخرین بروزرسانی"
+  "lastUpdate": "آخرین بروزرسانی",
+  "displayMode": {
+   "title": "نمایش :",
+   "minimal": "مینیمال",
+   "normal": "نرمال"
+  },
+  "boldStyle": "حالت درشتی"
  },
  "tables": {
   "readyToService": "خالـی",

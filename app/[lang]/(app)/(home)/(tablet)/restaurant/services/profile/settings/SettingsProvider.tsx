@@ -25,6 +25,7 @@ import {
 import {
  type SalonsConfig,
  defaultStorageSalonsConfig,
+ displayModeOptions,
  getStorageSalonsConfig,
  setStorageSalonsConfig,
 } from './utils/SalonsConfigSetting';
@@ -65,6 +66,13 @@ export default function SettingsProvider({
   return defaultStorageSalonsConfig;
  });
 
+ const [tempDisplayMode, setTempDisplayMode] = useState(() => {
+  if (typeof window !== 'undefined') {
+   return getStorageSalonsConfig();
+  }
+  return defaultStorageSalonsConfig;
+ });
+
  const [isOpen, setIsOpen] = useState(false);
  const [activeView, setActiveView] = useState<ActiveView | null>(null);
 
@@ -96,10 +104,18 @@ export default function SettingsProvider({
   };
   setSalonsConfig(newConfig);
   setStorageSalonsConfig(newConfig);
+  setTempDisplayMode(newConfig);
  }
 
  function toggleIsOpen() {
   setIsOpen(!isOpen);
+ }
+
+ function handleToggleDisplayMode(type: (typeof displayModeOptions)[number]) {
+  setTempDisplayMode((prev) => ({ ...prev, displayMode: type }));
+ }
+ function handleToggleBoldStyle(boldStyle: SalonsConfig['boldStyle']) {
+  setTempDisplayMode((prev) => ({ ...prev, boldStyle }));
  }
 
  const ctx: Settings = {
@@ -115,6 +131,9 @@ export default function SettingsProvider({
    salonsConfig,
    onChangeSalonsConfig: handleChangeSalonsConfig,
   },
+  tempDisplayMode,
+  handleToggleDisplayMode,
+  handleToggleBoldStyle,
  };
 
  function optionsList() {

@@ -24,6 +24,9 @@ interface Settings {
    value: SalonsConfig[T],
   ) => unknown;
  };
+ tempDisplayMode: SalonsConfig;
+ handleToggleDisplayMode: (type: 'normal' | 'minimal') => void;
+ handleToggleBoldStyle: (boldStyle: boolean) => void;
 }
 
 const SettingsContext = createContext<null | Settings>(null);
