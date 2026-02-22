@@ -19,11 +19,10 @@
   "prev": "قبلی",
   "lastUpdate": "آخرین بروزرسانی",
   "displayMode": {
-   "title": "نمایش :",
    "minimal": "مینیمال",
-   "normal": "نرمال"
-  },
-  "boldStyle": "حالت درشتی"
+   "normal": "نرمال",
+   "boldStyle": "برجستگی"
+  }
  },
  "tables": {
   "readyToService": "خالـی",

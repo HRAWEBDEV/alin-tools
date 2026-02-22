@@ -249,7 +249,6 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
         }
        />
        <Label htmlFor='displayMode' className={' font-medium text-orange-500'}>
-        {dic.filters.displayMode.title}{' '}
         {tempDisplayMode['displayMode'] === 'minimal'
          ? dic.filters.displayMode.minimal
          : dic.filters.displayMode.normal}
@@ -266,7 +265,7 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
         onCheckedChange={(newVal) => handleToggleBoldStyle(newVal)}
        />
        <Label htmlFor='isBold' className={' font-medium text-orange-500'}>
-        {dic.filters.boldStyle}
+        {dic.filters.displayMode.boldStyle}
        </Label>
       </div>
 
