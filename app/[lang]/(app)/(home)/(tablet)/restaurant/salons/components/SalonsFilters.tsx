@@ -144,7 +144,7 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
     {dic.title}
    </h1>
    <div className='bg-background sticky top-0 z-2 p-4 lg:p-6 pt-4! pb-2!'>
-    <div className='flex flex-col md:flex-row md:justify-between lg:gap-2 gap-4 mb-6 top-0 sticky z-3 w-full'>
+    <div className='flex flex-col md:flex-row md:justify-between lg:gap-2 gap-4 sm:mb-6 mb-2 top-0 sticky z-3 w-full'>
      <div className='flex sm:gap-4 lg:gap-2 xl:gap-4 gap-4 items-center grow'>
       <div className='grid lg:max-w-[24rem] xl:max-w-md 2xl:max-w-lg grid-cols-[max-content_1fr_max-content] grow w-full'>
        <Button

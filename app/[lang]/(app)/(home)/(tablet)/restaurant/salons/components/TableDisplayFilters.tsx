@@ -75,7 +75,7 @@ export function TableDisplayFilters({
   <>
    <Drawer>
     <DrawerTrigger className='w-fit' asChild>
-     <IoFilterCircleOutline className='text-gray-500 hover:text-gray-400 dark:hover:text-gray-200 dark:text-gray-300 size-8 cursor-pointer' />
+     <IoFilterCircleOutline className='text-gray-500 hover:text-gray-400 dark:hover:text-gray-200 dark:text-gray-300 size-10! cursor-pointer' />
     </DrawerTrigger>
     <DrawerContent className='p-6 gap-4'>
      <DrawerTitle className='text-center'>فیلتر‌ها</DrawerTitle>
