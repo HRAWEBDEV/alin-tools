@@ -28,6 +28,7 @@ import { getTableStateStyles } from '../utils/tableStates';
 import { TableStateTypes } from '../utils/tableStates';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { TableDisplayFilters } from './TableDisplayFilters';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
  const [searchedSalon, setSearchedSalon] = useState('');
  const { locale } = useBaseConfig();
@@ -56,6 +57,86 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
  const filteredSalons = data.filter((item) =>
   item.value.includes(searchedSalon),
  );
+ const isDesktop = useMediaQuery('(min-width: 640px)');
+ const statusSwitches = (
+  <>
+   <div className='flex gap-2 items-center'>
+    <Switch
+     disabled={showTransferTable || showMergeTable}
+     style={{
+      direction: 'ltr',
+     }}
+     id='empty'
+     className='scale-125'
+     checked={filters.showEmptyTables}
+     onCheckedChange={(newValue) =>
+      changeFilters({
+       ...filters,
+       showEmptyTables: newValue,
+      })
+     }
+    />
+    <Label
+     htmlFor='empty'
+     className={
+      getTableStateStyles(TableStateTypes.readyToService).text + ' font-medium'
+     }
+    >
+     {dic.filters.empty} ({tablesReport.emptyTables})
+    </Label>
+   </div>
+   <div className='flex gap-2 items-center'>
+    <Switch
+     disabled={showTransferTable || showMergeTable}
+     style={{
+      direction: 'ltr',
+     }}
+     id='occupied'
+     className='scale-125'
+     checked={filters.showOccupiedTables}
+     onCheckedChange={(newValue) =>
+      changeFilters({
+       ...filters,
+       showOccupiedTables: newValue,
+      })
+     }
+    />
+    <Label
+     htmlFor='occupied'
+     className={
+      getTableStateStyles(TableStateTypes.regularCustomer).text + ' font-medium'
+     }
+    >
+     {dic.filters.occupied} ({tablesReport.occupiedTables})
+    </Label>
+   </div>
+   <div className='flex gap-2 items-center'>
+    <Switch
+     id='reserved'
+     disabled={showTransferTable}
+     style={{
+      direction: 'ltr',
+     }}
+     className='scale-125'
+     checked={filters.showReservedTables}
+     onCheckedChange={(newValue) =>
+      changeFilters({
+       ...filters,
+       showReservedTables: newValue,
+      })
+     }
+    />
+    <Label
+     htmlFor='reserved'
+     className={
+      getTableStateStyles(TableStateTypes.reserved).text + ' font-medium'
+     }
+    >
+     {dic.filters.reserved} ({tablesReport.reservedTables})
+    </Label>
+   </div>
+  </>
+ );
 
  return (
   <>
@@ -63,9 +144,9 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
     {dic.title}
    </h1>
    <div className='bg-background sticky top-0 z-2 p-4 lg:p-6 pt-4! pb-2!'>
-    <div className='flex flex-col md:flex-row md:justify-between gap-4 mb-2 top-0 sticky z-3 w-full'>
-     <div className='flex gap-2 items-center grow xl:max-w-xl lg:max-w-lg sm:flex-row flex-col'>
-      <div className='grid grid-cols-[max-content_1fr_max-content] grow w-full'>
+    <div className='flex flex-col md:flex-row md:justify-between lg:gap-2 gap-4 mb-6 top-0 sticky z-3 w-full'>
+     <div className='flex sm:gap-4 lg:gap-2 xl:gap-4 gap-4 items-center grow'>
+      <div className='grid lg:max-w-[24rem] xl:max-w-md 2xl:max-w-lg grid-cols-[max-content_1fr_max-content] grow w-full'>
        <Button
         size='icon'
         variant='outline'
@@ -156,86 +237,10 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
         <TiArrowLeft className='size-8' />
        </Button>
       </div>
-      <TableDisplayFilters />
+      <TableDisplayFilters statusSwitches={statusSwitches} />
      </div>
-     <div className='flex gap-3 items-center flex-wrap justify-center md:justify-start'>
-      <div className='flex gap-2 items-center'>
-       <Switch
-        disabled={showTransferTable || showMergeTable}
-        style={{
-         direction: 'ltr',
-        }}
-        id='empty'
-        className='scale-125'
-        checked={filters.showEmptyTables}
-        onCheckedChange={(newValue) =>
-         changeFilters({
-          ...filters,
-          showEmptyTables: newValue,
-         })
-        }
-       />
-       <Label
-        htmlFor='empty'
-        className={
-         getTableStateStyles(TableStateTypes.readyToService).text +
-         ' font-medium'
-        }
-       >
-        {dic.filters.empty} ({tablesReport.emptyTables})
-       </Label>
-      </div>
-      <div className='flex gap-2 items-center'>
-       <Switch
-        disabled={showTransferTable || showMergeTable}
-        style={{
-         direction: 'ltr',
-        }}
-        id='occupied'
-        className='scale-125'
-        checked={filters.showOccupiedTables}
-        onCheckedChange={(newValue) =>
-         changeFilters({
-          ...filters,
-          showOccupiedTables: newValue,
-         })
-        }
-       />
-       <Label
-        htmlFor='occupied'
-        className={
-         getTableStateStyles(TableStateTypes.regularCustomer).text +
-         ' font-medium'
-        }
-       >
-        {dic.filters.occupied} ({tablesReport.occupiedTables})
-       </Label>
-      </div>
-      <div className='flex gap-2 items-center'>
-       <Switch
-        id='reserved'
-        disabled={showTransferTable}
-        style={{
-         direction: 'ltr',
-        }}
-        className='scale-125'
-        checked={filters.showReservedTables}
-        onCheckedChange={(newValue) =>
-         changeFilters({
-          ...filters,
-          showReservedTables: newValue,
-         })
-        }
-       />
-       <Label
-        htmlFor='reserved'
-        className={
-         getTableStateStyles(TableStateTypes.reserved).text + ' font-medium'
-        }
-       >
-        {dic.filters.reserved} ({tablesReport.reservedTables})
-       </Label>
-      </div>
+     <div className='flex md:gap-2 lg:gap-3 xl:gap-4 items-center flex-wrap justify-between md:justify-start shrink-0 lg:flex-nowrap'>
+      {isDesktop && statusSwitches}
 
       {/* <div className='flex gap-2 items-center'> */}
       {/*  <Switch */}
