@@ -8,6 +8,8 @@
  "mergeTo": "ادغام شود با:",
  "cancelMerge": "لغو ادغام",
  "filters": {
+  "drawerFilterTitle": "فیلتر‌ها",
+  "drawerStatusTableTitle": "وضعیت میز‌ها",
   "search": "جستجو ...",
   "selectSalon": "انتخاب سالن",
   "tables": "میز‌ها",

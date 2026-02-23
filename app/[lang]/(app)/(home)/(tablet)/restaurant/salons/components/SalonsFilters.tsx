@@ -237,7 +237,7 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
         <TiArrowLeft className='size-8' />
        </Button>
       </div>
-      <TableDisplayFilters statusSwitches={statusSwitches} />
+      <TableDisplayFilters statusSwitches={statusSwitches} dic={dic} />
      </div>
      <div className='flex md:gap-2 lg:gap-3 xl:gap-4 items-center flex-wrap justify-between md:justify-start shrink-0 lg:flex-nowrap'>
       {isDesktop && statusSwitches}

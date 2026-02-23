@@ -11,11 +11,14 @@ import {
 } from '@/components/ui/drawer';
 import { ReactNode } from 'react';
 import { IoFilterCircleOutline } from 'react-icons/io5';
+import { SalonsDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/salons/dictionary';
 
 export function TableDisplayFilters({
  statusSwitches,
+ dic,
 }: {
  statusSwitches: ReactNode;
+ dic: SalonsDictionary;
 }) {
  const { tempDisplayMode, handleToggleDisplayMode, handleToggleBoldStyle } =
   useSettingsContext();
@@ -78,10 +81,14 @@ export function TableDisplayFilters({
      <IoFilterCircleOutline className='text-gray-500 hover:text-gray-400 dark:hover:text-gray-200 dark:text-gray-300 size-10! cursor-pointer' />
     </DrawerTrigger>
     <DrawerContent className='p-6 gap-4'>
-     <DrawerTitle className='text-center'>فیلتر‌ها</DrawerTitle>
+     <DrawerTitle className='text-center'>
+      {dic.filters.drawerFilterTitle}
+     </DrawerTitle>
      {renderFilters()}
      <div className='flex flex-col gap-4 my-4'>
-      <h6 className='font-medium text-center'>وضعیت میز‌ها</h6>
+      <h6 className='font-medium text-center'>
+       {dic.filters.drawerStatusTableTitle}
+      </h6>
       <div className='flex items-center justify-between'>{statusSwitches}</div>
      </div>
     </DrawerContent>
