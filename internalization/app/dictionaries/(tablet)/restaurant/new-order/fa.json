@@ -7,6 +7,9 @@
   "search": "جستجو"
  },
  "orderInfo": {
+  "phoneNumber": "شماره تماس",
+  "firstName": "نام",
+  "lastName": "نام خانوادگی",
   "salonName": "نام سالن",
   "search": "جستجو",
   "orderDate": "تاریخ",
@@ -40,6 +43,10 @@
   "noRoomSelected": "شماره اتاق انتخاب نشده است",
   "noSubscriberSelected": "کد اشتراک انتخاب نشده است",
   "contractNo": "شماره قرارداد"
+ },
+ "orderQuickInfo": {
+  "confirm": "تایید",
+  "checkPhoneNumber": "جستجو شماره"
  },
  "orderConfirm": {
   "removeOrderItemConfirmMessage": "آیا از حذف این آیتم اطمینان دارید؟",
