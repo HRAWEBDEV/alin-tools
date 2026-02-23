@@ -1,5 +1,5 @@
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { useSettingsContext } from '../../services/profile/settings/settingsContext';
+import { useSettingsContext } from '../../../services/profile/settings/settingsContext';
 import { MdViewComfy, MdViewCompact, MdFormatBold } from 'react-icons/md';
 import { cx } from 'class-variance-authority';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
@@ -12,6 +12,8 @@ import {
 import { ReactNode } from 'react';
 import { IoFilterCircleOutline } from 'react-icons/io5';
 import { SalonsDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/salons/dictionary';
+import { useSalonBaseConfigContext } from '../../services/salon-base-config/salonBaseConfigContext';
+import MobileTableFilterIndicator from './MobileTableFilterIndicator';
 
 export function TableDisplayFilters({
  statusSwitches,
@@ -23,6 +25,16 @@ export function TableDisplayFilters({
  const { tempDisplayMode, handleToggleDisplayMode, handleToggleBoldStyle } =
   useSettingsContext();
  const isDesktop = useMediaQuery('(min-width: 640px)');
+ const {
+  tablesInfo: { filters },
+ } = useSalonBaseConfigContext();
+
+ const numActiveFilters = [
+  filters.showEmptyTables,
+  filters.showOccupiedTables,
+  filters.showReservedTables,
+ ].filter((item) => item === false).length;
+
  function renderFilters() {
   return (
    <>
@@ -77,8 +89,16 @@ export function TableDisplayFilters({
  ) : (
   <>
    <Drawer>
-    <DrawerTrigger className='w-fit' asChild>
-     <IoFilterCircleOutline className='text-gray-500 hover:text-gray-400 dark:hover:text-gray-200 dark:text-gray-300 size-10! cursor-pointer' />
+    <DrawerTrigger className='w-fit relative' asChild>
+     <button className='w-fit relative'>
+      <MobileTableFilterIndicator num={numActiveFilters} />
+      <IoFilterCircleOutline
+       className={cx(
+        'text-gray-500 hover:text-gray-400 dark:hover:text-gray-200 dark:text-gray-300 size-10! cursor-pointer',
+        numActiveFilters ? 'text-primary/80' : '',
+       )}
+      />
+     </button>
     </DrawerTrigger>
     <DrawerContent className='p-6 gap-4'>
      <DrawerTitle className='text-center'>

@@ -27,7 +27,7 @@ import { useSalonBaseConfigContext } from '../services/salon-base-config/salonBa
 import { getTableStateStyles } from '../utils/tableStates';
 import { TableStateTypes } from '../utils/tableStates';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
-import { TableDisplayFilters } from './TableDisplayFilters';
+import { TableDisplayFilters } from './SalonDisplayFilters/TableDisplayFilters';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
  const [searchedSalon, setSearchedSalon] = useState('');
