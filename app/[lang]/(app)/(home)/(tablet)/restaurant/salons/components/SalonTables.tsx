@@ -13,13 +13,11 @@ import { Button } from '@/components/ui/button';
 import { useSettingsContext } from '../../services/profile/settings/settingsContext';
 
 export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
- const {
-  salonsConfigSetup: { salonsConfig },
- } = useSettingsContext();
- const tablesGridClass =
-  salonsConfig.displayMode === 'minimal'
-   ? 'grid gap-2 gap-y-4 justify-center grid-cols-[repeat(auto-fill,minmax(6rem,1fr))]'
-   : 'grid gap-6 grid-cols-[repeat(auto-fill,minmax(9rem,10rem))] sm:grid-cols-[repeat(auto-fill,minmax(10rem,11rem))] justify-center';
+ const { tempDisplayMode } = useSettingsContext();
+ const isDisplayMinimal = tempDisplayMode.displayMode === 'minimal';
+ const tablesGridClass = isDisplayMinimal
+  ? 'grid gap-2 gap-y-4 justify-center grid-cols-[repeat(auto-fill,minmax(6rem,1fr))]'
+  : 'grid gap-6 grid-cols-[repeat(auto-fill,minmax(9rem,10rem))] sm:grid-cols-[repeat(auto-fill,minmax(10rem,11rem))] justify-center';
  const {
   initData: { defaultSaleTimeID, salons, tableTypes },
   hallsInfo: {
@@ -78,8 +76,8 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
      <SalonTable
       dic={dic}
       table={selectedTable}
-      isMinimal={salonsConfig.displayMode === 'minimal'}
-      isBold={salonsConfig.boldStyle}
+      isMinimal={isDisplayMinimal}
+      isBold={tempDisplayMode.boldStyle}
       tableType='normal'
       changeSelectedTable={changeSelectedTable}
       changeShowMergeTable={changeShowMergeTable}
@@ -94,7 +92,7 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
       transferTableTo={transferTableTo}
      />
      <div
-      className={`${salonsConfig.displayMode === 'minimal' ? 'col-span-3' : 'col-span-2'} flex flex-col`}
+      className={`${isDisplayMinimal ? 'col-span-3' : 'col-span-2'} flex flex-col`}
      >
       <p className='text-lg font-medium text-rose-700 dark:text-rose-400 mb-6'>
        {dic.toMergeTableSelectSelectAvailableTables}
@@ -118,8 +116,8 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
      <SalonTable
       dic={dic}
       table={selectedTable}
-      isMinimal={salonsConfig.displayMode === 'minimal'}
-      isBold={salonsConfig.boldStyle}
+      isMinimal={isDisplayMinimal}
+      isBold={tempDisplayMode.boldStyle}
       tableType='normal'
       changeSelectedTable={changeSelectedTable}
       changeShowMergeTable={changeShowMergeTable}
@@ -134,7 +132,7 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
       transferTableTo={transferTableTo}
      />
      <div
-      className={`${salonsConfig.displayMode === 'minimal' ? 'col-span-3' : 'col-span-2'} flex flex-col`}
+      className={`${isDisplayMinimal ? 'col-span-3' : 'col-span-2'} flex flex-col`}
      >
       <p className='text-lg font-medium text-rose-700 dark:text-rose-400 mb-6'>
        {dic.toTransferTableSelectSelectAvailableTables}
@@ -174,8 +172,8 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
          dic={dic}
          table={table}
          tableType='normal'
-         isMinimal={salonsConfig.displayMode === 'minimal'}
-         isBold={salonsConfig.boldStyle}
+         isMinimal={isDisplayMinimal}
+         isBold={tempDisplayMode.boldStyle}
          changeSelectedTable={changeSelectedTable}
          changeShowMergeTable={changeShowMergeTable}
          changeShowTransferTable={changeShowTransferTable}
