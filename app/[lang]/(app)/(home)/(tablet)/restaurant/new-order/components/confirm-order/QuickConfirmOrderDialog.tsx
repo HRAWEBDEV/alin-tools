@@ -54,6 +54,7 @@ export default function QuickOrderInfoDialog({
    errorFindPerson,
    findPerson,
    isErrorFindPerson,
+   personID,
    isPendingFindPerson,
   },
  } = useOrderBaseConfigContext();
@@ -65,11 +66,27 @@ export default function QuickOrderInfoDialog({
   control,
   setValue,
   clearErrors,
+  trigger,
   watch,
   getValues,
+  setFocus,
   formState: { errors },
  } = useFormContext<OrderInfo>();
  const [phoneNumberValue] = watch(['phoneNumber']);
+
+ async function confirmQuickOrderInfo() {
+  const isFirstNameValid = await trigger('firstName');
+  if (!isFirstNameValid) {
+   setFocus('firstName');
+   return;
+  }
+  const isLastNameValid = await trigger('lastName');
+  if (!isLastNameValid) {
+   setFocus('lastName');
+   return;
+  }
+  setIsOpen(false);
+ }
 
  return (
   <Dialog
@@ -209,6 +226,44 @@ export default function QuickOrderInfoDialog({
         </Alert>
        )}
       </div>
+      {(personID || isErrorFindPerson) && (
+       <div className='grid gap-4 grid-cols-2'>
+        <Field data-invalid={!!errors?.firstName}>
+         <FieldLabel htmlFor='firstName'>
+          {dic.orderInfo.firstName} {isErrorFindPerson && '*'}
+         </FieldLabel>
+         <InputGroup data-invalid={!!errors?.firstName}>
+          <InputGroupInput
+           readOnly={!!personID}
+           id='firstName'
+           {...register('firstName')}
+          />
+         </InputGroup>
+         {!!errors?.firstName && (
+          <FieldContent>
+           <FieldError>{errors?.firstName?.message}</FieldError>
+          </FieldContent>
+         )}
+        </Field>
+        <Field data-invalid={!!errors?.lastName}>
+         <FieldLabel htmlFor='lastName'>
+          {dic.orderInfo.lastName} {isErrorFindPerson && '*'}
+         </FieldLabel>
+         <InputGroup data-invalid={!!errors?.lastName}>
+          <InputGroupInput
+           readOnly={!!personID}
+           id='lastName'
+           {...register('lastName')}
+          />
+         </InputGroup>
+         {!!errors?.lastName && (
+          <FieldContent>
+           <FieldError>{errors?.lastName?.message}</FieldError>
+          </FieldContent>
+         )}
+        </Field>
+       </div>
+      )}
       <div className='grid gap-4 grid-cols-2'>
        <Field>
         <FieldLabel htmlFor='persons'>{dic.orderInfo.guestCount}</FieldLabel>
@@ -276,7 +331,12 @@ export default function QuickOrderInfoDialog({
      </FieldGroup>
     </div>
     <DialogFooter className='p-4 py-2 border-t border-input'>
-     <Button size='lg' className='sm:w-36' disabled={isPendingFindPerson}>
+     <Button
+      size='lg'
+      className='sm:w-36'
+      disabled={isPendingFindPerson}
+      onClick={confirmQuickOrderInfo}
+     >
       {isPendingFindPerson && <Spinner />}
       {dic.orderQuickInfo.confirm}
      </Button>
