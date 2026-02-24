@@ -15,7 +15,9 @@ import {
  InputGroup,
  InputGroupInput,
  InputGroupTextarea,
+ InputGroupAddon,
 } from '@/components/ui/input-group';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ChevronDownIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
@@ -60,6 +62,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
   register,
   setValue,
   watch,
+  getValues,
   formState: { errors },
   clearErrors,
  } = useFormContext<OrderInfo>();
@@ -72,6 +75,13 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
    freeTablesFetching,
   },
   order: { orderInfoName },
+  person: {
+   errorFindPerson,
+   findPerson,
+   isErrorFindPerson,
+   isPendingFindPerson,
+   personID,
+  },
  } = useOrderBaseConfigContext();
  const [showDateTimePicker, setShowDateTimePicker] = useState(false);
  const [showTimePicker, setShowTimePicker] = useState(false);
@@ -86,6 +96,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
   waiterValue,
   tableValue,
   contractValue,
+  phoneNumberValue,
  ] = watch([
   'saleType',
   'subscriber',
@@ -95,6 +106,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
   'waiter',
   'table',
   'contract',
+  'phoneNumber',
  ]);
 
  return (
@@ -371,6 +383,94 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        )}
       />
      </Field>
+     <div>
+      <Field data-invalid={!!errors.phoneNumber}>
+       <FieldLabel htmlFor='phoneNumber'>
+        {dic.orderInfo.phoneNumber}
+       </FieldLabel>
+       <Controller
+        control={control}
+        name='phoneNumber'
+        render={({ field: { value, onChange, ...other } }) => (
+         <InputGroup data-invalid={!!errors.phoneNumber}>
+          <NumericFormat
+           {...other}
+           value={value}
+           onValueChange={({ value }) => onChange(value)}
+           allowLeadingZeros={true}
+           decimalScale={0}
+           customInput={InputGroupInput}
+          />
+          <InputGroupAddon align='inline-end' className='-me-3'>
+           <Button
+            variant='outline'
+            className='rounded-ss-none rounded-es-none border-secondary text-secondary'
+            disabled={isPendingFindPerson || !phoneNumberValue}
+            onClick={() => {
+             const phoneNumber = getValues('phoneNumber');
+             if (!phoneNumber) return;
+             findPerson(phoneNumber);
+            }}
+           >
+            {isPendingFindPerson && <Spinner />}
+            {dic.orderQuickInfo.checkPhoneNumber}
+           </Button>
+          </InputGroupAddon>
+         </InputGroup>
+        )}
+       />
+       <FieldContent>
+        {!!errors.phoneNumber && (
+         <FieldError>{errors.phoneNumber?.message}</FieldError>
+        )}
+       </FieldContent>
+      </Field>
+      {errorFindPerson?.status === 404 && (
+       <Alert className='border-yellow-600 dark:border-yellow-400 bg-yellow-600/10 dark:bg-yellow-400/10 py-2'>
+        <AlertDescription className='text-yellow-600 dark:text-yellow-400 font-medium'>
+         {dic.orderQuickInfo.noPersonFoundFillPersonInfo}
+        </AlertDescription>
+       </Alert>
+      )}
+     </div>
+     {(personID || isErrorFindPerson) && (
+      <div className='grid gap-4 grid-cols-2'>
+       <Field data-invalid={!!errors?.firstName}>
+        <FieldLabel htmlFor='firstName'>
+         {dic.orderInfo.firstName} {isErrorFindPerson && '*'}
+        </FieldLabel>
+        <InputGroup data-invalid={!!errors?.firstName}>
+         <InputGroupInput
+          readOnly={!!personID}
+          id='firstName'
+          {...register('firstName')}
+         />
+        </InputGroup>
+        {!!errors?.firstName && (
+         <FieldContent>
+          <FieldError>{errors?.firstName?.message}</FieldError>
+         </FieldContent>
+        )}
+       </Field>
+       <Field data-invalid={!!errors?.lastName}>
+        <FieldLabel htmlFor='lastName'>
+         {dic.orderInfo.lastName} {isErrorFindPerson && '*'}
+        </FieldLabel>
+        <InputGroup data-invalid={!!errors?.lastName}>
+         <InputGroupInput
+          readOnly={!!personID}
+          id='lastName'
+          {...register('lastName')}
+         />
+        </InputGroup>
+        {!!errors?.lastName && (
+         <FieldContent>
+          <FieldError>{errors?.lastName?.message}</FieldError>
+         </FieldContent>
+        )}
+       </Field>
+      </div>
+     )}
      <Field
       data-invalid={!!errors.subscriber}
       data-disabled={

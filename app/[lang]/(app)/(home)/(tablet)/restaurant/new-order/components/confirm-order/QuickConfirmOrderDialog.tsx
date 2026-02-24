@@ -40,6 +40,7 @@ import { useSettingsContext } from '../../../services/profile/settings/settingsC
 import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseConfigContext';
 import { Spinner } from '@/components/ui/spinner';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { toast } from 'sonner';
 
 export default function QuickOrderInfoDialog({
  dic,
@@ -78,10 +79,12 @@ export default function QuickOrderInfoDialog({
   const isFirstNameValid = await trigger('firstName');
   if (!isFirstNameValid) {
    setFocus('firstName');
+   toast.error(dic.orderInfo.enterFirstName);
    return;
   }
   const isLastNameValid = await trigger('lastName');
   if (!isLastNameValid) {
+   toast.error(dic.orderInfo.enterLastName);
    setFocus('lastName');
    return;
   }
@@ -92,6 +95,10 @@ export default function QuickOrderInfoDialog({
   <Dialog
    open={open}
    onOpenChange={(newValue) => {
+    if (!newValue) {
+     confirmQuickOrderInfo();
+     return;
+    }
     setIsOpen(newValue);
    }}
   >

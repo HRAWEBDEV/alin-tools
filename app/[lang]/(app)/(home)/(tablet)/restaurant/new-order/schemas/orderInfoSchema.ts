@@ -115,7 +115,7 @@ function createOrderInfoSchema({ dic }: { dic: NewOrderDictionary }) {
    },
    {
     path: ['lastName'],
-    message: dic.orderInfo.lastName,
+    message: dic.orderInfo.enterLastName,
    },
   )
   .refine(
