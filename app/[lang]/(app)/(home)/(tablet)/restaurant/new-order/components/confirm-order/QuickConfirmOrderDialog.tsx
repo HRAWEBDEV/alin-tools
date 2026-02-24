@@ -201,8 +201,9 @@ export default function QuickOrderInfoDialog({
            <NumericFormat
             {...other}
             onBlur={() => {
+             const [firstName, lastName] = getValues(['firstName', 'lastName']);
              other.onBlur();
-             if (value && !isErrorFindPerson) {
+             if (value && !isErrorFindPerson && !firstName && !lastName) {
               findPerson(value);
              }
             }}
