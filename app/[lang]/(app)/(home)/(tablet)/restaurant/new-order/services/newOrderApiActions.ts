@@ -25,7 +25,7 @@ type Person = {
  };
 };
 
-type TSavePackage = {
+type SavePersonPackage = {
  personID: number;
  personName: string;
  personLastName: string;
@@ -550,6 +550,13 @@ function getPersonByNumber({
  );
 }
 
+function savePerson(newPerson: SavePersonPackage) {
+ return axios.post<number>(
+  '/Restaurant/Tablet/SavePersonSubscriber',
+  newPerson,
+ );
+}
+
 export type {
  InitialData,
  Subscriber,
@@ -584,4 +591,5 @@ export {
  getContracts,
  getPerson,
  getPersonByNumber,
+ savePerson,
 };
