@@ -38,12 +38,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { SaleTypes } from '../../utils/SaleTypes';
 import { useSettingsContext } from '../../../services/profile/settings/settingsContext';
 import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseConfigContext';
-import {
- personKey,
- getPersonByNumber,
-} from '../../services/newOrderApiActions';
-import { QueryClient, useMutation } from '@tanstack/react-query';
 import { Spinner } from '@/components/ui/spinner';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export default function QuickOrderInfoDialog({
  dic,
@@ -54,6 +50,12 @@ export default function QuickOrderInfoDialog({
  const {
   queries: { orderID },
   initialDataInfo: { data },
+  person: {
+   errorFindPerson,
+   findPerson,
+   isErrorFindPerson,
+   isPendingFindPerson,
+  },
  } = useOrderBaseConfigContext();
  const [open, setIsOpen] = useState(
   !orderID && orderConfigSetup.orderConfig.getInitInfo === 'active',
@@ -64,19 +66,10 @@ export default function QuickOrderInfoDialog({
   setValue,
   clearErrors,
   watch,
+  getValues,
   formState: { errors },
  } = useFormContext<OrderInfo>();
  const [phoneNumberValue] = watch(['phoneNumber']);
-
- const {
-  mutate: mutatePersonNumber,
-  isPending: isPendingPersonNumber,
-  isError: isErrorPersonNumber,
- } = useMutation({
-  async mutationFn() {
-   // return getPersonByNumber();
-  },
- });
 
  return (
   <Dialog
@@ -86,13 +79,13 @@ export default function QuickOrderInfoDialog({
    }}
   >
    <DialogContent
-    className='w-[min(95%,35rem)] max-w-none p-0'
+    className='flex flex-col w-[min(95%,35rem)] max-h-[95svh] max-w-none! p-0 overflow-hidden gap-0'
     showCloseButton={false}
    >
-    <DialogHeader className='p-4'>
+    <DialogHeader className='p-4 border-b border-input'>
      <DialogTitle>{dic.tools.orderInfo}</DialogTitle>
     </DialogHeader>
-    <form onSubmit={(e) => e.preventDefault()} className='p-4 pt-0'>
+    <div className='grow overflow-auto p-4'>
      <FieldGroup className='gap-4'>
       <div>
        <label className='block mb-2 font-medium'>
@@ -166,63 +159,100 @@ export default function QuickOrderInfoDialog({
         )}
        />
       </div>
-      <Field data-invalid={!!errors.phoneNumber}>
-       <FieldLabel htmlFor='phoneNumber'>
-        {dic.orderInfo.phoneNumber}
-       </FieldLabel>
-       <Controller
-        control={control}
-        name='phoneNumber'
-        render={({ field: { value, onChange, ...other } }) => (
-         <InputGroup data-invalid={!!errors.phoneNumber}>
-          <NumericFormat
-           {...other}
-           value={value}
-           onValueChange={({ value }) => onChange(value)}
-           allowLeadingZeros={true}
-           decimalScale={0}
-           customInput={InputGroupInput}
-          />
-          <InputGroupAddon align='inline-end' className='-me-3'>
-           <Button
-            variant='outline'
-            className='rounded-ss-none rounded-es-none border-secondary text-secondary'
-            disabled={isPendingPersonNumber || !phoneNumberValue}
-           >
-            {isPendingPersonNumber && <Spinner />}
-            {dic.orderQuickInfo.checkPhoneNumber}
-           </Button>
-          </InputGroupAddon>
-         </InputGroup>
-        )}
-       />
-       <FieldContent>
-        {!!errors.phoneNumber && (
-         <FieldError>{errors.phoneNumber?.message}</FieldError>
-        )}
-       </FieldContent>
-      </Field>
-      <Field>
-       <FieldLabel htmlFor='persons'>{dic.orderInfo.guestCount}</FieldLabel>
-       <Controller
-        control={control}
-        name='persons'
-        render={({ field: { value, onChange, ...other } }) => (
-         <InputGroup className='h-11'>
-          <NumericFormat
-           id='persons'
-           {...other}
-           value={value}
-           onValueChange={({ floatValue }) => onChange(floatValue || '')}
-           customInput={InputGroupInput}
-           allowNegative={false}
-           decimalScale={0}
-           allowLeadingZeros={false}
-          />
-         </InputGroup>
-        )}
-       />
-      </Field>
+      <div>
+       <Field data-invalid={!!errors.phoneNumber}>
+        <FieldLabel htmlFor='phoneNumber'>
+         {dic.orderInfo.phoneNumber}
+        </FieldLabel>
+        <Controller
+         control={control}
+         name='phoneNumber'
+         render={({ field: { value, onChange, ...other } }) => (
+          <InputGroup data-invalid={!!errors.phoneNumber}>
+           <NumericFormat
+            {...other}
+            value={value}
+            onValueChange={({ value }) => onChange(value)}
+            allowLeadingZeros={true}
+            decimalScale={0}
+            customInput={InputGroupInput}
+           />
+           <InputGroupAddon align='inline-end' className='-me-3'>
+            <Button
+             variant='outline'
+             className='rounded-ss-none rounded-es-none border-secondary text-secondary'
+             disabled={isPendingFindPerson || !phoneNumberValue}
+             onClick={() => {
+              const phoneNumber = getValues('phoneNumber');
+              if (!phoneNumber) return;
+              findPerson(phoneNumber);
+             }}
+            >
+             {isPendingFindPerson && <Spinner />}
+             {dic.orderQuickInfo.checkPhoneNumber}
+            </Button>
+           </InputGroupAddon>
+          </InputGroup>
+         )}
+        />
+        <FieldContent>
+         {!!errors.phoneNumber && (
+          <FieldError>{errors.phoneNumber?.message}</FieldError>
+         )}
+        </FieldContent>
+       </Field>
+       {errorFindPerson?.status === 404 && (
+        <Alert className='border-yellow-600 dark:border-yellow-400 bg-yellow-600/10 dark:bg-yellow-400/10 py-2'>
+         <AlertDescription className='text-yellow-600 dark:text-yellow-400 font-medium'>
+          {dic.orderQuickInfo.noPersonFoundFillPersonInfo}
+         </AlertDescription>
+        </Alert>
+       )}
+      </div>
+      <div className='grid gap-4 grid-cols-2'>
+       <Field>
+        <FieldLabel htmlFor='persons'>{dic.orderInfo.guestCount}</FieldLabel>
+        <Controller
+         control={control}
+         name='persons'
+         render={({ field: { value, onChange, ...other } }) => (
+          <InputGroup className='h-11'>
+           <NumericFormat
+            id='persons'
+            {...other}
+            value={value}
+            onValueChange={({ floatValue }) => onChange(floatValue || '')}
+            customInput={InputGroupInput}
+            allowNegative={false}
+            decimalScale={0}
+            allowLeadingZeros={false}
+           />
+          </InputGroup>
+         )}
+        />
+       </Field>
+       <Field>
+        <FieldLabel htmlFor='bonNo'>{dic.orderInfo.bonNo}</FieldLabel>
+        <Controller
+         control={control}
+         name='bonNo'
+         render={({ field: { value, onChange, ...other } }) => (
+          <InputGroup className='h-11'>
+           <NumericFormat
+            {...other}
+            value={value}
+            onValueChange={({ floatValue }) => onChange(floatValue || '')}
+            id='bonNo'
+            customInput={InputGroupInput}
+            allowNegative={false}
+            decimalScale={0}
+            allowLeadingZeros={false}
+           />
+          </InputGroup>
+         )}
+        />
+       </Field>
+      </div>
       <Field>
        <FieldLabel htmlFor='customer'>{dic.orderInfo.customerName}</FieldLabel>
        <Controller
@@ -231,27 +261,6 @@ export default function QuickOrderInfoDialog({
         render={({ field: { value, ...other } }) => (
          <InputGroup className='h-11'>
           <InputGroupInput id='customer' value={value} {...other} />
-         </InputGroup>
-        )}
-       />
-      </Field>
-      <Field>
-       <FieldLabel htmlFor='bonNo'>{dic.orderInfo.bonNo}</FieldLabel>
-       <Controller
-        control={control}
-        name='bonNo'
-        render={({ field: { value, onChange, ...other } }) => (
-         <InputGroup className='h-11'>
-          <NumericFormat
-           {...other}
-           value={value}
-           onValueChange={({ floatValue }) => onChange(floatValue || '')}
-           id='bonNo'
-           customInput={InputGroupInput}
-           allowNegative={false}
-           decimalScale={0}
-           allowLeadingZeros={false}
-          />
          </InputGroup>
         )}
        />
@@ -265,13 +274,13 @@ export default function QuickOrderInfoDialog({
        </InputGroup>
       </Field>
      </FieldGroup>
-     <DialogFooter className='pt-4'>
-      <Button size='lg' className='sm:w-36' disabled={isPendingPersonNumber}>
-       {isPendingPersonNumber && <Spinner />}
-       {dic.orderQuickInfo.confirm}
-      </Button>
-     </DialogFooter>
-    </form>
+    </div>
+    <DialogFooter className='p-4 py-2 border-t border-input'>
+     <Button size='lg' className='sm:w-36' disabled={isPendingFindPerson}>
+      {isPendingFindPerson && <Spinner />}
+      {dic.orderQuickInfo.confirm}
+     </Button>
+    </DialogFooter>
    </DialogContent>
   </Dialog>
  );

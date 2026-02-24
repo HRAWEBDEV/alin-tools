@@ -520,7 +520,7 @@ function getPerson({
  signal,
  personID,
 }: {
- signal: AbortSignal;
+ signal?: AbortSignal;
  personID: number;
 }) {
  const searchParams = new URLSearchParams([['personID', personID.toString()]]);
@@ -536,7 +536,7 @@ function getPersonByNumber({
  signal,
  phoneNumber,
 }: {
- signal: AbortSignal;
+ signal?: AbortSignal;
  phoneNumber: string;
 }) {
  const searchParams = new URLSearchParams([

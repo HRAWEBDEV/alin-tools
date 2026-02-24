@@ -18,6 +18,7 @@ import {
  getFreeTables,
  getOrderPayment,
  saveOrder,
+ getPersonByNumber,
 } from '../newOrderApiActions';
 import {
  saveAndCloseOrder,
@@ -117,6 +118,7 @@ export default function OrderBaseConfigProvider({
  const [selectedItemGroup, setSelectedItemGroup] = useState<ItemGroup | null>(
   null,
  );
+ const [personID, setPersonID] = useState<number | null>(null);
  const [searchedItemName, setSearchedItemName] = useState('');
  const [confirmOrderIsOpen, setConfirmOrderIsOpen] = useState(false);
  const [confirmOrderActiveType, setConfirmOrderActiveType] =
@@ -238,6 +240,29 @@ export default function OrderBaseConfigProvider({
    return data;
   },
  });
+
+ // person setup
+ const {
+  mutate: findPerson,
+  isPending: isPendingFindPerson,
+  isError: isErrorFindPerson,
+  error: errorFindPerson,
+ } = useMutation({
+  async mutationFn(phoneNumber: string) {
+   return getPersonByNumber({ phoneNumber });
+  },
+  onError() {
+   setPersonID(null);
+  },
+  onSuccess(res) {
+   setPersonID(res.data.personData.id);
+   queryClient.setQueryData(
+    ['person', res.data.personData.id.toString()],
+    res.data.personData,
+   );
+  },
+ });
+ //
 
  const {
   data: freeTables,
@@ -714,6 +739,13 @@ export default function OrderBaseConfigProvider({
    onCloseOrder,
    onSaveOrder: handleSaveOrder,
    orderItemsDispatch,
+  },
+  person: {
+   personID,
+   findPerson,
+   isPendingFindPerson,
+   isErrorFindPerson,
+   errorFindPerson: errorFindPerson as AxiosError | null,
   },
   invoice: {
    isPayable: saleTypeValue?.key !== SaleTypes.room,

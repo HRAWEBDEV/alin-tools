@@ -101,6 +101,24 @@ function createOrderInfoSchema({ dic }: { dic: NewOrderDictionary }) {
    lastName: z.string(),
   })
   .refine(
+   ({ phoneNumber, firstName }) => {
+    return phoneNumber ? !!firstName : true;
+   },
+   {
+    path: ['firstName'],
+    message: dic.orderInfo.enterFirstName,
+   },
+  )
+  .refine(
+   ({ phoneNumber, lastName }) => {
+    return phoneNumber ? !!lastName : true;
+   },
+   {
+    path: ['lastName'],
+    message: dic.orderInfo.lastName,
+   },
+  )
+  .refine(
    ({ room, saleType }) => {
     return saleType?.key === SaleTypes.room ? !!room : true;
    },
