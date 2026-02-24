@@ -76,6 +76,10 @@ export default function QuickOrderInfoDialog({
  const [phoneNumberValue] = watch(['phoneNumber']);
 
  async function confirmQuickOrderInfo() {
+  if (phoneNumberValue && !isErrorFindPerson) {
+   findPerson(phoneNumberValue);
+   return;
+  }
   const isFirstNameValid = await trigger('firstName');
   if (!isFirstNameValid) {
    setFocus('firstName');
@@ -195,6 +199,12 @@ export default function QuickOrderInfoDialog({
           <InputGroup data-invalid={!!errors.phoneNumber}>
            <NumericFormat
             {...other}
+            onBlur={() => {
+             other.onBlur();
+             if (value && !isErrorFindPerson) {
+              findPerson(value);
+             }
+            }}
             value={value}
             onValueChange={({ value }) => onChange(value)}
             allowLeadingZeros={true}

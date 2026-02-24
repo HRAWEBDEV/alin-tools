@@ -19,6 +19,7 @@ import {
  getOrderPayment,
  saveOrder,
  getPersonByNumber,
+ getPerson,
 } from '../newOrderApiActions';
 import {
  saveAndCloseOrder,
@@ -99,6 +100,7 @@ export default function OrderBaseConfigProvider({
   customerValue,
   roomValue,
   contractValue,
+  phoneNumberValue,
  ] = orderInfoForm.watch([
   'saleType',
   'hasService',
@@ -112,6 +114,7 @@ export default function OrderBaseConfigProvider({
   'customer',
   'room',
   'contract',
+  'phoneNumber',
  ]);
  //
  const [showCloseOrder, setShowCloseOrder] = useState(false);
@@ -240,13 +243,22 @@ export default function OrderBaseConfigProvider({
    return data;
   },
  });
-
  // person setup
+ const { data: personData } = useQuery({
+  staleTime: 'static',
+  enabled: !!personID,
+  queryKey: ['person', personID?.toString()],
+  async queryFn({ signal }) {
+   const res = await getPerson({ signal, personID: personID! });
+   return res.data;
+  },
+ });
  const {
   mutate: findPerson,
   isPending: isPendingFindPerson,
   isError: isErrorFindPerson,
   error: errorFindPerson,
+  reset: resetFindPerson,
  } = useMutation({
   async mutationFn(phoneNumber: string) {
    return getPersonByNumber({ phoneNumber });
@@ -679,6 +691,18 @@ export default function OrderBaseConfigProvider({
    });
   }
  }, [userOrder, userOrderSuccess, orderInfoForm]);
+
+ useEffect(() => {
+  orderInfoForm.setValue('firstName', personData?.name || '');
+  orderInfoForm.setValue('lastName', personData?.lastName || '');
+ }, [personData, orderInfoForm]);
+
+ useEffect(() => {
+  orderInfoForm.setValue('firstName', '');
+  orderInfoForm.setValue('lastName', '');
+  setPersonID(null);
+  resetFindPerson();
+ }, [phoneNumberValue, orderInfoForm, resetFindPerson]);
 
  const ctx: OrderBaseConfig = {
   shopLoading,

@@ -395,6 +395,12 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
          <InputGroup data-invalid={!!errors.phoneNumber}>
           <NumericFormat
            {...other}
+           onBlur={() => {
+            other.onBlur();
+            if (value && !isErrorFindPerson) {
+             findPerson(value);
+            }
+           }}
            value={value}
            onValueChange={({ value }) => onChange(value)}
            allowLeadingZeros={true}
