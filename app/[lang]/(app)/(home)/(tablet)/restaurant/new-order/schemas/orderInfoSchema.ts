@@ -23,6 +23,9 @@ const defaultOrderInfo: Partial<OrderInfo> = {
  employeeTip: '',
  deliveryValue: '',
  customerName: '',
+ phoneNumber: '',
+ firstName: '',
+ lastName: '',
 };
 
 function createOrderInfoSchema({ dic }: { dic: NewOrderDictionary }) {
@@ -93,7 +96,28 @@ function createOrderInfoSchema({ dic }: { dic: NewOrderDictionary }) {
    sendToKitchen: z.boolean(),
    printCash: z.boolean(),
    deliveryAgent: z.boolean(),
+   phoneNumber: z.string(),
+   firstName: z.string(),
+   lastName: z.string(),
   })
+  .refine(
+   ({ phoneNumber, firstName }) => {
+    return phoneNumber ? !!firstName : true;
+   },
+   {
+    path: ['firstName'],
+    message: dic.orderInfo.enterFirstName,
+   },
+  )
+  .refine(
+   ({ phoneNumber, lastName }) => {
+    return phoneNumber ? !!lastName : true;
+   },
+   {
+    path: ['lastName'],
+    message: dic.orderInfo.enterLastName,
+   },
+  )
   .refine(
    ({ room, saleType }) => {
     return saleType?.key === SaleTypes.room ? !!room : true;

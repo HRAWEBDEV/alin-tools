@@ -7,6 +7,9 @@
   "search": "جستجو"
  },
  "orderInfo": {
+  "phoneNumber": "شماره تماس",
+  "firstName": "نام",
+  "lastName": "نام خانوادگی",
   "salonName": "نام سالن",
   "search": "جستجو",
   "orderDate": "تاریخ",
@@ -39,7 +42,14 @@
   "addTag": "تگ",
   "noRoomSelected": "شماره اتاق انتخاب نشده است",
   "noSubscriberSelected": "کد اشتراک انتخاب نشده است",
+  "enterFirstName": "نام را وارد کنید",
+  "enterLastName": "نام خانوادگی را وارد کنید",
   "contractNo": "شماره قرارداد"
+ },
+ "orderQuickInfo": {
+  "confirm": "تایید",
+  "checkPhoneNumber": "جستجو شماره",
+  "noPersonFoundFillPersonInfo": "شخصی یافت نشد, نام و نام خانوادگی را وارد کنید."
  },
  "orderConfirm": {
   "removeOrderItemConfirmMessage": "آیا از حذف این آیتم اطمینان دارید؟",

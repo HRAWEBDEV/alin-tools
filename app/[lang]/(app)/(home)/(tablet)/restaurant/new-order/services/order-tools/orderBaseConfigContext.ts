@@ -11,6 +11,7 @@ import { type OrderItemActions } from '../../utils/orderItemsActionsReducer';
 import { type ShopCalculatorResult } from '../../utils/shopCalculator';
 import { type Combo } from '../../../utils/apiTypes';
 import { type OrderInvoicePayment } from '../../schemas/orderInvoicePaymentSchema';
+import { AxiosError } from 'axios';
 
 type ConfirmOrderType = (typeof confirmOrderTypes)[number];
 const confirmOrderTypes = ['orderInfo', 'shoppingCard', 'invoice'] as const;
@@ -67,6 +68,14 @@ interface OrderBaseConfig {
    isError: boolean;
    isSuccess: boolean;
   };
+ };
+ person: {
+  personID: number | null;
+  findPerson: (phoneNumber: string) => unknown;
+  isPendingFindPerson: boolean;
+  isErrorFindPerson: boolean;
+  errorFindPerson: AxiosError | null;
+  onChangePersonPhoneNumber: () => void;
  };
  order: {
   orderInfoName: string;

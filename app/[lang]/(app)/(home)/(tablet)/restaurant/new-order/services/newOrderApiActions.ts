@@ -2,6 +2,7 @@ import { axios } from '@/app/[lang]/(app)/utils/defaultAxios';
 import type { Combo, PagedData } from '../../utils/apiTypes';
 
 const newOrderKey = 'restaurant-new-order';
+const personKey = 'person';
 
 interface Waiter {
  personID: number;
@@ -12,6 +13,26 @@ interface Contract {
  id: number;
  name: string;
 }
+
+type Person = {
+ hasSubscriber: boolean;
+ personData: {
+  id: number;
+  name: string;
+  lastName: string;
+  mobileNo: string;
+  address: string;
+ };
+};
+
+type SavePersonPackage = {
+ personID: number;
+ personName: string;
+ personLastName: string;
+ personPhoneNumber: string;
+ modifySubscriber: boolean;
+ personAddress: string | null;
+};
 
 interface InitialData {
  orderId: number;
@@ -495,6 +516,47 @@ function getWaiters({
  );
 }
 
+function getPerson({
+ signal,
+ personID,
+}: {
+ signal?: AbortSignal;
+ personID: number;
+}) {
+ const searchParams = new URLSearchParams([['personID', personID.toString()]]);
+ return axios.get<Person['personData']>(
+  `/Public/Person/ReadPersonByKey?${searchParams.toString()}`,
+  {
+   signal,
+  },
+ );
+}
+
+function getPersonByNumber({
+ signal,
+ phoneNumber,
+}: {
+ signal?: AbortSignal;
+ phoneNumber: string;
+}) {
+ const searchParams = new URLSearchParams([
+  ['phoneNumber', phoneNumber.toString()],
+ ]);
+ return axios.get<Person>(
+  `/Restaurant/Tablet/ReadPersonByNumber?${searchParams.toString()}`,
+  {
+   signal,
+  },
+ );
+}
+
+function savePerson(newPerson: SavePersonPackage) {
+ return axios.post<number>(
+  '/Restaurant/SaleInvoice/SavePersonSubscriber',
+  newPerson,
+ );
+}
+
 export type {
  InitialData,
  Subscriber,
@@ -507,9 +569,11 @@ export type {
  SaveOrderPackage,
  Room,
  Tag,
+ Person,
 };
 export {
  newOrderKey,
+ personKey,
  getFreeTables,
  getInitData,
  getItemPrograms,
@@ -525,4 +589,7 @@ export {
  getTags,
  getWaiters,
  getContracts,
+ getPerson,
+ getPersonByNumber,
+ savePerson,
 };
