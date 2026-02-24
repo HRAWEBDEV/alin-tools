@@ -81,6 +81,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
    isErrorFindPerson,
    isPendingFindPerson,
    personID,
+   onChangePersonPhoneNumber,
   },
  } = useOrderBaseConfigContext();
  const [showDateTimePicker, setShowDateTimePicker] = useState(false);
@@ -402,7 +403,10 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
             }
            }}
            value={value}
-           onValueChange={({ value }) => onChange(value)}
+           onValueChange={({ value }) => {
+            onChangePersonPhoneNumber();
+            onChange(value);
+           }}
            allowLeadingZeros={true}
            decimalScale={0}
            customInput={InputGroupInput}

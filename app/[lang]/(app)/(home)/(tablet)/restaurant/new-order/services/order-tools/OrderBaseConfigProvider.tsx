@@ -20,6 +20,7 @@ import {
  saveOrder,
  getPersonByNumber,
  getPerson,
+ savePerson,
 } from '../newOrderApiActions';
 import {
  saveAndCloseOrder,
@@ -274,6 +275,13 @@ export default function OrderBaseConfigProvider({
    );
   },
  });
+
+ function handleChangePersonPhoneNumber() {
+  orderInfoForm.setValue('firstName', '');
+  orderInfoForm.setValue('lastName', '');
+  resetFindPerson();
+  setPersonID(null);
+ }
  //
 
  const {
@@ -471,7 +479,7 @@ export default function OrderBaseConfigProvider({
        ? data.deliveryAgent
        : false,
      name: data.customerName || orderInfoName || null,
-     personID: userOrder?.personID || null,
+     personID,
      dateTimeDateTimeOffset:
       userOrder?.dateTimeDateTimeOffset || new Date().toISOString(),
     } as SaveOrderPackage['order'];
@@ -485,6 +493,26 @@ export default function OrderBaseConfigProvider({
    },
   )();
   if (!orderInfoData || !newOrderData) return null;
+  const typedOrderInfoData = orderInfoData as OrderInfo;
+  const typedNewOrderData = newOrderData as SaveOrderPackage['order'];
+  if (!personID && typedOrderInfoData.phoneNumber) {
+   let savedPersonID: number | null = null;
+   try {
+    savedPersonID = (
+     await savePerson({
+      modifySubscriber: false,
+      personAddress: null,
+      personID: 0,
+      personName: typedOrderInfoData.firstName,
+      personLastName: typedOrderInfoData.lastName,
+      personPhoneNumber: typedOrderInfoData.phoneNumber,
+     })
+    ).data;
+    typedNewOrderData.personID = savedPersonID;
+   } catch {}
+   if (!savedPersonID) return null;
+   typedNewOrderData.personID = savedPersonID;
+  }
   return {
    orderInfoData,
    newOrderData,
@@ -627,6 +655,7 @@ export default function OrderBaseConfigProvider({
    occupied,
    comment,
    name,
+   personID,
   } = userOrder;
   if (tableID && tableNo) {
    orderInfoForm.setValue('table', {
@@ -634,6 +663,7 @@ export default function OrderBaseConfigProvider({
     value: tableNo.toString(),
    });
   }
+  setPersonID(personID);
   orderInfoForm.setValue('discountRate', discountRate || '');
   orderInfoForm.setValue('rounding', roundingValue || '');
   if (subscriberPersonID && subscriberCode) {
@@ -695,14 +725,8 @@ export default function OrderBaseConfigProvider({
  useEffect(() => {
   orderInfoForm.setValue('firstName', personData?.name || '');
   orderInfoForm.setValue('lastName', personData?.lastName || '');
+  orderInfoForm.setValue('phoneNumber', personData?.mobileNo || '');
  }, [personData, orderInfoForm]);
-
- useEffect(() => {
-  orderInfoForm.setValue('firstName', '');
-  orderInfoForm.setValue('lastName', '');
-  setPersonID(null);
-  resetFindPerson();
- }, [phoneNumberValue, orderInfoForm, resetFindPerson]);
 
  const ctx: OrderBaseConfig = {
   shopLoading,
@@ -770,6 +794,7 @@ export default function OrderBaseConfigProvider({
    isPendingFindPerson,
    isErrorFindPerson,
    errorFindPerson: errorFindPerson as AxiosError | null,
+   onChangePersonPhoneNumber: handleChangePersonPhoneNumber,
   },
   invoice: {
    isPayable: saleTypeValue?.key !== SaleTypes.room,

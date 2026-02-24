@@ -552,7 +552,7 @@ function getPersonByNumber({
 
 function savePerson(newPerson: SavePersonPackage) {
  return axios.post<number>(
-  '/Restaurant/Tablet/SavePersonSubscriber',
+  '/Restaurant/SaleInvoice/SavePersonSubscriber',
   newPerson,
  );
 }

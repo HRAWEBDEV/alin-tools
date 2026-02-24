@@ -57,6 +57,7 @@ export default function QuickOrderInfoDialog({
    isErrorFindPerson,
    personID,
    isPendingFindPerson,
+   onChangePersonPhoneNumber,
   },
  } = useOrderBaseConfigContext();
  const [open, setIsOpen] = useState(
@@ -206,7 +207,10 @@ export default function QuickOrderInfoDialog({
              }
             }}
             value={value}
-            onValueChange={({ value }) => onChange(value)}
+            onValueChange={({ value }) => {
+             onChangePersonPhoneNumber();
+             onChange(value);
+            }}
             allowLeadingZeros={true}
             decimalScale={0}
             customInput={InputGroupInput}

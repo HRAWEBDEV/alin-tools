@@ -75,6 +75,7 @@ interface OrderBaseConfig {
   isPendingFindPerson: boolean;
   isErrorFindPerson: boolean;
   errorFindPerson: AxiosError | null;
+  onChangePersonPhoneNumber: () => void;
  };
  order: {
   orderInfoName: string;
