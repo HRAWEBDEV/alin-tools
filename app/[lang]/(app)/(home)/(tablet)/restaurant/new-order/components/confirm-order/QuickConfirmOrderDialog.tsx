@@ -78,12 +78,12 @@ export default function QuickOrderInfoDialog({
 
  async function confirmQuickOrderInfo() {
   const isFirstNameValid = await trigger('firstName');
+  const isLastNameValid = await trigger('lastName');
   if (!isFirstNameValid) {
    setFocus('firstName');
    toast.error(dic.orderInfo.enterFirstName);
    return;
   }
-  const isLastNameValid = await trigger('lastName');
   if (!isLastNameValid) {
    toast.error(dic.orderInfo.enterLastName);
    setFocus('lastName');

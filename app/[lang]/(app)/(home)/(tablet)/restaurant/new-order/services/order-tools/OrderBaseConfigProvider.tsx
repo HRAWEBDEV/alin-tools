@@ -101,7 +101,6 @@ export default function OrderBaseConfigProvider({
   customerValue,
   roomValue,
   contractValue,
-  phoneNumberValue,
  ] = orderInfoForm.watch([
   'saleType',
   'hasService',
@@ -115,7 +114,6 @@ export default function OrderBaseConfigProvider({
   'customer',
   'room',
   'contract',
-  'phoneNumber',
  ]);
  //
  const [showCloseOrder, setShowCloseOrder] = useState(false);
@@ -273,6 +271,7 @@ export default function OrderBaseConfigProvider({
     ['person', res.data.personData.id.toString()],
     res.data.personData,
    );
+   orderInfoForm.clearErrors(['firstName', 'lastName']);
   },
  });
 
