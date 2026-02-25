@@ -34,6 +34,7 @@ import CloseButton from './components/CloseButton';
 import { getModeIcon } from '@/app/[lang]/(app)/utils/getModeIcons';
 import { useTheme } from 'next-themes';
 import { AppModes } from '@/theme/appModes';
+import { appVersion } from '@/services/base-config/baseConfigContext';
 
 const views: Record<ActiveView, React.ComponentType> = {
  orderConfig: dynamic(() => import('./components/order-config/OrderConfig'), {
@@ -193,7 +194,9 @@ export default function SettingsProvider({
      <DrawerHeader className='px-0 relative border-b border-input'>
       <DrawerTitle className='dark:text-gray-300 text-gray-600 sm:text-xl text-md flex items-center justify-start gap-4 px-8'>
        <RiSettings4Fill className='text-gray-400 size-12' />
-       {title}
+       <div>
+        {title} <span className='text-sm'>(v{appVersion})</span>
+       </div>
       </DrawerTitle>
      </DrawerHeader>
     );
