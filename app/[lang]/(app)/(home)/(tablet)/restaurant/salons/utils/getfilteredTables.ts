@@ -32,7 +32,7 @@ export function getFilteredTables({
  });
  if (showMergeTable && selectedTableID) {
   filteredData = filteredData.filter(
-   (table) => table.tableID !== selectedTableID,
+   (table) => table.tableID !== selectedTableID && table.orderCount <= 1,
   );
  }
  return filteredData;

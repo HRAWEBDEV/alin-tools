@@ -64,5 +64,8 @@
   "confirmMessage": "آیا از بستن سفارش اطمینان دارید؟",
   "confirm": "تایید",
   "cancel": "انصراف"
+ },
+ "multiOrder": {
+  "title": "لیست سفارشات"
  }
 }

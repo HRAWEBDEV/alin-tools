@@ -68,6 +68,7 @@ function generateTableMockData(updateTable: Partial<Table> = {}): Table {
   remained: null,
   occupiedPerson: null,
   OccupiedDateTimeOffset: null,
+  orderCount: 1,
   ...updateTable,
  };
 }
@@ -139,6 +140,25 @@ function mergeTable({
  );
 }
 
+// multi order
+function getTableOrders({
+ tableID,
+ signal,
+}: {
+ tableID: number;
+ signal: AbortSignal;
+}) {
+ const searchParams = new URLSearchParams([
+  ['masterOrderID', tableID.toString()],
+ ]);
+ return axios.get(
+  `/Restaurant/Tablet/ReadMultipleOrderData?${searchParams.toString()}`,
+  {
+   signal,
+  },
+ );
+}
+
 export type { Combo, Table, InitiData };
 export {
  getHallKey,
@@ -147,4 +167,5 @@ export {
  changeTableStateType,
  mergeTable,
  generateTableMockData,
+ getTableOrders,
 };

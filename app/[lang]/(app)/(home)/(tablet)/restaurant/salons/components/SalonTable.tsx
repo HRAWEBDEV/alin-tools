@@ -10,6 +10,12 @@ import { getTableRows } from '../utils/getTableRows';
 import { motion } from 'motion/react';
 import { AiOutlineMergeCells } from 'react-icons/ai';
 import {
+ Drawer,
+ DrawerContent,
+ DrawerHeader,
+ DrawerTitle,
+} from '@/components/ui/drawer';
+import {
  DropdownMenu,
  DropdownMenuTrigger,
  DropdownMenuContent,
@@ -22,6 +28,9 @@ import { IoMdAddCircle } from 'react-icons/io';
 import { GrStatusUnknown } from 'react-icons/gr';
 import { IoIosInformationCircle } from 'react-icons/io';
 import { type SalonBaseConfig } from '../services/salon-base-config/salonBaseConfigContext';
+import { useRouter } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
+import { getHallKey, getTableOrders } from '../services/salonsApiActions';
 
 export default function SalonTable({
  table,
@@ -50,7 +59,9 @@ export default function SalonTable({
    }
  | { tableType: 'mock' }
 )) {
+ const router = useRouter();
  const [isOpen, setIsOpen] = useState(false);
+ const [showTableOrdersList, setShowTableOrdersList] = useState(false);
 
  const handleOpenChange = (newOpen: boolean) => {
   if (tableUtils.tableType === 'mock') return;
@@ -60,6 +71,23 @@ export default function SalonTable({
  const tableStyles = getTableStateStyles(table.tableStateTypeID);
  const { locale, localeInfo } = useBaseConfig();
  const tableRows = getTableRows(table.tableCapacity, table.occupiedPerson || 0);
+
+ const { data: ordersList, isLoading: isLoadingOrdersList } = useQuery({
+  enabled: showTableOrdersList && tableUtils.tableType === 'normal',
+  queryKey: [getHallKey, 'ordersList', table.orderID.toString()],
+  async queryFn({ signal }) {
+   const res = await getTableOrders({ tableID: table.orderID, signal });
+   return res.data;
+  },
+ });
+
+ const tableTypeName =
+  tableUtils.tableType === 'mock'
+   ? '---'
+   : tableUtils.tableTypes.find(
+      (item: { key: string; value: string }) =>
+       item.key === table.tableTypeID.toString(),
+     )?.value || '';
 
  function getTableExtensionTitle() {
   if (tableUtils.tableType === 'mock') return;
@@ -88,13 +116,20 @@ export default function SalonTable({
     <DropdownMenuGroup>
      {table.tableStateTypeID !== TableStateTypes.outOfService &&
       !!table.orderID && (
-       <DropdownMenuItem className='text-teal-700 dark:text-teal-400' asChild>
-        <Link href={showOrderRedirectLink}>
-         <IoIosInformationCircle className='size-8 text-inherit' />
-         <DropdownMenuLabel className='text-base'>
-          {tableUtils.dic.tables.showOrder}
-         </DropdownMenuLabel>
-        </Link>
+       <DropdownMenuItem
+        className='text-purple-700 dark:text-purple-400'
+        onClick={() => {
+         if (table.orderCount <= 1) {
+          router.push(showOrderRedirectLink);
+          return;
+         }
+         setShowTableOrdersList(true);
+        }}
+       >
+        <IoIosInformationCircle className='size-8 text-inherit' />
+        <DropdownMenuLabel className='text-base'>
+         {tableUtils.dic.tables.showOrder}
+        </DropdownMenuLabel>
        </DropdownMenuItem>
       )}
      {table.tableStateTypeID !== TableStateTypes.outOfService && (
@@ -108,22 +143,24 @@ export default function SalonTable({
       </DropdownMenuItem>
      )}
      {(table.tableStateTypeID === TableStateTypes.outOfService ||
-      table.tableStateTypeID === TableStateTypes.readyToService) && (
-      <DropdownMenuItem
-       className='text-yellow-600 dark:text-yellow-400'
-       onClick={() => {
-        tableUtils.onShowChangeTableState(true);
-        setIsOpen(false);
-       }}
-      >
-       <GrStatusUnknown className='size-8 text-inherit' />
-       <DropdownMenuLabel className='text-base'>
-        {tableUtils.dic.tables.changeTableState}
-       </DropdownMenuLabel>
-      </DropdownMenuItem>
-     )}
+      table.tableStateTypeID === TableStateTypes.readyToService) &&
+      table.orderCount <= 1 && (
+       <DropdownMenuItem
+        className='text-yellow-600 dark:text-yellow-400'
+        onClick={() => {
+         tableUtils.onShowChangeTableState(true);
+         setIsOpen(false);
+        }}
+       >
+        <GrStatusUnknown className='size-8 text-inherit' />
+        <DropdownMenuLabel className='text-base'>
+         {tableUtils.dic.tables.changeTableState}
+        </DropdownMenuLabel>
+       </DropdownMenuItem>
+      )}
      {table.tableStateTypeID !== TableStateTypes.outOfService &&
-      table.tableStateTypeID !== TableStateTypes.readyToService && (
+      table.tableStateTypeID !== TableStateTypes.readyToService &&
+      table.orderCount <= 1 && (
        <>
         <DropdownMenuItem
          className='text-teal-700 dark:text-teal-400'
@@ -212,7 +249,13 @@ export default function SalonTable({
        tableUtils.mergeTableTo(table);
        return;
       }
-      if (isMinimal) handleOpenChange(true);
+      if (isMinimal) {
+       handleOpenChange(true);
+       return;
+      }
+      if (table.orderCount > 1) {
+       setShowTableOrdersList(true);
+      }
      }}
      style={{
       borderColor:
@@ -246,14 +289,7 @@ export default function SalonTable({
         className={`p-1 rounded-2xl border border-dashed text-center ${tableStyles.backgoundColor} ${tableStyles.border} ${tableStyles.text} `}
        >
         <span className='text-base font-medium group-data-[bold=true]:font-bold'>
-         <span>
-          {tableUtils.tableType === 'mock'
-           ? '---'
-           : tableUtils.tableTypes.find(
-              (item: { key: string; value: string }) =>
-               item.key === table.tableTypeID.toString(),
-             )?.value || ''}{' '}
-         </span>
+         <span>{tableTypeName} </span>
          {tableUtils.tableType === 'mock'
           ? ''
           : tableUtils.dic.tables[tableStyles.type]}
@@ -326,6 +362,23 @@ export default function SalonTable({
      {menuContent}
     </DropdownMenu>
    </div>
+   {tableUtils.tableType === 'normal' && (
+    <Drawer
+     open={showTableOrdersList}
+     onOpenChange={(newValue) => setShowTableOrdersList(newValue)}
+    >
+     <DrawerContent className='h-[min(80svh,35rem)]'>
+      <DrawerHeader className='text-xl border-b border-input'>
+       <DrawerTitle>
+        {tableUtils.dic.multiOrder.title} {tableTypeName} {table.tableNo}
+       </DrawerTitle>
+      </DrawerHeader>
+      <div className='overflow-hidden overflow-y-auto p-4'>
+       {table.orderCount}
+      </div>
+     </DrawerContent>
+    </Drawer>
+   )}
   </motion.div>
  );
 }
