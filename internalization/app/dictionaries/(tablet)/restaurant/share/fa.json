@@ -5,7 +5,9 @@
    "lastLoginDate": "آخرین ورود",
    "settings": "تنظیمات",
    "logout": "خروج",
-   "changeProgram": "تغییر برنامه"
+   "changeProgram": "تغییر برنامه",
+   "connectionLost": "اتصال به اینترنت قطع شده است",
+   "connected": "متصل"
   },
   "settings": {
    "title": "تنظیمات",

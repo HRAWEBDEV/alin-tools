@@ -19,6 +19,7 @@ import {
 import { useLogout } from '@/app/[lang]/(app)/login/hooks/useLogout';
 import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
 import { useSettingsContext } from './settings/settingsContext';
+import HeaderDate from '../../components/HeaderDate';
 
 export default function ProfileProvider({ children }: { children: ReactNode }) {
  const { userInfoRouterStorage, data, changeProgram } = useUserInfoRouter();
@@ -63,6 +64,9 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
         {userInfoRouterStorage.departmentName} -{' '}
         {userInfoRouterStorage.programName}
        </p>
+       <div className='w-[min(100%,15rem)]'>
+        <HeaderDate />
+       </div>
        {/* <p className='text-sm text-neutral-600 dark:text-neutral-300'> */}
        {/*  <span>{profile.lastLoginDate}: </span> */}
        {/*  <span> */}
