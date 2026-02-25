@@ -1,8 +1,7 @@
-# 1.0.0
+# 1.1.0
 ### features
-- add salons page with minimal and normal views
-- add new order page 
-- add image preview functionality for order item's images
-- add new order person info (mobile, first name, last name) to new order info form
-- add new order person info (mobile, first name, last name) to new order quick info form
+- add salons page minimal and bold views
+- add general settings 
+- add person info and search person functionality to new order page 
+- add new order quick info form
 ### bug fixes
