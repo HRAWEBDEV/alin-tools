@@ -20,6 +20,7 @@ import {
 import { TbTransfer } from 'react-icons/tb';
 import { IoMdAddCircle } from 'react-icons/io';
 import { GrStatusUnknown } from 'react-icons/gr';
+import { IoIosInformationCircle } from 'react-icons/io';
 import { type SalonBaseConfig } from '../services/salon-base-config/salonBaseConfigContext';
 
 export default function SalonTable({
@@ -71,15 +72,31 @@ export default function SalonTable({
   return '';
  }
 
- const newOrderRedirectLink =
+ const showOrderRedirectLink =
   tableUtils.tableType === 'mock'
    ? '#'
    : (`/${locale}/restaurant/new-order?salonID=${tableUtils.selectedHall?.key}&salonName=${tableUtils.selectedHall?.value}&tableID=${table.tableID}&tableNo=${table.tableNo}&orderID=${table.orderID}&fromSalons=true` as const);
+
+ const newOrderRedirectLink =
+  tableUtils.tableType === 'mock'
+   ? '#'
+   : (`/${locale}/restaurant/new-order?salonID=${tableUtils.selectedHall?.key}&salonName=${tableUtils.selectedHall?.value}&tableID=${table.tableID}&tableNo=${table.tableNo}&orderID=0&fromSalons=true` as const);
 
  const menuContent =
   tableUtils.tableType === 'mock' ? null : (
    <DropdownMenuContent align='start' className='w-56'>
     <DropdownMenuGroup>
+     {table.tableStateTypeID !== TableStateTypes.outOfService &&
+      !!table.orderID && (
+       <DropdownMenuItem className='text-teal-700 dark:text-teal-400' asChild>
+        <Link href={showOrderRedirectLink}>
+         <IoIosInformationCircle className='size-8 text-inherit' />
+         <DropdownMenuLabel className='text-base'>
+          {tableUtils.dic.tables.showOrder}
+         </DropdownMenuLabel>
+        </Link>
+       </DropdownMenuItem>
+      )}
      {table.tableStateTypeID !== TableStateTypes.outOfService && (
       <DropdownMenuItem className='text-sky-700 dark:text-sky-400' asChild>
        <Link href={newOrderRedirectLink}>
@@ -212,9 +229,10 @@ export default function SalonTable({
         : tableUtils.showTransferTable ||
             tableUtils.showMergeTable ||
             table.tableStateTypeID === TableStateTypes.outOfService ||
-            isMinimal
+            isMinimal ||
+            table.orderCount > 1
           ? '#'
-          : newOrderRedirectLink
+          : showOrderRedirectLink
       }
       className={`relative flex! flex-col grow items-stretch ${isBold ? tableStyles.backgoundColor : 'bg-background!'} p-2 group-data-[layout-minimal="true"]:w-full`}
      >

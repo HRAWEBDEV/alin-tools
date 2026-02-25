@@ -15,6 +15,7 @@ interface Table {
  tableID: number;
  tableNo: number;
  expired: boolean;
+ orderCount: number;
  tableStateDataID: number;
  tableStateID: number;
  tableStateTypeID: number;
