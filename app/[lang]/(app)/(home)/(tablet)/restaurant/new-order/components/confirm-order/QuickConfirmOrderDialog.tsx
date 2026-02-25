@@ -77,10 +77,6 @@ export default function QuickOrderInfoDialog({
  const [phoneNumberValue] = watch(['phoneNumber']);
 
  async function confirmQuickOrderInfo() {
-  if (phoneNumberValue && !isErrorFindPerson) {
-   findPerson(phoneNumberValue);
-   return;
-  }
   const isFirstNameValid = await trigger('firstName');
   if (!isFirstNameValid) {
    setFocus('firstName');
