@@ -42,6 +42,7 @@ export function TableDisplayFilters({
      className='w-full sm:max-w-[84px] grow'
      variant='outline'
      type='single'
+     size='lg'
      value={tempDisplayMode['displayMode']}
      onValueChange={(newVal) => {
       if (newVal) handleToggleDisplayMode(newVal as 'minimal' | 'normal');
@@ -65,6 +66,7 @@ export function TableDisplayFilters({
     <ToggleGroup
      variant='outline'
      type='multiple'
+     size='lg'
      className='w-full sm:w-auto grow sm:grow-0'
      value={tempDisplayMode['boldStyle'] ? ['bold'] : []}
      onValueChange={(newVal) => handleToggleBoldStyle(newVal.includes('bold'))}
