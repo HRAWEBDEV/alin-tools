@@ -266,6 +266,10 @@ export default function OrderBaseConfigProvider({
    setPersonID(null);
   },
   onSuccess(res) {
+   if (!res.data.personData) {
+    setPersonID(null);
+    return;
+   }
    setPersonID(res.data.personData.id);
    queryClient.setQueryData(
     ['person', res.data.personData.id.toString()],

@@ -22,7 +22,7 @@ type Person = {
   lastName: string;
   mobileNo: string;
   address: string;
- };
+ } | null;
 };
 
 type SavePersonPackage = {
@@ -552,7 +552,7 @@ function getPersonByNumber({
 
 function savePerson(newPerson: SavePersonPackage) {
  return axios.post<number>(
-  '/Restaurant/SaleInvoice/SavePersonSubscriber',
+  '/Restaurant/Tablet/SavePersonSubscriber',
   newPerson,
  );
 }
