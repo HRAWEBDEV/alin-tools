@@ -100,15 +100,18 @@ export default function SalonTable({
   return '';
  }
 
- const showOrderRedirectLink =
+ const orderRedirectLink =
   tableUtils.tableType === 'mock'
-   ? '#'
-   : (`/${locale}/restaurant/new-order?salonID=${tableUtils.selectedHall?.key}&salonName=${tableUtils.selectedHall?.value}&tableID=${table.tableID}&tableNo=${table.tableNo}&orderID=${table.orderID}&fromSalons=true` as const);
+   ? ''
+   : (`/${locale}/restaurant/new-order?salonID=${tableUtils.selectedHall?.key}&salonName=${tableUtils.selectedHall?.value}&tableID=${table.tableID}&tableNo=${table.tableNo}&fromSalons=true` as const);
 
- const newOrderRedirectLink =
-  tableUtils.tableType === 'mock'
-   ? '#'
-   : (`/${locale}/restaurant/new-order?salonID=${tableUtils.selectedHall?.key}&salonName=${tableUtils.selectedHall?.value}&tableID=${table.tableID}&tableNo=${table.tableNo}&orderID=0&fromSalons=true` as const);
+ const showOrderRedirectLink = orderRedirectLink
+  ? (`${orderRedirectLink}&orderID=${table.orderID}` as const)
+  : '#';
+
+ const newOrderRedirectLink = orderRedirectLink
+  ? (`${orderRedirectLink}&orderID=0` as const)
+  : '#';
 
  const menuContent =
   tableUtils.tableType === 'mock' ? null : (
