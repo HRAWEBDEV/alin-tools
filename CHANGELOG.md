@@ -1,3 +1,10 @@
+# 1.2.0
+### features
+- add connection status
+- add tables multi order functionlaity
+### bug fixes
+
+
 # 1.1.0
 ### features
 - add salons page minimal and bold views
