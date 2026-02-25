@@ -144,7 +144,7 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
     {dic.title}
    </h1>
    <div className='bg-background sticky top-0 z-2 p-4 lg:p-6 pt-4! pb-2!'>
-    <div className='flex flex-col md:flex-row md:justify-between lg:gap-2 gap-4 sm:mb-6 mb-2 top-0 sticky z-3 w-full'>
+    <div className='flex flex-col md:flex-row md:justify-between lg:gap-2 gap-4 mb-2 top-0 sticky z-3 w-full'>
      <div className='flex sm:gap-4 lg:gap-2 xl:gap-4 gap-4 items-center grow'>
       <div className='grid lg:max-w-[24rem] xl:max-w-md 2xl:max-w-lg grid-cols-[max-content_1fr_max-content] grow w-full'>
        <Button
@@ -239,28 +239,11 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
       </div>
       <TableDisplayFilters statusSwitches={statusSwitches} dic={dic} />
      </div>
-     <div className='flex md:gap-2 lg:gap-3 xl:gap-4 items-center flex-wrap justify-between md:justify-start shrink-0 lg:flex-nowrap'>
-      {isDesktop && statusSwitches}
-
-      {/* <div className='flex gap-2 items-center'> */}
-      {/*  <Switch */}
-      {/*   id='outOfService' */}
-      {/*   style={{ */}
-      {/*    direction: 'ltr', */}
-      {/*   }} */}
-      {/*   className='scale-125' */}
-      {/*   checked */}
-      {/*  /> */}
-      {/*  <Label */}
-      {/*   htmlFor='outOfService' */}
-      {/*   className={ */}
-      {/*    getTableStateStyles(TableStateTypes.outOfService).text + ' font-medium' */}
-      {/*   } */}
-      {/*  > */}
-      {/*   {dic.filters.outOfService} ({tablesReport.outOfServiceTables}) */}
-      {/*  </Label> */}
-      {/* </div> */}
-     </div>
+     {isDesktop && (
+      <div className='flex md:gap-2 lg:gap-3 xl:gap-4 items-center flex-wrap justify-between md:justify-start shrink-0 lg:flex-nowrap'>
+       {statusSwitches}
+      </div>
+     )}
     </div>
     <div>
      <div className='text-center md:text-start text-sm font-medium text-neutral-700 dark:text-neutral-400'>
