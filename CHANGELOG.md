@@ -1,6 +1,6 @@
 # 1.2.0
 ### features
-- add connection status
+- add connection status (hra-done)
 - add tables multi order functionlaity
 ### bug fixes
 
