@@ -174,7 +174,7 @@ export default function SalonBaseConfigProvider({
   return () => {
    salonSignalRConnection.stop();
   };
- }, [initDataSuccess]);
+ }, [initDataSuccess, userInfoRouterStorage]);
  useEffect(() => {
   getSalonTables();
  }, [getSalonTables]);
