@@ -52,7 +52,6 @@ export default function QuickOrderInfoDialog({
   queries: { orderID },
   initialDataInfo: { data },
   person: {
-   errorFindPerson,
    findPerson,
    isErrorFindPerson,
    personID,
@@ -236,7 +235,7 @@ export default function QuickOrderInfoDialog({
          )}
         </FieldContent>
        </Field>
-       {errorFindPerson?.status === 404 && (
+       {isErrorFindPerson && (
         <Alert className='border-yellow-600 dark:border-yellow-400 bg-yellow-600/10 dark:bg-yellow-400/10 py-2'>
          <AlertDescription className='text-yellow-600 dark:text-yellow-400 font-medium'>
           {dic.orderQuickInfo.noPersonFoundFillPersonInfo}

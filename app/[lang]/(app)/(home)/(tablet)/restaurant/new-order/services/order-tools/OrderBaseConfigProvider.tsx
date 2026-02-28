@@ -268,7 +268,7 @@ export default function OrderBaseConfigProvider({
   onSuccess(res) {
    if (!res.data.personData) {
     setPersonID(null);
-    return;
+    throw new Error('perosn not found');
    }
    setPersonID(res.data.personData.id);
    queryClient.setQueryData(
