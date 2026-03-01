@@ -23,15 +23,15 @@ import {
  DropdownMenuLabel,
 } from '@/components/ui/dropdown-menu';
 import { TbTransfer } from 'react-icons/tb';
-import { IoMdAddCircle } from 'react-icons/io';
+import { IoMdAddCircle, IoIosInformationCircle } from 'react-icons/io';
 import { GrStatusUnknown } from 'react-icons/gr';
-import { IoIosInformationCircle } from 'react-icons/io';
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { getHallKey, getTableOrders } from '../services/salonsApiActions';
 import TableOrders from './TableOrders';
 import { useOrderRedirectLink } from '../hooks/useOrderRedirectLink';
 import { TableUtils } from '../utils/tableUtils';
+import { IoAlbums } from 'react-icons/io5';
 
 export default function SalonTable({
  table,
@@ -287,12 +287,15 @@ export default function SalonTable({
        </div>
       )}
       <div className='text-start ps-2 grow'>
-       <div className='flex items-center gap-2'>
+       <div className='flex items-center'>
         <h3
          className={`text-2xl lg:text-3xl ${tableStyles.text} font-en-roboto group-data-[bold=true]:font-black`}
         >
          {table.tableNo.toString().padStart(2, '0')}
         </h3>
+        {table.orderCount > 1 && (
+         <IoAlbums className={`size-6 ${tableStyles.text} opacity-20`} />
+        )}
        </div>
        {!isMinimal && (
         <div>
