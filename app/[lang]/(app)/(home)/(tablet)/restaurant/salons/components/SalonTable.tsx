@@ -369,6 +369,8 @@ export default function SalonTable({
         isLoading={isLoadingOrdersList}
         orderRedirectLink={orderRedirectLink}
         orderCount={table.orderCount}
+        tableCapacity={table.tableCapacity}
+        tableStateType={table.tableStateTypeID}
        />
       </div>
      </DrawerContent>

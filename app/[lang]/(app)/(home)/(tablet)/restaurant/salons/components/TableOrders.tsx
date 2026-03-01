@@ -10,9 +10,13 @@ export default function TableOrders({
  isLoading,
  orderCount,
  orderRedirectLink,
+ tableCapacity,
+ tableStateType,
 }: {
  dic: SalonsDictionary;
  data?: TableOrderType[];
+ tableCapacity: number;
+ tableStateType: number;
  orderCount: number;
  isLoading: boolean;
  orderRedirectLink: ReturnType<typeof useOrderRedirectLink>;
@@ -33,6 +37,8 @@ export default function TableOrders({
      dic={dic}
      order={order}
      orderRedirectLink={orderRedirectLink}
+     tableCapacity={tableCapacity}
+     tableStateType={tableStateType}
     />
    ))}
   </div>

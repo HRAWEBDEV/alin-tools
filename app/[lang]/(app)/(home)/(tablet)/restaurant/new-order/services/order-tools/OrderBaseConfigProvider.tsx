@@ -214,9 +214,8 @@ export default function OrderBaseConfigProvider({
   isSuccess: userOrderSuccess,
  } = useQuery({
   staleTime: 'static',
-  gcTime: 0,
   enabled: !!orderIDQuery,
-  queryKey: [newOrderKey, 'order-info', orderIDQuery],
+  queryKey: [newOrderKey, 'order-info', orderIDQuery?.toString()],
   async queryFn({ signal }) {
    const { data } = await getOrder({ signal, orderID: orderIDQuery! });
    return data;
