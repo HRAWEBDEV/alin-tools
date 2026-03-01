@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import { type SalonsDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/salons/dictionary';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
-import { type InitiData, type Table } from '../services/salonsApiActions';
+import { type Table } from '../services/salonsApiActions';
 import { SlOptions } from 'react-icons/sl';
 import { TableStateTypes, getTableStateStyles } from '../utils/tableStates';
 import { getTableRows } from '../utils/getTableRows';
@@ -27,10 +26,12 @@ import { TbTransfer } from 'react-icons/tb';
 import { IoMdAddCircle } from 'react-icons/io';
 import { GrStatusUnknown } from 'react-icons/gr';
 import { IoIosInformationCircle } from 'react-icons/io';
-import { type SalonBaseConfig } from '../services/salon-base-config/salonBaseConfigContext';
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { getHallKey, getTableOrders } from '../services/salonsApiActions';
+import TableOrders from './TableOrders';
+import { useOrderRedirectLink } from '../hooks/useOrderRedirectLink';
+import { TableUtils } from '../utils/tableUtils';
 
 export default function SalonTable({
  table,
@@ -41,24 +42,11 @@ export default function SalonTable({
  table: Table;
  isMinimal?: boolean;
  isBold?: boolean;
-} & (
- | {
-    tableType: 'normal';
-    dic: SalonsDictionary;
-    tableTypes: InitiData['tableTypes'];
-    selectedHall: SalonBaseConfig['hallsInfo']['selectedHall'];
-    selectedTable: SalonBaseConfig['tablesInfo']['selectedTable'];
-    showTransferTable: SalonBaseConfig['tablesInfo']['showTransferTable'];
-    showMergeTable: SalonBaseConfig['tablesInfo']['showMergeTable'];
-    changeSelectedTable: SalonBaseConfig['tablesInfo']['changeSelectedTable'];
-    onShowChangeTableState: SalonBaseConfig['tablesInfo']['onShowChangeTableState'];
-    changeShowTransferTable: SalonBaseConfig['tablesInfo']['changeShowTransferTable'];
-    changeShowMergeTable: SalonBaseConfig['tablesInfo']['changeShowMergeTable'];
-    mergeTableTo: SalonBaseConfig['tablesInfo']['mergeTableTo'];
-    transferTableTo: SalonBaseConfig['tablesInfo']['transferTableTo'];
-   }
- | { tableType: 'mock' }
-)) {
+} & TableUtils) {
+ const orderRedirectLink = useOrderRedirectLink({
+  table,
+  tableUtils,
+ });
  const router = useRouter();
  const [isOpen, setIsOpen] = useState(false);
  const [showTableOrdersList, setShowTableOrdersList] = useState(false);
@@ -74,9 +62,12 @@ export default function SalonTable({
 
  const { data: ordersList, isLoading: isLoadingOrdersList } = useQuery({
   enabled: showTableOrdersList && tableUtils.tableType === 'normal',
-  queryKey: [getHallKey, 'ordersList', table.orderID.toString()],
+  queryKey: [getHallKey, 'ordersList', table.tableID.toString()],
   async queryFn({ signal }) {
-   const res = await getTableOrders({ tableID: table.orderID, signal });
+   const res = await getTableOrders({
+    tableID: table.tableID,
+    signal,
+   });
    return res.data;
   },
  });
@@ -99,11 +90,6 @@ export default function SalonTable({
   }
   return '';
  }
-
- const orderRedirectLink =
-  tableUtils.tableType === 'mock'
-   ? ''
-   : (`/${locale}/restaurant/new-order?salonID=${tableUtils.selectedHall?.key}&salonName=${tableUtils.selectedHall?.value}&tableID=${table.tableID}&tableNo=${table.tableNo}&fromSalons=true` as const);
 
  const showOrderRedirectLink = orderRedirectLink
   ? (`${orderRedirectLink}&orderID=${table.orderID}` as const)
@@ -377,7 +363,13 @@ export default function SalonTable({
        </DrawerTitle>
       </DrawerHeader>
       <div className='overflow-hidden overflow-y-auto p-4'>
-       {table.orderCount}
+       <TableOrders
+        dic={tableUtils.dic}
+        data={ordersList}
+        isLoading={isLoadingOrdersList}
+        orderRedirectLink={orderRedirectLink}
+        orderCount={table.orderCount}
+       />
       </div>
      </DrawerContent>
     </Drawer>

@@ -10,6 +10,8 @@ interface InitiData {
  defaultPrintCashBox: number;
 }
 
+type TableOrder = Combo;
+
 interface Table {
  vip: boolean;
  tableID: number;
@@ -148,10 +150,8 @@ function getTableOrders({
  tableID: number;
  signal: AbortSignal;
 }) {
- const searchParams = new URLSearchParams([
-  ['masterOrderID', tableID.toString()],
- ]);
- return axios.get(
+ const searchParams = new URLSearchParams([['tableID', tableID.toString()]]);
+ return axios.get<TableOrder[]>(
   `/Restaurant/Tablet/ReadMultipleOrderData?${searchParams.toString()}`,
   {
    signal,
@@ -159,7 +159,7 @@ function getTableOrders({
  );
 }
 
-export type { Combo, Table, InitiData };
+export type { Combo, Table, InitiData, TableOrder };
 export {
  getHallKey,
  transferTable,
