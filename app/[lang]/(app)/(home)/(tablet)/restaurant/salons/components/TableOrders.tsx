@@ -3,6 +3,8 @@ import { type TableOrder as TableOrderType } from '../services/salonsApiActions'
 import TableOrder from './TableOrder';
 import { useOrderRedirectLink } from '../hooks/useOrderRedirectLink';
 import { Skeleton } from '@/components/ui/skeleton';
+import Link from 'next/link';
+import { FaPlus } from 'react-icons/fa6';
 
 export default function TableOrders({
  dic,
@@ -31,6 +33,12 @@ export default function TableOrders({
   );
  return (
   <div className='flex gap-4 flex-wrap'>
+   <Link
+    className='size-40 border border-input rounded-md grid place-content-center bg-secondary/10 text-secondary'
+    href={orderRedirectLink ? `${orderRedirectLink}&orderID=0` : '#'}
+   >
+    <FaPlus className='size-10' />
+   </Link>
    {data?.map((order) => (
     <TableOrder
      key={order.key}
