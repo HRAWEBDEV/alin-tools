@@ -252,10 +252,10 @@ export default function UserInfoRouterProvider({
            >
             <Button
              variant='outline'
-             disabled={selectedDialogDepartment.id === Departments.roomDivision}
-             data-disabled={
-              selectedDialogDepartment.id === Departments.roomDivision
-             }
+             // disabled={selectedDialogDepartment.id === Departments.roomDivision}
+             // data-disabled={
+             //  selectedDialogDepartment.id === Departments.roomDivision
+             // }
              className={`relative h-auto w-auto flex-col size-40 max-h-none ${
               selectedDialogDepartment.id === Departments.roomDivision
                ? 'bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-400'
