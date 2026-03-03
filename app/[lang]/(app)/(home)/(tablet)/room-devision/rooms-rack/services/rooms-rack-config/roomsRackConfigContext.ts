@@ -1,12 +1,13 @@
 import { use, createContext } from 'react';
 import { OutOfContext } from '@/utils/OutOfContext';
 
-type SidebarPanel = 'stats' | 'help' | 'filters';
+type SidebarPanel = 'info' | 'help' | 'filters';
 type RackConfig = {
  sidebar: {
   isPin: boolean;
   isOpen: boolean;
   activePanel: SidebarPanel;
+  onChangeActivePanel: (panel: SidebarPanel) => unknown;
   toggle: (open?: boolean, activePanel?: SidebarPanel) => unknown;
   togglePin: (pin?: boolean) => unknown;
  };

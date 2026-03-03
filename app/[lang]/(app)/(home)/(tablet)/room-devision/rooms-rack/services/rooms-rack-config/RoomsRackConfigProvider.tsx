@@ -15,8 +15,8 @@ export function RoomsRackConfigProvider({
 }) {
  const [activeSidebarPanel, setActiveSidebarPanel] =
   useState<SidebarPanel>('filters');
- const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
- const [sidebarIsPin, setSidebarIsPin] = useState(false);
+ const [sidebarIsOpen, setSidebarIsOpen] = useState(true);
+ const [sidebarIsPin, setSidebarIsPin] = useState(true);
 
  function handleToggleSidebar(
   open?: boolean,
@@ -34,6 +34,10 @@ export function RoomsRackConfigProvider({
   setSidebarIsPin((pre) => (pin === undefined ? !pre : pin));
  }
 
+ function handleChangeActivePanel(panel: SidebarPanel) {
+  setActiveSidebarPanel(panel);
+ }
+
  const ctx: RackConfig = {
   sidebar: {
    isPin: sidebarIsPin,
@@ -41,6 +45,7 @@ export function RoomsRackConfigProvider({
    activePanel: activeSidebarPanel,
    toggle: handleToggleSidebar,
    togglePin: handleToggleSidebarPin,
+   onChangeActivePanel: handleChangeActivePanel,
   },
  };
  return (
