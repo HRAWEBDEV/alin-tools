@@ -4,6 +4,7 @@ import { useRoomDevisionShareDictionary } from '../services/share-dictionary/roo
 import Link from 'next/link';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { usePathname } from 'next/navigation';
+import { FaHotel } from 'react-icons/fa6';
 
 export default function NavList() {
  const { locale } = useBaseConfig();
@@ -17,24 +18,24 @@ export default function NavList() {
  } = useRoomDevisionShareDictionary();
  return (
   <ul className='p-2 w-[min(100%,15rem)] mx-auto grid gap-2'>
-   {/*<li>
+   <li>
     <Button
-     data-active={activePath === 'new-order'}
+     data-active={activePath === 'rooms-rack'}
      variant='ghost'
-     className='w-full h-auto justify-start data-[active="true"]:bg-background border border-transparent data-[active="true"]:text-primary data-[active="true"]:border-primary'
+     className='w-full min-h-16 h-auto justify-start data-[active="true"]:bg-background border border-transparent data-[active="true"]:text-primary data-[active="true"]:border-primary'
      asChild
     >
      <Link
       href={
-       activePath === 'new-order' ? '#' : `/${locale}/restaurant/new-order`
+       activePath === 'rooms-rack' ? '#' : `/${locale}/room-devision/rooms-rack`
       }
       className='flex w-auto h-auto items-center gap-4'
      >
-      <DishIcon className='size-12' />
-      <p className='text-base'>{navigation.newOrder}</p>
+      <FaHotel className='size-9' />
+      <p className='text-base'>{navigation.roomsRack}</p>
      </Link>
     </Button>
-   </li>*/}
+   </li>
   </ul>
  );
 }

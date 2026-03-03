@@ -1,6 +1,7 @@
 {
  "components": {
   "tabs": {
+   "roomsRack": "رک اتاق ها",
    "profile": "پروفایل",
    "menus": "منو‌ها"
   },
@@ -26,7 +27,9 @@
     "themeToggler": ""
    }
   },
-  "navigation": {},
+  "navigation": {
+   "roomsRack": "رک اتاق ها"
+  },
   "noItemFound": {
    "title": "آیتمی یافت نشد"
   },
