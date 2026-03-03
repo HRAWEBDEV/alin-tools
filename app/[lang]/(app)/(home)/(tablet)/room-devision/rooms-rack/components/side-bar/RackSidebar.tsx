@@ -25,9 +25,9 @@ export default function RackSidebar({ dic }: { dic: RoomsRackDictionary }) {
   <>
    {isOpen && (
     <aside
-     className={`fixed inset-0 md:static ${isOpen && !isPin && 'md:absolute! md:bottom-0 md:top-0 md:start-0 md:end-auto md:w-[18rem]'} h-full p-4 flex flex-col overflow-hidden z-[calc(var(--app-restaurant-tabs-zindex)+1)]`}
+     className={`fixed inset-0 md:static ${isOpen && !isPin ? 'md:absolute! md:bottom-0 md:top-0 md:start-0 md:end-auto md:w-[18rem]' : ''} h-full p-4 ${isPin ? 'md:pe-0' : ''} flex flex-col overflow-hidden z-[calc(var(--app-restaurant-tabs-zindex)+1)]`}
     >
-     <div className='shadow-lg bg-background border border-input grow rounded-md overflow-auto'>
+     <div className='shadow bg-background border border-input grow rounded-md overflow-auto'>
       <div className='p-2 bg-background sticky top-0'>
        <div className='flex justify-end mb-2 gap-2'>
         <Button
