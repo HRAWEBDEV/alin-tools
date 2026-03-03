@@ -4,9 +4,11 @@ import { OutOfContext } from '@/utils/OutOfContext';
 type SidebarPanel = 'stats' | 'help' | 'filters';
 type RackConfig = {
  sidebar: {
+  isPin: boolean;
   isOpen: boolean;
   activePanel: SidebarPanel;
   toggle: (open?: boolean, activePanel?: SidebarPanel) => unknown;
+  togglePin: (pin?: boolean) => unknown;
  };
 };
 

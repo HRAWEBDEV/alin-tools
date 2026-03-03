@@ -31,7 +31,7 @@ export default function NavList() {
       }
       className='flex w-auto h-auto items-center gap-4'
      >
-      <FaHotel className='size-9' />
+      <FaHotel className='size-8' />
       <p className='text-base'>{navigation.roomsRack}</p>
      </Link>
     </Button>
