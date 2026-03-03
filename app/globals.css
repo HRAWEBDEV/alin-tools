@@ -128,6 +128,14 @@
  --sidebar-ring: oklch(0.556 0 0);
 }
 
+[data-program='room-devision'] {
+ --primary: oklch(0.51 0.26 276.7);
+}
+
+[data-theme='dark'] [data-program='room-devision'] {
+ --primary: oklch(0.67 0.18 276.93);
+}
+
 .glass-card {
  backdrop-filter: blur(5px);
  -webkit-backdrop-filter: blur(5px);

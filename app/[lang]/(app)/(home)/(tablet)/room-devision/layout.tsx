@@ -17,7 +17,7 @@ export default async function HomeLayout({
   locale: lang as Locale,
  });
  return (
-  <>
+  <div data-program='room-devision'>
    <RoomDevisionShareDictionaryProvider roomDevisionShareDictionary={shareDic}>
     <SettingsProvider>
      <ProfileProvider>
@@ -32,6 +32,6 @@ export default async function HomeLayout({
      </ProfileProvider>
     </SettingsProvider>
    </RoomDevisionShareDictionaryProvider>
-  </>
+  </div>
  );
 }
