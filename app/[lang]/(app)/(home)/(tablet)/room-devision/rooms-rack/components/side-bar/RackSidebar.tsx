@@ -9,6 +9,7 @@ import {
 } from 'react-icons/fa';
 import { IoMdClose } from 'react-icons/io';
 import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
 
 export default function RackSidebar({ dic }: { dic: RoomsRackDictionary }) {
  const {
@@ -20,6 +21,7 @@ export default function RackSidebar({ dic }: { dic: RoomsRackDictionary }) {
    isPin,
    isOpen,
   },
+  initData: { isLoading: initDataIsLoading },
  } = useRackConfigContext();
  return (
   <>
@@ -70,7 +72,7 @@ export default function RackSidebar({ dic }: { dic: RoomsRackDictionary }) {
           onClick={() => onChangeActivePanel('filters')}
           className='grow basis-0 text-neutral-600 dark:text-neutral-400'
          >
-          <FaFilter className='size-4' />
+          {initDataIsLoading ? <Spinner /> : <FaFilter className='size-4' />}
           {dic.sidebar.tabs.filters}
          </TabsTrigger>
          <TabsTrigger

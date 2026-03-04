@@ -1,6 +1,28 @@
 {
  "title": "رک اتاق ها",
- "filter": {},
+ "filters": {
+  "roomType": "نوع اتاق",
+  "building": "ساختمان",
+  "floor": "طبفه",
+  "roomStateInOutState": "ورودی و خروجی",
+  "roomStateGroup": "وضعیت اشغال",
+  "roomStateKind": "وضعیت اتاق",
+  "roomStateType": "وضعیت مهمان اتاق",
+  "customers": "مشتری",
+  "rackType": "نوع رک",
+  "current": "جاری",
+  "future": "آینده",
+  "date": "تاریخ",
+  "occupiedRooms": "اتاق اشغال",
+  "vacantRooms": "اتاق خالی",
+  "readyRooms": "آماده سرویس",
+  "outOfOrder": "خارج از سرویس",
+  "outOfService": "در انتظار سرویس",
+  "guestCount": "تعداد مهمان",
+  "chargedReserve": "رزروهای شارژ نشده",
+  "showType": "نوع نمایش",
+  "occupancyRate": "درصد اشغال"
+ },
  "sidebar": {
   "tabs": {
    "filters": "فیلترها",
