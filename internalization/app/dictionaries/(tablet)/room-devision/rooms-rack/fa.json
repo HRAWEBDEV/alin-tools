@@ -21,7 +21,8 @@
   "guestCount": "تعداد مهمان",
   "chargedReserve": "رزروهای شارژ نشده",
   "showType": "نوع نمایش",
-  "occupancyRate": "درصد اشغال"
+  "occupancyRate": "درصد اشغال",
+  "clearFilters": "پاک کردن فیلترها"
  },
  "sidebar": {
   "tabs": {
