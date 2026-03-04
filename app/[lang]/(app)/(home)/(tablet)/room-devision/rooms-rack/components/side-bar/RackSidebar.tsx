@@ -10,6 +10,7 @@ import {
 import { IoMdClose } from 'react-icons/io';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
+import RackFilters from './RackFilters';
 
 export default function RackSidebar({ dic }: { dic: RoomsRackDictionary }) {
  const {
@@ -23,6 +24,9 @@ export default function RackSidebar({ dic }: { dic: RoomsRackDictionary }) {
   },
   initData: { isLoading: initDataIsLoading },
  } = useRackConfigContext();
+
+ const sidebarSlot = <RackFilters dic={dic} />;
+
  return (
   <>
    {isOpen && (
@@ -30,9 +34,9 @@ export default function RackSidebar({ dic }: { dic: RoomsRackDictionary }) {
      className={`fixed inset-0 md:static ${isOpen && !isPin ? 'md:absolute! md:bottom-0 md:top-0 md:start-0 md:end-auto md:w-76' : ''} h-full p-4 ${isPin ? 'md:pe-0' : ''} flex flex-col overflow-hidden z-[calc(var(--app-restaurant-tabs-zindex)+1)]`}
     >
      <div className='shadow bg-background border border-input grow rounded-md overflow-auto'>
-      <div className='p-2 bg-background sticky top-0'>
+      <div className='p-2 bg-background sticky top-0 z-1'>
        <div className='flex items-center justify-between mb-2 gap-2'>
-        <p className='font-medium'>
+        <p className='font-medium ps-2'>
          {dic.sidebar.tabs[activePanel]} {dic.title}
         </p>
         <div className='flex justify-between gap-2'>
@@ -86,6 +90,7 @@ export default function RackSidebar({ dic }: { dic: RoomsRackDictionary }) {
         </TabsList>
        </Tabs>
       </div>
+      {sidebarSlot}
      </div>
     </aside>
    )}

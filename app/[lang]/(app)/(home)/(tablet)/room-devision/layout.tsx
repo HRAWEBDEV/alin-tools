@@ -2,6 +2,7 @@ import { type Locale } from '@/internalization/app/localization';
 import { getRoomDevisionShareDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/share/dictionary';
 import RoomDevisionShareDictionaryProvider from './services/share-dictionary/RoomDevisionShareDictionaryProvider';
 import SettingsProvider from './services/profile/settings/SettingsProvider';
+import 'keen-slider/keen-slider.min.css';
 import ProfileProvider from './services/profile/ProfileProvider';
 import Header from './components/Header';
 import Nav from './components/Nav';

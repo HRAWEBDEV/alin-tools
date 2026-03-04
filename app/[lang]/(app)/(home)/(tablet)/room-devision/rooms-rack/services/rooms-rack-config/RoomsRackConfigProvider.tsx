@@ -8,6 +8,13 @@ import {
 import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
 import { roomsRackBaseKey, getInitialData } from '../roomsRackApiActions';
 import { useQuery } from '@tanstack/react-query';
+import { useForm, FormProvider } from 'react-hook-form';
+import {
+ type RackFiltersSchema,
+ defaultValues,
+ createRackFiltersSchema,
+} from '../../schemas/rackFiltersSchema';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 export function RoomsRackConfigProvider({
  children,
@@ -17,8 +24,13 @@ export function RoomsRackConfigProvider({
 }) {
  const [activeSidebarPanel, setActiveSidebarPanel] =
   useState<SidebarPanel>('filters');
- const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
+ const [sidebarIsOpen, setSidebarIsOpen] = useState(true);
  const [sidebarIsPin, setSidebarIsPin] = useState(true);
+
+ const rackFiltersUseForm = useForm<RackFiltersSchema>({
+  resolver: zodResolver(createRackFiltersSchema()),
+  defaultValues,
+ });
 
  function handleToggleSidebar(
   open?: boolean,
@@ -72,7 +84,7 @@ export function RoomsRackConfigProvider({
  };
  return (
   <rackConfigContext.Provider value={ctx}>
-   {children}
+   <FormProvider {...rackFiltersUseForm}>{children}</FormProvider>
   </rackConfigContext.Provider>
  );
 }

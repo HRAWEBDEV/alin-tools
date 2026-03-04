@@ -1,6 +1,6 @@
 'use client';
 import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
-import RackFilters from './RackFilters';
+import RackTools from './RackTools';
 import RackRooms from './rooms/RackRooms';
 import RackSidebar from './side-bar/RackSidebar';
 import { useRackConfigContext } from '../services/rooms-rack-config/roomsRackConfigContext';
@@ -21,7 +21,7 @@ export default function RoomsRackWrapper({
   >
    <RackSidebar dic={dic} />
    <div className='flex flex-col gap-2 overflow-hidden p-4'>
-    <RackFilters dic={dic} />
+    <RackTools dic={dic} />
     <RackRooms dic={dic} />
    </div>
   </div>

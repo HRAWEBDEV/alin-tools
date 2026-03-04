@@ -3,7 +3,7 @@
  "filters": {
   "roomType": "نوع اتاق",
   "building": "ساختمان",
-  "floor": "طبفه",
+  "floor": "طبقه",
   "roomStateInOutState": "ورودی و خروجی",
   "roomStateGroup": "وضعیت اشغال",
   "roomStateKind": "وضعیت اتاق",

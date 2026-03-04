@@ -1,23 +1,19 @@
 import { z } from 'zod';
 
 const defaultValues: Partial<RackFiltersSchema> = {
- building: null,
- customers: null,
- date: null,
- floor: null,
- previewType: 'current',
  rackType: null,
+ roomType: null,
+ building: null,
+ floor: null,
  roomStateGroup: null,
  roomStateInOutState: null,
  roomStateKind: null,
  roomStateType: null,
- roomType: null,
+ customers: null,
 };
 
 function createRackFiltersSchema() {
  return z.object({
-  previewType: z.enum(['current', 'future']),
-  date: z.date().nullable(),
   floor: z.object({ key: z.string(), value: z.string() }).nullable(),
   building: z.object({ key: z.string(), value: z.string() }).nullable(),
   rackType: z.object({ key: z.string(), value: z.string() }).nullable(),
