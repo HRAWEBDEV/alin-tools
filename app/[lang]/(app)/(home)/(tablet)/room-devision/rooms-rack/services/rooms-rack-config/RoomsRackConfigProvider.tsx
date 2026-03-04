@@ -6,6 +6,8 @@ import {
  rackConfigContext,
 } from './roomsRackConfigContext';
 import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
+import { roomsRackBaseKey, getInitialData } from '../roomsRackApiActions';
+import { useQuery } from '@tanstack/react-query';
 
 export function RoomsRackConfigProvider({
  children,
@@ -36,7 +38,21 @@ export function RoomsRackConfigProvider({
  function handleChangeActivePanel(panel: SidebarPanel) {
   setActiveSidebarPanel(panel);
  }
- console.log(activeSidebarPanel);
+
+ // init data
+ const {
+  data: initData,
+  isLoading: initDataIsLoading,
+  isSuccess: initDataIsSuccess,
+  isError: initDataIsError,
+ } = useQuery({
+  staleTime: 'static',
+  queryKey: [roomsRackBaseKey, 'init-data'],
+  async queryFn({ signal }) {
+   const res = await getInitialData({ signal });
+   return res.data;
+  },
+ });
 
  const ctx: RackConfig = {
   sidebar: {
@@ -46,6 +62,12 @@ export function RoomsRackConfigProvider({
    toggle: handleToggleSidebar,
    togglePin: handleToggleSidebarPin,
    onChangeActivePanel: handleChangeActivePanel,
+  },
+  initData: {
+   data: initData,
+   isLoading: initDataIsLoading,
+   isSuccess: initDataIsSuccess,
+   isError: initDataIsError,
   },
  };
  return (

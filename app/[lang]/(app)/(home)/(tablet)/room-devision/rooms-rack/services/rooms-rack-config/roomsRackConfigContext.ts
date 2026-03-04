@@ -1,5 +1,6 @@
 import { use, createContext } from 'react';
 import { OutOfContext } from '@/utils/OutOfContext';
+import { type InitialData } from '../roomsRackApiActions';
 
 type SidebarPanel = 'info' | 'help' | 'filters';
 type RackConfig = {
@@ -10,6 +11,12 @@ type RackConfig = {
   onChangeActivePanel: (panel: SidebarPanel) => unknown;
   toggle: (open?: boolean, activePanel?: SidebarPanel) => unknown;
   togglePin: (pin?: boolean) => unknown;
+ };
+ initData: {
+  data?: InitialData;
+  isLoading: boolean;
+  isSuccess: boolean;
+  isError: boolean;
  };
 };
 
