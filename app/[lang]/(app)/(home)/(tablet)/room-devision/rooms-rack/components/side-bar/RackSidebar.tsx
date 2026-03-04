@@ -25,30 +25,35 @@ export default function RackSidebar({ dic }: { dic: RoomsRackDictionary }) {
   <>
    {isOpen && (
     <aside
-     className={`fixed inset-0 md:static ${isOpen && !isPin ? 'md:absolute! md:bottom-0 md:top-0 md:start-0 md:end-auto md:w-[18rem]' : ''} h-full p-4 ${isPin ? 'md:pe-0' : ''} flex flex-col overflow-hidden z-[calc(var(--app-restaurant-tabs-zindex)+1)]`}
+     className={`fixed inset-0 md:static ${isOpen && !isPin ? 'md:absolute! md:bottom-0 md:top-0 md:start-0 md:end-auto md:w-76' : ''} h-full p-4 ${isPin ? 'md:pe-0' : ''} flex flex-col overflow-hidden z-[calc(var(--app-restaurant-tabs-zindex)+1)]`}
     >
      <div className='shadow bg-background border border-input grow rounded-md overflow-auto'>
       <div className='p-2 bg-background sticky top-0'>
-       <div className='flex justify-end mb-2 gap-2'>
-        <Button
-         data-is-pin={isPin}
-         variant='ghost'
-         size='icon-lg'
-         className='text-neutral-400 dark:text-neutral-600 data-[is-pin=true]:text-primary hidden md:flex'
-         onClick={() => {
-          togglePin();
-         }}
-        >
-         <FaThumbtack className='size-5' />
-        </Button>
-        <Button
-         variant='ghost'
-         size='icon-lg'
-         className='text-destructive'
-         onClick={() => toggle(false)}
-        >
-         <IoMdClose className='size-6' />
-        </Button>
+       <div className='flex items-center justify-between mb-2 gap-2'>
+        <p className='font-medium'>
+         {dic.sidebar.tabs[activePanel]} {dic.title}
+        </p>
+        <div className='flex justify-between gap-2'>
+         <Button
+          data-is-pin={isPin}
+          variant='ghost'
+          size='icon-lg'
+          className='text-neutral-400 dark:text-neutral-600 data-[is-pin=true]:text-primary hidden md:flex'
+          onClick={() => {
+           togglePin();
+          }}
+         >
+          <FaThumbtack className='size-5' />
+         </Button>
+         <Button
+          variant='ghost'
+          size='icon-lg'
+          className='text-destructive'
+          onClick={() => toggle(false)}
+         >
+          <IoMdClose className='size-6' />
+         </Button>
+        </div>
        </div>
        <Tabs value={activePanel} dir='rtl'>
         <TabsList className='w-full h-12'>
