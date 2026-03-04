@@ -42,25 +42,39 @@ export default function RackTools({ dic }: { dic: RoomsRackDictionary }) {
  });
 
  const {
-  sidebar: { toggle, isOpen },
+  sidebar: { toggle, isOpen, isPin },
  } = useRackConfigContext();
  return (
   <div className='py-2'>
+   <h1
+    data-is-sidebar-pin={isPin}
+    data-is-sidebar-open={isOpen}
+    className='lg:hidden data-[is-sidebar-pin=false]:block data-[is-sidebar-open=false]:block text-center md:text-start font-medium text-2xl lg:text-3xl mb-4'
+   >
+    {dic.title}
+   </h1>
    <div className='flex gap-2 items-center'>
     <div className='flex gap-2'>
-     <Button variant='outline' size='lg' onClick={() => toggle()}>
+     <Button
+      variant='outline'
+      size='lg'
+      onClick={() => toggle()}
+      className='text-neutral-600 dark:text-neutral-400'
+     >
       <FaFilter className='size-4' />
       <span className='hidden md:inline'>{dic.sidebar.tabs.filters}</span>
       {!!activeFilters.length && (
-       <Badge className='size-6'>{activeFilters.length}</Badge>
+       <Badge variant='destructive' className='size-6'>
+        {activeFilters.length}
+       </Badge>
       )}
      </Button>
     </div>
     <div
      key={
       isOpen
-       ? `collapse${activeFilters.length}`
-       : `expand${activeFilters.length}`
+       ? `collapse${activeFilters.length}-${isPin}`
+       : `expand${activeFilters.length}-${isPin}`
      }
      ref={sliderRef}
      className='keen-slider grow relative'
