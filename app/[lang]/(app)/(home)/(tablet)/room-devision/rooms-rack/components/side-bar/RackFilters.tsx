@@ -26,7 +26,7 @@ export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
 
  return (
   <>
-   <div className='grid grid-cols-1 gap-5 p-4 pt-2'>
+   <div className='grid grid-cols-1 gap-5 p-4'>
     <Field>
      <FieldLabel htmlFor='rack-type'>{dic.filters.rackType}</FieldLabel>
      <Controller

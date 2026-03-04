@@ -11,6 +11,7 @@ import { IoMdClose } from 'react-icons/io';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import RackFilters from './RackFilters';
+import RackHelp from './RackHelp';
 
 export default function RackSidebar({ dic }: { dic: RoomsRackDictionary }) {
  const {
@@ -25,7 +26,16 @@ export default function RackSidebar({ dic }: { dic: RoomsRackDictionary }) {
   initData: { isLoading: initDataIsLoading },
  } = useRackConfigContext();
 
- const sidebarSlot = <RackFilters dic={dic} />;
+ let sidebarSlot = <RackFilters dic={dic} />;
+
+ switch (activePanel) {
+  case 'help':
+   sidebarSlot = <RackHelp dic={dic} />;
+   break;
+  case 'info':
+   sidebarSlot = <div></div>;
+   break;
+ }
 
  return (
   <>
@@ -44,7 +54,7 @@ export default function RackSidebar({ dic }: { dic: RoomsRackDictionary }) {
           data-is-pin={isPin}
           variant='ghost'
           size='icon-lg'
-          className='text-neutral-400 dark:text-neutral-600 data-[is-pin=true]:text-primary hidden md:flex'
+          className='text-neutral-400 dark:text-neutral-600 data-[is-pin=true]:text-secondary hidden md:flex'
           onClick={() => {
            togglePin();
           }}

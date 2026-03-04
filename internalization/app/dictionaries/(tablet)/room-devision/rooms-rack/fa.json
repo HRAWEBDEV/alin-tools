@@ -22,7 +22,12 @@
   "chargedReserve": "رزروهای شارژ نشده",
   "showType": "نوع نمایش",
   "occupancyRate": "درصد اشغال",
+  "serviceState": "وضعیت سرویس",
+  "roomStateInOutStateState": "وضعیت ورودی و خروجی",
   "clearFilters": "پاک کردن فیلترها"
+ },
+ "tools": {
+  "lastUpdate": "آخرین بروزرسانی"
  },
  "sidebar": {
   "tabs": {

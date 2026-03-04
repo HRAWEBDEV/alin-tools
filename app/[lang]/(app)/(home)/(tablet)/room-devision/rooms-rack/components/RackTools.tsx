@@ -21,7 +21,7 @@ const largeBadgeKeys: (keyof RackFiltersSchema)[] = [
 ];
 
 export default function RackTools({ dic }: { dic: RoomsRackDictionary }) {
- const { localeInfo } = useBaseConfig();
+ const { locale, localeInfo } = useBaseConfig();
  const { watch, setValue } = useFormContext<RackFiltersSchema>();
 
  const filterKeys = Object.keys(defaultValues) as (keyof RackFiltersSchema)[];
@@ -49,11 +49,11 @@ export default function RackTools({ dic }: { dic: RoomsRackDictionary }) {
    <h1
     data-is-sidebar-pin={isPin}
     data-is-sidebar-open={isOpen}
-    className='lg:hidden data-[is-sidebar-pin=false]:block data-[is-sidebar-open=false]:block text-center md:text-start font-medium text-2xl lg:text-3xl mb-4'
+    className='lg:hidden text-center md:text-start font-medium text-2xl lg:text-3xl mb-4'
    >
     {dic.title}
    </h1>
-   <div className='flex gap-2 items-center'>
+   <div className='flex gap-2 items-center mb-2'>
     <div className='flex gap-2'>
      <Button
       variant='outline'
@@ -117,6 +117,23 @@ export default function RackTools({ dic }: { dic: RoomsRackDictionary }) {
       );
      })}
     </div>
+   </div>
+   <div className='flex gap-4'>
+    <p className='text-center md:text-start text-sm font-medium text-neutral-700 dark:text-neutral-400'>
+     <span>{dic.tools.lastUpdate}: </span>
+     <span>
+      {true
+       ? new Date().toLocaleTimeString(locale, {
+          hour: '2-digit',
+          minute: '2-digit',
+         })
+       : ''}
+     </span>
+    </p>
+    <p className='text-center md:text-start text-sm font-medium text-neutral-700 dark:text-neutral-400'>
+     <span>{dic.filters.occupancyRate}: </span>
+     <span className='text-secondary font-en-roboto text-[0.95rem]'>70%</span>
+    </p>
    </div>
   </div>
  );
