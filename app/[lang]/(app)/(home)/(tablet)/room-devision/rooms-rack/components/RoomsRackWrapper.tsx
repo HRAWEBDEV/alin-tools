@@ -3,6 +3,7 @@ import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(ta
 import RackTools from './RackTools';
 import RackRooms from './rooms/RackRooms';
 import RackSidebar from './side-bar/RackSidebar';
+import RackPagination from './rooms/RackPagination';
 import { useRackConfigContext } from '../services/rooms-rack-config/roomsRackConfigContext';
 
 export default function RoomsRackWrapper({
@@ -20,9 +21,10 @@ export default function RoomsRackWrapper({
    className={`grid grid-cols-1 ${isOpen && isPin ? 'md:grid-cols-[18rem_1fr]' : ''}  h-full overflow-hidden relative`}
   >
    <RackSidebar dic={dic} />
-   <div className='flex flex-col overflow-hidden p-4'>
+   <div className='flex flex-col overflow-auto px-4 my-4'>
     <RackTools dic={dic} />
     <RackRooms dic={dic} />
+    <RackPagination dic={dic} />
    </div>
   </div>
  );
