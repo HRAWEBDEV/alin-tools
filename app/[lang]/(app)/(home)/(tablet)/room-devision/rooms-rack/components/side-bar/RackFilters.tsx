@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Field, FieldLabel } from '@/components/ui/field';
 import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
 import { Controller, useFormContext } from 'react-hook-form';
@@ -5,6 +6,7 @@ import {
  type RackFiltersSchema,
  defaultValues,
 } from '../../schemas/rackFiltersSchema';
+import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import {
  Drawer,
  DrawerClose,
@@ -14,16 +16,25 @@ import {
  DrawerTrigger,
 } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button';
-import { ChevronsUpDown } from 'lucide-react';
+import { ChevronsUpDown, ChevronDownIcon } from 'lucide-react';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Spinner } from '@/components/ui/spinner';
 import { useRackConfigContext } from '../../services/rooms-rack-config/roomsRackConfigContext';
 import { rackShowTypes } from '../../utils/rackShowTypes';
+import {
+ Popover,
+ PopoverContent,
+ PopoverTrigger,
+} from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
 
 export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
+ const { locale } = useBaseConfig();
  const { initData } = useRackConfigContext();
- const { control, setValue } = useFormContext<RackFiltersSchema>();
+ const { control, setValue, watch } = useFormContext<RackFiltersSchema>();
+ const [showDatePicker, setShowDatePicker] = useState(false);
+ const [rackShowTypeValue] = watch(['showType']);
 
  return (
   <>
@@ -139,6 +150,9 @@ export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
               className='flex gap-1 items-center ps-6 py-2'
               onClick={() => {
                field.onChange(item);
+               if (item.value === 'current') {
+                setValue('date', null);
+               }
               }}
              >
               <Checkbox
@@ -162,6 +176,48 @@ export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
       )}
      />
     </Field>
+    {rackShowTypeValue?.value === 'future' && (
+     <Controller
+      control={control}
+      name='date'
+      render={({ field }) => (
+       <Field>
+        <FieldLabel htmlFor='date'>{dic.filters.date}</FieldLabel>
+        <Popover open={showDatePicker} onOpenChange={setShowDatePicker}>
+         <PopoverTrigger asChild>
+          <Button
+           variant='outline'
+           id='date'
+           className='justify-between font-normal h-11'
+           onBlur={field.onBlur}
+           ref={field.ref}
+          >
+           <span>
+            {field.value ? field.value.toLocaleDateString(locale) : ''}
+           </span>
+           <ChevronDownIcon />
+          </Button>
+         </PopoverTrigger>
+         <PopoverContent className='w-auto overflow-hidden p-0' align='start'>
+          <Calendar
+           mode='single'
+           captionLayout='dropdown'
+           className='[&]:[--cell-size:2.6rem]'
+           disabled={(date) => date.getTime() < new Date().getTime()}
+           selected={field.value || undefined}
+           onSelect={(newValue) => {
+            if (newValue) {
+             field.onChange(newValue);
+             setShowDatePicker(false);
+            }
+           }}
+          />
+         </PopoverContent>
+        </Popover>
+       </Field>
+      )}
+     />
+    )}
     <Field>
      <FieldLabel htmlFor='room-type'>{dic.filters.roomType}</FieldLabel>
      <Controller
@@ -842,7 +898,10 @@ export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
      onClick={() => {
       Object.keys(defaultValues).forEach((key) => {
        const typedKey = key as keyof RackFiltersSchema;
-       if (typedKey === 'rackType' || typedKey === 'showType') return;
+       if (typedKey === 'showType') {
+        setValue(typedKey, rackShowTypes[0]);
+        return;
+       }
        setValue(
         typedKey,
         defaultValues[typedKey] as RackFiltersSchema[keyof RackFiltersSchema],

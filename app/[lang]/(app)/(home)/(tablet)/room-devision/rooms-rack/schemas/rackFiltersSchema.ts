@@ -4,6 +4,7 @@ import { rackShowTypes } from '../utils/rackShowTypes';
 const defaultValues: Partial<RackFiltersSchema> = {
  rackType: null,
  showType: rackShowTypes[0],
+ date: null,
  roomType: null,
  building: null,
  floor: null,
@@ -21,6 +22,7 @@ function createRackFiltersSchema() {
   showType: z
    .object({ key: z.string(), value: z.enum(['current', 'future']) })
    .nullable(),
+  date: z.date().nullable(),
   rackType: z.object({ key: z.string(), value: z.string() }).nullable(),
   roomType: z.object({ key: z.string(), value: z.string() }).nullable(),
   roomStateGroup: z.object({ key: z.string(), value: z.string() }).nullable(),
@@ -33,7 +35,13 @@ function createRackFiltersSchema() {
  });
 }
 
+const staticFilters: readonly (keyof RackFiltersSchema)[] = [
+ 'date',
+ 'rackType',
+ 'showType',
+];
+
 type RackFiltersSchema = z.infer<ReturnType<typeof createRackFiltersSchema>>;
 
 export type { RackFiltersSchema };
-export { defaultValues, createRackFiltersSchema };
+export { defaultValues, createRackFiltersSchema, staticFilters };

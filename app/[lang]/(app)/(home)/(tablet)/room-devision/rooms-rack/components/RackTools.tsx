@@ -31,7 +31,7 @@ export default function RackTools({ dic }: { dic: RoomsRackDictionary }) {
  const filtersKeyValue = filterValues.map((value, i) => {
   return {
    key: filterKeys[i],
-   value: value?.value,
+   value: value instanceof Date ? value.toISOString() : value?.value,
   };
  });
 
@@ -88,6 +88,19 @@ export default function RackTools({ dic }: { dic: RoomsRackDictionary }) {
        badgeSizeType = 'large';
       }
 
+      let badgeValue = item.value;
+
+      if (item.key === 'showType' && badgeValue) {
+       badgeValue =
+        dic.filters[item.value as (typeof rackShowTypes)[number]['value']];
+      } else if (item.key === 'date' && badgeValue) {
+       badgeValue = new Date(badgeValue).toLocaleDateString(locale, {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+       });
+      }
+
       return (
        <Badge
         key={item.key}
@@ -97,27 +110,28 @@ export default function RackTools({ dic }: { dic: RoomsRackDictionary }) {
        >
         <p className='text-start grow overflow-hidden text-ellipsis'>
          <span className='text-neutral-500'>{dic.filters[item.key]}: </span>
-         {item.key === 'showType' && item.value
-          ? dic.filters[item.value as (typeof rackShowTypes)[number]['value']]
-          : item.value}
+         {badgeValue}
         </p>
-        {item.key !== 'showType' && item.key !== 'rackType' && (
-         <Button
-          variant='ghost'
-          size='icon-sm'
-          className='text-destructive'
-          onClick={() => {
-           setValue(
-            item.key,
-            defaultValues[
-             item.key
-            ] as RackFiltersSchema[keyof RackFiltersSchema],
-           );
-          }}
-         >
-          <FaRegTrashAlt />
-         </Button>
-        )}
+        <Button
+         variant='ghost'
+         size='icon-sm'
+         disabled={item.key === 'date'}
+         className='text-destructive'
+         onClick={() => {
+          if (item.key === 'showType') {
+           setValue(item.key, rackShowTypes[0]);
+           return;
+          }
+          setValue(
+           item.key,
+           defaultValues[
+            item.key
+           ] as RackFiltersSchema[keyof RackFiltersSchema],
+          );
+         }}
+        >
+         <FaRegTrashAlt />
+        </Button>
        </Badge>
       );
      })}
