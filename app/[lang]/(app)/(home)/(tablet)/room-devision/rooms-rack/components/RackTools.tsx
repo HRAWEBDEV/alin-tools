@@ -93,7 +93,7 @@ export default function RackTools({ dic }: { dic: RoomsRackDictionary }) {
         key={item.key}
         variant='outline'
         data-badge-size={badgeSizeType}
-        className='keen-slider__slide inline-flex justify-between items-center rounded-md py-0.5 font-medium bg-neutral-100 dark:bg-neutral-900 text-[0.85rem] data-[badge-size="small"]:basis-32 data-[badge-size="small"]:w-32 data-[badge-size="normal"]:basis-46 data-[badge-size="normal"]:w-46 data-[badge-size="large"]:basis-72 data-[badge-size="large"]:w-72'
+        className='keen-slider__slide inline-flex justify-between items-center rounded-md py-0.5 font-medium bg-neutral-100 dark:bg-neutral-900 text-[0.85rem] data-[badge-size="small"]:basis-32 data-[badge-size="small"]:w-32 data-[badge-size="normal"]:basis-46 data-[badge-size="normal"]:w-46 data-[badge-size="large"]:basis-72 data-[badge-size="large"]:w-72 h-10'
        >
         <p className='text-start grow overflow-hidden text-ellipsis'>
          <span className='text-neutral-500'>{dic.filters[item.key]}: </span>
@@ -101,21 +101,23 @@ export default function RackTools({ dic }: { dic: RoomsRackDictionary }) {
           ? dic.filters[item.value as (typeof rackShowTypes)[number]['value']]
           : item.value}
         </p>
-        <Button
-         variant='ghost'
-         size='icon-sm'
-         className='text-destructive'
-         onClick={() => {
-          setValue(
-           item.key,
-           defaultValues[
-            item.key
-           ] as RackFiltersSchema[keyof RackFiltersSchema],
-          );
-         }}
-        >
-         <FaRegTrashAlt />
-        </Button>
+        {item.key !== 'showType' && item.key !== 'rackType' && (
+         <Button
+          variant='ghost'
+          size='icon-sm'
+          className='text-destructive'
+          onClick={() => {
+           setValue(
+            item.key,
+            defaultValues[
+             item.key
+            ] as RackFiltersSchema[keyof RackFiltersSchema],
+           );
+          }}
+         >
+          <FaRegTrashAlt />
+         </Button>
+        )}
        </Badge>
       );
      })}

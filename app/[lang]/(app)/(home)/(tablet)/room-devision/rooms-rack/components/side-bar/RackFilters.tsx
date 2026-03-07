@@ -75,7 +75,7 @@ export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
               >
                <Checkbox
                 className='size-6'
-                checked={field.value?.value === item.value}
+                checked={field.value?.key === item.key}
                />
                <Button
                 tabIndex={-1}
@@ -842,6 +842,7 @@ export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
      onClick={() => {
       Object.keys(defaultValues).forEach((key) => {
        const typedKey = key as keyof RackFiltersSchema;
+       if (typedKey === 'rackType' || typedKey === 'showType') return;
        setValue(
         typedKey,
         defaultValues[typedKey] as RackFiltersSchema[keyof RackFiltersSchema],
