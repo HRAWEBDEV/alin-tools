@@ -150,9 +150,6 @@ export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
               className='flex gap-1 items-center ps-6 py-2'
               onClick={() => {
                field.onChange(item);
-               if (item.value === 'current') {
-                setValue('date', null);
-               }
               }}
              >
               <Checkbox
