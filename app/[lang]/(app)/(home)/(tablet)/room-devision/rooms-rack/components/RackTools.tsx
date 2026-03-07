@@ -132,7 +132,7 @@ export default function RackTools({ dic }: { dic: RoomsRackDictionary }) {
     </p>
     <p className='text-center md:text-start text-sm font-medium text-neutral-700 dark:text-neutral-400'>
      <span>{dic.filters.occupancyRate}: </span>
-     <span className='text-secondary font-en-roboto text-[0.95rem]'>70%</span>
+     <span className='text-secondary'>70%</span>
     </p>
    </div>
   </div>

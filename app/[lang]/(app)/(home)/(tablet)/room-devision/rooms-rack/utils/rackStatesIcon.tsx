@@ -14,6 +14,7 @@ import {
 } from 'react-icons/fa';
 import { WaitForCheckin } from '../../components/icons/WaitForCheckin';
 import { WaitForBook } from '../../components/icons/WaitForBook';
+import { ClockOutliend } from '../../components/icons/ClockOutliend';
 import { CheckHousekeeping } from '../../components/icons/CheckHousekeeping';
 import { DND } from '../../components/icons/DND';
 import { NoLuggage } from '../../components/icons/NoLuggage';
@@ -34,6 +35,8 @@ function getRoomInOutIcon(
    return <Checkout {...style} />;
   case RoomInOutState.todayWaitForCheckout:
    return <Checkout {...style} />;
+  case RoomInOutState.overStay:
+   return <ClockOutliend {...style} />;
  }
 }
 
@@ -46,9 +49,7 @@ function getStateKindIcon(
    return <ReadyToServiceRoomIcon {...style} />;
   case RoomStateKind.waitingForQC:
    return <QCRoomIcon {...style} />;
-  case RoomStateKind.waitingForQC:
-   return <CleanRoomIcon {...style} />;
-  case RoomStateKind.waitingForQC:
+  case RoomStateKind.notCleaned:
    return <CleanRoomIcon {...style} />;
   case RoomStateKind.outOfService:
    return <ServiceRoomIcon {...style} />;

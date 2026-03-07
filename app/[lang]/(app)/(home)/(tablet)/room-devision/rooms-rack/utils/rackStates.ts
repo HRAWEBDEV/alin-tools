@@ -6,6 +6,10 @@ enum RoomStateKind {
  transferGuest,
 }
 
+const roomStateKinds = Object.keys(RoomStateKind).filter(
+ (item) => !Number(item),
+) as readonly (keyof typeof RoomStateKind)[];
+
 enum RoomInOutState {
  todayCheckin = 1,
  todayWaitForCheckin,
@@ -13,6 +17,10 @@ enum RoomInOutState {
  todayWaitForCheckout,
  overStay = 7,
 }
+
+const roomInOutStates = Object.keys(RoomInOutState).filter(
+ (item) => !Number(item),
+) as readonly (keyof typeof RoomInOutState)[];
 
 enum RoomStateType {
  default = 1,
@@ -27,6 +35,10 @@ enum RoomStateType {
  houseUse,
  locked,
 }
+
+const roomStateTypes = Object.keys(RoomStateType).filter(
+ (item) => !Number(item),
+) as readonly (keyof typeof RoomStateType)[];
 
 enum RoomStateGroup {
  reservedOrEmptyRoom = 1,
@@ -169,5 +181,8 @@ export {
  RoomStateGroup,
  RoomStateKind,
  RoomStateType,
+ roomInOutStates,
+ roomStateKinds,
+ roomStateTypes,
  getRackStatesStyles,
 };
