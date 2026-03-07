@@ -1,6 +1,6 @@
 import { use, createContext } from 'react';
 import { OutOfContext } from '@/utils/OutOfContext';
-import { type InitialData } from '../roomsRackApiActions';
+import { type InitialData, type RackInfo } from '../roomsRackApiActions';
 
 type SidebarPanel = 'info' | 'help' | 'filters';
 type RackConfig = {
@@ -14,6 +14,12 @@ type RackConfig = {
  };
  initData: {
   data?: InitialData;
+  isLoading: boolean;
+  isSuccess: boolean;
+  isError: boolean;
+ };
+ rackInfo: {
+  data?: RackInfo;
   isLoading: boolean;
   isSuccess: boolean;
   isError: boolean;

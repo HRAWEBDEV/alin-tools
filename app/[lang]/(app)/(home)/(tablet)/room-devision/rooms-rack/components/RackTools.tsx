@@ -11,6 +11,7 @@ import {
  defaultValues,
 } from '../schemas/rackFiltersSchema';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
+import { rackShowTypes } from '../utils/rackShowTypes';
 
 const smallBadgeKeys: (keyof RackFiltersSchema)[] = ['floor', 'building'];
 const largeBadgeKeys: (keyof RackFiltersSchema)[] = [
@@ -96,7 +97,9 @@ export default function RackTools({ dic }: { dic: RoomsRackDictionary }) {
        >
         <p className='text-start grow overflow-hidden text-ellipsis'>
          <span className='text-neutral-500'>{dic.filters[item.key]}: </span>
-         {item.value}
+         {item.key === 'showType' && item.value
+          ? dic.filters[item.value as (typeof rackShowTypes)[number]['value']]
+          : item.value}
         </p>
         <Button
          variant='ghost'

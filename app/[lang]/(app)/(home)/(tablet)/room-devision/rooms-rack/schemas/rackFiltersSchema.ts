@@ -1,7 +1,9 @@
 import { z } from 'zod';
+import { rackShowTypes } from '../utils/rackShowTypes';
 
 const defaultValues: Partial<RackFiltersSchema> = {
  rackType: null,
+ showType: rackShowTypes[0],
  roomType: null,
  building: null,
  floor: null,
@@ -16,6 +18,9 @@ function createRackFiltersSchema() {
  return z.object({
   floor: z.object({ key: z.string(), value: z.string() }).nullable(),
   building: z.object({ key: z.string(), value: z.string() }).nullable(),
+  showType: z
+   .object({ key: z.string(), value: z.enum(['current', 'future']) })
+   .nullable(),
   rackType: z.object({ key: z.string(), value: z.string() }).nullable(),
   roomType: z.object({ key: z.string(), value: z.string() }).nullable(),
   roomStateGroup: z.object({ key: z.string(), value: z.string() }).nullable(),

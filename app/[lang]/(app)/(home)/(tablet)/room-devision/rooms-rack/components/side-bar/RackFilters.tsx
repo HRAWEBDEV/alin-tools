@@ -19,6 +19,7 @@ import { FaRegTrashAlt } from 'react-icons/fa';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Spinner } from '@/components/ui/spinner';
 import { useRackConfigContext } from '../../services/rooms-rack-config/roomsRackConfigContext';
+import { rackShowTypes } from '../../utils/rackShowTypes';
 
 export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
  const { initData } = useRackConfigContext();
@@ -48,20 +49,6 @@ export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
           </span>
           <div className='flex gap-1 items-center -me-2'>
            {initData.isLoading && <Spinner />}
-           {/*{value && (
-           <Button
-            type='button'
-            variant={'ghost'}
-            size={'icon'}
-            onClick={(e) => {
-             e.stopPropagation();
-             onChange(null);
-            }}
-            className='text-rose-700 dark:text-rose-400'
-           >
-            <FaRegTrashAlt />
-           </Button>
-          )}*/}
            <ChevronsUpDown className='opacity-50' />
           </div>
          </Button>
@@ -104,6 +91,71 @@ export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
           ) : (
            <div className='text-center font-medium'></div>
           )}
+         </div>
+        </DrawerContent>
+       </Drawer>
+      )}
+     />
+    </Field>
+    <Field>
+     <FieldLabel htmlFor='rack-show-type'>{dic.filters.showType}</FieldLabel>
+     <Controller
+      control={control}
+      name='showType'
+      render={({ field }) => (
+       <Drawer>
+        <DrawerTrigger asChild>
+         <Button
+          id='rack-show-type'
+          variant='outline'
+          role='combobox'
+          className='justify-between h-11'
+          onBlur={field.onBlur}
+          ref={field.ref}
+         >
+          <span className='text-start grow overflow-hidden text-ellipsis'>
+           {field.value ? dic.filters[field.value.value] : ''}
+          </span>
+          <div className='flex gap-1 items-center -me-2'>
+           {initData.isLoading && <Spinner />}
+           <ChevronsUpDown className='opacity-50' />
+          </div>
+         </Button>
+        </DrawerTrigger>
+        <DrawerContent className='h-[min(80svh,35rem)]'>
+         <DrawerHeader className='hidden'>
+          <DrawerTitle>{dic.filters.showType}</DrawerTitle>
+         </DrawerHeader>
+         <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+          <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
+           {dic.filters.showType}
+          </h1>
+         </div>
+         <div>
+          <ul>
+           {rackShowTypes.map((item) => (
+            <DrawerClose asChild key={item.key}>
+             <li
+              className='flex gap-1 items-center ps-6 py-2'
+              onClick={() => {
+               field.onChange(item);
+              }}
+             >
+              <Checkbox
+               className='size-6'
+               checked={field.value?.value === item.value}
+              />
+              <Button
+               tabIndex={-1}
+               variant='ghost'
+               className='w-full justify-start h-auto text-lg'
+              >
+               <span>{dic.filters[item.value]}</span>
+              </Button>
+             </li>
+            </DrawerClose>
+           ))}
+          </ul>
          </div>
         </DrawerContent>
        </Drawer>

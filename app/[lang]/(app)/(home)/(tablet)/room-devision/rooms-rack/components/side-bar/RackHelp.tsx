@@ -40,7 +40,7 @@ export default function RackHelp({ dic }: { dic: RoomsRackDictionary }) {
     </ul>
    </div>
    <div>
-    <p className='p-2 text-center text-neutral-600 dark:text-neutral-400 font-medium border-b border-input bg-neutral-100 dark:bg-neutral-900 text-sm'>
+    <p className='p-2 text-center text-neutral-600 dark:text-neutral-400 font-medium border-y border-input bg-neutral-100 dark:bg-neutral-900 text-sm'>
      {dic.help.roomStateInOutStateState}
     </p>
     <ul className='px-4 py-2 grid gap-2'>
@@ -62,7 +62,7 @@ export default function RackHelp({ dic }: { dic: RoomsRackDictionary }) {
     </ul>
    </div>
    <div>
-    <p className='p-2 text-center text-neutral-600 dark:text-neutral-400 font-medium border-b border-input bg-neutral-100 dark:bg-neutral-900 text-sm'>
+    <p className='p-2 text-center text-neutral-600 dark:text-neutral-400 font-medium border-y border-input bg-neutral-100 dark:bg-neutral-900 text-sm'>
      {dic.help.roomStateKind}
     </p>
     <ul className='px-4 py-2 grid gap-2'>

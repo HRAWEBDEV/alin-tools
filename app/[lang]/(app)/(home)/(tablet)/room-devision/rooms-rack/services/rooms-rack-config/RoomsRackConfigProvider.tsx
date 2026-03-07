@@ -6,7 +6,11 @@ import {
  rackConfigContext,
 } from './roomsRackConfigContext';
 import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
-import { roomsRackBaseKey, getInitialData } from '../roomsRackApiActions';
+import {
+ roomsRackBaseKey,
+ getInitialData,
+ getRackInfo,
+} from '../roomsRackApiActions';
 import { useQuery } from '@tanstack/react-query';
 import { useForm, FormProvider } from 'react-hook-form';
 import {
@@ -66,6 +70,22 @@ export function RoomsRackConfigProvider({
   },
  });
 
+ // rack info
+ const {
+  data: rackInfo,
+  isLoading: rackInfoIsLoading,
+  isSuccess: rackInfoIsSucess,
+  isError: rackInfoIsError,
+ } = useQuery({
+  enabled: false,
+  staleTime: 'static',
+  queryKey: [roomsRackBaseKey, 'info'],
+  async queryFn({ signal }) {
+   const res = await getRackInfo({ signal, date: '' });
+   return res.data;
+  },
+ });
+
  const ctx: RackConfig = {
   sidebar: {
    isPin: sidebarIsPin,
@@ -80,6 +100,12 @@ export function RoomsRackConfigProvider({
    isLoading: initDataIsLoading,
    isSuccess: initDataIsSuccess,
    isError: initDataIsError,
+  },
+  rackInfo: {
+   data: rackInfo,
+   isLoading: rackInfoIsLoading,
+   isSuccess: rackInfoIsSucess,
+   isError: rackInfoIsError,
   },
  };
  return (
