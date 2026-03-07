@@ -1,3 +1,5 @@
+type RoomState = (typeof roomStates)[number];
+
 enum RoomStateKind {
  readyToService = 1,
  waitingForQC,
@@ -44,6 +46,14 @@ enum RoomStateGroup {
  reservedOrEmptyRoom = 1,
  occupiedRoom,
 }
+
+const roomStates = [
+ 'emptyRoom',
+ 'reservedRoom',
+ 'closedRoom',
+ 'occupiedRoom',
+ 'dayUse',
+] as const;
 
 function getRackStatesStyles() {
  const rackStatesStyles = new Map<
@@ -176,6 +186,7 @@ function getRackStatesStyles() {
  return rackStatesStyles;
 }
 
+export type { RoomState };
 export {
  RoomInOutState,
  RoomStateGroup,
@@ -184,5 +195,6 @@ export {
  roomInOutStates,
  roomStateKinds,
  roomStateTypes,
+ roomStates,
  getRackStatesStyles,
 };
