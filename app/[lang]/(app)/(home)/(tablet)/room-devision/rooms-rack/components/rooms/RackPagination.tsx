@@ -15,11 +15,12 @@ import {
 } from 'react-icons/md';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
+import { rackLimitOptions } from '../../utils/rackLimitOptions';
 
 export default function RackPagination({ dic }: { dic: RoomsRackDictionary }) {
  const { localeInfo } = useBaseConfig();
  return (
-  <div className='pt-2 flex justify-between gap-2 sticky bottom-0 z-4 bg-background'>
+  <div className='py-2 flex justify-between gap-2 sticky bottom-0 z-1 bg-background'>
    <div className='basis-52'>
     <Select dir={localeInfo.contentDirection}>
      <SelectTrigger>
@@ -27,11 +28,11 @@ export default function RackPagination({ dic }: { dic: RoomsRackDictionary }) {
      </SelectTrigger>
      <SelectContent>
       <SelectGroup>
-       {/*{settings.ui.gridLimitSizeOptions.map((item) => (
+       {rackLimitOptions.map((item) => (
         <SelectItem key={item} value={item.toString()}>
          {item}
         </SelectItem>
-       ))}*/}
+       ))}
       </SelectGroup>
      </SelectContent>
     </Select>

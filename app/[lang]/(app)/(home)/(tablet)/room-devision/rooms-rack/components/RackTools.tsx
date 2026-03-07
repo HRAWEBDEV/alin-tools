@@ -44,9 +44,10 @@ export default function RackTools({ dic }: { dic: RoomsRackDictionary }) {
 
  const {
   sidebar: { toggle, isOpen, isPin },
+  rack: { lastUpdate },
  } = useRackConfigContext();
  return (
-  <div className='py-2 sticky top-0 z-4 bg-background'>
+  <div className='py-2 sticky top-0 z-1 bg-background'>
    <h1
     data-is-sidebar-pin={isPin}
     data-is-sidebar-open={isOpen}
@@ -141,12 +142,12 @@ export default function RackTools({ dic }: { dic: RoomsRackDictionary }) {
     <p className='text-center md:text-start text-sm font-medium text-neutral-700 dark:text-neutral-400'>
      <span>{dic.tools.lastUpdate}: </span>
      <span>
-      {true
-       ? new Date().toLocaleTimeString(locale, {
+      {lastUpdate
+       ? lastUpdate.toLocaleTimeString(locale, {
           hour: '2-digit',
           minute: '2-digit',
          })
-       : ''}
+       : '---'}
      </span>
     </p>
     <p className='text-center md:text-start text-sm font-medium text-neutral-700 dark:text-neutral-400'>

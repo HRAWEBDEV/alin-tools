@@ -1,6 +1,12 @@
-import { use, createContext } from 'react';
+import { use, createContext, Dispatch, SetStateAction } from 'react';
 import { OutOfContext } from '@/utils/OutOfContext';
-import { type InitialData, type RackInfo } from '../roomsRackApiActions';
+import {
+ type InitialData,
+ type RackInfo,
+ type RackDetails,
+ type Rack,
+} from '../roomsRackApiActions';
+import { type Paging } from '../../../utils/apiTypes';
 
 type SidebarPanel = 'info' | 'help' | 'filters';
 type RackConfig = {
@@ -23,6 +29,16 @@ type RackConfig = {
   isLoading: boolean;
   isSuccess: boolean;
   isError: boolean;
+ };
+ rack: {
+  data: Rack[];
+  isError: boolean;
+  isSuccess: boolean;
+  isLoading: boolean;
+  paging: Paging;
+  lastUpdate: Date | null;
+  onChangePaging: Dispatch<SetStateAction<Paging>>;
+  rackDetails: RackDetails | null;
  };
 };
 

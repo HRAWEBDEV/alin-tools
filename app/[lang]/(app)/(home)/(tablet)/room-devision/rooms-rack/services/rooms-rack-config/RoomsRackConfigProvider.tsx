@@ -1,5 +1,5 @@
 'use client';
-import { ReactNode, useState, useEffect } from 'react';
+import { ReactNode, useState, useEffect, useCallback } from 'react';
 import {
  type RackConfig,
  type SidebarPanel,
@@ -7,6 +7,8 @@ import {
 } from './roomsRackConfigContext';
 import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
 import {
+ type Rack,
+ type RackDetails,
  roomsRackBaseKey,
  getInitialData,
  getRackInfo,
@@ -44,6 +46,10 @@ import {
 } from '../../utils/rackQueries';
 import { rackShowTypes } from '../../utils/rackShowTypes';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
+import * as signalR from '@microsoft/signalr';
+import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
+import { getUserLoginToken } from '@/app/[lang]/(app)/login/utils/loginTokenManager';
+import { type PagedData, type Paging } from '../../../utils/apiTypes';
 
 export function RoomsRackConfigProvider({
  children,
@@ -51,6 +57,18 @@ export function RoomsRackConfigProvider({
  children: ReactNode;
  dic: RoomsRackDictionary;
 }) {
+ const { userInfoRouterStorage } = useUserInfoRouter();
+ const [rackIsError, setRackIsError] = useState(false);
+ const [rackIsSuccess, setRackIsSuccess] = useState(false);
+ const [rackIsLoading, setRackIsLoading] = useState(false);
+ const [rackRooms, setRackRooms] = useState<Rack[]>([]);
+ const [rackLastUpdate, setRackLastUpdate] = useState<Date | null>(null);
+ const [rackPaging, setRackPaging] = useState<Paging>({
+  limit: 10,
+  offset: 0,
+ });
+ const [rowsCount, setRowsCount] = useState(0);
+ const [rackDetails, setRackDetails] = useState<RackDetails | null>(null);
  const { locale } = useBaseConfig();
  const searchParams = useSearchParams();
  const router = useRouter();
@@ -58,6 +76,10 @@ export function RoomsRackConfigProvider({
   useState<SidebarPanel>('filters');
  const [sidebarIsOpen, setSidebarIsOpen] = useState(true);
  const [sidebarIsPin, setSidebarIsPin] = useState(true);
+ //
+ const [connection, setConnection] = useState<signalR.HubConnection | null>(
+  null,
+ );
  // queries
  const buildingKeyQueryValue = searchParams.get(buildingKeyQuery);
  const buildingValueQueryValue = searchParams.get(buildingValueQuery);
@@ -190,6 +212,50 @@ export function RoomsRackConfigProvider({
   'roomStateType',
   'roomType',
  ]);
+ // * signal r setup
+ const getRackRooms = useCallback(async () => {
+  if (!connection || !rackTypeValue || !showTypeValue) return;
+  setRackIsLoading(true);
+  setRackIsError(false);
+  try {
+   await connection.invoke(
+    'GetRackUpdate',
+    connection.connectionId,
+    rackPaging.limit,
+    rackPaging.offset + 1,
+    {
+     floorNo: Number(floorValue?.key) || null,
+     buildingNo: Number(buildingValue?.key) || null,
+     roomTypeID: Number(roomTypeValue?.key) || null,
+     groupID: Number(roomStateGroupValue?.key) || null,
+     kindID: Number(roomStateKindValue?.key) || null,
+     typeID: Number(roomStateTypeValue?.key) || null,
+     inOutStateID: Number(roomStateInOutStateValue?.key) || null,
+     customerID: Number(customersValue?.key) || null,
+     rackID: Number(rackTypeValue.key) || null,
+     date: null,
+    },
+   );
+   setRackIsSuccess(true);
+  } catch (error) {
+   console.log('signalR get salon rack rooms failed: ', error);
+   setRackIsError(true);
+  } finally {
+   setRackIsLoading(false);
+  }
+ }, [
+  connection,
+  buildingValue,
+  floorValue,
+  rackTypeValue,
+  roomStateInOutStateValue,
+  roomStateKindValue,
+  roomStateTypeValue,
+  showTypeValue,
+  roomTypeValue,
+  roomStateGroupValue,
+  customersValue,
+ ]);
 
  function handleToggleSidebar(
   open?: boolean,
@@ -231,6 +297,7 @@ export function RoomsRackConfigProvider({
   isLoading: rackInfoIsLoading,
   isSuccess: rackInfoIsSucess,
   isError: rackInfoIsError,
+  refetch: rackInfoRefetch,
  } = useQuery({
   enabled: false,
   staleTime: 'static',
@@ -240,6 +307,59 @@ export function RoomsRackConfigProvider({
    return res.data;
   },
  });
+
+ useEffect(() => {
+  getRackRooms();
+ }, [getRackRooms]);
+
+ useEffect(() => {
+  if (!connection) return;
+  connection.on('RackLastUpdate', (rackUpdate) => {
+   const {
+    rack: { rows, rowsCount },
+    rackInfos,
+   } = rackUpdate as {
+    rack: PagedData<Rack[]>;
+    rackInfos: RackDetails;
+   };
+   setRackRooms(rows);
+   setRackDetails(rackInfos);
+   rackInfoRefetch();
+   setRowsCount(rowsCount);
+   setRackLastUpdate(new Date());
+  });
+  return () => connection && connection.off('RackLastUpdate');
+ }, [connection, rackInfoRefetch]);
+
+ useEffect(() => {
+  if (!connection) return;
+  connection.on('RackChanged', () => {
+   getRackRooms();
+  });
+  return () => connection && connection.off('RackChanged');
+ }, [getRackRooms, connection]);
+
+ useEffect(() => {
+  const rackSignalRConnection = new signalR.HubConnectionBuilder()
+   .withUrl(
+    `${
+     process.env.NEXT_PUBLIC_API_URI
+    }/datachangenotifHub?token=${getUserLoginToken()}&programid=${userInfoRouterStorage.programID}&departmentid=${userInfoRouterStorage.departmentID}&ownerid=${userInfoRouterStorage.ownerID}&systemid=${userInfoRouterStorage.systemID}`,
+   )
+   .configureLogging(signalR.LogLevel.Information)
+   .build();
+  const startConnection = async () => {
+   setConnection(null);
+   try {
+    await rackSignalRConnection.start();
+    setConnection(rackSignalRConnection);
+   } catch (error) {}
+  };
+  startConnection();
+  return () => {
+   rackSignalRConnection.stop();
+  };
+ }, [userInfoRouterStorage]);
 
  useEffect(() => {
   const newSearchParams = new URLSearchParams(location.search);
@@ -383,7 +503,18 @@ export function RoomsRackConfigProvider({
    isSuccess: rackInfoIsSucess,
    isError: rackInfoIsError,
   },
+  rack: {
+   data: rackRooms,
+   isError: rackIsError,
+   isLoading: rackIsLoading,
+   isSuccess: rackIsSuccess,
+   onChangePaging: setRackPaging,
+   paging: rackPaging,
+   lastUpdate: rackLastUpdate,
+   rackDetails,
+  },
  };
+
  return (
   <rackConfigContext.Provider value={ctx}>
    <FormProvider {...rackFiltersUseForm}>{children}</FormProvider>

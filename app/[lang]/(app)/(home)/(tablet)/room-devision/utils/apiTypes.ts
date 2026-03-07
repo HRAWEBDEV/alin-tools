@@ -2,12 +2,14 @@ interface Combo {
  key: string;
  value: string;
 }
-
-interface PagedData<T> {
- rowsCount: number;
+type Paging = {
  limit: number;
  offset: number;
- rows: T;
-}
+};
 
-export type { Combo, PagedData };
+type PagedData<T> = {
+ rowsCount: number;
+ rows: T;
+} & Paging;
+
+export type { Combo, PagedData, Paging };

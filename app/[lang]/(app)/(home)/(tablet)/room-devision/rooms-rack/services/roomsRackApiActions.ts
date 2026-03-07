@@ -50,6 +50,68 @@ interface RackInfo {
  };
 }
 
+type Rack = {
+ roomID: number;
+ roomTypeID: number;
+ registerStateID: number;
+ dateDateTimeOffset: string;
+ msgFlag: boolean;
+ noRoom: boolean;
+ roomStateTypeID: number;
+ roomStateKindID: number;
+ roomStateGroupID: number;
+ guestCount: number | null;
+ roomInOutStateID: number | null;
+ registerID: number | null;
+ reserveID: number | null;
+ DateTimeDateOffset: string;
+ roomLabel: string;
+ roomNo: number;
+ floorNo: number;
+ folioID: number;
+ folioNo: number;
+ buildingNo: number;
+ sortNo: number;
+ roomTypeName: string | null;
+ roomStateGroupName: string | null;
+ roomStateTypeName: string | null;
+ roomStateKindName: string | null;
+ roomInOutStateName: string | null;
+ customerColor: string | null;
+ customerID: number | null;
+ customerName: string | null;
+ guestName: string | null;
+ guestLastName: string | null;
+ checkinDateTimeOffset: string | null;
+ depatureDateTimeOffset: string | null;
+ roomTypeAliasName: string | null;
+ reserveNo: number | null;
+ bookerName: string | null;
+ reserveArrival: string | null;
+ reserveDeparture: string | null;
+ arzID: number | null;
+ ratePlanID: number | null;
+ nights: number | null;
+ arrivalDateTimeOffset: string | null;
+ houseUse: boolean | null;
+ lateCheckout: boolean | null;
+ earlyCheckin: boolean | null;
+ boardID: number | null;
+ dayUse: boolean;
+ carFlag: boolean;
+ complimentaryID: number | null;
+};
+
+type RackDetails = {
+ guestCount: number;
+ occupieds: number;
+ outOfOrder: number;
+ outOfServices: number;
+ readies: number;
+ vacents: number;
+ reserveCount: number;
+};
+
 const roomsRackBaseKey = 'rooms-rack';
 
 function getInitialData({ signal }: { signal: AbortSignal }) {
@@ -65,5 +127,5 @@ function getRackInfo({ date, signal }: { signal: AbortSignal; date: string }) {
  });
 }
 
-export type { InitialData, RackInfo };
+export type { InitialData, RackInfo, Rack, RackDetails };
 export { roomsRackBaseKey, getInitialData, getRackInfo };
