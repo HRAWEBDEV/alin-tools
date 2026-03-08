@@ -1,4 +1,3 @@
-import { URLSearchParams } from 'url';
 import { type Combo } from '../../utils/apiTypes';
 import { axios } from '@/app/[lang]/(app)/utils/defaultAxios';
 

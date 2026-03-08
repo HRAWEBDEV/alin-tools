@@ -255,6 +255,7 @@ export function RoomsRackConfigProvider({
   roomTypeValue,
   roomStateGroupValue,
   customersValue,
+  rackPaging,
  ]);
 
  function handleToggleSidebar(
@@ -299,11 +300,24 @@ export function RoomsRackConfigProvider({
   isError: rackInfoIsError,
   refetch: rackInfoRefetch,
  } = useQuery({
-  enabled: false,
+  enabled:
+   showTypeValue?.value === 'current' ||
+   (showTypeValue?.value === 'future' && !!dateValue),
   staleTime: 'static',
-  queryKey: [roomsRackBaseKey, 'info'],
+  queryKey: [
+   roomsRackBaseKey,
+   'info',
+   showTypeValue?.key,
+   dateValue?.toISOString() || 'now',
+  ],
   async queryFn({ signal }) {
-   const res = await getRackInfo({ signal, date: '' });
+   const res = await getRackInfo({
+    signal,
+    date:
+     showTypeValue?.value === 'current'
+      ? new Date().toISOString()
+      : dateValue!.toISOString(),
+   });
    return res.data;
   },
  });
