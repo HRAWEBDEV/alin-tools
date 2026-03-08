@@ -52,6 +52,7 @@ const roomStates = [
  'reservedRoom',
  'closedRoom',
  'occupiedRoom',
+ 'occupiedCustomerRoom',
  'dayUse',
 ] as const;
 

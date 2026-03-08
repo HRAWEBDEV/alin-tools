@@ -21,7 +21,7 @@ export default function RoomsRackWrapper({
    className={`grid grid-cols-1 ${isOpen && isPin ? 'md:grid-cols-[18rem_1fr]' : ''}  h-full overflow-hidden relative`}
   >
    <RackSidebar dic={dic} />
-   <div className='flex flex-col overflow-auto px-4 my-4'>
+   <div className='flex flex-col overflow-auto px-4 md:my-4'>
     <RackTools dic={dic} />
     <RackRooms dic={dic} />
     <RackPagination dic={dic} />
