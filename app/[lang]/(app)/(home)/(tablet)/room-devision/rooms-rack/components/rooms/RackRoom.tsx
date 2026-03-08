@@ -115,6 +115,9 @@ export default function RackRoom({
         <p className='text-sm text-neutral-600 dark:text-neutral-400 text-wrap'>
          {room.guestName} {room.guestLastName}
         </p>
+        {/*<p className='text-sm text-neutral-600 dark:text-neutral-400 text-wrap'>
+         {room.customerName}
+        </p>*/}
        </div>
       </div>
       <div className='flex items-center justify-between gap-4'>
