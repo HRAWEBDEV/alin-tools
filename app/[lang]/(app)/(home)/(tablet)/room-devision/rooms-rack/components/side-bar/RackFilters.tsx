@@ -895,6 +895,12 @@ export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
      onClick={() => {
       Object.keys(defaultValues).forEach((key) => {
        const typedKey = key as keyof RackFiltersSchema;
+       if (typedKey === 'rackType') {
+        if (initData.isSuccess) {
+         setValue(typedKey, initData.data!.racks[0]);
+        }
+        return;
+       }
        if (typedKey === 'showType') {
         setValue(typedKey, rackShowTypes[0]);
         return;

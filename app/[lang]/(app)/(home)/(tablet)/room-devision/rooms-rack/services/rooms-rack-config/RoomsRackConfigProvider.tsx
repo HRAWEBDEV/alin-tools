@@ -482,6 +482,14 @@ export function RoomsRackConfigProvider({
   roomStateGroupValue,
  ]);
 
+ useEffect(() => {
+  if (!initDataIsSuccess) return;
+  const rackTypeValue = rackFiltersUseForm.getValues('rackType');
+  if (!rackTypeValue) {
+   rackFiltersUseForm.setValue('rackType', initData.racks[0]);
+  }
+ }, [initDataIsSuccess, rackFiltersUseForm, initData]);
+
  const ctx: RackConfig = {
   sidebar: {
    isPin: sidebarIsPin,

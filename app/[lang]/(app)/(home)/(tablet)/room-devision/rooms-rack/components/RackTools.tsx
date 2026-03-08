@@ -43,6 +43,7 @@ export default function RackTools({ dic }: { dic: RoomsRackDictionary }) {
  });
 
  const {
+  initData,
   sidebar: { toggle, isOpen, isPin },
   rack: { lastUpdate },
  } = useRackConfigContext();
@@ -119,6 +120,12 @@ export default function RackTools({ dic }: { dic: RoomsRackDictionary }) {
          disabled={item.key === 'date'}
          className='text-destructive'
          onClick={() => {
+          if (item.key === 'rackType') {
+           if (initData.isSuccess) {
+            setValue(item.key, initData.data!.racks[0]);
+           }
+           return;
+          }
           if (item.key === 'showType') {
            setValue(item.key, rackShowTypes[0]);
            return;
