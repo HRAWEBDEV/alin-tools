@@ -14,7 +14,7 @@ export default function RackPagination({ dic }: { dic: RoomsRackDictionary }) {
  } = useRackConfigContext();
  return (
   <>
-   {false ? null : (
+   {pageCount <= 1 ? null : (
     <div className='py-2 flex justify-center gap-2 sticky bottom-0 z-2 bg-background'>
      <div className='flex gap-1 items-center text-neutral-600 dark:text-neutral-400'>
       <div className='flex gap-1 items-center'>
