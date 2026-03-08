@@ -50,6 +50,7 @@ import * as signalR from '@microsoft/signalr';
 import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
 import { getUserLoginToken } from '@/app/[lang]/(app)/login/utils/loginTokenManager';
 import { type PagedData, type Paging } from '../../../utils/apiTypes';
+import { rackLimitOptions } from '../../utils/rackLimitOptions';
 
 export function RoomsRackConfigProvider({
  children,
@@ -64,7 +65,7 @@ export function RoomsRackConfigProvider({
  const [rackRooms, setRackRooms] = useState<Rack[]>([]);
  const [rackLastUpdate, setRackLastUpdate] = useState<Date | null>(null);
  const [rackPaging, setRackPaging] = useState<Paging>({
-  limit: 10,
+  limit: rackLimitOptions[0],
   offset: 0,
  });
  const [rowsCount, setRowsCount] = useState(0);
@@ -367,7 +368,9 @@ export function RoomsRackConfigProvider({
    try {
     await rackSignalRConnection.start();
     setConnection(rackSignalRConnection);
-   } catch (error) {}
+   } catch (error) {
+    console.log('start rack connection error', error);
+   }
   };
   startConnection();
   return () => {
@@ -532,6 +535,7 @@ export function RoomsRackConfigProvider({
    isSuccess: rackIsSuccess,
    onChangePaging: setRackPaging,
    paging: rackPaging,
+   rowsCount,
    lastUpdate: rackLastUpdate,
    rackDetails,
   },

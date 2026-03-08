@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import RackFilters from './RackFilters';
 import RackHelp from './RackHelp';
+import RackInfo from './RackInfo';
 
 export default function RackSidebar({ dic }: { dic: RoomsRackDictionary }) {
  const {
@@ -24,6 +25,7 @@ export default function RackSidebar({ dic }: { dic: RoomsRackDictionary }) {
    isOpen,
   },
   initData: { isLoading: initDataIsLoading },
+  rackInfo,
  } = useRackConfigContext();
 
  let sidebarSlot = <RackFilters dic={dic} />;
@@ -33,7 +35,7 @@ export default function RackSidebar({ dic }: { dic: RoomsRackDictionary }) {
    sidebarSlot = <RackHelp dic={dic} />;
    break;
   case 'info':
-   sidebarSlot = <div></div>;
+   sidebarSlot = <RackInfo dic={dic} />;
    break;
  }
 
@@ -78,7 +80,11 @@ export default function RackSidebar({ dic }: { dic: RoomsRackDictionary }) {
           onClick={() => onChangeActivePanel('info')}
           className='grow basis-0 text-neutral-600 dark:text-neutral-400'
          >
-          <FaInfoCircle className='size-4' />
+          {rackInfo.isLoading ? (
+           <Spinner />
+          ) : (
+           <FaInfoCircle className='size-4' />
+          )}
           {dic.sidebar.tabs.info}
          </TabsTrigger>
          <TabsTrigger

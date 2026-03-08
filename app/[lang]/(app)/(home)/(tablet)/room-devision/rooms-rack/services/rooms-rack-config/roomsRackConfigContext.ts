@@ -35,6 +35,7 @@ type RackConfig = {
   isError: boolean;
   isSuccess: boolean;
   isLoading: boolean;
+  rowsCount: number;
   paging: Paging;
   lastUpdate: Date | null;
   onChangePaging: Dispatch<SetStateAction<Paging>>;

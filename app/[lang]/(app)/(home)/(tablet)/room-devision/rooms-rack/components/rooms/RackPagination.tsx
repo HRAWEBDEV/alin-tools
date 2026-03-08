@@ -16,13 +16,23 @@ import {
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
 import { rackLimitOptions } from '../../utils/rackLimitOptions';
+import { useRackConfigContext } from '../../services/rooms-rack-config/roomsRackConfigContext';
 
 export default function RackPagination({ dic }: { dic: RoomsRackDictionary }) {
  const { localeInfo } = useBaseConfig();
+ const {
+  rack: { paging, onChangePaging },
+ } = useRackConfigContext();
  return (
   <div className='py-2 flex justify-between gap-2 sticky bottom-0 z-1 bg-background'>
-   <div className='basis-52'>
-    <Select dir={localeInfo.contentDirection}>
+   <div className='md:basis-52'>
+    <Select
+     dir={localeInfo.contentDirection}
+     value={paging.limit.toString()}
+     onValueChange={(newValue) =>
+      onChangePaging((pre) => ({ ...pre, limit: Number(newValue) }))
+     }
+    >
      <SelectTrigger>
       <SelectValue />
      </SelectTrigger>
@@ -63,7 +73,7 @@ export default function RackPagination({ dic }: { dic: RoomsRackDictionary }) {
      </Button>
     </div>
    </div>
-   <div className='basis-52'></div>
+   <div className='basis-52 hidden md:block'></div>
   </div>
  );
 }

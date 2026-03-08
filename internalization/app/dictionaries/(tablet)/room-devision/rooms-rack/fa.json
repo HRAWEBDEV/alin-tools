@@ -76,7 +76,30 @@
   "parking": "پارکینگ"
  },
  "tools": {
-  "lastUpdate": "آخرین بروزرسانی"
+  "lastUpdate": "آخرین بروزرسانی",
+  "results": "نتایج"
+ },
+ "info": {
+  "occupiedRooms": "اتاق اشغال",
+  "vacantRooms": "اتاق خالی",
+  "readyRooms": "آماده سرویس",
+  "outOfServiceRooms": "در انتظار سرویس",
+  "outOfOrderRooms": "خارج از سرویس",
+  "waitForQC": "در انتظار QC",
+  "todayCheckin": "ورودی امروز",
+  "registered": "پذیرش شده",
+  "notRegistered": "پذیرش نشده",
+  "todayCheckout": "خروجی امروز",
+  "checkout": "خارج شده",
+  "notCheckout": "خارج نشده",
+  "guestsCount": "تعداد مهمان",
+  "extraBedsCount": "تعداد تخت اضافه",
+  "walkin": "واکین",
+  "tell": "تلفن",
+  "website": "وب‌سایت",
+  "webService": "وب سرویس",
+  "other": "سایر",
+  "newReserve": "رزرو جدید"
  },
  "sidebar": {
   "tabs": {

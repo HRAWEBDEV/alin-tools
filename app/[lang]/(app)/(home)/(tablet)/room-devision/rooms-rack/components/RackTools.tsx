@@ -12,6 +12,7 @@ import {
 } from '../schemas/rackFiltersSchema';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { rackShowTypes } from '../utils/rackShowTypes';
+import { getRackOccupancyStyles } from '../utils/rackOcuppancyStyles';
 
 const smallBadgeKeys: (keyof RackFiltersSchema)[] = ['floor', 'building'];
 const largeBadgeKeys: (keyof RackFiltersSchema)[] = [
@@ -45,7 +46,8 @@ export default function RackTools({ dic }: { dic: RoomsRackDictionary }) {
  const {
   initData,
   sidebar: { toggle, isOpen, isPin },
-  rack: { lastUpdate },
+  rack: { data, lastUpdate },
+  rackInfo,
  } = useRackConfigContext();
  return (
   <div className='py-2 sticky top-0 z-1 bg-background'>
@@ -157,9 +159,15 @@ export default function RackTools({ dic }: { dic: RoomsRackDictionary }) {
        : '---'}
      </span>
     </p>
-    <p className='text-center md:text-start text-sm font-medium text-neutral-700 dark:text-neutral-400'>
+    <p
+     className={`text-center md:text-start text-sm font-medium ${getRackOccupancyStyles(rackInfo.data?.gaugeChart.value || 0).text}`}
+    >
      <span>{dic.filters.occupancyRate}: </span>
-     <span className='text-secondary'>70%</span>
+     <span>{rackInfo.data?.gaugeChart.value}%</span>
+    </p>
+    <p className='text-center md:text-start text-sm font-medium text-neutral-700 dark:text-neutral-400'>
+     <span>{dic.tools.results}: </span>
+     <span>{data.length}</span>
     </p>
    </div>
   </div>
