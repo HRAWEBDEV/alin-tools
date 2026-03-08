@@ -44,7 +44,7 @@
   "todayWaitForCheckin": "چک این امروز",
   "todayCheckout": "چک اوت شده امروز",
   "roomStateInOut": "وضعیت ورود و خروج اتاق",
-  "occupiedRoomCustomer": "اتاق اشغال (مشتری آزاد)",
+  "occupiedCustomerRoom": "اتاق اشغال (آزاد)",
   "todayWaitForCheckout": "چک اوت امروز",
   "default": "عادی",
   "checkHouseKeeper": "درحال بررسی خانه داری",

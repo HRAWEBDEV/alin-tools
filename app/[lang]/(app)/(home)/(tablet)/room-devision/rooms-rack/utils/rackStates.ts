@@ -64,7 +64,9 @@ function getRackStatesStyles() {
   | 'userDefaultColor'
   | 'occupiedCustomer'
   | 'waitForCheckin'
-  | 'transferGuest',
+  | 'transferGuest'
+  | (typeof roomStates)[number]
+  | 'none',
   {
    border: string;
    text: string;
@@ -181,6 +183,62 @@ function getRackStatesStyles() {
     border: '',
     backgoundColor: '',
     text: 'text-rose-600 dark:text-rose-300',
+   },
+  ],
+  [
+   'reservedRoom',
+   {
+    border: 'border-teal-600 dark:border-teal-300',
+    backgoundColor: 'bg-teal-50 dark:bg-teal-950',
+    text: 'text-teal-600 dark:text-teal-300',
+   },
+  ],
+  [
+   'occupiedRoom',
+   {
+    border: 'border-sky-600 dark:border-sky-300',
+    backgoundColor: 'bg-sky-50 dark:bg-sky-950',
+    text: 'text-sky-600 dark:text-sky-300',
+   },
+  ],
+  [
+   'dayUse',
+   {
+    border: 'border-sky-600 dark:border-sky-300',
+    backgoundColor: 'bg-sky-50 dark:bg-sky-950',
+    text: 'text-sky-600 dark:text-sky-300',
+   },
+  ],
+  [
+   'closedRoom',
+   {
+    border: 'border-sky-600 dark:border-sky-300',
+    backgoundColor: 'bg-sky-50 dark:bg-sky-950',
+    text: 'text-sky-600 dark:text-sky-300',
+   },
+  ],
+  [
+   'occupiedCustomerRoom',
+   {
+    border: 'border-orange-600 dark:border-orange-300',
+    backgoundColor: 'bg-orange-50 dark:bg-orange-950',
+    text: 'text-orange-600 dark:text-orange-300',
+   },
+  ],
+  [
+   'emptyRoom',
+   {
+    border: 'border-neutral-600 dark:border-neutral-300',
+    backgoundColor: 'bg-neutral-100 dark:bg-neutral-900',
+    text: 'text-neutral-600 dark:text-neutral-300',
+   },
+  ],
+  [
+   'none',
+   {
+    border: '',
+    backgoundColor: '',
+    text: '',
    },
   ],
  ]);
