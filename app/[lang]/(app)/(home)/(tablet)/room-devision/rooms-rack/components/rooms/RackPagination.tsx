@@ -1,52 +1,15 @@
 import { Button } from '@/components/ui/button';
 import {
- Select,
- SelectItem,
- SelectTrigger,
- SelectContent,
- SelectGroup,
- SelectValue,
-} from '@/components/ui/select';
-import {
  MdKeyboardDoubleArrowLeft,
  MdKeyboardDoubleArrowRight,
  MdKeyboardArrowLeft,
  MdKeyboardArrowRight,
 } from 'react-icons/md';
-import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
-import { rackLimitOptions } from '../../utils/rackLimitOptions';
-import { useRackConfigContext } from '../../services/rooms-rack-config/roomsRackConfigContext';
 
 export default function RackPagination({ dic }: { dic: RoomsRackDictionary }) {
- const { localeInfo } = useBaseConfig();
- const {
-  rack: { paging, onChangePaging },
- } = useRackConfigContext();
  return (
-  <div className='py-2 flex justify-between gap-2 sticky bottom-0 z-2 bg-background'>
-   <div className='xl:basis-52'>
-    <Select
-     dir={localeInfo.contentDirection}
-     value={paging.limit.toString()}
-     onValueChange={(newValue) =>
-      onChangePaging((pre) => ({ ...pre, limit: Number(newValue) }))
-     }
-    >
-     <SelectTrigger>
-      <SelectValue />
-     </SelectTrigger>
-     <SelectContent>
-      <SelectGroup>
-       {rackLimitOptions.map((item) => (
-        <SelectItem key={item} value={item.toString()}>
-         {item}
-        </SelectItem>
-       ))}
-      </SelectGroup>
-     </SelectContent>
-    </Select>
-   </div>
+  <div className='py-2 flex justify-center gap-2 sticky bottom-0 z-2 bg-background'>
    <div className='flex gap-1 items-center text-neutral-600 dark:text-neutral-400'>
     <div className='flex gap-1 items-center'>
      <Button variant='outline' size='icon'>
@@ -73,7 +36,6 @@ export default function RackPagination({ dic }: { dic: RoomsRackDictionary }) {
      </Button>
     </div>
    </div>
-   <div className='basis-52 hidden xl:block'></div>
   </div>
  );
 }

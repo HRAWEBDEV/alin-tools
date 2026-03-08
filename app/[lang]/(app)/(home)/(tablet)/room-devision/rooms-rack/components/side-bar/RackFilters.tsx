@@ -28,10 +28,14 @@ import {
  PopoverTrigger,
 } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
+import { rackLimitOptions } from '../../utils/rackLimitOptions';
 
 export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
  const { locale } = useBaseConfig();
- const { initData } = useRackConfigContext();
+ const {
+  initData,
+  rack: { paging, onChangePaging },
+ } = useRackConfigContext();
  const { control, setValue, watch } = useFormContext<RackFiltersSchema>();
  const [showDatePicker, setShowDatePicker] = useState(false);
  const [rackShowTypeValue] = watch(['showType']);
@@ -39,6 +43,60 @@ export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
  return (
   <>
    <div className='grid grid-cols-1 gap-5 p-4 pt-2'>
+    <Field>
+     <FieldLabel htmlFor='rack-limit'>{dic.filters.rackRoomsLimit}</FieldLabel>
+     <Drawer>
+      <DrawerTrigger asChild>
+       <Button
+        id='rack-limit'
+        variant='outline'
+        role='combobox'
+        className='justify-between h-11'
+       >
+        <span className='text-start grow overflow-hidden text-ellipsis'>
+         {paging.limit}
+        </span>
+        <div className='flex gap-1 items-center -me-2'>
+         {initData.isLoading && <Spinner />}
+         <ChevronsUpDown className='opacity-50' />
+        </div>
+       </Button>
+      </DrawerTrigger>
+      <DrawerContent className='h-[min(80svh,35rem)]'>
+       <DrawerHeader className='hidden'>
+        <DrawerTitle>{dic.filters.rackRoomsLimit}</DrawerTitle>
+       </DrawerHeader>
+       <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+        <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
+         {dic.filters.rackRoomsLimit}
+        </h1>
+       </div>
+       <div>
+        <ul>
+         {rackLimitOptions.map((item) => (
+          <DrawerClose asChild key={item}>
+           <li
+            className='flex gap-1 items-center ps-6 py-2'
+            onClick={() => {
+             onChangePaging((pre) => ({ ...pre, limit: item }));
+            }}
+           >
+            <Checkbox className='size-6' checked={item === paging.limit} />
+            <Button
+             tabIndex={-1}
+             variant='ghost'
+             className='w-full justify-start h-auto text-lg'
+            >
+             <span>{item}</span>
+            </Button>
+           </li>
+          </DrawerClose>
+         ))}
+        </ul>
+       </div>
+      </DrawerContent>
+     </Drawer>
+    </Field>
     <Field>
      <FieldLabel htmlFor='rack-type'>{dic.filters.rackType}</FieldLabel>
      <Controller

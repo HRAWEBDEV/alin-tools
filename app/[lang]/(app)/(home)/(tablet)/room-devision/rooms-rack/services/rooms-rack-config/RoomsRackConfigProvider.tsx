@@ -75,8 +75,8 @@ export function RoomsRackConfigProvider({
  const router = useRouter();
  const [activeSidebarPanel, setActiveSidebarPanel] =
   useState<SidebarPanel>('filters');
- const [sidebarIsOpen, setSidebarIsOpen] = useState(true);
- const [sidebarIsPin, setSidebarIsPin] = useState(true);
+ const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
+ const [sidebarIsPin, setSidebarIsPin] = useState(false);
  //
  const [connection, setConnection] = useState<signalR.HubConnection | null>(
   null,
