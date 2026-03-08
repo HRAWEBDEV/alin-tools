@@ -41,7 +41,7 @@ export default function RackRoom({
 
  const roomState: RoomState = (() => {
   if (room.roomStateTypeID == RoomStateType.waitForCheckin) {
-   return 'closedRoom';
+   return 'waitForCheckin';
   }
   if (room.registerStateID == 4) {
    return 'closedRoom';
@@ -86,12 +86,12 @@ export default function RackRoom({
      >
       <div
        dir='ltr'
-       className={`absolute top-12 start-1 opacity-25 ${roomStateKindStyle?.text}`}
+       className={`absolute top-12 start-1 opacity-30 ${roomStateKindStyle?.text}`}
       >
        {getStateKindIcon(room.roomStateKindID, {
-        fontSize: '2.5rem',
-        width: '2.5rem',
-        height: '2.5rem',
+        fontSize: '2.2rem',
+        width: '2.2rem',
+        height: '2.2rem',
         fill: 'currentColor',
        })}
       </div>
@@ -144,7 +144,7 @@ export default function RackRoom({
        </div>
        <div
         dir='ltr'
-        className={`flex items-center gap-1 text-base font-medium`}
+        className={`flex items-center gap-1 text-base font-medium text-neutral-600 dark:text-neutral-400`}
        >
         {getStateTypeIcon(room.roomStateTypeID, {
          fontSize: '1.4rem',

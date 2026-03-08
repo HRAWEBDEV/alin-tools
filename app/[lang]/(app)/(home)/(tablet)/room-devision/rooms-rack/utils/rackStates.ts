@@ -54,6 +54,7 @@ const roomStates = [
  'occupiedRoom',
  'occupiedCustomerRoom',
  'dayUse',
+ 'waitForCheckin',
 ] as const;
 
 function getRackStatesStyles() {
@@ -197,7 +198,7 @@ function getRackStatesStyles() {
    'occupiedRoom',
    {
     border: 'border-sky-600 dark:border-sky-300',
-    backgoundColor: 'bg-sky-50 dark:bg-sky-950',
+    backgoundColor: 'bg-sky-100 dark:bg-sky-900',
     text: 'text-sky-600 dark:text-sky-300',
    },
   ],
@@ -223,6 +224,14 @@ function getRackStatesStyles() {
     border: 'border-orange-600 dark:border-orange-300',
     backgoundColor: 'bg-orange-50 dark:bg-orange-950',
     text: 'text-orange-600 dark:text-orange-300',
+   },
+  ],
+  [
+   'waitForCheckin',
+   {
+    border: 'border-red-600 dark:border-red-300',
+    backgoundColor: 'bg-red-100 dark:bg-red-900',
+    text: 'text-red-600 dark:text-red-300',
    },
   ],
   [
