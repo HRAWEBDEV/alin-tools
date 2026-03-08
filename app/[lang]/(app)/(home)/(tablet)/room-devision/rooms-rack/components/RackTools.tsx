@@ -50,7 +50,7 @@ export default function RackTools({ dic }: { dic: RoomsRackDictionary }) {
   rackInfo,
  } = useRackConfigContext();
  return (
-  <div className='py-2 sticky top-0 z-1 bg-background'>
+  <div className='py-2 sticky top-0 z-2 bg-background'>
    <h1
     data-is-sidebar-pin={isPin}
     data-is-sidebar-open={isOpen}

@@ -112,7 +112,7 @@ export default function RackSidebar({ dic }: { dic: RoomsRackDictionary }) {
    )}
    {!isPin && isOpen && (
     <div
-     className='absolute z-2 inset-0 bg-black/40'
+     className='absolute z-3 inset-0 bg-black/40'
      onClick={() => toggle(false)}
     ></div>
    )}

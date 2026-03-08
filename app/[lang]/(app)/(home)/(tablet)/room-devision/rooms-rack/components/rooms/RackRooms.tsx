@@ -3,8 +3,9 @@ import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
 import { useRackConfigContext } from '../../services/rooms-rack-config/roomsRackConfigContext';
 import NoItemFound from '@/app/[lang]/(app)/components/NoItemFound';
 import UnExpectedError from '@/app/[lang]/(app)/components/UnExpectedError';
+import RackRoom from './RackRoom';
 
-export default function RackRooms({}: { dic: RoomsRackDictionary }) {
+export default function RackRooms({ dic }: { dic: RoomsRackDictionary }) {
  const { rack } = useRackConfigContext();
 
  if (rack.isSuccess && !rack.data.length)
@@ -21,5 +22,14 @@ export default function RackRooms({}: { dic: RoomsRackDictionary }) {
    </div>
   );
 
- return <div className='grow'>{rack.isLoading && <LinearLoading />}</div>;
+ return (
+  <div className='grow '>
+   {rack.isLoading && <LinearLoading />}
+   <div className='grid gap-4 grid-cols-[repeat(auto-fill,minmax(9rem,9.5rem))] justify-center pb-4'>
+    {rack.data.map((room) => (
+     <RackRoom dic={dic} key={room.roomLabel} room={room} />
+    ))}
+   </div>
+  </div>
+ );
 }

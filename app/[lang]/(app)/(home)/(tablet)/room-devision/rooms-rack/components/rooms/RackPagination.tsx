@@ -24,7 +24,7 @@ export default function RackPagination({ dic }: { dic: RoomsRackDictionary }) {
   rack: { paging, onChangePaging },
  } = useRackConfigContext();
  return (
-  <div className='py-2 flex justify-between gap-2 sticky bottom-0 z-1 bg-background'>
+  <div className='py-2 flex justify-between gap-2 sticky bottom-0 z-2 bg-background'>
    <div className='xl:basis-52'>
     <Select
      dir={localeInfo.contentDirection}
