@@ -25,7 +25,7 @@ export default function RackPagination({ dic }: { dic: RoomsRackDictionary }) {
  } = useRackConfigContext();
  return (
   <div className='py-2 flex justify-between gap-2 sticky bottom-0 z-1 bg-background'>
-   <div className='md:basis-52'>
+   <div className='xl:basis-52'>
     <Select
      dir={localeInfo.contentDirection}
      value={paging.limit.toString()}
@@ -73,7 +73,7 @@ export default function RackPagination({ dic }: { dic: RoomsRackDictionary }) {
      </Button>
     </div>
    </div>
-   <div className='basis-52 hidden md:block'></div>
+   <div className='basis-52 hidden xl:block'></div>
   </div>
  );
 }
