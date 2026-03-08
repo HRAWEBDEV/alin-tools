@@ -1,6 +1,7 @@
 'use client';
 import { ReactNode, useState, useEffect, useCallback } from 'react';
 import {
+ type ChangePageActions,
  type RackConfig,
  type SidebarPanel,
  rackConfigContext,
@@ -43,6 +44,8 @@ import {
  roomTypeValueQuery,
  showTypeKeyQuery,
  showTypeValueQuery,
+ limitQuery,
+ offsetQuery,
 } from '../../utils/rackQueries';
 import { rackShowTypes } from '../../utils/rackShowTypes';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
@@ -64,11 +67,6 @@ export function RoomsRackConfigProvider({
  const [rackIsLoading, setRackIsLoading] = useState(false);
  const [rackRooms, setRackRooms] = useState<Rack[]>([]);
  const [rackLastUpdate, setRackLastUpdate] = useState<Date | null>(null);
- const [rackPaging, setRackPaging] = useState<Paging>({
-  limit: rackLimitOptions[0],
-  offset: 0,
- });
- const [rowsCount, setRowsCount] = useState(0);
  const [rackDetails, setRackDetails] = useState<RackDetails | null>(null);
  const { locale } = useBaseConfig();
  const searchParams = useSearchParams();
@@ -92,6 +90,8 @@ export function RoomsRackConfigProvider({
  const rackTypeKeyQueryValue = searchParams.get(rackTypeKeyQuery);
  const rackTypeValueQueryValue = searchParams.get(rackTypeValueQuery);
  const roomStateGroupKeyQueryValue = searchParams.get(roomStateGroupKeyQuery);
+ const limitQueryValue = searchParams.get(limitQuery);
+ const offsetQueryValue = searchParams.get(offsetQuery);
  const roomStateGroupValueQueryValue = searchParams.get(
   roomStateGroupValueQuery,
  );
@@ -109,6 +109,40 @@ export function RoomsRackConfigProvider({
  const roomTypeValueQueryValue = searchParams.get(roomTypeValueQuery);
  const showTypeKeyQueryValue = searchParams.get(showTypeKeyQuery);
  const showTypeValueQueryValue = searchParams.get(showTypeValueQuery);
+
+ // paging
+ const [rackPaging, setRackPaging] = useState<Paging>({
+  limit: Number(limitQueryValue) || rackLimitOptions[0],
+  offset: Number(offsetQueryValue) || 0,
+ });
+ const [rowsCount, setRowsCount] = useState(0);
+
+ const pageCount =
+  rowsCount && rackPaging.limit ? Math.ceil(rowsCount / rackPaging.limit) : 0;
+
+ const isLastPage = rackPaging.offset + 1 >= pageCount;
+ const isFirstPage = rackPaging.offset + 1 === 1;
+
+ function handleChangePage(action: ChangePageActions) {
+  if (action === 'first') {
+   setRackPaging((pre) => ({ ...pre, offset: 0 }));
+   return;
+  }
+  if (action === 'last') {
+   setRackPaging((pre) => ({ ...pre, offset: pageCount - 1 }));
+   return;
+  }
+  if (action === 'next') {
+   if (rackPaging.offset === pageCount) return;
+   setRackPaging((pre) => ({ ...pre, offset: pre.offset + 1 }));
+   return;
+  }
+  if (action === 'prev') {
+   if (rackPaging.offset === 0) return;
+   setRackPaging((pre) => ({ ...pre, offset: pre.offset - 1 }));
+   return;
+  }
+ }
 
  const rackFiltersUseForm = useForm<RackFiltersSchema>({
   resolver: zodResolver(createRackFiltersSchema()),
@@ -480,12 +514,16 @@ export function RoomsRackConfigProvider({
    newSearchParams.delete(roomTypeValueQuery);
   }
 
+  newSearchParams.set(limitQuery, rackPaging.limit.toString());
+  newSearchParams.set(offsetQuery, rackPaging.offset.toString());
+
   router.replace(
    `/${locale}/room-devision/rooms-rack?${newSearchParams.toString()}`,
   );
  }, [
   locale,
   router,
+  rackPaging,
   rackTypeValue,
   roomTypeValue,
   showTypeValue,
@@ -506,6 +544,16 @@ export function RoomsRackConfigProvider({
    rackFiltersUseForm.setValue('rackType', initData.racks[0]);
   }
  }, [initDataIsSuccess, rackFiltersUseForm, initData]);
+
+ useEffect(() => {
+  if (!rackIsSuccess) return;
+  if (rackPaging.offset + 1 >= pageCount) {
+   setRackPaging((pre) => ({
+    ...pre,
+    offset: pageCount - 1,
+   }));
+  }
+ }, [rackPaging.offset, rackIsSuccess, pageCount]);
 
  const ctx: RackConfig = {
   sidebar: {
@@ -533,6 +581,10 @@ export function RoomsRackConfigProvider({
    isError: rackIsError,
    isLoading: rackIsLoading,
    isSuccess: rackIsSuccess,
+   isFirstPage,
+   isLastPage,
+   pageCount,
+   onChangePage: handleChangePage,
    onChangePaging: setRackPaging,
    paging: rackPaging,
    rowsCount,

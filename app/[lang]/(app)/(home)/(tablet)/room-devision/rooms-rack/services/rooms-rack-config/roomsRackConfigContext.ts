@@ -8,6 +8,7 @@ import {
 } from '../roomsRackApiActions';
 import { type Paging } from '../../../utils/apiTypes';
 
+type ChangePageActions = 'next' | 'prev' | 'last' | 'first';
 type SidebarPanel = 'info' | 'help' | 'filters';
 type RackConfig = {
  sidebar: {
@@ -37,6 +38,10 @@ type RackConfig = {
   isLoading: boolean;
   rowsCount: number;
   paging: Paging;
+  pageCount: number;
+  isLastPage: boolean;
+  isFirstPage: boolean;
+  onChangePage: (action: ChangePageActions) => unknown;
   lastUpdate: Date | null;
   onChangePaging: Dispatch<SetStateAction<Paging>>;
   rackDetails: RackDetails | null;
@@ -51,5 +56,5 @@ function useRackConfigContext() {
  return val;
 }
 
-export { type RackConfig, type SidebarPanel };
+export { type RackConfig, type SidebarPanel, type ChangePageActions };
 export { rackConfigContext, useRackConfigContext };

@@ -19,6 +19,8 @@ const roomStateTypeKeyQuery = 'roomStateTypeKey';
 const roomStateTypeValueQuery = 'roomStateTypeValue';
 const roomTypeKeyQuery = 'roomTypeKey';
 const roomTypeValueQuery = 'roomTypeValue';
+const limitQuery = 'limit';
+const offsetQuery = 'offset';
 
 export {
  buildingKeyQuery,
@@ -42,4 +44,6 @@ export {
  roomTypeValueQuery,
  showTypeKeyQuery,
  showTypeValueQuery,
+ limitQuery,
+ offsetQuery,
 };

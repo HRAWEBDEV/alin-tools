@@ -46,7 +46,7 @@ export default function RackTools({ dic }: { dic: RoomsRackDictionary }) {
  const {
   initData,
   sidebar: { toggle, isOpen, isPin },
-  rack: { data, lastUpdate },
+  rack: { lastUpdate, rowsCount },
   rackInfo,
  } = useRackConfigContext();
  return (
@@ -167,7 +167,7 @@ export default function RackTools({ dic }: { dic: RoomsRackDictionary }) {
     </p>
     <p className='text-center md:text-start text-sm font-medium text-neutral-700 dark:text-neutral-400'>
      <span>{dic.tools.results}: </span>
-     <span>{data.length}</span>
+     <span>{rowsCount}</span>
     </p>
    </div>
   </div>
