@@ -13,6 +13,7 @@ import { Spinner } from '@/components/ui/spinner';
 import RackFilters from './RackFilters';
 import RackHelp from './RackHelp';
 import RackInfo from './RackInfo';
+import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
 
 export default function RackSidebar({ dic }: { dic: RoomsRackDictionary }) {
  const {
@@ -26,6 +27,7 @@ export default function RackSidebar({ dic }: { dic: RoomsRackDictionary }) {
   },
   initData: { isLoading: initDataIsLoading },
   rackInfo,
+  rack,
  } = useRackConfigContext();
 
  let sidebarSlot = <RackFilters dic={dic} />;
@@ -105,6 +107,7 @@ export default function RackSidebar({ dic }: { dic: RoomsRackDictionary }) {
          </TabsTrigger>
         </TabsList>
        </Tabs>
+       {rack.isLoading && <LinearLoading />}
       </div>
       {sidebarSlot}
      </div>

@@ -34,7 +34,7 @@ export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
  const { locale } = useBaseConfig();
  const {
   initData,
-  rack: { paging, onChangePaging },
+  rack: { paging, onChangePaging, rowsCount, isLoading },
  } = useRackConfigContext();
  const { control, setValue, watch } = useFormContext<RackFiltersSchema>();
  const [showDatePicker, setShowDatePicker] = useState(false);
@@ -970,7 +970,11 @@ export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
       });
      }}
     >
+     <span className='basis-80'></span>
      {dic.filters.clearFilters}
+     <span className='basis-80 text-xs text-neutral-500'>
+      ({dic.tools.results}: {rowsCount})
+     </span>
     </Button>
    </div>
   </>

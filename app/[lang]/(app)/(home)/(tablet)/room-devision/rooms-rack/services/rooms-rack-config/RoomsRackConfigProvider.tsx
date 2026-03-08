@@ -552,6 +552,14 @@ export function RoomsRackConfigProvider({
     ...pre,
     offset: pageCount - 1,
    }));
+   return;
+  }
+  if (rackPaging.offset + 1 < pageCount) {
+   setRackPaging((pre) => ({
+    ...pre,
+    offset: pageCount - 1,
+   }));
+   return;
   }
  }, [rackPaging.offset, rackIsSuccess, pageCount]);
 
