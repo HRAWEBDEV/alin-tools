@@ -297,12 +297,9 @@ export function RoomsRackConfigProvider({
   dateValue,
  ]);
 
- function handleToggleSidebar(
-  open?: boolean,
-  activePanel: SidebarPanel = 'filters',
- ) {
+ function handleToggleSidebar(open?: boolean, activePanel?: SidebarPanel) {
   const sidebarState = open === undefined ? !sidebarIsOpen : open;
-  if (sidebarState) {
+  if (sidebarState && activePanel) {
    setActiveSidebarPanel(activePanel);
   }
   setSidebarIsOpen(sidebarState);
