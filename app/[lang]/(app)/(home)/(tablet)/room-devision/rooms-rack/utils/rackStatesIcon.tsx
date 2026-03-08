@@ -46,7 +46,7 @@ function getStateKindIcon(
 ) {
  switch (type) {
   case RoomStateKind.readyToService:
-   return <ReadyToServiceRoomIcon {...style} />;
+   return null;
   case RoomStateKind.waitingForQC:
    return <QCRoomIcon {...style} />;
   case RoomStateKind.notCleaned:

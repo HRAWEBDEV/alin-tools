@@ -190,7 +190,7 @@ function getRackStatesStyles() {
    'reservedRoom',
    {
     border: 'border-teal-600 dark:border-teal-300',
-    backgoundColor: 'bg-teal-50 dark:bg-teal-950',
+    backgoundColor: 'bg-teal-100 dark:bg-teal-900',
     text: 'text-teal-600 dark:text-teal-300',
    },
   ],
@@ -206,7 +206,7 @@ function getRackStatesStyles() {
    'dayUse',
    {
     border: 'border-sky-600 dark:border-sky-300',
-    backgoundColor: 'bg-sky-50 dark:bg-sky-950',
+    backgoundColor: 'bg-sky-100 dark:bg-sky-900',
     text: 'text-sky-600 dark:text-sky-300',
    },
   ],
@@ -214,7 +214,7 @@ function getRackStatesStyles() {
    'closedRoom',
    {
     border: 'border-sky-600 dark:border-sky-300',
-    backgoundColor: 'bg-sky-50 dark:bg-sky-950',
+    backgoundColor: 'bg-sky-100 dark:bg-sky-900',
     text: 'text-sky-600 dark:text-sky-300',
    },
   ],
@@ -222,7 +222,7 @@ function getRackStatesStyles() {
    'occupiedCustomerRoom',
    {
     border: 'border-orange-600 dark:border-orange-300',
-    backgoundColor: 'bg-orange-50 dark:bg-orange-950',
+    backgoundColor: 'bg-orange-100 dark:bg-orange-900',
     text: 'text-orange-600 dark:text-orange-300',
    },
   ],

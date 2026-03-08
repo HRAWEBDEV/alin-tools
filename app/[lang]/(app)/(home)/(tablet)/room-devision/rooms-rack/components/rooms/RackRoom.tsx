@@ -86,12 +86,12 @@ export default function RackRoom({
      >
       <div
        dir='ltr'
-       className={`absolute top-12 start-1 opacity-30 ${roomStateKindStyle?.text}`}
+       className={`absolute top-12 start-1 opacity-60 ${roomStateKindStyle?.text}`}
       >
        {getStateKindIcon(room.roomStateKindID, {
-        fontSize: '2.2rem',
-        width: '2.2rem',
-        height: '2.2rem',
+        fontSize: '3rem',
+        width: '3rem',
+        height: '3rem',
         fill: 'currentColor',
        })}
       </div>
