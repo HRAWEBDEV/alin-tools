@@ -1,5 +1,5 @@
 'use client';
-import { ReactNode, useState, useEffect, useCallback } from 'react';
+import { ReactNode, useState, useEffect, useCallback, useMemo } from 'react';
 import {
  type ChangePageActions,
  type RackConfig,
@@ -54,6 +54,7 @@ import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-pr
 import { getUserLoginToken } from '@/app/[lang]/(app)/login/utils/loginTokenManager';
 import { type PagedData, type Paging } from '../../../utils/apiTypes';
 import { rackLimitOptions } from '../../utils/rackLimitOptions';
+import { useDateFns } from '@/hooks/useDateFns';
 
 export function RoomsRackConfigProvider({
  children,
@@ -61,6 +62,7 @@ export function RoomsRackConfigProvider({
  children: ReactNode;
  dic: RoomsRackDictionary;
 }) {
+ const dateFns = useDateFns();
  const { userInfoRouterStorage } = useUserInfoRouter();
  const [rackIsError, setRackIsError] = useState(false);
  const [rackIsSuccess, setRackIsSuccess] = useState(false);
@@ -250,6 +252,7 @@ export function RoomsRackConfigProvider({
  // * signal r setup
  const getRackRooms = useCallback(async () => {
   if (!connection || !rackTypeValue || !showTypeValue) return;
+  if (showTypeValue.value === 'future' && !dateValue) return;
   setRackIsLoading(true);
   setRackIsError(false);
   try {
@@ -268,7 +271,7 @@ export function RoomsRackConfigProvider({
      inOutStateID: Number(roomStateInOutStateValue?.key) || null,
      customerID: Number(customersValue?.key) || null,
      rackID: Number(rackTypeValue.key) || null,
-     date: null,
+     date: showTypeValue.value === 'current' ? null : dateValue?.toISOString(),
     },
    );
    setRackIsSuccess(true);
@@ -291,6 +294,7 @@ export function RoomsRackConfigProvider({
   roomStateGroupValue,
   customersValue,
   rackPaging,
+  dateValue,
  ]);
 
  function handleToggleSidebar(
@@ -537,6 +541,16 @@ export function RoomsRackConfigProvider({
   roomStateGroupValue,
  ]);
 
+ const rackFutureDateStart = useMemo(() => {
+  const today = new Date();
+  const todayHour = today.getHours();
+  let rackFutureDateStart = dateFns.addDays(new Date(), 1);
+  if (initDataIsSuccess && todayHour < initData.roomingTime.item1) {
+   rackFutureDateStart = new Date();
+  }
+  return rackFutureDateStart;
+ }, [dateFns, initDataIsSuccess, initData]);
+
  useEffect(() => {
   if (!initDataIsSuccess) return;
   const rackTypeValue = rackFiltersUseForm.getValues('rackType');
@@ -544,6 +558,16 @@ export function RoomsRackConfigProvider({
    rackFiltersUseForm.setValue('rackType', initData.racks[0]);
   }
  }, [initDataIsSuccess, rackFiltersUseForm, initData]);
+
+ useEffect(() => {
+  if (showTypeValue?.value === 'current') {
+   rackFiltersUseForm.setValue('date', null);
+   return;
+  }
+  const dateValue = rackFiltersUseForm.getValues('date');
+  if (!!dateValue) return;
+  rackFiltersUseForm.setValue('date', rackFutureDateStart);
+ }, [showTypeValue, rackFiltersUseForm, dateFns, rackFutureDateStart]);
 
  useEffect(() => {
   if (!rackIsSuccess) return;
@@ -598,6 +622,7 @@ export function RoomsRackConfigProvider({
    rowsCount,
    lastUpdate: rackLastUpdate,
    rackDetails,
+   rackFutureDateStart,
   },
  };
 

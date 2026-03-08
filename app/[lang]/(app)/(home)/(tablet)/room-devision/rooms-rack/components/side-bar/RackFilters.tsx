@@ -34,7 +34,7 @@ export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
  const { locale } = useBaseConfig();
  const {
   initData,
-  rack: { paging, onChangePaging, rowsCount, isLoading },
+  rack: { paging, onChangePaging, rowsCount, rackFutureDateStart },
  } = useRackConfigContext();
  const { control, setValue, watch } = useFormContext<RackFiltersSchema>();
  const [showDatePicker, setShowDatePicker] = useState(false);
@@ -258,7 +258,7 @@ export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
            mode='single'
            captionLayout='dropdown'
            className='[&]:[--cell-size:2.6rem]'
-           disabled={(date) => date.getTime() < new Date().getTime()}
+           disabled={(date) => date.getTime() < rackFutureDateStart.getTime()}
            selected={field.value || undefined}
            onSelect={(newValue) => {
             if (newValue) {

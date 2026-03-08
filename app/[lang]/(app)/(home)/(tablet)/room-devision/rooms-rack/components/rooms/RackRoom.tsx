@@ -19,6 +19,8 @@ import {
  getStateTypeIcon,
 } from '../../utils/rackStatesIcon';
 import { CheckinCheckout } from '../../../components/icons/CheckinCheckout';
+import { useFormContext } from 'react-hook-form';
+import { RackFiltersSchema } from '../../schemas/rackFiltersSchema';
 
 export default function RackRoom({
  dic,
@@ -27,11 +29,14 @@ export default function RackRoom({
  dic: RoomsRackDictionary;
  room: Rack;
 }) {
+ const { watch } = useFormContext<RackFiltersSchema>();
  const roomStateKind = RoomStateKind[
   room.roomStateKindID
  ] as (typeof roomStateKinds)[number];
 
  const roomStateKindStyle = getRackStatesStyles().get(roomStateKind);
+ const [showTypeValue] = watch(['showType']);
+ const isFutureRack = showTypeValue?.value === 'future';
 
  const roomStateInOut = room.roomInOutStateID
   ? (RoomInOutState[room.roomInOutStateID] as (typeof roomInOutStates)[number])
@@ -84,17 +89,19 @@ export default function RackRoom({
       href='#'
       className={`relative flex! flex-col grow items-stretch p-2 ${roomStateStyle?.backgoundColor}`}
      >
-      <div
-       dir='ltr'
-       className={`absolute top-12 start-1 opacity-60 ${roomStateKindStyle?.text}`}
-      >
-       {getStateKindIcon(room.roomStateKindID, {
-        fontSize: '3rem',
-        width: '3rem',
-        height: '3rem',
-        fill: 'currentColor',
-       })}
-      </div>
+      {!isFutureRack && (
+       <div
+        dir='ltr'
+        className={`absolute top-12 start-1 opacity-60 ${roomStateKindStyle?.text}`}
+       >
+        {getStateKindIcon(room.roomStateKindID, {
+         fontSize: '3rem',
+         width: '3rem',
+         height: '3rem',
+         fill: 'currentColor',
+        })}
+       </div>
+      )}
       <div
        className={`p-1 rounded-2xl border border-dashed ${roomStateStyle?.border} ${roomStateStyle?.text} ${roomStateStyle?.backgoundColor} text-center`}
       >
@@ -120,40 +127,45 @@ export default function RackRoom({
         </p>*/}
        </div>
       </div>
-      <div className='flex items-center justify-between gap-4'>
-       <div dir='ltr' className='font-medium text-base flex items-center gap-2'>
+      {!isFutureRack && (
+       <div className='flex items-center justify-between gap-4'>
         <div
-         className={`${roomStateInOutStyle?.text || 'text-neutral-600 dark:text-neutral-400'}`}
+         dir='ltr'
+         className='font-medium text-base flex items-center gap-2'
         >
-         {room.roomInOutStateID ? (
-          getRoomInOutIcon(room.roomInOutStateID, {
-           fontSize: '1.5rem',
-           width: '1.5rem',
-           height: '1.5rem',
-           fill: 'currentColor',
-          })
-         ) : (
-          <CheckinCheckout
-           width='1.5rem'
-           height='1.5rem'
-           fontSize='1.5rem'
-           fill='currentColor'
-          />
-         )}
+         <div
+          className={`${roomStateInOutStyle?.text || 'text-neutral-600 dark:text-neutral-400'}`}
+         >
+          {room.roomInOutStateID ? (
+           getRoomInOutIcon(room.roomInOutStateID, {
+            fontSize: '1.5rem',
+            width: '1.5rem',
+            height: '1.5rem',
+            fill: 'currentColor',
+           })
+          ) : (
+           <CheckinCheckout
+            width='1.5rem'
+            height='1.5rem'
+            fontSize='1.5rem'
+            fill='currentColor'
+           />
+          )}
+         </div>
+        </div>
+        <div
+         dir='ltr'
+         className={`flex items-center gap-1 text-base font-medium text-neutral-600 dark:text-neutral-400`}
+        >
+         {getStateTypeIcon(room.roomStateTypeID, {
+          fontSize: '1.4rem',
+          width: '1.4rem',
+          height: '1.4rem',
+          fill: 'currentColor',
+         })}
         </div>
        </div>
-       <div
-        dir='ltr'
-        className={`flex items-center gap-1 text-base font-medium text-neutral-600 dark:text-neutral-400`}
-       >
-        {getStateTypeIcon(room.roomStateTypeID, {
-         fontSize: '1.4rem',
-         width: '1.4rem',
-         height: '1.4rem',
-         fill: 'currentColor',
-        })}
-       </div>
-      </div>
+      )}
      </Link>
     </Button>
    </div>

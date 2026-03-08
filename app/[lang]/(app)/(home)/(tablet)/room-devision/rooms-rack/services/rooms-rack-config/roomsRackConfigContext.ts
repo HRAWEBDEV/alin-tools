@@ -45,6 +45,7 @@ type RackConfig = {
   lastUpdate: Date | null;
   onChangePaging: Dispatch<SetStateAction<Paging>>;
   rackDetails: RackDetails | null;
+  rackFutureDateStart: Date;
  };
 };
 
