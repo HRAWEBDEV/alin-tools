@@ -22,12 +22,12 @@ export default function RoomMenu({
 }) {
  return (
   <Drawer open={isOpen} onOpenChange={setIsOpen}>
-   <DrawerContent>
+   <DrawerContent className='h-[min(60svh,35rem)]'>
     <DrawerHeader className='border-b border-input'>
      <DrawerTitle className='text-2xl'>{dic.options.title}</DrawerTitle>
     </DrawerHeader>
     {room ? (
-     <div className='p-4 pb-6 grid sm:grid-cols-[max-content_1fr] gap-6 w-[min(100%,50rem)] mx-auto'>
+     <div className='p-4 pb-6 grid sm:grid-cols-[max-content_1fr] gap-6 w-[min(100%,50rem)] mx-auto overflow-auto'>
       <div className='sm:w-48'>
        <RackRoom dic={dic} room={room} mock={true} />
       </div>
