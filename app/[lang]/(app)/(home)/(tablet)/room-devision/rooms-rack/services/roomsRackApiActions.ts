@@ -126,5 +126,24 @@ function getRackInfo({ date, signal }: { signal: AbortSignal; date: string }) {
  });
 }
 
+function changeRoomStateKind({
+ roomID,
+ date,
+ stateKind,
+}: {
+ roomID: number;
+ date: string;
+ stateKind: number;
+}) {
+ const searchParams = new URLSearchParams([
+  ['Date', date],
+  ['RoomID', roomID.toString()],
+  ['Kind', stateKind.toString()],
+ ]);
+ return axios.get(
+  `/Reception/ChangeRoomStateKind/SaveState?${searchParams.toString()}`,
+ );
+}
+
 export type { InitialData, RackInfo, Rack, RackDetails };
-export { roomsRackBaseKey, getInitialData, getRackInfo };
+export { roomsRackBaseKey, getInitialData, getRackInfo, changeRoomStateKind };

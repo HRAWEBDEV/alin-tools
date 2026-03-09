@@ -81,6 +81,7 @@ export function RoomsRackConfigProvider({
  const [sidebarIsPin, setSidebarIsPin] = useState(false);
  const [selectedRoom, setSelectedRoom] = useState<Rack | null>(null);
  const [showRackMenu, setShowRackMenu] = useState(false);
+ const [showRoomStateKind, setShowRoomStateKind] = useState(false);
  //
  const [connection, setConnection] = useState<signalR.HubConnection | null>(
   null,
@@ -651,6 +652,8 @@ export function RoomsRackConfigProvider({
     {children}
     <RoomMenu
      isOpen={showRackMenu}
+     showRoomStateKind={showRoomStateKind}
+     setShowRoomStateKind={setShowRoomStateKind}
      setIsOpen={(value) => {
       if (value) {
        return;

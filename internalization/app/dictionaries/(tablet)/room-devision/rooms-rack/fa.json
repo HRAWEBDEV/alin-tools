@@ -118,5 +118,9 @@
  "pagination": {
   "prev": "قبلی",
   "next": "بعدی"
+ },
+ "roomStateKind": {
+  "title": "تغییر وضعیت اتاق",
+  "currentStateKind": "وضعیت فعلی اتاق"
  }
 }

@@ -125,32 +125,32 @@ function getRackStatesStyles() {
   [
    'readyToService',
    {
-    border: '',
-    backgoundColor: '',
+    border: 'border-neutral-600 dark:border-neutral-400',
+    backgoundColor: 'bg-neutral-100 dark:bg-neutral-900',
     text: 'text-[#1C2836] dark:text-neutral-400',
    },
   ],
   [
    'waitingForQC',
    {
-    border: '',
-    backgoundColor: '',
+    border: 'border-sky-600 dark:border-sky-400',
+    backgoundColor: 'bg-sky-100 dark:bg-sky-900',
     text: 'text-[#0383c5]',
    },
   ],
   [
    'notCleaned',
    {
-    border: '',
-    backgoundColor: '',
+    border: 'border-orange-600 dark:border-orange-400',
+    backgoundColor: 'bg-orange-100 dark:bg-orange-900',
     text: 'text-[#B96205]',
    },
   ],
   [
    'outOfService',
    {
-    border: '',
-    backgoundColor: '',
+    border: 'border-red-600 dark:border-red-400',
+    backgoundColor: 'bg-red-100 dark:bg-red-900',
     text: 'text-red-700 dark:text-red-400',
    },
   ],

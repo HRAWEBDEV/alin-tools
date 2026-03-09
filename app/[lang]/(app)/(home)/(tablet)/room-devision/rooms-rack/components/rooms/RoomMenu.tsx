@@ -8,17 +8,22 @@ import {
 import { type Rack } from '../../services/roomsRackApiActions';
 import RackRoom from './RackRoom';
 import { Button } from '@/components/ui/button';
+import RoomStateKind from './RoomStateKind';
 
 export default function RoomMenu({
  dic,
  room,
  isOpen,
  setIsOpen,
+ showRoomStateKind,
+ setShowRoomStateKind,
 }: {
  dic: RoomsRackDictionary;
  room: Rack | null;
  isOpen: boolean;
- setIsOpen: (state: boolean) => void;
+ setIsOpen: (state: boolean) => unknown;
+ showRoomStateKind: boolean;
+ setShowRoomStateKind: (state: boolean) => unknown;
 }) {
  return (
   <Drawer open={isOpen} onOpenChange={setIsOpen}>
@@ -27,27 +32,39 @@ export default function RoomMenu({
      <DrawerTitle className='text-2xl'>{dic.options.title}</DrawerTitle>
     </DrawerHeader>
     {room ? (
-     <div className='p-4 pb-6 grid sm:grid-cols-[max-content_1fr] gap-6 w-[min(100%,50rem)] mx-auto overflow-auto'>
-      <div className='sm:w-48'>
-       <RackRoom dic={dic} room={room} mock={true} />
+     <>
+      <div className='p-4 pb-6 grid sm:grid-cols-[max-content_1fr] gap-6 w-[min(100%,50rem)] mx-auto overflow-auto'>
+       <div className='sm:w-48'>
+        <RackRoom dic={dic} room={room} mock={true} />
+       </div>
+       <div className='grid grid-cols-1 gap-2 content-start'>
+        <Button
+         variant='outline'
+         className='justify-start text-start h-12'
+         size='lg'
+         onClick={() => setShowRoomStateKind(true)}
+        >
+         {dic.options.changeRoomStateKind}
+        </Button>
+        <Button
+         variant='outline'
+         className='justify-start text-start h-12'
+         size='lg'
+        >
+         {dic.options.changeRoomStateType}
+        </Button>
+       </div>
       </div>
-      <div className='grid grid-cols-1 gap-2 content-start'>
-       <Button
-        variant='outline'
-        className='justify-start text-start h-12'
-        size='lg'
-       >
-        {dic.options.changeRoomStateKind}
-       </Button>
-       <Button
-        variant='outline'
-        className='justify-start text-start h-12'
-        size='lg'
-       >
-        {dic.options.changeRoomStateType}
-       </Button>
-      </div>
-     </div>
+      <RoomStateKind
+       dic={dic}
+       room={room}
+       open={showRoomStateKind}
+       onChangeOpen={setShowRoomStateKind}
+       onSuccess={() => {
+        setShowRoomStateKind(false);
+       }}
+      />
+     </>
     ) : null}
    </DrawerContent>
   </Drawer>
