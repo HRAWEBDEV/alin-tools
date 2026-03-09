@@ -112,7 +112,7 @@ export default function RackRoom({
       {!isFutureRack && (
        <div
         dir='ltr'
-        className={`absolute top-12 start-1 opacity-60 ${roomStateKindStyle?.text}`}
+        className={`absolute top-12 start-1 ${room.roomStateKindID !== RoomStateKind.waitingForQC ? 'opacity-60' : 'opacity-80'}  ${roomStateKindStyle?.text}`}
        >
         {getStateKindIcon(room.roomStateKindID, {
          fontSize: '3rem',
