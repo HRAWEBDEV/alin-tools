@@ -105,7 +105,7 @@ export default function RackRoom({
       href='#'
       className={`relative flex! flex-col grow items-stretch p-2 ${roomStateStyle?.backgoundColor}`}
       onClick={() => {
-       if (mock) return;
+       if (mock || isFutureRack) return;
        onShowRackMenu(room);
       }}
      >
