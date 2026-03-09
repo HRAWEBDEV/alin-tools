@@ -36,7 +36,7 @@ export default function RackRoom({
 }) {
  const { watch } = useFormContext<RackFiltersSchema>();
  const {
-  rack: { onShowRackMenu },
+  rack: { onShowRackMenu, rackView },
  } = useRackConfigContext();
  const { locale } = useBaseConfig();
  const roomStateKind = RoomStateKind[
@@ -93,9 +93,15 @@ export default function RackRoom({
      }
    : getRackStatesStyles().get(roomState);
 
+ const activeCompactView = rackView === 'compact' && !mock;
+
  return (
-  <motion.div layout className='grid group'>
-   <div className='relative min-h-40 group-data-[layout-minimal="true"]:min-h-auto'>
+  <motion.div
+   data-layout-compact={activeCompactView}
+   layout
+   className='grid group'
+  >
+   <div className='relative min-h-40 group-data-[layout-compact=true]:min-h-auto'>
     <Button
      variant={'outline'}
      className="z-1 rounded-2xl h-full flex-col justify-start text-start p-0 overflow-hidden shadow-lg [&_svg:not([class*='size-'])]:size-[unset]"
@@ -135,53 +141,58 @@ export default function RackRoom({
          {room.roomLabel.padStart(2, '0')}
         </h3>
        </div>
-       <div>
-        <p className='text-sm text-primary/80 text-wrap group-data-[bold=true]:font-medium'>
-         {room.roomTypeAliasName}
-        </p>
-        <p className='text-sm text-neutral-600 dark:text-neutral-400 text-wrap'>
-         {room.guestName} {room.guestLastName}
-        </p>
-        {mock && (
-         <>
-          {!!room.customerName && (
-           <p className='text-sm text-neutral-600 dark:text-neutral-400 text-wrap'>
-            {room.customerName}
-           </p>
-          )}
+       {!activeCompactView && (
+        <div>
+         <p className='text-sm text-primary/80 text-wrap group-data-[bold=true]:font-medium'>
+          {room.roomTypeAliasName}
+         </p>
+         <p className='text-sm text-neutral-600 dark:text-neutral-400 text-wrap'>
+          {room.guestName} {room.guestLastName}
+         </p>
+         {mock && (
+          <>
+           {!!room.customerName && (
+            <p className='text-sm text-neutral-600 dark:text-neutral-400 text-wrap'>
+             {room.customerName}
+            </p>
+           )}
 
-          {!!room.guestCount && (
+           {!!room.guestCount && (
+            <p className='text-sm text-neutral-600 dark:text-neutral-400 text-wrap'>
+             {room.guestCount} {dic.help.guest}
+            </p>
+           )}
+           {!!room.arrivalDateTimeOffset && !!room.depatureDateTimeOffset && (
+            <p className='text-sm text-neutral-600 dark:text-neutral-400 text-wrap'>
+             <span>
+              {new Date(room.arrivalDateTimeOffset).toLocaleDateString(locale, {
+               year: 'numeric',
+               month: '2-digit',
+               day: '2-digit',
+              })}
+             </span>
+             {'  -  '}
+             <span>
+              {new Date(room.depatureDateTimeOffset).toLocaleDateString(
+               locale,
+               {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+               },
+              )}
+             </span>
+            </p>
+           )}
            <p className='text-sm text-neutral-600 dark:text-neutral-400 text-wrap'>
-            {room.guestCount} {dic.help.guest}
+            {dic.help[roomStateKind]}
            </p>
-          )}
-          {!!room.arrivalDateTimeOffset && !!room.depatureDateTimeOffset && (
-           <p className='text-sm text-neutral-600 dark:text-neutral-400 text-wrap'>
-            <span>
-             {new Date(room.arrivalDateTimeOffset).toLocaleDateString(locale, {
-              year: 'numeric',
-              month: '2-digit',
-              day: '2-digit',
-             })}
-            </span>
-            {'  -  '}
-            <span>
-             {new Date(room.depatureDateTimeOffset).toLocaleDateString(locale, {
-              year: 'numeric',
-              month: '2-digit',
-              day: '2-digit',
-             })}
-            </span>
-           </p>
-          )}
-          <p className='text-sm text-neutral-600 dark:text-neutral-400 text-wrap'>
-           {dic.help[roomStateKind]}
-          </p>
-         </>
-        )}
-       </div>
+          </>
+         )}
+        </div>
+       )}
       </div>
-      {!isFutureRack && (
+      {!isFutureRack && !activeCompactView && (
        <div
         data-is-mock={mock}
         className='flex data-[is-mock=true]:flex-col items-center data-[is-mock=true]:items-start justify-between gap-2'

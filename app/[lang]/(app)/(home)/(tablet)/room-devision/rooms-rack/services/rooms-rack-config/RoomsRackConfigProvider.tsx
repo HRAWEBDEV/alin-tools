@@ -4,6 +4,7 @@ import {
  type ChangePageActions,
  type RackConfig,
  type SidebarPanel,
+ type RackView,
  rackConfigContext,
 } from './roomsRackConfigContext';
 import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
@@ -83,6 +84,7 @@ export function RoomsRackConfigProvider({
  const [showRackMenu, setShowRackMenu] = useState(false);
  const [showRoomStateKind, setShowRoomStateKind] = useState(false);
  const [showRoomStateType, setShowRoomStateType] = useState(false);
+ const [rackView, setRackView] = useState<RackView>('detailed');
  const targetSelectedRoom = selectedRoom
   ? rackRooms.find((item) => item.roomLabel === selectedRoom.roomLabel) || null
   : null;
@@ -133,6 +135,10 @@ export function RoomsRackConfigProvider({
 
  const isLastPage = rackPaging.offset + 1 >= pageCount;
  const isFirstPage = rackPaging.offset + 1 === 1;
+
+ function handleChangeRackView(view: RackView) {
+  setRackView(view);
+ }
 
  function handleChangePage(action: ChangePageActions) {
   if (action === 'first') {
@@ -629,6 +635,8 @@ export function RoomsRackConfigProvider({
   },
   rack: {
    data: rackRooms,
+   rackView,
+   onChangeRackView: handleChangeRackView,
    selectedRoom,
    onChangeSelectedRoom: handleChangeSelectedRoom,
    showRackMenu,

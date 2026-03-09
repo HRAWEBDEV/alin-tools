@@ -8,6 +8,7 @@ import {
 } from '../roomsRackApiActions';
 import { type Paging } from '../../../utils/apiTypes';
 
+type RackView = 'compact' | 'detailed';
 type ChangePageActions = 'next' | 'prev' | 'last' | 'first';
 type SidebarPanel = 'info' | 'help' | 'filters';
 type RackConfig = {
@@ -33,6 +34,8 @@ type RackConfig = {
  };
  rack: {
   data: Rack[];
+  rackView: RackView;
+  onChangeRackView: (view: RackView) => unknown;
   showRackMenu: boolean;
   onShowRackMenu: (room: Rack) => unknown;
   onHideRackMenu: () => unknown;
@@ -62,5 +65,10 @@ function useRackConfigContext() {
  return val;
 }
 
-export { type RackConfig, type SidebarPanel, type ChangePageActions };
+export {
+ type RackConfig,
+ type SidebarPanel,
+ type ChangePageActions,
+ type RackView,
+};
 export { rackConfigContext, useRackConfigContext };

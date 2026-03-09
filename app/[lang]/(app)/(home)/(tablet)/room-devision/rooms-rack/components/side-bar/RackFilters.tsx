@@ -20,7 +20,10 @@ import { ChevronsUpDown, ChevronDownIcon } from 'lucide-react';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Spinner } from '@/components/ui/spinner';
-import { useRackConfigContext } from '../../services/rooms-rack-config/roomsRackConfigContext';
+import {
+ RackView,
+ useRackConfigContext,
+} from '../../services/rooms-rack-config/roomsRackConfigContext';
 import { rackShowTypes } from '../../utils/rackShowTypes';
 import {
  Popover,
@@ -29,12 +32,21 @@ import {
 } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { rackLimitOptions } from '../../utils/rackLimitOptions';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { IoAppsOutline, IoGridOutline } from 'react-icons/io5';
 
 export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
  const { locale } = useBaseConfig();
  const {
   initData,
-  rack: { paging, onChangePaging, rowsCount, rackFutureDateStart },
+  rack: {
+   paging,
+   onChangePaging,
+   rowsCount,
+   rackFutureDateStart,
+   rackView,
+   onChangeRackView,
+  },
  } = useRackConfigContext();
  const { control, setValue, watch } = useFormContext<RackFiltersSchema>();
  const [showDatePicker, setShowDatePicker] = useState(false);
@@ -42,6 +54,23 @@ export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
 
  return (
   <>
+   <div className='px-2'>
+    <Tabs
+     value={rackView}
+     onValueChange={(newValue) => {
+      onChangeRackView(newValue as RackView);
+     }}
+    >
+     <TabsList className='h-11'>
+      <TabsTrigger value='compact'>
+       <IoAppsOutline className='size-7' />
+      </TabsTrigger>
+      <TabsTrigger value='detailed'>
+       <IoGridOutline className='size-7' />
+      </TabsTrigger>
+     </TabsList>
+    </Tabs>
+   </div>
    <div className='grid grid-cols-1 gap-5 p-4 pt-2'>
     <Field>
      <FieldLabel htmlFor='rack-limit'>{dic.filters.rackRoomsLimit}</FieldLabel>

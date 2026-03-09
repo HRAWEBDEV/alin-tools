@@ -32,7 +32,7 @@ export default function RoomMenu({
 }) {
  return (
   <Drawer open={isOpen} onOpenChange={setIsOpen}>
-   <DrawerContent className='h-[min(60svh,35rem)]'>
+   <DrawerContent className='h-[min(60svh,50rem)]'>
     <DrawerHeader className='border-b border-input'>
      <DrawerTitle className='text-2xl'>{dic.options.title}</DrawerTitle>
     </DrawerHeader>
