@@ -78,6 +78,7 @@
   "guest": "مهمان"
  },
  "options": {
+  "title": "عملیات اتاق",
   "changeRoomStateKind": "تغییر وضعیت اتاق",
   "changeRoomStateType": "تغییر وضعیت ویژه اتاق"
  },

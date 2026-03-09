@@ -649,7 +649,18 @@ export function RoomsRackConfigProvider({
   <rackConfigContext.Provider value={ctx}>
    <FormProvider {...rackFiltersUseForm}>
     {children}
-    {selectedRoom && <RoomMenu dic={dic} room={selectedRoom} />}
+    <RoomMenu
+     isOpen={showRackMenu}
+     setIsOpen={(value) => {
+      if (value) {
+       return;
+      } else {
+       handleHideRackMenu();
+      }
+     }}
+     dic={dic}
+     room={selectedRoom}
+    />
    </FormProvider>
   </rackConfigContext.Provider>
  );

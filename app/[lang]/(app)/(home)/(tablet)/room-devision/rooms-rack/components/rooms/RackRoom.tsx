@@ -11,6 +11,7 @@ import {
  RoomStateKind,
  roomStateKinds,
  roomInOutStates,
+ roomStateTypes,
  getRackStatesStyles,
 } from '../../utils/rackStates';
 import {
@@ -35,7 +36,7 @@ export default function RackRoom({
 }) {
  const { watch } = useFormContext<RackFiltersSchema>();
  const {
-  rack: { onChangeSelectedRoom },
+  rack: { onShowRackMenu },
  } = useRackConfigContext();
  const { locale } = useBaseConfig();
  const roomStateKind = RoomStateKind[
@@ -98,7 +99,7 @@ export default function RackRoom({
       className={`relative flex! flex-col grow items-stretch p-2 ${roomStateStyle?.backgoundColor}`}
       onClick={() => {
        if (mock) return;
-       onChangeSelectedRoom(room);
+       onShowRackMenu(room);
       }}
      >
       {!isFutureRack && (
@@ -166,17 +167,21 @@ export default function RackRoom({
             </span>
            </p>
           )}
+          <p className='text-sm text-neutral-600 dark:text-neutral-400 text-wrap'>
+           {dic.help[roomStateKind]}
+          </p>
          </>
         )}
        </div>
       </div>
       {!isFutureRack && (
-       <div className='flex items-center justify-between gap-4'>
-        <div
-         dir='ltr'
-         className='font-medium text-base flex items-center gap-2'
-        >
+       <div
+        data-is-mock={mock}
+        className='flex data-[is-mock=true]:flex-col items-center data-[is-mock=true]:items-start justify-between gap-2'
+       >
+        <div className='font-medium text-base flex items-center gap-2'>
          <div
+          dir='ltr'
           className={`${roomStateInOutStyle?.text || 'text-neutral-600 dark:text-neutral-400'}`}
          >
           {room.roomInOutStateID ? (
@@ -195,17 +200,34 @@ export default function RackRoom({
            />
           )}
          </div>
+         {roomStateInOut !== 'none' && mock && (
+          <p className='text-sm text-neutral-600 dark:text-neutral-400 text-wrap'>
+           {dic.help[roomStateInOut]}
+          </p>
+         )}
         </div>
         <div
-         dir='ltr'
          className={`flex items-center gap-1 text-base font-medium text-neutral-600 dark:text-neutral-400`}
         >
-         {getStateTypeIcon(room.roomStateTypeID, {
-          fontSize: '1.4rem',
-          width: '1.4rem',
-          height: '1.4rem',
-          fill: 'currentColor',
-         })}
+         <div dir='ltr'>
+          {getStateTypeIcon(room.roomStateTypeID, {
+           fontSize: '1.4rem',
+           width: '1.4rem',
+           height: '1.4rem',
+           fill: 'currentColor',
+          })}
+         </div>
+         {mock && (
+          <p className='text-sm text-neutral-600 dark:text-neutral-400 text-wrap'>
+           {
+            dic.help[
+             RoomStateType[
+              room.roomStateTypeID
+             ] as (typeof roomStateTypes)[number]
+            ]
+           }
+          </p>
+         )}
         </div>
        </div>
       )}
