@@ -82,6 +82,9 @@ export function RoomsRackConfigProvider({
  const [selectedRoom, setSelectedRoom] = useState<Rack | null>(null);
  const [showRackMenu, setShowRackMenu] = useState(false);
  const [showRoomStateKind, setShowRoomStateKind] = useState(false);
+ const targetSelectedRoom = selectedRoom
+  ? rackRooms.find((item) => item.roomLabel === selectedRoom.roomLabel) || null
+  : null;
  //
  const [connection, setConnection] = useState<signalR.HubConnection | null>(
   null,
@@ -662,7 +665,7 @@ export function RoomsRackConfigProvider({
       }
      }}
      dic={dic}
-     room={selectedRoom}
+     room={targetSelectedRoom}
     />
    </FormProvider>
   </rackConfigContext.Provider>

@@ -61,6 +61,7 @@ export default function RoomMenu({
        open={showRoomStateKind}
        onChangeOpen={setShowRoomStateKind}
        onSuccess={() => {
+        setIsOpen(false);
         setShowRoomStateKind(false);
        }}
       />

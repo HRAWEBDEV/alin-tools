@@ -20,6 +20,8 @@ import {
 } from '../../utils/rackStates';
 import { getStateKindIcon } from '../../utils/rackStatesIcon';
 import { ReadyToServiceRoomIcon } from '../../../components/icons/ReadyToServiceRoomIcon';
+import { toast } from 'sonner';
+import { AxiosError } from 'axios';
 
 export default function RoomStateKind({
  dic,
@@ -44,6 +46,9 @@ export default function RoomStateKind({
   },
   onSuccess() {
    onSuccess();
+  },
+  onError(err: AxiosError<string>) {
+   toast.error(err.response?.data);
   },
  });
 
@@ -84,7 +89,7 @@ export default function RoomStateKind({
         const stateKindStyle = getRackStatesStyles().get(kind);
         return (
          <>
-          {kind === 'transferGuest' ? null : (
+          {kind === 'transferGuest' || kind === 'outOfService' ? null : (
            <Button
             key={kind}
             variant='outline'
