@@ -136,7 +136,7 @@ export default function RackRoom({
         </h3>
        </div>
        <div>
-        <p className='text-sm text-primary text-wrap group-data-[bold=true]:font-medium'>
+        <p className='text-sm text-primary/80 text-wrap group-data-[bold=true]:font-medium'>
          {room.roomTypeAliasName}
         </p>
         <p className='text-sm text-neutral-600 dark:text-neutral-400 text-wrap'>
