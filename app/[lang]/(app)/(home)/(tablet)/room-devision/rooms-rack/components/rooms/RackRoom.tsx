@@ -84,7 +84,14 @@ export default function RackRoom({
   return 'emptyRoom';
  })();
 
- const roomStateStyle = getRackStatesStyles().get(roomState);
+ const roomStateStyle =
+  roomState === 'emptyRoom'
+   ? {
+      ...getRackStatesStyles().get(roomState),
+      text: roomStateKindStyle?.text,
+      border: roomStateKindStyle?.border,
+     }
+   : getRackStatesStyles().get(roomState);
 
  return (
   <motion.div layout className='grid group'>
