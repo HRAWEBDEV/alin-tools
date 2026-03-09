@@ -74,7 +74,12 @@
   "bookerName": "رزرو کننده",
   "reserveArrival": "تاریخ ورود رزرو",
   "reserveDeparture": "تاریخ خروج رزرو",
-  "parking": "پارکینگ"
+  "parking": "پارکینگ",
+  "guest": "مهمان"
+ },
+ "options": {
+  "changeRoomStateKind": "تغییر وضعیت اتاق",
+  "changeRoomStateType": "تغییر وضعیت ویژه اتاق"
  },
  "tools": {
   "lastUpdate": "آخرین بروزرسانی",

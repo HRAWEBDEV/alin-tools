@@ -33,6 +33,11 @@ type RackConfig = {
  };
  rack: {
   data: Rack[];
+  showRackMenu: boolean;
+  onShowRackMenu: (room: Rack) => unknown;
+  onHideRackMenu: () => unknown;
+  selectedRoom: Rack | null;
+  onChangeSelectedRoom: (room: Rack | null) => unknown;
   isError: boolean;
   isSuccess: boolean;
   isLoading: boolean;

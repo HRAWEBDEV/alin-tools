@@ -55,9 +55,11 @@ import { getUserLoginToken } from '@/app/[lang]/(app)/login/utils/loginTokenMana
 import { type PagedData, type Paging } from '../../../utils/apiTypes';
 import { rackLimitOptions } from '../../utils/rackLimitOptions';
 import { useDateFns } from '@/hooks/useDateFns';
+import RoomMenu from '../../components/rooms/RoomMenu';
 
 export function RoomsRackConfigProvider({
  children,
+ dic,
 }: {
  children: ReactNode;
  dic: RoomsRackDictionary;
@@ -77,6 +79,8 @@ export function RoomsRackConfigProvider({
   useState<SidebarPanel>('filters');
  const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
  const [sidebarIsPin, setSidebarIsPin] = useState(false);
+ const [selectedRoom, setSelectedRoom] = useState<Rack | null>(null);
+ const [showRackMenu, setShowRackMenu] = useState(false);
  //
  const [connection, setConnection] = useState<signalR.HubConnection | null>(
   null,
@@ -358,6 +362,19 @@ export function RoomsRackConfigProvider({
   },
  });
 
+ // select room and toggle rack menu
+ function handleChangeSelectedRoom(newRoom: Rack | null) {
+  setSelectedRoom(newRoom);
+ }
+ function handleShowRackMenu(room: Rack) {
+  handleChangeSelectedRoom(room);
+  setShowRackMenu(true);
+ }
+ function handleHideRackMenu() {
+  handleChangeSelectedRoom(null);
+  setShowRackMenu(false);
+ }
+
  useEffect(() => {
   getRackRooms();
  }, [getRackRooms]);
@@ -607,6 +624,11 @@ export function RoomsRackConfigProvider({
   },
   rack: {
    data: rackRooms,
+   selectedRoom,
+   onChangeSelectedRoom: handleChangeSelectedRoom,
+   showRackMenu,
+   onHideRackMenu: handleHideRackMenu,
+   onShowRackMenu: handleShowRackMenu,
    isError: rackIsError,
    isLoading: rackIsLoading,
    isSuccess: rackIsSuccess,
@@ -625,7 +647,10 @@ export function RoomsRackConfigProvider({
 
  return (
   <rackConfigContext.Provider value={ctx}>
-   <FormProvider {...rackFiltersUseForm}>{children}</FormProvider>
+   <FormProvider {...rackFiltersUseForm}>
+    {children}
+    {selectedRoom && <RoomMenu dic={dic} room={selectedRoom} />}
+   </FormProvider>
   </rackConfigContext.Provider>
  );
 }

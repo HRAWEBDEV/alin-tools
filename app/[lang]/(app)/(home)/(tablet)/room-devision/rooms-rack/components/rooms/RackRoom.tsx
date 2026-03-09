@@ -21,15 +21,23 @@ import {
 import { CheckinCheckout } from '../../../components/icons/CheckinCheckout';
 import { useFormContext } from 'react-hook-form';
 import { RackFiltersSchema } from '../../schemas/rackFiltersSchema';
+import { useRackConfigContext } from '../../services/rooms-rack-config/roomsRackConfigContext';
+import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 
 export default function RackRoom({
  dic,
  room,
+ mock = false,
 }: {
  dic: RoomsRackDictionary;
  room: Rack;
+ mock?: boolean;
 }) {
  const { watch } = useFormContext<RackFiltersSchema>();
+ const {
+  rack: { onChangeSelectedRoom },
+ } = useRackConfigContext();
+ const { locale } = useBaseConfig();
  const roomStateKind = RoomStateKind[
   room.roomStateKindID
  ] as (typeof roomStateKinds)[number];
@@ -88,6 +96,10 @@ export default function RackRoom({
      <Link
       href='#'
       className={`relative flex! flex-col grow items-stretch p-2 ${roomStateStyle?.backgoundColor}`}
+      onClick={() => {
+       if (mock) return;
+       onChangeSelectedRoom(room);
+      }}
      >
       {!isFutureRack && (
        <div
@@ -122,9 +134,40 @@ export default function RackRoom({
         <p className='text-sm text-neutral-600 dark:text-neutral-400 text-wrap'>
          {room.guestName} {room.guestLastName}
         </p>
-        {/*<p className='text-sm text-neutral-600 dark:text-neutral-400 text-wrap'>
-         {room.customerName}
-        </p>*/}
+        {mock && (
+         <>
+          {!!room.customerName && (
+           <p className='text-sm text-neutral-600 dark:text-neutral-400 text-wrap'>
+            {room.customerName}
+           </p>
+          )}
+
+          {!!room.guestCount && (
+           <p className='text-sm text-neutral-600 dark:text-neutral-400 text-wrap'>
+            {room.guestCount} {dic.help.guest}
+           </p>
+          )}
+          {!!room.arrivalDateTimeOffset && !!room.depatureDateTimeOffset && (
+           <p className='text-sm text-neutral-600 dark:text-neutral-400 text-wrap'>
+            <span>
+             {new Date(room.arrivalDateTimeOffset).toLocaleDateString(locale, {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+             })}
+            </span>
+            {'  -  '}
+            <span>
+             {new Date(room.depatureDateTimeOffset).toLocaleDateString(locale, {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+             })}
+            </span>
+           </p>
+          )}
+         </>
+        )}
        </div>
       </div>
       {!isFutureRack && (
