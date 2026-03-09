@@ -38,14 +38,16 @@ export default function RoomMenu({
         <RackRoom dic={dic} room={room} mock={true} />
        </div>
        <div className='grid grid-cols-1 gap-2 content-start'>
-        <Button
-         variant='outline'
-         className='justify-start text-start h-12'
-         size='lg'
-         onClick={() => setShowRoomStateKind(true)}
-        >
-         {dic.options.changeRoomStateKind}
-        </Button>
+        {!room.noRoom && (
+         <Button
+          variant='outline'
+          className='justify-start text-start h-12'
+          size='lg'
+          onClick={() => setShowRoomStateKind(true)}
+         >
+          {dic.options.changeRoomStateKind}
+         </Button>
+        )}
         <Button
          variant='outline'
          className='justify-start text-start h-12'
