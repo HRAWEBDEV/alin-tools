@@ -145,5 +145,30 @@ function changeRoomStateKind({
  );
 }
 
+function changeRoomStateType({
+ roomID,
+ date,
+ stateType,
+}: {
+ roomID: number;
+ date: string;
+ stateType: number;
+}) {
+ const searchParams = new URLSearchParams([
+  ['Date', date],
+  ['RoomID', roomID.toString()],
+  ['TypeID', stateType.toString()],
+ ]);
+ return axios.get(
+  `/Reception/ChangeRoomStateType/SaveState?${searchParams.toString()}`,
+ );
+}
+
 export type { InitialData, RackInfo, Rack, RackDetails };
-export { roomsRackBaseKey, getInitialData, getRackInfo, changeRoomStateKind };
+export {
+ roomsRackBaseKey,
+ getInitialData,
+ getRackInfo,
+ changeRoomStateKind,
+ changeRoomStateType,
+};

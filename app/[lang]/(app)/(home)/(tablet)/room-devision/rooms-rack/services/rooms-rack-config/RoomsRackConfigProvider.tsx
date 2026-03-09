@@ -82,6 +82,7 @@ export function RoomsRackConfigProvider({
  const [selectedRoom, setSelectedRoom] = useState<Rack | null>(null);
  const [showRackMenu, setShowRackMenu] = useState(false);
  const [showRoomStateKind, setShowRoomStateKind] = useState(false);
+ const [showRoomStateType, setShowRoomStateType] = useState(false);
  const targetSelectedRoom = selectedRoom
   ? rackRooms.find((item) => item.roomLabel === selectedRoom.roomLabel) || null
   : null;
@@ -657,6 +658,8 @@ export function RoomsRackConfigProvider({
      isOpen={showRackMenu}
      showRoomStateKind={showRoomStateKind}
      setShowRoomStateKind={setShowRoomStateKind}
+     showRoomStateType={showRoomStateType}
+     setShowRoomStateType={setShowRoomStateType}
      setIsOpen={(value) => {
       if (value) {
        return;

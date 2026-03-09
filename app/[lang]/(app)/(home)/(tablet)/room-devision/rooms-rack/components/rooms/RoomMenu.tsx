@@ -9,6 +9,7 @@ import { type Rack } from '../../services/roomsRackApiActions';
 import RackRoom from './RackRoom';
 import { Button } from '@/components/ui/button';
 import RoomStateKind from './RoomStateKind';
+import RoomStateType from './RoomStateType';
 
 export default function RoomMenu({
  dic,
@@ -17,6 +18,8 @@ export default function RoomMenu({
  setIsOpen,
  showRoomStateKind,
  setShowRoomStateKind,
+ showRoomStateType,
+ setShowRoomStateType,
 }: {
  dic: RoomsRackDictionary;
  room: Rack | null;
@@ -24,6 +27,8 @@ export default function RoomMenu({
  setIsOpen: (state: boolean) => unknown;
  showRoomStateKind: boolean;
  setShowRoomStateKind: (state: boolean) => unknown;
+ showRoomStateType: boolean;
+ setShowRoomStateType: (state: boolean) => unknown;
 }) {
  return (
   <Drawer open={isOpen} onOpenChange={setIsOpen}>
@@ -39,22 +44,25 @@ export default function RoomMenu({
        </div>
        <div className='grid grid-cols-1 gap-2 content-start'>
         {!room.noRoom && (
-         <Button
-          variant='outline'
-          className='justify-start text-start h-12'
-          size='lg'
-          onClick={() => setShowRoomStateKind(true)}
-         >
-          {dic.options.changeRoomStateKind}
-         </Button>
+         <>
+          <Button
+           variant='outline'
+           className='justify-start text-start h-12'
+           size='lg'
+           onClick={() => setShowRoomStateKind(true)}
+          >
+           {dic.options.changeRoomStateKind}
+          </Button>
+          <Button
+           variant='outline'
+           className='justify-start text-start h-12'
+           size='lg'
+           onClick={() => setShowRoomStateType(true)}
+          >
+           {dic.options.changeRoomStateType}
+          </Button>
+         </>
         )}
-        <Button
-         variant='outline'
-         className='justify-start text-start h-12'
-         size='lg'
-        >
-         {dic.options.changeRoomStateType}
-        </Button>
        </div>
       </div>
       <RoomStateKind
@@ -65,6 +73,16 @@ export default function RoomMenu({
        onSuccess={() => {
         setIsOpen(false);
         setShowRoomStateKind(false);
+       }}
+      />
+      <RoomStateType
+       dic={dic}
+       room={room}
+       open={showRoomStateType}
+       onChangeOpen={setShowRoomStateType}
+       onSuccess={() => {
+        setIsOpen(false);
+        setShowRoomStateType(false);
        }}
       />
      </>

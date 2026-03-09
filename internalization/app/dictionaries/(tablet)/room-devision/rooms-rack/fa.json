@@ -121,6 +121,10 @@
  },
  "roomStateKind": {
   "title": "تغییر وضعیت اتاق",
-  "currentStateKind": "وضعیت فعلی اتاق"
+  "currentStateKind": "وضعیت اتاق"
+ },
+ "roomStateType": {
+  "title": "تغییر وضعیت ویژه اتاق",
+  "currentStateKind": "وضعیت ویژه اتاق"
  }
 }
