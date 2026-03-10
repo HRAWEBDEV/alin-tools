@@ -14,8 +14,15 @@ import RackFilters from './RackFilters';
 import RackHelp from './RackHelp';
 import RackInfo from './RackInfo';
 import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
+import { type RoomStatisticsDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/room-statistics/dictionary';
 
-export default function RackSidebar({ dic }: { dic: RoomsRackDictionary }) {
+export default function RackSidebar({
+ dic,
+ roomsStatisticsDic,
+}: {
+ dic: RoomsRackDictionary;
+ roomsStatisticsDic: RoomStatisticsDictionary;
+}) {
  const {
   sidebar: {
    activePanel,
@@ -37,7 +44,7 @@ export default function RackSidebar({ dic }: { dic: RoomsRackDictionary }) {
    sidebarSlot = <RackHelp dic={dic} />;
    break;
   case 'info':
-   sidebarSlot = <RackInfo dic={dic} />;
+   sidebarSlot = <RackInfo dic={dic} roomsStatisticsDic={roomsStatisticsDic} />;
    break;
  }
 

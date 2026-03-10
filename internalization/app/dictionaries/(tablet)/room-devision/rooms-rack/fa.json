@@ -87,6 +87,7 @@
   "results": "نتایج"
  },
  "info": {
+  "showRoomsStatistics": "نمایش آمار اتاق ها",
   "occupiedRooms": "اتاق اشغال",
   "vacantRooms": "اتاق خالی",
   "readyRooms": "آماده سرویس",

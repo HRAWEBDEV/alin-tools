@@ -366,7 +366,7 @@ export function RoomsRackConfigProvider({
     signal,
     date:
      showTypeValue?.value === 'current'
-      ? new Date().toISOString()
+      ? dateFns.startOfToday().toISOString()
       : dateValue!.toISOString(),
    });
    return res.data;
