@@ -13,7 +13,7 @@ export default function RoomsManagementSlot({
  const searchParams = useSearchParams();
  const activeTab = searchParams.get('tab') || 'rooms-statistics';
  let slot = (
-  <div className='p-4 pt-0 w-[min(100%,55rem)] mx-auto'>
+  <div className='p-4 lg:pt-0 w-[min(100%,55rem)] mx-auto'>
    <RoomsStatisticsWrapper dic={roomsStatisticsDic} />
   </div>
  );

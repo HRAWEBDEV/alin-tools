@@ -76,7 +76,7 @@ export default function MainWrapperSetupProvider({
    <main
     ref={mainWrapperRef}
     data-main-container
-    className={`scroll-smooth grow pt-(--app-restaurant-header-height) pb-(--app-restaurant-tabs-height) lg:py-0 overflow-auto`}
+    className={`scroll-smooth grow pt-(--app-restaurant-header-height) pb-(--app-restaurant-tabs-height) in-data-[scroll-dicretion="down"]:pb-4 lg:py-0 overflow-auto`}
    >
     {children}
    </main>

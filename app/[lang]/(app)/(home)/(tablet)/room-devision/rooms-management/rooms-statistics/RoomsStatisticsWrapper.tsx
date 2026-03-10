@@ -29,7 +29,7 @@ export default function RoomsStatisticsWrapper({
  const dateFns = useDateFns();
  const [showDatePicker, setShowDatePicker] = useState(false);
  const [date, setDate] = useState<Date>(dateFns.startOfDay(new Date()));
- const { data, isLoading, isSuccess, isError } = useQuery({
+ const { data, isLoading, isError } = useQuery({
   queryKey: [roomsRackBaseKey, 'all', date.toISOString()],
   async queryFn({ signal }) {
    const res = await getRoomsStatistics({
