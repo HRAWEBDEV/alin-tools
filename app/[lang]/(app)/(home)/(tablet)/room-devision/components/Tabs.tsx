@@ -28,19 +28,19 @@ export default function Tabs() {
     </Link>
    </Button>
    <Button variant='ghost' className={tabClass} asChild>
-    <Link href={`/${locale}/room-devision/rooms-rack`}>
+    <Link href={`/${locale}/room-devision/execution-management`}>
      <FaClipboardList className={tabIconClass} />
      <p className='text-sm'>{tabsDic.executionManagement}</p>
     </Link>
    </Button>
    <Button variant='ghost' className={tabClass} asChild>
-    <Link href={`/${locale}/room-devision/rooms-rack`}>
+    <Link href={`/${locale}/room-devision/guests-management`}>
      <FaUserFriends className={tabIconClass} />
      <p className='text-sm'>{tabsDic.guestsManagement}</p>
     </Link>
    </Button>
    <Button variant='ghost' className={tabClass} asChild>
-    <Link href={`/${locale}/room-devision/rooms-rack`}>
+    <Link href={`/${locale}/room-devision/rooms-management`}>
      <FaHouseUser className={tabIconClass} />
      <p className='text-sm'>{tabsDic.roomsManagement}</p>
     </Link>

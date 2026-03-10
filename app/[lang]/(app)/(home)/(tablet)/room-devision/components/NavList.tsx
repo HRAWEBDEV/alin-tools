@@ -46,7 +46,7 @@ export default function NavList() {
       href={
        activePath === 'execution-management'
         ? '#'
-        : `/${locale}/room-devision/rooms-rack`
+        : `/${locale}/room-devision/execution-management`
       }
       className='flex w-auto h-auto items-center gap-4'
      >
@@ -64,7 +64,7 @@ export default function NavList() {
       href={
        activePath === 'guests-management'
         ? '#'
-        : `/${locale}/room-devision/rooms-rack`
+        : `/${locale}/room-devision/guests-management`
       }
       className='flex w-auto h-auto items-center gap-4'
      >
@@ -73,16 +73,16 @@ export default function NavList() {
      </Link>
     </Button>
     <Button
-     data-active={activePath === 'guests-management'}
+     data-active={activePath === 'rooms-management'}
      variant='ghost'
      className='w-full min-h-16 h-auto justify-start data-[active=""]:bg-background border border-transparent data-[active="true"]:text-primary data-[active="true"]:border-primary'
      asChild
     >
      <Link
       href={
-       activePath === 'guests-management'
+       activePath === 'rooms-management'
         ? '#'
-        : `/${locale}/room-devision/rooms-rack`
+        : `/${locale}/room-devision/rooms-management`
       }
       className='flex w-auto h-auto items-center gap-4'
      >
