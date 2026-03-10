@@ -10,5 +10,13 @@ export default async function RoomsManagement(
  const roomsManagementDic = await getRoomsManagementDictionary({
   locale: lang as Locale,
  });
- return <RoomsManagementWrapper dic={roomsManagementDic} />;
+ const roomsStatisticsDic = await getRoomStatisticsDictionary({
+  locale: lang as Locale,
+ });
+ return (
+  <RoomsManagementWrapper
+   dic={roomsManagementDic}
+   roomsStatisticsDic={roomsStatisticsDic}
+  />
+ );
 }
