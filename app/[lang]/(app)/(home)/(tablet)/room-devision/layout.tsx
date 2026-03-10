@@ -18,11 +18,14 @@ export default async function HomeLayout({
   locale: lang as Locale,
  });
  return (
-  <div data-program='room-devision'>
+  <div
+   data-program='room-devision'
+   className='grow overflow-hidden flex flex-col'
+  >
    <RoomDevisionShareDictionaryProvider roomDevisionShareDictionary={shareDic}>
     <SettingsProvider>
      <ProfileProvider>
-      <div className='h-svh overflow-hidden flex flex-col'>
+      <div className='grow overflow-hidden flex flex-col'>
        <Header />
        <div className='flex grow overflow-hidden'>
         <Nav />
