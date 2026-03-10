@@ -2,6 +2,7 @@
 ### features
 - active house keeping program (hra-done)
 - add rooms rack page (hra-done)
+- add rooms statistics page (hra-done)
 ### bug fixes
 
 # 1.2.0

@@ -69,6 +69,7 @@ export default function RoomsStatisticsWrapper({
          onSelect={(value) => {
           if (!value) return;
           setDate(value);
+          setShowDatePicker(false);
          }}
         />
        </PopoverContent>
