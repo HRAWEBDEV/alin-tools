@@ -9,24 +9,34 @@ export default function RoomsManagementTabs({
 }: {
  dic: RoomsManagementDictionary;
 }) {
- const { localeInfo } = useBaseConfig();
+ const { localeInfo, locale } = useBaseConfig();
+ const redirectPath = `/${locale}/room-devision/rooms-management` as const;
  return (
   <header className='p-2 sticky bottom-0 pb-0 order-2 lg:order-1 lg:pb-2 lg:top-0 lg:bottom-auto bg-background'>
    <div>
     <Tabs dir={localeInfo.contentDirection} defaultValue='rooms-statistics'>
      <TabsList className='h-11 w-[min(100%,30rem)] mx-auto bg-neutral-200 dark:bg-neutral-800'>
-      <TabsTrigger value='rooms-statistics'>
-       <Link href={'#'} className='font-medium'>
+      <TabsTrigger value='rooms-statistics' asChild>
+       <Link
+        href={`${redirectPath}?tab=rooms-statistics`}
+        className='font-medium'
+       >
         {dic.tabs.roomStatistics}
        </Link>
       </TabsTrigger>
-      <TabsTrigger value='entrance-and-exit-rooms'>
-       <Link href={'#'} className='font-medium'>
+      <TabsTrigger value='entrance-and-exit-rooms' asChild>
+       <Link
+        href={`${redirectPath}?tab=entrance-and-exit-rooms`}
+        className='font-medium'
+       >
         {dic.tabs.entranceAndExitRooms}
        </Link>
       </TabsTrigger>
-      <TabsTrigger value='reserved-rooms'>
-       <Link href={'#'} className='font-medium'>
+      <TabsTrigger value='reserved-rooms' asChild>
+       <Link
+        href={`${redirectPath}?tab=reserved-rooms`}
+        className='font-medium'
+       >
         {dic.tabs.reservedRooms}
        </Link>
       </TabsTrigger>
