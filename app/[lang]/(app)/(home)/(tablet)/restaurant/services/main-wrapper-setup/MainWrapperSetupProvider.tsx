@@ -5,7 +5,7 @@ import {
  type ScrollDirection,
  mainWrapperSetupContext,
 } from './mainWrapperSetupContext';
-import { useDebouncedCallback } from '@tanstack/react-pacer';
+import { useThrottledCallback } from '@tanstack/react-pacer';
 
 export default function MainWrapperSetupProvider({
  children,
@@ -16,7 +16,7 @@ export default function MainWrapperSetupProvider({
  const [scrollDirection, setScrollDirection] = useState<ScrollDirection>('up');
  const [scrollTop, setScrollTop] = useState<number>(0);
 
- const debouncer = useDebouncedCallback(
+ const debouncer = useThrottledCallback(
   () => {
    if (!mainWrapperRef.current) return;
    const newScrollTop = mainWrapperRef.current.scrollTop;
@@ -76,7 +76,7 @@ export default function MainWrapperSetupProvider({
    <main
     ref={mainWrapperRef}
     data-main-container
-    className={`scroll-smooth grow pt-(--app-restaurant-header-height) pb-(--app-restaurant-tabs-height) lg:py-0 overflow-auto`}
+    className={`scroll-smooth grow pt-(--app-restaurant-header-height) pb-(--app-restaurant-tabs-height) in-data-[scroll-dicretion="down"]:pb-4 lg:py-0 overflow-auto`}
    >
     {children}
    </main>

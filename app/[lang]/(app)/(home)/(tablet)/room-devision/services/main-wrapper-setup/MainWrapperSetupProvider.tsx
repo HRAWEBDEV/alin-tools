@@ -5,7 +5,7 @@ import {
  type ScrollDirection,
  mainWrapperSetupContext,
 } from './mainWrapperSetupContext';
-import { useDebouncedCallback } from '@tanstack/react-pacer';
+import { useThrottledCallback } from '@tanstack/react-pacer';
 
 export default function MainWrapperSetupProvider({
  children,
@@ -16,7 +16,7 @@ export default function MainWrapperSetupProvider({
  const [scrollDirection, setScrollDirection] = useState<ScrollDirection>('up');
  const [scrollTop, setScrollTop] = useState<number>(0);
 
- const debouncer = useDebouncedCallback(
+ const debouncer = useThrottledCallback(
   () => {
    if (!mainWrapperRef.current) return;
    const newScrollTop = mainWrapperRef.current.scrollTop;
