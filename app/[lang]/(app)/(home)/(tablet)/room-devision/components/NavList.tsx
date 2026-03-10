@@ -4,7 +4,8 @@ import { useRoomDevisionShareDictionary } from '../services/share-dictionary/roo
 import Link from 'next/link';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { usePathname } from 'next/navigation';
-import { FaHotel } from 'react-icons/fa6';
+import { FaUserFriends } from 'react-icons/fa';
+import { FaHotel, FaClipboardList, FaHouseUser } from 'react-icons/fa6';
 
 export default function NavList() {
  const { locale } = useBaseConfig();
@@ -33,6 +34,60 @@ export default function NavList() {
      >
       <FaHotel className='size-8' />
       <p className='text-base'>{navigation.roomsRack}</p>
+     </Link>
+    </Button>
+    <Button
+     data-active={activePath === 'execution-management'}
+     variant='ghost'
+     className='w-full min-h-16 h-auto justify-start data-[active=""]:bg-background border border-transparent data-[active="true"]:text-primary data-[active="true"]:border-primary'
+     asChild
+    >
+     <Link
+      href={
+       activePath === 'execution-management'
+        ? '#'
+        : `/${locale}/room-devision/rooms-rack`
+      }
+      className='flex w-auto h-auto items-center gap-4'
+     >
+      <FaClipboardList className='size-8' />
+      <p className='text-base'>{navigation.executionManagement}</p>
+     </Link>
+    </Button>
+    <Button
+     data-active={activePath === 'guests-management'}
+     variant='ghost'
+     className='w-full min-h-16 h-auto justify-start data-[active=""]:bg-background border border-transparent data-[active="true"]:text-primary data-[active="true"]:border-primary'
+     asChild
+    >
+     <Link
+      href={
+       activePath === 'guests-management'
+        ? '#'
+        : `/${locale}/room-devision/rooms-rack`
+      }
+      className='flex w-auto h-auto items-center gap-4'
+     >
+      <FaUserFriends className='size-8' />
+      <p className='text-base'>{navigation.guestsManagement}</p>
+     </Link>
+    </Button>
+    <Button
+     data-active={activePath === 'guests-management'}
+     variant='ghost'
+     className='w-full min-h-16 h-auto justify-start data-[active=""]:bg-background border border-transparent data-[active="true"]:text-primary data-[active="true"]:border-primary'
+     asChild
+    >
+     <Link
+      href={
+       activePath === 'guests-management'
+        ? '#'
+        : `/${locale}/room-devision/rooms-rack`
+      }
+      className='flex w-auto h-auto items-center gap-4'
+     >
+      <FaHouseUser className='size-8' />
+      <p className='text-base'>{navigation.roomsManagement}</p>
      </Link>
     </Button>
    </li>

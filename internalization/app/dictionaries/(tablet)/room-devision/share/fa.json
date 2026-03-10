@@ -3,7 +3,10 @@
   "tabs": {
    "roomsRack": "رک اتاق ها",
    "profile": "پروفایل",
-   "menus": "منو‌ها"
+   "menus": "منو‌ها",
+   "executionManagement": "اجرا",
+   "guestsManagement": "مهمانان",
+   "roomsManagement": "اتاق ها"
   },
   "profile": {
    "title": "پروفایل کاربر",
@@ -28,7 +31,10 @@
    }
   },
   "navigation": {
-   "roomsRack": "رک اتاق ها"
+   "roomsRack": "رک اتاق ها",
+   "executionManagement": "مدیریت اجرا",
+   "guestsManagement": "مدیریت مهمانان",
+   "roomsManagement": "مدیریت اتاق ها"
   },
   "noItemFound": {
    "title": "آیتمی یافت نشد"
