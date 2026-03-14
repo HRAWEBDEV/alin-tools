@@ -1,8 +1,7 @@
 'use client';
 import { type OutOfOrderRoomsDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/out-of-order-rooms/dictionary';
 import OutOfOrderRoomsFilters from './components/OutOfOrderRoomsFilters';
-// import EntranceAndExitFilters from './components/EntranceAndExitFilters';
-// import EntranceAndExitList from './components/EntranceAndExitList';
+import OutOfOrderRooms from './components/OutOfOrderRooms';
 import { useForm, FormProvider } from 'react-hook-form';
 import {
  OutOfOrderRoomsSchema,
@@ -48,7 +47,7 @@ export default function OutOfOrderRoomsWrapper({
     initDataIsLoading={initDataIsLoading}
     initData={initData}
    />
-   {/*   <EntranceAndExitList dic={dic} />*/}
+   <OutOfOrderRooms dic={dic} />
   </FormProvider>
  );
 }
