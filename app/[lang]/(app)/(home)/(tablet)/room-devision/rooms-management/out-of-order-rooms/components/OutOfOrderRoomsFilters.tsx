@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { type OutOfOrderRoomsDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/out-of-order-rooms/dictionary';
-import { FaFilter } from 'react-icons/fa';
+import { FaFilter, FaPlus } from 'react-icons/fa';
 import { Field, FieldLabel } from '@/components/ui/field';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -31,8 +31,6 @@ import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { type InitialData } from '../services/outOfOrderApiActions';
 import { Spinner } from '@/components/ui/spinner';
 import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
-import { useDateFns } from '@/hooks/useDateFns';
-import { string } from 'zod/v3';
 
 const smallBadgeKeys: (keyof OutOfOrderRoomsSchema)[] = ['floor', 'room'];
 const largeBadgeKeys: (keyof OutOfOrderRoomsSchema)[] = ['roomType'];
@@ -46,11 +44,11 @@ export default function OutOfOrderRoomsFilters({
  initData?: InitialData;
  initDataIsLoading: boolean;
 }) {
- const dateFns = useDateFns();
- const [showDatePicker, setShowDatePicker] = useState(false);
+ const [showFromDatePicker, setShowFromDatePicker] = useState(false);
+ const [showToDatePicker, setShowToDatePicker] = useState(false);
  const { locale, localeInfo } = useBaseConfig();
- const { control, watch, setValue, getValues } =
-  useFormContext<OutOfOrderRoomsSchema>();
+ const { control, watch, setValue } = useFormContext<OutOfOrderRoomsSchema>();
+ const [fromDateValue, toDateValue] = watch(['fromDate', 'toDate']);
 
  const [sliderRef] = useKeenSlider({
   rtl: localeInfo.contentDirection === 'rtl',
@@ -87,7 +85,10 @@ export default function OutOfOrderRoomsFilters({
  return (
   <div className='[&]:[--default-top-offset:var(--top-offset,0)] sticky top-4 lg:top-(--default-top-offset) py-4 bg-background'>
    <div className='flex gap-2 items-center mb-1'>
-    <div>
+    <Button size='icon-lg'>
+     <FaPlus />
+    </Button>
+    <div className='flex items-center gap-2'>
      <Drawer>
       <DrawerTrigger>
        <Button
@@ -122,7 +123,10 @@ export default function OutOfOrderRoomsFilters({
           render={({ field }) => (
            <Field>
             <FieldLabel htmlFor='fromDate'>{dic.filters.fromDate}</FieldLabel>
-            <Popover open={showDatePicker} onOpenChange={setShowDatePicker}>
+            <Popover
+             open={showFromDatePicker}
+             onOpenChange={setShowFromDatePicker}
+            >
              <PopoverTrigger asChild>
               <Button
                variant='outline'
@@ -145,11 +149,65 @@ export default function OutOfOrderRoomsFilters({
                mode='single'
                captionLayout='dropdown'
                className='[&]:[--cell-size:2.6rem]'
+               defaultMonth={fromDateValue || undefined}
+               disabled={(date) =>
+                toDateValue ? date.getTime() >= toDateValue?.getTime() : false
+               }
+               endMonth={toDateValue || undefined}
                selected={field.value || undefined}
                onSelect={(newValue) => {
                 if (newValue) {
                  field.onChange(newValue);
-                 setShowDatePicker(false);
+                 setShowFromDatePicker(false);
+                }
+               }}
+              />
+             </PopoverContent>
+            </Popover>
+           </Field>
+          )}
+         />
+         <Controller
+          control={control}
+          name='toDate'
+          render={({ field }) => (
+           <Field>
+            <FieldLabel htmlFor='toDate'>{dic.filters.toDate}</FieldLabel>
+            <Popover open={showToDatePicker} onOpenChange={setShowToDatePicker}>
+             <PopoverTrigger asChild>
+              <Button
+               variant='outline'
+               id='toDate'
+               className='justify-between font-normal h-11'
+               onBlur={field.onBlur}
+               ref={field.ref}
+              >
+               <span>
+                {field.value ? field.value.toLocaleDateString(locale) : ''}
+               </span>
+               <ChevronDownIcon />
+              </Button>
+             </PopoverTrigger>
+             <PopoverContent
+              className='w-auto overflow-hidden p-0'
+              align='start'
+             >
+              <Calendar
+               mode='single'
+               captionLayout='dropdown'
+               className='[&]:[--cell-size:2.6rem]'
+               selected={field.value || undefined}
+               defaultMonth={toDateValue || undefined}
+               disabled={(date) =>
+                fromDateValue
+                 ? date.getTime() <= fromDateValue?.getTime()
+                 : false
+               }
+               startMonth={fromDateValue || undefined}
+               onSelect={(newValue) => {
+                if (newValue) {
+                 field.onChange(newValue);
+                 setShowFromDatePicker(false);
                 }
                }}
               />

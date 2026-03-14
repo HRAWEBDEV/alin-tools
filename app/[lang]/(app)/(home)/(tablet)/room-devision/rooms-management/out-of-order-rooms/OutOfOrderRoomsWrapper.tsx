@@ -14,15 +14,19 @@ import {
  outOfOrderRoomsBaseKey,
  getInitialData,
 } from './services/outOfOrderApiActions';
+import { useDateFns } from '@/hooks/useDateFns';
 
 export default function OutOfOrderRoomsWrapper({
  dic,
 }: {
  dic: OutOfOrderRoomsDictionary;
 }) {
+ const dateFns = useDateFns();
  const filtersUseForm = useForm<OutOfOrderRoomsSchema>({
   defaultValues: {
    ...defaultValues,
+   fromDate: dateFns.startOfToday(),
+   toDate: dateFns.addYears(dateFns.startOfYear(new Date()), 1),
   },
   resolver: zodResolver(createOutOfOrderRoomsSchema()),
  });

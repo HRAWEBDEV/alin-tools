@@ -19,10 +19,7 @@ export default function OutOfOrderRoom({
   <>
    <Drawer>
     <DrawerTrigger asChild>
-     <div
-      className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900'
-      tabIndex={0}
-     >
+     <button className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900'>
       <div className='flex flex-wrap justify-between gap-1 mb-1'>
        <div>
         <span className='text-sm text-neutral-600 dark:text-neutral-400'>
@@ -55,62 +52,13 @@ export default function OutOfOrderRoom({
         {new Date().toLocaleDateString(locale)}
        </span>
       </div>
-     </div>
+     </button>
     </DrawerTrigger>
     <DrawerContent className='h-[min(60svh,35rem)] flex flex-col'>
      <DrawerHeader>
       <DrawerTitle className='text-lg'>{dic.info.moreInfo}</DrawerTitle>
      </DrawerHeader>
-     <div className='grow overflow-auto p-4'>
-      <div className='w-[min(100%,50rem)] mx-auto grid grid-cols-2 gap-4'>
-       <div className='text-lg'>
-        <span className='text-neutral-600 dark:text-neutral-400'>
-         {dic.info.roomNo}:{' '}
-        </span>
-        <span className='font-medium text-2xl'>110</span>
-       </div>
-       <div className='text-lg'>
-        <span className='text-neutral-600 dark:text-neutral-400'>
-         {dic.info.floor}:{' '}
-        </span>
-        <span className='font-medium text-2xl'>1</span>
-       </div>
-       <div className='text-lg'>
-        <span className='text-neutral-600 dark:text-neutral-400'>
-         {dic.info.roomType}:{' '}
-        </span>
-        <span className='font-medium'>دو تخته تویین</span>
-       </div>
-       <div className='text-lg'>
-        <span className='text-neutral-600 dark:text-neutral-400'>
-         {dic.info.reason}:{' '}
-        </span>
-        <span className='font-medium text-destructive/90'>خرابی تجهیزات</span>
-       </div>
-       <div className='text-lg'>
-        <span className='text-neutral-600 dark:text-neutral-400'>
-         {dic.info.fromDate}:{' '}
-        </span>
-        <span className='font-medium text-secondary/90'>
-         {new Date().toLocaleDateString(locale)}
-        </span>
-       </div>
-       <div className='text-lg'>
-        <span className='text-neutral-600 dark:text-neutral-400'>
-         {dic.info.toDate}:{' '}
-        </span>
-        <span className='font-medium text-destructive/90'>
-         {new Date().toLocaleDateString(locale)}
-        </span>
-       </div>
-       <div className='col-span-full flex flex-col'>
-        <span className='text-neutral-600 dark:text-neutral-400'>
-         {dic.info.comment}:{' '}
-        </span>
-        <p>شرح علت خارج از سرویس بودن اتاق</p>
-       </div>
-      </div>
-     </div>
+     <div className='grow overflow-auto p-4'></div>
     </DrawerContent>
    </Drawer>
   </>
