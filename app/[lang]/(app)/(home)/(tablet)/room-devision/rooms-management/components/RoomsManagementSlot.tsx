@@ -29,9 +29,6 @@ export default function RoomsManagementSlot({
     </div>
    );
    break;
-  case 'reserved-rooms':
-   slot = <div></div>;
-   break;
  }
  return <main className='order-1 lg:order-2 grow'>{slot}</main>;
 }

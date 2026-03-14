@@ -35,14 +35,6 @@ export default function RoomsManagementTabs({
         {dic.tabs.entranceAndExitRooms}
        </Link>
       </TabsTrigger>
-      <TabsTrigger value='reserved-rooms' asChild>
-       <Link
-        href={`${redirectPath}?tab=reserved-rooms`}
-        className='font-medium'
-       >
-        {dic.tabs.reservedRooms}
-       </Link>
-      </TabsTrigger>
      </TabsList>
     </Tabs>
    </div>
