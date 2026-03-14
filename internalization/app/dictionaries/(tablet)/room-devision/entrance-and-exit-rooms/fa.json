@@ -7,9 +7,12 @@
   "roomType": "نوع اتاق",
   "floor": "طبقه",
   "entrance": "ورودی",
-  "exit": "خروجی"
+  "exit": "خروجی",
+  "nextDay": "روز بعد",
+  "prevDay": "روز قبل"
  },
  "info": {
+  "results": "نتایج",
   "moreInfo": "اطلاعات بیشتر",
   "roomNo": "شماره اتاق",
   "registerNo": "شماره پذیرش",

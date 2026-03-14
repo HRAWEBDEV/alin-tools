@@ -31,6 +31,8 @@ import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { type InitialData } from '../services/entranceAndExitApiActions';
 import { typeOptions } from '../utils/typeOptions';
 import { Spinner } from '@/components/ui/spinner';
+import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
+import { useDateFns } from '@/hooks/useDateFns';
 
 const smallBadgeKeys: (keyof EntranceAndExitSchema)[] = ['floor', 'type'];
 const largeBadgeKeys: (keyof EntranceAndExitSchema)[] = ['roomType'];
@@ -44,9 +46,12 @@ export default function EntranceAndExitFilters({
  initData?: InitialData;
  initDataIsLoading: boolean;
 }) {
+ const dateFns = useDateFns();
  const [showDatePicker, setShowDatePicker] = useState(false);
  const { locale, localeInfo } = useBaseConfig();
- const { control, watch, setValue } = useFormContext<EntranceAndExitSchema>();
+ const { control, watch, setValue, getValues } =
+  useFormContext<EntranceAndExitSchema>();
+ const dateValue = watch('date');
 
  const [sliderRef] = useKeenSlider({
   rtl: localeInfo.contentDirection === 'rtl',
@@ -66,6 +71,16 @@ export default function EntranceAndExitFilters({
  });
 
  const activeFilters = filtersKeyValue.filter((item) => !!item.value);
+
+ function goToNextDay() {
+  const dateValue = getValues('date') || dateFns.startOfToday();
+  setValue('date', dateFns.addDays(dateValue, 1));
+ }
+
+ function goToPrevDay() {
+  const dateValue = getValues('date') || dateFns.startOfToday();
+  setValue('date', dateFns.addDays(dateValue, -1));
+ }
 
  return (
   <div className='[&]:[--default-top-offset:var(--top-offset,0)] sticky top-4 lg:top-(--default-top-offset) py-4 bg-background'>
@@ -89,10 +104,24 @@ export default function EntranceAndExitFilters({
       </DrawerTrigger>
       <DrawerContent className='h-[min(60svh,35rem)] flex flex-col'>
        <DrawerHeader>
-        <DrawerTitle className='text-xl'>{dic.filters.filters}</DrawerTitle>
+        <DrawerTitle className='text-xl'>
+         {dic.filters.filters}{' '}
+         <span className='text-sm text-neutral-700 dark:text-neutral-400'>
+          ({dic.info.results}: 1)
+         </span>
+        </DrawerTitle>
        </DrawerHeader>
        <div className='grow overflow-auto p-4'>
+        {initDataIsLoading && <LinearLoading />}
         <div className='mx-auto w-[min(100%,40rem)] grid grid-cols-2 gap-4'>
+         <div className='col-span-full flex justify-center items-center gap-4'>
+          <Button size='lg' variant='outline' onClick={goToPrevDay}>
+           {dic.filters.prevDay}
+          </Button>
+          <Button size='lg' variant='outline' onClick={goToNextDay}>
+           {dic.filters.nextDay}
+          </Button>
+         </div>
          <Controller
           control={control}
           name='date'
@@ -122,6 +151,7 @@ export default function EntranceAndExitFilters({
                mode='single'
                captionLayout='dropdown'
                className='[&]:[--cell-size:2.6rem]'
+               defaultMonth={dateValue || undefined}
                selected={field.value || undefined}
                onSelect={(newValue) => {
                 if (newValue) {
@@ -377,6 +407,22 @@ export default function EntranceAndExitFilters({
       </DrawerContent>
      </Drawer>
     </div>
+    <Button
+     size='lg'
+     className='px-3 hidden lg:flex'
+     variant='outline'
+     onClick={goToPrevDay}
+    >
+     {dic.filters.prevDay}
+    </Button>
+    <Button
+     size='lg'
+     className='px-3 hidden lg:flex'
+     variant='outline'
+     onClick={goToNextDay}
+    >
+     {dic.filters.nextDay}
+    </Button>
     <div
      key={`expand-${activeFilters.length}`}
      ref={sliderRef}
