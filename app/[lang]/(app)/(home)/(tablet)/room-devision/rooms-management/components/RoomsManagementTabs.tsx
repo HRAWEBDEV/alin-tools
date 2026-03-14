@@ -3,6 +3,7 @@ import { type RoomsManagementDictionary } from '@/internalization/app/dictionari
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 export default function RoomsManagementTabs({
  dic,
@@ -11,10 +12,12 @@ export default function RoomsManagementTabs({
 }) {
  const { localeInfo, locale } = useBaseConfig();
  const redirectPath = `/${locale}/room-devision/rooms-management` as const;
+ const searchParams = useSearchParams();
+ const activeTab = searchParams.get('tab') || 'rooms-statistics';
  return (
-  <header className='p-2 sticky bottom-0 pb-0 order-2 lg:order-1 lg:pb-2 lg:top-0 lg:bottom-auto bg-background'>
+  <header className='p-2 sticky bottom-0 pb-0 order-2 lg:order-1 lg:pb-2 lg:top-0 lg:bottom-auto bg-background z-3'>
    <div>
-    <Tabs dir={localeInfo.contentDirection} defaultValue='rooms-statistics'>
+    <Tabs dir={localeInfo.contentDirection} defaultValue={activeTab}>
      <TabsList className='h-11 w-[min(100%,30rem)] mx-auto bg-neutral-200 dark:bg-neutral-800'>
       <TabsTrigger value='rooms-statistics' asChild>
        <Link

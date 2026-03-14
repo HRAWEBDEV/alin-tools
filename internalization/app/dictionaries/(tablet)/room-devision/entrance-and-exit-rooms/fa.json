@@ -5,7 +5,9 @@
   "date": "تاریخ",
   "type": "نوع",
   "roomType": "نوع اتاق",
-  "floor": "طبقه"
+  "floor": "طبقه",
+  "entrance": "ورودی",
+  "exit": "خروجی"
  },
  "info": {
   "roomNo": "شماره اتاق",
