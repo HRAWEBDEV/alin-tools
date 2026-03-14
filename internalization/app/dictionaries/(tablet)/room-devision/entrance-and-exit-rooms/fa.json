@@ -10,13 +10,14 @@
   "exit": "خروجی"
  },
  "info": {
+  "moreInfo": "اطلاعات بیشتر",
   "roomNo": "شماره اتاق",
   "registerNo": "شماره پذیرش",
   "customerName": "نام مشتری",
   "roomType": "نوع اتاق",
   "arrivalDate": "تاریخ ورود",
   "departureDate": "تاریخ خروج",
-  "guestCount": "تعداد مهمان",
+  "guestCount": "تعداد مهمانان",
   "extraBed": "تخت اضافه"
  }
 }

@@ -98,7 +98,6 @@ export default function EntranceAndExitRoomsWrapper({
    },
   });
 
- console.log(data);
  return (
   <FormProvider {...filtersUseForm}>
    <EntranceAndExitFilters

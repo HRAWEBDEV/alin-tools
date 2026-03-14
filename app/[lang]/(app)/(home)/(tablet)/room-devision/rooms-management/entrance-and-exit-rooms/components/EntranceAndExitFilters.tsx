@@ -68,7 +68,7 @@ export default function EntranceAndExitFilters({
  const activeFilters = filtersKeyValue.filter((item) => !!item.value);
 
  return (
-  <div className='[&]:[--default-top-offset:var(--top-offset,0)] sticky top-4 lg:top-(--default-top-offset) mb-2 bg-background'>
+  <div className='[&]:[--default-top-offset:var(--top-offset,0)] sticky top-4 lg:top-(--default-top-offset) py-4 bg-background'>
    <div className='flex gap-2 items-center'>
     <div>
      <Drawer>
