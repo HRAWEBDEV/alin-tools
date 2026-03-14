@@ -5,5 +5,9 @@ export default function EntranceAndExitList({
 }: {
  dic: EntranceAndExitRoomsDictionary;
 }) {
- return <div></div>;
+ return (
+  <div>
+   <div className='h-[2000px]'></div>
+  </div>
+ );
 }

@@ -14,7 +14,7 @@ export default function RoomsManagementWrapper({
  entranceAndExitDic: EntranceAndExitRoomsDictionary;
 }) {
  return (
-  <div className='flex flex-col [&]:[--top-offset:3.75rem]'>
+  <div className='flex flex-col [&]:[--top-offset:3.75rem] min-h-full'>
    <RoomsManagementTabs dic={dic} />
    <RoomsManagementSlot
     dic={dic}

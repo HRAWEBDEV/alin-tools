@@ -68,7 +68,7 @@ export default function EntranceAndExitFilters({
  const activeFilters = filtersKeyValue.filter((item) => !!item.value);
 
  return (
-  <div className='[&]:[--default-top-offset:var(--top-offset,0)] sticky top-(--default-top-offset) mb-2 bg-background'>
+  <div className='[&]:[--default-top-offset:var(--top-offset,0)] sticky top-4 lg:top-(--default-top-offset) mb-2 bg-background'>
    <div className='flex gap-2 items-center'>
     <div>
      <Drawer>
@@ -91,7 +91,7 @@ export default function EntranceAndExitFilters({
        <DrawerHeader>
         <DrawerTitle className='text-xl'>{dic.filters.filters}</DrawerTitle>
        </DrawerHeader>
-       <div className='grow overflow-auto'>
+       <div className='grow overflow-auto p-4'>
         <div className='mx-auto w-[min(100%,40rem)] grid grid-cols-2 gap-4'>
          <Controller
           control={control}
