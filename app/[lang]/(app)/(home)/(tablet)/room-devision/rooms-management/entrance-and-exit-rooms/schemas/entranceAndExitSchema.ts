@@ -14,7 +14,7 @@ function createEntranceAndExitSchema() {
   type: z
    .object({
     key: z.string(),
-    value: z.string(),
+    value: z.enum(['entrance', 'exit']),
    })
    .nullable(),
   floor: z

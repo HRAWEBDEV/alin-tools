@@ -10,6 +10,12 @@ import {
 } from './schemas/entranceAndExitSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useDateFns } from '@/hooks/useDateFns';
+import { useQuery } from '@tanstack/react-query';
+import {
+ entranceAndExitBaseKey,
+ getInitialData,
+} from './services/entranceAndExitApiActions';
+import { init } from 'next/dist/compiled/webpack/webpack';
 
 export default function EntranceAndExitRoomsWrapper({
  dic,
@@ -24,9 +30,27 @@ export default function EntranceAndExitRoomsWrapper({
   },
   resolver: zodResolver(createEntranceAndExitSchema()),
  });
+
+ // init data
+ const {
+  data: initData,
+  isLoading: initDataIsLoading,
+  isError: initDataIsError,
+ } = useQuery({
+  queryKey: [entranceAndExitBaseKey, 'init-data'],
+  async queryFn({ signal }) {
+   const res = await getInitialData({ signal });
+   return res.data;
+  },
+ });
+
  return (
   <FormProvider {...filtersUseForm}>
-   <EntranceAndExitFilters dic={dic} />
+   <EntranceAndExitFilters
+    dic={dic}
+    initDataIsLoading={initDataIsLoading}
+    initData={initData}
+   />
    <EntranceAndExitList dic={dic} />
   </FormProvider>
  );

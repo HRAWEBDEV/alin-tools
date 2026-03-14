@@ -10,6 +10,7 @@ import {
  DrawerContent,
  DrawerHeader,
  DrawerTitle,
+ DrawerClose,
 } from '@/components/ui/drawer';
 import { useFormContext, Controller } from 'react-hook-form';
 import { type EntranceAndExitSchema } from '../schemas/entranceAndExitSchema';
@@ -23,11 +24,18 @@ import { ChevronsUpDown, ChevronDownIcon } from 'lucide-react';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
+import { type InitialData } from '../services/entranceAndExitApiActions';
+import { typeOptions } from '../utils/typeOptions';
+import { Spinner } from '@/components/ui/spinner';
 
 export default function EntranceAndExitFilters({
  dic,
+ initDataIsLoading,
+ initData,
 }: {
  dic: EntranceAndExitRoomsDictionary;
+ initData?: InitialData;
+ initDataIsLoading: boolean;
 }) {
  const [showDatePicker, setShowDatePicker] = useState(false);
  const { locale } = useBaseConfig();
@@ -52,7 +60,7 @@ export default function EntranceAndExitFilters({
         )}
        </Button>
       </DrawerTrigger>
-      <DrawerContent className='max-h-[70dvh] min-h-[70dvh] flex flex-col'>
+      <DrawerContent className='h-[min(60svh,35rem)] flex flex-col'>
        <DrawerHeader>
         <DrawerTitle className='text-xl'>{dic.filters.filters}</DrawerTitle>
        </DrawerHeader>
@@ -100,6 +108,243 @@ export default function EntranceAndExitFilters({
            </Field>
           )}
          />
+         <Field>
+          <FieldLabel htmlFor='type'>{dic.filters.type}</FieldLabel>
+          <Controller
+           control={control}
+           name='type'
+           render={({ field }) => (
+            <Drawer>
+             <DrawerTrigger asChild>
+              <Button
+               id='type'
+               variant='outline'
+               role='combobox'
+               className='justify-between h-11'
+               onBlur={field.onBlur}
+               ref={field.ref}
+              >
+               <span className='text-start grow overflow-hidden text-ellipsis'>
+                {field.value ? dic.filters[field.value.value] : ''}
+               </span>
+               <div className='flex gap-1 items-center -me-2'>
+                {initDataIsLoading && <Spinner />}
+                {field.value && (
+                 <Button
+                  type='button'
+                  variant={'ghost'}
+                  size={'icon'}
+                  onClick={(e) => {
+                   e.stopPropagation();
+                   field.onChange(null);
+                  }}
+                  className='text-rose-700 dark:text-rose-400'
+                 >
+                  <FaRegTrashAlt />
+                 </Button>
+                )}
+                <ChevronsUpDown className='opacity-50' />
+               </div>
+              </Button>
+             </DrawerTrigger>
+             <DrawerContent className='h-[min(60svh,35rem)]'>
+              <DrawerHeader className='hidden'>
+               <DrawerTitle>{dic.filters.type}</DrawerTitle>
+              </DrawerHeader>
+              <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+               <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
+                {dic.filters.type}
+               </h1>
+              </div>
+              <div>
+               <ul>
+                {typeOptions.map((item) => (
+                 <DrawerClose asChild key={item.key}>
+                  <li
+                   className='flex gap-1 items-center ps-6 py-2'
+                   onClick={() => {
+                    field.onChange(item);
+                   }}
+                  >
+                   <Checkbox
+                    className='size-6'
+                    checked={field.value?.key === item.key}
+                   />
+                   <Button
+                    tabIndex={-1}
+                    variant='ghost'
+                    className='w-full justify-start h-auto text-lg'
+                   >
+                    <span>{dic.filters[item.value]}</span>
+                   </Button>
+                  </li>
+                 </DrawerClose>
+                ))}
+               </ul>
+              </div>
+             </DrawerContent>
+            </Drawer>
+           )}
+          />
+         </Field>
+         <Field>
+          <FieldLabel htmlFor='floor'>{dic.filters.floor}</FieldLabel>
+          <Controller
+           control={control}
+           name='floor'
+           render={({ field }) => (
+            <Drawer>
+             <DrawerTrigger asChild>
+              <Button
+               id='floor'
+               variant='outline'
+               role='combobox'
+               className='justify-between h-11'
+               onBlur={field.onBlur}
+               ref={field.ref}
+              >
+               <span className='text-start grow overflow-hidden text-ellipsis'>
+                {field.value?.value || ''}
+               </span>
+               <div className='flex gap-1 items-center -me-2'>
+                {initDataIsLoading && <Spinner />}
+                {field.value && (
+                 <Button
+                  type='button'
+                  variant={'ghost'}
+                  size={'icon'}
+                  onClick={(e) => {
+                   e.stopPropagation();
+                   field.onChange(null);
+                  }}
+                  className='text-rose-700 dark:text-rose-400'
+                 >
+                  <FaRegTrashAlt />
+                 </Button>
+                )}
+                <ChevronsUpDown className='opacity-50' />
+               </div>
+              </Button>
+             </DrawerTrigger>
+             <DrawerContent className='h-[min(60svh,35rem)]'>
+              <DrawerHeader className='hidden'>
+               <DrawerTitle>{dic.filters.floor}</DrawerTitle>
+              </DrawerHeader>
+              <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+               <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
+                {dic.filters.floor}
+               </h1>
+              </div>
+              <div>
+               <ul>
+                {initData?.floors.map((item) => (
+                 <DrawerClose asChild key={item.key}>
+                  <li
+                   className='flex gap-1 items-center ps-6 py-2'
+                   onClick={() => {
+                    field.onChange(item);
+                   }}
+                  >
+                   <Checkbox
+                    className='size-6'
+                    checked={field.value?.key === item.key}
+                   />
+                   <Button
+                    tabIndex={-1}
+                    variant='ghost'
+                    className='w-full justify-start h-auto text-lg'
+                   >
+                    <span>{item.value}</span>
+                   </Button>
+                  </li>
+                 </DrawerClose>
+                ))}
+               </ul>
+              </div>
+             </DrawerContent>
+            </Drawer>
+           )}
+          />
+         </Field>
+         <Field>
+          <FieldLabel htmlFor='room-type'>{dic.filters.roomType}</FieldLabel>
+          <Controller
+           control={control}
+           name='roomType'
+           render={({ field }) => (
+            <Drawer>
+             <DrawerTrigger asChild>
+              <Button
+               id='room-type'
+               variant='outline'
+               role='combobox'
+               className='justify-between h-11'
+               onBlur={field.onBlur}
+               ref={field.ref}
+              >
+               <span className='text-start grow overflow-hidden text-ellipsis'>
+                {field.value?.value || ''}
+               </span>
+               <div className='flex gap-1 items-center -me-2'>
+                {initDataIsLoading && <Spinner />}
+                {field.value && (
+                 <Button
+                  type='button'
+                  variant={'ghost'}
+                  size={'icon'}
+                  onClick={(e) => {
+                   e.stopPropagation();
+                   field.onChange(null);
+                  }}
+                  className='text-rose-700 dark:text-rose-400'
+                 >
+                  <FaRegTrashAlt />
+                 </Button>
+                )}
+                <ChevronsUpDown className='opacity-50' />
+               </div>
+              </Button>
+             </DrawerTrigger>
+             <DrawerContent className='h-[min(60svh,35rem)]'>
+              <DrawerHeader className='hidden'>
+               <DrawerTitle>{dic.filters.roomType}</DrawerTitle>
+              </DrawerHeader>
+              <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+               <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
+                {dic.filters.roomType}
+               </h1>
+              </div>
+              <div>
+               <ul>
+                {initData?.roomTypes.map((item) => (
+                 <DrawerClose asChild key={item.key}>
+                  <li
+                   className='flex gap-1 items-center ps-6 py-2'
+                   onClick={() => {
+                    field.onChange(item);
+                   }}
+                  >
+                   <Checkbox
+                    className='size-6'
+                    checked={field.value?.key === item.key}
+                   />
+                   <Button
+                    tabIndex={-1}
+                    variant='ghost'
+                    className='w-full justify-start h-auto text-lg'
+                   >
+                    <span>{item.value}</span>
+                   </Button>
+                  </li>
+                 </DrawerClose>
+                ))}
+               </ul>
+              </div>
+             </DrawerContent>
+            </Drawer>
+           )}
+          />
+         </Field>
         </div>
        </div>
       </DrawerContent>
