@@ -84,7 +84,7 @@ export default function EntranceAndExitFilters({
 
  return (
   <div className='[&]:[--default-top-offset:var(--top-offset,0)] sticky top-4 lg:top-(--default-top-offset) py-4 bg-background'>
-   <div className='flex gap-2 items-center'>
+   <div className='flex gap-2 items-center mb-1'>
     <div>
      <Drawer>
       <DrawerTrigger>
@@ -480,6 +480,12 @@ export default function EntranceAndExitFilters({
       );
      })}
     </div>
+   </div>
+   <div className='text-sm'>
+    <span className='text-neutral-700 dark:text-neutral-400'>
+     {dic.info.results}:{' '}
+    </span>
+    <span>1</span>
    </div>
   </div>
  );
