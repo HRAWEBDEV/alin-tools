@@ -40,6 +40,14 @@ export default function RoomsStatisticsWrapper({
   },
  });
 
+ function goToNextDay() {
+  setDate((pre) => dateFns.addDays(pre, 1));
+ }
+
+ function goToPrevDay() {
+  setDate((pre) => dateFns.addDays(pre, -1));
+ }
+
  if (isError) return <UnExpectedError />;
  return (
   <div>
@@ -75,6 +83,14 @@ export default function RoomsStatisticsWrapper({
        </PopoverContent>
       </Popover>
      </Field>
+     <div className='flex gap-2 items-end'>
+      <Button variant='outline' className='h-11 px-3' onClick={goToPrevDay}>
+       {dic.prevDay}
+      </Button>
+      <Button variant='outline' className='h-11 px-3' onClick={goToNextDay}>
+       {dic.nextDay}
+      </Button>
+     </div>
     </div>
     <div className='grid gap-4 grid-cols-2 md:grid-cols-3'>
      {/* occupancy */}

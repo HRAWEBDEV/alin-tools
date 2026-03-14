@@ -1,6 +1,8 @@
 {
  "title": "آمار اتاق ها",
  "date": "تاریخ",
+ "nextDay": "روز بعد",
+ "prevDay": "روز قبل",
  "occupied": {
   "title": "وضعیت اشغال",
   "occupiedRoom": "اتاق اشغال",
