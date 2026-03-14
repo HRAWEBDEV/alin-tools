@@ -1,0 +1,20 @@
+{
+ "title": "اتاق های ورودی و خروجی",
+ "filters": {
+  "filters": "فیلترها",
+  "date": "تاریخ",
+  "type": "نوع",
+  "roomType": "نوع اتاق",
+  "floor": "طبقه"
+ },
+ "info": {
+  "roomNo": "شماره اتاق",
+  "registerNo": "شماره پذیرش",
+  "customerName": "نام مشتری",
+  "roomType": "نوع اتاق",
+  "arrivalDate": "تاریخ ورود",
+  "departureDate": "تاریخ خروج",
+  "guestCount": "تعداد مهمان",
+  "extraBed": "تخت اضافه"
+ }
+}

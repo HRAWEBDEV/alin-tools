@@ -4,6 +4,7 @@
 - add rooms rack page (hra-done)
 - add rooms statistics page (hra-done)
 - add rack rooms statistics dialog in rack info panel (hra-done)
+- add entrance and exit rooms 
 ### bug fixes
 - remove main wrapper bottom padding in mobile mode, when scroll direction is down (hra-done)
 - use useThrottle instead of useDebouce to change scroll direction (hra-done)
