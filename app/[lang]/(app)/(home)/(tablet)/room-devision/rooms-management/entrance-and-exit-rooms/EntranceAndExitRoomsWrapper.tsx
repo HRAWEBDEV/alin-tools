@@ -10,12 +10,12 @@ import {
 } from './schemas/entranceAndExitSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useDateFns } from '@/hooks/useDateFns';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
 import {
  entranceAndExitBaseKey,
  getInitialData,
+ getRooms,
 } from './services/entranceAndExitApiActions';
-import { init } from 'next/dist/compiled/webpack/webpack';
 
 export default function EntranceAndExitRoomsWrapper({
  dic,
@@ -31,6 +31,10 @@ export default function EntranceAndExitRoomsWrapper({
   resolver: zodResolver(createEntranceAndExitSchema()),
  });
 
+ const [dateValue, floorValue, roomTypeValue, typeValue] = filtersUseForm.watch(
+  ['date', 'floor', 'roomType', 'type'],
+ );
+
  // init data
  const {
   data: initData,
@@ -44,6 +48,57 @@ export default function EntranceAndExitRoomsWrapper({
   },
  });
 
+ // rooms
+ const { data, hasNextPage, fetchNextPage, isFetching, refetch, isSuccess } =
+  useInfiniteQuery({
+   enabled: !!dateValue,
+   queryKey: [
+    entranceAndExitBaseKey,
+    'rooms',
+    dateValue?.toISOString(),
+    typeValue?.key || 'all',
+    floorValue?.key || 'all',
+    roomTypeValue?.key || 'all',
+   ],
+   initialPageParam: {
+    limit: 300,
+    offset: 1,
+   },
+   async queryFn({ signal, pageParam }) {
+    const res = await getRooms({
+     signal,
+     date: dateValue!.toISOString(),
+     isCheckin: typeValue?.value === 'entrance',
+     isCheckout: typeValue?.value === 'exit',
+     limit: pageParam.limit.toString(),
+     offset: pageParam.offset.toString(),
+     floorNo: floorValue?.key,
+     roomTypeID: roomTypeValue?.key,
+    });
+    return res.data;
+   },
+   getNextPageParam(lastPage) {
+    const nextOffset = lastPage.offset + 1;
+    if (lastPage.offset * lastPage.limit >= lastPage.rowsCount) {
+     return undefined;
+    }
+    return {
+     offset: nextOffset,
+     limit: lastPage.limit,
+    };
+   },
+   getPreviousPageParam(firstPage) {
+    if (firstPage.offset <= 1) {
+     return undefined;
+    }
+    return {
+     limit: firstPage.limit,
+     offset: firstPage.offset - 1,
+    };
+   },
+  });
+
+ console.log(data);
  return (
   <FormProvider {...filtersUseForm}>
    <EntranceAndExitFilters
