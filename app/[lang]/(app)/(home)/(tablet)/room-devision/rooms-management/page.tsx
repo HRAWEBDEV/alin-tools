@@ -1,6 +1,7 @@
 import { getRoomsManagementDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-management/dictionary';
 import { getRoomStatisticsDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/room-statistics/dictionary';
 import { getEntranceAndExitRoomsDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/entrance-and-exit-rooms/dictionary';
+import { getOutOfOrderRoomsDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/out-of-order-rooms/dictionary';
 import { type Locale } from '@/internalization/app/localization';
 import RoomsManagementWrapper from './components/RoomsManagementWrapper';
 
@@ -17,9 +18,13 @@ export default async function RoomsManagement(
  const entranceAndExitDic = await getEntranceAndExitRoomsDictionary({
   locale: lang as Locale,
  });
+ const outOfOrderDic = await getOutOfOrderRoomsDictionary({
+  locale: lang as Locale,
+ });
  return (
   <RoomsManagementWrapper
    dic={roomsManagementDic}
+   outOfOrderDic={outOfOrderDic}
    roomsStatisticsDic={roomsStatisticsDic}
    entranceAndExitDic={entranceAndExitDic}
   />

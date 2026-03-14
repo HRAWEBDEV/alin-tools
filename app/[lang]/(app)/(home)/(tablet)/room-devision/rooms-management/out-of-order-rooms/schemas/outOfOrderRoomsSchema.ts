@@ -5,6 +5,7 @@ const defaultValues: Partial<OutOfOrderRoomsSchema> = {
  toDate: null,
  reason: null,
  roomType: null,
+ room: null,
  floor: null,
  comment: '',
 };
@@ -14,6 +15,12 @@ function createOutOfOrderRoomsSchema() {
   fromDate: z.date().nullable(),
   toDate: z.date().nullable(),
   reason: z
+   .object({
+    key: z.string(),
+    value: z.string(),
+   })
+   .nullable(),
+  room: z
    .object({
     key: z.string(),
     value: z.string(),

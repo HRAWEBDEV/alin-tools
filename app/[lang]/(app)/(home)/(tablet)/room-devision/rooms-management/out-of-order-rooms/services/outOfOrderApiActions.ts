@@ -2,10 +2,10 @@ import { axios } from '@/app/[lang]/(app)/utils/defaultAxios';
 import { Combo } from '../../../utils/apiTypes';
 
 interface InitialData {
- floors: Combo;
- roomTypes: Combo;
- rooms: Combo;
- reasons: Combo;
+ floors: Combo[];
+ roomTypes: Combo[];
+ rooms: Combo[];
+ reasons: Combo[];
 }
 
 interface Room {
