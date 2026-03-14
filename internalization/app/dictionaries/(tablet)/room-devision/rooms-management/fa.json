@@ -2,6 +2,7 @@
  "title": "آمار اتاق ها",
  "tabs": {
   "roomStatistics": "آمار اتاق ها",
-  "entranceAndExitRooms": "ورودی و خروجی"
+  "entranceAndExitRooms": "ورودی و خروجی",
+  "outOfOrderRooms": "خارج از سرویس"
  }
 }

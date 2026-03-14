@@ -29,6 +29,9 @@ export default function RoomsManagementSlot({
     </div>
    );
    break;
+  case 'out-of-order-rooms':
+   slot = <div className='p-4 lg:pt-0'></div>;
+   break;
  }
  return <main className='order-1 lg:order-2 grow'>{slot}</main>;
 }

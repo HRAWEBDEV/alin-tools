@@ -35,6 +35,14 @@ export default function RoomsManagementTabs({
         {dic.tabs.entranceAndExitRooms}
        </Link>
       </TabsTrigger>
+      <TabsTrigger value='out-of-order-rooms' asChild>
+       <Link
+        href={`${redirectPath}?tab=out-of-order-rooms`}
+        className='font-medium'
+       >
+        {dic.tabs.outOfOrderRooms}
+       </Link>
+      </TabsTrigger>
      </TabsList>
     </Tabs>
    </div>
