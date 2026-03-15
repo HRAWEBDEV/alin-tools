@@ -13,6 +13,16 @@ interface OutOfOrderResult {
  outOfOrders: PagedData<Room[]>;
 }
 
+type SaveOutOfOrder = Pick<
+ Room,
+ | 'id'
+ | 'reasonID'
+ | 'roomID'
+ | 'fromDateTimeOffset'
+ | 'untilDateTimeOffset'
+ | 'comment'
+>;
+
 interface Room {
  id: number;
  roomID: number;
@@ -80,5 +90,18 @@ function getOutOfOrderRooms({
  );
 }
 
-export type { InitialData, Room, OutOfOrderResult };
-export { outOfOrderRoomsBaseKey, getInitialData, getOutOfOrderRooms };
+function saveOutOfOrderRoom(room: SaveOutOfOrder) {
+ return axios.post('/Reception/OutOfOrder/SaveOutOfOrder', room);
+}
+function updateOutOfOrderRoom(room: SaveOutOfOrder) {
+ return axios.put('/Reception/OutOfOrder/UpdateOutOfOrder', room);
+}
+
+export type { InitialData, Room, OutOfOrderResult, SaveOutOfOrder };
+export {
+ outOfOrderRoomsBaseKey,
+ getInitialData,
+ getOutOfOrderRooms,
+ saveOutOfOrderRoom,
+ updateOutOfOrderRoom,
+};

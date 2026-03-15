@@ -221,7 +221,7 @@ export default function OutOfOrderRoomsFilters({
                onSelect={(newValue) => {
                 if (newValue) {
                  field.onChange(newValue);
-                 setShowFromDatePicker(false);
+                 setShowToDatePicker(false);
                 }
                }}
               />

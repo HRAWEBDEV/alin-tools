@@ -15,7 +15,13 @@ import {
  defaultValues,
  createOutOfOrderRoomsSchema,
 } from '../schemas/outOfOrderRoomsSchema';
-import { type InitialData } from '../services/outOfOrderApiActions';
+import {
+ type InitialData,
+ type SaveOutOfOrder,
+ outOfOrderRoomsBaseKey,
+ updateOutOfOrderRoom,
+ saveOutOfOrderRoom,
+} from '../services/outOfOrderApiActions';
 import { EditOutOfOrderProps } from '../utils/editOutOfOrderProps';
 import { Field, FieldLabel } from '@/components/ui/field';
 import {
@@ -25,12 +31,14 @@ import {
 } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
 import { ChevronsUpDown, ChevronDownIcon } from 'lucide-react';
-import { FaRegTrashAlt } from 'react-icons/fa';
 import { Calendar } from '@/components/ui/calendar';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { Spinner } from '@/components/ui/spinner';
 import { Checkbox } from '@/components/ui/checkbox';
 import { InputGroup, InputGroupTextarea } from '@/components/ui/input-group';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
+import { toast } from 'sonner';
 
 export default function NewOutOfOrderRoom({
  dic,
@@ -43,25 +51,52 @@ export default function NewOutOfOrderRoom({
  initDataIsLoading: boolean;
  editRoom: EditOutOfOrderProps;
 }) {
+ const queryClient = useQueryClient();
  const { locale } = useBaseConfig();
  const [showFromDatePicker, setShowFromDatePicker] = useState(false);
  const [showToDatePicker, setShowToDatePicker] = useState(false);
- const { control, watch, setValue, register } = useForm<OutOfOrderRoomsSchema>({
-  resolver: zodResolver(createOutOfOrderRoomsSchema()),
-  defaultValues: {
-   ...defaultValues,
-   fromDate: null,
-   toDate: null,
+ const { control, watch, setValue, register, handleSubmit } =
+  useForm<OutOfOrderRoomsSchema>({
+   resolver: zodResolver(createOutOfOrderRoomsSchema()),
+   defaultValues: {
+    ...defaultValues,
+   },
+  });
+ const [fromDateValue, toDateValue] = watch(['fromDate', 'toDate']);
+
+ // save or update
+ const { mutate, isPending } = useMutation({
+  mutationFn(props: OutOfOrderRoomsSchema) {
+   const newRoom: SaveOutOfOrder = {
+    ...(editRoom.targetEditRoom || {}),
+    id: editRoom.selectedOutOfOrderRoomID || 0,
+    fromDateTimeOffset: props.fromDate!.toISOString(),
+    untilDateTimeOffset: props.toDate!.toISOString(),
+    reasonID: Number(props.reason!.key),
+    roomID: Number(props.room!.key),
+    comment: props.comment || null,
+   };
+   return editRoom.selectedOutOfOrderRoomID
+    ? updateOutOfOrderRoom(newRoom)
+    : saveOutOfOrderRoom(newRoom);
+  },
+  onError(err: AxiosError<string>) {
+   toast.error(err.response?.data);
+  },
+  onSuccess() {
+   queryClient.invalidateQueries({
+    queryKey: [outOfOrderRoomsBaseKey, 'rooms'],
+   });
+   editRoom.onCloseEdit();
   },
  });
- const [fromDateValue, toDateValue] = watch(['fromDate', 'toDate']);
 
  useEffect(() => {
   setValue(
    'fromDate',
    editRoom.targetEditRoom
     ? new Date(editRoom.targetEditRoom.fromDateTimeOffset)
-    : null,
+    : new Date(),
   );
   setValue(
    'toDate',
@@ -105,7 +140,9 @@ export default function NewOutOfOrderRoom({
    <DrawerContent className='h-[min(65svh,40rem)] flex flex-col'>
     <DrawerHeader>
      <DrawerTitle className='text-xl'>
-      {editRoom.selectedOutOfOrderRoomID ? dic.filters.edit : dic.filters.new}
+      {editRoom.selectedOutOfOrderRoomID
+       ? `${dic.filters.edit} ${editRoom.targetEditRoom?.roomLabel}`
+       : dic.filters.new}
      </DrawerTitle>
     </DrawerHeader>
     <div className='grow overflow-auto p-4'>
@@ -192,7 +229,7 @@ export default function NewOutOfOrderRoom({
             onSelect={(newValue) => {
              if (newValue) {
               field.onChange(newValue);
-              setShowFromDatePicker(false);
+              setShowToDatePicker(false);
              }
             }}
            />
@@ -213,6 +250,7 @@ export default function NewOutOfOrderRoom({
             id='room'
             variant='outline'
             role='combobox'
+            disabled={!!editRoom.selectedOutOfOrderRoomID}
             className='justify-between h-11'
             onBlur={field.onBlur}
             ref={field.ref}
@@ -331,13 +369,25 @@ export default function NewOutOfOrderRoom({
        <Button
         type='button'
         size='lg'
+        disabled={isPending}
         variant='outline'
         className='md:w-36'
         onClick={() => editRoom.onCloseEdit()}
        >
+        {isPending && <Spinner />}
         {dic.newOrEdit.cancel}
        </Button>
-       <Button size='lg' className='md:w-36' type='submit'>
+       <Button
+        disabled={isPending}
+        size='lg'
+        className='md:w-36'
+        type='submit'
+        onClick={(e) => {
+         e.preventDefault();
+         handleSubmit((props) => mutate(props))();
+        }}
+       >
+        {isPending && <Spinner />}
         {dic.newOrEdit.confirm}
        </Button>
       </div>
