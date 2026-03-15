@@ -21,6 +21,8 @@ import {
  outOfOrderRoomsBaseKey,
  updateOutOfOrderRoom,
  saveOutOfOrderRoom,
+ removeOutOfOrder,
+ expiredOutOfOrder,
 } from '../services/outOfOrderApiActions';
 import { EditOutOfOrderProps } from '../utils/editOutOfOrderProps';
 import { Field, FieldLabel } from '@/components/ui/field';
@@ -40,6 +42,16 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { toast } from 'sonner';
 import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
+import {
+ Dialog,
+ DialogClose,
+ DialogContent,
+ DialogFooter,
+ DialogHeader,
+ DialogTitle,
+ DialogTrigger,
+} from '@/components/ui/dialog';
+import { BiError } from 'react-icons/bi';
 
 export default function NewOutOfOrderRoom({
  dic,
@@ -98,6 +110,38 @@ export default function NewOutOfOrderRoom({
    editRoom.onCloseEdit();
   },
  });
+ // remove
+ const { mutate: confirmRemove, isPending: confirmRemoveIsPending } =
+  useMutation({
+   mutationFn() {
+    return removeOutOfOrder(editRoom.targetEditRoom!.id);
+   },
+   onError(err: AxiosError<string>) {
+    toast.error(err.response?.data);
+   },
+   onSuccess() {
+    queryClient.invalidateQueries({
+     queryKey: [outOfOrderRoomsBaseKey, 'rooms'],
+    });
+    editRoom.onCloseEdit();
+   },
+  });
+ // expire
+ const { mutate: confirmExpire, isPending: confirmExpireIsPending } =
+  useMutation({
+   mutationFn() {
+    return expiredOutOfOrder(editRoom.targetEditRoom!.roomID);
+   },
+   onError(err: AxiosError<string>) {
+    toast.error(err.response?.data);
+   },
+   onSuccess() {
+    queryClient.invalidateQueries({
+     queryKey: [outOfOrderRoomsBaseKey, 'rooms'],
+    });
+    editRoom.onCloseEdit();
+   },
+  });
 
  useEffect(() => {
   setValue(
@@ -145,7 +189,7 @@ export default function NewOutOfOrderRoom({
     editRoom.onCloseEdit();
    }}
   >
-   <DrawerContent className='h-[min(65svh,40rem)] flex flex-col'>
+   <DrawerContent className='h-[min(70svh,40rem)] flex flex-col'>
     <DrawerHeader>
      <DrawerTitle className='text-xl'>
       {editRoom.selectedOutOfOrderRoomID
@@ -155,6 +199,104 @@ export default function NewOutOfOrderRoom({
     </DrawerHeader>
     <div className='grow overflow-auto p-4'>
      <form className='mx-auto w-[min(100%,40rem)] grid grid-cols-2 gap-4'>
+      {!!editRoom.selectedOutOfOrderRoomID && (
+       <div className='flex gap-2 items-center justify-end col-span-full'>
+        <Dialog>
+         <DialogTrigger asChild>
+          <Button
+           type='button'
+           variant='outline'
+           className='text-destructive border-destructive'
+          >
+           {dic.newOrEdit.expire}
+          </Button>
+         </DialogTrigger>
+         <DialogContent className='p-0 gap-0'>
+          <DialogHeader className='p-4'>
+           <DialogTitle className='hidden'>
+            {dic.newOrEdit.expireConfirmMessage}
+           </DialogTitle>
+          </DialogHeader>
+          <div className='p-4'>
+           <div className='flex gap-1 items-center text-red-700 dark:text-red-400 font-medium'>
+            <BiError className='size-12' />
+            <p>{dic.newOrEdit.expireConfirmMessage}</p>
+           </div>
+          </div>
+          <DialogFooter className='p-4'>
+           <DialogClose asChild>
+            <Button
+             className='sm:w-24'
+             variant='outline'
+             disabled={confirmExpireIsPending}
+            >
+             {confirmExpireIsPending && <Spinner />}
+             {dic.newOrEdit.cancel}
+            </Button>
+           </DialogClose>
+           <DialogClose asChild>
+            <Button
+             className='sm:w-24'
+             variant='destructive'
+             disabled={confirmExpireIsPending}
+             onClick={() => confirmExpire()}
+            >
+             {confirmExpireIsPending && <Spinner />}
+             {dic.newOrEdit.confirm}
+            </Button>
+           </DialogClose>
+          </DialogFooter>
+         </DialogContent>
+        </Dialog>
+        <Dialog>
+         <DialogTrigger asChild>
+          <Button
+           type='button'
+           variant='outline'
+           className='text-destructive border-destructive'
+          >
+           {dic.newOrEdit.remove}
+          </Button>
+         </DialogTrigger>
+         <DialogContent className='p-0 gap-0'>
+          <DialogHeader className='p-4'>
+           <DialogTitle className='hidden'>
+            {dic.newOrEdit.removeConfirmMessage}
+           </DialogTitle>
+          </DialogHeader>
+          <div className='p-4'>
+           <div className='flex gap-1 items-center text-red-700 dark:text-red-400 font-medium'>
+            <BiError className='size-12' />
+            <p>{dic.newOrEdit.removeConfirmMessage}</p>
+           </div>
+          </div>
+          <DialogFooter className='p-4'>
+           <DialogClose asChild>
+            <Button
+             className='sm:w-24'
+             variant='outline'
+             disabled={confirmRemoveIsPending}
+            >
+             {confirmRemoveIsPending && <Spinner />}
+             {dic.newOrEdit.cancel}
+            </Button>
+           </DialogClose>
+           <DialogClose asChild>
+            <Button
+             className='sm:w-24'
+             variant='destructive'
+             onClick={() => confirmRemove()}
+             disabled={confirmRemoveIsPending}
+            >
+             {confirmRemoveIsPending && <Spinner />}
+             {dic.newOrEdit.confirm}
+            </Button>
+           </DialogClose>
+          </DialogFooter>
+         </DialogContent>
+        </Dialog>
+       </div>
+      )}
       <Controller
        control={control}
        name='fromDate'
@@ -392,7 +534,7 @@ export default function NewOutOfOrderRoom({
          size='lg'
          disabled={isPending}
          variant='outline'
-         className='md:w-36'
+         className='md:w-34'
          onClick={() => editRoom.onCloseEdit()}
         >
          {isPending && <Spinner />}
@@ -401,7 +543,7 @@ export default function NewOutOfOrderRoom({
         <Button
          disabled={isPending}
          size='lg'
-         className='md:w-36'
+         className='md:w-34'
          type='submit'
          onClick={(e) => {
           e.preventDefault();

@@ -96,6 +96,16 @@ function saveOutOfOrderRoom(room: SaveOutOfOrder) {
 function updateOutOfOrderRoom(room: SaveOutOfOrder) {
  return axios.put('/Reception/OutOfOrder/UpdateOutOfOrder', room);
 }
+function removeOutOfOrder(roomId: number) {
+ return axios.delete(
+  `/Reception/OutOfOrder/RemoveOutOfOrder?OutOfOrderID=${roomId.toString()}`,
+ );
+}
+function expiredOutOfOrder(roomId: number) {
+ return axios.put(
+  `/Reception/OutOfOrder/UpdateOutOfOrderExpireDate?RoomID=${roomId}`,
+ );
+}
 
 export type { InitialData, Room, OutOfOrderResult, SaveOutOfOrder };
 export {
@@ -104,4 +114,6 @@ export {
  getOutOfOrderRooms,
  saveOutOfOrderRoom,
  updateOutOfOrderRoom,
+ removeOutOfOrder,
+ expiredOutOfOrder,
 };

@@ -29,6 +29,10 @@
  "newOrEdit": {
   "confirm": "تایید",
   "cancel": "انصراف",
-  "fillRequiredFields": "فیلدهای الزامی را پر کنید"
+  "fillRequiredFields": "فیلدهای الزامی را پر کنید",
+  "remove": "حذف",
+  "expire": "توقف خارج از سرویس",
+  "removeConfirmMessage": "آیا از حذف آیتم اطمینان دارید؟",
+  "expireConfirmMessage": "آیا از توقف خارج از سرویس اطمینان دارید؟"
  }
 }
