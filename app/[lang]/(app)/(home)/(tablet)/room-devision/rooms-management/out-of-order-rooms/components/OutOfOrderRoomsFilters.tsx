@@ -220,6 +220,82 @@ export default function OutOfOrderRoomsFilters({
            </Field>
           )}
          />
+         <Field className='col-span-2'>
+          <FieldLabel htmlFor='room-type'>{dic.filters.roomType}</FieldLabel>
+          <Controller
+           control={control}
+           name='roomType'
+           render={({ field }) => (
+            <Drawer>
+             <DrawerTrigger asChild>
+              <Button
+               id='room-type'
+               variant='outline'
+               role='combobox'
+               className='justify-between h-11'
+               onBlur={field.onBlur}
+               ref={field.ref}
+              >
+               <span className='text-start grow overflow-hidden text-ellipsis'>
+                {field.value?.value || ''}
+               </span>
+               <div className='flex gap-1 items-center -me-2'>
+                {initDataIsLoading && <Spinner />}
+                {field.value && (
+                 <Button
+                  type='button'
+                  variant={'ghost'}
+                  size={'icon'}
+                  onClick={(e) => {
+                   e.stopPropagation();
+                   field.onChange(null);
+                  }}
+                  className='text-rose-700 dark:text-rose-400'
+                 >
+                  <FaRegTrashAlt />
+                 </Button>
+                )}
+                <ChevronsUpDown className='opacity-50' />
+               </div>
+              </Button>
+             </DrawerTrigger>
+             <DrawerContent className='h-[min(60svh,35rem)] flex flex-col'>
+              <DrawerHeader>
+               <DrawerTitle className='text-xl'>
+                {dic.filters.roomType}
+               </DrawerTitle>
+              </DrawerHeader>
+              <div className='grow overflow-hidden overflow-y-auto'>
+               <ul>
+                {initData?.roomTypes.map((item) => (
+                 <DrawerClose asChild key={item.key}>
+                  <li
+                   className='flex gap-1 items-center ps-6 py-2'
+                   onClick={() => {
+                    field.onChange(item);
+                   }}
+                  >
+                   <Checkbox
+                    className='size-6'
+                    checked={field.value?.key === item.key}
+                   />
+                   <Button
+                    tabIndex={-1}
+                    variant='ghost'
+                    className='w-full justify-start h-auto text-lg'
+                   >
+                    <span>{item.value}</span>
+                   </Button>
+                  </li>
+                 </DrawerClose>
+                ))}
+               </ul>
+              </div>
+             </DrawerContent>
+            </Drawer>
+           )}
+          />
+         </Field>
          <Field>
           <FieldLabel htmlFor='floor'>{dic.filters.floor}</FieldLabel>
           <Controller
@@ -259,97 +335,13 @@ export default function OutOfOrderRoomsFilters({
                </div>
               </Button>
              </DrawerTrigger>
-             <DrawerContent className='h-[min(60svh,35rem)]'>
-              <DrawerHeader className='hidden'>
+             <DrawerContent className='h-[min(60svh,35rem)] flex flex-col'>
+              <DrawerHeader className='text-xl'>
                <DrawerTitle>{dic.filters.floor}</DrawerTitle>
               </DrawerHeader>
-              <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
-               <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
-                {dic.filters.floor}
-               </h1>
-              </div>
-              <div>
+              <div className='grow overflow-hidden overflow-y-auto'>
                <ul>
                 {initData?.floors.map((item) => (
-                 <DrawerClose asChild key={item.key}>
-                  <li
-                   className='flex gap-1 items-center ps-6 py-2'
-                   onClick={() => {
-                    field.onChange(item);
-                   }}
-                  >
-                   <Checkbox
-                    className='size-6'
-                    checked={field.value?.key === item.key}
-                   />
-                   <Button
-                    tabIndex={-1}
-                    variant='ghost'
-                    className='w-full justify-start h-auto text-lg'
-                   >
-                    <span>{item.value}</span>
-                   </Button>
-                  </li>
-                 </DrawerClose>
-                ))}
-               </ul>
-              </div>
-             </DrawerContent>
-            </Drawer>
-           )}
-          />
-         </Field>
-         <Field>
-          <FieldLabel htmlFor='room-type'>{dic.filters.roomType}</FieldLabel>
-          <Controller
-           control={control}
-           name='roomType'
-           render={({ field }) => (
-            <Drawer>
-             <DrawerTrigger asChild>
-              <Button
-               id='room-type'
-               variant='outline'
-               role='combobox'
-               className='justify-between h-11'
-               onBlur={field.onBlur}
-               ref={field.ref}
-              >
-               <span className='text-start grow overflow-hidden text-ellipsis'>
-                {field.value?.value || ''}
-               </span>
-               <div className='flex gap-1 items-center -me-2'>
-                {initDataIsLoading && <Spinner />}
-                {field.value && (
-                 <Button
-                  type='button'
-                  variant={'ghost'}
-                  size={'icon'}
-                  onClick={(e) => {
-                   e.stopPropagation();
-                   field.onChange(null);
-                  }}
-                  className='text-rose-700 dark:text-rose-400'
-                 >
-                  <FaRegTrashAlt />
-                 </Button>
-                )}
-                <ChevronsUpDown className='opacity-50' />
-               </div>
-              </Button>
-             </DrawerTrigger>
-             <DrawerContent className='h-[min(60svh,35rem)]'>
-              <DrawerHeader className='hidden'>
-               <DrawerTitle>{dic.filters.roomType}</DrawerTitle>
-              </DrawerHeader>
-              <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
-               <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
-                {dic.filters.roomType}
-               </h1>
-              </div>
-              <div>
-               <ul>
-                {initData?.roomTypes.map((item) => (
                  <DrawerClose asChild key={item.key}>
                   <li
                    className='flex gap-1 items-center ps-6 py-2'
@@ -417,16 +409,11 @@ export default function OutOfOrderRoomsFilters({
                </div>
               </Button>
              </DrawerTrigger>
-             <DrawerContent className='h-[min(60svh,35rem)]'>
-              <DrawerHeader className='hidden'>
-               <DrawerTitle>{dic.filters.room}</DrawerTitle>
+             <DrawerContent className='h-[min(60svh,35rem)] flex flex-col'>
+              <DrawerHeader>
+               <DrawerTitle className='text-xl'>{dic.filters.room}</DrawerTitle>
               </DrawerHeader>
-              <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
-               <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
-                {dic.filters.room}
-               </h1>
-              </div>
-              <div>
+              <div className='grow overflow-hidden overflow-y-auto'>
                <ul>
                 {initData?.rooms.map((item) => (
                  <DrawerClose asChild key={item.key}>
