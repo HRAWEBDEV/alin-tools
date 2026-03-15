@@ -74,25 +74,28 @@ export default function OutOfOrderRoomsWrapper({
      roomID: roomValue?.key,
      roomTypeID: roomTypeValue?.key,
     });
-    return res.data.outOfOrders;
+    return res.data;
    },
    getNextPageParam(lastPage) {
-    const nextOffset = lastPage.offset + 1;
-    if (lastPage.offset * lastPage.limit >= lastPage.rowsCount) {
+    const nextOffset = lastPage.outOfOrders.offset + 1;
+    if (
+     lastPage.outOfOrders.offset * lastPage.outOfOrders.limit >=
+     lastPage.outOfOrders.rowsCount
+    ) {
      return undefined;
     }
     return {
      offset: nextOffset,
-     limit: lastPage.limit,
+     limit: lastPage.outOfOrders.limit,
     };
    },
    getPreviousPageParam(firstPage) {
-    if (firstPage.offset <= 1) {
+    if (firstPage.outOfOrders.offset <= 1) {
      return undefined;
     }
     return {
-     limit: firstPage.limit,
-     offset: firstPage.offset - 1,
+     limit: firstPage.outOfOrders.limit,
+     offset: firstPage.outOfOrders.offset - 1,
     };
    },
   });

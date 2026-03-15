@@ -23,8 +23,8 @@ export default function OutOfOrderRooms({
    <div className='grid gap-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 pb-4'>
     {rooms.data?.pages.map((group, i) => (
      <Fragment key={i}>
-      {group.rows.length ? (
-       group.rows.map((room) => (
+      {group.outOfOrders.rows.length ? (
+       group.outOfOrders.rows.map((room) => (
         <OutOfOrderRoom room={room} key={room.id} dic={dic} />
        ))
       ) : (

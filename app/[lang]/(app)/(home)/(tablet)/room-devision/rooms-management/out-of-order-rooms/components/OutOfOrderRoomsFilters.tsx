@@ -114,7 +114,7 @@ export default function OutOfOrderRoomsFilters({
         <DrawerTitle className='text-xl'>
          {dic.filters.filters}{' '}
          <span className='text-sm text-neutral-700 dark:text-neutral-400'>
-          ({dic.info.results}: {rooms.data?.pages[0]?.rowsCount})
+          ({dic.info.results}: {rooms.data?.pages[0]?.outOfOrders.rowsCount})
          </span>
         </DrawerTitle>
        </DrawerHeader>
@@ -504,11 +504,21 @@ export default function OutOfOrderRoomsFilters({
      })}
     </div>
    </div>
-   <div className='text-sm'>
-    <span className='text-neutral-700 dark:text-neutral-400'>
-     {dic.info.results}:{' '}
-    </span>
-    <span>{rooms.data?.pages[0]?.rowsCount}</span>
+   <div className='text-sm flex gap-4 items-center'>
+    <div>
+     <span className='text-neutral-700 dark:text-neutral-400'>
+      {dic.info.nightPerRoom}:{' '}
+     </span>
+     <span className='text-primary font-medium'>
+      {rooms.data?.pages[0]?.rooms}
+     </span>
+    </div>
+    <div>
+     <span className='text-neutral-700 dark:text-neutral-400'>
+      {dic.info.results}:{' '}
+     </span>
+     <span>{rooms.data?.pages[0]?.outOfOrders.rowsCount}</span>
+    </div>
    </div>
   </div>
  );

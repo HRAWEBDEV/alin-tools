@@ -1,9 +1,9 @@
 import { type PagedData } from '../../../utils/apiTypes';
-import { type Room } from '../services/outOfOrderApiActions';
+import { type OutOfOrderResult } from '../services/outOfOrderApiActions';
 import { InfiniteData } from '@tanstack/react-query';
 
 export interface OutOfOrderRoomsProps {
- data?: InfiniteData<PagedData<Room[]>, unknown>;
+ data?: InfiniteData<OutOfOrderResult, unknown>;
  hasNextPage: boolean;
  fetchNextPage: () => unknown;
  isFetching: boolean;

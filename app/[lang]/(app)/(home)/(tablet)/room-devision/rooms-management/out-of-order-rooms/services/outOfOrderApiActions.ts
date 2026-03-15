@@ -8,6 +8,11 @@ interface InitialData {
  reasons: Combo[];
 }
 
+interface OutOfOrderResult {
+ rooms: number;
+ outOfOrders: PagedData<Room[]>;
+}
+
 interface Room {
  id: number;
  roomID: number;
@@ -67,12 +72,13 @@ function getOutOfOrderRooms({
  if (!!roomTypeID) {
   searchParams.set('roomTypeID', roomTypeID);
  }
- return axios.get<{
-  outOfOrders: PagedData<Room[]>;
- }>(`/Reception/OutOfOrder/GetOutOfOrders?${searchParams.toString()}`, {
-  signal,
- });
+ return axios.get<OutOfOrderResult>(
+  `/Reception/OutOfOrder/GetOutOfOrders?${searchParams.toString()}`,
+  {
+   signal,
+  },
+ );
 }
 
-export type { InitialData, Room };
+export type { InitialData, Room, OutOfOrderResult };
 export { outOfOrderRoomsBaseKey, getInitialData, getOutOfOrderRooms };
