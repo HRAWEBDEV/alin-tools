@@ -1,4 +1,5 @@
 'use client';
+import { useState } from 'react';
 import { type OutOfOrderRoomsDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/out-of-order-rooms/dictionary';
 import OutOfOrderRoomsFilters from './components/OutOfOrderRoomsFilters';
 import OutOfOrderRooms from './components/OutOfOrderRooms';
@@ -16,12 +17,17 @@ import {
  getOutOfOrderRooms,
 } from './services/outOfOrderApiActions';
 import { useDateFns } from '@/hooks/useDateFns';
+import NewOutOfOrderRoom from './components/NewOutOfOrderRoom';
 
 export default function OutOfOrderRoomsWrapper({
  dic,
 }: {
  dic: OutOfOrderRoomsDictionary;
 }) {
+ const [selectedOutOfOrderRoomID, setSelectedOutOfOrderRoomID] = useState<
+  number | null
+ >(null);
+ const [showNew, setShowNew] = useState(false);
  const dateFns = useDateFns();
  const filtersUseForm = useForm<OutOfOrderRoomsSchema>({
   defaultValues: {
@@ -100,32 +106,76 @@ export default function OutOfOrderRoomsWrapper({
    },
   });
 
+ // edit or new
+ function handleOpenEdit(id: number | null) {
+  setSelectedOutOfOrderRoomID(id);
+  setShowNew(true);
+ }
+ function handleCloseEdit() {
+  setSelectedOutOfOrderRoomID(null);
+  setShowNew(false);
+ }
+
+ const targetEditRoom = !!data?.pages[0].outOfOrders.rowsCount
+  ? data?.pages[0].outOfOrders.rows.find(
+     (item) => item.id === selectedOutOfOrderRoomID,
+    ) || null
+  : null;
+
  return (
-  <FormProvider {...filtersUseForm}>
-   <OutOfOrderRoomsFilters
+  <>
+   <FormProvider {...filtersUseForm}>
+    <OutOfOrderRoomsFilters
+     dic={dic}
+     initDataIsLoading={initDataIsLoading}
+     initData={initData}
+     rooms={{
+      data,
+      hasNextPage,
+      fetchNextPage,
+      isFetching,
+      refetch,
+      isSuccess,
+     }}
+     editRoom={{
+      selectedOutOfOrderRoomID,
+      showNew,
+      onCloseEdit: handleCloseEdit,
+      onShowEdit: handleOpenEdit,
+      targetEditRoom,
+     }}
+    />
+    <OutOfOrderRooms
+     dic={dic}
+     editRoom={{
+      selectedOutOfOrderRoomID,
+      showNew,
+      onCloseEdit: handleCloseEdit,
+      onShowEdit: handleOpenEdit,
+      targetEditRoom,
+     }}
+     rooms={{
+      data,
+      hasNextPage,
+      fetchNextPage,
+      isFetching,
+      refetch,
+      isSuccess,
+     }}
+    />
+   </FormProvider>
+   <NewOutOfOrderRoom
     dic={dic}
+    initialData={initData}
     initDataIsLoading={initDataIsLoading}
-    initData={initData}
-    rooms={{
-     data,
-     hasNextPage,
-     fetchNextPage,
-     isFetching,
-     refetch,
-     isSuccess,
+    editRoom={{
+     selectedOutOfOrderRoomID,
+     showNew,
+     onCloseEdit: handleCloseEdit,
+     onShowEdit: handleOpenEdit,
+     targetEditRoom,
     }}
    />
-   <OutOfOrderRooms
-    dic={dic}
-    rooms={{
-     data,
-     hasNextPage,
-     fetchNextPage,
-     isFetching,
-     refetch,
-     isSuccess,
-    }}
-   />
-  </FormProvider>
+  </>
  );
 }

@@ -1,19 +1,25 @@
 import { type OutOfOrderRoomsDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/out-of-order-rooms/dictionary';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { type Room } from '../services/outOfOrderApiActions';
+import { type EditOutOfOrderProps } from '../utils/editOutOfOrderProps';
 
 export default function OutOfOrderRoom({
  dic,
  room,
+ editRoom,
 }: {
  dic: OutOfOrderRoomsDictionary;
+ editRoom: EditOutOfOrderProps;
  room: Room;
 }) {
  const { locale } = useBaseConfig();
 
  return (
   <>
-   <button className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900'>
+   <button
+    className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900'
+    onClick={() => editRoom.onShowEdit(room.id)}
+   >
     <div className='flex flex-wrap justify-between gap-1 mb-2'>
      <div>
       <span className='text-sm text-neutral-600 dark:text-neutral-400'>

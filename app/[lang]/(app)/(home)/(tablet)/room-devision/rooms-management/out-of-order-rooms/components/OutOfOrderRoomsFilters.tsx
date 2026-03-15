@@ -32,6 +32,7 @@ import { type InitialData } from '../services/outOfOrderApiActions';
 import { Spinner } from '@/components/ui/spinner';
 import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
 import { type OutOfOrderRoomsProps } from '../utils/outOfOrderRoomsProps';
+import { type EditOutOfOrderProps } from '../utils/editOutOfOrderProps';
 
 const smallBadgeKeys: (keyof OutOfOrderRoomsSchema)[] = ['floor', 'room'];
 const largeBadgeKeys: (keyof OutOfOrderRoomsSchema)[] = ['roomType'];
@@ -41,11 +42,13 @@ export default function OutOfOrderRoomsFilters({
  initDataIsLoading,
  initData,
  rooms,
+ editRoom,
 }: {
  dic: OutOfOrderRoomsDictionary;
  initData?: InitialData;
  initDataIsLoading: boolean;
  rooms: OutOfOrderRoomsProps;
+ editRoom: EditOutOfOrderProps;
 }) {
  const [showFromDatePicker, setShowFromDatePicker] = useState(false);
  const [showToDatePicker, setShowToDatePicker] = useState(false);
@@ -88,8 +91,15 @@ export default function OutOfOrderRoomsFilters({
  return (
   <div className='[&]:[--default-top-offset:var(--top-offset,0)] sticky top-4 lg:top-(--default-top-offset) py-4 bg-background'>
    <div className='flex gap-2 items-center mb-1'>
-    <Button size='lg' className='px-3!'>
-     <FaPlus />
+    <Button
+     size='lg'
+     className='px-3!'
+     disabled={initDataIsLoading}
+     onClick={() => {
+      editRoom.onShowEdit(null);
+     }}
+    >
+     {initDataIsLoading ? <Spinner /> : <FaPlus />}
      <span className='hidden lg:inline'>{dic.filters.new}</span>
     </Button>
     <div className='flex items-center gap-2'>
@@ -119,7 +129,7 @@ export default function OutOfOrderRoomsFilters({
         </DrawerTitle>
        </DrawerHeader>
        <div className='grow overflow-auto p-4'>
-        {initDataIsLoading && <LinearLoading />}
+        {(initDataIsLoading || rooms.isFetching) && <LinearLoading />}
         <div className='mx-auto w-[min(100%,40rem)] grid grid-cols-2 gap-4'>
          <Controller
           control={control}

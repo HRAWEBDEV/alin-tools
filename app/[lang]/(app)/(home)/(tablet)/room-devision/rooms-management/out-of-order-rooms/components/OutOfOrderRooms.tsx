@@ -6,13 +6,16 @@ import NoItemFound from '@/app/[lang]/(app)/components/NoItemFound';
 import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
+import { EditOutOfOrderProps } from '../utils/editOutOfOrderProps';
 
 export default function OutOfOrderRooms({
  dic,
  rooms,
+ editRoom,
 }: {
  dic: OutOfOrderRoomsDictionary;
  rooms: OutOfOrderRoomsProps;
+ editRoom: EditOutOfOrderProps;
 }) {
  if (rooms.isSuccess && !rooms.data?.pages.length) {
   return <NoItemFound />;
@@ -25,7 +28,12 @@ export default function OutOfOrderRooms({
      <Fragment key={i}>
       {group.outOfOrders.rows.length ? (
        group.outOfOrders.rows.map((room) => (
-        <OutOfOrderRoom room={room} key={room.id} dic={dic} />
+        <OutOfOrderRoom
+         room={room}
+         key={room.id}
+         dic={dic}
+         editRoom={editRoom}
+        />
        ))
       ) : (
        <div className='col-span-full'>

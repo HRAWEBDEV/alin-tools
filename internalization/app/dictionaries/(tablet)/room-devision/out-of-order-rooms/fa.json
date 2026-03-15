@@ -7,7 +7,8 @@
   "floor": "طبقه",
   "room": "اتاق",
   "roomType": "نوع اتاق",
-  "new": "جدید"
+  "new": "جدید",
+  "edit": "ویرایش"
  },
  "info": {
   "nightPerRoom": "اتاق / شب",
@@ -23,5 +24,9 @@
   "comment": "توضیحات",
   "user": "کاربر",
   "roomType": "نوع اتاق"
+ },
+ "newOrEdit": {
+  "confirm": "تایید",
+  "cancel": "انصراف"
  }
 }
