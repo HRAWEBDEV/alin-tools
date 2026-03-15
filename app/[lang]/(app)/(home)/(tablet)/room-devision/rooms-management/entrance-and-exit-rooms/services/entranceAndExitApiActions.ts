@@ -7,7 +7,14 @@ interface InitialData {
 }
 
 interface Room {
- id: number;
+ roomLabel: string;
+ folioNo: number;
+ roomTypeAliasName: string;
+ customerName: string;
+ checkinDateOffset: string | null;
+ checkoutDateOffset: string | null;
+ guestCount: number;
+ exBedCount: number;
 }
 
 const entranceAndExitBaseKey = 'entrance-and-exit-rooms';
@@ -23,14 +30,10 @@ function getRooms({
  signal,
  isCheckin,
  isCheckout,
- limit,
- offset,
  floorNo,
  roomTypeID,
 }: {
  signal: AbortSignal;
- limit: string;
- offset: string;
  date: string;
  isCheckin: boolean;
  isCheckout: boolean;
@@ -39,10 +42,11 @@ function getRooms({
 }) {
  const searchParams = new URLSearchParams([
   ['date', date],
-  ['limit', limit],
-  ['offset', offset],
   ['checkin', String(isCheckin)],
   ['checkout', String(isCheckout)],
+  ['all', String(true)],
+  ['registered', String(false)],
+  ['notRegistered', String(false)],
  ]);
  if (floorNo !== undefined) {
   searchParams.set('floorNo', floorNo);
@@ -50,8 +54,11 @@ function getRooms({
  if (!!roomTypeID) {
   searchParams.set('roomTypeID', roomTypeID);
  }
- return axios.get<PagedData<Room[]>>(
+ return axios.get<Room[]>(
   `/Reception/CheckInCheckOutRooms/GetCheckinCheckouRooms?${searchParams.toString()}`,
+  {
+   signal,
+  },
  );
 }
 

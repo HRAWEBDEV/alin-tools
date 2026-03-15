@@ -49,54 +49,28 @@ export default function EntranceAndExitRoomsWrapper({
  });
 
  // rooms
- const { data, hasNextPage, fetchNextPage, isFetching, refetch, isSuccess } =
-  useInfiniteQuery({
-   enabled: !!dateValue,
-   queryKey: [
-    entranceAndExitBaseKey,
-    'rooms',
-    dateValue?.toISOString(),
-    typeValue?.key || 'all',
-    floorValue?.key || 'all',
-    roomTypeValue?.key || 'all',
-   ],
-   initialPageParam: {
-    limit: 300,
-    offset: 1,
-   },
-   async queryFn({ signal, pageParam }) {
-    const res = await getRooms({
-     signal,
-     date: dateValue!.toISOString(),
-     isCheckin: typeValue?.value === 'entrance',
-     isCheckout: typeValue?.value === 'exit',
-     limit: pageParam.limit.toString(),
-     offset: pageParam.offset.toString(),
-     floorNo: floorValue?.key,
-     roomTypeID: roomTypeValue?.key,
-    });
-    return res.data;
-   },
-   getNextPageParam(lastPage) {
-    const nextOffset = lastPage.offset + 1;
-    if (lastPage.offset * lastPage.limit >= lastPage.rowsCount) {
-     return undefined;
-    }
-    return {
-     offset: nextOffset,
-     limit: lastPage.limit,
-    };
-   },
-   getPreviousPageParam(firstPage) {
-    if (firstPage.offset <= 1) {
-     return undefined;
-    }
-    return {
-     limit: firstPage.limit,
-     offset: firstPage.offset - 1,
-    };
-   },
-  });
+ const { data, isFetching, refetch, isSuccess, isError } = useQuery({
+  enabled: !!dateValue,
+  queryKey: [
+   entranceAndExitBaseKey,
+   'rooms',
+   dateValue?.toISOString(),
+   typeValue?.key || 'all',
+   floorValue?.key || 'all',
+   roomTypeValue?.key || 'all',
+  ],
+  async queryFn({ signal }) {
+   const res = await getRooms({
+    signal,
+    date: dateValue!.toISOString(),
+    isCheckin: typeValue?.value === 'entrance',
+    isCheckout: typeValue?.value === 'exit',
+    floorNo: floorValue?.key,
+    roomTypeID: roomTypeValue?.key,
+   });
+   return res.data;
+  },
+ });
 
  return (
   <FormProvider {...filtersUseForm}>
@@ -104,8 +78,24 @@ export default function EntranceAndExitRoomsWrapper({
     dic={dic}
     initDataIsLoading={initDataIsLoading}
     initData={initData}
+    rooms={{
+     data,
+     isFetching,
+     isSuccess,
+     refetch,
+     isError,
+    }}
    />
-   <EntranceAndExitList dic={dic} />
+   <EntranceAndExitList
+    dic={dic}
+    rooms={{
+     data,
+     isFetching,
+     isSuccess,
+     refetch,
+     isError,
+    }}
+   />
   </FormProvider>
  );
 }

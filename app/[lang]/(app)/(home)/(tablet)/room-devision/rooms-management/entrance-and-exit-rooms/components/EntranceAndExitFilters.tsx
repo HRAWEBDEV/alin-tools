@@ -33,6 +33,7 @@ import { typeOptions } from '../utils/typeOptions';
 import { Spinner } from '@/components/ui/spinner';
 import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
 import { useDateFns } from '@/hooks/useDateFns';
+import { EntranceAndExitRoomsProps } from '../utils/entranceAndExitRoomsProps';
 
 const smallBadgeKeys: (keyof EntranceAndExitSchema)[] = ['floor', 'type'];
 const largeBadgeKeys: (keyof EntranceAndExitSchema)[] = ['roomType'];
@@ -41,10 +42,12 @@ export default function EntranceAndExitFilters({
  dic,
  initDataIsLoading,
  initData,
+ rooms,
 }: {
  dic: EntranceAndExitRoomsDictionary;
  initData?: InitialData;
  initDataIsLoading: boolean;
+ rooms: EntranceAndExitRoomsProps;
 }) {
  const dateFns = useDateFns();
  const [showDatePicker, setShowDatePicker] = useState(false);
@@ -107,12 +110,12 @@ export default function EntranceAndExitFilters({
         <DrawerTitle className='text-xl'>
          {dic.filters.filters}{' '}
          <span className='text-sm text-neutral-700 dark:text-neutral-400'>
-          ({dic.info.results}: 1)
+          ({dic.info.results}: {rooms.data?.length})
          </span>
         </DrawerTitle>
        </DrawerHeader>
        <div className='grow overflow-auto p-4'>
-        {initDataIsLoading && <LinearLoading />}
+        {(initDataIsLoading || rooms.isFetching) && <LinearLoading />}
         <div className='mx-auto w-[min(100%,40rem)] grid grid-cols-2 gap-4'>
          <div className='col-span-full flex justify-center items-center gap-4'>
           <Button size='lg' variant='outline' onClick={goToPrevDay}>
@@ -485,7 +488,7 @@ export default function EntranceAndExitFilters({
     <span className='text-neutral-700 dark:text-neutral-400'>
      {dic.info.results}:{' '}
     </span>
-    <span>1</span>
+    <span>{rooms.data?.length}</span>
    </div>
   </div>
  );
