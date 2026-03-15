@@ -88,7 +88,7 @@ export default function OutOfOrderRoomsFilters({
  const activeFilters = filtersKeyValue.filter((item) => !!item.value);
 
  return (
-  <div className='[&]:[--default-top-offset:var(--top-offset,0)] sticky top-4 lg:top-(--default-top-offset) py-4 bg-background'>
+  <div className='[&]:[--default-top-offset:var(--top-offset,0)] sticky top-4 lg:top-(--default-top-offset) py-4 bg-background z-3'>
    <div className='flex gap-2 items-center mb-1'>
     <Button
      size='lg'
