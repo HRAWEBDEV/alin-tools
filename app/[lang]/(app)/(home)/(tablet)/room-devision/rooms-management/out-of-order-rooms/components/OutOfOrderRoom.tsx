@@ -2,6 +2,7 @@ import { type OutOfOrderRoomsDictionary } from '@/internalization/app/dictionari
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { type Room } from '../services/outOfOrderApiActions';
 import { type EditOutOfOrderProps } from '../utils/editOutOfOrderProps';
+import { MdTouchApp } from 'react-icons/md';
 
 export default function OutOfOrderRoom({
  dic,
@@ -17,9 +18,12 @@ export default function OutOfOrderRoom({
  return (
   <>
    <button
-    className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900'
+    className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 relative isolate'
     onClick={() => editRoom.onShowEdit(room.id)}
    >
+    <div className='absolute bottom-0 end-0 -z-1'>
+     <MdTouchApp className='size-24 text-neutral-200 dark:text-neutral-800' />
+    </div>
     <div className='flex flex-wrap justify-between gap-1 mb-2'>
      <div>
       <span className='text-sm text-neutral-600 dark:text-neutral-400'>
