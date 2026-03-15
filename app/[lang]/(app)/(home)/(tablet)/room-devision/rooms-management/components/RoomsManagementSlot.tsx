@@ -1,4 +1,5 @@
 'use client';
+import { Activity } from 'react';
 import { type RoomStatisticsDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/room-statistics/dictionary';
 import { type RoomsManagementDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-management/dictionary';
 import RoomsStatisticsWrapper from '../rooms-statistics/RoomsStatisticsWrapper';
@@ -20,26 +21,25 @@ export default function RoomsManagementSlot({
 }) {
  const searchParams = useSearchParams();
  const activeTab = searchParams.get('tab') || 'rooms-statistics';
- let slot = (
-  <div className='p-4 lg:pt-0 w-[min(100%,55rem)] mx-auto'>
-   <RoomsStatisticsWrapper dic={roomsStatisticsDic} />
-  </div>
- );
- switch (activeTab) {
-  case 'entrance-and-exit-rooms':
-   slot = (
+ return (
+  <main className='order-1 lg:order-2 grow'>
+   <Activity mode={activeTab === 'rooms-statistics' ? 'visible' : 'hidden'}>
+    <div className='p-4 lg:pt-0 w-[min(100%,55rem)] mx-auto'>
+     <RoomsStatisticsWrapper dic={roomsStatisticsDic} />
+    </div>
+   </Activity>
+   <Activity
+    mode={activeTab === 'entrance-and-exit-rooms' ? 'visible' : 'hidden'}
+   >
     <div className='p-4 lg:pt-0'>
      <EntranceAndExitRoomsWrapper dic={entranceAndExitDic} />
     </div>
-   );
-   break;
-  case 'out-of-order-rooms':
-   slot = (
+   </Activity>
+   <Activity mode={activeTab === 'out-of-order-rooms' ? 'visible' : 'hidden'}>
     <div className='p-4 lg:pt-0'>
      <OutOfOrderRoomsWrapper dic={outOfOrderDic} />
     </div>
-   );
-   break;
- }
- return <main className='order-1 lg:order-2 grow'>{slot}</main>;
+   </Activity>
+  </main>
+ );
 }
