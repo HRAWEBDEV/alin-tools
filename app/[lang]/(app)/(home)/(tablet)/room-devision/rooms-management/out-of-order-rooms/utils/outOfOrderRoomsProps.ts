@@ -9,4 +9,5 @@ export interface OutOfOrderRoomsProps {
  isFetching: boolean;
  refetch: () => unknown;
  isSuccess: boolean;
+ isError: boolean;
 }

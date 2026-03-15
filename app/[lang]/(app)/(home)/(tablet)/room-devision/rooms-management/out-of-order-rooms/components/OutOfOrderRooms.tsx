@@ -7,6 +7,7 @@ import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { EditOutOfOrderProps } from '../utils/editOutOfOrderProps';
+import UnExpectedError from '@/app/[lang]/(app)/components/UnExpectedError';
 
 export default function OutOfOrderRooms({
  dic,
@@ -19,6 +20,9 @@ export default function OutOfOrderRooms({
 }) {
  if (rooms.isSuccess && !rooms.data?.pages.length) {
   return <NoItemFound />;
+ }
+ if (!rooms.isFetching && rooms.isError) {
+  return <UnExpectedError />;
  }
  return (
   <div>

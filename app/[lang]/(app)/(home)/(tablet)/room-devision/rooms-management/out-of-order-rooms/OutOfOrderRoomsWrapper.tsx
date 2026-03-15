@@ -53,58 +53,65 @@ export default function OutOfOrderRoomsWrapper({
  });
 
  // rooms
- const { data, hasNextPage, fetchNextPage, isFetching, refetch, isSuccess } =
-  useInfiniteQuery({
-   enabled: !!fromDateValue && !!toDateValue,
-   queryKey: [
-    outOfOrderRoomsBaseKey,
-    'rooms',
-    fromDateValue?.toISOString(),
-    toDateValue?.toISOString(),
-    floorValue?.key || 'all',
-    roomTypeValue?.key || 'all',
-    roomValue?.key || 'all',
-   ],
-   initialPageParam: {
-    limit: 50,
-    offset: 1,
-   },
-   async queryFn({ signal, pageParam }) {
-    const res = await getOutOfOrderRooms({
-     signal,
-     limit: pageParam.limit.toString(),
-     offset: pageParam.offset.toString(),
-     fromDate: fromDateValue!.toISOString(),
-     toDate: toDateValue!.toISOString(),
-     floorNo: floorValue?.key,
-     roomID: roomValue?.key,
-     roomTypeID: roomTypeValue?.key,
-    });
-    return res.data;
-   },
-   getNextPageParam(lastPage) {
-    const nextOffset = lastPage.outOfOrders.offset + 1;
-    if (
-     lastPage.outOfOrders.offset * lastPage.outOfOrders.limit >=
-     lastPage.outOfOrders.rowsCount
-    ) {
-     return undefined;
-    }
-    return {
-     offset: nextOffset,
-     limit: lastPage.outOfOrders.limit,
-    };
-   },
-   getPreviousPageParam(firstPage) {
-    if (firstPage.outOfOrders.offset <= 1) {
-     return undefined;
-    }
-    return {
-     limit: firstPage.outOfOrders.limit,
-     offset: firstPage.outOfOrders.offset - 1,
-    };
-   },
-  });
+ const {
+  data,
+  hasNextPage,
+  fetchNextPage,
+  isFetching,
+  refetch,
+  isSuccess,
+  isError,
+ } = useInfiniteQuery({
+  enabled: !!fromDateValue && !!toDateValue,
+  queryKey: [
+   outOfOrderRoomsBaseKey,
+   'rooms',
+   fromDateValue?.toISOString(),
+   toDateValue?.toISOString(),
+   floorValue?.key || 'all',
+   roomTypeValue?.key || 'all',
+   roomValue?.key || 'all',
+  ],
+  initialPageParam: {
+   limit: 50,
+   offset: 1,
+  },
+  async queryFn({ signal, pageParam }) {
+   const res = await getOutOfOrderRooms({
+    signal,
+    limit: pageParam.limit.toString(),
+    offset: pageParam.offset.toString(),
+    fromDate: fromDateValue!.toISOString(),
+    toDate: toDateValue!.toISOString(),
+    floorNo: floorValue?.key,
+    roomID: roomValue?.key,
+    roomTypeID: roomTypeValue?.key,
+   });
+   return res.data;
+  },
+  getNextPageParam(lastPage) {
+   const nextOffset = lastPage.outOfOrders.offset + 1;
+   if (
+    lastPage.outOfOrders.offset * lastPage.outOfOrders.limit >=
+    lastPage.outOfOrders.rowsCount
+   ) {
+    return undefined;
+   }
+   return {
+    offset: nextOffset,
+    limit: lastPage.outOfOrders.limit,
+   };
+  },
+  getPreviousPageParam(firstPage) {
+   if (firstPage.outOfOrders.offset <= 1) {
+    return undefined;
+   }
+   return {
+    limit: firstPage.outOfOrders.limit,
+    offset: firstPage.outOfOrders.offset - 1,
+   };
+  },
+ });
 
  // edit or new
  function handleOpenEdit(id: number | null) {
@@ -136,6 +143,7 @@ export default function OutOfOrderRoomsWrapper({
       isFetching,
       refetch,
       isSuccess,
+      isError,
      }}
      editRoom={{
       selectedOutOfOrderRoomID,
@@ -161,6 +169,7 @@ export default function OutOfOrderRoomsWrapper({
       isFetching,
       refetch,
       isSuccess,
+      isError,
      }}
     />
    </FormProvider>

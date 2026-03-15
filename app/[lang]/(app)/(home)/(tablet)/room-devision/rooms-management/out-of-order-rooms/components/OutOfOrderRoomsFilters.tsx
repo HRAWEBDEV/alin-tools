@@ -30,7 +30,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { type InitialData } from '../services/outOfOrderApiActions';
 import { Spinner } from '@/components/ui/spinner';
-import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
 import { type OutOfOrderRoomsProps } from '../utils/outOfOrderRoomsProps';
 import { type EditOutOfOrderProps } from '../utils/editOutOfOrderProps';
 
@@ -129,7 +128,6 @@ export default function OutOfOrderRoomsFilters({
         </DrawerTitle>
        </DrawerHeader>
        <div className='grow overflow-auto p-4'>
-        {(initDataIsLoading || rooms.isFetching) && <LinearLoading />}
         <div className='mx-auto w-[min(100%,40rem)] grid grid-cols-2 gap-4'>
          <Controller
           control={control}

@@ -31,7 +31,6 @@ import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { type InitialData } from '../services/entranceAndExitApiActions';
 import { typeOptions } from '../utils/typeOptions';
 import { Spinner } from '@/components/ui/spinner';
-import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
 import { useDateFns } from '@/hooks/useDateFns';
 import { EntranceAndExitRoomsProps } from '../utils/entranceAndExitRoomsProps';
 
@@ -115,7 +114,6 @@ export default function EntranceAndExitFilters({
         </DrawerTitle>
        </DrawerHeader>
        <div className='grow overflow-auto p-4'>
-        {(initDataIsLoading || rooms.isFetching) && <LinearLoading />}
         <div className='mx-auto w-[min(100%,40rem)] grid grid-cols-2 gap-4'>
          <div className='col-span-full flex justify-center items-center gap-4'>
           <Button size='lg' variant='outline' onClick={goToPrevDay}>
