@@ -39,6 +39,7 @@ import { InputGroup, InputGroupTextarea } from '@/components/ui/input-group';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { toast } from 'sonner';
+import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
 
 export default function NewOutOfOrderRoom({
  dic,
@@ -51,6 +52,7 @@ export default function NewOutOfOrderRoom({
  initDataIsLoading: boolean;
  editRoom: EditOutOfOrderProps;
 }) {
+ const { data: userInfo } = useUserInfoRouter();
  const queryClient = useQueryClient();
  const { locale } = useBaseConfig();
  const [showFromDatePicker, setShowFromDatePicker] = useState(false);
@@ -365,31 +367,41 @@ export default function NewOutOfOrderRoom({
         <InputGroupTextarea {...register('comment')} />
        </InputGroup>
       </Field>
-      <div className='col-span-full flex flex-col-reverse md:flex-row gap-4 justify-end'>
-       <Button
-        type='button'
-        size='lg'
-        disabled={isPending}
-        variant='outline'
-        className='md:w-36'
-        onClick={() => editRoom.onCloseEdit()}
-       >
-        {isPending && <Spinner />}
-        {dic.newOrEdit.cancel}
-       </Button>
-       <Button
-        disabled={isPending}
-        size='lg'
-        className='md:w-36'
-        type='submit'
-        onClick={(e) => {
-         e.preventDefault();
-         handleSubmit((props) => mutate(props))();
-        }}
-       >
-        {isPending && <Spinner />}
-        {dic.newOrEdit.confirm}
-       </Button>
+      <div className='col-span-full flex flex-col md:flex-row gap-4 md:justify-between md:items-center'>
+       <div>
+        <span>{dic.info.addBy}: </span>
+        <span className='font-medium text-primary'>
+         {editRoom.selectedOutOfOrderRoomID
+          ? editRoom.targetEditRoom?.userPersonName
+          : userInfo.user.personFullName}
+        </span>
+       </div>
+       <div className='flex gap-4 flex-col-reverse md:flex-row'>
+        <Button
+         type='button'
+         size='lg'
+         disabled={isPending}
+         variant='outline'
+         className='md:w-36'
+         onClick={() => editRoom.onCloseEdit()}
+        >
+         {isPending && <Spinner />}
+         {dic.newOrEdit.cancel}
+        </Button>
+        <Button
+         disabled={isPending}
+         size='lg'
+         className='md:w-36'
+         type='submit'
+         onClick={(e) => {
+          e.preventDefault();
+          handleSubmit((props) => mutate(props))();
+         }}
+        >
+         {isPending && <Spinner />}
+         {dic.newOrEdit.confirm}
+        </Button>
+       </div>
       </div>
      </form>
     </div>
