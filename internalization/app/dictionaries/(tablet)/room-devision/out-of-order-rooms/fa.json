@@ -28,6 +28,7 @@
  },
  "newOrEdit": {
   "confirm": "تایید",
-  "cancel": "انصراف"
+  "cancel": "انصراف",
+  "fillRequiredFields": "فیلدهای الزامی را پر کنید"
  }
 }

@@ -57,13 +57,19 @@ export default function NewOutOfOrderRoom({
  const { locale } = useBaseConfig();
  const [showFromDatePicker, setShowFromDatePicker] = useState(false);
  const [showToDatePicker, setShowToDatePicker] = useState(false);
- const { control, watch, setValue, register, handleSubmit } =
-  useForm<OutOfOrderRoomsSchema>({
-   resolver: zodResolver(createOutOfOrderRoomsSchema()),
-   defaultValues: {
-    ...defaultValues,
-   },
-  });
+ const {
+  control,
+  watch,
+  setValue,
+  register,
+  handleSubmit,
+  formState: { errors },
+ } = useForm<OutOfOrderRoomsSchema>({
+  resolver: zodResolver(createOutOfOrderRoomsSchema()),
+  defaultValues: {
+   ...defaultValues,
+  },
+ });
  const [fromDateValue, toDateValue] = watch(['fromDate', 'toDate']);
 
  // save or update
@@ -153,7 +159,7 @@ export default function NewOutOfOrderRoom({
        control={control}
        name='fromDate'
        render={({ field }) => (
-        <Field>
+        <Field data-invalid={!!errors.fromDate}>
          <FieldLabel htmlFor='fromDate'>{dic.filters.fromDate} *</FieldLabel>
          <Popover
           open={showFromDatePicker}
@@ -161,6 +167,7 @@ export default function NewOutOfOrderRoom({
          >
           <PopoverTrigger asChild>
            <Button
+            data-invalid={!!errors.fromDate}
             variant='outline'
             id='fromDate'
             className='justify-between font-normal h-11'
@@ -200,11 +207,12 @@ export default function NewOutOfOrderRoom({
        control={control}
        name='toDate'
        render={({ field }) => (
-        <Field>
+        <Field data-invalid={!!errors.toDate}>
          <FieldLabel htmlFor='toDate'>{dic.filters.toDate} *</FieldLabel>
          <Popover open={showToDatePicker} onOpenChange={setShowToDatePicker}>
           <PopoverTrigger asChild>
            <Button
+            data-invalid={!!errors.toDate}
             variant='outline'
             id='toDate'
             className='justify-between font-normal h-11'
@@ -240,7 +248,7 @@ export default function NewOutOfOrderRoom({
         </Field>
        )}
       />
-      <Field>
+      <Field data-invalid={!!errors.room}>
        <FieldLabel htmlFor='room'>{dic.filters.room} *</FieldLabel>
        <Controller
         control={control}
@@ -249,6 +257,7 @@ export default function NewOutOfOrderRoom({
          <Drawer>
           <DrawerTrigger asChild>
            <Button
+            data-invalid={!!errors.room}
             id='room'
             variant='outline'
             role='combobox'
@@ -301,9 +310,10 @@ export default function NewOutOfOrderRoom({
         )}
        />
       </Field>
-      <Field>
+      <Field data-invalid={!!errors.reason}>
        <FieldLabel htmlFor='reason'>{dic.info.reason} *</FieldLabel>
        <Controller
+        data-invalid={!!errors.reason}
         control={control}
         name='reason'
         render={({ field }) => (
@@ -395,7 +405,12 @@ export default function NewOutOfOrderRoom({
          type='submit'
          onClick={(e) => {
           e.preventDefault();
-          handleSubmit((props) => mutate(props))();
+          handleSubmit(
+           (props) => mutate(props),
+           () => {
+            toast.error(dic.newOrEdit.fillRequiredFields);
+           },
+          )();
          }}
         >
          {isPending && <Spinner />}
