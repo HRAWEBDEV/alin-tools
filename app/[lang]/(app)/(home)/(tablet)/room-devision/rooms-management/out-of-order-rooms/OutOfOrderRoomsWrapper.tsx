@@ -60,7 +60,7 @@ export default function OutOfOrderRoomsWrapper({
     roomValue?.key || 'all',
    ],
    initialPageParam: {
-    limit: 300,
+    limit: 50,
     offset: 1,
    },
    async queryFn({ signal, pageParam }) {

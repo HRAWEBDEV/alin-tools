@@ -4,6 +4,8 @@ import OutOfOrderRoom from './OutOfOrderRoom';
 import { type OutOfOrderRoomsProps } from '../utils/outOfOrderRoomsProps';
 import NoItemFound from '@/app/[lang]/(app)/components/NoItemFound';
 import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
+import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
 
 export default function OutOfOrderRooms({
  dic,
@@ -33,6 +35,20 @@ export default function OutOfOrderRooms({
      </Fragment>
     ))}
    </div>
+   {rooms.hasNextPage && (
+    <div className='flex items-center justify-center mt-4'>
+     <Button
+      variant='outline'
+      size='lg'
+      disabled={rooms.isFetching}
+      onClick={() => rooms.fetchNextPage()}
+      className='text-primary border-primary font-medium'
+     >
+      {rooms.isFetching && <Spinner className='text-primary' />}
+      {dic.info.loadMore}
+     </Button>
+    </div>
+   )}
   </div>
  );
 }
