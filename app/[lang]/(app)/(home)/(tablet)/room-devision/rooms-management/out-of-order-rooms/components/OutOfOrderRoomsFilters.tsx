@@ -31,6 +31,7 @@ import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { type InitialData } from '../services/outOfOrderApiActions';
 import { Spinner } from '@/components/ui/spinner';
 import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
+import { type OutOfOrderRoomsProps } from '../utils/outOfOrderRoomsProps';
 
 const smallBadgeKeys: (keyof OutOfOrderRoomsSchema)[] = ['floor', 'room'];
 const largeBadgeKeys: (keyof OutOfOrderRoomsSchema)[] = ['roomType'];
@@ -39,10 +40,12 @@ export default function OutOfOrderRoomsFilters({
  dic,
  initDataIsLoading,
  initData,
+ rooms,
 }: {
  dic: OutOfOrderRoomsDictionary;
  initData?: InitialData;
  initDataIsLoading: boolean;
+ rooms: OutOfOrderRoomsProps;
 }) {
  const [showFromDatePicker, setShowFromDatePicker] = useState(false);
  const [showToDatePicker, setShowToDatePicker] = useState(false);
@@ -85,8 +88,9 @@ export default function OutOfOrderRoomsFilters({
  return (
   <div className='[&]:[--default-top-offset:var(--top-offset,0)] sticky top-4 lg:top-(--default-top-offset) py-4 bg-background'>
    <div className='flex gap-2 items-center mb-1'>
-    <Button size='icon-lg'>
+    <Button size='lg' className='px-3!'>
      <FaPlus />
+     <span className='hidden lg:inline'>{dic.filters.new}</span>
     </Button>
     <div className='flex items-center gap-2'>
      <Drawer>
@@ -110,7 +114,7 @@ export default function OutOfOrderRoomsFilters({
         <DrawerTitle className='text-xl'>
          {dic.filters.filters}{' '}
          <span className='text-sm text-neutral-700 dark:text-neutral-400'>
-          ({dic.info.results}: 1)
+          ({dic.info.results}: {rooms.data?.pages[0]?.rowsCount})
          </span>
         </DrawerTitle>
        </DrawerHeader>
@@ -374,6 +378,85 @@ export default function OutOfOrderRoomsFilters({
            )}
           />
          </Field>
+         <Field>
+          <FieldLabel htmlFor='room'>{dic.filters.room}</FieldLabel>
+          <Controller
+           control={control}
+           name='room'
+           render={({ field }) => (
+            <Drawer>
+             <DrawerTrigger asChild>
+              <Button
+               id='room'
+               variant='outline'
+               role='combobox'
+               className='justify-between h-11'
+               onBlur={field.onBlur}
+               ref={field.ref}
+              >
+               <span className='text-start grow overflow-hidden text-ellipsis'>
+                {field.value?.value || ''}
+               </span>
+               <div className='flex gap-1 items-center -me-2'>
+                {initDataIsLoading && <Spinner />}
+                {field.value && (
+                 <Button
+                  type='button'
+                  variant={'ghost'}
+                  size={'icon'}
+                  onClick={(e) => {
+                   e.stopPropagation();
+                   field.onChange(null);
+                  }}
+                  className='text-rose-700 dark:text-rose-400'
+                 >
+                  <FaRegTrashAlt />
+                 </Button>
+                )}
+                <ChevronsUpDown className='opacity-50' />
+               </div>
+              </Button>
+             </DrawerTrigger>
+             <DrawerContent className='h-[min(60svh,35rem)]'>
+              <DrawerHeader className='hidden'>
+               <DrawerTitle>{dic.filters.room}</DrawerTitle>
+              </DrawerHeader>
+              <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+               <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
+                {dic.filters.room}
+               </h1>
+              </div>
+              <div>
+               <ul>
+                {initData?.rooms.map((item) => (
+                 <DrawerClose asChild key={item.key}>
+                  <li
+                   className='flex gap-1 items-center ps-6 py-2'
+                   onClick={() => {
+                    field.onChange(item);
+                   }}
+                  >
+                   <Checkbox
+                    className='size-6'
+                    checked={field.value?.key === item.key}
+                   />
+                   <Button
+                    tabIndex={-1}
+                    variant='ghost'
+                    className='w-full justify-start h-auto text-lg'
+                   >
+                    <span>{item.value}</span>
+                   </Button>
+                  </li>
+                 </DrawerClose>
+                ))}
+               </ul>
+              </div>
+             </DrawerContent>
+            </Drawer>
+           )}
+          />
+         </Field>
         </div>
        </div>
       </DrawerContent>
@@ -438,7 +521,7 @@ export default function OutOfOrderRoomsFilters({
     <span className='text-neutral-700 dark:text-neutral-400'>
      {dic.info.results}:{' '}
     </span>
-    <span>1</span>
+    <span>{rooms.data?.pages[0]?.rowsCount}</span>
    </div>
   </div>
  );

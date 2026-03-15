@@ -1,5 +1,5 @@
 import { axios } from '@/app/[lang]/(app)/utils/defaultAxios';
-import { Combo } from '../../../utils/apiTypes';
+import { Combo, PagedData } from '../../../utils/apiTypes';
 
 interface InitialData {
  floors: Combo[];
@@ -10,6 +10,19 @@ interface InitialData {
 
 interface Room {
  id: number;
+ roomID: number;
+ fromDateTimeOffset: string;
+ untilDateTimeOffset: string;
+ reasonID: number;
+ comment: string | null;
+ date: string;
+ roomNo: number;
+ roomLabel: string;
+ floorNo: number;
+ roomTypeID: number;
+ roomTypeName: string;
+ userPersonName: string;
+ reasonName: string | null;
 }
 
 const outOfOrderRoomsBaseKey = 'out-of-order-rooms';
@@ -20,5 +33,46 @@ function getInitialData({ signal }: { signal: AbortSignal }) {
  });
 }
 
+function getOutOfOrderRooms({
+ signal,
+ fromDate,
+ limit,
+ offset,
+ toDate,
+ floorNo,
+ roomID,
+ roomTypeID,
+}: {
+ signal: AbortSignal;
+ fromDate: string;
+ toDate: string;
+ floorNo?: string;
+ roomID?: string;
+ roomTypeID?: string;
+ limit: string;
+ offset: string;
+}) {
+ const searchParams = new URLSearchParams([
+  ['limit', limit],
+  ['offset', offset],
+  ['fromDate', fromDate],
+  ['toDate', toDate],
+ ]);
+ if (floorNo !== undefined) {
+  searchParams.set('floorNo', floorNo);
+ }
+ if (!!roomID) {
+  searchParams.set('roomID', roomID);
+ }
+ if (!!roomTypeID) {
+  searchParams.set('roomTypeID', roomTypeID);
+ }
+ return axios.get<{
+  outOfOrders: PagedData<Room[]>;
+ }>(`/Reception/OutOfOrder/GetOutOfOrders?${searchParams.toString()}`, {
+  signal,
+ });
+}
+
 export type { InitialData, Room };
-export { outOfOrderRoomsBaseKey, getInitialData };
+export { outOfOrderRoomsBaseKey, getInitialData, getOutOfOrderRooms };

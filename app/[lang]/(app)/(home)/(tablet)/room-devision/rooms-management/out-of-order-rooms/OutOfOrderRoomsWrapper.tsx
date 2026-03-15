@@ -9,10 +9,11 @@ import {
  defaultValues,
 } from './schemas/outOfOrderRoomsSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
 import {
  outOfOrderRoomsBaseKey,
  getInitialData,
+ getOutOfOrderRooms,
 } from './services/outOfOrderApiActions';
 import { useDateFns } from '@/hooks/useDateFns';
 
@@ -30,7 +31,8 @@ export default function OutOfOrderRoomsWrapper({
   },
   resolver: zodResolver(createOutOfOrderRoomsSchema()),
  });
-
+ const [fromDateValue, toDateValue, floorValue, roomValue, roomTypeValue] =
+  filtersUseForm.watch(['fromDate', 'toDate', 'floor', 'room', 'roomType']);
  // init data
  const {
   data: initData,
@@ -44,14 +46,83 @@ export default function OutOfOrderRoomsWrapper({
   },
  });
 
+ // rooms
+ const { data, hasNextPage, fetchNextPage, isFetching, refetch, isSuccess } =
+  useInfiniteQuery({
+   enabled: !!fromDateValue && !!toDateValue,
+   queryKey: [
+    outOfOrderRoomsBaseKey,
+    'rooms',
+    fromDateValue?.toISOString(),
+    toDateValue?.toISOString(),
+    floorValue?.key || 'all',
+    roomTypeValue?.key || 'all',
+    roomValue?.key || 'all',
+   ],
+   initialPageParam: {
+    limit: 300,
+    offset: 1,
+   },
+   async queryFn({ signal, pageParam }) {
+    const res = await getOutOfOrderRooms({
+     signal,
+     limit: pageParam.limit.toString(),
+     offset: pageParam.offset.toString(),
+     fromDate: fromDateValue!.toISOString(),
+     toDate: toDateValue!.toISOString(),
+     floorNo: floorValue?.key,
+     roomID: roomValue?.key,
+     roomTypeID: roomTypeValue?.key,
+    });
+    return res.data.outOfOrders;
+   },
+   getNextPageParam(lastPage) {
+    const nextOffset = lastPage.offset + 1;
+    if (lastPage.offset * lastPage.limit >= lastPage.rowsCount) {
+     return undefined;
+    }
+    return {
+     offset: nextOffset,
+     limit: lastPage.limit,
+    };
+   },
+   getPreviousPageParam(firstPage) {
+    if (firstPage.offset <= 1) {
+     return undefined;
+    }
+    return {
+     limit: firstPage.limit,
+     offset: firstPage.offset - 1,
+    };
+   },
+  });
+
  return (
   <FormProvider {...filtersUseForm}>
    <OutOfOrderRoomsFilters
     dic={dic}
     initDataIsLoading={initDataIsLoading}
     initData={initData}
+    rooms={{
+     data,
+     hasNextPage,
+     fetchNextPage,
+     isFetching,
+     refetch,
+     isSuccess,
+    }}
    />
-   <OutOfOrderRooms dic={dic} />
+   <OutOfOrderRooms
+    dic={dic}
+    rooms={{
+     data,
+     hasNextPage,
+     fetchNextPage,
+     isFetching,
+     refetch,
+     isSuccess,
+    }}
+   />
   </FormProvider>
  );
 }
