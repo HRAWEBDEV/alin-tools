@@ -12,6 +12,13 @@
    "title": "صفحه‌ای یافت نشد",
    "goHome": "برو به خانه"
   },
+  "noItemFound": {
+   "title": "آیتمی یافت نشد."
+  },
+  "unExpectedError": {
+   "title": "خطایی رخ داده است",
+   "pleaseTryAgainLater": "لطفا دوباره تلاش کنید"
+  },
   "modeController": {
    "description": "تغییر حالت"
   },

@@ -1,0 +1,99 @@
+import { useState } from 'react';
+import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
+import { useRackConfigContext } from '../../services/rooms-rack-config/roomsRackConfigContext';
+import { type RoomStatisticsDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/room-statistics/dictionary';
+import { Button } from '@/components/ui/button';
+import { FaInfoCircle } from 'react-icons/fa';
+import RoomsStatisticsDialog from '../../../rooms-management/rooms-statistics/components/RoomsStatisticsDialog';
+
+export default function RackInfo({
+ dic,
+ roomsStatisticsDic,
+}: {
+ dic: RoomsRackDictionary;
+ roomsStatisticsDic: RoomStatisticsDictionary;
+}) {
+ const [showRoomsStatistics, setShowRoomsStatistics] = useState(false);
+ const { rackInfo } = useRackConfigContext();
+ return (
+  <>
+   <div className='px-2'>
+    <Button className='w-full' onClick={() => setShowRoomsStatistics(true)}>
+     <FaInfoCircle />
+     {dic.info.showRoomsStatistics}
+    </Button>
+   </div>
+   <div className='p-4 pt-2'>
+    <div className='grid grid-cols-1 gap-2 border-b border-input pb-2 mb-2 text-sm'>
+     <div className='font-medium'>
+      <span className='text-neutral-500'>{dic.info.occupiedRooms}: </span>
+      <span>{rackInfo.data?.occupied}</span>
+     </div>
+     <div className='font-medium'>
+      <span className='text-neutral-500'>{dic.info.vacantRooms}: </span>
+      <span>{rackInfo.data?.vacent}</span>
+     </div>
+     <div className='font-medium'>
+      <span className='text-neutral-500'>{dic.info.readyRooms}: </span>
+      <span>{rackInfo.data?.readyToService}</span>
+     </div>
+     <div className='font-medium'>
+      <span className='text-neutral-500'>{dic.info.outOfServiceRooms}: </span>
+      <span>{rackInfo.data?.waiteForService}</span>
+     </div>
+     <div className='font-medium flex gap-1'>
+      <span className='text-neutral-500'>{dic.info.waitForQC}: </span>
+      <span>{rackInfo.data?.waiteForQC}</span>
+     </div>
+     <div className='font-medium flex gap-1'>
+      <span className='text-neutral-500'>{dic.info.outOfOrderRooms}: </span>
+      <span>{rackInfo.data?.outOfOrder}</span>
+     </div>
+    </div>
+    <div className='grid grid-cols-1 gap-2 border-b border-input pb-2 mb-2 text-sm'>
+     <div className='font-medium flex gap-1'>
+      <span className='text-neutral-500'>{dic.info.todayCheckin}: </span>
+      <span>{rackInfo.data?.todayCheckin}</span>
+     </div>
+     <div className='font-medium flex gap-1'>
+      <span className='text-neutral-500'>{dic.info.registered}: </span>
+      <span>{rackInfo.data?.todayCheckedin}</span>
+     </div>
+     <div className='font-medium flex gap-1'>
+      <span className='text-neutral-500'>{dic.info.notRegistered}: </span>
+      <span>{rackInfo.data?.notCheckin}</span>
+     </div>
+    </div>
+    <div className='grid grid-cols-1 gap-2 border-b border-input pb-2 mb-2 text-sm'>
+     <div className='font-medium flex gap-1'>
+      <span className='text-neutral-500'>{dic.info.todayCheckout}: </span>
+      <span>{rackInfo.data?.todayCheckout}</span>
+     </div>
+     <div className='font-medium flex gap-1'>
+      <span className='text-neutral-500'>{dic.info.checkout}: </span>
+      <span>{rackInfo.data?.todayCheckedout}</span>
+     </div>
+     <div className='font-medium flex gap-1'>
+      <span className='text-neutral-500'>{dic.info.notCheckout}: </span>
+      <span>{rackInfo.data?.notCheckout}</span>
+     </div>
+    </div>
+    <div className='grid grid-cols-1 gap-2 text-sm'>
+     <div className='font-medium flex gap-1'>
+      <span className='text-neutral-500'>{dic.info.guestsCount}: </span>
+      <span>{rackInfo.data?.guestCout}</span>
+     </div>
+     <div className='font-medium flex gap-1'>
+      <span className='text-neutral-500'>{dic.info.extraBedsCount}: </span>
+      <span>{rackInfo.data?.extraBed}</span>
+     </div>
+    </div>
+   </div>
+   <RoomsStatisticsDialog
+    dic={roomsStatisticsDic}
+    open={showRoomsStatistics}
+    setOpen={setShowRoomsStatistics}
+   />
+  </>
+ );
+}

@@ -1,0 +1,38 @@
+{
+ "title": "اتاق های خارج از سرویس",
+ "filters": {
+  "filters": "فیلترها",
+  "fromDate": "از تاریخ",
+  "toDate": "تا تاریخ",
+  "floor": "طبقه",
+  "room": "اتاق",
+  "roomType": "نوع اتاق",
+  "new": "جدید",
+  "edit": "ویرایش"
+ },
+ "info": {
+  "addBy": "ثبت کننده",
+  "nightPerRoom": "اتاق / شب",
+  "loadMore": "نمایش بیشتر",
+  "moreInfo": "اطلاعات بیشتر",
+  "results": "نتایج",
+  "roomNo": "شماره اتاق",
+  "room": "اتاق",
+  "floor": "طبقه",
+  "fromDate": "از تاریخ",
+  "toDate": "تا تاریخ",
+  "reason": "علت",
+  "comment": "توضیحات",
+  "user": "کاربر",
+  "roomType": "نوع اتاق"
+ },
+ "newOrEdit": {
+  "confirm": "تایید",
+  "cancel": "انصراف",
+  "fillRequiredFields": "فیلدهای الزامی را پر کنید",
+  "remove": "حذف",
+  "expire": "توقف خارج از سرویس",
+  "removeConfirmMessage": "آیا از حذف آیتم اطمینان دارید؟",
+  "expireConfirmMessage": "آیا از توقف خارج از سرویس اطمینان دارید؟"
+ }
+}

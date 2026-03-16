@@ -1,13 +1,13 @@
 'use client';
 import { IoIosSearch } from 'react-icons/io';
-import { useRestaurantShareDictionary } from '../(home)/(tablet)/restaurant/services/share-dictionary/restaurantShareDictionaryContext';
+import { useShareDictionary } from '../services/share-dictionary/shareDictionaryContext';
 
 export default function NoItemFound() {
  const {
-  restaurantShareDictionary: {
+  shareDictionary: {
    components: { noItemFound },
   },
- } = useRestaurantShareDictionary();
+ } = useShareDictionary();
  return (
   <div className='w-80 h-60 rounded-xl mx-auto flex flex-col items-center justify-center gap-4 text-neutral-400 dark:text-neutral-600'>
    <IoIosSearch className='size-16' />

@@ -1,0 +1,35 @@
+import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
+import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
+import { useRackConfigContext } from '../../services/rooms-rack-config/roomsRackConfigContext';
+import NoItemFound from '@/app/[lang]/(app)/components/NoItemFound';
+import UnExpectedError from '@/app/[lang]/(app)/components/UnExpectedError';
+import RackRoom from './RackRoom';
+
+export default function RackRooms({ dic }: { dic: RoomsRackDictionary }) {
+ const { rack } = useRackConfigContext();
+
+ if (rack.isSuccess && !rack.data.length)
+  return (
+   <div className='grow'>
+    <NoItemFound />
+   </div>
+  );
+
+ if (rack.isError && !rack.isSuccess)
+  return (
+   <div className='grow'>
+    <UnExpectedError />
+   </div>
+  );
+
+ return (
+  <div className='grow '>
+   {rack.isLoading && <LinearLoading />}
+   <div className='grid gap-4 grid-cols-[repeat(auto-fill,minmax(9rem,9.5rem))] justify-center pb-4'>
+    {rack.data.map((room) => (
+     <RackRoom dic={dic} key={room.roomLabel} room={room} />
+    ))}
+   </div>
+  </div>
+ );
+}

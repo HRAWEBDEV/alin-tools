@@ -1,0 +1,50 @@
+{
+ "title": "آمار اتاق ها",
+ "date": "تاریخ",
+ "nextDay": "روز بعد",
+ "prevDay": "روز قبل",
+ "occupied": {
+  "title": "وضعیت اشغال",
+  "occupiedRoom": "اتاق اشغال",
+  "emptyRoom": "اتاق خالی",
+  "guestCount": "تعداد مهمان",
+  "exBedCount": "تعداد تخت اضافه",
+  "occupencyPercentage": "درصد اشغال"
+ },
+ "service": {
+  "title": "وضعیت سرویس",
+  "serviceReady": "آماده سرویس",
+  "outofService": "خارج از سرویس",
+  "awaitingQualityControl": "در انتظار کنترل کیفیت",
+  "awaitingService": "در انتظار سرویس",
+  "stopSale": "توقف فروش"
+ },
+ "arrival": {
+  "title": "اتاق‌های ورودی",
+  "todayArrival": "ورودی امروز",
+  "registered": "پذیرش شده",
+  "notRegistered": "پذیرش نشده",
+  "earlyCheckin": "پذیرش زود هنگام",
+  "guestCount": "تعداد مهمان ورودی"
+ },
+ "departure": {
+  "title": "اتاق‌های خروجی",
+  "todayDeparture": "خروجی امروز",
+  "checkout": "خارج شده",
+  "notCheckout": "خارج نشده",
+  "earlyCheckout": "خروج دیر هنگام",
+  "guestCount": "تعداد مهمان خروجی"
+ },
+ "status": {
+  "title": "وضعیت",
+  "awaitingReserve": "در انتظار رزرو",
+  "awaitingRegister": "در انتظار پذیرش",
+  "withoutGuest": "بدون مهمان",
+  "noDisturb": "مزاحم نشوید",
+  "locked": "قفل شده",
+  "noSleep": "اشغال بدون خواب",
+  "hotelUse": "مورد استفاده هتل",
+  "lightLuggageGuest": "مهمان کم توشه",
+  "noLuggageGuest": "مهمان بی توشه"
+ }
+}

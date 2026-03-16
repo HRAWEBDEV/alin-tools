@@ -1,0 +1,30 @@
+import { type RoomsManagementDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-management/dictionary';
+import RoomsManagementTabs from './RoomsManagementTabs';
+import RoomsManagementSlot from './RoomsManagementSlot';
+import { type RoomStatisticsDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/room-statistics/dictionary';
+import { type OutOfOrderRoomsDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/out-of-order-rooms/dictionary';
+import { type EntranceAndExitRoomsDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/entrance-and-exit-rooms/dictionary';
+
+export default function RoomsManagementWrapper({
+ dic,
+ roomsStatisticsDic,
+ entranceAndExitDic,
+ outOfOrderDic,
+}: {
+ dic: RoomsManagementDictionary;
+ roomsStatisticsDic: RoomStatisticsDictionary;
+ entranceAndExitDic: EntranceAndExitRoomsDictionary;
+ outOfOrderDic: OutOfOrderRoomsDictionary;
+}) {
+ return (
+  <div className='flex flex-col [&]:[--top-offset:3.75rem] min-h-full'>
+   <RoomsManagementTabs dic={dic} />
+   <RoomsManagementSlot
+    dic={dic}
+    roomsStatisticsDic={roomsStatisticsDic}
+    entranceAndExitDic={entranceAndExitDic}
+    outOfOrderDic={outOfOrderDic}
+   />
+  </div>
+ );
+}
