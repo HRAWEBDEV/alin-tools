@@ -207,7 +207,9 @@ export default function NewOutOfOrderRoom({
            type='button'
            variant='outline'
            className='text-destructive border-destructive'
+           disabled={confirmExpireIsPending}
           >
+            {confirmExpireIsPending && <Spinner/>}
            {dic.newOrEdit.expire}
           </Button>
          </DialogTrigger>
@@ -253,8 +255,10 @@ export default function NewOutOfOrderRoom({
           <Button
            type='button'
            variant='outline'
+           disabled={confirmRemoveIsPending}
            className='text-destructive border-destructive'
           >
+            {confirmRemoveIsPending && <Spinner/>}
            {dic.newOrEdit.remove}
           </Button>
          </DialogTrigger>
