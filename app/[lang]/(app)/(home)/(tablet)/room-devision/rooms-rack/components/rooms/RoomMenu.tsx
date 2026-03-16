@@ -10,6 +10,7 @@ import RackRoom from './RackRoom';
 import { Button } from '@/components/ui/button';
 import RoomStateKind from './RoomStateKind';
 import RoomStateType from './RoomStateType';
+import RoomControl from './RoomControl';
 
 export default function RoomMenu({
  dic,
@@ -20,6 +21,8 @@ export default function RoomMenu({
  setShowRoomStateKind,
  showRoomStateType,
  setShowRoomStateType,
+ setShowRoomControl,
+ showRoomControl,
 }: {
  dic: RoomsRackDictionary;
  room: Rack | null;
@@ -29,6 +32,8 @@ export default function RoomMenu({
  setShowRoomStateKind: (state: boolean) => unknown;
  showRoomStateType: boolean;
  setShowRoomStateType: (state: boolean) => unknown;
+ showRoomControl: boolean;
+ setShowRoomControl: (state: boolean) => unknown;
 }) {
  return (
   <Drawer open={isOpen} onOpenChange={setIsOpen}>
@@ -61,6 +66,14 @@ export default function RoomMenu({
           >
            {dic.options.changeRoomStateType}
           </Button>
+          <Button
+           variant='outline'
+           className='justify-start text-start h-12'
+           size='lg'
+           onClick={() => setShowRoomControl(true)}
+          >
+           {dic.options.houseControl}
+          </Button>
          </>
         )}
        </div>
@@ -83,6 +96,16 @@ export default function RoomMenu({
        onSuccess={() => {
         setIsOpen(false);
         setShowRoomStateType(false);
+       }}
+      />
+      <RoomControl
+       dic={dic}
+       room={room}
+       open={showRoomControl}
+       onChangeOpen={setShowRoomControl}
+       onSuccess={() => {
+        setIsOpen(false);
+        setShowRoomControl(false);
        }}
       />
      </>
