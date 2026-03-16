@@ -16,6 +16,11 @@ import {
 } from '../../utils/roomControl';
 import { Field, FieldLabel } from '@/components/ui/field';
 import { InputGroup, InputGroupTextarea } from '@/components/ui/input-group';
+import {
+ getRoomControlHistory,
+ saveRoomControl,
+} from '../../services/room-control/roomControlApiActions';
+import { useMutation } from '@tanstack/react-query';
 
 export default function RoomControl({
  dic,
@@ -31,6 +36,13 @@ export default function RoomControl({
  onSuccess: () => unknown;
 }) {
  const { locale } = useBaseConfig();
+
+ const { mutate } = useMutation({
+  mutationFn() {
+   return saveRoomControl(room.roomID, room.registerID!);
+  },
+ });
+
  return (
   <Dialog open={open} onOpenChange={onChangeOpen}>
    <DialogContent className='gap-0 p-0 max-h-[95svh] overflow-hidden flex flex-col'>
@@ -112,12 +124,19 @@ export default function RoomControl({
          variant='outline'
          className='md:w-24 text-secondary border-secondary'
          type='button'
+         onClick={() => mutate()}
         >
          {dic.houseControl.history}
         </Button>
        </div>
        <div className='grid grid-cols-2 md:flex gap-2'>
-        <Button variant='outline' size='lg' className='md:w-28' type='button'>
+        <Button
+         variant='outline'
+         size='lg'
+         className='md:w-28'
+         type='button'
+         onClick={() => onChangeOpen(false)}
+        >
          {dic.houseControl.cancel}
         </Button>
         <Button size='lg' className='md:w-28' type='button'>
