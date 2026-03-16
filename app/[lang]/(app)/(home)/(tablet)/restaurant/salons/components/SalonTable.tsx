@@ -63,6 +63,7 @@ export default function SalonTable({
  const { data: ordersList, isLoading: isLoadingOrdersList } = useQuery({
   enabled: showTableOrdersList && tableUtils.tableType === 'normal',
   queryKey: [getHallKey, 'ordersList', table.tableID.toString()],
+  gcTime:0,
   async queryFn({ signal }) {
    const res = await getTableOrders({
     tableID: table.tableID,
