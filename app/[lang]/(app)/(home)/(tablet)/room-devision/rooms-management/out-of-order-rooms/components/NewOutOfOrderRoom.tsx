@@ -209,7 +209,7 @@ export default function NewOutOfOrderRoom({
            className='text-destructive border-destructive'
            disabled={confirmExpireIsPending}
           >
-            {confirmExpireIsPending && <Spinner/>}
+           {confirmExpireIsPending && <Spinner />}
            {dic.newOrEdit.expire}
           </Button>
          </DialogTrigger>
@@ -230,7 +230,7 @@ export default function NewOutOfOrderRoom({
             <Button
              className='sm:w-24'
              variant='outline'
-             disabled={confirmExpireIsPending}
+             disabled={confirmExpireIsPending || confirmExpireIsPending}
             >
              {confirmExpireIsPending && <Spinner />}
              {dic.newOrEdit.cancel}
@@ -258,7 +258,7 @@ export default function NewOutOfOrderRoom({
            disabled={confirmRemoveIsPending}
            className='text-destructive border-destructive'
           >
-            {confirmRemoveIsPending && <Spinner/>}
+           {confirmRemoveIsPending && <Spinner />}
            {dic.newOrEdit.remove}
           </Button>
          </DialogTrigger>
@@ -279,7 +279,7 @@ export default function NewOutOfOrderRoom({
             <Button
              className='sm:w-24'
              variant='outline'
-             disabled={confirmRemoveIsPending}
+             disabled={confirmExpireIsPending || confirmExpireIsPending}
             >
              {confirmRemoveIsPending && <Spinner />}
              {dic.newOrEdit.cancel}
@@ -536,7 +536,9 @@ export default function NewOutOfOrderRoom({
         <Button
          type='button'
          size='lg'
-         disabled={isPending}
+         disabled={
+          isPending || confirmExpireIsPending || confirmRemoveIsPending
+         }
          variant='outline'
          className='md:w-34'
          onClick={() => editRoom.onCloseEdit()}
@@ -545,7 +547,9 @@ export default function NewOutOfOrderRoom({
          {dic.newOrEdit.cancel}
         </Button>
         <Button
-         disabled={isPending}
+         disabled={
+          isPending || confirmExpireIsPending || confirmRemoveIsPending
+         }
          size='lg'
          className='md:w-34'
          type='submit'
