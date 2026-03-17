@@ -1,3 +1,6 @@
 {
- "title": "آمار اتاق ها"
+ "title": "مدریرت اجرا",
+ "tabs": {
+  "guestCheckoutCheckList": "چک لیست خروج مهمانان"
+ }
 }
