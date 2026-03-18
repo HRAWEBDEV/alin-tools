@@ -251,7 +251,10 @@ export default function NewGuestCheckoutChecklist({
         </Dialog>
        </div>
       )}
-      <Field data-invalid={!!errors.room}>
+      <Field
+       data-invalid={!!errors.room}
+       className='col-span-full lg:col-span-1'
+      >
        <FieldLabel htmlFor='room'>{dic.filters.room} *</FieldLabel>
        <Controller
         control={control}
@@ -322,7 +325,10 @@ export default function NewGuestCheckoutChecklist({
         )}
        />
       </Field>
-      <Field data-invalid={!!errors.maid}>
+      <Field
+       data-invalid={!!errors.maid}
+       className='col-span-full lg:col-span-1'
+      >
        <FieldLabel htmlFor='maid'>{dic.info.maid} *</FieldLabel>
        <Controller
         data-invalid={!!errors.maid}
