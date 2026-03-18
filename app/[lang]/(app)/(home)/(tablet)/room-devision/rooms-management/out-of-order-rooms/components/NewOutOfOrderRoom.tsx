@@ -143,6 +143,12 @@ export default function NewOutOfOrderRoom({
    },
   });
 
+ function setFormDefaults() {
+  Object.entries(defaultValues).forEach(([key, value]) => {
+   setValue(key as keyof OutOfOrderRoomsSchema, value);
+  });
+ }
+
  useEffect(() => {
   setValue(
    'fromDate',
@@ -181,12 +187,16 @@ export default function NewOutOfOrderRoom({
   );
  }, [setValue, editRoom.targetEditRoom]);
 
+ const pendActions =
+  confirmRemoveIsPending || confirmExpireIsPending || isPending;
+
  return (
   <Drawer
    open={editRoom.showNew}
    onOpenChange={(newValue) => {
     if (newValue) return;
     editRoom.onCloseEdit();
+    setFormDefaults();
    }}
   >
    <DrawerContent className='h-[min(70svh,40rem)] flex flex-col'>
@@ -207,9 +217,9 @@ export default function NewOutOfOrderRoom({
            type='button'
            variant='outline'
            className='text-destructive border-destructive'
-           disabled={confirmExpireIsPending}
+           disabled={pendActions}
           >
-           {confirmExpireIsPending && <Spinner />}
+           {pendActions && <Spinner />}
            {dic.newOrEdit.expire}
           </Button>
          </DialogTrigger>
@@ -230,9 +240,9 @@ export default function NewOutOfOrderRoom({
             <Button
              className='sm:w-24'
              variant='outline'
-             disabled={confirmExpireIsPending || confirmExpireIsPending}
+             disabled={pendActions}
             >
-             {confirmExpireIsPending && <Spinner />}
+             {pendActions && <Spinner />}
              {dic.newOrEdit.cancel}
             </Button>
            </DialogClose>
@@ -240,10 +250,10 @@ export default function NewOutOfOrderRoom({
             <Button
              className='sm:w-24'
              variant='destructive'
-             disabled={confirmExpireIsPending}
+             disabled={pendActions}
              onClick={() => confirmExpire()}
             >
-             {confirmExpireIsPending && <Spinner />}
+             {pendActions && <Spinner />}
              {dic.newOrEdit.confirm}
             </Button>
            </DialogClose>
@@ -255,10 +265,10 @@ export default function NewOutOfOrderRoom({
           <Button
            type='button'
            variant='outline'
-           disabled={confirmRemoveIsPending}
+           disabled={pendActions}
            className='text-destructive border-destructive'
           >
-           {confirmRemoveIsPending && <Spinner />}
+           {pendActions && <Spinner />}
            {dic.newOrEdit.remove}
           </Button>
          </DialogTrigger>
@@ -279,9 +289,9 @@ export default function NewOutOfOrderRoom({
             <Button
              className='sm:w-24'
              variant='outline'
-             disabled={confirmExpireIsPending || confirmExpireIsPending}
+             disabled={pendActions}
             >
-             {confirmRemoveIsPending && <Spinner />}
+             {pendActions && <Spinner />}
              {dic.newOrEdit.cancel}
             </Button>
            </DialogClose>
@@ -290,9 +300,9 @@ export default function NewOutOfOrderRoom({
              className='sm:w-24'
              variant='destructive'
              onClick={() => confirmRemove()}
-             disabled={confirmRemoveIsPending}
+             disabled={pendActions}
             >
-             {confirmRemoveIsPending && <Spinner />}
+             {pendActions && <Spinner />}
              {dic.newOrEdit.confirm}
             </Button>
            </DialogClose>
@@ -536,20 +546,16 @@ export default function NewOutOfOrderRoom({
         <Button
          type='button'
          size='lg'
-         disabled={
-          isPending || confirmExpireIsPending || confirmRemoveIsPending
-         }
+         disabled={pendActions}
          variant='outline'
          className='md:w-34'
          onClick={() => editRoom.onCloseEdit()}
         >
-         {isPending && <Spinner />}
+         {pendActions && <Spinner />}
          {dic.newOrEdit.cancel}
         </Button>
         <Button
-         disabled={
-          isPending || confirmExpireIsPending || confirmRemoveIsPending
-         }
+         disabled={pendActions}
          size='lg'
          className='md:w-34'
          type='submit'
@@ -563,7 +569,7 @@ export default function NewOutOfOrderRoom({
           )();
          }}
         >
-         {isPending && <Spinner />}
+         {pendActions && <Spinner />}
          {dic.newOrEdit.confirm}
         </Button>
        </div>
