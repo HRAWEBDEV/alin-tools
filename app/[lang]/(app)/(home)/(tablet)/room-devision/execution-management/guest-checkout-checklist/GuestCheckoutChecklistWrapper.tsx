@@ -29,9 +29,13 @@ export default function GuestCheckoutChecklistWrapper({
  const filtersUseForm = useForm<CheckoutChecklistSchema>({
   defaultValues: {
    ...defaultValues,
+   fromDate: dateFns.startOfToday(),
+   toDate: dateFns.startOfToday(),
   },
   resolver: zodResolver(createCheckoutChecklistSchema()),
  });
+ const [fromDateValue, toDateValue, roomValue, maidValue] =
+  filtersUseForm.watch(['fromDate', 'toDate', 'room', 'maid']);
  // init data
  const {
   data: initData,
@@ -55,7 +59,7 @@ export default function GuestCheckoutChecklistWrapper({
   isSuccess,
   isError,
  } = useInfiniteQuery({
-  enabled: false,
+  enabled: !!fromDateValue && !!toDateValue,
   queryKey: [guestCheckoutChecklistBaseKey, 'guests'],
   initialPageParam: {
    limit: 50,
@@ -66,6 +70,10 @@ export default function GuestCheckoutChecklistWrapper({
     signal,
     limit: pageParam.limit.toString(),
     offset: pageParam.offset.toString(),
+    fromDate: fromDateValue!.toISOString(),
+    toDate: toDateValue!.toISOString(),
+    maidID: maidValue?.key,
+    roomID: roomValue?.key,
    });
    return res.data;
   },
