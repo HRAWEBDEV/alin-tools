@@ -22,6 +22,7 @@ import {
  guestCheckoutChecklistBaseKey,
  saveCheckoutlist,
  updateCheckoutlist,
+ removeCheckoutlist,
 } from '../services/guestCheckoutChecklistApiActions';
 import { EditGuestCheckoutProps } from '../utils/editGuestCheckoutProps';
 import { Field, FieldLabel } from '@/components/ui/field';
@@ -117,6 +118,23 @@ export default function NewGuestCheckoutChecklist({
    },
   });
 
+ // remove
+ const { mutate: confirmRemove, isPending: confirmRemoveIsPending } =
+  useMutation({
+   mutationFn() {
+    return removeCheckoutlist(editChecklist.targetEditChecklist!.id);
+   },
+   onError(err: AxiosError<string>) {
+    toast.error(err.response?.data);
+   },
+   onSuccess() {
+    queryClient.invalidateQueries({
+     queryKey: [guestCheckoutChecklistBaseKey, 'list'],
+    });
+    editChecklist.onCloseEdit();
+   },
+  });
+
  useEffect(() => {
   setValue(
    'fromDate',
@@ -150,6 +168,9 @@ export default function NewGuestCheckoutChecklist({
   );
  }, [setValue, editChecklist.targetEditChecklist]);
 
+ const pendActions =
+  saveChecklistIsPending || registerInfoIsPending || confirmRemoveIsPending;
+
  return (
   <Drawer
    open={editChecklist.showNew}
@@ -168,6 +189,59 @@ export default function NewGuestCheckoutChecklist({
     </DrawerHeader>
     <div className='grow overflow-auto p-4'>
      <form className='mx-auto w-[min(100%,40rem)] grid grid-cols-2 gap-4'>
+      {!!editChecklist.selectedCheckListID && (
+       <div className='flex gap-2 items-center justify-end col-span-full'>
+        <Dialog>
+         <DialogTrigger asChild>
+          <Button
+           type='button'
+           variant='outline'
+           disabled={pendActions}
+           className='text-destructive border-destructive'
+          >
+           {pendActions && <Spinner />}
+           {dic.newOrEdit.remove}
+          </Button>
+         </DialogTrigger>
+         <DialogContent className='p-0 gap-0'>
+          <DialogHeader className='p-4'>
+           <DialogTitle className='hidden'>
+            {dic.newOrEdit.removeConfirmMessage}
+           </DialogTitle>
+          </DialogHeader>
+          <div className='p-4'>
+           <div className='flex gap-1 items-center text-red-700 dark:text-red-400 font-medium'>
+            <BiError className='size-12' />
+            <p>{dic.newOrEdit.removeConfirmMessage}</p>
+           </div>
+          </div>
+          <DialogFooter className='p-4'>
+           <DialogClose asChild>
+            <Button
+             className='sm:w-24'
+             variant='outline'
+             disabled={pendActions}
+            >
+             {pendActions && <Spinner />}
+             {dic.newOrEdit.cancel}
+            </Button>
+           </DialogClose>
+           <DialogClose asChild>
+            <Button
+             className='sm:w-24'
+             variant='destructive'
+             onClick={() => confirmRemove()}
+             disabled={pendActions}
+            >
+             {pendActions && <Spinner />}
+             {dic.newOrEdit.confirm}
+            </Button>
+           </DialogClose>
+          </DialogFooter>
+         </DialogContent>
+        </Dialog>
+       </div>
+      )}
       <Field data-invalid={!!errors.room}>
        <FieldLabel htmlFor='room'>{dic.filters.room} *</FieldLabel>
        <Controller
@@ -313,16 +387,16 @@ export default function NewGuestCheckoutChecklist({
          size='lg'
          variant='outline'
          className='md:w-34'
-         disabled={registerInfoIsPending || saveChecklistIsPending}
+         disabled={pendActions}
         >
-         {(registerInfoIsPending || saveChecklistIsPending) && <Spinner />}
+         {pendActions && <Spinner />}
          {dic.newOrEdit.cancel}
         </Button>
         <Button
          size='lg'
          className='md:w-34'
          type='submit'
-         disabled={registerInfoIsPending || saveChecklistIsPending}
+         disabled={pendActions}
          onClick={(e) => {
           e.preventDefault();
           handleSubmit((data) => {
@@ -330,7 +404,7 @@ export default function NewGuestCheckoutChecklist({
           })();
          }}
         >
-         {(registerInfoIsPending || saveChecklistIsPending) && <Spinner />}
+         {pendActions && <Spinner />}
          {dic.newOrEdit.confirm}
         </Button>
        </div>

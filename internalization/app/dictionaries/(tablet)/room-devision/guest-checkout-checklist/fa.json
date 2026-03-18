@@ -21,6 +21,8 @@
  },
  "newOrEdit": {
   "confirm": "تایید",
-  "cancel": "انصراف"
+  "cancel": "انصراف",
+  "remove": "حذف",
+  "removeConfirmMessage": "آیا از حذف آیتم اطمینان دارید؟"
  }
 }
