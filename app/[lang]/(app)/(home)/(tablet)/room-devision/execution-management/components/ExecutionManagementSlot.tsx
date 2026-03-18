@@ -18,7 +18,7 @@ export default function ExecutionManagementSlot({
    <Activity
     mode={activeTab === 'guest-checkout-checklist' ? 'visible' : 'hidden'}
    >
-    <div className='p-4 lg:pt-0 w-[min(100%,55rem)] mx-auto'>
+    <div className='p-4 lg:pt-0'>
      <GuestCheckoutChecklistWrapper dic={guestChecklistDic} />
     </div>
    </Activity>

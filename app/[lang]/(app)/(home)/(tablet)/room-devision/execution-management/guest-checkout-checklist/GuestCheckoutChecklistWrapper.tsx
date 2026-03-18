@@ -15,6 +15,7 @@ import {
  getCheckoutChecklist,
 } from './services/guestCheckoutChecklistApiActions';
 import { useDateFns } from '@/hooks/useDateFns';
+import GuestCheckoutChecklistFilters from './components/GuestCheckoutChecklistFilters';
 
 export default function GuestCheckoutChecklistWrapper({
  dic,
@@ -99,30 +100,28 @@ export default function GuestCheckoutChecklistWrapper({
  });
 
  // edit or new
- // function handleOpenEdit(id: number | null) {
- //  setSelectedOutOfOrderRoomID(id);
- //  setShowNew(true);
- // }
- // function handleCloseEdit() {
- //  setSelectedOutOfOrderRoomID(null);
- //  setShowNew(false);
- // }
+ function handleOpenEdit(id: number | null) {
+  setSelectedCheckListID(id);
+  setShowNew(true);
+ }
+ function handleCloseEdit() {
+  setSelectedCheckListID(null);
+  setShowNew(false);
+ }
 
- // const targetEditRoom = !!data?.pages[0].outOfOrders.rowsCount
- //  ? data?.pages[0].outOfOrders.rows.find(
- //     (item) => item.id === selectedOutOfOrderRoomID,
- //    ) || null
- //  : null;
+ const targetEditChecklist = !!data?.pages[0].rows
+  ? data?.pages[0].rows.find((item) => item.id === selectedCheckListID) || null
+  : null;
 
  return (
   <>
    <FormProvider {...filtersUseForm}>
     <></>
-    {/*<OutOfOrderRoomsFilters
+    <GuestCheckoutChecklistFilters
      dic={dic}
      initDataIsLoading={initDataIsLoading}
      initData={initData}
-     rooms={{
+     checklist={{
       data,
       hasNextPage,
       fetchNextPage,
@@ -131,14 +130,14 @@ export default function GuestCheckoutChecklistWrapper({
       isSuccess,
       isError,
      }}
-     editRoom={{
-      selectedOutOfOrderRoomID,
+     editChecklist={{
+      selectedCheckListID,
       showNew,
       onCloseEdit: handleCloseEdit,
       onShowEdit: handleOpenEdit,
-      targetEditRoom,
+      targetEditChecklist,
      }}
-    />*/}
+    />
     {/*<OutOfOrderRooms
      dic={dic}
      editRoom={{
