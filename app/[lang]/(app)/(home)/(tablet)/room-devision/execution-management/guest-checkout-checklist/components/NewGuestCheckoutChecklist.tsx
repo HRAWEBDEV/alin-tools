@@ -15,25 +15,24 @@ import {
  defaultValues,
  createCheckoutChecklistSchema,
 } from '../schemas/checkoutChecklistSchema';
-import { type InitialData } from '../services/guestCheckoutChecklistApiActions';
+import {
+ type InitialData,
+ type SaveCheckoutChecklist,
+ getRegisterInfo,
+ guestCheckoutChecklistBaseKey,
+ saveCheckoutlist,
+ updateCheckoutlist,
+} from '../services/guestCheckoutChecklistApiActions';
 import { EditGuestCheckoutProps } from '../utils/editGuestCheckoutProps';
 import { Field, FieldLabel } from '@/components/ui/field';
-import {
- Popover,
- PopoverContent,
- PopoverTrigger,
-} from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
-import { ChevronsUpDown, ChevronDownIcon } from 'lucide-react';
-import { Calendar } from '@/components/ui/calendar';
-import { useBaseConfig } from '@/services/base-config/baseConfigContext';
+import { ChevronsUpDown } from 'lucide-react';
 import { Spinner } from '@/components/ui/spinner';
 import { Checkbox } from '@/components/ui/checkbox';
 import { InputGroup, InputGroupTextarea } from '@/components/ui/input-group';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { toast } from 'sonner';
-import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
 import {
  Dialog,
  DialogClose,
@@ -56,14 +55,15 @@ export default function NewGuestCheckoutChecklist({
  initDataIsLoading: boolean;
  editChecklist: EditGuestCheckoutProps;
 }) {
- const { data: userInfo } = useUserInfoRouter();
+ const [registerID, setRegisterID] = useState<null | number>(
+  editChecklist.targetEditChecklist?.registerID || null,
+ );
+ const [folioNo, setFolioNo] = useState<number | null>(
+  editChecklist.targetEditChecklist?.folioNo || null,
+ );
  const queryClient = useQueryClient();
- const { locale } = useBaseConfig();
- const [showFromDatePicker, setShowFromDatePicker] = useState(false);
- const [showToDatePicker, setShowToDatePicker] = useState(false);
  const {
   control,
-  watch,
   setValue,
   register,
   handleSubmit,
@@ -74,7 +74,48 @@ export default function NewGuestCheckoutChecklist({
    ...defaultValues,
   },
  });
- const [fromDateValue, toDateValue] = watch(['fromDate', 'toDate']);
+
+ const { mutate: mutateRegisterInfo, isPending: registerInfoIsPending } =
+  useMutation({
+   mutationFn(roomID: number) {
+    return getRegisterInfo({ roomID, date: new Date().toISOString() });
+   },
+   onSuccess(res) {
+    setRegisterID(res.data.registerID);
+    setFolioNo(res.data.folioNo);
+   },
+   onError(err: AxiosError<string>) {
+    setRegisterID(null);
+    setFolioNo(null);
+    setValue('room', null);
+    toast.error(err.response?.data);
+   },
+  });
+
+ const { mutate: mutateSaveChecklist, isPending: saveChecklistIsPending } =
+  useMutation({
+   mutationFn(data: CheckoutChecklistSchema) {
+    const newChecklist: SaveCheckoutChecklist = {
+     id: editChecklist.selectedCheckListID || 0,
+     comment: data.comment || null,
+     dateTimeDateTimeOffset: new Date().toISOString(),
+     registerID,
+     roomID: Number(data.room!.key),
+     maidUserPersonID: Number(data.maid!.key),
+    };
+    return editChecklist.selectedCheckListID
+     ? updateCheckoutlist(newChecklist)
+     : saveCheckoutlist(newChecklist);
+   },
+   onSuccess() {
+    queryClient.invalidateQueries({
+     queryKey: [guestCheckoutChecklistBaseKey, 'list'],
+    });
+   },
+   onError(err: AxiosError<string>) {
+    toast.error(err.response?.data);
+   },
+  });
 
  useEffect(() => {
   setValue(
@@ -101,7 +142,6 @@ export default function NewGuestCheckoutChecklist({
       }
     : null,
   );
-
   setValue(
    'comment',
    editChecklist.targetEditChecklist
@@ -128,99 +168,6 @@ export default function NewGuestCheckoutChecklist({
     </DrawerHeader>
     <div className='grow overflow-auto p-4'>
      <form className='mx-auto w-[min(100%,40rem)] grid grid-cols-2 gap-4'>
-      <Controller
-       control={control}
-       name='fromDate'
-       render={({ field }) => (
-        <Field data-invalid={!!errors.fromDate}>
-         <FieldLabel htmlFor='fromDate'>{dic.filters.fromDate} *</FieldLabel>
-         <Popover
-          open={showFromDatePicker}
-          onOpenChange={setShowFromDatePicker}
-         >
-          <PopoverTrigger asChild>
-           <Button
-            data-invalid={!!errors.fromDate}
-            variant='outline'
-            id='fromDate'
-            className='justify-between font-normal h-11'
-            onBlur={field.onBlur}
-            ref={field.ref}
-           >
-            <span>
-             {field.value ? field.value.toLocaleDateString(locale) : ''}
-            </span>
-            <ChevronDownIcon />
-           </Button>
-          </PopoverTrigger>
-          <PopoverContent className='w-auto overflow-hidden p-0' align='start'>
-           <Calendar
-            mode='single'
-            captionLayout='dropdown'
-            className='[&]:[--cell-size:2.6rem]'
-            defaultMonth={fromDateValue || undefined}
-            disabled={(date) =>
-             toDateValue ? date.getTime() >= toDateValue?.getTime() : false
-            }
-            endMonth={toDateValue || undefined}
-            selected={field.value || undefined}
-            onSelect={(newValue) => {
-             if (newValue) {
-              field.onChange(newValue);
-              setShowFromDatePicker(false);
-             }
-            }}
-           />
-          </PopoverContent>
-         </Popover>
-        </Field>
-       )}
-      />
-      <Controller
-       control={control}
-       name='toDate'
-       render={({ field }) => (
-        <Field data-invalid={!!errors.toDate}>
-         <FieldLabel htmlFor='toDate'>{dic.filters.toDate} *</FieldLabel>
-         <Popover open={showToDatePicker} onOpenChange={setShowToDatePicker}>
-          <PopoverTrigger asChild>
-           <Button
-            data-invalid={!!errors.toDate}
-            variant='outline'
-            id='toDate'
-            className='justify-between font-normal h-11'
-            onBlur={field.onBlur}
-            ref={field.ref}
-           >
-            <span>
-             {field.value ? field.value.toLocaleDateString(locale) : ''}
-            </span>
-            <ChevronDownIcon />
-           </Button>
-          </PopoverTrigger>
-          <PopoverContent className='w-auto overflow-hidden p-0' align='start'>
-           <Calendar
-            mode='single'
-            captionLayout='dropdown'
-            className='[&]:[--cell-size:2.6rem]'
-            selected={field.value || undefined}
-            defaultMonth={toDateValue || undefined}
-            disabled={(date) =>
-             fromDateValue ? date.getTime() <= fromDateValue?.getTime() : false
-            }
-            startMonth={fromDateValue || undefined}
-            onSelect={(newValue) => {
-             if (newValue) {
-              field.onChange(newValue);
-              setShowToDatePicker(false);
-             }
-            }}
-           />
-          </PopoverContent>
-         </Popover>
-        </Field>
-       )}
-      />
       <Field data-invalid={!!errors.room}>
        <FieldLabel htmlFor='room'>{dic.filters.room} *</FieldLabel>
        <Controller
@@ -243,7 +190,15 @@ export default function NewGuestCheckoutChecklist({
              {field.value?.value || ''}
             </span>
             <div className='flex gap-1 items-center -me-2'>
-             {initDataIsLoading && <Spinner />}
+             {folioNo && (
+              <div className='text-xs'>
+               <span className='text-neutral-600 dark:text-neutral-400'>
+                {dic.info.registerNo}:{' '}
+               </span>
+               <span className='text-sm'>{folioNo}</span>
+              </div>
+             )}
+             {(initDataIsLoading || registerInfoIsPending) && <Spinner />}
              <ChevronsUpDown className='opacity-50' />
             </div>
            </Button>
@@ -260,6 +215,7 @@ export default function NewGuestCheckoutChecklist({
                 className='flex gap-1 items-center ps-6 py-2'
                 onClick={() => {
                  field.onChange(item);
+                 mutateRegisterInfo(Number(item.key));
                 }}
                >
                 <Checkbox
@@ -352,10 +308,29 @@ export default function NewGuestCheckoutChecklist({
       </Field>
       <div className='col-span-full flex flex-col md:flex-row gap-4 md:justify-end md:items-center'>
        <div className='flex gap-4 flex-col-reverse md:flex-row'>
-        <Button type='button' size='lg' variant='outline' className='md:w-34'>
+        <Button
+         type='button'
+         size='lg'
+         variant='outline'
+         className='md:w-34'
+         disabled={registerInfoIsPending || saveChecklistIsPending}
+        >
+         {(registerInfoIsPending || saveChecklistIsPending) && <Spinner />}
          {dic.newOrEdit.cancel}
         </Button>
-        <Button size='lg' className='md:w-34' type='submit'>
+        <Button
+         size='lg'
+         className='md:w-34'
+         type='submit'
+         disabled={registerInfoIsPending || saveChecklistIsPending}
+         onClick={(e) => {
+          e.preventDefault();
+          handleSubmit((data) => {
+           mutateSaveChecklist(data);
+          })();
+         }}
+        >
+         {(registerInfoIsPending || saveChecklistIsPending) && <Spinner />}
          {dic.newOrEdit.confirm}
         </Button>
        </div>
