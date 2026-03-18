@@ -19,6 +19,14 @@ export default function ExecutionManagementTabs({
    <div>
     <Tabs dir={localeInfo.contentDirection} defaultValue={activeTab}>
      <TabsList className='h-11 w-[min(100%,30rem)] mx-auto bg-neutral-200 dark:bg-neutral-800'>
+      <TabsTrigger value='' asChild>
+       <Link
+        href={`${redirectPath}?tab=guest-checkout-checklist`}
+        className='font-medium'
+       >
+        {dic.tabs.dailyTasksLists}
+       </Link>
+      </TabsTrigger>
       <TabsTrigger value='guest-checkout-checklist' asChild>
        <Link
         href={`${redirectPath}?tab=guest-checkout-checklist`}

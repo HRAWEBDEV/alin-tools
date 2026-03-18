@@ -18,5 +18,9 @@
   "maid": "خانه دار",
   "registerNo": "شماره پذیرش",
   "comment": "توضیحات"
+ },
+ "newOrEdit": {
+  "confirm": "تایید",
+  "cancel": "انصراف"
  }
 }

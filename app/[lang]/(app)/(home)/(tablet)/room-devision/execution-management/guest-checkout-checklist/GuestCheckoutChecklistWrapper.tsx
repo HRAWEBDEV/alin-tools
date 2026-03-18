@@ -17,6 +17,7 @@ import {
 import { useDateFns } from '@/hooks/useDateFns';
 import GuestCheckoutChecklistFilters from './components/GuestCheckoutChecklistFilters';
 import GuestCheckoutChecklist from './components/GuestCheckoutChecklist';
+import NewGuestCheckoutChecklist from './components/NewGuestCheckoutChecklist';
 
 export default function GuestCheckoutChecklistWrapper({
  dic,
@@ -62,7 +63,14 @@ export default function GuestCheckoutChecklistWrapper({
   isError,
  } = useInfiniteQuery({
   enabled: !!fromDateValue && !!toDateValue,
-  queryKey: [guestCheckoutChecklistBaseKey, 'guests'],
+  queryKey: [
+   guestCheckoutChecklistBaseKey,
+   'list',
+   fromDateValue?.toISOString(),
+   toDateValue?.toISOString(),
+   roomValue?.key || 'all',
+   maidValue?.key || 'all',
+  ],
   initialPageParam: {
    limit: 50,
    offset: 1,
@@ -159,6 +167,18 @@ export default function GuestCheckoutChecklistWrapper({
      }}
     />
    </FormProvider>
+   <NewGuestCheckoutChecklist
+    dic={dic}
+    initialData={initData}
+    initDataIsLoading={initDataIsLoading}
+    editChecklist={{
+     selectedCheckListID,
+     showNew,
+     onCloseEdit: handleCloseEdit,
+     onShowEdit: handleOpenEdit,
+     targetEditChecklist,
+    }}
+   />
   </>
  );
 }

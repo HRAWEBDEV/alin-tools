@@ -1,6 +1,7 @@
 {
  "title": "مدریرت اجرا",
  "tabs": {
-  "guestCheckoutCheckList": "چک لیست خروج مهمانان"
+  "guestCheckoutCheckList": "لیست خروج مهمانان",
+  "dailyTasksLists": "لیست وظایف روزانه"
  }
 }
