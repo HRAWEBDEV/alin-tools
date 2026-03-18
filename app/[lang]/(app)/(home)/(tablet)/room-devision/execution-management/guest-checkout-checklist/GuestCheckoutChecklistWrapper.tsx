@@ -16,6 +16,7 @@ import {
 } from './services/guestCheckoutChecklistApiActions';
 import { useDateFns } from '@/hooks/useDateFns';
 import GuestCheckoutChecklistFilters from './components/GuestCheckoutChecklistFilters';
+import GuestCheckoutChecklist from './components/GuestCheckoutChecklist';
 
 export default function GuestCheckoutChecklistWrapper({
  dic,
@@ -138,16 +139,9 @@ export default function GuestCheckoutChecklistWrapper({
       targetEditChecklist,
      }}
     />
-    {/*<OutOfOrderRooms
+    <GuestCheckoutChecklist
      dic={dic}
-     editRoom={{
-      selectedOutOfOrderRoomID,
-      showNew,
-      onCloseEdit: handleCloseEdit,
-      onShowEdit: handleOpenEdit,
-      targetEditRoom,
-     }}
-     rooms={{
+     checklist={{
       data,
       hasNextPage,
       fetchNextPage,
@@ -156,7 +150,14 @@ export default function GuestCheckoutChecklistWrapper({
       isSuccess,
       isError,
      }}
-    />*/}
+     editChecklist={{
+      selectedCheckListID,
+      showNew,
+      onCloseEdit: handleCloseEdit,
+      onShowEdit: handleOpenEdit,
+      targetEditChecklist,
+     }}
+    />
    </FormProvider>
   </>
  );
