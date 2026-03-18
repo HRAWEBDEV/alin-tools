@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
-import * as icons from 'react-icons/io5';
+import * as icons from 'react-icons/bs';
 
 export default function HomePage() {
  const { locale } = useBaseConfig();

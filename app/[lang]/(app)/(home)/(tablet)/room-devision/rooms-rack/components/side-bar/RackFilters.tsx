@@ -34,6 +34,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { rackLimitOptions } from '../../utils/rackLimitOptions';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { IoAppsOutline, IoGridOutline } from 'react-icons/io5';
+import { BsGripHorizontal } from 'react-icons/bs';
 
 export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
  const { locale } = useBaseConfig();
@@ -62,6 +63,9 @@ export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
      }}
     >
      <TabsList className='h-11'>
+      <TabsTrigger value='minimal'>
+       <BsGripHorizontal className='size-7' />
+      </TabsTrigger>
       <TabsTrigger value='compact'>
        <IoAppsOutline className='size-7' />
       </TabsTrigger>

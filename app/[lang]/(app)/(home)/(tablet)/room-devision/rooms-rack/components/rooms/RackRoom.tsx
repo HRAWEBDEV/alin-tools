@@ -18,6 +18,7 @@ import {
  getStateKindIcon,
  getRoomInOutIcon,
  getStateTypeIcon,
+ getRoomStateIcon,
 } from '../../utils/rackStatesIcon';
 import { CheckinCheckout } from '../../../components/icons/CheckinCheckout';
 import { useFormContext } from 'react-hook-form';
@@ -94,14 +95,16 @@ export default function RackRoom({
    : getRackStatesStyles().get(roomState);
 
  const activeCompactView = rackView === 'compact' && !mock;
+ const activeMinimalView = rackView === 'minimal' && !mock;
 
  return (
   <motion.div
    data-layout-compact={activeCompactView}
+   data-layout-minimal={activeMinimalView}
    layout
    className='grid group'
   >
-   <div className='relative min-h-40 group-data-[layout-compact=true]:min-h-auto'>
+   <div className='relative min-h-40 group-data-[layout-compact=true]:min-h-auto group-data-[layout-minimal=true]:min-h-auto'>
     <Button
      variant={'outline'}
      className="z-1 rounded-2xl h-full flex-col justify-start text-start p-0 overflow-hidden shadow-lg [&_svg:not([class*='size-'])]:size-[unset]"
@@ -115,7 +118,7 @@ export default function RackRoom({
        onShowRackMenu(room);
       }}
      >
-      {!isFutureRack && (
+      {!isFutureRack && !activeMinimalView && (
        <div
         dir='ltr'
         className={`absolute top-12 start-1 ${room.roomStateKindID !== RoomStateKind.waitingForQC ? 'opacity-60' : 'opacity-80'}  ${roomStateKindStyle?.text}`}
@@ -131,17 +134,23 @@ export default function RackRoom({
       <div
        className={`p-1 rounded-2xl border border-dashed ${roomStateStyle?.border} ${roomStateStyle?.text} ${roomStateStyle?.backgoundColor} text-center`}
       >
-       <span className='text-base font-medium'>{dic.help[roomState]}</span>
+       {activeMinimalView ? (
+        <div className='flex justify-center'>
+         {getRoomStateIcon(roomState, {})}
+        </div>
+       ) : (
+        <span className='text-base font-medium'>{dic.help[roomState]}</span>
+       )}
       </div>
-      <div className='text-start ps-2 grow'>
-       <div className='flex items-center gap-1'>
+      <div className='text-start ps-2 grow group-data-[layout-minimal=true]:ps-0'>
+       <div className='flex items-center group-data-[layout-minimal=true]:justify-center gap-1'>
         <h3
-         className={`text-2xl lg:text-3xl font-en-roboto ${roomStateStyle?.text}`}
+         className={`text-2xl lg:text-3xl group-data-[layout-minimal=true]:text-2xl font-en-roboto ${roomStateStyle?.text}`}
         >
          {room.roomLabel.padStart(2, '0')}
         </h3>
        </div>
-       {!activeCompactView && (
+       {!activeCompactView && !activeMinimalView && (
         <div>
          <p className='text-sm text-primary/80 text-wrap group-data-[bold=true]:font-medium'>
           {room.roomTypeAliasName}
@@ -192,7 +201,7 @@ export default function RackRoom({
         </div>
        )}
       </div>
-      {!isFutureRack && !activeCompactView && (
+      {!isFutureRack && !activeCompactView && !activeMinimalView && (
        <div
         data-is-mock={mock}
         className='flex data-[is-mock=true]:flex-col items-center data-[is-mock=true]:items-start justify-between gap-2'
