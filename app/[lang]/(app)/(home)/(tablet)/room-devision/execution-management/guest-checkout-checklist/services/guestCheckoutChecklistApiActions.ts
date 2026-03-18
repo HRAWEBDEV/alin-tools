@@ -20,8 +20,10 @@ interface CheckoutChecklist {
 
 const guestCheckoutChecklistBaseKey = 'guest-checkout-checklist';
 
-function getInitialData() {
- return axios.get<InitialData>('/HouseKeeping/CheckOutList/GetData');
+function getInitialData({ signal }: { signal: AbortSignal }) {
+ return axios.get<InitialData>('/HouseKeeping/CheckOutList/GetData', {
+  signal,
+ });
 }
 
 function getCheckoutChecklist({
@@ -55,6 +57,9 @@ function getCheckoutChecklist({
  }
  return axios.get<PagedData<CheckoutChecklist[]>>(
   `/HouseKeeping/CheckOutList/GetCheckOutCheckLists?${searchParams.toString()}`,
+  {
+   signal,
+  },
  );
 }
 
