@@ -1,3 +1,7 @@
 {
- "title": "آمار اتاق ها"
+ "title": "مدریرت اجرا",
+ "tabs": {
+  "guestCheckoutCheckList": "لیست خروج مهمانان",
+  "dailyTasksLists": "لیست وظایف روزانه"
+ }
 }

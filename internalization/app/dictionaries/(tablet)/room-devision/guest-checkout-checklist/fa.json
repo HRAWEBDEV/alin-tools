@@ -1,0 +1,28 @@
+{
+ "title": "چک لیست خروجی مهمان",
+ "filters": {
+  "filters": "فیلترها",
+  "fromDate": "از تاریخ",
+  "toDate": "از تاریخ",
+  "room": "اتاق",
+  "maid": "خانه دار",
+  "new": "جدید",
+  "edit": "ویرایش"
+ },
+ "info": {
+  "loadMore": "مشاهده بیشتر",
+  "results": "نتایج",
+  "fromDate": "از تاریخ",
+  "toDate": "از تاریخ",
+  "room": "اتاق",
+  "maid": "خانه دار",
+  "registerNo": "شماره پذیرش",
+  "comment": "توضیحات"
+ },
+ "newOrEdit": {
+  "confirm": "تایید",
+  "cancel": "انصراف",
+  "remove": "حذف",
+  "removeConfirmMessage": "آیا از حذف آیتم اطمینان دارید؟"
+ }
+}
