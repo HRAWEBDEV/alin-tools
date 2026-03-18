@@ -135,6 +135,14 @@ export default function NewGuestCheckoutChecklist({
    },
   });
 
+ function setFormDefaults() {
+  Object.entries(defaultValues).forEach(([key, value]) => {
+   setValue(key as keyof CheckoutChecklistSchema, value);
+  });
+  setRegisterID(null);
+  setFolioNo(null);
+ }
+
  useEffect(() => {
   setValue(
    'fromDate',
@@ -176,6 +184,7 @@ export default function NewGuestCheckoutChecklist({
    open={editChecklist.showNew}
    onOpenChange={(newValue) => {
     if (newValue) return;
+    setFormDefaults();
     editChecklist.onCloseEdit();
    }}
   >
