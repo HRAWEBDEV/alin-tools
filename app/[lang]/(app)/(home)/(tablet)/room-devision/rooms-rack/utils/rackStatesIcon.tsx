@@ -47,6 +47,8 @@ function getRoomStateIcon(
    return <User {...style} />;
   case 'reservedRoom':
    return <Reserve {...style} />;
+  case 'waitForCheckin':
+   return <WaitForCheckin {...style} />;
  }
 }
 
