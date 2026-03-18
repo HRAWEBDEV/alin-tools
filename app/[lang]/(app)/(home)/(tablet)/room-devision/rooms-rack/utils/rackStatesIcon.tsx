@@ -1,8 +1,17 @@
 import { SVGProps } from 'react';
-import { RoomInOutState, RoomStateKind, RoomStateType } from './rackStates';
+import {
+ RoomInOutState,
+ RoomStateKind,
+ RoomStateType,
+ RoomState,
+} from './rackStates';
+import { Reserve } from '../../components/icons/Reserve';
+import { UserLock } from 'lucide-react';
+import { User } from '../../components/icons/User';
+import { DayUseIcon } from '../../components/icons/DayUseIcon';
+import { Room as RoomIcon } from '../../components/icons/Room';
 import { Checkin } from '../../components/icons/Chekin';
 import { Checkout } from '../../components/icons/Checkout';
-import { ReadyToServiceRoomIcon } from '../../components/icons/ReadyToServiceRoomIcon';
 import { QCRoomIcon } from '../../components/icons/QCRoomIcon';
 import { CleanRoomIcon } from '../../components/icons/CleanRoomIcon';
 import { ServiceRoomIcon } from '../../components/icons/ServiceRoomIcon';
@@ -20,7 +29,26 @@ import { DND } from '../../components/icons/DND';
 import { NoLuggage } from '../../components/icons/NoLuggage';
 import { LightLuggage } from '../../components/icons/LightLuggage';
 import { NoShow } from '../../components/icons/NoShow';
-import { CarIcon } from '../../components/icons/CarIcon';
+
+function getRoomStateIcon(
+ type: RoomState,
+ style: SVGProps<SVGSVGElement> = {},
+) {
+ switch (type) {
+  case 'emptyRoom':
+   return <RoomIcon {...style} />;
+  case 'closedRoom':
+   return <UserLock {...style} />;
+  case 'dayUse':
+   return <DayUseIcon {...style} />;
+  case 'occupiedCustomerRoom':
+   return <User {...style} />;
+  case 'occupiedRoom':
+   return <User {...style} />;
+  case 'reservedRoom':
+   return <Reserve {...style} />;
+ }
+}
 
 function getRoomInOutIcon(
  type: RoomInOutState,
@@ -88,4 +116,9 @@ function getStateTypeIcon(
  }
 }
 
-export { getRoomInOutIcon, getStateKindIcon, getStateTypeIcon };
+export {
+ getRoomInOutIcon,
+ getStateKindIcon,
+ getStateTypeIcon,
+ getRoomStateIcon,
+};
