@@ -32,7 +32,7 @@ type Props = {
  initData: InitialData | undefined;
  initDataIsLoading: boolean;
  totalResults?: number;
- onSubmit: () => void;
+ onSubmit?: () => void;
 };
 
 export default function GuestsFilters({
@@ -99,7 +99,7 @@ export default function GuestsFilters({
  };
 
  const handleApply = () => {
-  onSubmit();
+  onSubmit?.();
   setFilterDrawerOpen(false);
  };
 
