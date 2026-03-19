@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
 import { Spinner } from '@/components/ui/spinner';
-import { X, SlidersHorizontal } from 'lucide-react';
+import { X, Check } from 'lucide-react';
 import { type GuestsFilterForm } from './GuestsListWrapper';
 import { useState } from 'react';
 import { GuestsManagementDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/guests-management/dictionary';
@@ -14,6 +14,9 @@ import {
  type InitialData,
  type SelectOption,
 } from '../services/guestsListApiActions';
+import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
+import { FaFilter } from 'react-icons/fa';
 
 const FILTER_KEYS: (keyof GuestsFilterForm)[] = [
  'folio',
@@ -29,6 +32,7 @@ type Props = {
  initData: InitialData | undefined;
  initDataIsLoading: boolean;
  totalResults?: number;
+ onSubmit: () => void;
 };
 
 export default function GuestsFilters({
@@ -36,8 +40,10 @@ export default function GuestsFilters({
  initData,
  initDataIsLoading,
  totalResults,
+ onSubmit,
 }: Props) {
- const { control, setValue, register } = useFormContext<GuestsFilterForm>();
+ const { control, setValue, register, reset } =
+  useFormContext<GuestsFilterForm>();
  const values = useWatch({ control });
  const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
  const [selectDrawerOpen, setSelectDrawerOpen] = useState<string | null>(null);
@@ -45,10 +51,28 @@ export default function GuestsFilters({
  const activeFilters = FILTER_KEYS.filter((k) => values[k]);
  const [sliderRef] = useKeenSlider({ slides: { perView: 'auto', spacing: 8 } });
 
+ const filterKeyLabel = (key: keyof GuestsFilterForm): string => {
+  switch (key) {
+   case 'folio':
+    return dic.filters.folio;
+   case 'reserveNo':
+    return dic.filters.reserveNo;
+   case 'nationality':
+    return dic.filters.nationality;
+   case 'specialGuest':
+    return dic.fields.specialGuest;
+   case 'group':
+    return dic.fields.customerName;
+   case 'room':
+    return dic.fields.room;
+   default:
+    return key;
+  }
+ };
+
  const filterLabel = (key: keyof GuestsFilterForm): string | null => {
   const val = values[key];
   if (!val) return null;
-
   switch (key) {
    case 'nationality':
     return (
@@ -69,35 +93,77 @@ export default function GuestsFilters({
   }
  };
 
+ const handleCancel = () => {
+  reset();
+  setFilterDrawerOpen(false);
+ };
+
+ const handleApply = () => {
+  onSubmit();
+  setFilterDrawerOpen(false);
+ };
+
  return (
   <div className='flex flex-col gap-2 px-2 pt-2'>
    <div className='flex items-center gap-2'>
     <Drawer open={filterDrawerOpen} onOpenChange={setFilterDrawerOpen}>
      <DrawerTrigger asChild>
-      <Button variant='outline' size='sm'>
-       <SlidersHorizontal className='w-4 h-4 me-2' />
-       {dic.filters.title || 'Filters'}
+      <Button
+       size='lg'
+       className='text-neutral-600 dark:text-neutral-400'
+       variant='outline'
+      >
+       {dic.filters.title}
+       <FaFilter className='size-4' />
+       {activeFilters.length > 0 && (
+        <Badge variant='destructive' className='size-6'>
+         {activeFilters.length}
+        </Badge>
+       )}
       </Button>
      </DrawerTrigger>
 
-     <DrawerContent>
-      <div className='p-4 flex flex-col gap-4'>
-       <h3 className='font-semibold text-lg'>
-        {dic.filters.title || 'Filters'}
-       </h3>
+     <DrawerContent className='max-h-[85vh]'>
+      <div className='p-5 flex flex-col gap-5 overflow-y-auto'>
+       {/* Header */}
+       <div className='flex items-center justify-between'>
+        <h3 className='font-semibold text-lg'>{dic.filters.title}</h3>
+        {activeFilters.length > 0 && (
+         <button
+          onClick={() => reset()}
+          className='text-xs text-destructive hover:underline'
+         >
+          پاک کردن همه
+         </button>
+        )}
+       </div>
 
-       <div className='flex flex-col gap-3'>
-        <input
-         {...register('folio')}
-         placeholder={dic.filters.folio}
-         className='border rounded px-3 py-2 text-sm'
-        />
-        <input
-         {...register('reserveNo')}
-         placeholder={dic.filters.reserveNo}
-         className='border rounded px-3 py-2 text-sm'
-        />
+       {/* Text inputs */}
+       <div className='grid grid-cols-2 gap-3'>
+        <div className='flex flex-col gap-1'>
+         <label className='text-xs text-muted-foreground'>
+          {dic.filters.folio}
+         </label>
+         <Input
+          {...register('folio')}
+          placeholder={dic.filters.folio}
+          className='h-10'
+         />
+        </div>
+        <div className='flex flex-col gap-1'>
+         <label className='text-xs text-muted-foreground'>
+          {dic.filters.reserveNo}
+         </label>
+         <Input
+          {...register('reserveNo')}
+          placeholder={dic.filters.reserveNo}
+          className='h-10'
+         />
+        </div>
+       </div>
 
+       {/* Select buttons */}
+       <div className='grid grid-cols-2 gap-3'>
         {(['nationality', 'specialGuest', 'group', 'room'] as const).map(
          (key) => (
           <Controller
@@ -106,43 +172,55 @@ export default function GuestsFilters({
            name={key}
            render={({ field }) => (
             <>
-             <Button
-              variant='outline'
-              onClick={() => setSelectDrawerOpen(key)}
-              className='justify-start'
-             >
-              {initDataIsLoading ? (
-               <Spinner className='w-4 h-4' />
-              ) : (
-               filterLabel(key) ||
-               (dic.filters as Record<string, string>)[key] ||
-               key
-              )}
-             </Button>
+             <div className='flex flex-col gap-1'>
+              <label className='text-xs text-muted-foreground'>
+               {filterKeyLabel(key)}
+              </label>
+              <Button
+               variant='outline'
+               onClick={() => setSelectDrawerOpen(key)}
+               className={cn(
+                'justify-between h-10 font-normal',
+                field.value && 'border-primary text-primary',
+               )}
+              >
+               <span className='truncate'>
+                {initDataIsLoading ? (
+                 <Spinner className='w-4 h-4' />
+                ) : (
+                 (filterLabel(key) ?? `انتخاب ${filterKeyLabel(key)}`)
+                )}
+               </span>
+               {field.value && <Check className='size-4 shrink-0' />}
+              </Button>
+             </div>
 
              <Drawer
               open={selectDrawerOpen === key}
               onOpenChange={(open) => !open && setSelectDrawerOpen(null)}
              >
-              <DrawerContent>
-               <div className='p-4 flex flex-col gap-2'>
+              <DrawerContent className='max-h-[85vh]'>
+               <div className='p-4 flex flex-col gap-1 max-h-[85vh] overflow-y-auto'>
+                <h4 className='font-medium text-sm mb-2 text-muted-foreground'>
+                 {filterKeyLabel(key)}
+                </h4>
                 {getOptions(key, initData)?.map((opt) => (
-                 <label
+                 <button
                   key={opt.key}
-                  className='flex items-center gap-2 py-2 px-3 rounded hover:bg-muted cursor-pointer'
+                  onClick={() => {
+                   field.onChange(field.value === opt.value ? null : opt.value);
+                   setSelectDrawerOpen(null);
+                  }}
+                  className={cn(
+                   'flex items-center justify-between py-3 px-4 rounded-lg text-sm transition-colors',
+                   field.value === opt.value
+                    ? 'bg-primary/10 text-primary font-medium'
+                    : 'hover:bg-muted',
+                  )}
                  >
-                  <input
-                   type='checkbox'
-                   checked={field.value === opt.value}
-                   onChange={() => {
-                    field.onChange(
-                     field.value === opt.value ? null : opt.value,
-                    );
-                    setSelectDrawerOpen(null);
-                   }}
-                  />
                   {opt.value}
-                 </label>
+                  {field.value === opt.value && <Check className='size-4' />}
+                 </button>
                 ))}
                </div>
               </DrawerContent>
@@ -153,31 +231,40 @@ export default function GuestsFilters({
          ),
         )}
        </div>
+
+       {/* Actions */}
+       <div className='grid grid-cols-2 gap-3 pt-2 border-t'>
+        <Button variant='outline' onClick={handleCancel}>
+         انصراف
+        </Button>
+        <Button onClick={handleApply}>اعمال فیلتر</Button>
+       </div>
       </div>
      </DrawerContent>
     </Drawer>
 
-    {activeFilters.length > 0 && (
-     <Badge variant='secondary'>{activeFilters.length}</Badge>
-    )}
-
     {totalResults !== undefined && (
      <span className='text-sm text-muted-foreground'>
-      {totalResults} {dic.info?.results || 'results'}
+      {totalResults} {dic.info.results}
      </span>
     )}
    </div>
 
+   {/* Active filter badges */}
    {activeFilters.length > 0 && (
-    <div ref={sliderRef} className='keen-slider'>
+    <div ref={sliderRef} className='keen-slider! mt-1' dir='rtl'>
      {activeFilters.map((key) => (
       <div key={key} className='keen-slider__slide w-auto!'>
        <Badge
         variant='outline'
-        className='flex items-center gap-1 text-primary border-primary'
+        className='flex items-center gap-1 py-1 px-2 text-primary border-primary rounded-lg!'
        >
+        <span className='text-xs text-muted-foreground'>
+         {filterKeyLabel(key)}:
+        </span>
         {filterLabel(key)}
         <button
+         className='cursor-pointer ml-1 hover:text-destructive transition-colors'
          onClick={() =>
           setValue(key, key === 'folio' || key === 'reserveNo' ? '' : null)
          }
