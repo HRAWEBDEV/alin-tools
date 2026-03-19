@@ -2,5 +2,39 @@
  "title": "مدیریت مهمانان",
  "tabs": {
   "guestsList": "لیست مهمانان مقیم"
+ },
+ "filters": {
+  "title": "فیلتر‌ها",
+  "folio": "فولیو",
+  "reserveNo": "شماره رزرو",
+  "nationality": "ملیت"
+ },
+ "info": {
+  "loadMore": "بارگذاری بیشتر",
+  "results": "نتایج"
+ },
+ "fields": {
+  "room": "اتاق",
+  "roomNo": "شماره اتاق",
+  "roomType": "نوع اتاق",
+  "reserveNo": "شماره رزرو",
+  "fullName": "نام و نام خانوادگی",
+  "guestCount": "تعداد مهمان",
+  "extraBed": "خواب اضافه",
+  "checkIn": "ورود",
+  "gender": "جنسیت",
+  "checkOut": "خروج",
+  "specialGuest": "مهمانان ویژه",
+  "floor": "طبقه",
+  "customerName": "مشتری",
+  "fatherName": "نام پدر",
+  "phoneNumber": "شماره تماس",
+  "homeCity": "شهر محل زندگی",
+  "address": "آدرس محل زندگی",
+  "guestName": "نام همراه",
+  "email": "ایمیل"
+ },
+ "detail": {
+  "title": "جزئیات"
  }
 }

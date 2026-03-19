@@ -3,6 +3,7 @@ import {
  GetSearchQueryValuesResult,
  SetSearchQueryOnPathname,
 } from '../utils/searchQueryValues';
+import { GuestsFilterForm } from '../components/GuestsListWrapper';
 
 type SelectOption = { key: string; value: string };
 
@@ -14,12 +15,24 @@ type InitialData = {
  customers: SelectOptons;
 };
 type ApiPagedData<T> = {
- rowsCount: number;
- limit: number;
- offset: number;
  rows: T;
+ totalCount: number;
+ pageNumber: number;
+ pageSize: number;
+ nextPage: number | null;
 };
-type Guest = { id: number; fullName: string };
+// type Guest = {
+//  id: number;
+//  fullName: string;
+//  roomNo?: number;
+//  roomLabel?: string;
+//  nationalityName?: string | null;
+//  folioNo?: number | null;
+//  reserveNo?: number;
+//  VIPGuestTypeName?: string | null;
+//  mobileNo?: string | null;
+//  email?: string | null;
+// };
 
 type ResidentGuest = {
  id: number;
@@ -41,7 +54,10 @@ type ResidentGuest = {
  entranceDate: string | null;
  travelVehicleID: number | null;
  checkinDateTime: string;
+ checkinDateTimeOffset: string;
  checkoutDateTime: string | null;
+ registerDepatureDateTimeOffset: string | null;
+ sourceCityName: string | null;
  isMaster: boolean;
  isFolioOwner: boolean;
  extraRateTypeID: number;
@@ -60,6 +76,7 @@ type ResidentGuest = {
  birthCityZoneID: number | null;
  birthDate: string | null;
  genderID: number | null;
+ genderName: string | null;
  IDCardCityZoneID: number | null;
  IDCardNo: string | null;
  nationalCode: string | null;
@@ -141,19 +158,20 @@ const getResidentGuests = (
  });
 };
 
-let getGuestAbortController: null | AbortController = null;
-const getGuests = (queryValues: GetSearchQueryValuesResult) => {
+let getGuestAbortController: AbortController | undefined;
+
+const getGuests = (filters: GuestsFilterForm, pageParam: number) => {
  getGuestAbortController?.abort();
  getGuestAbortController = new AbortController();
- const queryPathname = SetSearchQueryOnPathname({
-  queryValues,
-  pathname: getGuestsApi,
- });
- return axios.get<ApiPagedData<Guest[]>>(queryPathname, {
+
+ return axios.get<ApiPagedData<ResidentGuest[]>>(getGuestsApi, {
+  params: {
+   ...filters,
+   pageNumber: pageParam,
+  },
   signal: getGuestAbortController.signal,
  });
 };
-
 const getReportExcel = (queryValues: GetSearchQueryValuesResult) => {
  const pathname = SetSearchQueryOnPathname({
   queryValues,
@@ -175,11 +193,12 @@ const getReportPrint = (queryValues: GetSearchQueryValuesResult) => {
 };
 
 export {
- type InitialData as TInitialData,
- type ResidentGuest as TResidentGuest,
- type ResidentGuests as TResidentGuests,
- type Guest as TGuest,
- type ResidentGuestsData as TResidentGuestsData,
+ type InitialData as InitialData,
+ type ApiPagedData,
+ type ResidentGuest as ResidentGuest,
+ type ResidentGuests as ResidentGuests,
+ //  type Guest as Guest,
+ type ResidentGuestsData as ResidentGuestsData,
  getInitialData,
  getResidentGuests,
  getGuests,
@@ -189,4 +208,5 @@ export {
  initDefaults,
  residentGuestsDefault,
  getResidentGuestsQueryKey,
+ type SelectOption,
 };
