@@ -83,6 +83,7 @@ export default function DailyTaskPreview({
  function handleCloseEdit() {
   setShowEdit(false);
   setSelectedNoteId(null);
+  setNoteComment('');
  }
  const targetNote = selectedNoteId
   ? notes?.find((note) => note.id === selectedNoteId) || null
@@ -118,6 +119,7 @@ export default function DailyTaskPreview({
     onOpenChange={(newValue) => {
      if (newValue) return;
      editChecklist.onCloseEdit();
+     handleCloseEdit();
     }}
    >
     <DrawerContent className='h-[min(60svh,40rem)] flex flex-col'>
