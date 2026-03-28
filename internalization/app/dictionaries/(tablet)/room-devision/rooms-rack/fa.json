@@ -80,7 +80,8 @@
  "options": {
   "title": "عملیات اتاق",
   "changeRoomStateKind": "تغییر وضعیت اتاق",
-  "changeRoomStateType": "تغییر وضعیت ویژه اتاق"
+  "changeRoomStateType": "تغییر وضعیت ویژه اتاق",
+  "houseControl": "کنترل خانه داری"
  },
  "tools": {
   "lastUpdate": "آخرین بروزرسانی",
@@ -127,5 +128,18 @@
  "roomStateType": {
   "title": "تغییر وضعیت ویژه اتاق",
   "currentStateKind": "وضعیت ویژه اتاق"
+ },
+ "houseControl": {
+  "title": "کنترل خانه داری",
+  "roomStatus": "وضعیت اتاق",
+  "houseKeepingControl": "اعلام به خانه داری",
+  "minibarControl": "ثبت مینی بار",
+  "underControl": "در حال کنترل",
+  "roomControl": "کنترل اتاق",
+  "houseMaidDescription": "توضیحات خانه دار",
+  "cancel": "انصراف",
+  "clear": "لغو",
+  "confirm": "تایید",
+  "history": "سوابق"
  }
 }
