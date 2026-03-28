@@ -1,9 +1,10 @@
 import { z } from 'zod';
+import { timeNoOptions } from '../utils/timeNo';
 
 const defaultValues: Partial<DailyTasksSchema> = {
+ maid: null,
  date: null,
  roomType: null,
- maid: null,
  timeNo: 'firstTurn',
 };
 
@@ -22,7 +23,7 @@ function createDailyTasksSchema() {
     value: z.string(),
    })
    .nullable(),
-  timeNo: z.enum(['firstTurn', 'secondTurn', 'thirdTurn']),
+  timeNo: z.enum(timeNoOptions),
  });
 }
 

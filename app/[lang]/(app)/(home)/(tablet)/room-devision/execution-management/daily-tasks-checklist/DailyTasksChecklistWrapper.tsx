@@ -16,6 +16,7 @@ import {
 } from './services/dailyTasksApiActions';
 import { useDateFns } from '@/hooks/useDateFns';
 import { TimeNo } from './utils/timeNo';
+import DailyTasksFilters from './components/DailyTasksFilters';
 
 export default function DailyTasksChecklistWrapper({
  dic,
@@ -74,7 +75,18 @@ export default function DailyTasksChecklistWrapper({
  return (
   <>
    <FormProvider {...filtersUseForm}>
-    <></>
+    <DailyTasksFilters
+     dic={dic}
+     initDataIsLoading={initDataIsLoading}
+     initData={initData}
+     checklist={{
+      isError,
+      isFetching,
+      isSuccess,
+      refetch,
+      data,
+     }}
+    />
    </FormProvider>
   </>
  );

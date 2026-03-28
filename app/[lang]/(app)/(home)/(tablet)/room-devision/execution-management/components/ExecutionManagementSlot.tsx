@@ -5,6 +5,7 @@ import { type ExecutionManagementDictionary } from '@/internalization/app/dictio
 import GuestCheckoutChecklistWrapper from '../guest-checkout-checklist/GuestCheckoutChecklistWrapper';
 import { type GuestCheckoutChecklistDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/guest-checkout-checklist/dictionary';
 import { type DailyTasksChecklistDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/daily-tasks-checklist/dictionary';
+import DailyTasksChecklistWrapper from '../daily-tasks-checklist/DailyTasksChecklistWrapper';
 
 export default function ExecutionManagementSlot({
  guestChecklistDic,
@@ -21,7 +22,9 @@ export default function ExecutionManagementSlot({
    <Activity
     mode={activeTab === 'daily-tasks-checklist' ? 'visible' : 'hidden'}
    >
-    <div className='p-4 lg:pt-0'></div>
+    <div className='p-4 lg:pt-0'>
+     <DailyTasksChecklistWrapper dic={dailyTasksDic} />
+    </div>
    </Activity>
    <Activity
     mode={activeTab === 'guest-checkout-checklist' ? 'visible' : 'hidden'}
