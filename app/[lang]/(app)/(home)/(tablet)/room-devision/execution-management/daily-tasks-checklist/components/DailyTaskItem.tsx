@@ -1,5 +1,4 @@
 import { type DailyTasksChecklistDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/daily-tasks-checklist/dictionary';
-import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { CheckList } from '../services/dailyTasksApiActions';
 import { MdTouchApp } from 'react-icons/md';
 import { type EditDailyTaskProps } from '../utils/editDailyTaskProps';
@@ -14,8 +13,6 @@ export default function DailyTaskItem({
  checkoutItem: CheckList;
  editChecklist: EditDailyTaskProps;
 }) {
- const { locale } = useBaseConfig();
-
  return (
   <>
    <button
