@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { type DailyTasksChecklistDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/daily-tasks-checklist/dictionary';
 import { useForm, FormProvider } from 'react-hook-form';
 import {
@@ -43,6 +43,7 @@ export default function DailyTasksChecklistWrapper({
   data: initData,
   isLoading: initDataIsLoading,
   isError: initDataIsError,
+  isSuccess: initDataIsSuccess,
  } = useQuery({
   queryKey: [dailyTasksBaseKey, 'init-data'],
   async queryFn({ signal }) {
@@ -87,6 +88,15 @@ export default function DailyTasksChecklistWrapper({
  const targetEditChecklist = !!data?.length
   ? data?.find((item) => item.id === selectedCheckListID) || null
   : null;
+
+ useEffect(() => {
+  if (!initDataIsSuccess || !initData.maids.length) return;
+  const activeMaid = initData.maid
+   ? initData.maids.find((item) => item.key === initData.maid.id.toString()) ||
+     initData.maids[0]
+   : initData.maids[0];
+  filtersUseForm.setValue('maid', activeMaid);
+ }, [initDataIsSuccess, initData, filtersUseForm]);
 
  return (
   <>
