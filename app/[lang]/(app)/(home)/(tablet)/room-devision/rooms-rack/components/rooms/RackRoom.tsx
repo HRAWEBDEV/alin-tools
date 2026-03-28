@@ -132,14 +132,14 @@ export default function RackRoom({
        </div>
       )}
       <div
-       className={`p-1 rounded-2xl border border-dashed ${roomStateStyle?.border} ${roomStateStyle?.text} ${roomStateStyle?.backgoundColor} text-center`}
+       className={`rounded-2xl border border-dashed ${roomStateStyle?.border} ${roomStateStyle?.text} ${roomStateStyle?.backgoundColor} text-center ${activeMinimalView ? 'p-0' : 'p-1'}`}
       >
        {activeMinimalView ? (
         <div className='flex justify-center'>
          {getRoomStateIcon(roomState, {
-          fontSize: '2rem',
-          width: '2rem',
-          height: '2rem',
+          fontSize: '2.2rem',
+          width: '2.2rem',
+          height: '2.2rem',
           fill: 'currentColor',
          })}
         </div>
