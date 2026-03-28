@@ -93,4 +93,4 @@ function getDailyTasks({
 }
 
 export type { CheckList, InitialData, Maid };
-export { dailyTasksBaseKey, getInitialData };
+export { dailyTasksBaseKey, getInitialData, getDailyTasks };
