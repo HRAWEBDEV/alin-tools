@@ -156,11 +156,15 @@ export default function RackRoom({
         </h3>
        </div>
        {!activeCompactView && !activeMinimalView && (
-        <div>
-         <p className='text-sm text-primary/80 text-wrap group-data-[bold=true]:font-medium'>
+        <div className='grid grid-cols-1'>
+         <p
+          className={`text-sm text-primary/80 text-wrap group-data-[bold=true]:font-medium ${mock ? '' : 'text-ellipsis overflow-hidden text-start whitespace-nowrap'}`}
+         >
           {room.roomTypeAliasName}
          </p>
-         <p className='text-sm text-neutral-600 dark:text-neutral-400 text-wrap'>
+         <p
+          className={`text-sm text-neutral-600 dark:text-neutral-400 text-wrap ${mock ? '' : 'text-ellipsis overflow-hidden text-start whitespace-nowrap'}`}
+         >
           {room.guestName} {room.guestLastName}
          </p>
          {mock && (
