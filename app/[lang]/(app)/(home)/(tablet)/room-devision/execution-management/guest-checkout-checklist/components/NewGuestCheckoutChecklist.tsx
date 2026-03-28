@@ -112,6 +112,7 @@ export default function NewGuestCheckoutChecklist({
     queryClient.invalidateQueries({
      queryKey: [guestCheckoutChecklistBaseKey, 'list'],
     });
+    editChecklist.onCloseEdit();
    },
    onError(err: AxiosError<string>) {
     toast.error(err.response?.data);
