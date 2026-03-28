@@ -13,6 +13,7 @@
   "prevDay": "روز قبل"
  },
  "info": {
+  "preview": "مشاهده",
   "results": "نتایج",
   "roomNo": "شماره اتاق",
   "occupied": "اشغال",
@@ -24,6 +25,17 @@
   "dnd": "غیرتجاری",
   "sleptOut": "بدون خواب",
   "lightLuggage": "کم توشه",
-  "noLuggage": "بی توشه"
+  "noLuggage": "بی توشه",
+  "addMessage": "افزودن پیام",
+  "messages": "پیام ها"
+ },
+ "notes": {
+  "title": "پیام ها",
+  "new": "جدید",
+  "edit": "ویرایش",
+  "comment": "توضیحات",
+  "removeNoteConfirmMessage": "آیا از حذف پیام اطمینان دارید؟",
+  "confirm": "تایید",
+  "cancel": "انصراف"
  }
 }

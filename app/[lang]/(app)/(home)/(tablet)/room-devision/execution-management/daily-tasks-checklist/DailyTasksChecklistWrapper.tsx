@@ -18,6 +18,7 @@ import { useDateFns } from '@/hooks/useDateFns';
 import { TimeNo } from './utils/timeNo';
 import DailyTasksFilters from './components/DailyTasksFilters';
 import DailyTasksList from './components/DailyTasksList';
+import DailyTaskPreview from './components/DailyTaskPreview';
 
 export default function DailyTasksChecklistWrapper({
  dic,
@@ -131,6 +132,16 @@ export default function DailyTasksChecklistWrapper({
      }}
     />
    </FormProvider>
+   <DailyTaskPreview
+    dic={dic}
+    editChecklist={{
+     onCloseEdit: handleCloseEdit,
+     onShowEdit: handleOpenEdit,
+     selectedCheckListID,
+     showNew,
+     targetEditChecklist,
+    }}
+   />
   </>
  );
 }
