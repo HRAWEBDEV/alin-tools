@@ -7,7 +7,10 @@
   "title": "فیلتر‌ها",
   "folio": "فولیو",
   "reserveNo": "شماره رزرو",
-  "nationality": "ملیت"
+  "nationality": "ملیت",
+  "removeFilters": " پاک کردن همه",
+  "select": "انتخاب",
+  "guest": "مهمان"
  },
  "info": {
   "loadMore": "بارگذاری بیشتر",

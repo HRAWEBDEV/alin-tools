@@ -13,6 +13,7 @@ import {
  ResidentGuest,
 } from '../services/guestsListApiActions';
 import { GuestsManagementDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/guests-management/dictionary';
+import { useDebounce } from '../../hooks/useDebounce';
 
 export type GuestsFilterForm = {
  folio?: string;
@@ -30,9 +31,6 @@ export default function GuestsListWrapper({
 }: {
  dic: GuestsManagementDictionary;
 }) {
- const [selectedGuest, setSelectedGuest] = useState<ResidentGuest | null>(null);
- const [page, setPage] = useState(1);
-
  const methods = useForm<GuestsFilterForm>({
   defaultValues: {
    folio: '',
@@ -45,14 +43,16 @@ export default function GuestsListWrapper({
  });
 
  const filters = useWatch({ control: methods.control });
+ const [selectedGuest, setSelectedGuest] = useState<ResidentGuest | null>(null);
+ const [page, setPage] = useState(1);
 
  const initData = useQuery({
   queryKey: ['guestsInitialData'],
   queryFn: ({ signal }) => getInitialData(signal),
  });
-
+ const debouncedFilters = useDebounce(filters, 500);
  const guests = useQuery({
-  queryKey: ['residentGuests', filters],
+  queryKey: ['residentGuests', debouncedFilters],
   queryFn: ({ signal }) => {
    const queryValues = {
     folioNo: filters.folio ? [filters.folio] : undefined,
@@ -66,7 +66,7 @@ export default function GuestsListWrapper({
   },
   enabled: !!initData.data,
  });
-
+ const numGuests = guests.data?.data.guestsCount;
  const paginatedGuests = useMemo(() => {
   const allGuests = guests.data?.data.residentGuests || [];
   return allGuests.slice(0, page * PAGE_SIZE);
@@ -82,6 +82,7 @@ export default function GuestsListWrapper({
    <div className='flex flex-col gap-2 h-full'>
     <GuestsFilters
      dic={dic}
+     numGuests={numGuests}
      initData={initData.data?.data}
      initDataIsLoading={initData.isLoading}
     />

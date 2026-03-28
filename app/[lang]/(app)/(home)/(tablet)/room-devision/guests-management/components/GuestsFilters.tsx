@@ -17,6 +17,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { FaFilter } from 'react-icons/fa';
+import { FaPerson } from 'react-icons/fa6';
 
 const FILTER_KEYS: (keyof GuestsFilterForm)[] = [
  'folio',
@@ -33,6 +34,7 @@ type Props = {
  initDataIsLoading: boolean;
  totalResults?: number;
  onSubmit?: () => void;
+ numGuests: number | undefined;
 };
 
 export default function GuestsFilters({
@@ -40,7 +42,7 @@ export default function GuestsFilters({
  initData,
  initDataIsLoading,
  totalResults,
- onSubmit,
+ numGuests,
 }: Props) {
  const { control, setValue, register, reset } =
   useFormContext<GuestsFilterForm>();
@@ -93,19 +95,9 @@ export default function GuestsFilters({
   }
  };
 
- const handleCancel = () => {
-  reset();
-  setFilterDrawerOpen(false);
- };
-
- const handleApply = () => {
-  onSubmit?.();
-  setFilterDrawerOpen(false);
- };
-
  return (
-  <div className='flex flex-col gap-2 px-2 pt-2'>
-   <div className='flex items-center gap-2'>
+  <div className='flex flex-col gap-2 pt-2'>
+   <div className='flex items-center gap-2 justify-between'>
     <Drawer open={filterDrawerOpen} onOpenChange={setFilterDrawerOpen}>
      <DrawerTrigger asChild>
       <Button
@@ -125,26 +117,25 @@ export default function GuestsFilters({
 
      <DrawerContent className='max-h-[85vh]'>
       <div className='p-5 flex flex-col gap-5 overflow-y-auto'>
-       {/* Header */}
        <div className='flex items-center justify-between'>
         <h3 className='font-semibold text-lg'>{dic.filters.title}</h3>
         {activeFilters.length > 0 && (
          <button
           onClick={() => reset()}
-          className='text-xs text-destructive hover:underline'
+          className='text-xs text-destructive hover:underline cursor-pointer'
          >
-          پاک کردن همه
+          {dic.filters.removeFilters}
          </button>
         )}
        </div>
 
-       {/* Text inputs */}
-       <div className='grid grid-cols-2 gap-3'>
+       <div className='grid sm:grid-cols-2 grid-cols-1 gap-3'>
         <div className='flex flex-col gap-1'>
          <label className='text-xs text-muted-foreground'>
           {dic.filters.folio}
          </label>
          <Input
+          type='number'
           {...register('folio')}
           placeholder={dic.filters.folio}
           className='h-10'
@@ -155,6 +146,7 @@ export default function GuestsFilters({
           {dic.filters.reserveNo}
          </label>
          <Input
+          type='number'
           {...register('reserveNo')}
           placeholder={dic.filters.reserveNo}
           className='h-10'
@@ -162,8 +154,7 @@ export default function GuestsFilters({
         </div>
        </div>
 
-       {/* Select buttons */}
-       <div className='grid grid-cols-2 gap-3'>
+       <div className='grid sm:grid-cols-2 grid-cols-1 gap-3'>
         {(['nationality', 'specialGuest', 'group', 'room'] as const).map(
          (key) => (
           <Controller
@@ -188,7 +179,8 @@ export default function GuestsFilters({
                 {initDataIsLoading ? (
                  <Spinner className='w-4 h-4' />
                 ) : (
-                 (filterLabel(key) ?? `انتخاب ${filterKeyLabel(key)}`)
+                 (filterLabel(key) ??
+                 `${dic.filters.select} ${filterKeyLabel(key)}`)
                 )}
                </span>
                {field.value && <Check className='size-4 shrink-0' />}
@@ -231,14 +223,6 @@ export default function GuestsFilters({
          ),
         )}
        </div>
-
-       {/* Actions */}
-       <div className='grid grid-cols-2 gap-3 pt-2 border-t'>
-        <Button variant='outline' onClick={handleCancel}>
-         انصراف
-        </Button>
-        <Button onClick={handleApply}>اعمال فیلتر</Button>
-       </div>
       </div>
      </DrawerContent>
     </Drawer>
@@ -248,9 +232,22 @@ export default function GuestsFilters({
       {totalResults} {dic.info.results}
      </span>
     )}
+    {numGuests ? (
+     <Button
+      size='lg'
+      variant='outline'
+      className='rounded-md text-neutral-600 dark:text-neutral-400 px-2! cursor-auto'
+     >
+      <div className='flex items-center gap-1'>
+       {numGuests}
+       <span className='sm:block hidden'>{dic.filters.guest}</span>
+      </div>
+      <FaPerson className='size-5!' />
+     </Button>
+    ) : (
+     <></>
+    )}
    </div>
-
-   {/* Active filter badges */}
    {activeFilters.length > 0 && (
     <div ref={sliderRef} className='keen-slider! mt-1' dir='rtl'>
      {activeFilters.map((key) => (
