@@ -13,15 +13,15 @@ export default function ExecutionManagementTabs({
  const { localeInfo, locale } = useBaseConfig();
  const redirectPath = `/${locale}/room-devision/execution-management` as const;
  const searchParams = useSearchParams();
- const activeTab = searchParams.get('tab') || 'guest-checkout-checklist';
+ const activeTab = searchParams.get('tab') || 'daily-tasks-checklist';
  return (
   <header className='p-2 sticky bottom-0 pb-0 order-2 lg:order-1 lg:pb-2 lg:top-0 lg:bottom-auto bg-background z-3'>
    <div>
     <Tabs dir={localeInfo.contentDirection} defaultValue={activeTab}>
      <TabsList className='h-11 w-[min(100%,30rem)] mx-auto bg-neutral-200 dark:bg-neutral-800'>
-      <TabsTrigger value='' asChild>
+      <TabsTrigger value='daily-tasks-checklist' asChild>
        <Link
-        href={`${redirectPath}?tab=guest-checkout-checklist`}
+        href={`${redirectPath}?tab=daily-tasks-checklist`}
         className='font-medium'
        >
         {dic.tabs.dailyTasksLists}

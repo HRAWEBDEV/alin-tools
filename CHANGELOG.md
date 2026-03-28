@@ -7,6 +7,8 @@
 - add entrance and exit rooms (hra-done)
 - add out of order rooms (hra-done)
 - add rack minimal view (hra-done)
+- add checkout checklist page (hra-done)
+- add daily tasks page (hra-done)
 ### bug fixes
 - remove main wrapper bottom padding in mobile mode, when scroll direction is down (hra-done)
 - use useThrottle instead of useDebouce to change scroll direction (hra-done)

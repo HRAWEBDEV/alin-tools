@@ -1,0 +1,27 @@
+{
+ "title": "چک لیست وظایفت روزانه",
+ "filters": {
+  "filters": "فیلترها",
+  "date": "تاریخ",
+  "roomType": "نوع اتاق",
+  "maid": "خانه دار",
+  "timeNo": "نوبت",
+  "firstTurn": "نوبت اول",
+  "secondTurn": "نوبت دوم",
+  "thirdTurn": "نوبت سوم"
+ },
+ "info": {
+  "results": "نتایج",
+  "roomNo": "شماره اتاق",
+  "occupied": "اشغال",
+  "ready": "آماده سرویس",
+  "clean": "نظافت شده",
+  "outOfService": "نیاز به سرویس",
+  "outOfOrder": "خارج از سرویس",
+  "houseUse": "مزاحم نشوید",
+  "dnd": "غیرتجاری",
+  "sleptOut": "بدون خواب",
+  "lightLuggage": "کم توشه",
+  "noLuggage": "بی توشه"
+ }
+}
