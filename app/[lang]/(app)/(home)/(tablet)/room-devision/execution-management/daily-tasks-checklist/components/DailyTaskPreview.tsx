@@ -9,12 +9,15 @@ import {
 } from '@/components/ui/drawer';
 import { type EditDailyTaskProps } from '../utils/editDailyTaskProps';
 import {
+ type SaveNote,
  dailyTasksBaseKey,
  getDailyTaskNotes,
+ saveNote,
+ updateNote,
 } from '../services/dailyTasksApiActions';
 import { FaCheck } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import { Badge } from '@/components/ui/badge';
 import { Spinner } from '@/components/ui/spinner';
 import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
@@ -30,6 +33,8 @@ import {
 } from '@/components/ui/dialog';
 import { FieldLabel, Field } from '@/components/ui/field';
 import { InputGroup, InputGroupTextarea } from '@/components/ui/input-group';
+import { AxiosError } from 'axios';
+import { toast } from 'sonner';
 
 export default function DailyTaskPreview({
  dic,
@@ -82,6 +87,25 @@ export default function DailyTaskPreview({
  const targetNote = selectedNoteId
   ? notes?.find((note) => note.id === selectedNoteId) || null
   : null;
+
+ const { mutate: saveNoteMutate, isPending: saveNoteIsPending } = useMutation({
+  mutationFn() {
+   const newNote: SaveNote = {
+    id: targetNote?.id || 0,
+    comment: noteComment || '',
+    dailyTaskDataID: editChecklist.selectedCheckListID!,
+    userPersonID: targetNote?.userPersonID || 0,
+   };
+   return targetNote?.id ? updateNote(newNote) : saveNote(newNote);
+  },
+  onSuccess() {
+   handleInvalideNotes();
+   handleCloseEdit();
+  },
+  onError(err: AxiosError<string>) {
+   toast.error(err.response?.data);
+  },
+ });
 
  useEffect(() => {
   setNoteComment(targetNote?.comment || '');
@@ -283,13 +307,23 @@ export default function DailyTaskPreview({
      </div>
      <DialogFooter className='p-4 py-2 border-t border-input'>
       <DialogClose asChild>
-       <Button className='sm:w-24' variant='outline'>
+       <Button
+        className='sm:w-24'
+        variant='outline'
+        disabled={saveNoteIsPending}
+       >
+        {saveNoteIsPending && <Spinner />}
         {dic.notes.cancel}
        </Button>
       </DialogClose>
-      <DialogClose asChild>
-       <Button className='sm:w-24'>{dic.notes.confirm}</Button>
-      </DialogClose>
+      <Button
+       className='sm:w-24'
+       disabled={saveNoteIsPending}
+       onClick={() => saveNoteMutate()}
+      >
+       {saveNoteIsPending && <Spinner />}
+       {dic.notes.confirm}
+      </Button>
      </DialogFooter>
     </DialogContent>
    </Dialog>

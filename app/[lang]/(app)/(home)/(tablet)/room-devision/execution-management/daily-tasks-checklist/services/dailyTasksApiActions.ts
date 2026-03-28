@@ -65,6 +65,11 @@ interface TaskNote {
  name: string;
 }
 
+type SaveNote = Pick<
+ TaskNote,
+ 'id' | 'dailyTaskDataID' | 'comment' | 'userPersonID'
+>;
+
 const dailyTasksBaseKey = 'daily-tasks-checklist';
 
 function getInitialData({ signal }: { signal: AbortSignal }) {
@@ -129,11 +134,24 @@ function removeDailyTaskNote(noteID: number) {
  );
 }
 
-export type { CheckList, InitialData, Maid, TaskNote };
+function saveNote(note: SaveNote) {
+ return axios.post<TaskNote[]>('/HouseKeeping/HouseKeepingNote/SaveNote', note);
+}
+
+function updateNote(note: SaveNote) {
+ return axios.post<TaskNote[]>(
+  '/HouseKeeping/HouseKeepingNote/UpdateNote',
+  note,
+ );
+}
+
+export type { CheckList, InitialData, Maid, TaskNote, SaveNote };
 export {
  dailyTasksBaseKey,
  getInitialData,
  getDailyTasks,
  getDailyTaskNotes,
  removeDailyTaskNote,
+ saveNote,
+ updateNote,
 };
