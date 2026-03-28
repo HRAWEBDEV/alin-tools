@@ -2,6 +2,7 @@ import { getExecutionManagementDictionary } from '@/internalization/app/dictiona
 import { type Locale } from '@/internalization/app/localization';
 import ExecutionManagementWrapper from './components/ExecutionManagementWrapper';
 import { getGuestCheckoutChecklistDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/guest-checkout-checklist/dictionary';
+import { getDailyTasksChecklistDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/daily-tasks-checklist/dictionary';
 
 export default async function ExecutionManagementPage(
  props: PageProps<'/[lang]/room-devision/execution-management'>,
@@ -13,10 +14,14 @@ export default async function ExecutionManagementPage(
  const checkoutCheckListDic = await getGuestCheckoutChecklistDictionary({
   locale: lang as Locale,
  });
+ const dailyTasksDic = await getDailyTasksChecklistDictionary({
+  locale: lang as Locale,
+ });
  return (
   <ExecutionManagementWrapper
    dic={dic}
    guestChecklistDic={checkoutCheckListDic}
+   dailyTasksDic={dailyTasksDic}
   />
  );
 }
