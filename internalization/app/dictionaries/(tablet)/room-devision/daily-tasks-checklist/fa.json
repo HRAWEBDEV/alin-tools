@@ -8,7 +8,9 @@
   "timeNo": "نوبت",
   "firstTurn": "نوبت اول",
   "secondTurn": "نوبت دوم",
-  "thirdTurn": "نوبت سوم"
+  "thirdTurn": "نوبت سوم",
+  "nextDay": "روز بعد",
+  "prevDay": "روز قبل"
  },
  "info": {
   "results": "نتایج",
