@@ -17,6 +17,7 @@ import {
 import { useDateFns } from '@/hooks/useDateFns';
 import { TimeNo } from './utils/timeNo';
 import DailyTasksFilters from './components/DailyTasksFilters';
+import DailyTasksList from './components/DailyTasksList';
 
 export default function DailyTasksChecklistWrapper({
  dic,
@@ -26,6 +27,7 @@ export default function DailyTasksChecklistWrapper({
  const [selectedCheckListID, setSelectedCheckListID] = useState<number | null>(
   null,
  );
+ const [showNew, setShowNew] = useState(false);
  const dateFns = useDateFns();
  const filtersUseForm = useForm<DailyTasksSchema>({
   defaultValues: {
@@ -72,6 +74,20 @@ export default function DailyTasksChecklistWrapper({
   },
  });
 
+ // edit or new
+ function handleOpenEdit(id: number | null) {
+  setSelectedCheckListID(id);
+  setShowNew(true);
+ }
+ function handleCloseEdit() {
+  setSelectedCheckListID(null);
+  setShowNew(false);
+ }
+
+ const targetEditChecklist = !!data?.length
+  ? data?.find((item) => item.id === selectedCheckListID) || null
+  : null;
+
  return (
   <>
    <FormProvider {...filtersUseForm}>
@@ -85,6 +101,23 @@ export default function DailyTasksChecklistWrapper({
       isSuccess,
       refetch,
       data,
+     }}
+    />
+    <DailyTasksList
+     dic={dic}
+     checklist={{
+      isError,
+      isFetching,
+      isSuccess,
+      refetch,
+      data,
+     }}
+     editChecklist={{
+      onCloseEdit: handleCloseEdit,
+      onShowEdit: handleOpenEdit,
+      selectedCheckListID,
+      showNew,
+      targetEditChecklist,
      }}
     />
    </FormProvider>

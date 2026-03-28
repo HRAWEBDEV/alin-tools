@@ -121,7 +121,7 @@ export default function DailyTasksFilters({
              <TabsTrigger
               key={item}
               value={item}
-              className='w-32'
+              className='w-24 sm:w-32'
               onClick={() => setValue('timeNo', item)}
              >
               {dic.filters[item]}
