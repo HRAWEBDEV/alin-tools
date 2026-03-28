@@ -136,7 +136,12 @@ export default function RackRoom({
       >
        {activeMinimalView ? (
         <div className='flex justify-center'>
-         {getRoomStateIcon(roomState, {})}
+         {getRoomStateIcon(roomState, {
+          fontSize: '2rem',
+          width: '2rem',
+          height: '2rem',
+          fill: 'currentColor',
+         })}
         </div>
        ) : (
         <span className='text-base font-medium'>{dic.help[roomState]}</span>
