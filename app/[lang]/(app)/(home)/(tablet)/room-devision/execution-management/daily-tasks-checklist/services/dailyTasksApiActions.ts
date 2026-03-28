@@ -55,6 +55,16 @@ interface CheckList {
  maidFullName: string;
 }
 
+interface TaskNote {
+ id: number;
+ dailyTaskDataID: number;
+ userPersonID: number;
+ comment: string;
+ lastName: string;
+ middleName: string;
+ name: string;
+}
+
 const dailyTasksBaseKey = 'daily-tasks-checklist';
 
 function getInitialData({ signal }: { signal: AbortSignal }) {
@@ -92,5 +102,38 @@ function getDailyTasks({
  );
 }
 
-export type { CheckList, InitialData, Maid };
-export { dailyTasksBaseKey, getInitialData, getDailyTasks };
+function getDailyTaskNotes({
+ signal,
+ dailyTaskID,
+}: {
+ signal: AbortSignal;
+ dailyTaskID: number;
+}) {
+ const searchParams = new URLSearchParams([
+  ['DailyTaskDataID', dailyTaskID.toString()],
+ ]);
+ return axios.get<TaskNote[]>(
+  `/HouseKeeping/HouseKeepingNote/GetNote?${searchParams.toString()}`,
+  {
+   signal,
+  },
+ );
+}
+
+function removeDailyTaskNote(noteID: number) {
+ const searchParams = new URLSearchParams([
+  ['DailyTaskNoteID', noteID.toString()],
+ ]);
+ return axios.delete<TaskNote[]>(
+  `/HouseKeeping/HouseKeepingNote/RemoveNote?${searchParams.toString()}`,
+ );
+}
+
+export type { CheckList, InitialData, Maid, TaskNote };
+export {
+ dailyTasksBaseKey,
+ getInitialData,
+ getDailyTasks,
+ getDailyTaskNotes,
+ removeDailyTaskNote,
+};
