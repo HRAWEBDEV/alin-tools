@@ -33,6 +33,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { DailyTasksChecklistProps } from '../utils/dailyTasksChecklistProps';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { timeNoOptions } from '../utils/timeNo';
+import { useDateFns } from '@/hooks/useDateFns';
 
 const smallBadgeKeys: (keyof DailyTasksSchema)[] = [];
 const largeBadgeKeys: (keyof DailyTasksSchema)[] = ['maid', 'roomType'];
@@ -48,9 +49,11 @@ export default function DailyTasksFilters({
  initDataIsLoading: boolean;
  checklist: DailyTasksChecklistProps;
 }) {
+ const dateFns = useDateFns();
  const [showFromDatePicker, setShowFromDatePicker] = useState(false);
  const { locale, localeInfo } = useBaseConfig();
- const { control, watch, setValue } = useFormContext<DailyTasksSchema>();
+ const { control, watch, setValue, getValues } =
+  useFormContext<DailyTasksSchema>();
  const [dateValue, timeNoValue] = watch(['date', 'timeNo']);
 
  const [sliderRef] = useKeenSlider({
@@ -83,6 +86,16 @@ export default function DailyTasksFilters({
 
  const activeFilters = filtersKeyValue.filter((item) => !!item.value);
 
+ function goToNextDay() {
+  const dateValue = getValues('date') || dateFns.startOfToday();
+  setValue('date', dateFns.addDays(dateValue, 1));
+ }
+
+ function goToPrevDay() {
+  const dateValue = getValues('date') || dateFns.startOfToday();
+  setValue('date', dateFns.addDays(dateValue, -1));
+ }
+
  return (
   <div className='[&]:[--default-top-offset:var(--top-offset,0)] sticky top-4 lg:top-(--default-top-offset) py-4 bg-background z-3'>
    <div className='flex gap-2 items-center mb-1'>
@@ -114,6 +127,14 @@ export default function DailyTasksFilters({
        </DrawerHeader>
        <div className='grow overflow-auto p-4'>
         <div className='mx-auto w-[min(100%,40rem)] grid grid-cols-2 gap-4'>
+         <div className='col-span-full flex justify-center items-center gap-4'>
+          <Button size='lg' variant='outline' onClick={goToPrevDay}>
+           {dic.filters.prevDay}
+          </Button>
+          <Button size='lg' variant='outline' onClick={goToNextDay}>
+           {dic.filters.nextDay}
+          </Button>
+         </div>
          <div className='col-span-full'>
           <Tabs dir={localeInfo.contentDirection} defaultValue={timeNoValue}>
            <TabsList className='h-11 mx-auto'>
@@ -317,6 +338,22 @@ export default function DailyTasksFilters({
        </div>
       </DrawerContent>
      </Drawer>
+     <Button
+      size='lg'
+      className='px-3 hidden lg:flex'
+      variant='outline'
+      onClick={goToPrevDay}
+     >
+      {dic.filters.prevDay}
+     </Button>
+     <Button
+      size='lg'
+      className='px-3 hidden lg:flex'
+      variant='outline'
+      onClick={goToNextDay}
+     >
+      {dic.filters.nextDay}
+     </Button>
     </div>
     <div
      key={`expand-${activeFilters.length}`}
