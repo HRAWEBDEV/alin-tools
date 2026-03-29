@@ -20,6 +20,7 @@ import { useLogout } from '@/app/[lang]/(app)/login/hooks/useLogout';
 import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
 import { useSettingsContext } from './settings/settingsContext';
 import HeaderDate from '../../components/HeaderDate';
+import { appVersion } from '@/services/base-config/baseConfigContext';
 
 export default function ProfileProvider({ children }: { children: ReactNode }) {
  const { userInfoRouterStorage, data, changeProgram } = useUserInfoRouter();
@@ -62,7 +63,10 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
        </p>
        <p className='text-sm truncate w-full mb-3 font-medium'>
         {userInfoRouterStorage.departmentName} -{' '}
-        {userInfoRouterStorage.programName}
+        {userInfoRouterStorage.programName}{' '}
+        <span className='uppercase font-en-roboto text-neutral-500'>
+         v({appVersion})
+        </span>
        </p>
        <div className='w-[min(100%,15rem)]'>
         <HeaderDate />

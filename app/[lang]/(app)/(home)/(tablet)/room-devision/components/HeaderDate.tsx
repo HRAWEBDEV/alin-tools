@@ -48,7 +48,7 @@ export default function HeaderDate() {
       : ''}
     </span>
    </div>
-   <div>
+   <div className='flex gap-1'>
     <Tooltip>
      <TooltipTrigger asChild>
       {isOnline ? (

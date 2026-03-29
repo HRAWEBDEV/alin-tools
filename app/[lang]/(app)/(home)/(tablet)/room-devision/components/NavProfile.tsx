@@ -6,6 +6,7 @@ import { useRoomDevisionShareDictionary } from '../services/share-dictionary/roo
 import HeaderDate from './HeaderDate';
 import { useProfileContext } from '../services/profile/profileContext';
 import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
+import { appVersion } from '@/services/base-config/baseConfigContext';
 
 export default function NavProfile() {
  const { data, userInfoRouterStorage } = useUserInfoRouter();
