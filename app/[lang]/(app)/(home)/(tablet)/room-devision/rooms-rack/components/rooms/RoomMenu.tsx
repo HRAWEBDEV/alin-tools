@@ -14,6 +14,13 @@ import RoomStateType from './RoomStateType';
 import RoomControl from './RoomControl';
 import RoomGuestsWrapper from '../guests/RoomGuestsWrapper';
 import { Badge } from '@/components/ui/badge';
+import { useQuery } from '@tanstack/react-query';
+import {
+ roomGuestMessagesBaseKey,
+ getRoomGuestMessages,
+} from '../../services/guest-messages/roomGuestMessagesApiActions';
+import { roomGuestsBaseKey } from '../../services/guests/roomGuestsApiActions';
+import { Spinner } from '@/components/ui/spinner';
 
 export default function RoomMenu({
  dic,
@@ -28,6 +35,8 @@ export default function RoomMenu({
  showRoomControl,
  showRoomGuests,
  setShowRoomGuests,
+ showGuestMessages,
+ setShowGuestMessages,
 }: {
  dic: RoomsRackDictionary;
  room: Rack | null;
@@ -41,7 +50,26 @@ export default function RoomMenu({
  setShowRoomControl: (state: boolean) => unknown;
  showRoomGuests: boolean;
  setShowRoomGuests: (state: boolean) => unknown;
+ showGuestMessages: boolean;
+ setShowGuestMessages: (state: boolean) => unknown;
 }) {
+ const {
+  data: guestMessages,
+  isSuccess: guestMessagesIsSuccess,
+  isError: guestMessagesIsError,
+  isFetching: guestMessagesIsFetching,
+ } = useQuery({
+  enabled: !!room && !!room.registerID,
+  queryKey: [roomGuestsBaseKey, 'list', room?.registerID?.toString()],
+  async queryFn({ signal }) {
+   const res = await getRoomGuestMessages({
+    signal,
+    registerId: room!.registerID!,
+   });
+   return res.data;
+  },
+ });
+
  return (
   <Drawer open={isOpen} onOpenChange={setIsOpen}>
    <DrawerContent className='h-[min(60svh,50rem)]'>
@@ -82,6 +110,20 @@ export default function RoomMenu({
              onClick={() => setShowRoomControl(true)}
             >
              {dic.options.houseControl}
+            </Button>
+            <Button
+             variant='outline'
+             className='justify-start text-start h-12'
+             size='lg'
+             onClick={() => setShowGuestMessages(true)}
+            >
+             {dic.options.guestMessages}
+             {guestMessagesIsFetching && <Spinner />}
+             {guestMessagesIsSuccess && (
+              <Badge variant='default' className='size-6'>
+               {guestMessages?.registerMessages.length || 0}
+              </Badge>
+             )}
             </Button>
             <Button
              variant='outline'
