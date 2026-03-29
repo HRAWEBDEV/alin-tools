@@ -94,6 +94,7 @@ export function RoomsRackConfigProvider({
  const [selectedRoom, setSelectedRoom] = useState<Rack | null>(null);
  const [showRackMenu, setShowRackMenu] = useState(false);
  const [showRoomStateKind, setShowRoomStateKind] = useState(false);
+ const [showRoomGuests, setShowRoomGuests] = useState(false);
  const [showRoomStateType, setShowRoomStateType] = useState(false);
  const [showRoomControl, setShowRoomControl] = useState(false);
  const [rackView, setRackView] = useState<RackView>(rackSetting.layout);
@@ -697,6 +698,8 @@ export function RoomsRackConfigProvider({
      setShowRoomStateType={setShowRoomStateType}
      showRoomControl={showRoomControl}
      setShowRoomControl={setShowRoomControl}
+     showRoomGuests={showRoomGuests}
+     setShowRoomGuests={setShowRoomGuests}
      setIsOpen={(value) => {
       if (value) {
        return;

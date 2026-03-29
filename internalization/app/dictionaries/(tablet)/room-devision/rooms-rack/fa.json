@@ -142,5 +142,19 @@
   "clear": "لغو",
   "confirm": "تایید",
   "history": "سوابق"
+ },
+ "roomGuests": {
+  "title": "مهمانان",
+  "roomNumber": "اتاق",
+  "registrationNumber": "شماره پذیرش",
+  "firstName": "نام",
+  "middleName": "نام میانی",
+  "lastName": "نام خانوادگی",
+  "gender": "جنسیت",
+  "nationality": "ملیت",
+  "nationalCode": "شماره ملی",
+  "priceType": "نوع قیمت",
+  "master": "نفر اصلی",
+  "folioOwner": "صاحب حساب"
  }
 }
