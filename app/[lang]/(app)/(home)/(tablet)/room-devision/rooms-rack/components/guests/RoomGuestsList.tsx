@@ -3,7 +3,7 @@ import { type RoomGuest } from '../../services/guests/roomGuestsApiActions';
 import NoItemFound from '@/app/[lang]/(app)/components/NoItemFound';
 import UnExpectedError from '@/app/[lang]/(app)/components/UnExpectedError';
 import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
-import { MdTouchApp } from 'react-icons/md';
+// import { MdTouchApp } from 'react-icons/md';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { FaCheck } from 'react-icons/fa';
 
@@ -36,9 +36,9 @@ export default function RoomGuestsList({
       key={guest.id}
       className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 isolate relative'
      >
-      <div className='absolute bottom-0 end-6 -z-1 opacity-60'>
+      {/*<div className='absolute bottom-0 end-6 -z-1 opacity-60'>
        <MdTouchApp className='size-24 text-neutral-200 dark:text-neutral-800' />
-      </div>
+      </div>*/}
       <div className='flex flex-wrap justify-between gap-1 mb-1'>
        <div>
         <span className='text-sm text-neutral-600 dark:text-neutral-400'>
