@@ -10,7 +10,7 @@ import {
 } from './schemas/entranceAndExitSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useDateFns } from '@/hooks/useDateFns';
-import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import {
  entranceAndExitBaseKey,
  getInitialData,
@@ -65,7 +65,7 @@ export default function EntranceAndExitRoomsWrapper({
     date: dateValue!.toISOString(),
     isCheckin: typeValue?.value === 'entrance',
     isCheckout: typeValue?.value === 'exit',
-    floorNo: floorValue?.key,
+    floorNo: floorValue?.value,
     roomTypeID: roomTypeValue?.key,
    });
    return res.data;

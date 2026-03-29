@@ -83,7 +83,7 @@ export default function OutOfOrderRoomsWrapper({
     offset: pageParam.offset.toString(),
     fromDate: fromDateValue!.toISOString(),
     toDate: toDateValue!.toISOString(),
-    floorNo: floorValue?.key,
+    floorNo: floorValue?.value,
     roomID: roomValue?.key,
     roomTypeID: roomTypeValue?.key,
    });
