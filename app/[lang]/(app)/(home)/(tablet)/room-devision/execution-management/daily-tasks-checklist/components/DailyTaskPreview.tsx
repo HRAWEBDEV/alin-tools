@@ -160,6 +160,15 @@ export default function DailyTaskPreview({
           </DrawerHeader>
           <div className='grow overflow-auto p-4 w-[min(100%,50rem)] mx-auto'>
            {notesIsFetching && <LinearLoading />}
+           <div className='mb-2 flex justify-end'>
+            <Button
+             variant='outline'
+             className='border-primary text-primary w-28'
+             onClick={() => handleEdit(null)}
+            >
+             {dic.info.addMessage}
+            </Button>
+           </div>
            {notesIsSuccess && notes.length ? (
             notes?.map((note) => (
              <DailyTaskNote
@@ -313,6 +322,9 @@ export default function DailyTaskPreview({
         className='sm:w-24'
         variant='outline'
         disabled={saveNoteIsPending}
+        onClick={() => {
+         handleCloseEdit();
+        }}
        >
         {saveNoteIsPending && <Spinner />}
         {dic.notes.cancel}
