@@ -12,7 +12,7 @@ import {
  DrawerTrigger,
 } from '@/components/ui/drawer';
 import { Spinner } from '@/components/ui/spinner';
-import { X, Check } from 'lucide-react';
+import { Check, ChevronsUpDown } from 'lucide-react';
 import { type GuestsFilterForm } from './GuestsListWrapper';
 import { useState } from 'react';
 import { GuestsManagementDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/guests-management/dictionary';
@@ -22,7 +22,7 @@ import {
 } from '../services/guestsListApiActions';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import { FaFilter } from 'react-icons/fa';
+import { FaFilter, FaRegTrashAlt } from 'react-icons/fa';
 import { FaPerson } from 'react-icons/fa6';
 
 const FILTER_KEYS: (keyof GuestsFilterForm)[] = [
@@ -32,6 +32,17 @@ const FILTER_KEYS: (keyof GuestsFilterForm)[] = [
  'specialGuest',
  'group',
  'room',
+];
+
+const smallBadgeKeys: (keyof GuestsFilterForm)[] = [
+ 'folio',
+ 'reserveNo',
+ 'room',
+];
+const largeBadgeKeys: (keyof GuestsFilterForm)[] = [
+ 'nationality',
+ 'specialGuest',
+ 'group',
 ];
 
 type Props = {
@@ -50,14 +61,16 @@ export default function GuestsFilters({
  totalResults,
  numGuests,
 }: Props) {
- const { control, setValue, register, reset } =
-  useFormContext<GuestsFilterForm>();
+ const { control, setValue, reset } = useFormContext<GuestsFilterForm>();
  const values = useWatch({ control });
  const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
  const [selectDrawerOpen, setSelectDrawerOpen] = useState<string | null>(null);
 
  const activeFilters = FILTER_KEYS.filter((k) => values[k]);
- const [sliderRef] = useKeenSlider({ slides: { perView: 'auto', spacing: 8 } });
+ const [sliderRef] = useKeenSlider({
+  slides: { perView: 'auto', spacing: 5 },
+  rtl: true,
+ });
 
  const filterKeyLabel = (key: keyof GuestsFilterForm): string => {
   switch (key) {
@@ -121,12 +134,12 @@ export default function GuestsFilters({
       </Button>
      </DrawerTrigger>
 
-     <DrawerContent className='sm:min-h-auto min-h-[calc(100dvh-120px)]'>
+     <DrawerContent className='sm:min-h-auto min-h-[calc(100dvh-80px)]'>
       <DrawerHeader className='pb-1'>
        <DrawerTitle>{dic.filters.title}</DrawerTitle>
       </DrawerHeader>
       <div className='p-5 pt-0 flex flex-col gap-5 overflow-y-auto max-w-[95%] mx-auto w-full'>
-       <div className='flex items-center justify-between'>
+       <div className='flex items-center justify-end mb-4 mt-2'>
         {activeFilters.length > 0 && (
          <button
           onClick={() => reset()}
@@ -138,28 +151,69 @@ export default function GuestsFilters({
        </div>
 
        <div className='grid sm:grid-cols-2 grid-cols-1 gap-6'>
-        <div className='flex flex-col gap-1'>
-         <label className='text-xs text-muted-foreground'>
-          {dic.filters.folio}
-         </label>
-         <Input
-          type='number'
-          {...register('folio')}
-          placeholder={dic.filters.folio}
-          className='h-10'
-         />
-        </div>
-        <div className='flex flex-col gap-1'>
-         <label className='text-xs text-muted-foreground'>
-          {dic.filters.reserveNo}
-         </label>
-         <Input
-          type='number'
-          {...register('reserveNo')}
-          placeholder={dic.filters.reserveNo}
-          className='h-10'
-         />
-        </div>
+        <Controller
+         control={control}
+         name='folio'
+         render={({ field }) => (
+          <div className='flex flex-col gap-1 relative'>
+           <label className='text-xs text-muted-foreground'>
+            {dic.filters.folio}
+           </label>
+           <div className='relative flex items-center'>
+            <Input
+             type='number'
+             {...field}
+             value={field.value ?? ''}
+             placeholder={dic.filters.folio}
+             className='h-11 pe-10'
+            />
+            {field.value && (
+             <Button
+              type='button'
+              variant={'ghost'}
+              size={'icon'}
+              onClick={() => field.onChange('')}
+              className='absolute end-1 text-rose-700 dark:text-rose-400 h-8 w-8 bg-transparent!'
+             >
+              <FaRegTrashAlt className='size-4 ' />
+             </Button>
+            )}
+           </div>
+          </div>
+         )}
+        />
+
+        <Controller
+         control={control}
+         name='reserveNo'
+         render={({ field }) => (
+          <div className='flex flex-col gap-1 relative'>
+           <label className='text-xs text-muted-foreground'>
+            {dic.filters.reserveNo}
+           </label>
+           <div className='relative flex items-center'>
+            <Input
+             type='number'
+             {...field}
+             value={field.value ?? ''}
+             placeholder={dic.filters.reserveNo}
+             className='h-11 pe-10'
+            />
+            {field.value && (
+             <Button
+              type='button'
+              variant={'ghost'}
+              size={'icon'}
+              onClick={() => field.onChange('')}
+              className='absolute end-1 text-rose-700 dark:text-rose-400 h-8 w-8 bg-transparent!'
+             >
+              <FaRegTrashAlt className='size-4' />
+             </Button>
+            )}
+           </div>
+          </div>
+         )}
+        />
        </div>
 
        <div className='grid sm:grid-cols-2 grid-cols-1 gap-6'>
@@ -179,11 +233,11 @@ export default function GuestsFilters({
                variant='outline'
                onClick={() => setSelectDrawerOpen(key)}
                className={cn(
-                'justify-between h-10 font-normal',
+                'justify-between h-11 font-normal',
                 field.value && 'border-primary text-primary',
                )}
               >
-               <span className='truncate'>
+               <span className='text-start grow overflow-hidden text-ellipsis'>
                 {initDataIsLoading ? (
                  <Spinner className='w-4 h-4' />
                 ) : (
@@ -191,7 +245,23 @@ export default function GuestsFilters({
                  `${dic.filters.select} ${filterKeyLabel(key)}`)
                 )}
                </span>
-               {field.value && <Check className='size-4 shrink-0' />}
+               <div className='flex gap-1 items-center -me-2'>
+                {field.value && (
+                 <Button
+                  type='button'
+                  variant={'ghost'}
+                  size={'icon'}
+                  onClick={(e) => {
+                   e.stopPropagation();
+                   field.onChange(null);
+                  }}
+                  className='text-rose-700 dark:text-rose-400 h-8 w-8 bg-transparent!'
+                 >
+                  <FaRegTrashAlt className='size-4' />
+                 </Button>
+                )}
+                <ChevronsUpDown className='opacity-50 size-4 shrink-0' />
+               </div>
               </Button>
              </div>
 
@@ -257,28 +327,44 @@ export default function GuestsFilters({
     )}
    </div>
    {activeFilters.length > 0 && (
-    <div ref={sliderRef} className='keen-slider! mt-1' dir='rtl'>
-     {activeFilters.map((key) => (
-      <div key={key} className='keen-slider__slide w-auto!'>
+    <div
+     key={`expand-${activeFilters.length}`}
+     ref={sliderRef}
+     className='keen-slider grow relative mt-1'
+     dir='rtl'
+    >
+     {activeFilters.map((key) => {
+      let badgeSizeType: 'normal' | 'small' | 'large' = 'normal';
+      if (smallBadgeKeys.includes(key)) {
+       badgeSizeType = 'small';
+      } else if (largeBadgeKeys.includes(key)) {
+       badgeSizeType = 'large';
+      }
+
+      return (
        <Badge
+        key={key}
         variant='outline'
-        className='flex items-center gap-1 py-1 px-2 text-primary border-primary rounded-lg!'
+        data-badge-size={badgeSizeType}
+        className='keen-slider__slide inline-flex justify-between items-center rounded-md py-0.5 font-medium bg-neutral-100 dark:bg-neutral-900 text-[0.85rem] data-[badge-size="small"]:basis-32 data-[badge-size="small"]:w-32 data-[badge-size="normal"]:basis-46 data-[badge-size="normal"]:w-46 data-[badge-size="large"]:basis-72 data-[badge-size="large"]:w-72 h-10'
        >
-        <span className='text-xs text-muted-foreground'>
-         {filterKeyLabel(key)}:
-        </span>
-        {filterLabel(key)}
-        <button
-         className='cursor-pointer ml-1 hover:text-destructive transition-colors'
+        <p className='text-start grow truncate'>
+         <span className='text-neutral-500'>{filterKeyLabel(key)}: </span>
+         {filterLabel(key)}
+        </p>
+        <Button
+         variant='ghost'
+         size='icon-sm'
+         className='text-destructive shrink-0'
          onClick={() =>
           setValue(key, key === 'folio' || key === 'reserveNo' ? '' : null)
          }
         >
-         <X className='w-3 h-3' />
-        </button>
+         <FaRegTrashAlt />
+        </Button>
        </Badge>
-      </div>
-     ))}
+      );
+     })}
     </div>
    )}
   </div>
