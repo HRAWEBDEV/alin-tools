@@ -26,6 +26,7 @@ import { WaitForBook } from '../../components/icons/WaitForBook';
 import { ClockOutliend } from '../../components/icons/ClockOutliend';
 import { CheckHousekeeping } from '../../components/icons/CheckHousekeeping';
 import { DND } from '../../components/icons/DND';
+import { SleptOut } from '../../components/icons/SleptOut';
 import { NoLuggage } from '../../components/icons/NoLuggage';
 import { LightLuggage } from '../../components/icons/LightLuggage';
 import { NoShow } from '../../components/icons/NoShow';
@@ -115,6 +116,8 @@ function getStateTypeIcon(
    return <NoShow {...style} />;
   case RoomStateType.locked:
    return <FaLock {...style} />;
+  case RoomStateType.sleptOut:
+   return <SleptOut {...style} />;
  }
 }
 
