@@ -11,6 +11,8 @@
 - add daily tasks page (hra-done)
 - add daily task notes (hra-done)
 - show app version in user profile (hra-done)
+- add reload button if necessary - for real time data
+- add rack setting storage 
 ### bug fixes
 - remove main wrapper bottom padding in mobile mode, when scroll direction is down (hra-done)
 - use useThrottle instead of useDebouce to change scroll direction (hra-done)

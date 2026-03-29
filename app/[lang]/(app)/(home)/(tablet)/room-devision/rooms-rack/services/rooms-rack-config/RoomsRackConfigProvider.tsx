@@ -54,9 +54,14 @@ import * as signalR from '@microsoft/signalr';
 import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
 import { getUserLoginToken } from '@/app/[lang]/(app)/login/utils/loginTokenManager';
 import { type PagedData, type Paging } from '../../../utils/apiTypes';
-import { rackLimitOptions } from '../../utils/rackLimitOptions';
 import { useDateFns } from '@/hooks/useDateFns';
 import RoomMenu from '../../components/rooms/RoomMenu';
+import {
+ type RackSetting,
+ getRackSetting,
+ defaultRackSetting,
+ saveRackSetting,
+} from '../../utils/rackSettingLocalStorage';
 
 export function RoomsRackConfigProvider({
  children,
@@ -67,6 +72,12 @@ export function RoomsRackConfigProvider({
 }) {
  const dateFns = useDateFns();
  const { userInfoRouterStorage } = useUserInfoRouter();
+ const [rackSetting, setRackSetting] = useState<RackSetting>(() => {
+  if (typeof window !== 'undefined') {
+   return getRackSetting();
+  }
+  return defaultRackSetting;
+ });
  const [rackIsError, setRackIsError] = useState(false);
  const [rackIsSuccess, setRackIsSuccess] = useState(false);
  const [rackIsLoading, setRackIsLoading] = useState(false);
@@ -85,7 +96,7 @@ export function RoomsRackConfigProvider({
  const [showRoomStateKind, setShowRoomStateKind] = useState(false);
  const [showRoomStateType, setShowRoomStateType] = useState(false);
  const [showRoomControl, setShowRoomControl] = useState(false);
- const [rackView, setRackView] = useState<RackView>('detailed');
+ const [rackView, setRackView] = useState<RackView>(rackSetting.layout);
  const targetSelectedRoom = selectedRoom
   ? rackRooms.find((item) => item.roomLabel === selectedRoom.roomLabel) || null
   : null;
@@ -126,7 +137,7 @@ export function RoomsRackConfigProvider({
 
  // paging
  const [rackPaging, setRackPaging] = useState<Paging>({
-  limit: Number(limitQueryValue) || rackLimitOptions[0],
+  limit: Number(limitQueryValue) || rackSetting.pageLimit,
   offset: Number(offsetQueryValue) || 0,
  });
  const [rowsCount, setRowsCount] = useState(0);
@@ -139,6 +150,7 @@ export function RoomsRackConfigProvider({
 
  function handleChangeRackView(view: RackView) {
   setRackView(view);
+  changeRackSetting('layout', view);
  }
 
  function handleChangePage(action: ChangePageActions) {
@@ -265,6 +277,18 @@ export function RoomsRackConfigProvider({
   'roomStateType',
   'roomType',
  ]);
+ // change setting
+ function changeRackSetting<T extends keyof RackSetting>(
+  key: T,
+  value: RackSetting[T],
+ ) {
+  const newSetting = {
+   ...rackSetting,
+   [key]: value,
+  };
+  setRackSetting(newSetting);
+  saveRackSetting(newSetting);
+ }
  // * signal r setup
  const getRackRooms = useCallback(async () => {
   if (!connection || !rackTypeValue || !showTypeValue) return;

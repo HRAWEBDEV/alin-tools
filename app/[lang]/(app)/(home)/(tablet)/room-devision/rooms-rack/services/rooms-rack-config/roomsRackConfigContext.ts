@@ -7,8 +7,9 @@ import {
  type Rack,
 } from '../roomsRackApiActions';
 import { type Paging } from '../../../utils/apiTypes';
+import { type RackLayout } from '../../utils/rackLayout';
 
-type RackView = 'compact' | 'detailed' | 'minimal';
+type RackView = RackLayout;
 type ChangePageActions = 'next' | 'prev' | 'last' | 'first';
 type SidebarPanel = 'info' | 'help' | 'filters';
 type RackConfig = {
