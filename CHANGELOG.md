@@ -15,6 +15,7 @@
 - use useThrottle instead of useDebouce to change scroll direction (hra-done)
 - fix drawer and dialog overflow
 - fix order list cache bug (hra-done)
+- fix rooms statistics mobile responsive (hra-done)
 
 # 1.2.0
 ### features

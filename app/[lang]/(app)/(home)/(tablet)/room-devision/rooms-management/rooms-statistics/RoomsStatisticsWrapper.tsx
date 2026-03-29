@@ -92,7 +92,7 @@ export default function RoomsStatisticsWrapper({
       </Button>
      </div>
     </div>
-    <div className='grid gap-4 grid-cols-2 md:grid-cols-3'>
+    <div className='grid gap-4 sm:grid-cols-2 md:grid-cols-3'>
      {/* occupancy */}
      <div className='p-2 shadow-sm border border-input rounded-lg'>
       <h3 className='text-center font-medium rounded-lg p-2 border mb-2 bg-destructive/10 text-destructive border-destructive/50 text-base'>
@@ -170,7 +170,7 @@ export default function RoomsStatisticsWrapper({
       </div>
      </div>
      {/* status */}
-     <div className='p-2 shadow-sm border border-input rounded-lg col-span-2 md:row-span-2 md:col-span-1'>
+     <div className='p-2 shadow-sm border border-input rounded-lg sm:col-span-full md:row-span-2 md:col-span-1'>
       <h3 className='text-center font-medium rounded-lg p-2 border mb-2 bg-orange-100 text-orange-600 border-orange-400 dark:bg-orange-950 dark:text-orange-400 dark:border-orange-600 text-base'>
        {dic.arrival.title}
       </h3>
