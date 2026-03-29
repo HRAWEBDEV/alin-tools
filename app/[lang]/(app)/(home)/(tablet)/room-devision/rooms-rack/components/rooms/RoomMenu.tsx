@@ -13,6 +13,7 @@ import RoomStateKind from './RoomStateKind';
 import RoomStateType from './RoomStateType';
 import RoomControl from './RoomControl';
 import RoomGuestsWrapper from '../guests/RoomGuestsWrapper';
+import { Badge } from '@/components/ui/badge';
 
 export default function RoomMenu({
  dic,
@@ -89,6 +90,9 @@ export default function RoomMenu({
              onClick={() => setShowRoomGuests(true)}
             >
              {dic.options.guests}
+             <Badge variant='destructive' className='size-6'>
+              {room.guestCount}
+             </Badge>
             </Button>
            </>
           )}
