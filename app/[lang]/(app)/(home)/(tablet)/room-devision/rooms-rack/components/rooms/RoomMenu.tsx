@@ -6,6 +6,7 @@ import {
  DrawerTitle,
 } from '@/components/ui/drawer';
 import { type Rack } from '../../services/roomsRackApiActions';
+import { RoomStateGroup } from '../../utils/rackStates';
 import RackRoom from './RackRoom';
 import { Button } from '@/components/ui/button';
 import RoomStateKind from './RoomStateKind';
@@ -66,14 +67,25 @@ export default function RoomMenu({
           >
            {dic.options.changeRoomStateType}
           </Button>
-          <Button
-           variant='outline'
-           className='justify-start text-start h-12'
-           size='lg'
-           onClick={() => setShowRoomControl(true)}
-          >
-           {dic.options.houseControl}
-          </Button>
+          {RoomStateGroup.occupiedRoom === room.roomStateGroupID && (
+           <>
+            <Button
+             variant='outline'
+             className='justify-start text-start h-12'
+             size='lg'
+             onClick={() => setShowRoomControl(true)}
+            >
+             {dic.options.houseControl}
+            </Button>
+            <Button
+             variant='outline'
+             className='justify-start text-start h-12'
+             size='lg'
+            >
+             {dic.options.guests}
+            </Button>
+           </>
+          )}
          </>
         )}
        </div>

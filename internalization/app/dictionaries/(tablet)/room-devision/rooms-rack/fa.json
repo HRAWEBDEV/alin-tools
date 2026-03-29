@@ -81,6 +81,7 @@
   "title": "عملیات اتاق",
   "changeRoomStateKind": "تغییر وضعیت اتاق",
   "changeRoomStateType": "تغییر وضعیت ویژه اتاق",
+  "guests": "مهمان ها",
   "houseControl": "کنترل خانه داری"
  },
  "tools": {
