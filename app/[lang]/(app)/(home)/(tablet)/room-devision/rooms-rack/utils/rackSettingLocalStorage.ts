@@ -4,11 +4,13 @@ import { rackLimitOptions } from './rackLimitOptions';
 interface RackSetting {
  layout: RackLayout;
  pageLimit: number;
+ sidebarIsPin: boolean;
 }
 
 const defaultRackSetting: RackSetting = {
  layout: 'detailed',
  pageLimit: rackLimitOptions[0],
+ sidebarIsPin: false,
 };
 
 const rackSettingLocalKey = 'rooms-rack-setting';

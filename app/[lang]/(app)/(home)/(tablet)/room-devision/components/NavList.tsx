@@ -37,21 +37,21 @@ export default function NavList() {
      </Link>
     </Button>
     <Button
-     data-active={activePath === 'execution-management'}
+     data-active={activePath === 'rooms-management'}
      variant='ghost'
      className='w-full min-h-16 h-auto justify-start data-[active=""]:bg-background border border-transparent data-[active="true"]:text-primary data-[active="true"]:border-primary'
      asChild
     >
      <Link
       href={
-       activePath === 'execution-management'
+       activePath === 'rooms-management'
         ? '#'
-        : `/${locale}/room-devision/execution-management`
+        : `/${locale}/room-devision/rooms-management`
       }
       className='flex w-auto h-auto items-center gap-4'
      >
-      <FaClipboardList className='size-8' />
-      <p className='text-base'>{navigation.executionManagement}</p>
+      <FaHouseUser className='size-8' />
+      <p className='text-base'>{navigation.roomsManagement}</p>
      </Link>
     </Button>
     <Button
@@ -73,21 +73,21 @@ export default function NavList() {
      </Link>
     </Button>
     <Button
-     data-active={activePath === 'rooms-management'}
+     data-active={activePath === 'execution-management'}
      variant='ghost'
      className='w-full min-h-16 h-auto justify-start data-[active=""]:bg-background border border-transparent data-[active="true"]:text-primary data-[active="true"]:border-primary'
      asChild
     >
      <Link
       href={
-       activePath === 'rooms-management'
+       activePath === 'execution-management'
         ? '#'
-        : `/${locale}/room-devision/rooms-management`
+        : `/${locale}/room-devision/execution-management`
       }
       className='flex w-auto h-auto items-center gap-4'
      >
-      <FaHouseUser className='size-8' />
-      <p className='text-base'>{navigation.roomsManagement}</p>
+      <FaClipboardList className='size-8' />
+      <p className='text-base'>{navigation.executionManagement}</p>
      </Link>
     </Button>
    </li>

@@ -90,7 +90,7 @@ export function RoomsRackConfigProvider({
  const [activeSidebarPanel, setActiveSidebarPanel] =
   useState<SidebarPanel>('filters');
  const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
- const [sidebarIsPin, setSidebarIsPin] = useState(false);
+ const [sidebarIsPin, setSidebarIsPin] = useState(rackSetting.sidebarIsPin);
  const [selectedRoom, setSelectedRoom] = useState<Rack | null>(null);
  const [showRackMenu, setShowRackMenu] = useState(false);
  const [showRoomStateKind, setShowRoomStateKind] = useState(false);
@@ -346,7 +346,9 @@ export function RoomsRackConfigProvider({
  }
 
  function handleToggleSidebarPin(pin?: boolean) {
-  setSidebarIsPin((pre) => (pin === undefined ? !pre : pin));
+  const newPin = pin === undefined ? !sidebarIsPin : pin;
+  setSidebarIsPin(newPin);
+  changeRackSetting('sidebarIsPin', newPin);
  }
 
  function handleChangeActivePanel(panel: SidebarPanel) {
