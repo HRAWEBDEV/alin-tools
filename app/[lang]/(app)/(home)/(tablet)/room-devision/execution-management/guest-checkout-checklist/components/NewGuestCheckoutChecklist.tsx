@@ -404,6 +404,9 @@ export default function NewGuestCheckoutChecklist({
          variant='outline'
          className='md:w-34'
          disabled={pendActions}
+         onClick={() => {
+          editChecklist.onCloseEdit();
+         }}
         >
          {pendActions && <Spinner />}
          {dic.newOrEdit.cancel}
