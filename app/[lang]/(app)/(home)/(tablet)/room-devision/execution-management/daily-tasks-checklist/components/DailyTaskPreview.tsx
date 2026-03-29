@@ -333,7 +333,13 @@ export default function DailyTaskPreview({
       <Button
        className='sm:w-24'
        disabled={saveNoteIsPending}
-       onClick={() => saveNoteMutate()}
+       onClick={() => {
+        if (!noteComment) {
+         handleCloseEdit();
+         return;
+        }
+        saveNoteMutate();
+       }}
       >
        {saveNoteIsPending && <Spinner />}
        {dic.notes.confirm}
