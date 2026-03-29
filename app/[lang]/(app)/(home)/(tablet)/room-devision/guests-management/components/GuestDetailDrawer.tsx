@@ -23,17 +23,17 @@ export default function GuestDetailDrawer({
 
  return (
   <Drawer open={!!guest} onOpenChange={(open) => !open && onClose()}>
-   <DrawerContent dir='rtl' className='h-auto! sm:min-h-auto min-h-[89svh]'>
+   <DrawerContent dir='rtl' className='h-auto! sm:min-h-auto min-h-[89svh] '>
     <DrawerHeader>
      <DrawerTitle>{dic.detail.title}</DrawerTitle>
     </DrawerHeader>
     {guest && (
-     <div className='grid sm:grid-cols-2 md:grid-cols-3 grid-cols-1 gap-x-8 gap-y-4 p-4 text-sm sm:justify-items-center justify-items-normal'>
+     <div className='grid sm:grid-cols-2 md:grid-cols-3 grid-cols-1 gap-x-8 gap-y-4 p-4 text-sm sm:justify-items-center justify-items-normal max-w-[70%] w-full mx-auto'>
       <DetailRow label={dic.fields.roomNo} value={guest.roomNo} />
       <DetailRow label={dic.fields.reserveNo} value={guest.reserveNo} />
       <DetailRow
        label={dic.fields.fullName}
-       value={guest.folioName}
+       value={guest.guestFullName}
        valueClassName='text-primary'
       />
       <DetailRow label={dic.fields.fatherName} value={guest.fatherName} />
@@ -117,7 +117,10 @@ function DetailRow({
 
  return (
   <div className='flex items-center text-start gap-2 sm:justify-start justify-between sm:px-0 px-4'>
-   <span className='text-muted-foreground'>{label}</span>
+   <span className='text-muted-foreground'>
+    {label}
+    {' : '}
+   </span>
    {isLink && value ? (
     <Link href={linkValue as Route} className={valueClassName}>
      {value}

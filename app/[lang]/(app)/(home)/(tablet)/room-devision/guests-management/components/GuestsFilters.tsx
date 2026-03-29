@@ -4,7 +4,13 @@ import { useFormContext, Controller, useWatch } from 'react-hook-form';
 import { useKeenSlider } from 'keen-slider/react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
+import {
+ Drawer,
+ DrawerContent,
+ DrawerHeader,
+ DrawerTitle,
+ DrawerTrigger,
+} from '@/components/ui/drawer';
 import { Spinner } from '@/components/ui/spinner';
 import { X, Check } from 'lucide-react';
 import { type GuestsFilterForm } from './GuestsListWrapper';
@@ -115,10 +121,12 @@ export default function GuestsFilters({
       </Button>
      </DrawerTrigger>
 
-     <DrawerContent className='max-h-[85vh]'>
-      <div className='p-5 flex flex-col gap-5 overflow-y-auto'>
+     <DrawerContent className='sm:min-h-auto min-h-[calc(100dvh-120px)]'>
+      <DrawerHeader className='pb-1'>
+       <DrawerTitle>{dic.filters.title}</DrawerTitle>
+      </DrawerHeader>
+      <div className='p-5 pt-0 flex flex-col gap-5 overflow-y-auto max-w-[95%] mx-auto w-full'>
        <div className='flex items-center justify-between'>
-        <h3 className='font-semibold text-lg'>{dic.filters.title}</h3>
         {activeFilters.length > 0 && (
          <button
           onClick={() => reset()}
@@ -129,7 +137,7 @@ export default function GuestsFilters({
         )}
        </div>
 
-       <div className='grid sm:grid-cols-2 grid-cols-1 gap-3'>
+       <div className='grid sm:grid-cols-2 grid-cols-1 gap-6'>
         <div className='flex flex-col gap-1'>
          <label className='text-xs text-muted-foreground'>
           {dic.filters.folio}
@@ -154,7 +162,7 @@ export default function GuestsFilters({
         </div>
        </div>
 
-       <div className='grid sm:grid-cols-2 grid-cols-1 gap-3'>
+       <div className='grid sm:grid-cols-2 grid-cols-1 gap-6'>
         {(['nationality', 'specialGuest', 'group', 'room'] as const).map(
          (key) => (
           <Controller
