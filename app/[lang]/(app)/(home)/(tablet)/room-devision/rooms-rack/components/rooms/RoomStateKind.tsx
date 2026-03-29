@@ -57,7 +57,7 @@ export default function RoomStateKind({
    <DialogContent className='gap-0 p-0 max-h-[95svh] overflow-hidden flex flex-col'>
     <DialogHeader className='p-4 border-b border-input'>
      <DialogHeader>
-      <DialogTitle className='text-lg'>{dic.roomStateKind.title}</DialogTitle>
+      <DialogTitle className='text-lg'>{dic.roomGuests.title}</DialogTitle>
      </DialogHeader>
     </DialogHeader>
     <div className='p-4 grow overflow-auto'>

@@ -6,11 +6,13 @@ import {
  DrawerTitle,
 } from '@/components/ui/drawer';
 import { type Rack } from '../../services/roomsRackApiActions';
+import { RoomStateGroup } from '../../utils/rackStates';
 import RackRoom from './RackRoom';
 import { Button } from '@/components/ui/button';
 import RoomStateKind from './RoomStateKind';
 import RoomStateType from './RoomStateType';
 import RoomControl from './RoomControl';
+import RoomGuestsWrapper from '../guests/RoomGuestsWrapper';
 
 export default function RoomMenu({
  dic,
@@ -23,6 +25,8 @@ export default function RoomMenu({
  setShowRoomStateType,
  setShowRoomControl,
  showRoomControl,
+ showRoomGuests,
+ setShowRoomGuests,
 }: {
  dic: RoomsRackDictionary;
  room: Rack | null;
@@ -34,6 +38,8 @@ export default function RoomMenu({
  setShowRoomStateType: (state: boolean) => unknown;
  showRoomControl: boolean;
  setShowRoomControl: (state: boolean) => unknown;
+ showRoomGuests: boolean;
+ setShowRoomGuests: (state: boolean) => unknown;
 }) {
  return (
   <Drawer open={isOpen} onOpenChange={setIsOpen}>
@@ -66,14 +72,26 @@ export default function RoomMenu({
           >
            {dic.options.changeRoomStateType}
           </Button>
-          <Button
-           variant='outline'
-           className='justify-start text-start h-12'
-           size='lg'
-           onClick={() => setShowRoomControl(true)}
-          >
-           {dic.options.houseControl}
-          </Button>
+          {RoomStateGroup.occupiedRoom === room.roomStateGroupID && (
+           <>
+            <Button
+             variant='outline'
+             className='justify-start text-start h-12'
+             size='lg'
+             onClick={() => setShowRoomControl(true)}
+            >
+             {dic.options.houseControl}
+            </Button>
+            <Button
+             variant='outline'
+             className='justify-start text-start h-12'
+             size='lg'
+             onClick={() => setShowRoomGuests(true)}
+            >
+             {dic.options.guests}
+            </Button>
+           </>
+          )}
          </>
         )}
        </div>
@@ -97,6 +115,12 @@ export default function RoomMenu({
         setIsOpen(false);
         setShowRoomStateType(false);
        }}
+      />
+      <RoomGuestsWrapper
+       dic={dic}
+       room={room}
+       open={showRoomGuests}
+       onChangeOpen={setShowRoomGuests}
       />
       <RoomControl
        dic={dic}
