@@ -20,6 +20,7 @@ import {
  getRoomGuestMessages,
 } from '../../services/guest-messages/roomGuestMessagesApiActions';
 import { Spinner } from '@/components/ui/spinner';
+import RoomGuestMessagesWrapper from '../guest-messages/RoomGuestMessagesWrapper';
 
 export default function RoomMenu({
  dic,
@@ -57,6 +58,7 @@ export default function RoomMenu({
   isSuccess: guestMessagesIsSuccess,
   isError: guestMessagesIsError,
   isFetching: guestMessagesIsFetching,
+  refetch: guestMessagesRefetch,
  } = useQuery({
   enabled: !!room && !!room.registerID,
   queryKey: [roomGuestMessagesBaseKey, 'list', room?.registerID?.toString()],
@@ -175,6 +177,19 @@ export default function RoomMenu({
        onSuccess={() => {
         setIsOpen(false);
         setShowRoomControl(false);
+       }}
+      />
+      <RoomGuestMessagesWrapper
+       dic={dic}
+       room={room}
+       open={showGuestMessages}
+       onChangeOpen={setShowGuestMessages}
+       roomGuestMessages={{
+        data: guestMessages,
+        isSuccess: guestMessagesIsSuccess,
+        isError: guestMessagesIsError,
+        isFetching: guestMessagesIsFetching,
+        refetch: guestMessagesRefetch,
        }}
       />
      </>
