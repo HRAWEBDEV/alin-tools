@@ -9,6 +9,9 @@ interface RoomGuestMessage {
  message: string;
  readed: boolean;
 }
+interface RoomGuestMessagesRes {
+ registerMessages: RoomGuestMessage[];
+}
 
 const roomGuestMessagesBaseKey = 'room-guest-messages';
 
@@ -22,12 +25,13 @@ function getRoomGuestMessages({
  const searchParams = new URLSearchParams([
   ['RegisterID', registerId.toString()],
  ]);
- return axios.get<{
-  registerMessages: RoomGuestMessage[];
- }>(`/Reception/RegisterMessage/GetDatas?${searchParams.toString()}`, {
-  signal,
- });
+ return axios.get<RoomGuestMessagesRes>(
+  `/Reception/RegisterMessage/GetDatas?${searchParams.toString()}`,
+  {
+   signal,
+  },
+ );
 }
 
-export type { RoomGuestMessage };
+export type { RoomGuestMessagesRes, RoomGuestMessage };
 export { roomGuestMessagesBaseKey, getRoomGuestMessages };

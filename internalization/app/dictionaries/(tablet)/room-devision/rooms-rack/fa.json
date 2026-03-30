@@ -159,5 +159,15 @@
   "folioOwner": "صاحب حساب",
   "checkinDate": "تاریخ ورود",
   "checkoutDate": "تاریخ خروج"
+ },
+ "roomGuestMessages": {
+  "title": "پیام برای مهمان",
+  "addMessage": "افزودن پیام",
+  "fromPerson": "پیام از",
+  "toPerson": "پیام به",
+  "dateTime": "تاریخ و ساعت",
+  "remove": "حذف",
+  "received": "اعلام شد",
+  "edit": "ویرایش"
  }
 }
