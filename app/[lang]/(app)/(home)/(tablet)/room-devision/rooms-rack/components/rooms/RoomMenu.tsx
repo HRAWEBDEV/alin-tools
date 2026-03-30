@@ -164,8 +164,8 @@ export default function RoomMenu({
       <RoomGuestsWrapper
        dic={dic}
        room={room}
-       open={showGuestMessages}
-       onChangeOpen={setShowGuestMessages}
+       open={showRoomGuests}
+       onChangeOpen={setShowRoomGuests}
       />
       <RoomControl
        dic={dic}
