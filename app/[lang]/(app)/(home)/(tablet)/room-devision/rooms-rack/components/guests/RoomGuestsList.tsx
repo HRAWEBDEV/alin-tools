@@ -53,18 +53,31 @@ export default function RoomGuestsList({
         <span className='font-medium text-lg'>{guest.folioNo}</span>
        </div>
       </div>
-      <div className='flex items-center justify-between gap-2 mb-2'>
-       <p className='text-base mb-1 font-medium text-primary text-start grow'>
-        {guest.firstName} _ {guest.lastName}
-       </p>
+      <div className='flex flex-wrap justify-between gap-1 mb-2'>
+       <div>
+        <span className='text-sm text-neutral-600 dark:text-neutral-400'>
+         {dic.roomGuests.firstName}:{' '}
+        </span>
+        <span className='font-medium'>{guest.firstName}</span>
+       </div>
       </div>
-      <div className='flex flex-wrap justify-between gap-1 mb-1'>
+      <div className='flex flex-wrap justify-between gap-1 mb-2'>
+       <div>
+        <span className='text-sm text-neutral-600 dark:text-neutral-400'>
+         {dic.roomGuests.lastName}:{' '}
+        </span>
+        <span className='font-medium'>{guest.lastName}</span>
+       </div>
+      </div>
+      <div className='flex flex-wrap justify-between gap-1 mb-2'>
        <div>
         <span className='text-sm text-neutral-600 dark:text-neutral-400'>
          {dic.roomGuests.gender}:{' '}
         </span>
         <span>{guest.genderName}</span>
        </div>
+      </div>
+      <div className='flex flex-wrap justify-between gap-1 mb-2'>
        <div>
         <span className='text-sm text-neutral-600 dark:text-neutral-400'>
          {dic.roomGuests.nationality}:{' '}
@@ -72,13 +85,15 @@ export default function RoomGuestsList({
         <span>{guest.nationalityName}</span>
        </div>
       </div>
-      <div className='flex flex-wrap justify-between gap-1 mb-1'>
+      <div className='flex flex-wrap justify-between gap-1 mb-2'>
        <div>
         <span className='text-sm text-neutral-600 dark:text-neutral-400'>
          {dic.roomGuests.nationalCode}:{' '}
         </span>
         <span>{guest.nationalCode}</span>
        </div>
+      </div>
+      <div className='flex flex-wrap justify-between gap-1 mb-2'>
        <div>
         <span className='text-sm text-neutral-600 dark:text-neutral-400'>
          {dic.roomGuests.priceType}:{' '}
@@ -86,13 +101,21 @@ export default function RoomGuestsList({
         <span>{guest.extraRateTypeName}</span>
        </div>
       </div>
-      <div className='flex flex-wrap justify-between gap-1 mb-1 items-center'>
+      <div className='flex flex-wrap justify-between gap-1 mb-2 items-center'>
        <div>
+        <span className='text-sm text-neutral-600 dark:text-neutral-400'>
+         {dic.roomGuests.checkinDate}:{' '}
+        </span>
         <span className='text-secondary'>
          {new Date(guest.checkinDateTimeOffset).toLocaleDateString(locale)}
         </span>
        </div>
+      </div>
+      <div className='flex flex-wrap justify-between gap-1 mb-2 items-center'>
        <div>
+        <span className='text-sm text-neutral-600 dark:text-neutral-400'>
+         {dic.roomGuests.checkoutDate}:{' '}
+        </span>
         <span className='text-destructive'>
          {guest.checkoutDateTimeOffset
           ? new Date(guest.checkoutDateTimeOffset).toLocaleDateString(locale)

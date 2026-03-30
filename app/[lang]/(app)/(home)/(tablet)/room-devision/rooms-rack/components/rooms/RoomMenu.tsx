@@ -19,7 +19,6 @@ import {
  roomGuestMessagesBaseKey,
  getRoomGuestMessages,
 } from '../../services/guest-messages/roomGuestMessagesApiActions';
-import { roomGuestsBaseKey } from '../../services/guests/roomGuestsApiActions';
 import { Spinner } from '@/components/ui/spinner';
 
 export default function RoomMenu({
@@ -60,7 +59,7 @@ export default function RoomMenu({
   isFetching: guestMessagesIsFetching,
  } = useQuery({
   enabled: !!room && !!room.registerID,
-  queryKey: [roomGuestsBaseKey, 'list', room?.registerID?.toString()],
+  queryKey: [roomGuestMessagesBaseKey, 'list', room?.registerID?.toString()],
   async queryFn({ signal }) {
    const res = await getRoomGuestMessages({
     signal,
@@ -165,8 +164,8 @@ export default function RoomMenu({
       <RoomGuestsWrapper
        dic={dic}
        room={room}
-       open={showRoomGuests}
-       onChangeOpen={setShowRoomGuests}
+       open={showGuestMessages}
+       onChangeOpen={setShowGuestMessages}
       />
       <RoomControl
        dic={dic}
