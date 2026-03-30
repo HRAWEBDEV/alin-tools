@@ -11,6 +11,8 @@ import RoomGuestMessages from './RoomGuestMessages';
 import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
 import { Button } from '@/components/ui/button';
 import { FaPlus } from 'react-icons/fa';
+import { useQueryClient } from '@tanstack/react-query';
+import { roomGuestMessagesBaseKey } from '../../services/guest-messages/roomGuestMessagesApiActions';
 
 export default function RoomGuestMessagesWrapper({
  dic,
@@ -25,6 +27,14 @@ export default function RoomGuestMessagesWrapper({
  open: boolean;
  onChangeOpen: (state: boolean) => unknown;
 }) {
+ const queryClient = useQueryClient();
+
+ function handleInvalidateQuery() {
+  queryClient.invalidateQueries({
+   queryKey: [roomGuestMessagesBaseKey, 'list', room?.registerID?.toString()],
+  });
+ }
+
  return (
   <Dialog open={open} onOpenChange={onChangeOpen}>
    <DialogContent className='sm:max-w-[unset]! sm:w-[min(98%,40rem)] gap-0 p-0 max-h-[95svh] overflow-hidden flex flex-col'>
@@ -43,7 +53,11 @@ export default function RoomGuestMessagesWrapper({
        {dic.roomGuestMessages.addMessage}
       </Button>
      </div>
-     <RoomGuestMessages dic={dic} roomGuestMessages={roomGuestMessages} />
+     <RoomGuestMessages
+      dic={dic}
+      roomGuestMessages={roomGuestMessages}
+      onInvalidateQuery={handleInvalidateQuery}
+     />
     </div>
    </DialogContent>
   </Dialog>

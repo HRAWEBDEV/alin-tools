@@ -33,5 +33,28 @@ function getRoomGuestMessages({
  );
 }
 
+function removeGuestMessage(messageId: number) {
+ const searchParams = new URLSearchParams([
+  ['RegisterMessageID', messageId.toString()],
+ ]);
+ return axios.delete(
+  `/Reception/RegisterMessage/RemoveRegisterMessage?${searchParams.toString()}`,
+ );
+}
+
+function receiveMessage(messageId: number) {
+ const searchParams = new URLSearchParams([
+  ['RegisterMessageID', messageId.toString()],
+ ]);
+ return axios.post(
+  `/Reception/RegisterMessage/ChangeToRead?${searchParams.toString()}`,
+ );
+}
+
 export type { RoomGuestMessagesRes, RoomGuestMessage };
-export { roomGuestMessagesBaseKey, getRoomGuestMessages };
+export {
+ roomGuestMessagesBaseKey,
+ getRoomGuestMessages,
+ removeGuestMessage,
+ receiveMessage,
+};

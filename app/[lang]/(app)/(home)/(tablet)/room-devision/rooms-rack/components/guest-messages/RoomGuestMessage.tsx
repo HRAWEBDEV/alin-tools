@@ -1,22 +1,63 @@
 import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
 import {
- RoomGuestMessage as Message,
+ type RoomGuestMessage as Message,
  type RoomGuestMessage,
+ removeGuestMessage,
+ receiveMessage,
 } from '../../services/guest-messages/roomGuestMessagesApiActions';
 import { MdTouchApp } from 'react-icons/md';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { Button } from '@/components/ui/button';
+import { useMutation } from '@tanstack/react-query';
+import { Spinner } from '@/components/ui/spinner';
+import { AxiosError } from 'axios';
+import { toast } from 'sonner';
+import { FaCheck } from 'react-icons/fa';
 
 export default function RoomGuestMessage({
  dic,
  message,
+ onInvalidateQuery,
 }: {
  dic: RoomsRackDictionary;
  message: Message;
+ onInvalidateQuery: () => unknown;
 }) {
  const { locale } = useBaseConfig();
+
+ const { mutate: removeMessageMutate, isPending: removeMessageIsPending } =
+  useMutation({
+   mutationFn() {
+    return removeGuestMessage(message.id);
+   },
+   onSuccess() {
+    onInvalidateQuery();
+   },
+   onError(err: AxiosError<string>) {
+    toast.error(err.response?.data);
+   },
+  });
+
+ const { mutate: receiveMessageMutate, isPending: receiveMessageIsPending } =
+  useMutation({
+   mutationFn() {
+    return receiveMessage(message.id);
+   },
+   onSuccess() {
+    onInvalidateQuery();
+   },
+   onError(err: AxiosError<string>) {
+    toast.error(err.response?.data);
+   },
+  });
+
+ const actionIsPending = removeMessageIsPending || receiveMessageIsPending;
+
  return (
-  <div className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 isolate relative'>
+  <div
+   data-received={message.readed}
+   className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 data-[received=true]:bg-secondary/5 isolate relative'
+  >
    <div className='absolute bottom-0 end-6 -z-1 opacity-60'>
     <MdTouchApp className='size-24 text-neutral-200 dark:text-neutral-800' />
    </div>
@@ -62,13 +103,31 @@ export default function RoomGuestMessage({
    <div className='flex justify-between gap-4 items-center border-t border-input pt-2 mt-2'>
     <div></div>
     <div className='flex flex-wrap gap-2'>
-     <Button variant='outline' className='text-primary border-primary'>
+     <Button
+      variant='outline'
+      className='text-primary border-primary'
+      disabled={actionIsPending}
+     >
+      {actionIsPending && <Spinner />}
       {dic.roomGuestMessages.edit}
      </Button>
-     <Button variant='outline' className='text-secondary border-secondary'>
+     <Button
+      variant='outline'
+      className='text-secondary border-secondary'
+      disabled={actionIsPending || message.readed}
+      onClick={() => receiveMessageMutate()}
+     >
+      {actionIsPending && <Spinner />}
+      {message.readed && <FaCheck />}
       {dic.roomGuestMessages.received}
      </Button>
-     <Button variant='outline' className='text-destructive border-destructive'>
+     <Button
+      variant='outline'
+      className='text-destructive border-destructive'
+      onClick={() => removeMessageMutate()}
+      disabled={actionIsPending}
+     >
+      {actionIsPending && <Spinner />}
       {dic.roomGuestMessages.remove}
      </Button>
     </div>

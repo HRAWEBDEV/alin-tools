@@ -7,9 +7,11 @@ import RoomGuestMessage from './RoomGuestMessage';
 export default function RoomGuestMessages({
  dic,
  roomGuestMessages,
+ onInvalidateQuery,
 }: {
  dic: RoomsRackDictionary;
  roomGuestMessages: RoomGuestMessageProps;
+ onInvalidateQuery: () => unknown;
 }) {
  if (
   roomGuestMessages.isSuccess &&
@@ -23,7 +25,12 @@ export default function RoomGuestMessages({
  return (
   <div className='grid gap-2 grid-cols-1'>
    {roomGuestMessages.data?.registerMessages.map((message) => (
-    <RoomGuestMessage key={message.id} dic={dic} message={message} />
+    <RoomGuestMessage
+     key={message.id}
+     dic={dic}
+     message={message}
+     onInvalidateQuery={onInvalidateQuery}
+    />
    ))}
   </div>
  );
