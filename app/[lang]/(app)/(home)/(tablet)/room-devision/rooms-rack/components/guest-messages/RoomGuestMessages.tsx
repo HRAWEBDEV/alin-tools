@@ -3,13 +3,16 @@ import { RoomGuestMessageProps } from '../../utils/roomGuestMessageProps';
 import NoItemFound from '@/app/[lang]/(app)/components/NoItemFound';
 import UnExpectedError from '@/app/[lang]/(app)/components/UnExpectedError';
 import RoomGuestMessage from './RoomGuestMessage';
+import { EditRoomGuestMessagesProps } from '../../utils/editRoomGuestMessagesProps';
 
 export default function RoomGuestMessages({
  dic,
  roomGuestMessages,
+ editRoomGuestMessages,
  onInvalidateQuery,
 }: {
  dic: RoomsRackDictionary;
+ editRoomGuestMessages: EditRoomGuestMessagesProps;
  roomGuestMessages: RoomGuestMessageProps;
  onInvalidateQuery: () => unknown;
 }) {
@@ -30,6 +33,7 @@ export default function RoomGuestMessages({
      dic={dic}
      message={message}
      onInvalidateQuery={onInvalidateQuery}
+     editRoomGuestMessages={editRoomGuestMessages}
     />
    ))}
   </div>

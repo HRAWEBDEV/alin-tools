@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
 import {
  Dialog,
@@ -27,6 +28,8 @@ export default function RoomGuestMessagesWrapper({
  open: boolean;
  onChangeOpen: (state: boolean) => unknown;
 }) {
+ const [showEdit, setShowEdit] = useState(false);
+ const [seletedNoteId, setSelectedNoteId] = useState<number | null>(null);
  const queryClient = useQueryClient();
 
  function handleInvalidateQuery() {
@@ -34,6 +37,22 @@ export default function RoomGuestMessagesWrapper({
    queryKey: [roomGuestMessagesBaseKey, 'list', room?.registerID?.toString()],
   });
  }
+
+ function handleShowEdit(id: number | null) {
+  setSelectedNoteId(id);
+  setShowEdit(true);
+ }
+
+ function handleCloseEdit() {
+  setSelectedNoteId(null);
+  setShowEdit(false);
+ }
+
+ const targetNote = seletedNoteId
+  ? roomGuestMessages.data?.registerMessages.find(
+     (item) => item.id === seletedNoteId,
+    ) || null
+  : null;
 
  return (
   <Dialog open={open} onOpenChange={onChangeOpen}>
@@ -48,7 +67,11 @@ export default function RoomGuestMessagesWrapper({
     {roomGuestMessages.isFetching && <LinearLoading />}
     <div className='p-4 grow overflow-auto'>
      <div className='mb-4'>
-      <Button>
+      <Button
+       onClick={() => {
+        handleShowEdit(null);
+       }}
+      >
        <FaPlus />
        {dic.roomGuestMessages.addMessage}
       </Button>
@@ -57,6 +80,12 @@ export default function RoomGuestMessagesWrapper({
       dic={dic}
       roomGuestMessages={roomGuestMessages}
       onInvalidateQuery={handleInvalidateQuery}
+      editRoomGuestMessages={{
+       showEdit,
+       onShowEdit: handleShowEdit,
+       closeShowEdit: handleCloseEdit,
+       targetNote,
+      }}
      />
     </div>
    </DialogContent>

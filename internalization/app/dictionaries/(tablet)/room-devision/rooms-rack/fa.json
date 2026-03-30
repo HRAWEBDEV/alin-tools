@@ -162,12 +162,17 @@
  },
  "roomGuestMessages": {
   "title": "پیام برای مهمان",
+  "confirmRemoveMessage": "آیا از حذف پیام اطمینان دارید؟",
+  "confirmReceiveMessage": "آیا از اعلام پیام اطمینان دارید؟",
   "addMessage": "افزودن پیام",
   "fromPerson": "پیام از",
   "toPerson": "پیام به",
   "dateTime": "تاریخ و ساعت",
   "remove": "حذف",
   "received": "اعلام شد",
-  "edit": "ویرایش"
+  "edit": "ویرایش",
+  "new": "جدید",
+  "confirm": "تایید",
+  "cancel": "انصراف"
  }
 }
