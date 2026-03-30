@@ -13,6 +13,8 @@ interface RoomGuestMessagesRes {
  registerMessages: RoomGuestMessage[];
 }
 
+type SaveRoomGuestMessage = RoomGuestMessage;
+
 const roomGuestMessagesBaseKey = 'room-guest-messages';
 
 function getRoomGuestMessages({
@@ -51,10 +53,19 @@ function receiveMessage(messageId: number) {
  );
 }
 
-export type { RoomGuestMessagesRes, RoomGuestMessage };
+function saveMessage(message: SaveRoomGuestMessage) {
+ return axios.post('/Reception/RegisterMessage/SaveRegisterMessage', message);
+}
+function updateMessage(message: SaveRoomGuestMessage) {
+ return axios.put('/Reception/RegisterMessage/UpdateRegisterMessage', message);
+}
+
+export type { RoomGuestMessagesRes, RoomGuestMessage, SaveRoomGuestMessage };
 export {
  roomGuestMessagesBaseKey,
  getRoomGuestMessages,
  removeGuestMessage,
  receiveMessage,
+ saveMessage,
+ updateMessage,
 };

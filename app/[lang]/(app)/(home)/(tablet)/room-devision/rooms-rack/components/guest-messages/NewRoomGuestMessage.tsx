@@ -22,6 +22,15 @@ import {
 } from '../../schemas/room-guest-message/roomGuestMessageSchema';
 import { Button } from '@/components/ui/button';
 import { type EditRoomGuestMessagesProps } from '../../utils/editRoomGuestMessagesProps';
+import {
+ type SaveRoomGuestMessage,
+ saveMessage,
+ updateMessage,
+} from '../../services/guest-messages/roomGuestMessagesApiActions';
+import { useMutation } from '@tanstack/react-query';
+import { Spinner } from '@/components/ui/spinner';
+import { AxiosError } from 'axios';
+import { toast } from 'sonner';
 
 export default function NewRoomGuestMessage({
  dic,
@@ -34,9 +43,39 @@ export default function NewRoomGuestMessage({
   register,
   setValue,
   formState: { errors },
+  handleSubmit,
  } = useForm<RoomGuestMessageSchema>({
   resolver: zodResolver(createRoomGuestMessageSchema()),
   defaultValues,
+ });
+
+ const { mutate, isPending } = useMutation({
+  mutationFn({ comment, fromPerson, toPerson }: RoomGuestMessageSchema) {
+   const newMessage: SaveRoomGuestMessage = {
+    ...(editRoomGuestMessage.targetNote || {}),
+    id: editRoomGuestMessage.selectedId || 0,
+    messageFrom: fromPerson,
+    messageTo: toPerson,
+    message: comment,
+    registerID: editRoomGuestMessage.registerId,
+    dateTimeDateTimeOffset:
+     editRoomGuestMessage.targetNote?.dateTimeDateTimeOffset ||
+     new Date().toISOString(),
+    readed: editRoomGuestMessage.targetNote
+     ? editRoomGuestMessage.targetNote.readed
+     : false,
+   };
+   return editRoomGuestMessage.selectedId
+    ? updateMessage(newMessage)
+    : saveMessage(newMessage);
+  },
+  onSuccess() {
+   editRoomGuestMessage.closeShowEdit();
+   editRoomGuestMessage.onInvalidateQuery();
+  },
+  onError(err: AxiosError<string>) {
+   toast.error(err.response?.data);
+  },
  });
 
  useEffect(() => {
@@ -94,10 +133,20 @@ export default function NewRoomGuestMessage({
       size='lg'
       className='sm:w-28'
       onClick={() => editRoomGuestMessage.closeShowEdit()}
+      disabled={isPending}
      >
+      {isPending && <Spinner />}
       {dic.roomGuestMessages.cancel}
      </Button>
-     <Button size='lg' className='sm:w-28'>
+     <Button
+      size='lg'
+      className='sm:w-28'
+      disabled={isPending}
+      onClick={() => {
+       handleSubmit((data) => mutate(data))();
+      }}
+     >
+      {isPending && <Spinner />}
       {dic.roomGuestMessages.confirm}
      </Button>
     </DialogFooter>

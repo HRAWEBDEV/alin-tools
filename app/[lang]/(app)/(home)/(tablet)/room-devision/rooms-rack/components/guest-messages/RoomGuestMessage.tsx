@@ -84,17 +84,13 @@ export default function RoomGuestMessage({
       <span className='text-sm text-neutral-600 dark:text-neutral-400'>
        {dic.roomGuestMessages.fromPerson}:{' '}
       </span>
-      <span className='font-medium text-lg text-primary'>
-       {message.messageFrom}
-      </span>
+      <span className='font-medium text-primary'>{message.messageFrom}</span>
      </div>
      <div>
       <span className='text-sm text-neutral-600 dark:text-neutral-400'>
        {dic.roomGuestMessages.toPerson}:{' '}
       </span>
-      <span className='font-medium text-lg text-destructive'>
-       {message.messageTo}
-      </span>
+      <span className='font-medium text-destructive'>{message.messageTo}</span>
      </div>
      <div>
       <span className='text-sm text-neutral-600 dark:text-neutral-400'>
