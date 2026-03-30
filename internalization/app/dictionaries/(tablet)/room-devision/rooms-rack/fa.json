@@ -82,7 +82,8 @@
   "changeRoomStateKind": "تغییر وضعیت اتاق",
   "changeRoomStateType": "تغییر وضعیت ویژه اتاق",
   "guests": "مهمان ها",
-  "houseControl": "کنترل خانه داری"
+  "houseControl": "کنترل خانه داری",
+  "guestMessages": "پیام برای مهمان"
  },
  "tools": {
   "lastUpdate": "آخرین بروزرسانی",
@@ -155,6 +156,8 @@
   "nationalCode": "شماره ملی",
   "priceType": "نوع قیمت",
   "master": "نفر اصلی",
-  "folioOwner": "صاحب حساب"
+  "folioOwner": "صاحب حساب",
+  "checkinDate": "تاریخ ورود",
+  "checkoutDate": "تاریخ خروج"
  }
 }
