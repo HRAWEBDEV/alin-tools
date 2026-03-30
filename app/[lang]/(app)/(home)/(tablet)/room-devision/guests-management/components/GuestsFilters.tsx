@@ -12,7 +12,7 @@ import {
  DrawerTrigger,
 } from '@/components/ui/drawer';
 import { Spinner } from '@/components/ui/spinner';
-import { Check, ChevronsUpDown } from 'lucide-react';
+import { ChevronsUpDown } from 'lucide-react';
 import { type GuestsFilterForm } from './GuestsListWrapper';
 import { useState } from 'react';
 import { GuestsManagementDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/guests-management/dictionary';
@@ -24,6 +24,7 @@ import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { FaFilter, FaRegTrashAlt } from 'react-icons/fa';
 import { FaPerson } from 'react-icons/fa6';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const FILTER_KEYS: (keyof GuestsFilterForm)[] = [
  'folio',
@@ -53,6 +54,9 @@ type Props = {
  onSubmit?: () => void;
  numGuests: number | undefined;
 };
+
+const SHARED_DRAWER_CLASSES =
+ 'sm:h-[min(85svh,26rem)] h-[min(95svh,66rem)] flex flex-col';
 
 export default function GuestsFilters({
  dic,
@@ -133,13 +137,12 @@ export default function GuestsFilters({
        )}
       </Button>
      </DrawerTrigger>
-
-     <DrawerContent className='sm:min-h-auto min-h-[calc(100dvh-80px)]'>
-      <DrawerHeader className='pb-1'>
+     <DrawerContent className={SHARED_DRAWER_CLASSES}>
+      <DrawerHeader className='pb-1 shrink-0'>
        <DrawerTitle>{dic.filters.title}</DrawerTitle>
       </DrawerHeader>
-      <div className='p-5 pt-0 flex flex-col gap-5 overflow-y-auto max-w-[95%] mx-auto w-full'>
-       <div className='flex items-center justify-end mb-4 mt-2'>
+      <div className='p-5 pt-0 flex flex-col gap-5 overflow-y-auto max-w-[min(100%,40rem)] mx-auto w-full'>
+       <div className='flex items-center justify-end mb-4 mt-2 shrink-0'>
         {activeFilters.length > 0 && (
          <button
           onClick={() => reset()}
@@ -150,7 +153,7 @@ export default function GuestsFilters({
         )}
        </div>
 
-       <div className='grid sm:grid-cols-2 grid-cols-1 gap-6'>
+       <div className='grid sm:grid-cols-2 grid-cols-1 gap-6 shrink-0'>
         <Controller
          control={control}
          name='folio'
@@ -216,7 +219,7 @@ export default function GuestsFilters({
         />
        </div>
 
-       <div className='grid sm:grid-cols-2 grid-cols-1 gap-6'>
+       <div className='grid sm:grid-cols-2 grid-cols-1 gap-6 pb-6'>
         {(['nationality', 'specialGuest', 'group', 'room'] as const).map(
          (key) => (
           <Controller
@@ -269,29 +272,40 @@ export default function GuestsFilters({
               open={selectDrawerOpen === key}
               onOpenChange={(open) => !open && setSelectDrawerOpen(null)}
              >
-              <DrawerContent className='max-h-[85vh]'>
-               <div className='p-4 flex flex-col gap-1 max-h-[85vh] overflow-y-auto'>
-                <h4 className='font-medium text-sm mb-2 text-muted-foreground'>
+              {/* CHILD DRAWER - Using the identical exact strategy */}
+              <DrawerContent className={SHARED_DRAWER_CLASSES}>
+               <DrawerHeader className='shrink-0'>
+                <DrawerTitle className='text-xl'>
                  {filterKeyLabel(key)}
-                </h4>
-                {getOptions(key, initData)?.map((opt) => (
-                 <button
-                  key={opt.key}
-                  onClick={() => {
-                   field.onChange(field.value === opt.value ? null : opt.value);
-                   setSelectDrawerOpen(null);
-                  }}
-                  className={cn(
-                   'flex items-center justify-between py-3 px-4 rounded-lg text-sm transition-colors',
-                   field.value === opt.value
-                    ? 'bg-primary/10 text-primary font-medium'
-                    : 'hover:bg-muted',
-                  )}
-                 >
-                  {opt.value}
-                  {field.value === opt.value && <Check className='size-4' />}
-                 </button>
-                ))}
+                </DrawerTitle>
+               </DrawerHeader>
+               <div className='grow overflow-hidden overflow-y-auto mb-6'>
+                <ul>
+                 {getOptions(key, initData)?.map((opt) => (
+                  <li
+                   key={opt.key}
+                   className='flex gap-1 items-center ps-6 py-2 cursor-pointer hover:bg-muted/50 transition-colors'
+                   onClick={() => {
+                    field.onChange(
+                     field.value === opt.value ? null : opt.value,
+                    );
+                    setSelectDrawerOpen(null);
+                   }}
+                  >
+                   <Checkbox
+                    className='size-6 pointer-events-none'
+                    checked={field.value === opt.value}
+                   />
+                   <Button
+                    tabIndex={-1}
+                    variant='ghost'
+                    className='w-full justify-start h-auto text-lg pointer-events-none'
+                   >
+                    <span>{opt.value}</span>
+                   </Button>
+                  </li>
+                 ))}
+                </ul>
                </div>
               </DrawerContent>
              </Drawer>
