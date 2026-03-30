@@ -88,6 +88,8 @@ export default function RoomGuestMessagesWrapper({
         onShowEdit: handleShowEdit,
         closeShowEdit: handleCloseEdit,
         targetNote,
+        registerId: room.registerID!,
+        onInvalidateQuery: handleInvalidateQuery,
        }}
       />
      </div>
