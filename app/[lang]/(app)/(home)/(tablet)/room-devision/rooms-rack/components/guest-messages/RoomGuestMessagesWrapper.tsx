@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button';
 import { FaPlus } from 'react-icons/fa';
 import { useQueryClient } from '@tanstack/react-query';
 import { roomGuestMessagesBaseKey } from '../../services/guest-messages/roomGuestMessagesApiActions';
+import NewRoomGuestMessage from './NewRoomGuestMessage';
 
 export default function RoomGuestMessagesWrapper({
  dic,
@@ -55,40 +56,53 @@ export default function RoomGuestMessagesWrapper({
   : null;
 
  return (
-  <Dialog open={open} onOpenChange={onChangeOpen}>
-   <DialogContent className='sm:max-w-[unset]! sm:w-[min(98%,40rem)] gap-0 p-0 max-h-[95svh] overflow-hidden flex flex-col'>
-    <DialogHeader className='p-4 border-b border-input'>
-     <DialogHeader>
-      <DialogTitle className='text-lg'>
-       {dic.roomGuestMessages.title} {room.roomLabel}
-      </DialogTitle>
+  <>
+   <Dialog open={open} onOpenChange={onChangeOpen}>
+    <DialogContent className='sm:max-w-[unset]! sm:w-[min(98%,40rem)] gap-0 p-0 max-h-[95svh] overflow-hidden flex flex-col'>
+     <DialogHeader className='p-4 border-b border-input'>
+      <DialogHeader>
+       <DialogTitle className='text-lg'>
+        {dic.roomGuestMessages.title} {room.roomLabel}
+       </DialogTitle>
+      </DialogHeader>
      </DialogHeader>
-    </DialogHeader>
-    {roomGuestMessages.isFetching && <LinearLoading />}
-    <div className='p-4 grow overflow-auto'>
-     <div className='mb-4'>
-      <Button
-       onClick={() => {
-        handleShowEdit(null);
+     {roomGuestMessages.isFetching && <LinearLoading />}
+     <div className='p-4 grow overflow-auto'>
+      <div className='mb-4'>
+       <Button
+        onClick={() => {
+         handleShowEdit(null);
+        }}
+       >
+        <FaPlus />
+        {dic.roomGuestMessages.addMessage}
+       </Button>
+      </div>
+      <RoomGuestMessages
+       dic={dic}
+       roomGuestMessages={roomGuestMessages}
+       onInvalidateQuery={handleInvalidateQuery}
+       editRoomGuestMessages={{
+        showEdit,
+        selectedId: seletedNoteId,
+        onShowEdit: handleShowEdit,
+        closeShowEdit: handleCloseEdit,
+        targetNote,
        }}
-      >
-       <FaPlus />
-       {dic.roomGuestMessages.addMessage}
-      </Button>
+      />
      </div>
-     <RoomGuestMessages
-      dic={dic}
-      roomGuestMessages={roomGuestMessages}
-      onInvalidateQuery={handleInvalidateQuery}
-      editRoomGuestMessages={{
-       showEdit,
-       onShowEdit: handleShowEdit,
-       closeShowEdit: handleCloseEdit,
-       targetNote,
-      }}
-     />
-    </div>
-   </DialogContent>
-  </Dialog>
+    </DialogContent>
+   </Dialog>
+   <NewRoomGuestMessage
+    dic={dic}
+    editRoomGuestMessage={{
+     showEdit,
+     selectedId: seletedNoteId,
+     onShowEdit: handleShowEdit,
+     closeShowEdit: handleCloseEdit,
+     targetNote,
+    }}
+   />
+  </>
  );
 }
