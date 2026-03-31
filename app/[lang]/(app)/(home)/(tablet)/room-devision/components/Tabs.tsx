@@ -33,10 +33,6 @@ export default function Tabs() {
      <p className='text-sm'>{tabsDic.roomsManagement}</p>
     </Link>
    </Button>
-   <Button variant='ghost' className={tabClass} onClick={() => toggleProfile()}>
-    <FaUserCircle className={tabIconClass} />
-    <p className='text-sm'>{tabsDic.profile}</p>
-   </Button>
    <Button variant='ghost' className={tabClass} asChild>
     <Link href={`/${locale}/room-devision/guests-management`}>
      <FaUserFriends className={tabIconClass} />
@@ -48,6 +44,10 @@ export default function Tabs() {
      <FaClipboardList className={tabIconClass} />
      <p className='text-sm'>{tabsDic.executionManagement}</p>
     </Link>
+   </Button>
+   <Button variant='ghost' className={tabClass} onClick={() => toggleProfile()}>
+    <FaUserCircle className={tabIconClass} />
+    <p className='text-sm'>{tabsDic.profile}</p>
    </Button>
   </nav>
  );
