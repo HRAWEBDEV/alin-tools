@@ -37,6 +37,8 @@ export default function RoomMenu({
  setShowRoomGuests,
  showGuestMessages,
  setShowGuestMessages,
+ showRoomNotes,
+ setShowRoomNotes,
 }: {
  dic: RoomsRackDictionary;
  room: Rack | null;
@@ -52,6 +54,8 @@ export default function RoomMenu({
  setShowRoomGuests: (state: boolean) => unknown;
  showGuestMessages: boolean;
  setShowGuestMessages: (state: boolean) => unknown;
+ showRoomNotes: boolean;
+ setShowRoomNotes: (state: boolean) => unknown;
 }) {
  const {
   data: guestMessages,

@@ -83,7 +83,8 @@
   "changeRoomStateType": "تغییر وضعیت ویژه اتاق",
   "guests": "مهمان ها",
   "houseControl": "کنترل خانه داری",
-  "guestMessages": "پیام برای مهمان"
+  "guestMessages": "پیام برای مهمان",
+  "roomNotes": "یادداشت ها"
  },
  "tools": {
   "lastUpdate": "آخرین بروزرسانی",
@@ -175,5 +176,8 @@
   "new": "جدید",
   "confirm": "تایید",
   "cancel": "انصراف"
+ },
+ "roomNotes": {
+  "title": "یادداشت ها"
  }
 }
