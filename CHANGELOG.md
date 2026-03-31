@@ -11,14 +11,16 @@
 - add daily tasks page (hra-done)
 - add daily task notes (hra-done)
 - show app version in user profile (hra-done)
-- add reload button if necessary - for real time data
 - add rack setting storage (hra-done)
+- add rack guest messages (hra-done)
+- add rack guests (hra-done)
 ### bug fixes
 - remove main wrapper bottom padding in mobile mode, when scroll direction is down (hra-done)
 - use useThrottle instead of useDebouce to change scroll direction (hra-done)
 - fix drawer and dialog overflow
 - fix order list cache bug (hra-done)
 - fix rooms statistics mobile responsive (hra-done)
+- add reload button if necessary - for real time data
 
 # 1.2.0
 ### features
