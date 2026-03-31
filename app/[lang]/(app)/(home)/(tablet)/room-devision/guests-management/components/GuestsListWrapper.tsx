@@ -12,8 +12,8 @@ import {
  getInitialData,
  ResidentGuest,
 } from '../services/guestsListApiActions';
-import { GuestsManagementDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/guests-management/dictionary';
 import { useDebounce } from '../../hooks/useDebounce';
+import { type ResidentGuestsDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/resident-guests/dictionary';
 
 export type GuestsFilterForm = {
  folio?: string;
@@ -29,7 +29,7 @@ const PAGE_SIZE = 12;
 export default function GuestsListWrapper({
  dic,
 }: {
- dic: GuestsManagementDictionary;
+ dic: ResidentGuestsDictionary;
 }) {
  const methods = useForm<GuestsFilterForm>({
   defaultValues: {

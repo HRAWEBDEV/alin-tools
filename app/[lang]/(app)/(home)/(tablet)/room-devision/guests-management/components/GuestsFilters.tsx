@@ -15,7 +15,6 @@ import { Spinner } from '@/components/ui/spinner';
 import { ChevronsUpDown } from 'lucide-react';
 import { type GuestsFilterForm } from './GuestsListWrapper';
 import { useState } from 'react';
-import { GuestsManagementDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/guests-management/dictionary';
 import {
  type InitialData,
  type SelectOption,
@@ -25,6 +24,7 @@ import { cn } from '@/lib/utils';
 import { FaFilter, FaRegTrashAlt } from 'react-icons/fa';
 import { FaPerson } from 'react-icons/fa6';
 import { Checkbox } from '@/components/ui/checkbox';
+import { ResidentGuestsDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/resident-guests/dictionary';
 
 const FILTER_KEYS: (keyof GuestsFilterForm)[] = [
  'folio',
@@ -47,7 +47,7 @@ const largeBadgeKeys: (keyof GuestsFilterForm)[] = [
 ];
 
 type Props = {
- dic: GuestsManagementDictionary;
+ dic: ResidentGuestsDictionary;
  initData: InitialData | undefined;
  initDataIsLoading: boolean;
  totalResults?: number;

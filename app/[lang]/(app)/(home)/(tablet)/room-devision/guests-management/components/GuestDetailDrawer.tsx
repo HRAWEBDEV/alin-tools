@@ -5,10 +5,10 @@ import {
  DrawerTitle,
 } from '@/components/ui/drawer';
 import { ResidentGuest } from '../services/guestsListApiActions';
-import { GuestsManagementDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/guests-management/dictionary';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import Link from 'next/link';
 import type { Route } from 'next';
+import { ResidentGuestsDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/resident-guests/dictionary';
 
 export default function GuestDetailDrawer({
  guest,
@@ -16,7 +16,7 @@ export default function GuestDetailDrawer({
  onClose,
 }: {
  guest: ResidentGuest | null;
- dic: GuestsManagementDictionary;
+ dic: ResidentGuestsDictionary;
  onClose: () => void;
 }) {
  const { locale } = useBaseConfig();
