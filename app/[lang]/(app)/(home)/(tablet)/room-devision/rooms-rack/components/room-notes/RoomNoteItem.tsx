@@ -2,6 +2,8 @@ import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(ta
 import {
  type RoomNote,
  deleteRoomNote,
+ activeRoomNote,
+ deactiveRoomNote,
 } from '../../services/room-notes/RackRoomNotesApiActions';
 import { MdTouchApp } from 'react-icons/md';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
@@ -46,7 +48,22 @@ export default function RoomNoteItem({
    },
   });
 
- const actionIsPending = removeMessageIsPending;
+ const {
+  mutate: changeStateMessageMutate,
+  isPending: changeStateMessageIsPending,
+ } = useMutation({
+  mutationFn() {
+   return note.disabled ? activeRoomNote(note.id) : deactiveRoomNote(note.id);
+  },
+  onSuccess() {
+   editRoomNote.onInvalidateQuery();
+  },
+  onError(err: AxiosError<string>) {
+   toast.error(err.response?.data);
+  },
+ });
+
+ const actionIsPending = removeMessageIsPending || changeStateMessageIsPending;
 
  return (
   <div className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 isolate relative'>
@@ -112,10 +129,55 @@ export default function RoomNoteItem({
       <DialogTrigger asChild>
        <Button
         variant='outline'
-        className='text-destructive border-destructive'
+        className={`${note.disabled ? 'text-destructive border-destructive' : 'text-secondary border-secondary'}`}
         disabled={actionIsPending}
        >
         {actionIsPending && <Spinner />}
+        {note.disabled ? dic.roomNotes.deactive : dic.roomNotes.actvie}
+       </Button>
+      </DialogTrigger>
+      <DialogContent className='p-0 gap-0'>
+       <DialogHeader className='p-4'></DialogHeader>
+       <div className='p-4'>
+        <div className='flex gap-1 items-center text-red-700 dark:text-red-400 font-medium'>
+         <BiError className='size-12' />
+         <p>
+          {dic.roomNotes.confirmChangeStateTo}{' '}
+          <span
+           className={`${!note.disabled ? 'text-destructive border-destructive' : 'text-secondary border-secondary'}`}
+          >
+           {note.disabled ? dic.roomNotes.actvie : dic.roomNotes.deactive}
+          </span>
+         </p>
+        </div>
+       </div>
+       <DialogFooter className='p-4'>
+        <DialogClose asChild>
+         <Button className='sm:w-24' variant='outline'>
+          {dic.roomNotes.cancel}
+         </Button>
+        </DialogClose>
+        <DialogClose asChild>
+         <Button
+          className='sm:w-24'
+          variant='destructive'
+          onClick={() => changeStateMessageMutate()}
+         >
+          {dic.roomNotes.confirm}
+         </Button>
+        </DialogClose>
+       </DialogFooter>
+      </DialogContent>
+     </Dialog>
+     <Dialog>
+      <DialogTrigger asChild>
+       <Button
+        variant='outline'
+        className='text-destructive border-destructive'
+        disabled={actionIsPending || note.deleted}
+       >
+        {actionIsPending && <Spinner />}
+        {note.deleted && <FaCheck />}
         {dic.roomNotes.remove}
        </Button>
       </DialogTrigger>

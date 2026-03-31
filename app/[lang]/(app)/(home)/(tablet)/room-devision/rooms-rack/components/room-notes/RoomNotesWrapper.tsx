@@ -12,8 +12,13 @@ import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
 import { Button } from '@/components/ui/button';
 import { FaPlus } from 'react-icons/fa';
 import { useQueryClient } from '@tanstack/react-query';
-import { rackRoomNotesBaseKey } from '../../services/room-notes/RackRoomNotesApiActions';
+import {
+ rackRoomNotesBaseKey,
+ getInitialData,
+} from '../../services/room-notes/RackRoomNotesApiActions';
+import { useQuery } from '@tanstack/react-query';
 import RoomNotes from './RoomNotes';
+import NewRoomNote from './NewRoomNote';
 
 export default function RoomNotesWrapper({
  dic,
@@ -31,6 +36,15 @@ export default function RoomNotesWrapper({
  const [showEdit, setShowEdit] = useState(false);
  const [seletedNoteId, setSelectedNoteId] = useState<number | null>(null);
  const queryClient = useQueryClient();
+
+ const { data: initialData, isLoading: initialDataIsLoading } = useQuery({
+  staleTime: 'static',
+  queryKey: [rackRoomNotesBaseKey, 'initial-data'],
+  async queryFn({ signal }) {
+   const res = await getInitialData({ signal });
+   return res.data;
+  },
+ });
 
  function handleInvalidateQuery() {
   queryClient.invalidateQueries({
@@ -51,6 +65,19 @@ export default function RoomNotesWrapper({
  const targetNote = seletedNoteId
   ? roomNotes.data?.rows.find((item) => item.id === seletedNoteId) || null
   : null;
+
+ const editRoomNoteProps = {
+  closeShowEdit: handleCloseEdit,
+  onInvalidateQuery: handleInvalidateQuery,
+  onShowEdit: handleShowEdit,
+  selectedId: seletedNoteId,
+  registerId: room!.registerID!,
+  roomId: room!.roomID!,
+  showEdit,
+  targetNote,
+  initialData,
+  initialDataIsLoading,
+ };
 
  return (
   <>
@@ -78,19 +105,12 @@ export default function RoomNotesWrapper({
       <RoomNotes
        dic={dic}
        roomNotes={roomNotes}
-       editRoomNotes={{
-        closeShowEdit: handleCloseEdit,
-        onInvalidateQuery: handleInvalidateQuery,
-        onShowEdit: handleShowEdit,
-        selectedId: seletedNoteId,
-        registerId: room!.registerID!,
-        showEdit,
-        targetNote,
-       }}
+       editRoomNotes={editRoomNoteProps}
       />
      </div>
     </DialogContent>
    </Dialog>
+   <NewRoomNote dic={dic} editRoomNote={editRoomNoteProps} />
   </>
  );
 }

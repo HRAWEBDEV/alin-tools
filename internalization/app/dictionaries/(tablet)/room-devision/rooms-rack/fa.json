@@ -183,7 +183,7 @@
   "new": "جدید",
   "addMessage": "افزودن یادداشت",
   "filters": "فیلترها",
-  "fromPerson": "پیام دهنده",
+  "fromPerson": "از طرف",
   "deactiveBy": "غیر فعال کننده",
   "registerNo": "شماره پذیرش",
   "fromDate": "از تاریخ",
@@ -194,6 +194,7 @@
   "dateTime": "تاریخ و ساعت",
   "remove": "حذف",
   "confirmRemoveMessage": "آیا از حذف پیام اطمینان دارید؟",
+  "confirmChangeStateTo": "تغییر وضعیت پیام به: ",
   "actvie": "فعال",
   "deactive": "غیرفعال",
   "removed": "حذف شده"

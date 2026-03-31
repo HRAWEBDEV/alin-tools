@@ -1,11 +1,11 @@
 import { axios } from '@/app/[lang]/(app)/utils/defaultAxios';
 import { type Combo, type PagedData } from '../../../utils/apiTypes';
 
-type InitialData = {
+interface InitialData {
  messageTypes: Combo[];
-};
+}
 
-type RoomNote = {
+interface RoomNote {
  id: number;
  userPersonName: string;
  dateTimeDateTimeOffset: string;
@@ -16,7 +16,12 @@ type RoomNote = {
  message: string;
  disabled: boolean;
  deleted: boolean;
-};
+}
+
+type SaveNote = Omit<
+ RoomNote,
+ 'userPersonName' | 'messageTypeName' | 'disabled' | 'deleted'
+>;
 
 const rackRoomNotesBaseKey = 'rack-room-notes';
 
@@ -69,11 +74,11 @@ function getRoomNotes({
  );
 }
 
-function saveRoomNote(newNote: RoomNote) {
+function saveRoomNote(newNote: SaveNote) {
  return axios.post('/Reception/RoomMessage/SaveRoomMessage', newNote);
 }
 
-function updateRoomNote(newNote: RoomNote) {
+function updateRoomNote(newNote: SaveNote) {
  return axios.put('/Reception/RoomMessage/UpdateRoomMessage', newNote);
 }
 
@@ -103,7 +108,7 @@ function deactiveRoomNote(noteId: number) {
  );
 }
 
-export type { InitialData, RoomNote };
+export type { InitialData, RoomNote, SaveNote };
 export {
  rackRoomNotesBaseKey,
  getInitialData,
