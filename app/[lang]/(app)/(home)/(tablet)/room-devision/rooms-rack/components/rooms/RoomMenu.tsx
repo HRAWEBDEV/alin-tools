@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query';
 import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
 import {
  Drawer,
@@ -14,13 +15,26 @@ import RoomStateType from './RoomStateType';
 import RoomControl from './RoomControl';
 import RoomGuestsWrapper from '../guests/RoomGuestsWrapper';
 import { Badge } from '@/components/ui/badge';
-import { useQuery } from '@tanstack/react-query';
 import {
  roomGuestMessagesBaseKey,
  getRoomGuestMessages,
 } from '../../services/guest-messages/roomGuestMessagesApiActions';
 import { Spinner } from '@/components/ui/spinner';
 import RoomGuestMessagesWrapper from '../guest-messages/RoomGuestMessagesWrapper';
+import { useForm, FormProvider } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import {
+ type RoomNotesSchema,
+ defaultValues,
+ createRoomNotesSchema,
+} from '../../schemas/room-notes/roomNotesSchema';
+import {
+ rackRoomNotesBaseKey,
+ getRoomNotes,
+} from '../../services/room-notes/RackRoomNotesApiActions';
+import { useState, useEffect } from 'react';
+import { type Paging } from '../../../utils/apiTypes';
+import RoomNotesWrapper from '../room-notes/RoomNotesWrapper';
 
 export default function RoomMenu({
  dic,
@@ -37,6 +51,8 @@ export default function RoomMenu({
  setShowRoomGuests,
  showGuestMessages,
  setShowGuestMessages,
+ showRoomNotes,
+ setShowRoomNotes,
 }: {
  dic: RoomsRackDictionary;
  room: Rack | null;
@@ -52,7 +68,10 @@ export default function RoomMenu({
  setShowRoomGuests: (state: boolean) => unknown;
  showGuestMessages: boolean;
  setShowGuestMessages: (state: boolean) => unknown;
+ showRoomNotes: boolean;
+ setShowRoomNotes: (state: boolean) => unknown;
 }) {
+ // guest messages setup
  const {
   data: guestMessages,
   isSuccess: guestMessagesIsSuccess,
@@ -70,10 +89,65 @@ export default function RoomMenu({
    return res.data;
   },
  });
+ // room notes setup
+ const [roomNotesPaging, setRoomNotesPaging] = useState<Paging>({
+  limit: 10,
+  offset: 0,
+ });
+ const [roomNotesRowsCount, setRoomNotesRowsCount] = useState(0);
+
+ const roomNotesForm = useForm<RoomNotesSchema>({
+  defaultValues,
+  resolver: zodResolver(createRoomNotesSchema()),
+ });
+
+ const [fromDateValue, untilDateValue, noteTypeValue, noteStateValue] =
+  roomNotesForm.watch(['fromDate', 'untilDate', 'noteType', 'noteState']);
+
+ const {
+  data: roomNotes,
+  isError: roomNotesIsError,
+  isSuccess: roomNotesIsSuccess,
+  isFetching: roomNotesIsFetching,
+  refetch: roomNotesRefetch,
+ } = useQuery({
+  enabled: !!room && !!room.registerID && !!room.roomID,
+  queryKey: [
+   rackRoomNotesBaseKey,
+   'list',
+   room?.registerID?.toString(),
+   room?.roomID.toString(),
+   roomNotesPaging.limit.toString(),
+   roomNotesPaging.offset.toString(),
+   fromDateValue?.toISOString() || 'all',
+   untilDateValue?.toISOString() || 'all',
+   noteTypeValue?.key || 'all',
+   noteStateValue?.key || 'all',
+  ],
+  async queryFn({ signal }) {
+   const res = await getRoomNotes({
+    limit: roomNotesPaging.limit,
+    offset: roomNotesPaging.offset + 1,
+    registerId: room!.registerID!,
+    roomId: room!.roomID!,
+    signal,
+    fromDate: fromDateValue?.toISOString(),
+    untilDate: untilDateValue?.toISOString(),
+    messageStateKey: noteStateValue!.key,
+    messageTypeId: noteTypeValue?.key,
+   });
+   setRoomNotesPaging((pre) => ({ ...pre, offset: 0 }));
+   return res.data;
+  },
+ });
+
+ useEffect(() => {
+  setRoomNotesRowsCount(roomNotes?.rowsCount || 0);
+ }, [roomNotes]);
 
  return (
   <Drawer open={isOpen} onOpenChange={setIsOpen}>
-   <DrawerContent className='h-[min(60svh,50rem)]'>
+   <DrawerContent className='h-[min(70svh,50rem)]'>
     <DrawerHeader className='border-b border-input'>
      <DrawerTitle className='text-2xl'>{dic.options.title}</DrawerTitle>
     </DrawerHeader>
@@ -111,6 +185,20 @@ export default function RoomMenu({
              onClick={() => setShowRoomControl(true)}
             >
              {dic.options.houseControl}
+            </Button>
+            <Button
+             variant='outline'
+             className='justify-start text-start h-12'
+             size='lg'
+             onClick={() => setShowRoomNotes(true)}
+            >
+             {dic.options.roomNotes}
+             {roomNotesIsFetching && <Spinner />}
+             {roomNotesIsSuccess && (
+              <Badge variant='secondary' className='size-6'>
+               {roomNotes.rowsCount || 0}
+              </Badge>
+             )}
             </Button>
             <Button
              variant='outline'
@@ -179,6 +267,33 @@ export default function RoomMenu({
         setShowRoomControl(false);
        }}
       />
+      <FormProvider {...roomNotesForm}>
+       <RoomNotesWrapper
+        dic={dic}
+        room={room}
+        open={showRoomNotes}
+        onChangeOpen={(state) => {
+         if (!state) {
+          roomNotesForm.setValue('fromDate', defaultValues['fromDate']);
+          roomNotesForm.setValue('untilDate', defaultValues['untilDate']);
+          roomNotesForm.setValue('noteState', defaultValues['noteState']);
+          roomNotesForm.setValue('noteType', defaultValues['noteType']);
+          setRoomNotesPaging((pre) => ({ ...pre, offset: 0 }));
+         }
+         setShowRoomNotes(state);
+        }}
+        roomNotes={{
+         data: roomNotes,
+         isError: roomNotesIsError,
+         isSuccess: roomNotesIsSuccess,
+         isFetching: roomNotesIsFetching,
+         refetch: roomNotesRefetch,
+         paging: roomNotesPaging,
+         setPaging: setRoomNotesPaging,
+         rowsCount: roomNotesRowsCount,
+        }}
+       />
+      </FormProvider>
       <RoomGuestMessagesWrapper
        dic={dic}
        room={room}

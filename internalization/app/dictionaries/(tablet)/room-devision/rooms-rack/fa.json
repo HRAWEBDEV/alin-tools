@@ -83,7 +83,8 @@
   "changeRoomStateType": "تغییر وضعیت ویژه اتاق",
   "guests": "مهمان ها",
   "houseControl": "کنترل خانه داری",
-  "guestMessages": "پیام برای مهمان"
+  "guestMessages": "پیام برای مهمان",
+  "roomNotes": "یادداشت ها"
  },
  "tools": {
   "lastUpdate": "آخرین بروزرسانی",
@@ -175,5 +176,32 @@
   "new": "جدید",
   "confirm": "تایید",
   "cancel": "انصراف"
+ },
+ "roomNotes": {
+  "title": "یادداشت ها",
+  "edit": "ویرایش",
+  "new": "جدید",
+  "addMessage": "افزودن یادداشت",
+  "filters": "فیلترها",
+  "fromPerson": "از طرف",
+  "deactiveBy": "غیر فعال کننده",
+  "registerNo": "شماره پذیرش",
+  "fromDate": "از تاریخ",
+  "untilDate": "تا تاریخ",
+  "noteType": "نوع پیام",
+  "noteState": "وضعیت",
+  "confirm": "تایید",
+  "cancel": "انصراف",
+  "dateTime": "تاریخ و ساعت",
+  "remove": "حذف",
+  "confirmRemoveMessage": "آیا از حذف پیام اطمینان دارید؟",
+  "confirmChangeStateTo": "تغییر وضعیت پیام به: ",
+  "prev": "قبلی",
+  "next": "بعدی",
+  "result": "نتایج",
+  "active": "فعال",
+  "deactive": "غیرفعال",
+  "deleted": "حذف شده",
+  "disabledBy": "غیر فعال کننده"
  }
 }
