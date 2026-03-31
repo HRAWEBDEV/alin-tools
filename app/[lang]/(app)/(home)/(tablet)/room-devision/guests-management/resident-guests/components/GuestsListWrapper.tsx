@@ -12,7 +12,7 @@ import {
  getInitialData,
  ResidentGuest,
 } from '../services/guestsListApiActions';
-import { useDebounce } from '../../hooks/useDebounce';
+import { useDebounce } from '../../../hooks/useDebounce';
 import { type ResidentGuestsDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/resident-guests/dictionary';
 
 export type GuestsFilterForm = {

@@ -1,6 +1,6 @@
 import { type GuestsManagementDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/guests-management/dictionary';
 import React, { Activity } from 'react';
-import GuestsListWrapper from './GuestsListWrapper';
+import GuestsListWrapper from '../resident-guests/components/GuestsListWrapper';
 import { ResidentGuestsDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/resident-guests/dictionary';
 
 interface GuestsManagementSlot {
