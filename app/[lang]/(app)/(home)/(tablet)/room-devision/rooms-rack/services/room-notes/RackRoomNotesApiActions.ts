@@ -7,10 +7,12 @@ type InitialData = {
 
 type RoomNote = {
  id: number;
+ userPersonName: string;
  dateTimeDateTimeOffset: string;
  registerID: number | null;
  roomID: number;
  messageTypeID: number;
+ messageTypeName: string;
  message: string;
  disabled: boolean;
  deleted: boolean;
