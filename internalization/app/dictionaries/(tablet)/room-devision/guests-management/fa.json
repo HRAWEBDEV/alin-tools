@@ -10,7 +10,9 @@
   "nationality": "ملیت",
   "removeFilters": " پاک کردن همه",
   "select": "انتخاب",
-  "guest": "مهمان"
+  "guest": "مهمان",
+
+  "noItemFound": "موردی یافت نشد"
  },
  "info": {
   "loadMore": "موارد بیشتر",

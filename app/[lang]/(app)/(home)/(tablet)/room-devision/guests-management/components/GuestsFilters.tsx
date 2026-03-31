@@ -272,7 +272,6 @@ export default function GuestsFilters({
               open={selectDrawerOpen === key}
               onOpenChange={(open) => !open && setSelectDrawerOpen(null)}
              >
-              {/* CHILD DRAWER - Using the identical exact strategy */}
               <DrawerContent className={SHARED_DRAWER_CLASSES}>
                <DrawerHeader className='shrink-0'>
                 <DrawerTitle className='text-xl'>
@@ -305,6 +304,11 @@ export default function GuestsFilters({
                    </Button>
                   </li>
                  ))}
+                 {getOptions(key, initData).length === 0 && (
+                  <li className='text-center my-6 font-normal text-destructive'>
+                   {dic.filters.noItemFound}
+                  </li>
+                 )}
                 </ul>
                </div>
               </DrawerContent>
