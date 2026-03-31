@@ -1,9 +1,10 @@
 import { z } from 'zod';
+import { noteStateTypes } from '../../utils/room-notes/noteStateTypes';
 
-const defaultValues: Partial<RoomNotesSchema> = {
+const defaultValues: RoomNotesSchema = {
  fromDate: null,
  untilDate: null,
- noteState: null,
+ noteState: noteStateTypes[0],
  noteType: null,
  comment: '',
 };
@@ -22,7 +23,7 @@ function createRoomNotesSchema() {
    noteState: z
     .object({
      key: z.string(),
-     value: z.string(),
+     value: z.enum(noteStateTypes.map((item) => item.value)),
     })
     .nullable(),
    comment: z.string().min(1),

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
 import {
  Dialog,
@@ -40,7 +40,6 @@ import {
  DrawerTitle,
  DrawerTrigger,
 } from '@/components/ui/drawer';
-import { useDateFns } from '@/hooks/useDateFns';
 import { Calendar } from '@/components/ui/calendar';
 import { ChevronsUpDown, ChevronDownIcon } from 'lucide-react';
 import { FaRegTrashAlt } from 'react-icons/fa';
@@ -53,6 +52,7 @@ import {
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { Spinner } from '@/components/ui/spinner';
 import { Checkbox } from '@/components/ui/checkbox';
+import { noteStateTypes } from '../../utils/room-notes/noteStateTypes';
 
 export default function RoomNotesWrapper({
  dic,
@@ -68,11 +68,9 @@ export default function RoomNotesWrapper({
  onChangeOpen: (state: boolean) => unknown;
 }) {
  const { locale } = useBaseConfig();
- const dateFns = useDateFns();
  const [showFromDatePicker, setShowFromDatePicker] = useState(false);
  const [showUntilDatePicker, setShowFromUntilPicker] = useState(false);
- const { watch, getValues, setValue, control } =
-  useFormContext<RoomNotesSchema>();
+ const { watch, control } = useFormContext<RoomNotesSchema>();
  const [showEdit, setShowEdit] = useState(false);
  const [seletedNoteId, setSelectedNoteId] = useState<number | null>(null);
  const queryClient = useQueryClient();
@@ -162,13 +160,6 @@ export default function RoomNotesWrapper({
  function goToFirstPage() {
   roomNotes.setPaging((pre) => ({ ...pre, offset: 0 }));
  }
-
- useEffect(() => {
-  if (roomNotes.isFetching || !!roomNotes.isSuccess) return;
-  if (roomNotes.paging.offset + 1 > pages) {
-   roomNotes.setPaging((pre) => ({ ...pre, offset: pages - 1 }));
-  }
- }, [pages, roomNotes]);
 
  return (
   <>
@@ -427,6 +418,72 @@ export default function RoomNotesWrapper({
                       className='w-full justify-start h-auto text-lg'
                      >
                       <span>{item.value}</span>
+                     </Button>
+                    </li>
+                   </DrawerClose>
+                  ))}
+                 </ul>
+                </div>
+               </DrawerContent>
+              </Drawer>
+             )}
+            />
+           </Field>
+           <Field>
+            <FieldLabel htmlFor='note-state'>
+             {dic.roomNotes.noteState}
+            </FieldLabel>
+            <Controller
+             control={control}
+             name='noteState'
+             render={({ field }) => (
+              <Drawer>
+               <DrawerTrigger asChild>
+                <Button
+                 id='note-state'
+                 variant='outline'
+                 role='combobox'
+                 className='justify-between h-11'
+                 onBlur={field.onBlur}
+                 ref={field.ref}
+                >
+                 <span className='text-start grow overflow-hidden text-ellipsis'>
+                  {field.value ? dic.roomNotes[field.value.value] : ''}
+                 </span>
+                 <div className='flex gap-1 items-center -me-2'>
+                  <ChevronsUpDown className='opacity-50' />
+                 </div>
+                </Button>
+               </DrawerTrigger>
+               <DrawerContent className='h-[min(60svh,35rem)]'>
+                <DrawerHeader className='hidden'>
+                 <DrawerTitle>{dic.roomNotes.noteState}</DrawerTitle>
+                </DrawerHeader>
+                <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+                 <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
+                  {dic.roomNotes.noteState}
+                 </h1>
+                </div>
+                <div>
+                 <ul>
+                  {noteStateTypes.map((item) => (
+                   <DrawerClose asChild key={item.key}>
+                    <li
+                     className='flex gap-1 items-center ps-6 py-2'
+                     onClick={() => {
+                      field.onChange(item);
+                     }}
+                    >
+                     <Checkbox
+                      className='size-6'
+                      checked={field.value?.key === item.key}
+                     />
+                     <Button
+                      tabIndex={-1}
+                      variant='ghost'
+                      className='w-full justify-start h-auto text-lg'
+                     >
+                      <span>{dic.roomNotes[item.value]}</span>
                      </Button>
                     </li>
                    </DrawerClose>

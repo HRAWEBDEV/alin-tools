@@ -189,6 +189,7 @@
   "fromDate": "از تاریخ",
   "untilDate": "تا تاریخ",
   "noteType": "نوع پیام",
+  "noteState": "وضعیت",
   "confirm": "تایید",
   "cancel": "انصراف",
   "dateTime": "تاریخ و ساعت",
@@ -198,8 +199,8 @@
   "prev": "قبلی",
   "next": "بعدی",
   "result": "نتایج",
-  "actvie": "فعال",
+  "active": "فعال",
   "deactive": "غیرفعال",
-  "removed": "حذف شده"
+  "deleted": "حذف شده"
  }
 }

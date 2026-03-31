@@ -139,7 +139,7 @@ export default function RoomNoteItem({
         disabled={actionIsPending}
        >
         {actionIsPending && <Spinner />}
-        {note.disabled ? dic.roomNotes.deactive : dic.roomNotes.actvie}
+        {note.disabled ? dic.roomNotes.deactive : dic.roomNotes.active}
        </Button>
       </DialogTrigger>
       <DialogContent className='p-0 gap-0'>
@@ -152,7 +152,7 @@ export default function RoomNoteItem({
           <span
            className={`${!note.disabled ? 'text-destructive border-destructive' : 'text-secondary border-secondary'}`}
           >
-           {note.disabled ? dic.roomNotes.actvie : dic.roomNotes.deactive}
+           {note.disabled ? dic.roomNotes.active : dic.roomNotes.deactive}
           </span>
          </p>
         </div>

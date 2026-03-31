@@ -133,9 +133,10 @@ export default function RoomMenu({
     signal,
     fromDate: fromDateValue?.toISOString(),
     untilDate: untilDateValue?.toISOString(),
-    messageStateKey: '2',
+    messageStateKey: noteStateValue!.key,
     messageTypeId: noteTypeValue?.key,
    });
+   setRoomNotesPaging((pre) => ({ ...pre, offset: 0 }));
    return res.data;
   },
  });
@@ -271,7 +272,16 @@ export default function RoomMenu({
         dic={dic}
         room={room}
         open={showRoomNotes}
-        onChangeOpen={setShowRoomNotes}
+        onChangeOpen={(state) => {
+         if (!state) {
+          roomNotesForm.setValue('fromDate', defaultValues['fromDate']);
+          roomNotesForm.setValue('untilDate', defaultValues['untilDate']);
+          roomNotesForm.setValue('noteState', defaultValues['noteState']);
+          roomNotesForm.setValue('noteType', defaultValues['noteType']);
+          setRoomNotesPaging((pre) => ({ ...pre, offset: 0 }));
+         }
+         setShowRoomNotes(state);
+        }}
         roomNotes={{
          data: roomNotes,
          isError: roomNotesIsError,
