@@ -17,11 +17,19 @@ interface RoomNote {
  message: string;
  disabled: boolean;
  deleted: boolean;
+ disableUserPersonName: string | null;
+ disableDateTimeOffset: string | null;
 }
 
 type SaveNote = Omit<
  RoomNote,
- 'userPersonName' | 'messageTypeName' | 'disabled' | 'deleted' | 'folioNo'
+ | 'userPersonName'
+ | 'messageTypeName'
+ | 'disabled'
+ | 'deleted'
+ | 'folioNo'
+ | 'disableUserPersonName'
+ | 'disableDateTimeOffset'
 >;
 
 const rackRoomNotesBaseKey = 'rack-room-notes';

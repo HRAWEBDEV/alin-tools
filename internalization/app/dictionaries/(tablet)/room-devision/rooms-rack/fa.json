@@ -201,6 +201,7 @@
   "result": "نتایج",
   "active": "فعال",
   "deactive": "غیرفعال",
-  "deleted": "حذف شده"
+  "deleted": "حذف شده",
+  "disabledBy": "غیر فعال کننده"
  }
 }

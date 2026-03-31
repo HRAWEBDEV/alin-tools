@@ -66,7 +66,11 @@ export default function RoomNoteItem({
  const actionIsPending = removeMessageIsPending || changeStateMessageIsPending;
 
  return (
-  <div className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 isolate relative'>
+  <div
+   data-is-deactive={note.disabled}
+   data-is-deleted={note.deleted}
+   className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 data-[is-deactive="true"]:bg-destructive/5 data-[is-deleted="true"]:bg-destructive/5 isolate relative'
+  >
    <div className='absolute bottom-0 end-6 -z-1 opacity-60'>
     <MdTouchApp className='size-24 text-neutral-200 dark:text-neutral-800' />
    </div>
@@ -116,8 +120,28 @@ export default function RoomNoteItem({
      </p>
     </div>
    </button>
-   <div className='flex justify-between gap-4 items-center border-t border-input pt-2 mt-2'>
-    <div></div>
+   <div className='flex justify-between gap-4 items-center border-t border-input pt-2 mt-2 flex-wrap'>
+    <div className='flex gap-2'>
+     {note.disableUserPersonName && (
+      <div className='text-sm text-neutral-600 dark:text-neutral-400'>
+       <span>{dic.roomNotes.disabledBy}: </span>
+       <span className='font-medium'>{note.disableUserPersonName}</span>
+      </div>
+     )}
+     {note.disableDateTimeOffset && (
+      <div className='text-xs text-neutral-600 dark:text-neutral-400'>
+       <span className='font-medium'>
+        {new Date(note.disableDateTimeOffset).toLocaleString(locale, {
+         year: 'numeric',
+         month: '2-digit',
+         day: '2-digit',
+         hour: '2-digit',
+         minute: '2-digit',
+        })}
+       </span>
+      </div>
+     )}
+    </div>
     <div className='flex flex-wrap gap-2'>
      <Button
       variant='outline'
@@ -136,7 +160,7 @@ export default function RoomNoteItem({
        <Button
         variant='outline'
         className={`${note.disabled ? 'text-destructive border-destructive' : 'text-secondary border-secondary'}`}
-        disabled={actionIsPending}
+        disabled={actionIsPending || note.deleted}
        >
         {actionIsPending && <Spinner />}
         {note.disabled ? dic.roomNotes.deactive : dic.roomNotes.active}
