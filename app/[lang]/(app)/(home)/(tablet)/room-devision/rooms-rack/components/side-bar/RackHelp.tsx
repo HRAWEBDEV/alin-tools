@@ -16,6 +16,7 @@ import {
  getRoomStateIcon,
 } from '../../utils/rackStatesIcon';
 import { Fragment } from 'react';
+import { IoNotifications } from 'react-icons/io5';
 
 export default function RackHelp({ dic }: { dic: RoomsRackDictionary }) {
  return (
@@ -111,6 +112,14 @@ export default function RackHelp({ dic }: { dic: RoomsRackDictionary }) {
        </div>
       </li>
      ))}
+     <li className='flex gap-2 items-center'>
+      <div dir='ltr'>
+       <IoNotifications className='size-8 text-destructive' />
+      </div>
+      <div className='text-neutral-700 dark:text-neutral-400 text-sm'>
+       {dic.help.hasNotes}
+      </div>
+     </li>
     </ul>
    </div>
   </div>

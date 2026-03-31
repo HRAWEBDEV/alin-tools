@@ -25,6 +25,7 @@ import { useFormContext } from 'react-hook-form';
 import { RackFiltersSchema } from '../../schemas/rackFiltersSchema';
 import { useRackConfigContext } from '../../services/rooms-rack-config/roomsRackConfigContext';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
+import { IoNotifications } from 'react-icons/io5';
 
 export default function RackRoom({
  dic,
@@ -118,6 +119,11 @@ export default function RackRoom({
        onShowRackMenu(room);
       }}
      >
+      {room.msgFlag && (
+       <div className='absolute top-1 end-0'>
+        <IoNotifications className='size-5 text-destructive' />
+       </div>
+      )}
       {!isFutureRack && !activeMinimalView && (
        <div
         dir='ltr'
@@ -205,6 +211,11 @@ export default function RackRoom({
            <p className='text-sm text-neutral-600 dark:text-neutral-400 text-wrap'>
             {dic.help[roomStateKind]}
            </p>
+           {room.carFlag && (
+            <p className='text-sm text-neutral-600 dark:text-neutral-400 text-wrap'>
+             {dic.help.parking}
+            </p>
+           )}
           </>
          )}
         </div>
