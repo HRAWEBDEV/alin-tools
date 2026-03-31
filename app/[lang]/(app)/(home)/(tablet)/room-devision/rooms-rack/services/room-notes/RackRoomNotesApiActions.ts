@@ -10,6 +10,7 @@ interface RoomNote {
  userPersonName: string;
  dateTimeDateTimeOffset: string;
  registerID: number | null;
+ folioNo: number;
  roomID: number;
  messageTypeID: number;
  messageTypeName: string;
@@ -20,7 +21,7 @@ interface RoomNote {
 
 type SaveNote = Omit<
  RoomNote,
- 'userPersonName' | 'messageTypeName' | 'disabled' | 'deleted'
+ 'userPersonName' | 'messageTypeName' | 'disabled' | 'deleted' | 'folioNo'
 >;
 
 const rackRoomNotesBaseKey = 'rack-room-notes';

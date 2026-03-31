@@ -195,6 +195,9 @@
   "remove": "حذف",
   "confirmRemoveMessage": "آیا از حذف پیام اطمینان دارید؟",
   "confirmChangeStateTo": "تغییر وضعیت پیام به: ",
+  "prev": "قبلی",
+  "next": "بعدی",
+  "result": "نتایج",
   "actvie": "فعال",
   "deactive": "غیرفعال",
   "removed": "حذف شده"

@@ -266,21 +266,24 @@ export default function RoomMenu({
         setShowRoomControl(false);
        }}
       />
-      <RoomNotesWrapper
-       dic={dic}
-       room={room}
-       open={showRoomNotes}
-       onChangeOpen={setShowRoomNotes}
-       roomNotes={{
-        data: roomNotes,
-        isError: roomNotesIsError,
-        isSuccess: roomNotesIsSuccess,
-        isFetching: roomNotesIsFetching,
-        refetch: roomNotesRefetch,
-        paging: roomNotesPaging,
-        rowsCount: roomNotesRowsCount,
-       }}
-      />
+      <FormProvider {...roomNotesForm}>
+       <RoomNotesWrapper
+        dic={dic}
+        room={room}
+        open={showRoomNotes}
+        onChangeOpen={setShowRoomNotes}
+        roomNotes={{
+         data: roomNotes,
+         isError: roomNotesIsError,
+         isSuccess: roomNotesIsSuccess,
+         isFetching: roomNotesIsFetching,
+         refetch: roomNotesRefetch,
+         paging: roomNotesPaging,
+         setPaging: setRoomNotesPaging,
+         rowsCount: roomNotesRowsCount,
+        }}
+       />
+      </FormProvider>
       <RoomGuestMessagesWrapper
        dic={dic}
        room={room}

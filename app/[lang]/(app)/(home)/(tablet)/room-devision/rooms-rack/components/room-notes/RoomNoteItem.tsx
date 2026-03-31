@@ -91,6 +91,12 @@ export default function RoomNoteItem({
      </div>
      <div>
       <span className='text-sm text-neutral-600 dark:text-neutral-400'>
+       {dic.roomNotes.registerNo}:{' '}
+      </span>
+      <span className='font-medium'>{note.folioNo}</span>
+     </div>
+     <div>
+      <span className='text-sm text-neutral-600 dark:text-neutral-400'>
        {dic.roomNotes.dateTime}:{' '}
       </span>
       <span className='font-medium text-sm text-neutral-700 dark:text-neutral-400'>
