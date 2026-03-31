@@ -185,7 +185,7 @@
   "deactiveBy": "غیر فعال کننده",
   "registerNo": "شماره پذیرش",
   "fromDate": "از تاریخ",
-  "toDate": "تا تاریخ",
+  "untilDate": "تا تاریخ",
   "noteType": "نوع پیام",
   "confirm": "تایید",
   "cancel": "انصراف",
