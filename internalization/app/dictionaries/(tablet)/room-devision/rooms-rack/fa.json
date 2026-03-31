@@ -178,6 +178,21 @@
   "cancel": "انصراف"
  },
  "roomNotes": {
-  "title": "یادداشت ها"
+  "title": "یادداشت ها",
+  "edit": "ویرایش",
+  "new": "جدید",
+  "fromPerson": "پیام دهنده",
+  "deactiveBy": "غیر فعال کننده",
+  "registerNo": "شماره پذیرش",
+  "fromDate": "از تاریخ",
+  "toDate": "تا تاریخ",
+  "noteType": "نوع پیام",
+  "confirm": "تایید",
+  "cancel": "انصراف",
+  "dataTime": "تاریخ و ساعت",
+  "remove": "حذف",
+  "actvie": "فعال",
+  "deactive": "غیرفعال",
+  "removed": "حذف شده"
  }
 }
