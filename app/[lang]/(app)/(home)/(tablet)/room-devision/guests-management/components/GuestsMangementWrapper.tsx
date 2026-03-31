@@ -6,12 +6,15 @@ import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { useSearchParams } from 'next/navigation';
 import GuestsManagementTabs from './GuestsManagementTabs';
 import GuestsManagementSlot from './GuestsManagementSlot';
+import { type ArrivalReservesDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/arrival-reserves/dictionary';
 export default function GuestsMangementWrapper({
  dic,
  residentGuestsDic,
+ arrivalReservesDic,
 }: {
  dic: GuestsManagementDictionary;
  residentGuestsDic: ResidentGuestsDictionary;
+ arrivalReservesDic: ArrivalReservesDictionary;
 }) {
  const { localeInfo, locale } = useBaseConfig();
  const redirectPath = `/${locale}/room-devision/guests-management` as const;
@@ -26,8 +29,8 @@ export default function GuestsMangementWrapper({
     redirectPath={redirectPath}
    />
    <GuestsManagementSlot
-    dic={dic}
     residentGuestsDic={residentGuestsDic}
+    arrivalReservesDic={arrivalReservesDic}
     activeTab={activeTab}
    />
   </div>

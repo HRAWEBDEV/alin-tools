@@ -19,11 +19,24 @@ export default function GuestsManagementTabs({
  return (
   <header className='p-2 sticky bottom-0 pb-0 order-2 lg:order-1 lg:pb-2 lg:top-0 lg:bottom-auto bg-background z-3'>
    <div>
-    <Tabs dir={localeInfo.contentDirection} defaultValue={activeTab}>
+    <Tabs dir={localeInfo.contentDirection} value={activeTab}>
      <TabsList className='h-11 w-[min(100%,30rem)] mx-auto bg-neutral-200 dark:bg-neutral-800'>
       <TabsTrigger value='guests-list' asChild>
-       <Link href={`${redirectPath}?guests-list`} className='font-medium'>
+       <Link
+        href={`${redirectPath}?tab=guests-list`}
+        className='font-medium'
+        key='guests-list'
+       >
         {dic.tabs.guestsList}
+       </Link>
+      </TabsTrigger>
+      <TabsTrigger value='arrival-reserves' asChild>
+       <Link
+        href={`${redirectPath}?tab=arrival-reserves`}
+        className='font-medium'
+        key='arrival-reserves'
+       >
+        {dic.tabs.arrivalReserves}
        </Link>
       </TabsTrigger>
      </TabsList>
