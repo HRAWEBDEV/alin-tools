@@ -1,7 +1,7 @@
-import { GuestsManagementDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/guests-management/dictionary';
 import { ResidentGuest } from '../services/guestsListApiActions';
 import { MdTouchApp } from 'react-icons/md';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
+import { type ResidentGuestsDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/resident-guests/dictionary';
 
 export default function GuestCard({
  guest,
@@ -9,7 +9,7 @@ export default function GuestCard({
  onClick,
 }: {
  guest: ResidentGuest;
- dic: GuestsManagementDictionary;
+ dic: ResidentGuestsDictionary;
  onClick: () => void;
 }) {
  const { locale } = useBaseConfig();

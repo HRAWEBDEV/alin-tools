@@ -2,7 +2,7 @@ import { axios } from '@/app/[lang]/(app)/utils/defaultAxios';
 import {
  GetSearchQueryValuesResult,
  SetSearchQueryOnPathname,
-} from '../utils/searchQueryValues';
+} from '../../utils/searchQueryValues';
 import { GuestsFilterForm } from '../components/GuestsListWrapper';
 
 type SelectOption = { key: string; value: string };

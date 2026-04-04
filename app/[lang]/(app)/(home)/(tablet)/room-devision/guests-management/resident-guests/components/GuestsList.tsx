@@ -6,11 +6,11 @@ import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
 import UnExpectedError from '@/app/[lang]/(app)/components/UnExpectedError';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
-import { GuestsManagementDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/guests-management/dictionary';
 import { ResidentGuest } from '../services/guestsListApiActions';
+import { ResidentGuestsDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/resident-guests/dictionary';
 
 type Props = {
- dic: GuestsManagementDictionary;
+ dic: ResidentGuestsDictionary;
  guests: ResidentGuest[];
  isLoading: boolean;
  isFetching: boolean;

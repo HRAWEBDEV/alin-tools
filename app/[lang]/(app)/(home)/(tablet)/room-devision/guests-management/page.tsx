@@ -3,6 +3,7 @@ import { type Locale } from '@/internalization/app/localization';
 import React from 'react';
 import GuestsMangementWrapper from './components/GuestsMangementWrapper';
 import { Metadata } from 'next';
+import { getResidentGuestsDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/resident-guests/dictionary';
 
 export const generateMetadata = async (
  props: PageProps<'/[lang]/room-devision/guests-management'>,
@@ -16,6 +17,16 @@ export default async function page(
  props: PageProps<'/[lang]/room-devision/guests-management'>,
 ) {
  const { lang } = await props.params;
- const dic = await getGuestsManagementDictionary({ locale: lang as Locale });
- return <GuestsMangementWrapper dic={dic} />;
+ const guestsManagementDic = await getGuestsManagementDictionary({
+  locale: lang as Locale,
+ });
+ const residentGuestsDic = await getResidentGuestsDictionary({
+  locale: lang as Locale,
+ });
+ return (
+  <GuestsMangementWrapper
+   dic={guestsManagementDic}
+   residentGuestsDic={residentGuestsDic}
+  />
+ );
 }
