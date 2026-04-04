@@ -82,6 +82,8 @@ export default function NewRoomNote({
   },
  });
 
+ const isEditable = !editRoomNote.targetNote?.deleted;
+
  useEffect(() => {
   setValue(
    'noteType',
@@ -123,6 +125,7 @@ export default function NewRoomNote({
             className='justify-between h-11'
             onBlur={field.onBlur}
             ref={field.ref}
+            disabled={!isEditable}
            >
             <span className='text-start grow overflow-hidden text-ellipsis'>
              {field.value ? field.value.value : ''}
@@ -178,34 +181,40 @@ export default function NewRoomNote({
         {dic.roomGuestMessages.comment}
        </FieldLabel>
        <InputGroup data-invalid={!!errors.comment}>
-        <InputGroupTextarea id='comment' {...register('comment')} />
+        <InputGroupTextarea
+         id='comment'
+         {...register('comment')}
+         readOnly={!isEditable}
+        />
        </InputGroup>
       </Field>
      </FieldGroup>
     </div>
-    <DialogFooter className='p-4 border-t border-input'>
-     <Button
-      variant='outline'
-      size='lg'
-      className='sm:w-28'
-      onClick={() => editRoomNote.closeShowEdit()}
-      disabled={isPending}
-     >
-      {isPending && <Spinner />}
-      {dic.roomGuestMessages.cancel}
-     </Button>
-     <Button
-      size='lg'
-      className='sm:w-28'
-      disabled={isPending}
-      onClick={() => {
-       handleSubmit((data) => mutate(data))();
-      }}
-     >
-      {isPending && <Spinner />}
-      {dic.roomGuestMessages.confirm}
-     </Button>
-    </DialogFooter>
+    {isEditable && (
+     <DialogFooter className='p-4 border-t border-input'>
+      <Button
+       variant='outline'
+       size='lg'
+       className='sm:w-28'
+       onClick={() => editRoomNote.closeShowEdit()}
+       disabled={isPending}
+      >
+       {isPending && <Spinner />}
+       {dic.roomGuestMessages.cancel}
+      </Button>
+      <Button
+       size='lg'
+       className='sm:w-28'
+       disabled={isPending}
+       onClick={() => {
+        handleSubmit((data) => mutate(data))();
+       }}
+      >
+       {isPending && <Spinner />}
+       {dic.roomGuestMessages.confirm}
+      </Button>
+     </DialogFooter>
+    )}
    </DialogContent>
   </Dialog>
  );
