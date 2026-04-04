@@ -89,7 +89,12 @@
   "enterPaymentRefNo": "شماره مرجع را وارد کنید",
   "selectCardReader": "کارت خوان انتخاب نشده است",
   "selectBank": "بانک انتخاب نشده است",
-  "selectPayType": "نوع پرداخت انتخاب نشده است"
+  "selectPayType": "نوع پرداخت انتخاب نشده است",
+  "nationalCode": "کد ملی",
+  "mobileNo": "شماره همراه",
+  "fillMobileNoOrNationalCode": "شماره تماس یا کدملی را وارد کنید",
+  "or": "یا",
+  "otpCode": "کد یکبار مصرف"
  },
  "closeOrder": {
   "confirmMessage": "آیا از بستن سفارش اطمینان دارید؟",

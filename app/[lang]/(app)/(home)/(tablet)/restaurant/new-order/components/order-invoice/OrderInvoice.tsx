@@ -7,6 +7,7 @@ import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseC
 import { useCurrencyFormatter } from '@/hooks/useCurrencyFormatter';
 import { Spinner } from '@/components/ui/spinner';
 import { ChevronsUpDown, ArrowDown } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
  Drawer,
  DrawerTrigger,
@@ -38,6 +39,7 @@ import {
  getPcPoses,
 } from '../../services/orderInvoicePaymentApiActions';
 import { toast } from 'sonner';
+import { NumericFormat } from 'react-number-format';
 
 const invoiceRowClass =
  'flex justify-between gap-2 items-center text-base pb-3 mb-3 border-b border-input font-medium';
@@ -144,7 +146,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
     (item) => item.key === pcPoseData.defualtPosID.toString(),
    ) || pcPoseData.pcPoses[0];
   setValue('cardReader', activePos);
- }, [pcPoseData]);
+ }, [pcPoseData, setValue]);
 
  return orderItems.length ? (
   <div>
@@ -336,7 +338,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
            )}
           />
          </Field>
-         {paymentTypeValue?.key !== '1' && (
+         {paymentTypeValue?.key !== '1' && paymentTypeValue?.key !== '6' && (
           <Field data-invalid={!!errors.bank}>
            <FieldLabel htmlFor='bank'>{dic.invoice.bank} *</FieldLabel>
            <Controller
@@ -492,7 +494,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
           />
          </Field>
         )}
-        {paymentTypeValue?.key !== '1' && (
+        {paymentTypeValue?.key !== '1' && paymentTypeValue?.key !== '6' && (
          <Field data-invalid={!!errors.paymentRefNo}>
           <FieldLabel htmlFor='paymentRefNo'>
            {dic.invoice.paymentRefNo}
@@ -506,6 +508,80 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
            </FieldContent>
           )}
          </Field>
+        )}
+        {paymentTypeValue?.key === '6' && (
+         <>
+          <div className='flex gap-4 items-end'>
+           <Controller
+            control={control}
+            name='mobileNo'
+            render={({ field: { value, onChange, ...other } }) => (
+             <Field data-invalid={!!errors.mobileNo}>
+              <FieldLabel htmlFor='mobileNo'>{dic.invoice.mobileNo}</FieldLabel>
+              <InputGroup data-invalid={!!errors.mobileNo} className='h-11'>
+               <NumericFormat
+                id='mobileNo'
+                {...other}
+                value={value}
+                onValueChange={({ value }) => onChange(value)}
+                customInput={InputGroupInput}
+                allowLeadingZeros
+                decimalScale={0}
+               />
+              </InputGroup>
+             </Field>
+            )}
+           />
+           <div> {dic.invoice.or} </div>
+           <Controller
+            control={control}
+            name='nationalCode'
+            render={({ field: { value, onChange, ...other } }) => (
+             <Field data-invalid={!!errors.nationalCode}>
+              <FieldLabel htmlFor='national-code'>
+               {dic.invoice.nationalCode}
+              </FieldLabel>
+              <InputGroup data-invalid={!!errors.nationalCode} className='h-11'>
+               <NumericFormat
+                id='national-code'
+                {...other}
+                value={value}
+                onValueChange={({ value }) => onChange(value)}
+                customInput={InputGroupInput}
+                allowLeadingZeros
+                decimalScale={0}
+               />
+              </InputGroup>
+             </Field>
+            )}
+           />
+          </div>
+          <Alert className='bg-destructive/10 border-destructive/10'>
+           <AlertDescription className='text-destructive/80'>
+            {dic.invoice.fillMobileNoOrNationalCode}
+           </AlertDescription>
+          </Alert>
+          <Controller
+           control={control}
+           name='otpCode'
+           render={({ field: { value, onChange, ...other } }) => (
+            <Field data-invalid={!!errors.otpCode}>
+             <FieldLabel htmlFor='otpCode'>{dic.invoice.otpCode} *</FieldLabel>
+             <InputGroup data-invalid={!!errors.otpCode} className='h-11'>
+              <NumericFormat
+               id='otpCode'
+               {...other}
+               value={value}
+               onValueChange={({ value }) => onChange(value)}
+               customInput={InputGroupInput}
+               allowLeadingZeros
+               decimalScale={0}
+              />
+             </InputGroup>
+            </Field>
+           )}
+          />
+         </>
         )}
         <div className='grid sm:grid-cols-3 gap-3 sm:justify-end'>
          <div></div>
