@@ -23,65 +23,67 @@ export default function GuestDetailDrawer({
 
  return (
   <Drawer open={!!guest} onOpenChange={(open) => !open && onClose()}>
-   <DrawerContent dir='rtl' className='h-auto! sm:min-h-auto min-h-[89svh] '>
+   <DrawerContent className='h-[min(50svh,35rem)]'>
     <DrawerHeader>
      <DrawerTitle>{dic.detail.title}</DrawerTitle>
     </DrawerHeader>
-    {guest && (
-     <div className='grid sm:grid-cols-2 md:grid-cols-3 grid-cols-1 gap-x-8 gap-y-4 p-4 text-sm sm:justify-items-center justify-items-normal max-w-[70%] w-full mx-auto'>
-      <DetailRow label={dic.fields.roomNo} value={guest.roomNo} />
-      <DetailRow label={dic.fields.reserveNo} value={guest.reserveNo} />
-      <DetailRow
-       label={dic.fields.fullName}
-       value={guest.guestFullName}
-       valueClassName='text-primary'
-      />
-      <DetailRow label={dic.fields.fatherName} value={guest.fatherName} />
-      <DetailRow label={dic.fields.floor} value={guest.floorNo} />
-      <DetailRow label={dic.fields.roomType} value={guest.roomTypeName} />
-      <DetailRow
-       label={dic.fields.checkIn}
-       value={
-        guest.checkinDateTime
-         ? new Date(guest.checkinDateTimeOffset).toLocaleDateString(locale)
-         : '-'
-       }
-       valueClassName='text-secondary'
-      />
-      <DetailRow
-       label={dic.fields.checkOut}
-       value={
-        guest.registerDepatureDateTimeOffset
-         ? new Date(guest.registerDepatureDateTimeOffset).toLocaleDateString(
-            locale,
-           )
-         : '-'
-       }
-       valueClassName='text-destructive'
-      />
+    <div className='overflow-x-hidden overflow-auto'>
+     {guest && (
+      <div className='grid sm:grid-cols-2 md:grid-cols-3 grid-cols-1 gap-4 p-4 text-sm w-[min(60rem,100%)] mx-auto'>
+       <DetailRow label={dic.fields.roomNo} value={guest.roomNo} />
+       <DetailRow label={dic.fields.reserveNo} value={guest.reserveNo} />
+       <DetailRow
+        label={dic.fields.fullName}
+        value={guest.guestFullName}
+        valueClassName='text-primary'
+       />
+       <DetailRow label={dic.fields.fatherName} value={guest.fatherName} />
+       <DetailRow label={dic.fields.floor} value={guest.floorNo} />
+       <DetailRow label={dic.fields.roomType} value={guest.roomTypeName} />
+       <DetailRow
+        label={dic.fields.checkIn}
+        value={
+         guest.checkinDateTime
+          ? new Date(guest.checkinDateTimeOffset).toLocaleDateString(locale)
+          : '-'
+        }
+        valueClassName='text-secondary'
+       />
+       <DetailRow
+        label={dic.fields.checkOut}
+        value={
+         guest.registerDepatureDateTimeOffset
+          ? new Date(guest.registerDepatureDateTimeOffset).toLocaleDateString(
+             locale,
+            )
+          : '-'
+        }
+        valueClassName='text-destructive'
+       />
 
-      <DetailRow label={dic.fields.customerName} value={guest.customerName} />
-      <DetailRow
-       label={dic.filters.nationality}
-       value={guest.nationalityName}
-      />
-      <DetailRow
-       label={dic.fields.phoneNumber}
-       value={guest.mobileNo}
-       valueClassName='text-primary hover:border border border-b border-transparent hover:border-b hover:border-b-primary'
-       isLink
-      />
-      <DetailRow
-       label={dic.fields.email}
-       value={guest.email}
-       valueClassName='text-primary hover:border border border-b border-transparent hover:border-b hover:border-b-primary'
-       isLink
-      ></DetailRow>
-      <DetailRow label={dic.fields.homeCity} value={guest.sourceCityName} />
-      <DetailRow label={dic.fields.address} value={guest.homeAddress} />
-      <DetailRow label={dic.fields.gender} value={guest.genderName} />
-     </div>
-    )}
+       <DetailRow label={dic.fields.customerName} value={guest.customerName} />
+       <DetailRow
+        label={dic.filters.nationality}
+        value={guest.nationalityName}
+       />
+       <DetailRow
+        label={dic.fields.phoneNumber}
+        value={guest.mobileNo}
+        valueClassName='text-primary hover:border border border-b border-transparent hover:border-b hover:border-b-primary'
+        isLink
+       />
+       <DetailRow
+        label={dic.fields.email}
+        value={guest.email}
+        valueClassName='text-primary hover:border border border-b border-transparent hover:border-b hover:border-b-primary'
+        isLink
+       ></DetailRow>
+       <DetailRow label={dic.fields.homeCity} value={guest.sourceCityName} />
+       <DetailRow label={dic.fields.address} value={guest.homeAddress} />
+       <DetailRow label={dic.fields.gender} value={guest.genderName} />
+      </div>
+     )}
+    </div>
    </DrawerContent>
   </Drawer>
  );

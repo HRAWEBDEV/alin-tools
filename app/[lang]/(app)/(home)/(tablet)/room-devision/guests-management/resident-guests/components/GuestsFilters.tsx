@@ -1,5 +1,4 @@
 'use client';
-
 import { useFormContext, Controller, useWatch } from 'react-hook-form';
 import { useKeenSlider } from 'keen-slider/react';
 import { Badge } from '@/components/ui/badge';
@@ -19,7 +18,12 @@ import {
  type InitialData,
  type SelectOption,
 } from '../services/guestsListApiActions';
-import { Input } from '@/components/ui/input';
+import { Field, FieldLabel } from '@/components/ui/field';
+import {
+ InputGroup,
+ InputGroupInput,
+ InputGroupAddon,
+} from '@/components/ui/input-group';
 import { cn } from '@/lib/utils';
 import { FaFilter, FaRegTrashAlt } from 'react-icons/fa';
 import { FaPerson } from 'react-icons/fa6';
@@ -35,11 +39,7 @@ const FILTER_KEYS: (keyof GuestsFilterForm)[] = [
  'room',
 ];
 
-const smallBadgeKeys: (keyof GuestsFilterForm)[] = [
- 'folio',
- 'reserveNo',
- 'room',
-];
+const smallBadgeKeys: (keyof GuestsFilterForm)[] = ['room'];
 const largeBadgeKeys: (keyof GuestsFilterForm)[] = [
  'nationality',
  'specialGuest',
@@ -55,8 +55,7 @@ type Props = {
  numGuests: number | undefined;
 };
 
-const SHARED_DRAWER_CLASSES =
- 'sm:h-[min(85svh,26rem)] h-[min(95svh,66rem)] flex flex-col';
+const SHARED_DRAWER_CLASSES = 'sm:h-[min(85svh,30rem)] flex flex-col';
 
 export default function GuestsFilters({
  dic,
@@ -152,73 +151,68 @@ export default function GuestsFilters({
          </button>
         )}
        </div>
-
        <div className='grid sm:grid-cols-2 grid-cols-1 gap-6 shrink-0'>
         <Controller
          control={control}
          name='folio'
          render={({ field }) => (
-          <div className='flex flex-col gap-1 relative'>
-           <label className='text-xs text-muted-foreground'>
-            {dic.filters.folio}
-           </label>
-           <div className='relative flex items-center'>
-            <Input
+          <Field>
+           <FieldLabel htmlFor='folio'>{dic.filters.folio}</FieldLabel>
+           <InputGroup className='h-11'>
+            <InputGroupInput
              type='number'
+             id='folio'
              {...field}
              value={field.value ?? ''}
-             placeholder={dic.filters.folio}
-             className='h-11 pe-10'
             />
-            {field.value && (
-             <Button
-              type='button'
-              variant={'ghost'}
-              size={'icon'}
-              onClick={() => field.onChange('')}
-              className='absolute end-1 text-rose-700 dark:text-rose-400 h-8 w-8 bg-transparent!'
-             >
-              <FaRegTrashAlt className='size-4 ' />
-             </Button>
-            )}
-           </div>
-          </div>
+            <InputGroupAddon align='inline-end'>
+             {field.value && (
+              <Button
+               type='button'
+               variant='ghost'
+               size='icon'
+               className='text-destructive'
+               onClick={() => field.onChange('')}
+              >
+               <FaRegTrashAlt className='size-4' />
+              </Button>
+             )}
+            </InputGroupAddon>
+           </InputGroup>
+          </Field>
          )}
         />
-
         <Controller
          control={control}
          name='reserveNo'
          render={({ field }) => (
-          <div className='flex flex-col gap-1 relative'>
-           <label className='text-xs text-muted-foreground'>
-            {dic.filters.reserveNo}
-           </label>
-           <div className='relative flex items-center'>
-            <Input
+          <Field>
+           <FieldLabel htmlFor='reserve-no'>{dic.filters.reserveNo}</FieldLabel>
+           <InputGroup className='h-11'>
+            <InputGroupInput
              type='number'
+             id='reserve-no'
              {...field}
              value={field.value ?? ''}
-             placeholder={dic.filters.reserveNo}
-             className='h-11 pe-10'
             />
-            {field.value && (
-             <Button
-              type='button'
-              variant={'ghost'}
-              size={'icon'}
-              onClick={() => field.onChange('')}
-              className='absolute end-1 text-rose-700 dark:text-rose-400 h-8 w-8 bg-transparent!'
-             >
-              <FaRegTrashAlt className='size-4' />
-             </Button>
-            )}
-           </div>
-          </div>
+            <InputGroupAddon align='inline-end'>
+             {field.value && (
+              <Button
+               type='button'
+               variant='ghost'
+               size='icon-lg'
+               className='text-destructive'
+               onClick={() => field.onChange('')}
+              >
+               <FaRegTrashAlt className='size-4' />
+              </Button>
+             )}
+            </InputGroupAddon>
+           </InputGroup>
+          </Field>
          )}
         />
        </div>
-
        <div className='grid sm:grid-cols-2 grid-cols-1 gap-6 pb-6'>
         {(['nationality', 'specialGuest', 'group', 'room'] as const).map(
          (key) => (
@@ -228,37 +222,32 @@ export default function GuestsFilters({
            name={key}
            render={({ field }) => (
             <>
-             <div className='flex flex-col gap-1'>
-              <label className='text-xs text-muted-foreground'>
-               {filterKeyLabel(key)}
-              </label>
+             <Field>
+              <FieldLabel htmlFor='field'>{filterKeyLabel(key)}</FieldLabel>
               <Button
+               id={field.name}
                variant='outline'
                onClick={() => setSelectDrawerOpen(key)}
-               className={cn(
-                'justify-between h-11 font-normal',
-                field.value && 'border-primary text-primary',
-               )}
+               className={cn('justify-between h-11 font-normal')}
               >
                <span className='text-start grow overflow-hidden text-ellipsis'>
                 {initDataIsLoading ? (
                  <Spinner className='w-4 h-4' />
                 ) : (
-                 (filterLabel(key) ??
-                 `${dic.filters.select} ${filterKeyLabel(key)}`)
+                 filterLabel(key)
                 )}
                </span>
                <div className='flex gap-1 items-center -me-2'>
                 {field.value && (
                  <Button
                   type='button'
-                  variant={'ghost'}
-                  size={'icon'}
+                  variant='ghost'
+                  size='icon-lg'
+                  className='text-destructive'
                   onClick={(e) => {
                    e.stopPropagation();
                    field.onChange(null);
                   }}
-                  className='text-rose-700 dark:text-rose-400 h-8 w-8 bg-transparent!'
                  >
                   <FaRegTrashAlt className='size-4' />
                  </Button>
@@ -266,8 +255,7 @@ export default function GuestsFilters({
                 <ChevronsUpDown className='opacity-50 size-4 shrink-0' />
                </div>
               </Button>
-             </div>
-
+             </Field>
              <Drawer
               open={selectDrawerOpen === key}
               onOpenChange={(open) => !open && setSelectDrawerOpen(null)}

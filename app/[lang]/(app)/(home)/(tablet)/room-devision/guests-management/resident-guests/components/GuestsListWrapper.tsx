@@ -24,7 +24,7 @@ export type GuestsFilterForm = {
  room?: string | null;
 };
 
-const PAGE_SIZE = 12;
+const PAGE_SIZE = 50;
 
 export default function GuestsListWrapper({
  dic,

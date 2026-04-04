@@ -22,7 +22,7 @@ export default function GuestCard({
    <div className='absolute bottom-0 end-0 -z-1 opacity-60'>
     <MdTouchApp className='size-24 text-neutral-200 dark:text-neutral-800' />
    </div>
-   <div className='flex flex-wrap justify-between gap-1 mb-2'>
+   <div className='flex flex-wrap justify-between gap-1 mb-1'>
     <div>
      <span className='text-sm text-neutral-600 dark:text-neutral-400'>
       {dic.fields.roomNo}:{' '}
@@ -45,17 +45,20 @@ export default function GuestCard({
     </div> */}
    </div>
    <div className='mb-1 flex items-center justify-between gap-2'>
-    <p className='text-sm flex-1 mb-1 font-medium text-neutral-700 truncate dark:text-neutral-400 text-start '>
+    <p className='text-sm flex-1 mb-1 font-medium text-neutral-700 truncate dark:text-neutral-400 text-start'>
      {guest.firstName} {guest.lastName}
     </p>
     <div className='text-end truncate max-w-[40%]'>
      {/* <span className='text-sm text-neutral-600 dark:text-neutral-400'>
       {dic.fields.roomType}:{' '}
      </span> */}
-     <span className='text-sm text-primary w-full'>{guest.roomTypeName}</span>
     </div>
    </div>
-
+   <div className='mb-1 flex items-center justify-between gap-2'>
+    <p className='text-sm flex-1 mb-1 truncate text-start text-primary'>
+     {guest.roomTypeName}
+    </p>
+   </div>
    <div className='flex flex-wrap gap-1 justify-between'>
     <span className='text-secondary/80'>
      {guest.checkinDateTime
