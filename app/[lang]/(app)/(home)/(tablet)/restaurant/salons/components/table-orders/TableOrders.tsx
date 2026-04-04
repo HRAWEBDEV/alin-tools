@@ -1,10 +1,11 @@
 import { type SalonsDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/salons/dictionary';
-import { type TableOrder as TableOrderType } from '../services/salonsApiActions';
+import { type TableOrder as TableOrderType } from '../../services/salonsApiActions';
 import TableOrder from './TableOrder';
-import { useOrderRedirectLink } from '../hooks/useOrderRedirectLink';
+import { useOrderRedirectLink } from '../../hooks/useOrderRedirectLink';
 import { Skeleton } from '@/components/ui/skeleton';
 import Link from 'next/link';
 import { FaPlus } from 'react-icons/fa6';
+import { DrawerClose } from '@/components/ui/drawer';
 
 export default function TableOrders({
  dic,
@@ -14,14 +15,16 @@ export default function TableOrders({
  orderRedirectLink,
  tableCapacity,
  tableStateType,
+ fromNewOrder = false,
 }: {
- dic: SalonsDictionary;
+ dic: SalonsDictionary['multiOrder'];
  data?: TableOrderType[];
  tableCapacity: number;
  tableStateType: number;
  orderCount: number;
  isLoading: boolean;
  orderRedirectLink: ReturnType<typeof useOrderRedirectLink>;
+ fromNewOrder?: boolean;
 }) {
  if (isLoading)
   return (
@@ -33,12 +36,16 @@ export default function TableOrders({
   );
  return (
   <div className='flex gap-4 flex-wrap'>
-   <Link
-    className='size-40 border border-input rounded-md grid place-content-center bg-secondary/10 text-secondary'
-    href={orderRedirectLink ? `${orderRedirectLink}&orderID=0` : '#'}
-   >
-    <FaPlus className='size-10' />
-   </Link>
+   {!fromNewOrder && (
+    <DrawerClose asChild>
+     <Link
+      className='size-40 border border-input rounded-md grid place-content-center bg-secondary/10 text-secondary'
+      href={orderRedirectLink ? `${orderRedirectLink}&orderID=0` : '#'}
+     >
+      <FaPlus className='size-10' />
+     </Link>
+    </DrawerClose>
+   )}
    {data?.map((order) => (
     <TableOrder
      key={order.key}

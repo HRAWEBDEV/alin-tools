@@ -28,7 +28,7 @@ import { GrStatusUnknown } from 'react-icons/gr';
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { getHallKey, getTableOrders } from '../services/salonsApiActions';
-import TableOrders from './TableOrders';
+import TableOrders from './table-orders/TableOrders';
 import { useOrderRedirectLink } from '../hooks/useOrderRedirectLink';
 import { TableUtils } from '../utils/tableUtils';
 import { IoAlbums } from 'react-icons/io5';
@@ -367,7 +367,7 @@ export default function SalonTable({
       </DrawerHeader>
       <div className='overflow-hidden overflow-y-auto p-4'>
        <TableOrders
-        dic={tableUtils.dic}
+        dic={tableUtils.dic['multiOrder']}
         data={ordersList}
         isLoading={isLoadingOrdersList}
         orderRedirectLink={orderRedirectLink}

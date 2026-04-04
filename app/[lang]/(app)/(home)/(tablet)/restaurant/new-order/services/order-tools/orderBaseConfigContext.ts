@@ -30,6 +30,7 @@ interface OrderBaseConfig {
  queries: {
   fromSalons: boolean;
   orderID: number | null;
+  salonID: string | null;
   salonName: string | null;
  };
  initialDataInfo: {
