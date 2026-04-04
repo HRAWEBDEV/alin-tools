@@ -103,10 +103,12 @@ export default function NewOrderHeader({ dic }: { dic: NewOrderDictionary }) {
     <div>
      <h1 className='text-center md:text-start font-medium text-2xl lg:text-3xl'>
       {dic.title}
-      <span className='text-2xl text-neutral-600 dark:text-neutral-400'>
-       {' '}
-       ({userOrder.order.data?.orderNo || ''})
-      </span>
+      {userOrder.order.data && (
+       <span className='text-2xl text-neutral-600 dark:text-neutral-400'>
+        {' '}
+        ({userOrder.order.data.orderNo || ''})
+       </span>
+      )}
      </h1>
     </div>
     <div className='basis-11 flex gap-4'>
