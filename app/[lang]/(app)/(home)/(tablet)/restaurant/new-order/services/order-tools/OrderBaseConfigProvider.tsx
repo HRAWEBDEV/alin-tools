@@ -22,6 +22,7 @@ import {
  getPerson,
  savePerson,
 } from '../newOrderApiActions';
+import { getHallKey } from '../../../salons/services/salonsApiActions';
 import {
  saveAndCloseOrder,
  sendToPcPos,
@@ -374,6 +375,11 @@ export default function OrderBaseConfigProvider({
       queryKey: [newOrderKey, 'order-items', orderIDQuery],
      });
     }
+    if (userOrder?.tableID) {
+     queryClient.invalidateQueries({
+      queryKey: [getHallKey, 'ordersList', userOrder.tableID.toString()],
+     });
+    }
     if (res.data.message) {
      toast.warning(res.data.message);
     }
@@ -407,6 +413,11 @@ export default function OrderBaseConfigProvider({
    if (orderIDQuery) {
     queryClient.invalidateQueries({
      queryKey: [newOrderKey, 'order-items', orderIDQuery],
+    });
+   }
+   if (userOrder?.tableID) {
+    queryClient.invalidateQueries({
+     queryKey: [getHallKey, 'ordersList', userOrder.tableID.toString()],
     });
    }
    if (res.data.message) {
@@ -567,6 +578,11 @@ export default function OrderBaseConfigProvider({
     if (orderIDQuery) {
      queryClient.invalidateQueries({
       queryKey: [newOrderKey, 'order-items', orderIDQuery],
+     });
+    }
+    if (userOrder?.tableID) {
+     queryClient.invalidateQueries({
+      queryKey: [getHallKey, 'ordersList', userOrder.tableID.toString()],
      });
     }
     if (res.data.message) {
