@@ -337,7 +337,7 @@ export default function OrderBaseConfigProvider({
   isError: orderPaymentError,
  } = useQuery({
   enabled: !!userOrder?.id,
-  queryKey: [newOrderKey, 'order-payment'],
+  queryKey: [newOrderKey, 'order-payment', orderIDQuery?.toString()],
   gcTime: 0,
   async queryFn({ signal }) {
    const res = await getOrderPayment({
