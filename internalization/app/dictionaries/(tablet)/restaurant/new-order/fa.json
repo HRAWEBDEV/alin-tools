@@ -121,5 +121,8 @@
   "title": "عنوان"
  },
  "findTags": {},
- "findWaiters": {}
+ "findWaiters": {},
+ "multiOrder": {
+  "title": "لیست سفارشات"
+ }
 }

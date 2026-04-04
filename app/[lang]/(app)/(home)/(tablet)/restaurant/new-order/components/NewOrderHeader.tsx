@@ -15,29 +15,102 @@ import {
 import { BiError } from 'react-icons/bi';
 import { useFormContext } from 'react-hook-form';
 import { type OrderInfo } from '../schemas/orderInfoSchema';
+import {
+ getHallKey,
+ getTableOrders,
+} from '../../salons/services/salonsApiActions';
+import { useQuery } from '@tanstack/react-query';
+import { IoAlbums } from 'react-icons/io5';
+import {
+ Drawer,
+ DrawerContent,
+ DrawerHeader,
+ DrawerTitle,
+ DrawerTrigger,
+} from '@/components/ui/drawer';
+import TableOrders from '../../salons/components/table-orders/TableOrders';
+import { TableStateTypes } from '../../salons/utils/tableStates';
+import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 
 export default function NewOrderHeader({ dic }: { dic: NewOrderDictionary }) {
  const { watch } = useFormContext<OrderInfo>();
+ const { locale } = useBaseConfig();
  const router = useRouter();
  const {
-  queries: { fromSalons, salonName },
+  queries: { fromSalons, salonName, salonID },
   order: { orderInfoName },
+  userOrder,
  } = useOrderBaseConfigContext();
  const [tableValue, saleTimeValue, saleTypeValue] = watch([
   'table',
   'saleTime',
   'saleType',
  ]);
+
+ const { data: ordersList, isLoading: isLoadingOrdersList } = useQuery({
+  enabled: !!tableValue,
+  queryKey: [getHallKey, 'ordersList', tableValue?.key],
+  async queryFn({ signal }) {
+   const res = await getTableOrders({
+    tableID: Number(tableValue!.key),
+    signal,
+   });
+   return res.data;
+  },
+ });
+ const orderRedirectLink = tableValue
+  ? (`/${locale}/restaurant/new-order?salonID=${salonID}&salonName=${salonName}&tableID=${Number(tableValue.key)}&tableNo=${Number(tableValue.value)}&fromSalons=true` as const)
+  : '';
+
+ const orderListButton =
+  ordersList && ordersList?.length > 1 ? (
+   <Drawer>
+    <DrawerTrigger asChild>
+     <Button
+      size='icon-lg'
+      variant='outline'
+      className='text-primary border-primary'
+     >
+      <IoAlbums className='size-5' />
+     </Button>
+    </DrawerTrigger>
+    <DrawerContent className='h-[min(80svh,35rem)]'>
+     <DrawerHeader className='text-xl border-b border-input'>
+      <DrawerTitle>
+       {dic.multiOrder.title} {dic.orderInfo.tableNo} {tableValue?.key}
+      </DrawerTitle>
+     </DrawerHeader>
+     <div className='overflow-hidden overflow-y-auto p-4'>
+      <TableOrders
+       dic={dic.multiOrder}
+       data={ordersList}
+       isLoading={isLoadingOrdersList}
+       orderRedirectLink={orderRedirectLink}
+       orderCount={0}
+       tableCapacity={0}
+       tableStateType={TableStateTypes.regularCustomer}
+       fromNewOrder
+      />
+     </div>
+    </DrawerContent>
+   </Drawer>
+  ) : null;
+
  return (
   <div className='flex flex-col gap-2'>
    <div className='flex justify-between items-center gap-4'>
-    <div className='basis-11 md:hidden'></div>
+    <div className='basis-11 md:hidden'>{orderListButton}</div>
     <div>
      <h1 className='text-center md:text-start font-medium text-2xl lg:text-3xl'>
       {dic.title}
+      <span className='text-2xl text-neutral-600 dark:text-neutral-400'>
+       {' '}
+       ({userOrder.order.data?.orderNo || ''})
+      </span>
      </h1>
     </div>
-    <div className='basis-11'>
+    <div className='basis-11 flex gap-4'>
+     <div className='hidden md:block'>{orderListButton}</div>
      <Dialog>
       {fromSalons && (
        <DialogTrigger asChild>

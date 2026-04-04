@@ -22,6 +22,7 @@ import {
  getPerson,
  savePerson,
 } from '../newOrderApiActions';
+import { getHallKey } from '../../../salons/services/salonsApiActions';
 import {
  saveAndCloseOrder,
  sendToPcPos,
@@ -101,6 +102,7 @@ export default function OrderBaseConfigProvider({
   customerValue,
   roomValue,
   contractValue,
+  tableValue,
  ] = orderInfoForm.watch([
   'saleType',
   'hasService',
@@ -114,6 +116,7 @@ export default function OrderBaseConfigProvider({
   'customer',
   'room',
   'contract',
+  'table',
  ]);
  //
  const [showCloseOrder, setShowCloseOrder] = useState(false);
@@ -151,6 +154,13 @@ export default function OrderBaseConfigProvider({
  }
  function handleChangeSelectedItemGroup(newItemGroup: ItemGroup) {
   setSelectedItemGroup(newItemGroup);
+ }
+ function handleInvalidateTableOrderList() {
+  if (tableValue) {
+   queryClient.invalidateQueries({
+    queryKey: [getHallKey, 'ordersList', tableValue.key],
+   });
+  }
  }
 
  const {
@@ -374,6 +384,7 @@ export default function OrderBaseConfigProvider({
       queryKey: [newOrderKey, 'order-items', orderIDQuery],
      });
     }
+    handleInvalidateTableOrderList();
     if (res.data.message) {
      toast.warning(res.data.message);
     }
@@ -409,6 +420,7 @@ export default function OrderBaseConfigProvider({
      queryKey: [newOrderKey, 'order-items', orderIDQuery],
     });
    }
+   handleInvalidateTableOrderList();
    if (res.data.message) {
     toast.warning(res.data.message);
    }
@@ -569,6 +581,7 @@ export default function OrderBaseConfigProvider({
       queryKey: [newOrderKey, 'order-items', orderIDQuery],
      });
     }
+    handleInvalidateTableOrderList();
     if (res.data.message) {
      toast.warning(res.data.message);
     }
@@ -746,6 +759,7 @@ export default function OrderBaseConfigProvider({
    fromSalons: fromSalonsQuery,
    orderID: orderIDQuery,
    salonName: salonNameQuery,
+   salonID: salonIDQuery,
   },
   initialDataInfo: {
    data: initData,
