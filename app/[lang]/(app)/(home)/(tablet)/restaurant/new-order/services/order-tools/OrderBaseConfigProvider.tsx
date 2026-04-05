@@ -553,27 +553,31 @@ export default function OrderBaseConfigProvider({
     newOrder: SaveOrderPackage['order'];
     orderInfo: OrderInfo;
    }) {
-    return paymentData.paymentType?.key === '2'
-     ? sendToPcPos({
-        order: newOrder,
-        orderItems: pricedOrderItems,
-        sendToKitchen: orderInfo.sendToKitchen,
-        printToCashBox: orderInfo.sendToKitchen,
-        bankID: Number(paymentData.bank!.key),
-        posID: Number(paymentData.cardReader!.key),
-       })
-     : saveAndCloseOrder({
-        order: newOrder,
-        orderItems: pricedOrderItems,
-        sendToKitchen: orderInfo.sendToKitchen,
-        printToCashBox: orderInfo.sendToKitchen,
-        cash: {
-         bankAccountID: Number(paymentData.bank?.key) || null,
-         payRefNo: paymentData.paymentRefNo || null,
-         payTypeID: Number(paymentData.paymentType?.key) || null,
-         sValue: invoiceShopResult.remained,
-        },
-       });
+    if (paymentData.paymentType?.key === '2') {
+     return sendToPcPos({
+      order: newOrder,
+      orderItems: pricedOrderItems,
+      sendToKitchen: orderInfo.sendToKitchen,
+      printToCashBox: orderInfo.sendToKitchen,
+      bankID: Number(paymentData.bank!.key),
+      posID: Number(paymentData.cardReader!.key),
+     });
+    }
+    const isWalletPayment = paymentData.paymentType?.key === '2';
+    return saveAndCloseOrder({
+     order: newOrder,
+     orderItems: pricedOrderItems,
+     sendToKitchen: orderInfo.sendToKitchen,
+     printToCashBox: orderInfo.sendToKitchen,
+     walletID: isWalletPayment ? paymentData.walletKey : undefined,
+     otpCode: isWalletPayment ? paymentData.otpCode : undefined,
+     cash: {
+      bankAccountID: Number(paymentData.bank?.key) || null,
+      payRefNo: paymentData.paymentRefNo || null,
+      payTypeID: Number(paymentData.paymentType?.key) || null,
+      sValue: invoiceShopResult.remained,
+     },
+    });
    },
    onSuccess(res) {
     if (orderIDQuery) {

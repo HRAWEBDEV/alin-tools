@@ -83,13 +83,23 @@ function saveAndCloseOrder({
  cash = noCashDefault,
  sendToKitchen = false,
  printToCashBox = false,
+ walletID,
+ otpCode,
 }: {
  sendToKitchen?: boolean;
  printToCashBox?: boolean;
+ walletID?: string;
+ otpCode?: string;
  cash?: SaveCashPackage;
 } & SaveOrderPackage) {
+ const searchParams = new URLSearchParams([
+  ['sendToKitchen', String(sendToKitchen)],
+  ['printToCashBox', String(printToCashBox)],
+ ]);
+ if (walletID) searchParams.set('WalletID', walletID.toString());
+ if (otpCode) searchParams.set('OTPCode', otpCode.toString());
  return axios.post<{ message: string }>(
-  `/Restaurant/CloseOrder/SaveOrderAndClose?sendToKitchen=${sendToKitchen}&printToCashBox=${printToCashBox}`,
+  `/Restaurant/CloseOrder/SaveOrderAndClose?${searchParams.toString()}`,
   {
    order,
    orderItems,

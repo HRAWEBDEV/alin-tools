@@ -6,6 +6,10 @@ const defaultValues: Partial<OrderInvoicePayment> = {
  bank: null,
  cardReader: null,
  paymentType: null,
+ mobileNo: '',
+ nationalCode: '',
+ otpCode: '',
+ walletKey: '',
 };
 
 function createOrderInvoicePaymentSchema({ dic }: { dic: NewOrderDictionary }) {
@@ -32,7 +36,11 @@ function createOrderInvoicePaymentSchema({ dic }: { dic: NewOrderDictionary }) {
     })
     .nullable()
     .optional(),
-   paymentRefNo: z.string(),
+   paymentRefNo: z.string().optional(),
+   nationalCode: z.string().optional(),
+   mobileNo: z.string().optional(),
+   otpCode: z.string().optional(),
+   walletKey: z.string().optional(),
   })
   .refine(
    ({ paymentType }) => {
@@ -45,7 +53,9 @@ function createOrderInvoicePaymentSchema({ dic }: { dic: NewOrderDictionary }) {
   )
   .refine(
    ({ paymentType, paymentRefNo }) => {
-    return paymentType?.key !== '1' && paymentType?.key !== '2'
+    return paymentType?.key !== '1' &&
+     paymentType?.key !== '2' &&
+     paymentType?.key !== '6'
      ? !!paymentRefNo
      : true;
    },
@@ -56,16 +66,7 @@ function createOrderInvoicePaymentSchema({ dic }: { dic: NewOrderDictionary }) {
   )
   .refine(
    ({ paymentType, bank }) => {
-    return paymentType?.key !== '1' ? !!bank : true;
-   },
-   {
-    path: ['bank'],
-    message: dic.invoice.selectBank,
-   },
-  )
-  .refine(
-   ({ paymentType, bank }) => {
-    return paymentType?.key !== '1' ? !!bank : true;
+    return paymentType?.key !== '1' && paymentType?.key !== '6' ? !!bank : true;
    },
    {
     path: ['bank'],
@@ -79,6 +80,18 @@ function createOrderInvoicePaymentSchema({ dic }: { dic: NewOrderDictionary }) {
    {
     path: ['cardReader'],
     message: dic.invoice.selectCardReader,
+   },
+  )
+  .refine(
+   ({ paymentType, nationalCode, mobileNo }) => {
+    if (paymentType?.key === '6') {
+     return !!nationalCode || !!mobileNo;
+    }
+    return true;
+   },
+   {
+    path: ['nationalCode'],
+    message: dic.invoice.fillMobileNoOrNationalCode,
    },
   );
 }

@@ -7,6 +7,7 @@ import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseC
 import { useCurrencyFormatter } from '@/hooks/useCurrencyFormatter';
 import { Spinner } from '@/components/ui/spinner';
 import { ChevronsUpDown, ArrowDown } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
  Drawer,
  DrawerTrigger,
@@ -31,13 +32,16 @@ import {
  createOrderInvoicePaymentSchema,
 } from '../../schemas/orderInvoicePaymentSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import {
  newOrderPaymentKey,
  getOrderInvoicePaymentInitData,
  getPcPoses,
 } from '../../services/orderInvoicePaymentApiActions';
+import { getWalletInfo } from '../../services/wallet/walletApiActiions';
 import { toast } from 'sonner';
+import { NumericFormat } from 'react-number-format';
+import { AxiosError } from 'axios';
 
 const invoiceRowClass =
  'flex justify-between gap-2 items-center text-base pb-3 mb-3 border-b border-input font-medium';
@@ -52,6 +56,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
   watch,
   handleSubmit,
   clearErrors,
+  setError,
  } = useForm<OrderInvoicePayment>({
   resolver: zodResolver(createOrderInvoicePaymentSchema({ dic })),
   defaultValues: {
@@ -76,7 +81,6 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
     totalDiscount,
     totalService,
     totalSValue,
-    totalPrice,
    },
    onPayment,
    onPaymentPcPos,
@@ -120,6 +124,34 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
   )();
  }
 
+ // wallet setup
+ const {
+  mutate: getWalletInfoMutate,
+  isPending: getWalletInfoIsPending,
+  data: walletInfoData,
+  isError: walletInfoError,
+  isSuccess: walletInfoSuccess,
+  reset: walletInfoReset,
+ } = useMutation({
+  mutationFn({
+   mobileNo,
+   nationalCode,
+  }: Pick<OrderInvoicePayment, 'nationalCode' | 'mobileNo'>) {
+   return getWalletInfo({
+    mobileNo: mobileNo!,
+    nationalCode: nationalCode!,
+    sValue: remained.toString(),
+   });
+  },
+  onError(err: AxiosError<string>) {
+   toast.error(err.response?.data);
+   setValue('walletKey', '');
+  },
+  onSuccess(res) {
+   setValue('walletKey', res.data.id.toString());
+  },
+ });
+
  useEffect(() => {
   if (!data || !isSuccess) return;
   if (!getValues('paymentType') && !!data.payTypes.length) {
@@ -144,7 +176,85 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
     (item) => item.key === pcPoseData.defualtPosID.toString(),
    ) || pcPoseData.pcPoses[0];
   setValue('cardReader', activePos);
- }, [pcPoseData]);
+ }, [pcPoseData, setValue]);
+
+ function renderSubmitPaymentFormButton() {
+  if (paymentTypeValue?.key === '6') {
+   if (!walletInfoSuccess || !walletInfoData) {
+    return (
+     <Button
+      disabled={isFetching || shopLoading || getWalletInfoIsPending}
+      type='submit'
+      className='h-11'
+      onClick={(e) => {
+       e.preventDefault();
+       handleSubmit(
+        (props) => {
+         getWalletInfoMutate({
+          mobileNo: props.mobileNo!,
+          nationalCode: props.nationalCode!,
+         });
+        },
+        (err) => {
+         if (err.nationalCode) {
+          toast.error(err.nationalCode.message);
+         }
+        },
+       )();
+      }}
+     >
+      {(isFetching || shopLoading || getWalletInfoIsPending) && <Spinner />}
+      {dic.invoice.confirm}
+     </Button>
+    );
+   }
+   return (
+    <Button
+     disabled={isFetching || shopLoading}
+     type='submit'
+     className='h-11'
+     onClick={(e) => {
+      e.preventDefault();
+      const otpCode = getValues('otpCode');
+      if (!otpCode) {
+       setError('otpCode', {
+        message: dic.invoice.fillOtpCode,
+       });
+       return;
+      }
+      handleConfirmPayment(e);
+     }}
+    >
+     {(isFetching || shopLoading) && <Spinner />}
+     {dic.invoice.confirmInvoicePayment}
+    </Button>
+   );
+  }
+  if (paymentTypeValue?.key === '2') {
+   return (
+    <Button
+     disabled={isFetching || shopLoading}
+     type='submit'
+     className='h-11'
+     onClick={handleConfirmPayment}
+    >
+     {(isFetching || shopLoading) && <Spinner />}
+     {dic.invoice.sendToCardReader}
+    </Button>
+   );
+  }
+  return (
+   <Button
+    type='submit'
+    disabled={isFetching || shopLoading}
+    className='h-11'
+    onClick={handleConfirmPayment}
+   >
+    {(isFetching || shopLoading) && <Spinner />}
+    {dic.invoice.confirmInvoicePayment}
+   </Button>
+  );
+ }
 
  return orderItems.length ? (
   <div>
@@ -336,7 +446,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
            )}
           />
          </Field>
-         {paymentTypeValue?.key !== '1' && (
+         {paymentTypeValue?.key !== '1' && paymentTypeValue?.key !== '6' && (
           <Field data-invalid={!!errors.bank}>
            <FieldLabel htmlFor='bank'>{dic.invoice.bank} *</FieldLabel>
            <Controller
@@ -492,7 +602,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
           />
          </Field>
         )}
-        {paymentTypeValue?.key !== '1' && (
+        {paymentTypeValue?.key !== '1' && paymentTypeValue?.key !== '6' && (
          <Field data-invalid={!!errors.paymentRefNo}>
           <FieldLabel htmlFor='paymentRefNo'>
            {dic.invoice.paymentRefNo}
@@ -507,30 +617,139 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
           )}
          </Field>
         )}
+        {paymentTypeValue?.key === '6' && (
+         <>
+          <div className='flex gap-4 items-end'>
+           <Controller
+            control={control}
+            name='mobileNo'
+            render={({ field: { value, onChange, ...other } }) => (
+             <Field data-invalid={!!errors.mobileNo}>
+              <FieldLabel htmlFor='mobileNo'>{dic.invoice.mobileNo}</FieldLabel>
+              <InputGroup data-invalid={!!errors.mobileNo} className='h-11'>
+               <NumericFormat
+                id='mobileNo'
+                {...other}
+                value={value}
+                onValueChange={({ value }) => {
+                 walletInfoReset();
+                 onChange(value);
+                }}
+                customInput={InputGroupInput}
+                allowLeadingZeros
+                decimalScale={0}
+               />
+              </InputGroup>
+             </Field>
+            )}
+           />
+           <div> {dic.invoice.or} </div>
+           <Controller
+            control={control}
+            name='nationalCode'
+            render={({ field: { value, onChange, ...other } }) => (
+             <Field data-invalid={!!errors.nationalCode}>
+              <FieldLabel htmlFor='national-code'>
+               {dic.invoice.nationalCode}
+              </FieldLabel>
+              <InputGroup data-invalid={!!errors.nationalCode} className='h-11'>
+               <NumericFormat
+                id='national-code'
+                {...other}
+                value={value}
+                onValueChange={({ value }) => {
+                 walletInfoReset();
+                 onChange(value);
+                }}
+                customInput={InputGroupInput}
+                allowLeadingZeros
+                decimalScale={0}
+               />
+              </InputGroup>
+             </Field>
+            )}
+           />
+          </div>
+          {!!errors.nationalCode && (
+           <Alert className='bg-destructive/10'>
+            <AlertDescription className='text-destructive font-medium'>
+             {dic.invoice.fillMobileNoOrNationalCode}
+            </AlertDescription>
+           </Alert>
+          )}
+          {walletInfoSuccess && (
+           <>
+            <div className='grid grid-cols-2 gap-4 gap-y-5'>
+             <Field>
+              <FieldLabel htmlFor='firstName'>
+               {dic.invoice.firstName}
+              </FieldLabel>
+              <InputGroup className='h-11'>
+               <InputGroupInput
+                id='firstName'
+                readOnly
+                value={walletInfoData?.data.personFrisName}
+               />
+              </InputGroup>
+             </Field>
+             <Field>
+              <FieldLabel htmlFor='lastName'>{dic.invoice.lastName}</FieldLabel>
+              <InputGroup className='h-11'>
+               <InputGroupInput
+                id='lastName'
+                readOnly
+                value={walletInfoData?.data.personLatName}
+               />
+              </InputGroup>
+             </Field>
+             <Field className='col-span-full'>
+              <FieldLabel htmlFor='wallet-remained'>
+               {dic.invoice.credit}
+              </FieldLabel>
+              <InputGroup className='h-11'>
+               <NumericFormat
+                id='wallet-remained'
+                readOnly
+                value={walletInfoData?.data.remainWallet}
+                thousandSeparator
+                customInput={InputGroupInput}
+               />
+              </InputGroup>
+             </Field>
+            </div>
+            <Controller
+             control={control}
+             name='otpCode'
+             render={({ field: { value, onChange, ...other } }) => (
+              <Field data-invalid={!!errors.otpCode}>
+               <FieldLabel htmlFor='otpCode'>
+                {dic.invoice.otpCode} *
+               </FieldLabel>
+               <InputGroup data-invalid={!!errors.otpCode} className='h-11'>
+                <NumericFormat
+                 id='otpCode'
+                 {...other}
+                 value={value}
+                 onValueChange={({ value }) => onChange(value)}
+                 customInput={InputGroupInput}
+                 allowLeadingZeros
+                 decimalScale={0}
+                />
+               </InputGroup>
+               {!!errors.otpCode && (
+                <FieldError>{errors.otpCode?.message}</FieldError>
+               )}
+              </Field>
+             )}
+            />
+           </>
+          )}
+         </>
+        )}
         <div className='grid sm:grid-cols-3 gap-3 sm:justify-end'>
          <div></div>
          <div></div>
-         {paymentTypeValue?.key === '2' ? (
-          <Button
-           disabled={isFetching || shopLoading}
-           type='submit'
-           className='h-11'
-           onClick={handleConfirmPayment}
-          >
-           {(isFetching || shopLoading) && <Spinner />}
-           {dic.invoice.sendToCardReader}
-          </Button>
-         ) : (
-          <Button
-           type='submit'
-           disabled={isFetching || shopLoading}
-           className='h-11'
-           onClick={handleConfirmPayment}
-          >
-           {(isFetching || shopLoading) && <Spinner />}
-           {dic.invoice.confirmInvoicePayment}
-          </Button>
-         )}
+         {renderSubmitPaymentFormButton()}
         </div>
        </FieldGroup>
       </form>
