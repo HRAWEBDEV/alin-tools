@@ -128,7 +128,7 @@ export default function GuestsFilters({
        className='text-neutral-600 dark:text-neutral-400'
        variant='outline'
       >
-       {dic.filters.title}
+       <span className='hidden md:inline'>{dic.filters.title}</span>
        <FaFilter className='size-4' />
        {activeFilters.length > 0 && (
         <Badge variant='destructive' className='size-6'>
