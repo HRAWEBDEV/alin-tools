@@ -130,6 +130,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
   data: walletInfoData,
   isError: walletInfoError,
   isSuccess: walletInfoSuccess,
+  reset: walletInfoReset,
  } = useMutation({
   mutationFn({
    mobileNo,
@@ -614,7 +615,10 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
                 id='mobileNo'
                 {...other}
                 value={value}
-                onValueChange={({ value }) => onChange(value)}
+                onValueChange={({ value }) => {
+                 walletInfoReset();
+                 onChange(value);
+                }}
                 customInput={InputGroupInput}
                 allowLeadingZeros
                 decimalScale={0}
@@ -637,7 +641,10 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
                 id='national-code'
                 {...other}
                 value={value}
-                onValueChange={({ value }) => onChange(value)}
+                onValueChange={({ value }) => {
+                 walletInfoReset();
+                 onChange(value);
+                }}
                 customInput={InputGroupInput}
                 allowLeadingZeros
                 decimalScale={0}
