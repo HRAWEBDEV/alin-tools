@@ -16,6 +16,8 @@
 - add rack guests (hra-done)
 - add rack room notes icon (hra-done)
 - add new order page orders list and switch functionality (hra-done)
+- add new order wallet payment (hra-done)
+- add new order wallet payment timer
 ### bug fixes
 - remove main wrapper bottom padding in mobile mode, when scroll direction is down (hra-done)
 - use useThrottle instead of useDebouce to change scroll direction (hra-done)
