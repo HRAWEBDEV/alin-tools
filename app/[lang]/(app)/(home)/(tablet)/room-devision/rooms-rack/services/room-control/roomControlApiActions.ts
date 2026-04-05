@@ -2,7 +2,41 @@ import { axios } from '@/app/[lang]/(app)/utils/defaultAxios';
 
 const roomControlBaseKey = 'rooms-control';
 
-interface RoomControl {}
+interface RoomControl {
+ id: number;
+ roomID: number;
+ registerID: number;
+ receptionPersonID: number;
+ receptionDateTimeOffset: string;
+ maidPersonID: number | null;
+ maidDateTimeOffset: string | null;
+ minibarChecked: boolean;
+ minibarDateTimeOffset: string | null;
+ roomChecked: boolean;
+ roomCheckDateTimeOffset: string | null;
+ maidComment: string | null;
+ closed: boolean;
+ cancelled: boolean;
+ deleted: boolean;
+ ownerID: 1;
+ roomNo: number;
+ roomLabel: string;
+ roomTypeID: number;
+ floorNo: number;
+ folioNo: number;
+ receptionPersonFrisName: string;
+ receptionPersonLatName: string;
+ receptionPersonFullName: string;
+ maidPersonFrisName: string | null;
+ maidPersonLatName: string | null;
+ maidPersonFullName: string | null;
+}
+
+type RoomControlStep = 'alert' | 'checkNow' | 'minibar' | 'checkRoom';
+type RoomControlStepState = Record<RoomControlStep, boolean>;
+type SaveRoomControl = {
+ roomControl: Pick<RoomControl, 'id' | 'roomID' | 'registerID'>;
+} & RoomControlStepState;
 
 function getRoomControlHistory({
  roomID,
@@ -40,18 +74,8 @@ function getRoomControls({ signal }: { signal: AbortSignal }) {
  });
 }
 
-function saveRoomControl(roomID: number, registerID: number) {
- return axios.post('/HouseKeeping/RoomControl/SaveRoomConrols', {
-  roomControl: {
-   id: 0,
-   roomID,
-   registerID,
-  },
-  alert: true,
-  checkNow: false,
-  miniBar: false,
-  checkRoom: false,
- });
+function saveRoomControl(roomControl: SaveRoomControl) {
+ return axios.post('/HouseKeeping/RoomControl/SaveRoomConrols', roomControl);
 }
 
 function changeRoomControl({
@@ -70,7 +94,12 @@ function changeRoomControl({
  );
 }
 
-export type { RoomControl };
+export type {
+ RoomControl,
+ SaveRoomControl,
+ RoomControlStep,
+ RoomControlStepState,
+};
 export {
  roomControlBaseKey,
  getRoomControlHistory,

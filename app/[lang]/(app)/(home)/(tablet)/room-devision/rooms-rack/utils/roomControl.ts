@@ -1,33 +1,32 @@
-type RoomControlStep = (typeof roomControlSteps)[number];
-
-const roomControlSteps = [
+import { RoomControlStep } from '../services/room-control/roomControlApiActions';
+const roomControlSteps: { title: RoomControlStep }[] = [
  {
-  title: 'houseKeepingControl',
+  title: 'alert',
  },
  {
-  title: 'underControl',
+  title: 'checkNow',
  },
  {
-  title: 'minibarControl',
+  title: 'minibar',
  },
  {
-  title: 'roomControl',
+  title: 'checkRoom',
  },
 ] as const;
 
-function getRoomControlStyles(stepTitle: RoomControlStep['title']) {
+function getRoomControlStyles(stepTitle: RoomControlStep) {
  switch (stepTitle) {
-  case 'minibarControl':
+  case 'minibar':
    return {
     text: 'text-teal-700 dark:text-teal-400',
     bg: 'bg-teal-50 dark:bg-teal-950',
    };
-  case 'underControl':
+  case 'checkNow':
    return {
     text: 'text-sky-700 dark:text-sky-400',
     bg: 'bg-sky-50 dark:bg-sky-950',
    };
-  case 'roomControl':
+  case 'checkRoom':
    return {
     text: 'text-teal-700 dark:text-teal-400',
     bg: 'bg-teal-50 dark:bg-teal-950',

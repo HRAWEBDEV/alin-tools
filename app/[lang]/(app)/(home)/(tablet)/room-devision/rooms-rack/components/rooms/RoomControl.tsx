@@ -22,6 +22,7 @@ import {
  getRoomControl,
  getRoomControls,
  saveRoomControl,
+ RoomControlStep,
 } from '../../services/room-control/roomControlApiActions';
 import { useQuery, useMutation } from '@tanstack/react-query';
 
@@ -52,23 +53,34 @@ export default function RoomControl({
   },
  });
 
- // room controls
- const { data: roomControls } = useQuery({
-  queryKey: [roomControlBaseKey, 'rooms'],
-  async queryFn({ signal }) {
-   const res = await getRoomControls({
-    signal,
-   });
-   return res.data;
+ const roomControlStepDetails: {
+  [key in RoomControlStep]: {
+   isChecked: boolean;
+   date: string | null;
+   fullName: string | null;
+  };
+ } = {
+  alert: {
+   isChecked: !!roomControl,
+   fullName: roomControl?.receptionPersonFullName || null,
+   date: roomControl?.receptionDateTimeOffset || null,
   },
- });
-
- // save room control
- const { mutate } = useMutation({
-  mutationFn() {
-   return saveRoomControl(room.roomID, room.registerID!);
+  checkNow: {
+   isChecked: !!roomControl?.maidPersonID,
+   fullName: roomControl?.maidPersonFullName || null,
+   date: roomControl?.maidDateTimeOffset || null,
   },
- });
+  minibar: {
+   isChecked: !!roomControl?.minibarChecked,
+   fullName: roomControl?.maidPersonFullName || null,
+   date: roomControl?.minibarDateTimeOffset || null,
+  },
+  checkRoom: {
+   isChecked: !!roomControl?.roomChecked,
+   fullName: roomControl?.maidPersonFullName || null,
+   date: roomControl?.roomCheckDateTimeOffset || null,
+  },
+ };
 
  return (
   <Dialog open={open} onOpenChange={onChangeOpen}>
@@ -92,6 +104,7 @@ export default function RoomControl({
       <div className='grid gap-4 grid-cols-[repeat(2,10rem)] justify-items-center justify-center mb-6'>
        {roomControlSteps.map((step) => {
         const roomControlStyle = getRoomControlStyles(step.title);
+        const stepDetail = roomControlStepDetails[step.title];
         return (
          <Button
           type='button'
@@ -112,25 +125,33 @@ export default function RoomControl({
            {roomControlIsLoading && (
             <Spinner className={`size-12 ${roomControlStyle.text}`} />
            )}
-           {/*<FaCheck className={`size-12 ${roomControlStyle.text}`} />*/}
+           {stepDetail.isChecked && (
+            <FaCheck className={`size-12 ${roomControlStyle.text}`} />
+           )}
           </div>
           <div className='p-1'>
            <p className='text-xs text-neutral-500'>
-            {false && (
+            {stepDetail.isChecked && (
              <>
               <span className='ps-2'>
-               {new Date().toLocaleTimeString(locale, {
-                hour: '2-digit',
-                minute: '2-digit',
-               })}
+               {stepDetail.date
+                ? new Date(stepDetail.date).toLocaleTimeString(locale, {
+                   hour: '2-digit',
+                   minute: '2-digit',
+                  })
+                : ''}
               </span>
-              <span>{new Date().toLocaleDateString(locale)}</span>
+              <span className='ps-2'>
+               {stepDetail.date
+                ? new Date(stepDetail.date).toLocaleDateString(locale)
+                : ''}
+              </span>
              </>
             )}
            </p>
-           {false && (
+           {stepDetail.fullName && (
             <p className='text-sm text-neutral-600 dark:text-neutral-600 whitespace-normal'>
-             حمیدرضا حمیدرضا
+             {stepDetail.fullName}
             </p>
            )}
           </div>
@@ -186,7 +207,6 @@ export default function RoomControl({
          className='md:w-28'
          type='button'
          disabled={roomControlIsLoading}
-         onClick={() => mutate()}
         >
          {roomControlIsLoading && <Spinner />}
          {dic.houseControl.confirm}
