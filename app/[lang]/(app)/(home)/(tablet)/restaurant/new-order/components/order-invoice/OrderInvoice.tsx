@@ -152,6 +152,22 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
   },
  });
 
+ function confirmGetWalletInfo() {
+  handleSubmit(
+   (props) => {
+    getWalletInfoMutate({
+     mobileNo: props.mobileNo!,
+     nationalCode: props.nationalCode!,
+    });
+   },
+   (err) => {
+    if (err.nationalCode) {
+     toast.error(err.nationalCode.message);
+    }
+   },
+  )();
+ }
+
  useEffect(() => {
   if (!data || !isSuccess) return;
   if (!getValues('paymentType') && !!data.payTypes.length) {
@@ -188,19 +204,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
       className='h-11'
       onClick={(e) => {
        e.preventDefault();
-       handleSubmit(
-        (props) => {
-         getWalletInfoMutate({
-          mobileNo: props.mobileNo!,
-          nationalCode: props.nationalCode!,
-         });
-        },
-        (err) => {
-         if (err.nationalCode) {
-          toast.error(err.nationalCode.message);
-         }
-        },
-       )();
+       confirmGetWalletInfo();
       }}
      >
       {(isFetching || shopLoading || getWalletInfoIsPending) && <Spinner />}
@@ -746,8 +750,21 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
           )}
          </>
         )}
-        <div className='grid sm:grid-cols-3 gap-3 sm:justify-end'>
-         <div></div>
+        <div className='grid sm:grid-cols-3 gap-3 sm:justify-end items-center'>
+         <div>
+          {walletInfoSuccess && paymentTypeValue?.key === '6' && (
+           <Button
+            type='button'
+            variant='ghost'
+            onClick={() => {
+             walletInfoReset();
+             confirmGetWalletInfo();
+            }}
+           >
+            {dic.invoice.resendCode}
+           </Button>
+          )}
+         </div>
          <div></div>
          {renderSubmitPaymentFormButton()}
         </div>
