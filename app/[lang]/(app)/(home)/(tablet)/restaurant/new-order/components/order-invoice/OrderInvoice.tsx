@@ -56,6 +56,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
   watch,
   handleSubmit,
   clearErrors,
+  setError,
  } = useForm<OrderInvoicePayment>({
   resolver: zodResolver(createOrderInvoicePaymentSchema({ dic })),
   defaultValues: {
@@ -208,9 +209,24 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
     );
    }
    return (
-    <Button disabled={isFetching || shopLoading} type='submit' className='h-11'>
+    <Button
+     disabled={isFetching || shopLoading}
+     type='submit'
+     className='h-11'
+     onClick={(e) => {
+      e.preventDefault();
+      const otpCode = getValues('otpCode');
+      if (!otpCode) {
+       setError('otpCode', {
+        message: dic.invoice.fillOtpCode,
+       });
+       return;
+      }
+      handleConfirmPayment(e);
+     }}
+    >
      {(isFetching || shopLoading) && <Spinner />}
-     {dic.invoice.sendCode}
+     {dic.invoice.confirmInvoicePayment}
     </Button>
    );
   }
