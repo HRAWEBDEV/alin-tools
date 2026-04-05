@@ -78,7 +78,6 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
     totalDiscount,
     totalService,
     totalSValue,
-    totalPrice,
    },
    onPayment,
    onPaymentPcPos,
