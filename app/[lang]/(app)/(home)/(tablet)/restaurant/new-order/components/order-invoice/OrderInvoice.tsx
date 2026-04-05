@@ -148,6 +148,41 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
   setValue('cardReader', activePos);
  }, [pcPoseData, setValue]);
 
+ function renderSubmitPaymentFormButton() {
+  if (paymentTypeValue?.key === '6') {
+   return (
+    <Button disabled={isFetching || shopLoading} type='submit' className='h-11'>
+     {(isFetching || shopLoading) && <Spinner />}
+     {dic.invoice.sendCode}
+    </Button>
+   );
+  }
+  if (paymentTypeValue?.key === '2') {
+   return (
+    <Button
+     disabled={isFetching || shopLoading}
+     type='submit'
+     className='h-11'
+     onClick={handleConfirmPayment}
+    >
+     {(isFetching || shopLoading) && <Spinner />}
+     {dic.invoice.sendToCardReader}
+    </Button>
+   );
+  }
+  return (
+   <Button
+    type='submit'
+    disabled={isFetching || shopLoading}
+    className='h-11'
+    onClick={handleConfirmPayment}
+   >
+    {(isFetching || shopLoading) && <Spinner />}
+    {dic.invoice.confirmInvoicePayment}
+   </Button>
+  );
+ }
+
  return orderItems.length ? (
   <div>
    <div className='w-[min(100%,35rem)] mx-auto pt-2'>
@@ -556,8 +591,8 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
             )}
            />
           </div>
-          <Alert className='bg-destructive/10 border-destructive/10'>
-           <AlertDescription className='text-destructive/80'>
+          <Alert className='bg-orange-50 dark:bg-orange-950'>
+           <AlertDescription className='text-orange-700 dark:text-orange-400 font-medium'>
             {dic.invoice.fillMobileNoOrNationalCode}
            </AlertDescription>
           </Alert>
@@ -578,6 +613,9 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
                decimalScale={0}
               />
              </InputGroup>
+             {!!errors.otpCode && (
+              <FieldError>{errors.otpCode?.message}</FieldError>
+             )}
             </Field>
            )}
           />
@@ -586,27 +624,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
         <div className='grid sm:grid-cols-3 gap-3 sm:justify-end'>
          <div></div>
          <div></div>
-         {paymentTypeValue?.key === '2' ? (
-          <Button
-           disabled={isFetching || shopLoading}
-           type='submit'
-           className='h-11'
-           onClick={handleConfirmPayment}
-          >
-           {(isFetching || shopLoading) && <Spinner />}
-           {dic.invoice.sendToCardReader}
-          </Button>
-         ) : (
-          <Button
-           type='submit'
-           disabled={isFetching || shopLoading}
-           className='h-11'
-           onClick={handleConfirmPayment}
-          >
-           {(isFetching || shopLoading) && <Spinner />}
-           {dic.invoice.confirmInvoicePayment}
-          </Button>
-         )}
+         {renderSubmitPaymentFormButton()}
         </div>
        </FieldGroup>
       </form>

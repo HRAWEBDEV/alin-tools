@@ -95,6 +95,7 @@ function createOrderInvoicePaymentSchema({ dic }: { dic: NewOrderDictionary }) {
    ({ paymentType, otpCode }) => (paymentType?.key === '6' ? !!otpCode : true),
    {
     path: ['otpCode'],
+    message: dic.invoice.fillOtpCode,
    },
   );
 }

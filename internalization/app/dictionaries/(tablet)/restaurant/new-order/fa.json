@@ -94,7 +94,10 @@
   "mobileNo": "شماره همراه",
   "fillMobileNoOrNationalCode": "شماره تماس یا کدملی را وارد کنید",
   "or": "یا",
-  "otpCode": "کد یکبار مصرف"
+  "otpCode": "کد یکبار مصرف",
+  "fillOtpCode": "کد یکبار مصرف را وارد کنید",
+  "sendCode": "ارسال کد",
+  "resendCode": "ارسال مجدد کد"
  },
  "closeOrder": {
   "confirmMessage": "آیا از بستن سفارش اطمینان دارید؟",
