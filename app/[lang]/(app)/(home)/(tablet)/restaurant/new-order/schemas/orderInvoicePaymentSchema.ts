@@ -9,6 +9,7 @@ const defaultValues: Partial<OrderInvoicePayment> = {
  mobileNo: '',
  nationalCode: '',
  otpCode: '',
+ walletKey: '',
 };
 
 function createOrderInvoicePaymentSchema({ dic }: { dic: NewOrderDictionary }) {
@@ -35,10 +36,11 @@ function createOrderInvoicePaymentSchema({ dic }: { dic: NewOrderDictionary }) {
     })
     .nullable()
     .optional(),
-   paymentRefNo: z.string(),
-   nationalCode: z.string(),
-   mobileNo: z.string(),
-   otpCode: z.string(),
+   paymentRefNo: z.string().optional(),
+   nationalCode: z.string().optional(),
+   mobileNo: z.string().optional(),
+   otpCode: z.string().optional(),
+   walletKey: z.string().optional(),
   })
   .refine(
    ({ paymentType }) => {
@@ -89,13 +91,7 @@ function createOrderInvoicePaymentSchema({ dic }: { dic: NewOrderDictionary }) {
    },
    {
     path: ['nationalCode'],
-   },
-  )
-  .refine(
-   ({ paymentType, otpCode }) => (paymentType?.key === '6' ? !!otpCode : true),
-   {
-    path: ['otpCode'],
-    message: dic.invoice.fillOtpCode,
+    message: dic.invoice.fillMobileNoOrNationalCode,
    },
   );
 }

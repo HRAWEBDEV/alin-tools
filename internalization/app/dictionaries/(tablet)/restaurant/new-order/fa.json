@@ -97,7 +97,11 @@
   "otpCode": "کد یکبار مصرف",
   "fillOtpCode": "کد یکبار مصرف را وارد کنید",
   "sendCode": "ارسال کد",
-  "resendCode": "ارسال مجدد کد"
+  "resendCode": "ارسال مجدد کد",
+  "confirm": "تایید",
+  "firstName": "نام",
+  "lastName": "نام خانوادگی",
+  "credit": "اعتبار"
  },
  "closeOrder": {
   "confirmMessage": "آیا از بستن سفارش اطمینان دارید؟",

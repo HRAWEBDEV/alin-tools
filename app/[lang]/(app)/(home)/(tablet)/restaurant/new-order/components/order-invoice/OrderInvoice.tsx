@@ -32,14 +32,16 @@ import {
  createOrderInvoicePaymentSchema,
 } from '../../schemas/orderInvoicePaymentSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import {
  newOrderPaymentKey,
  getOrderInvoicePaymentInitData,
  getPcPoses,
 } from '../../services/orderInvoicePaymentApiActions';
+import { getWalletInfo } from '../../services/wallet/walletApiActiions';
 import { toast } from 'sonner';
 import { NumericFormat } from 'react-number-format';
+import { AxiosError } from 'axios';
 
 const invoiceRowClass =
  'flex justify-between gap-2 items-center text-base pb-3 mb-3 border-b border-input font-medium';
@@ -121,6 +123,33 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
   )();
  }
 
+ // wallet setup
+ const {
+  mutate: getWalletInfoMutate,
+  isPending: getWalletInfoIsPending,
+  data: walletInfoData,
+  isError: walletInfoError,
+  isSuccess: walletInfoSuccess,
+ } = useMutation({
+  mutationFn({
+   mobileNo,
+   nationalCode,
+  }: Pick<OrderInvoicePayment, 'nationalCode' | 'mobileNo'>) {
+   return getWalletInfo({
+    mobileNo: mobileNo!,
+    nationalCode: nationalCode!,
+    sValue: remained.toString(),
+   });
+  },
+  onError(err: AxiosError<string>) {
+   toast.error(err.response?.data);
+   setValue('walletKey', '');
+  },
+  onSuccess(res) {
+   setValue('walletKey', res.data.id.toString());
+  },
+ });
+
  useEffect(() => {
   if (!data || !isSuccess) return;
   if (!getValues('paymentType') && !!data.payTypes.length) {
@@ -149,6 +178,34 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
 
  function renderSubmitPaymentFormButton() {
   if (paymentTypeValue?.key === '6') {
+   if (!walletInfoSuccess || !walletInfoData) {
+    return (
+     <Button
+      disabled={isFetching || shopLoading || getWalletInfoIsPending}
+      type='submit'
+      className='h-11'
+      onClick={(e) => {
+       e.preventDefault();
+       handleSubmit(
+        (props) => {
+         getWalletInfoMutate({
+          mobileNo: props.mobileNo!,
+          nationalCode: props.nationalCode!,
+         });
+        },
+        (err) => {
+         if (err.nationalCode) {
+          toast.error(err.nationalCode.message);
+         }
+        },
+       )();
+      }}
+     >
+      {(isFetching || shopLoading || getWalletInfoIsPending) && <Spinner />}
+      {dic.invoice.confirm}
+     </Button>
+    );
+   }
    return (
     <Button disabled={isFetching || shopLoading} type='submit' className='h-11'>
      {(isFetching || shopLoading) && <Spinner />}
@@ -590,34 +647,80 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
             )}
            />
           </div>
-          <Alert className='bg-orange-50 dark:bg-orange-950'>
-           <AlertDescription className='text-orange-700 dark:text-orange-400 font-medium'>
-            {dic.invoice.fillMobileNoOrNationalCode}
-           </AlertDescription>
-          </Alert>
-          <Controller
-           control={control}
-           name='otpCode'
-           render={({ field: { value, onChange, ...other } }) => (
-            <Field data-invalid={!!errors.otpCode}>
-             <FieldLabel htmlFor='otpCode'>{dic.invoice.otpCode} *</FieldLabel>
-             <InputGroup data-invalid={!!errors.otpCode} className='h-11'>
-              <NumericFormat
-               id='otpCode'
-               {...other}
-               value={value}
-               onValueChange={({ value }) => onChange(value)}
-               customInput={InputGroupInput}
-               allowLeadingZeros
-               decimalScale={0}
-              />
-             </InputGroup>
-             {!!errors.otpCode && (
-              <FieldError>{errors.otpCode?.message}</FieldError>
+          {!!errors.nationalCode && (
+           <Alert className='bg-destructive/10'>
+            <AlertDescription className='text-destructive font-medium'>
+             {dic.invoice.fillMobileNoOrNationalCode}
+            </AlertDescription>
+           </Alert>
+          )}
+          {walletInfoSuccess && (
+           <>
+            <div className='grid grid-cols-2 gap-4 gap-y-5'>
+             <Field>
+              <FieldLabel htmlFor='firstName'>
+               {dic.invoice.firstName}
+              </FieldLabel>
+              <InputGroup className='h-11'>
+               <InputGroupInput
+                id='firstName'
+                readOnly
+                value={walletInfoData?.data.personFrisName}
+               />
+              </InputGroup>
+             </Field>
+             <Field>
+              <FieldLabel htmlFor='lastName'>{dic.invoice.lastName}</FieldLabel>
+              <InputGroup className='h-11'>
+               <InputGroupInput
+                id='lastName'
+                readOnly
+                value={walletInfoData?.data.personLatName}
+               />
+              </InputGroup>
+             </Field>
+             <Field className='col-span-full'>
+              <FieldLabel htmlFor='wallet-remained'>
+               {dic.invoice.credit}
+              </FieldLabel>
+              <InputGroup className='h-11'>
+               <NumericFormat
+                id='wallet-remained'
+                readOnly
+                value={walletInfoData?.data.remainWallet}
+                thousandSeparator
+                customInput={InputGroupInput}
+               />
+              </InputGroup>
+             </Field>
+            </div>
+            <Controller
+             control={control}
+             name='otpCode'
+             render={({ field: { value, onChange, ...other } }) => (
+              <Field data-invalid={!!errors.otpCode}>
+               <FieldLabel htmlFor='otpCode'>
+                {dic.invoice.otpCode} *
+               </FieldLabel>
+               <InputGroup data-invalid={!!errors.otpCode} className='h-11'>
+                <NumericFormat
+                 id='otpCode'
+                 {...other}
+                 value={value}
+                 onValueChange={({ value }) => onChange(value)}
+                 customInput={InputGroupInput}
+                 allowLeadingZeros
+                 decimalScale={0}
+                />
+               </InputGroup>
+               {!!errors.otpCode && (
+                <FieldError>{errors.otpCode?.message}</FieldError>
+               )}
+              </Field>
              )}
-            </Field>
-           )}
-          />
+            />
+           </>
+          )}
          </>
         )}
         <div className='grid sm:grid-cols-3 gap-3 sm:justify-end'>

@@ -15,7 +15,7 @@ function getWalletInfo({
  nationalCode,
  sValue,
 }: {
- signal: AbortSignal;
+ signal?: AbortSignal;
  sValue: string;
  mobileNo: string;
  nationalCode: string;
