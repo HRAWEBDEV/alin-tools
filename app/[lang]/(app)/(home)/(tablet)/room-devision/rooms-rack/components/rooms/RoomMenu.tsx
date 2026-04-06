@@ -12,7 +12,8 @@ import RackRoom from './RackRoom';
 import { Button } from '@/components/ui/button';
 import RoomStateKind from './RoomStateKind';
 import RoomStateType from './RoomStateType';
-import RoomControl from './RoomControl';
+import RoomControl from '../room-control/RoomControl';
+import RoomControlIndicator from '../room-control/RoomControlIndicator';
 import RoomGuestsWrapper from '../guests/RoomGuestsWrapper';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -185,6 +186,15 @@ export default function RoomMenu({
              onClick={() => setShowRoomControl(true)}
             >
              {dic.options.houseControl}
+             {room.hkStateID && (
+              <div>
+               <RoomControlIndicator
+                dic={dic}
+                withText
+                hkStateID={room.hkStateID}
+               />
+              </div>
+             )}
             </Button>
             <Button
              variant='outline'

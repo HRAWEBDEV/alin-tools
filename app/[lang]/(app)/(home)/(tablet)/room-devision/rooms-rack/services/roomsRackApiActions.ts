@@ -56,6 +56,7 @@ type Rack = {
  dateDateTimeOffset: string;
  msgFlag: boolean;
  noRoom: boolean;
+ hkStateID: number | null;
  roomStateTypeID: number;
  roomStateKindID: number;
  roomStateGroupID: number;
