@@ -103,7 +103,7 @@ export default function ArrivalReservesFilters({
    case 'withRoomNo':
     return dic.filters.withRoomNo;
    case 'withoutRoomNo':
-    return dic.filters.withRoomNo;
+    return dic.filters.withoutRoomNo;
    case 'charged':
     return dic.filters.charged;
    case 'notCharged':
