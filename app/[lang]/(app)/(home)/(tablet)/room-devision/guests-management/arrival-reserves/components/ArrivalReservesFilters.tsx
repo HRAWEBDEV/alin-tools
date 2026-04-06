@@ -27,26 +27,14 @@ import { Calendar } from '@/components/ui/calendar';
 import { ChevronDownIcon } from 'lucide-react';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { Field, FieldLabel } from '@/components/ui/field';
-
+import { ArrivalReservesSchema } from '../schemas/arrivalReservesSchema';
 type SelectOption = { key: string | number; value: string };
 type InitialData = {
  customers: SelectOption[];
  roomTypes: SelectOption[];
 };
 
-type ArrivalReservesFilterForm = {
- date: string | Date | null;
- roomTypeID: string | null;
- customerID: string | null;
- withRoomNo: boolean;
- withoutRoomNo: boolean;
- charged: boolean;
- notCharged: boolean;
- noShow: boolean;
- canceled: boolean;
-};
-
-const FILTER_KEYS: (keyof ArrivalReservesFilterForm)[] = [
+const FILTER_KEYS: (keyof ArrivalReservesSchema)[] = [
  'date',
  'roomTypeID',
  'customerID',
@@ -58,7 +46,7 @@ const FILTER_KEYS: (keyof ArrivalReservesFilterForm)[] = [
  'canceled',
 ];
 
-const smallBadgeKeys: (keyof ArrivalReservesFilterForm)[] = [
+const smallBadgeKeys: (keyof ArrivalReservesSchema)[] = [
  'withRoomNo',
  'withoutRoomNo',
  'charged',
@@ -66,7 +54,7 @@ const smallBadgeKeys: (keyof ArrivalReservesFilterForm)[] = [
  'noShow',
  'canceled',
 ];
-const largeBadgeKeys: (keyof ArrivalReservesFilterForm)[] = [
+const largeBadgeKeys: (keyof ArrivalReservesSchema)[] = [
  'customerID',
  'roomTypeID',
 ];
@@ -87,8 +75,7 @@ export default function ArrivalReservesFilters({
  initDataIsLoading = false,
  totalResults,
 }: Props) {
- const { control, setValue, reset } =
-  useFormContext<ArrivalReservesFilterForm>();
+ const { control, setValue, reset } = useFormContext<ArrivalReservesSchema>();
  const values = useWatch({ control });
  const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
  const [selectDrawerOpen, setSelectDrawerOpen] = useState<string | null>(null);
@@ -105,7 +92,7 @@ export default function ArrivalReservesFilters({
   rtl: true,
  });
 
- const filterKeyLabel = (key: keyof ArrivalReservesFilterForm): string => {
+ const filterKeyLabel = (key: keyof ArrivalReservesSchema): string => {
   switch (key) {
    case 'date':
     return dic.fields.arrivalDate;
@@ -130,7 +117,7 @@ export default function ArrivalReservesFilters({
   }
  };
 
- const filterLabel = (key: keyof ArrivalReservesFilterForm): string | null => {
+ const filterLabel = (key: keyof ArrivalReservesSchema): string | null => {
   const val = values[key];
   if (val === null || val === false || val === '') return null;
 

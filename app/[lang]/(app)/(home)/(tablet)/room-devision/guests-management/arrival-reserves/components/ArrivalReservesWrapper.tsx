@@ -11,9 +11,15 @@ import {
 import ArrivalReservesFilters from './ArrivalReservesFilters';
 import ArrivalReservesList from './ArrivalReservesList';
 import ArrivalReserveDrawer from './ArrivalReserveDrawer';
+import {
+ createArrivalReservesSchema,
+ defaultValues,
+ type ArrivalReservesSchema,
+} from '../schemas/arrivalReservesSchema';
 import type { TReserveRoom } from '../services/arrivalReservesApiActions';
 import type { ArrivalReservesDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/arrival-reserves/dictionary';
 import { GetSearchQueryValuesResult } from '../../utils/searchQueryValues';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 type Props = {
  dic: ArrivalReservesDictionary;
@@ -26,18 +32,9 @@ export default function ArrivalReservesWrapper({ dic }: Props) {
   null,
  );
 
- const methods = useForm({
-  defaultValues: {
-   date: null as string | Date | null,
-   roomTypeID: null as string | null,
-   customerID: null as string | null,
-   withRoomNo: false,
-   withoutRoomNo: false,
-   charged: false,
-   notCharged: false,
-   noShow: false,
-   canceled: false,
-  },
+ const methods = useForm<ArrivalReservesSchema>({
+  resolver: zodResolver(createArrivalReservesSchema()),
+  defaultValues,
  });
 
  const formValues = useWatch({ control: methods.control });
