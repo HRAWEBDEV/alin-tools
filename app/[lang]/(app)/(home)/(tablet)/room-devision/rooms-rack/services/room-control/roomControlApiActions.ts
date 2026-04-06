@@ -32,10 +32,10 @@ interface RoomControl {
  maidPersonFullName: string | null;
 }
 
-type RoomControlStep = 'alert' | 'checkNow' | 'minibar' | 'checkRoom';
+type RoomControlStep = 'alert' | 'checkNow' | 'miniBar' | 'checkRoom';
 type RoomControlStepState = Record<RoomControlStep, boolean>;
 type SaveRoomControl = {
- roomControl: Pick<RoomControl, 'id' | 'roomID' | 'registerID'>;
+ roomControl: Pick<RoomControl, 'id' | 'roomID' | 'registerID' | 'maidComment'>;
 } & RoomControlStepState;
 
 function getRoomControlHistory({

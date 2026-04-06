@@ -1,3 +1,4 @@
+import { useState, useEffect, useMemo } from 'react';
 import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
 import { type Rack } from '../../services/roomsRackApiActions';
 import {
@@ -18,13 +19,47 @@ import {
 import { Field, FieldLabel } from '@/components/ui/field';
 import { InputGroup, InputGroupTextarea } from '@/components/ui/input-group';
 import {
+ type RoomControlStep,
+ type SaveRoomControl,
  roomControlBaseKey,
  getRoomControl,
- getRoomControls,
  saveRoomControl,
- RoomControlStep,
 } from '../../services/room-control/roomControlApiActions';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
+import { toast } from 'sonner';
+import { AxiosError } from 'axios';
+
+type RoomControlStepDetails = {
+ [key in RoomControlStep]: {
+  isChecked: boolean;
+  date: string | null;
+  fullName: string | null;
+ };
+};
+
+const roomControlStepDetailDefaults: RoomControlStepDetails = {
+ alert: {
+  isChecked: false,
+  fullName: null,
+  date: null,
+ },
+ checkNow: {
+  isChecked: false,
+  fullName: null,
+  date: null,
+ },
+ miniBar: {
+  isChecked: false,
+  fullName: null,
+  date: null,
+ },
+ checkRoom: {
+  isChecked: false,
+  fullName: null,
+  date: null,
+ },
+};
 
 export default function RoomControl({
  dic,
@@ -39,10 +74,18 @@ export default function RoomControl({
  onChangeOpen: (state: boolean) => unknown;
  onSuccess: () => unknown;
 }) {
+ const queryClient = useQueryClient();
+ const [maidComment, setMaidComment] = useState<string>('');
  const { locale } = useBaseConfig();
+ const [roomControlStepDetails, setRoomControlStepDetails] =
+  useState<RoomControlStepDetails>(roomControlStepDetailDefaults);
 
  // room control
- const { data: roomControl, isLoading: roomControlIsLoading } = useQuery({
+ const {
+  data: roomControl,
+  isLoading: roomControlIsLoading,
+  isFetching: roomControlIsFetching,
+ } = useQuery({
   queryKey: [roomControlBaseKey, 'room', room.roomID.toString()],
   async queryFn({ signal }) {
    const res = await getRoomControl({
@@ -53,37 +96,102 @@ export default function RoomControl({
   },
  });
 
- const roomControlStepDetails: {
-  [key in RoomControlStep]: {
-   isChecked: boolean;
-   date: string | null;
-   fullName: string | null;
+ // save room control
+ function handleInvalidateRoomControl() {
+  queryClient.invalidateQueries({
+   queryKey: [roomControlBaseKey, 'room', room.roomID.toString()],
+  });
+ }
+
+ const { mutate: saveRoomControlMutate, isPending: saveRoomControlIsPending } =
+  useMutation({
+   mutationFn() {
+    const saveNextStep = nextStep === 'done' ? 'checkRoom' : nextStep;
+    const newRoomControl: SaveRoomControl = {
+     roomControl: {
+      ...(roomControl || {}),
+      id: roomControl?.id || 0,
+      registerID: room.registerID!,
+      roomID: room.roomID!,
+      maidComment: maidComment || null,
+     },
+     alert: false,
+     checkNow: false,
+     checkRoom: false,
+     miniBar: false,
+     [saveNextStep]: roomControlStepDetails[saveNextStep].isChecked,
+    };
+    return saveRoomControl(newRoomControl);
+   },
+   onSuccess() {
+    handleInvalidateRoomControl();
+   },
+   onError(err: AxiosError<string>) {
+    toast.error(err.response?.data);
+   },
+  });
+
+ const serverRoomControlStepDetails = useMemo(() => {
+  return {
+   alert: {
+    isChecked: !!roomControl,
+    fullName: roomControl?.receptionPersonFullName || null,
+    date: roomControl?.receptionDateTimeOffset || null,
+   },
+   checkNow: {
+    isChecked: !!roomControl?.maidPersonID,
+    fullName: roomControl?.maidPersonFullName || null,
+    date: roomControl?.maidDateTimeOffset || null,
+   },
+   miniBar: {
+    isChecked: !!roomControl?.minibarChecked,
+    fullName: roomControl?.maidPersonFullName || null,
+    date: roomControl?.minibarDateTimeOffset || null,
+   },
+   checkRoom: {
+    isChecked: !!roomControl?.roomChecked,
+    fullName: roomControl?.maidPersonFullName || null,
+    date: roomControl?.roomCheckDateTimeOffset || null,
+   },
   };
- } = {
-  alert: {
-   isChecked: !!roomControl,
-   fullName: roomControl?.receptionPersonFullName || null,
-   date: roomControl?.receptionDateTimeOffset || null,
-  },
-  checkNow: {
-   isChecked: !!roomControl?.maidPersonID,
-   fullName: roomControl?.maidPersonFullName || null,
-   date: roomControl?.maidDateTimeOffset || null,
-  },
-  minibar: {
-   isChecked: !!roomControl?.minibarChecked,
-   fullName: roomControl?.maidPersonFullName || null,
-   date: roomControl?.minibarDateTimeOffset || null,
-  },
-  checkRoom: {
-   isChecked: !!roomControl?.roomChecked,
-   fullName: roomControl?.maidPersonFullName || null,
-   date: roomControl?.roomCheckDateTimeOffset || null,
-  },
- };
+ }, [roomControl]);
+
+ const nextStep = (Object.keys(serverRoomControlStepDetails).find((key) => {
+  const val = serverRoomControlStepDetails[key as RoomControlStep];
+  return !val.isChecked;
+ }) || 'done') as RoomControlStep | 'done';
+
+ useEffect(() => {
+  setMaidComment(roomControl?.maidComment || '');
+  setRoomControlStepDetails({
+   alert: {
+    ...serverRoomControlStepDetails['alert'],
+   },
+   checkNow: {
+    ...serverRoomControlStepDetails['checkNow'],
+   },
+   miniBar: {
+    ...serverRoomControlStepDetails['miniBar'],
+   },
+   checkRoom: {
+    ...serverRoomControlStepDetails['checkRoom'],
+   },
+  });
+ }, [roomControl, open, serverRoomControlStepDetails]);
+
+ const pendingAction = roomControlIsFetching || saveRoomControlIsPending;
 
  return (
-  <Dialog open={open} onOpenChange={onChangeOpen}>
+  <Dialog
+   open={open}
+   onOpenChange={(value) => {
+    onChangeOpen(value);
+    if (!value) {
+     setMaidComment('');
+     setRoomControlStepDetails(roomControlStepDetailDefaults);
+    }
+   }}
+  >
    <DialogContent className='gap-0 p-0 max-h-[95svh] overflow-hidden flex flex-col'>
     <DialogHeader className='p-4 border-b border-input'>
      <DialogHeader>
@@ -93,13 +201,18 @@ export default function RoomControl({
       </DialogTitle>
      </DialogHeader>
     </DialogHeader>
+    {roomControlIsFetching && <LinearLoading />}
     <div className='p-4 grow overflow-auto'>
      <form>
       <h2 className='text-center mb-4 font-medium'>
        <span className='text-neutral-700 dark:text-neutral-400'>
-        {dic.houseControl.roomStatus}:{' '}
+        {dic.houseControl.nextStep}:
+       </span>{' '}
+       <span
+        className={`text-lg ${getRoomControlStyles(nextStep === 'done' ? 'checkRoom' : nextStep).text}`}
+       >
+        {dic.houseControl[nextStep]}
        </span>
-       <span className='text-lg'></span>
       </h2>
       <div className='grid gap-4 grid-cols-[repeat(2,10rem)] justify-items-center justify-center mb-6'>
        {roomControlSteps.map((step) => {
@@ -111,7 +224,22 @@ export default function RoomControl({
           variant='outline'
           className={`relative h-auto flex-col justify-start items-stretch w-40 min-h-40 max-h-none [&_svg:not([class*='size-'])]:size-[unset] p-0 gap-0 ${roomControlStyle.bg} isolate`}
           key={step.title}
-          disabled={roomControlIsLoading}
+          disabled={pendingAction}
+          onClick={() => {
+           if (step.title !== nextStep) {
+            toast.error(
+             `${dic.houseControl.nextStep}: ${dic.houseControl[nextStep]}`,
+            );
+            return;
+           }
+           setRoomControlStepDetails((pre) => ({
+            ...pre,
+            [step.title]: {
+             ...pre[step.title],
+             isChecked: !pre[step.title].isChecked,
+            },
+           }));
+          }}
          >
           <div className='absolute bottom-0 end-0 -z-1'>
            <MdTouchApp className='size-18 text-neutral-200/60 dark:text-neutral-800' />
@@ -159,14 +287,22 @@ export default function RoomControl({
         );
        })}
       </div>
-      <Field className='gap-2 mb-4'>
-       <FieldLabel htmlFor='houseMaidDescription'>
-        {dic.houseControl.houseMaidDescription}
-       </FieldLabel>
-       <InputGroup>
-        <InputGroupTextarea />
-       </InputGroup>
-      </Field>
+      {(nextStep === 'done' || nextStep === 'checkRoom') && (
+       <Field className='gap-2 mb-4'>
+        <FieldLabel htmlFor='houseMaidDescription'>
+         {dic.houseControl.houseMaidDescription}
+        </FieldLabel>
+        <InputGroup>
+         <InputGroupTextarea
+          id='houseMaidDescription'
+          value={maidComment}
+          onChange={(e) => {
+           setMaidComment(e.target.value);
+          }}
+         />
+        </InputGroup>
+       </Field>
+      )}
       <div className='flex justify-between gap-4 flex-wrap flex-col-reverse md:flex-row'>
        <div className='grid grid-cols-2 md:flex gap-2'>
         <Button
@@ -174,9 +310,9 @@ export default function RoomControl({
          size='lg'
          className='md:w-24 text-destructive border-destructive'
          type='button'
-         disabled={roomControlIsLoading}
+         disabled={pendingAction}
         >
-         {roomControlIsLoading && <Spinner />}
+         {pendingAction && <Spinner />}
          {dic.houseControl.clear}
         </Button>
         <Button
@@ -184,9 +320,9 @@ export default function RoomControl({
          variant='outline'
          className='md:w-24 text-secondary border-secondary'
          type='button'
-         disabled={roomControlIsLoading}
+         disabled={pendingAction}
         >
-         {roomControlIsLoading && <Spinner />}
+         {pendingAction && <Spinner />}
          {dic.houseControl.history}
         </Button>
        </div>
@@ -196,19 +332,20 @@ export default function RoomControl({
          size='lg'
          className='md:w-28'
          type='button'
-         disabled={roomControlIsLoading}
+         disabled={pendingAction}
          onClick={() => onChangeOpen(false)}
         >
-         {roomControlIsLoading && <Spinner />}
+         {pendingAction && <Spinner />}
          {dic.houseControl.cancel}
         </Button>
         <Button
          size='lg'
          className='md:w-28'
          type='button'
-         disabled={roomControlIsLoading}
+         disabled={pendingAction}
+         onClick={() => saveRoomControlMutate()}
         >
-         {roomControlIsLoading && <Spinner />}
+         {pendingAction && <Spinner />}
          {dic.houseControl.confirm}
         </Button>
        </div>

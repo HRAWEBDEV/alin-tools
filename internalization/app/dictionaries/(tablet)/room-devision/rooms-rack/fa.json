@@ -136,15 +136,17 @@
  "houseControl": {
   "title": "کنترل خانه داری",
   "roomStatus": "وضعیت اتاق",
+  "nextStep": "مرحله بعد",
   "alert": "اعلام به خانه داری",
-  "minibar": "ثبت مینی بار",
+  "miniBar": "ثبت مینی بار",
   "checkNow": "در حال کنترل",
   "checkRoom": "کنترل اتاق",
   "houseMaidDescription": "توضیحات خانه دار",
   "cancel": "انصراف",
   "clear": "لغو",
   "confirm": "تایید",
-  "history": "سوابق"
+  "history": "سوابق",
+  "done": "پایان"
  },
  "roomGuests": {
   "title": "مهمانان",

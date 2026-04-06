@@ -7,7 +7,7 @@ const roomControlSteps: { title: RoomControlStep }[] = [
   title: 'checkNow',
  },
  {
-  title: 'minibar',
+  title: 'miniBar',
  },
  {
   title: 'checkRoom',
@@ -16,7 +16,7 @@ const roomControlSteps: { title: RoomControlStep }[] = [
 
 function getRoomControlStyles(stepTitle: RoomControlStep) {
  switch (stepTitle) {
-  case 'minibar':
+  case 'miniBar':
    return {
     text: 'text-teal-700 dark:text-teal-400',
     bg: 'bg-teal-50 dark:bg-teal-950',
