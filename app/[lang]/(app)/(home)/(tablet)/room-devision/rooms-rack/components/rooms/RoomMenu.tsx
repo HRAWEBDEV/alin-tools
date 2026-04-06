@@ -12,7 +12,7 @@ import RackRoom from './RackRoom';
 import { Button } from '@/components/ui/button';
 import RoomStateKind from './RoomStateKind';
 import RoomStateType from './RoomStateType';
-import RoomControl from './RoomControl';
+import RoomControl from '../room-control/RoomControl';
 import RoomGuestsWrapper from '../guests/RoomGuestsWrapper';
 import { Badge } from '@/components/ui/badge';
 import {

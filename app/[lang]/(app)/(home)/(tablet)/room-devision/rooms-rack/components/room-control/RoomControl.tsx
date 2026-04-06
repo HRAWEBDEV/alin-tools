@@ -28,13 +28,14 @@ import {
  getRoomControl,
  saveRoomControl,
  changeRoomControl,
+ getRoomControlHistory,
 } from '../../services/room-control/roomControlApiActions';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
 import { BiError } from 'react-icons/bi';
-import next from 'next';
+import { Badge } from '@/components/ui/badge';
 
 type RoomControlStepDetails = {
  [key in RoomControlStep]: {
@@ -102,10 +103,28 @@ export default function RoomControl({
   },
  });
 
+ const {
+  data: roomControlHistory,
+  isFetching: roomControlHistoryIsFetching,
+  isLoading: roomControlHistoryIsLoading,
+ } = useQuery({
+  queryKey: [roomControlBaseKey, 'room', 'history', room.roomID.toString()],
+  async queryFn({ signal }) {
+   const res = await getRoomControlHistory({
+    roomID: room.roomID,
+    signal,
+   });
+   return res.data;
+  },
+ });
+
  // save room control
  function handleInvalidateRoomControl() {
   queryClient.invalidateQueries({
    queryKey: [roomControlBaseKey, 'room', room.roomID.toString()],
+  });
+  queryClient.invalidateQueries({
+   queryKey: [roomControlBaseKey, 'room', 'history', room.roomID.toString()],
   });
  }
 
@@ -383,16 +402,33 @@ export default function RoomControl({
           </DialogFooter>
          </DialogContent>
         </Dialog>
-        <Button
-         size='lg'
-         variant='outline'
-         className='md:w-24 text-secondary border-secondary'
-         type='button'
-         disabled={pendingAction}
-        >
-         {pendingAction && <Spinner />}
-         {dic.houseControl.history}
-        </Button>
+        <Dialog>
+         <DialogTrigger asChild>
+          <Button
+           size='lg'
+           variant='outline'
+           className='md:w-24 text-secondary border-secondary'
+           type='button'
+           disabled={pendingAction || roomControlHistoryIsLoading}
+          >
+           {(pendingAction || roomControlHistoryIsLoading) && <Spinner />}
+           {dic.houseControl.history}
+           <Badge>{roomControlHistory?.length}</Badge>
+          </Button>
+         </DialogTrigger>
+         <DialogContent className='flex flex-col w-[min(95%,70rem)] max-h-[95svh] max-w-none! p-0 overflow-hidden gap-0'>
+          <DialogHeader className='p-4 border-b border-input'>
+           <DialogHeader>
+            <DialogTitle className='text-lg'>
+             {dic.houseControl.history} {dic.houseControl.title}{' '}
+             <span className='font-en-roboto'>{room.roomLabel}</span>
+            </DialogTitle>
+           </DialogHeader>
+          </DialogHeader>
+          {roomControlHistoryIsFetching && <LinearLoading />}
+          <div className='p-4 grow overflow-auto'></div>
+         </DialogContent>
+        </Dialog>
        </div>
        <div className='grid grid-cols-2 md:flex gap-2'>
         <Button

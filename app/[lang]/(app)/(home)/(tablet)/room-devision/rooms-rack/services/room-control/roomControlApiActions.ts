@@ -45,7 +45,7 @@ function getRoomControlHistory({
  roomID: number;
  signal: AbortSignal;
 }) {
- return axios.get(
+ return axios.get<RoomControl[]>(
   `/HouseKeeping/RoomControl/GetRoomControlHistory?RoomID=${roomID.toString()}`,
   {
    signal,
