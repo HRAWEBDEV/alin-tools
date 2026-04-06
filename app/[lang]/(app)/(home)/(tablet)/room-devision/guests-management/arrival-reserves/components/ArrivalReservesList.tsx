@@ -6,19 +6,19 @@ import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
 import UnExpectedError from '@/app/[lang]/(app)/components/UnExpectedError';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
-import type { TReserveRoom } from '../services/arrivalReservesApiActions';
+import type { ReserveRoom } from '../services/arrivalReservesApiActions';
 import type { ArrivalReservesDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/arrival-reserves/dictionary';
 
 type Props = {
  dic: ArrivalReservesDictionary;
- reserves: TReserveRoom[];
+ reserves: ReserveRoom[];
  isLoading: boolean;
  isFetching: boolean;
  isFetchingNextPage: boolean;
  isError: boolean;
  hasMore: boolean;
  onLoadMore: () => void;
- onSelectReserve: (reserve: TReserveRoom) => void;
+ onSelectReserve: (reserve: ReserveRoom) => void;
 };
 
 export default function ArrivalReservesList({

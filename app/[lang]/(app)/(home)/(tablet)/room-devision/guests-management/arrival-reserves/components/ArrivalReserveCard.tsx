@@ -1,6 +1,6 @@
 import { MdTouchApp } from 'react-icons/md';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
-import type { TReserveRoom } from '../services/arrivalReservesApiActions';
+import type { ReserveRoom } from '../services/arrivalReservesApiActions';
 import type { ArrivalReservesDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/arrival-reserves/dictionary';
 
 export default function ArrivalReserveCard({
@@ -8,7 +8,7 @@ export default function ArrivalReserveCard({
  dic,
  onClick,
 }: {
- reserve: TReserveRoom;
+ reserve: ReserveRoom;
  dic: ArrivalReservesDictionary;
  onClick: () => void;
 }) {

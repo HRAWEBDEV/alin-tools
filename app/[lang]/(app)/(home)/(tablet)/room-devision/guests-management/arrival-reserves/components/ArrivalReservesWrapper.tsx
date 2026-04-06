@@ -16,7 +16,7 @@ import {
  defaultValues,
  type ArrivalReservesSchema,
 } from '../schemas/arrivalReservesSchema';
-import type { TReserveRoom } from '../services/arrivalReservesApiActions';
+import type { ReserveRoom } from '../services/arrivalReservesApiActions';
 import type { ArrivalReservesDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/arrival-reserves/dictionary';
 import { GetSearchQueryValuesResult } from '../../utils/searchQueryValues';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -28,7 +28,7 @@ type Props = {
 const PAGE_SIZE = 10;
 
 export default function ArrivalReservesWrapper({ dic }: Props) {
- const [selectedReserve, setSelectedReserve] = useState<TReserveRoom | null>(
+ const [selectedReserve, setSelectedReserve] = useState<ReserveRoom | null>(
   null,
  );
 
