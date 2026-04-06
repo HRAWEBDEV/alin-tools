@@ -14,10 +14,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { ChevronsUpDown } from 'lucide-react';
 import { type GuestsFilterForm } from './GuestsListWrapper';
 import { useState } from 'react';
-import {
- type InitialData,
- type SelectOption,
-} from '../services/guestsListApiActions';
+import { type InitialData } from '../services/guestsListApiActions';
 import { Field, FieldLabel } from '@/components/ui/field';
 import {
  InputGroup,
@@ -29,6 +26,7 @@ import { FaFilter, FaRegTrashAlt } from 'react-icons/fa';
 import { FaPerson } from 'react-icons/fa6';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ResidentGuestsDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/resident-guests/dictionary';
+import { type Combo } from '../../../utils/apiTypes';
 
 const FILTER_KEYS: (keyof GuestsFilterForm)[] = [
  'folio',
@@ -310,69 +308,56 @@ export default function GuestsFilters({
       </div>
      </DrawerContent>
     </Drawer>
-
-    {totalResults !== undefined && (
-     <span className='text-sm text-muted-foreground'>
-      {totalResults} {dic.info.results}
-     </span>
-    )}
-    {numGuests ? (
-     <Button
-      size='lg'
-      variant='outline'
-      className='rounded-md text-neutral-600 dark:text-neutral-400 px-2! cursor-auto'
+    {activeFilters.length > 0 && (
+     <div
+      key={`expand-${activeFilters.length}`}
+      ref={sliderRef}
+      className='keen-slider grow relative mt-1'
+      dir='rtl'
      >
-      <div className='flex items-center gap-1'>
-       {numGuests}
-       <span className='sm:block hidden'>{dic.filters.guest}</span>
-      </div>
-      <FaPerson className='size-5!' />
-     </Button>
-    ) : (
-     <></>
+      {activeFilters.map((key) => {
+       let badgeSizeType: 'normal' | 'small' | 'large' = 'normal';
+       if (smallBadgeKeys.includes(key)) {
+        badgeSizeType = 'small';
+       } else if (largeBadgeKeys.includes(key)) {
+        badgeSizeType = 'large';
+       }
+
+       return (
+        <Badge
+         key={key}
+         variant='outline'
+         data-badge-size={badgeSizeType}
+         className='keen-slider__slide inline-flex justify-between items-center rounded-md py-0.5 font-medium bg-neutral-100 dark:bg-neutral-900 text-[0.85rem] data-[badge-size="small"]:basis-32 data-[badge-size="small"]:w-32 data-[badge-size="normal"]:basis-46 data-[badge-size="normal"]:w-46 data-[badge-size="large"]:basis-72 data-[badge-size="large"]:w-72 h-10'
+        >
+         <p className='text-start grow truncate'>
+          <span className='text-neutral-500'>{filterKeyLabel(key)}: </span>
+          {filterLabel(key)}
+         </p>
+         <Button
+          variant='ghost'
+          size='icon-sm'
+          className='text-destructive shrink-0'
+          onClick={() =>
+           setValue(key, key === 'folio' || key === 'reserveNo' ? '' : null)
+          }
+         >
+          <FaRegTrashAlt />
+         </Button>
+        </Badge>
+       );
+      })}
+     </div>
     )}
    </div>
-   {activeFilters.length > 0 && (
-    <div
-     key={`expand-${activeFilters.length}`}
-     ref={sliderRef}
-     className='keen-slider grow relative mt-1'
-     dir='rtl'
-    >
-     {activeFilters.map((key) => {
-      let badgeSizeType: 'normal' | 'small' | 'large' = 'normal';
-      if (smallBadgeKeys.includes(key)) {
-       badgeSizeType = 'small';
-      } else if (largeBadgeKeys.includes(key)) {
-       badgeSizeType = 'large';
-      }
-
-      return (
-       <Badge
-        key={key}
-        variant='outline'
-        data-badge-size={badgeSizeType}
-        className='keen-slider__slide inline-flex justify-between items-center rounded-md py-0.5 font-medium bg-neutral-100 dark:bg-neutral-900 text-[0.85rem] data-[badge-size="small"]:basis-32 data-[badge-size="small"]:w-32 data-[badge-size="normal"]:basis-46 data-[badge-size="normal"]:w-46 data-[badge-size="large"]:basis-72 data-[badge-size="large"]:w-72 h-10'
-       >
-        <p className='text-start grow truncate'>
-         <span className='text-neutral-500'>{filterKeyLabel(key)}: </span>
-         {filterLabel(key)}
-        </p>
-        <Button
-         variant='ghost'
-         size='icon-sm'
-         className='text-destructive shrink-0'
-         onClick={() =>
-          setValue(key, key === 'folio' || key === 'reserveNo' ? '' : null)
-         }
-        >
-         <FaRegTrashAlt />
-        </Button>
-       </Badge>
-      );
-     })}
-    </div>
-   )}
+   <div className='flex gap-4 items-center'>
+    <span className='text-sm text-muted-foreground'>
+     {dic.info.results}: {totalResults}
+    </span>
+    <span className='text-sm text-muted-foreground'>
+     {dic.filters.guest}: {numGuests}
+    </span>
+   </div>
   </div>
  );
 }
@@ -380,7 +365,7 @@ export default function GuestsFilters({
 function getOptions(
  key: 'nationality' | 'specialGuest' | 'group' | 'room',
  data: InitialData | undefined,
-): SelectOption[] {
+): Combo[] {
  if (!data) return [];
  switch (key) {
   case 'nationality':

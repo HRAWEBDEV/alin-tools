@@ -3,36 +3,14 @@ import {
  GetSearchQueryValuesResult,
  SetSearchQueryOnPathname,
 } from '../../utils/searchQueryValues';
-import { GuestsFilterForm } from '../components/GuestsListWrapper';
+import { type Combo } from '../../../utils/apiTypes';
 
-type SelectOption = { key: string; value: string };
-
-type SelectOptons = SelectOption[];
 type InitialData = {
- nationalities: SelectOptons;
- rooms: SelectOptons;
- vipGuestTypes: SelectOptons;
- customers: SelectOptons;
+ nationalities: Combo[];
+ rooms: Combo[];
+ vipGuestTypes: Combo[];
+ customers: Combo[];
 };
-type ApiPagedData<T> = {
- rows: T;
- totalCount: number;
- pageNumber: number;
- pageSize: number;
- nextPage: number | null;
-};
-// type Guest = {
-//  id: number;
-//  fullName: string;
-//  roomNo?: number;
-//  roomLabel?: string;
-//  nationalityName?: string | null;
-//  folioNo?: number | null;
-//  reserveNo?: number;
-//  VIPGuestTypeName?: string | null;
-//  mobileNo?: string | null;
-//  email?: string | null;
-// };
 
 type ResidentGuest = {
  id: number;
@@ -112,31 +90,16 @@ type ResidentGuest = {
  roomTypeID: number;
 };
 
-type ResidentGuests = ResidentGuest[];
-
 type ResidentGuestsData = {
- residentGuests: ResidentGuests;
+ residentGuests: ResidentGuest[];
  guestsCount: number;
 };
 
 const getResidentGuestsInitialData = '/Reception/ResidentGuest/GetDatas';
 const getResidentGuestsApi = '/Reception/ResidentGuest/GetResidentGuests';
-const getGuestsApi = '/Reception/ResidentGuest/GetGuests';
-const getReportExcelApi = '/Reception/ResidentGuest/GenerateExcelReport';
-const getReportPrintApi = '/Reception/ResidentGuest/GenerateReport';
 
-const initDefaults: InitialData = {
- nationalities: [],
- rooms: [],
- vipGuestTypes: [],
- customers: [],
-};
 const getInitDataQueryKey = 'reception-resident-guests-init-data';
 
-const residentGuestsDefault: ResidentGuestsData = {
- residentGuests: [],
- guestsCount: 0,
-};
 const getResidentGuestsQueryKey = 'reception-resident-guests-get-data';
 
 const getInitialData = (signal: AbortSignal) => {
@@ -145,10 +108,10 @@ const getInitialData = (signal: AbortSignal) => {
  });
 };
 
-const getResidentGuests = (
+function getResidentGuests(
  signal: AbortSignal,
  queryValues: GetSearchQueryValuesResult,
-) => {
+) {
  const pathname = SetSearchQueryOnPathname({
   pathname: getResidentGuestsApi,
   queryValues,
@@ -156,57 +119,12 @@ const getResidentGuests = (
  return axios.get<ResidentGuestsData>(pathname, {
   signal,
  });
-};
+}
 
-let getGuestAbortController: AbortController | undefined;
-
-const getGuests = (filters: GuestsFilterForm, pageParam: number) => {
- getGuestAbortController?.abort();
- getGuestAbortController = new AbortController();
-
- return axios.get<ApiPagedData<ResidentGuest[]>>(getGuestsApi, {
-  params: {
-   ...filters,
-   pageNumber: pageParam,
-  },
-  signal: getGuestAbortController.signal,
- });
-};
-const getReportExcel = (queryValues: GetSearchQueryValuesResult) => {
- const pathname = SetSearchQueryOnPathname({
-  queryValues,
-  pathname: getReportExcelApi,
- });
- return axios.get<Blob | null>(pathname, {
-  responseType: 'blob',
- });
-};
-
-const getReportPrint = (queryValues: GetSearchQueryValuesResult) => {
- const pathname = SetSearchQueryOnPathname({
-  queryValues,
-  pathname: getReportPrintApi,
- });
- return axios.get<Blob>(pathname, {
-  responseType: 'blob',
- });
-};
-
+export type { InitialData, ResidentGuest, ResidentGuestsData };
 export {
- type InitialData as InitialData,
- type ApiPagedData,
- type ResidentGuest as ResidentGuest,
- type ResidentGuests as ResidentGuests,
- //  type Guest as Guest,
- type ResidentGuestsData as ResidentGuestsData,
+ getResidentGuestsQueryKey,
+ getInitDataQueryKey,
  getInitialData,
  getResidentGuests,
- getGuests,
- getReportExcel,
- getReportPrint,
- getInitDataQueryKey,
- initDefaults,
- residentGuestsDefault,
- getResidentGuestsQueryKey,
- type SelectOption,
 };

@@ -1,9 +1,7 @@
 'use client';
-
 import { useForm, FormProvider, useWatch } from 'react-hook-form';
 import { useQuery } from '@tanstack/react-query';
 import { useState, useMemo } from 'react';
-
 import GuestsFilters from './GuestsFilters';
 import GuestsList from './GuestsList';
 import GuestDetailDrawer from './GuestDetailDrawer';
@@ -85,6 +83,7 @@ export default function GuestsListWrapper({
      numGuests={numGuests}
      initData={initData.data?.data}
      initDataIsLoading={initData.isLoading}
+     totalResults={guests.data?.data.residentGuests.length}
     />
     <GuestsList
      dic={dic}

@@ -1,5 +1,4 @@
 'use client';
-
 import GuestCard from './GuestCard';
 import NoItemFound from '@/app/[lang]/(app)/components/NoItemFound';
 import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
