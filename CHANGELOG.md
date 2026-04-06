@@ -19,6 +19,8 @@
 - add new order wallet payment (hra-done)
 - add new order OTP code resend button (hra-done)
 - add new order wallet payment timer
+- add rack room control (hra-done)
+- add rack room control history (hra-done)
 ### bug fixes
 - remove main wrapper bottom padding in mobile mode, when scroll direction is down (hra-done)
 - use useThrottle instead of useDebouce to change scroll direction (hra-done)
