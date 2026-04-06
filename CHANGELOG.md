@@ -21,6 +21,7 @@
 - add new order wallet payment timer
 - add rack room control (hra-done)
 - add rack room control history (hra-done)
+- add rack house control indicatro (hra-done)
 ### bug fixes
 - remove main wrapper bottom padding in mobile mode, when scroll direction is down (hra-done)
 - use useThrottle instead of useDebouce to change scroll direction (hra-done)
