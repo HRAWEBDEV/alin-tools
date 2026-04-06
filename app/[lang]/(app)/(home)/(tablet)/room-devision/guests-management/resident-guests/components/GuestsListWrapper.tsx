@@ -12,7 +12,12 @@ import {
 } from '../services/guestsListApiActions';
 import { useDebounce } from '../../../hooks/useDebounce';
 import { type ResidentGuestsDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/resident-guests/dictionary';
-
+import { zodResolver } from '@hookform/resolvers/zod';
+import {
+ createGuestsListSchema,
+ defaultValues,
+ type GuestsListSchema,
+} from '../schemas/residentGuestsSchema';
 export type GuestsFilterForm = {
  folio?: string;
  reserveNo?: string;
@@ -29,15 +34,9 @@ export default function GuestsListWrapper({
 }: {
  dic: ResidentGuestsDictionary;
 }) {
- const methods = useForm<GuestsFilterForm>({
-  defaultValues: {
-   folio: '',
-   reserveNo: '',
-   nationality: null,
-   specialGuest: null,
-   group: null,
-   room: null,
-  },
+ const methods = useForm<GuestsListSchema>({
+  resolver: zodResolver(createGuestsListSchema()),
+  defaultValues: defaultValues as GuestsListSchema,
  });
 
  const filters = useWatch({ control: methods.control });
