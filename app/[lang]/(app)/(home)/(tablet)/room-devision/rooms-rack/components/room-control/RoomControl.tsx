@@ -337,7 +337,7 @@ export default function RoomControl({
         );
        })}
       </div>
-      {(nextStep === 'done' || nextStep === 'checkRoom') && (
+      {nextStep === 'done' && (
        <Field className='gap-2 mb-4'>
         <FieldLabel htmlFor='houseMaidDescription'>
          {dic.houseControl.houseMaidDescription}
