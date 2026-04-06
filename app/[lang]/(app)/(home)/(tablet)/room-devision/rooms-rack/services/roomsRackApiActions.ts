@@ -33,7 +33,6 @@ interface RackInfo {
  notCheckout: number;
  guestCout: number;
  extraBed: number;
- hkStateID: number | null;
  rackReserveInfo: {
   walkin: number;
   tell: number;
@@ -57,6 +56,7 @@ type Rack = {
  dateDateTimeOffset: string;
  msgFlag: boolean;
  noRoom: boolean;
+ hkStateID: number | null;
  roomStateTypeID: number;
  roomStateKindID: number;
  roomStateGroupID: number;

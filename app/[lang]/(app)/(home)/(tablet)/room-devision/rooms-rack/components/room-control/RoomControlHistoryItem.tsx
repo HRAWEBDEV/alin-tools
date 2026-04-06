@@ -168,6 +168,12 @@ export default function RoomControlHistoryItem({
      <span className='font-medium'>{history.maidPersonFullName}</span>
     </div>
    </div>
+   <div className='flex flex-col gap-1 text-start'>
+    <span className='text-sm text-neutral-700 dark:text-neutral-400 text-start'>
+     {dic.houseControl.comment}:
+    </span>
+    <p>{history.maidComment}</p>
+   </div>
   </button>
  );
 }

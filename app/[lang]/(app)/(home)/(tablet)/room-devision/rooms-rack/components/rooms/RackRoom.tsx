@@ -26,6 +26,7 @@ import { RackFiltersSchema } from '../../schemas/rackFiltersSchema';
 import { useRackConfigContext } from '../../services/rooms-rack-config/roomsRackConfigContext';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { IoNotifications } from 'react-icons/io5';
+import RoomControlIndicator from '../room-control/RoomControlIndicator';
 
 export default function RackRoom({
  dic,
@@ -119,6 +120,13 @@ export default function RackRoom({
        onShowRackMenu(room);
       }}
      >
+      <div
+       className={`absolute left-1/2 ${activeMinimalView || activeCompactView ? 'bottom-0' : 'bottom-2'} -translate-x-1/2`}
+      >
+       {!mock && room.hkStateID && (
+        <RoomControlIndicator dic={dic} hkStateID={room.hkStateID} />
+       )}
+      </div>
       {room.msgFlag && (
        <div className='absolute top-1 end-0'>
         <IoNotifications className='size-5 text-destructive' />
@@ -153,7 +161,7 @@ export default function RackRoom({
         <span className='text-base font-medium'>{dic.help[roomState]}</span>
        )}
       </div>
-      <div className='text-start ps-2 grow group-data-[layout-minimal=true]:ps-0'>
+      <div className='text-start ps-2 grow group-data-[layout-minimal=true]:ps-0 group-data-[layout-minimal=true]:pb-1 group-data-[layout-compact=true]:pb-1'>
        <div className='flex items-center group-data-[layout-minimal=true]:justify-center gap-1'>
         <h3
          className={`text-2xl lg:text-3xl group-data-[layout-minimal=true]:text-2xl font-en-roboto ${roomStateStyle?.text}`}
@@ -276,6 +284,11 @@ export default function RackRoom({
           </p>
          )}
         </div>
+       </div>
+      )}
+      {room.hkStateID && mock && (
+       <div>
+        <RoomControlIndicator withText dic={dic} hkStateID={room.hkStateID} />
        </div>
       )}
      </Link>
