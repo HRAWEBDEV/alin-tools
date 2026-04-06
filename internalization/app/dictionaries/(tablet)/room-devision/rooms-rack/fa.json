@@ -147,7 +147,9 @@
   "confirmClearMessage": "آیا از لغو اطمینان دارید؟",
   "confirm": "تایید",
   "history": "سوابق",
-  "done": "پایان"
+  "done": "پایان",
+  "reception": "پذیرش",
+  "maid": "خانه دار"
  },
  "roomGuests": {
   "title": "مهمانان",

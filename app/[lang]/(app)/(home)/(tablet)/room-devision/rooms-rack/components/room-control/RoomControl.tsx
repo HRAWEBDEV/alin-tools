@@ -36,6 +36,7 @@ import { toast } from 'sonner';
 import { AxiosError } from 'axios';
 import { BiError } from 'react-icons/bi';
 import { Badge } from '@/components/ui/badge';
+import RoomControlHistory from './RoomControlHistory';
 
 type RoomControlStepDetails = {
  [key in RoomControlStep]: {
@@ -107,6 +108,8 @@ export default function RoomControl({
   data: roomControlHistory,
   isFetching: roomControlHistoryIsFetching,
   isLoading: roomControlHistoryIsLoading,
+  isSuccess: roomControlHistoryIsSuccess,
+  isError: roomControlHistoryIsError,
  } = useQuery({
   queryKey: [roomControlBaseKey, 'room', 'history', room.roomID.toString()],
   async queryFn({ signal }) {
@@ -413,10 +416,10 @@ export default function RoomControl({
           >
            {(pendingAction || roomControlHistoryIsLoading) && <Spinner />}
            {dic.houseControl.history}
-           <Badge>{roomControlHistory?.length}</Badge>
+           <Badge variant='secondary'>{roomControlHistory?.length}</Badge>
           </Button>
          </DialogTrigger>
-         <DialogContent className='flex flex-col w-[min(95%,70rem)] max-h-[95svh] max-w-none! p-0 overflow-hidden gap-0'>
+         <DialogContent className='flex flex-col w-[min(95%,60rem)] max-h-[95svh] max-w-none! p-0 overflow-hidden gap-0'>
           <DialogHeader className='p-4 border-b border-input'>
            <DialogHeader>
             <DialogTitle className='text-lg'>
@@ -426,7 +429,16 @@ export default function RoomControl({
            </DialogHeader>
           </DialogHeader>
           {roomControlHistoryIsFetching && <LinearLoading />}
-          <div className='p-4 grow overflow-auto'></div>
+          <div className='p-4 grow overflow-auto'>
+           <RoomControlHistory
+            dic={dic}
+            data={roomControlHistory}
+            isFetching={roomControlHistoryIsFetching}
+            isLoading={roomControlHistoryIsLoading}
+            isSuccess={roomControlHistoryIsSuccess}
+            isError={roomControlHistoryIsError}
+           />
+          </div>
          </DialogContent>
         </Dialog>
        </div>
