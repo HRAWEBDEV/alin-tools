@@ -3,6 +3,9 @@ import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(ta
 import { type Rack } from '../../services/roomsRackApiActions';
 import {
  Dialog,
+ DialogClose,
+ DialogTrigger,
+ DialogFooter,
  DialogHeader,
  DialogTitle,
  DialogContent,
@@ -24,11 +27,14 @@ import {
  roomControlBaseKey,
  getRoomControl,
  saveRoomControl,
+ changeRoomControl,
 } from '../../services/room-control/roomControlApiActions';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
+import { BiError } from 'react-icons/bi';
+import next from 'next';
 
 type RoomControlStepDetails = {
  [key in RoomControlStep]: {
@@ -130,6 +136,25 @@ export default function RoomControl({
     toast.error(err.response?.data);
    },
   });
+ // clear room control
+
+ const {
+  mutate: clearRoomControlMutate,
+  isPending: clearRoomControlIsPending,
+ } = useMutation({
+  mutationFn() {
+   return changeRoomControl({
+    registerID: room.registerID!,
+    roomID: room.roomID!,
+   });
+  },
+  onSuccess() {
+   handleInvalidateRoomControl();
+  },
+  onError(err: AxiosError<string>) {
+   toast.error(err.response?.data);
+  },
+ });
 
  const serverRoomControlStepDetails = useMemo(() => {
   return {
@@ -179,7 +204,10 @@ export default function RoomControl({
   });
  }, [roomControl, open, serverRoomControlStepDetails]);
 
- const pendingAction = roomControlIsFetching || saveRoomControlIsPending;
+ const pendingAction =
+  roomControlIsFetching ||
+  saveRoomControlIsPending ||
+  clearRoomControlIsPending;
 
  return (
   <Dialog
@@ -305,16 +333,56 @@ export default function RoomControl({
       )}
       <div className='flex justify-between gap-4 flex-wrap flex-col-reverse md:flex-row'>
        <div className='grid grid-cols-2 md:flex gap-2'>
-        <Button
-         variant='outline'
-         size='lg'
-         className='md:w-24 text-destructive border-destructive'
-         type='button'
-         disabled={pendingAction}
-        >
-         {pendingAction && <Spinner />}
-         {dic.houseControl.clear}
-        </Button>
+        <Dialog>
+         <DialogTrigger asChild>
+          <Button
+           variant='outline'
+           size='lg'
+           className='md:w-24 text-destructive border-destructive'
+           type='button'
+           disabled={pendingAction || nextStep === 'alert'}
+          >
+           {pendingAction && <Spinner />}
+           {dic.houseControl.clear}
+          </Button>
+         </DialogTrigger>
+         <DialogContent className='p-0 gap-0'>
+          <DialogHeader className='p-4'>
+           <DialogTitle className='hidden'>
+            {dic.houseControl.confirmClearMessage}
+           </DialogTitle>
+          </DialogHeader>
+          <div className='p-4'>
+           <div className='flex gap-1 items-center text-red-700 dark:text-red-400 font-medium'>
+            <BiError className='size-12' />
+            <p>{dic.houseControl.confirmClearMessage}</p>
+           </div>
+          </div>
+          <DialogFooter className='p-4'>
+           <DialogClose asChild>
+            <Button
+             className='sm:w-24'
+             variant='outline'
+             disabled={pendingAction}
+            >
+             {pendingAction && <Spinner />}
+             {dic.houseControl.cancel}
+            </Button>
+           </DialogClose>
+           <DialogClose asChild>
+            <Button
+             className='sm:w-24'
+             variant='destructive'
+             disabled={pendingAction}
+             onClick={() => clearRoomControlMutate()}
+            >
+             {pendingAction && <Spinner />}
+             {dic.houseControl.confirm}
+            </Button>
+           </DialogClose>
+          </DialogFooter>
+         </DialogContent>
+        </Dialog>
         <Button
          size='lg'
          variant='outline'

@@ -144,6 +144,7 @@
   "houseMaidDescription": "توضیحات خانه دار",
   "cancel": "انصراف",
   "clear": "لغو",
+  "confirmClearMessage": "آیا از لغو اطمینان دارید؟",
   "confirm": "تایید",
   "history": "سوابق",
   "done": "پایان"
