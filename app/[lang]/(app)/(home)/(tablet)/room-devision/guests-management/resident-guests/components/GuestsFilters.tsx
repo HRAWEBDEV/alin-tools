@@ -94,20 +94,27 @@ export default function GuestsFilters({
  const filterLabel = (key: keyof GuestsFilterForm): string | null => {
   const val = values[key];
   if (!val) return null;
+
   switch (key) {
    case 'nationality':
     return (
-     initData?.nationalities.find((n) => n.value === val)?.value ?? String(val)
+     initData?.nationalities.find((n) => String(n.key) === String(val))
+      ?.value ?? String(val)
     );
    case 'room':
-    return initData?.rooms.find((r) => r.value === val)?.value ?? String(val);
+    return (
+     initData?.rooms.find((r) => String(r.key) === String(val))?.value ??
+     String(val)
+    );
    case 'specialGuest':
     return (
-     initData?.vipGuestTypes.find((v) => v.value === val)?.value ?? String(val)
+     initData?.vipGuestTypes.find((v) => String(v.key) === String(val))
+      ?.value ?? String(val)
     );
    case 'group':
     return (
-     initData?.customers.find((c) => c.value === val)?.value ?? String(val)
+     initData?.customers.find((c) => String(c.key) === String(val))?.value ??
+     String(val)
     );
    default:
     return String(val);
@@ -265,30 +272,34 @@ export default function GuestsFilters({
                </DrawerHeader>
                <div className='grow overflow-hidden overflow-y-auto mb-6'>
                 <ul>
-                 {getOptions(key, initData)?.map((opt) => (
-                  <li
-                   key={opt.key}
-                   className='flex gap-1 items-center ps-6 py-2 cursor-pointer hover:bg-muted/50 transition-colors'
-                   onClick={() => {
-                    field.onChange(
-                     field.value === opt.value ? null : opt.value,
-                    );
-                    setSelectDrawerOpen(null);
-                   }}
-                  >
-                   <Checkbox
-                    className='size-6 pointer-events-none'
-                    checked={field.value === opt.value}
-                   />
-                   <Button
-                    tabIndex={-1}
-                    variant='ghost'
-                    className='w-full justify-start h-auto text-lg pointer-events-none'
+                 {getOptions(key, initData)?.map((opt) => {
+                  const optionKeyStr = String(opt.key);
+
+                  return (
+                   <li
+                    key={opt.key}
+                    className='flex gap-1 items-center ps-6 py-2 cursor-pointer hover:bg-muted/50 transition-colors'
+                    onClick={() => {
+                     field.onChange(
+                      field.value === optionKeyStr ? null : optionKeyStr,
+                     );
+                     setSelectDrawerOpen(null);
+                    }}
                    >
-                    <span>{opt.value}</span>
-                   </Button>
-                  </li>
-                 ))}
+                    <Checkbox
+                     className='size-6 pointer-events-none'
+                     checked={field.value === optionKeyStr}
+                    />
+                    <Button
+                     tabIndex={-1}
+                     variant='ghost'
+                     className='w-full justify-start h-auto text-lg pointer-events-none'
+                    >
+                     <span>{opt.value}</span>
+                    </Button>
+                   </li>
+                  );
+                 })}
                  {getOptions(key, initData).length === 0 && (
                   <li className='text-center my-6 font-normal text-destructive'>
                    {dic.filters.noItemFound}
