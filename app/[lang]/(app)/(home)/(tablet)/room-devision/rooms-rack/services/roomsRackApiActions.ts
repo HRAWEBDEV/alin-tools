@@ -33,6 +33,7 @@ interface RackInfo {
  notCheckout: number;
  guestCout: number;
  extraBed: number;
+ hkStateID: number | null;
  rackReserveInfo: {
   walkin: number;
   tell: number;
