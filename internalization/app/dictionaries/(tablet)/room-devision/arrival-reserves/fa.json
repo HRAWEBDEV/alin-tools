@@ -1,5 +1,46 @@
 {
  "title": "رزروهای ورودی",
- "filters": {},
- "info": {}
+ "filters": {
+  "title": "فیلتر‌ها",
+  "withRoomNo": "با شماره اتاق",
+  "customer": "مشتری",
+  "clearAll": "حذف همه",
+  "fromDate": "از تاریخ",
+  "toDate": "تا تاریخ",
+  "withoutRoomNo": "بدون شماره اتاق",
+  "charged": "شارژ شده",
+  "notCharged": "شارژ نشده",
+  "noShow": "نوشو",
+  "canceled": "لغو شده"
+ },
+ "info": {
+  "customerSelected": "مشتری انتخاب شده",
+  "selectCustomer": "انتخاب مشتری",
+  "loadMore": "موارد بیشتر",
+  "adults": "بزرگسالان",
+  "children": "کودکان",
+  "notAssigned": "انتصاب نشده",
+  "unnamedGuest": "مهمان بی‌نام",
+  "noFiltersApplied": "فیلتری اعمال نشده",
+  "results": "نتایج",
+  "noItemFound": "موردی یافت نشد",
+  "select": "اتخاب",
+  "selectDate": "انتخاب تاریخ"
+ },
+ "detail": {
+  "title": "جزئیات"
+ },
+ "fields": {
+  "title": "",
+  "reserveNo": "شماره رزرو",
+  "roomNo": "شماره اتاق",
+  "guestFullName": "نام کامل مهمان",
+  "customerName": "نام مشتری",
+  "roomType": "نوع اتاق",
+  "pax": "پاکس",
+  "arrivalDate": "تاریخ ورود",
+  "departureDate": "تاریخ عزیمت",
+  "phoneNumber": "شماره تلفن",
+  "email": "ایمیل"
+ }
 }
