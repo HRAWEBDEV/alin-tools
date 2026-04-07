@@ -39,8 +39,15 @@ const getInitDatasApi = '/Reception/ArrivalReserves/GetDatas';
 const getReserveRoomsApi = '/Reception/ArrivalReserves/GetReserveRooms';
 const getInitDatasQueryKey = 'share-arrival-reserves-init-datas';
 const initDataDefaults: SelectOptions = [];
-const getInitDatas = (signal: AbortSignal) => {
- return axios.get<SelectOptions>(getInitDatasApi, { signal });
+const getInitDatas = (
+ signal: AbortSignal,
+ queryValues: GetSearchQueryValuesResult,
+) => {
+ const queryPathname = SetSearchQueryOnPathname({
+  pathname: getInitDatasApi,
+  queryValues: queryValues || {},
+ });
+ return axios.get<SelectOptions>(queryPathname, { signal });
 };
 
 let customerAbortController: AbortController | null = null;

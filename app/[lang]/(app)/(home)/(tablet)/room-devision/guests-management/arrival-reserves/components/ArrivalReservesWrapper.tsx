@@ -35,13 +35,32 @@ export default function ArrivalReservesWrapper({ dic }: Props) {
   null,
  );
 
+ const methods = useForm<ArrivalReservesSchema>({
+  resolver: zodResolver(createArrivalReservesSchema()),
+  defaultValues,
+ });
+
+ const formValues = useWatch({ control: methods.control });
+ const debouncedFilters = useDebounce(formValues, 500);
+
+ const effectiveDate = useMemo(() => {
+  return debouncedFilters.date
+   ? new Date(debouncedFilters.date).toISOString()
+   : new Date().toISOString();
+ }, [debouncedFilters.date]);
+
  const { data: initData, isLoading: initDataIsLoading } = useQuery({
-  queryKey: [getInitDatasQueryKey, 'customers-list'],
+  queryKey: [getInitDatasQueryKey, 'customers-list', effectiveDate],
   queryFn: async ({ signal }) => {
+   const queryValues: GetSearchQueryValuesResult = {
+    date: [effectiveDate],
+   };
+
    const [initDatasRes, customersRes] = await Promise.all([
-    getInitDatas(signal),
-    getCustomers(signal),
+    getInitDatas(signal, queryValues),
+    getCustomers(signal, queryValues),
    ]);
+
    return {
     roomTypes: initDatasRes.data || [],
     customers:
@@ -53,14 +72,6 @@ export default function ArrivalReservesWrapper({ dic }: Props) {
   },
   staleTime: 5 * 60 * 1000,
  });
-
- const methods = useForm<ArrivalReservesSchema>({
-  resolver: zodResolver(createArrivalReservesSchema()),
-  defaultValues,
- });
-
- const formValues = useWatch({ control: methods.control });
- const debouncedFilters = useDebounce(formValues, 500);
 
  const {
   data,
@@ -76,6 +87,7 @@ export default function ArrivalReservesWrapper({ dic }: Props) {
    const formattedQueryValues: GetSearchQueryValuesResult = {
     limit: [String(PAGE_SIZE)],
     offset: [String(pageParam)],
+    date: [effectiveDate],
     withRoomNo: [debouncedFilters.withRoomNo ? 'true' : 'false'],
     withoutRoomNo: [debouncedFilters.withoutRoomNo ? 'true' : 'false'],
     charged: [debouncedFilters.charged ? 'true' : 'false'],
@@ -84,9 +96,6 @@ export default function ArrivalReservesWrapper({ dic }: Props) {
     canceled: [debouncedFilters.canceled ? 'true' : 'false'],
    };
 
-   if (debouncedFilters.date) {
-    formattedQueryValues.date = [new Date(debouncedFilters.date).toISOString()];
-   }
    if (debouncedFilters.roomTypeID) {
     formattedQueryValues.roomTypeID = [String(debouncedFilters.roomTypeID)];
    }
