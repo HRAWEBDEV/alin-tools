@@ -27,15 +27,18 @@ import { useRackConfigContext } from '../../services/rooms-rack-config/roomsRack
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { IoNotifications } from 'react-icons/io5';
 import RoomControlIndicator from '../room-control/RoomControlIndicator';
+import { type RoomControlDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/room-control/dictionary';
 
 export default function RackRoom({
  dic,
  room,
  mock = false,
+ roomControlDic,
 }: {
  dic: RoomsRackDictionary;
  room: Rack;
  mock?: boolean;
+ roomControlDic: RoomControlDictionary;
 }) {
  const { watch } = useFormContext<RackFiltersSchema>();
  const {
@@ -124,7 +127,7 @@ export default function RackRoom({
        className={`absolute left-1/2 ${activeMinimalView || activeCompactView ? 'bottom-0' : 'bottom-2'} -translate-x-1/2`}
       >
        {!mock && room.hkStateID && (
-        <RoomControlIndicator dic={dic} hkStateID={room.hkStateID} />
+        <RoomControlIndicator dic={roomControlDic} hkStateID={room.hkStateID} />
        )}
       </div>
       {room.msgFlag && (
@@ -288,7 +291,11 @@ export default function RackRoom({
       )}
       {room.hkStateID && mock && (
        <div>
-        <RoomControlIndicator withText dic={dic} hkStateID={room.hkStateID} />
+        <RoomControlIndicator
+         withText
+         dic={roomControlDic}
+         hkStateID={room.hkStateID}
+        />
        </div>
       )}
      </Link>

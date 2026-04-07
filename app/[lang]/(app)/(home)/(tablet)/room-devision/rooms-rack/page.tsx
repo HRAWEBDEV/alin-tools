@@ -33,7 +33,11 @@ export default async function HomePage(
  });
  return (
   <RoomsRackConfigProvider dic={dic} roomControlDic={roomControlDic}>
-   <RoomsRackWrapper dic={dic} roomsStatisticsDic={roomsStatisticsDic} />
+   <RoomsRackWrapper
+    dic={dic}
+    roomsStatisticsDic={roomsStatisticsDic}
+    roomControlDic={roomControlDic}
+   />
   </RoomsRackConfigProvider>
  );
 }
