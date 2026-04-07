@@ -1,4 +1,4 @@
-import { RoomControlStep } from '../services/room-control/roomControlApiActions';
+import { RoomControlStep } from '../../services/room-control/roomControlApiActions';
 const roomControlSteps: { title: RoomControlStep }[] = [
  {
   title: 'alert',

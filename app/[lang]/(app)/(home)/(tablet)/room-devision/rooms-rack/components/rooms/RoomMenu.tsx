@@ -269,7 +269,9 @@ export default function RoomMenu({
       />
       <RoomControl
        dic={dic}
-       room={room}
+       roomID={room.roomID!}
+       registerID={room.registerID!}
+       roomLabel={room.roomLabel!}
        open={showRoomControl}
        onChangeOpen={setShowRoomControl}
        onSuccess={() => {

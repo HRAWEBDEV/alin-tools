@@ -18,7 +18,7 @@ import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import {
  roomControlSteps,
  getRoomControlStyles,
-} from '../../utils/roomControl';
+} from '../../utils/room-control/roomControl';
 import { Field, FieldLabel } from '@/components/ui/field';
 import { InputGroup, InputGroupTextarea } from '@/components/ui/input-group';
 import {
@@ -73,12 +73,15 @@ export default function RoomControl({
  dic,
  open,
  onChangeOpen,
- room,
- onSuccess,
+ roomID,
+ registerID,
+ roomLabel,
 }: {
  dic: RoomsRackDictionary;
  open: boolean;
- room: Rack;
+ roomID: number;
+ registerID: number;
+ roomLabel: string;
  onChangeOpen: (state: boolean) => unknown;
  onSuccess: () => unknown;
 }) {
@@ -94,10 +97,10 @@ export default function RoomControl({
   isLoading: roomControlIsLoading,
   isFetching: roomControlIsFetching,
  } = useQuery({
-  queryKey: [roomControlBaseKey, 'room', room.roomID.toString()],
+  queryKey: [roomControlBaseKey, 'room', roomID.toString()],
   async queryFn({ signal }) {
    const res = await getRoomControl({
-    roomID: room.roomID,
+    roomID: roomID,
     signal,
    });
    return res.data;
@@ -111,10 +114,10 @@ export default function RoomControl({
   isSuccess: roomControlHistoryIsSuccess,
   isError: roomControlHistoryIsError,
  } = useQuery({
-  queryKey: [roomControlBaseKey, 'room', 'history', room.roomID.toString()],
+  queryKey: [roomControlBaseKey, 'room', 'history', roomID.toString()],
   async queryFn({ signal }) {
    const res = await getRoomControlHistory({
-    roomID: room.roomID,
+    roomID: roomID,
     signal,
    });
    return res.data;
@@ -124,10 +127,10 @@ export default function RoomControl({
  // save room control
  function handleInvalidateRoomControl() {
   queryClient.invalidateQueries({
-   queryKey: [roomControlBaseKey, 'room', room.roomID.toString()],
+   queryKey: [roomControlBaseKey, 'room', roomID.toString()],
   });
   queryClient.invalidateQueries({
-   queryKey: [roomControlBaseKey, 'room', 'history', room.roomID.toString()],
+   queryKey: [roomControlBaseKey, 'room', 'history', roomID.toString()],
   });
  }
 
@@ -139,8 +142,8 @@ export default function RoomControl({
      roomControl: {
       ...(roomControl || {}),
       id: roomControl?.id || 0,
-      registerID: room.registerID!,
-      roomID: room.roomID!,
+      registerID: registerID!,
+      roomID: roomID!,
       maidComment: maidComment || null,
      },
      alert: false,
@@ -166,8 +169,8 @@ export default function RoomControl({
  } = useMutation({
   mutationFn() {
    return changeRoomControl({
-    registerID: room.registerID!,
-    roomID: room.roomID!,
+    registerID: registerID!,
+    roomID: roomID!,
    });
   },
   onSuccess() {
@@ -247,7 +250,7 @@ export default function RoomControl({
      <DialogHeader>
       <DialogTitle className='text-lg'>
        {dic.houseControl.title}{' '}
-       <span className='font-en-roboto'>{room.roomLabel}</span>
+       <span className='font-en-roboto'>{roomLabel}</span>
       </DialogTitle>
      </DialogHeader>
     </DialogHeader>
@@ -424,7 +427,7 @@ export default function RoomControl({
            <DialogHeader>
             <DialogTitle className='text-lg'>
              {dic.houseControl.history} {dic.houseControl.title}{' '}
-             <span className='font-en-roboto'>{room.roomLabel}</span>
+             <span className='font-en-roboto'>{roomLabel}</span>
             </DialogTitle>
            </DialogHeader>
           </DialogHeader>

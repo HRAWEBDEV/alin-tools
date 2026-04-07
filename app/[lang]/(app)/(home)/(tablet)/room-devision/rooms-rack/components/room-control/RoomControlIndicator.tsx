@@ -1,7 +1,7 @@
 import {
  type RoomControlStep,
  getRoomControlStyles,
-} from '../../utils/roomControl';
+} from '../../utils/room-control/roomControl';
 import { HouseControlStates } from '../../utils/room-control/houseControlStates';
 import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
 
