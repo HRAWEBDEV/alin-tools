@@ -1,6 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
-import { type Rack } from '../../services/roomsRackApiActions';
+import { type RoomControlDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/room-control/dictionary';
 import {
  Dialog,
  DialogClose,
@@ -77,7 +76,7 @@ export default function RoomControl({
  registerID,
  roomLabel,
 }: {
- dic: RoomsRackDictionary;
+ dic: RoomControlDictionary;
  open: boolean;
  roomID: number;
  registerID: number;

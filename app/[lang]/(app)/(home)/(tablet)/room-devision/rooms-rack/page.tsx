@@ -1,5 +1,6 @@
 import { getRoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
 import { getRoomStatisticsDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/room-statistics/dictionary';
+import { getRoomControlDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/room-control/dictionary';
 import { RoomsRackConfigProvider } from './services/rooms-rack-config/RoomsRackConfigProvider';
 import RoomsRackWrapper from './components/RoomsRackWrapper';
 import { type Locale } from '@/internalization/app/localization';
@@ -27,8 +28,11 @@ export default async function HomePage(
  const roomsStatisticsDic = await getRoomStatisticsDictionary({
   locale: lang as Locale,
  });
+ const roomControlDic = await getRoomControlDictionary({
+  locale: lang as Locale,
+ });
  return (
-  <RoomsRackConfigProvider dic={dic}>
+  <RoomsRackConfigProvider dic={dic} roomControlDic={roomControlDic}>
    <RoomsRackWrapper dic={dic} roomsStatisticsDic={roomsStatisticsDic} />
   </RoomsRackConfigProvider>
  );

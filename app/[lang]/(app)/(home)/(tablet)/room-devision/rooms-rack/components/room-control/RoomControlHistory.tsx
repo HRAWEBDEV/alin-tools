@@ -1,4 +1,4 @@
-import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
+import { type RoomControlDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/room-control/dictionary';
 import { type RoomControl } from '../../services/room-control/roomControlApiActions';
 import NoItemFound from '@/app/[lang]/(app)/components/NoItemFound';
 import UnExpectedError from '@/app/[lang]/(app)/components/UnExpectedError';
@@ -11,7 +11,7 @@ export default function RoomControlHistory({
  isFetching,
  isSuccess,
 }: {
- dic: RoomsRackDictionary;
+ dic: RoomControlDictionary;
  data?: RoomControl[];
  isFetching: boolean;
  isLoading: boolean;

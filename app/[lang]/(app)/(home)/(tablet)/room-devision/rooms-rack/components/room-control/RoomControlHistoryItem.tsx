@@ -1,4 +1,4 @@
-import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
+import { type RoomControlDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/room-control/dictionary';
 import { type RoomControl } from '../../services/room-control/roomControlApiActions';
 import { MdTouchApp } from 'react-icons/md';
 import { useMemo } from 'react';
@@ -9,7 +9,7 @@ export default function RoomControlHistoryItem({
  dic,
  history,
 }: {
- dic: RoomsRackDictionary;
+ dic: RoomControlDictionary;
  history: RoomControl;
 }) {
  const { locale } = useBaseConfig();

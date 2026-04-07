@@ -8,6 +8,7 @@ import {
  rackConfigContext,
 } from './roomsRackConfigContext';
 import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
+import { type RoomControlDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/room-control/dictionary';
 import {
  type Rack,
  type RackDetails,
@@ -66,9 +67,11 @@ import {
 export function RoomsRackConfigProvider({
  children,
  dic,
+ roomControlDic,
 }: {
  children: ReactNode;
  dic: RoomsRackDictionary;
+ roomControlDic: RoomControlDictionary;
 }) {
  const dateFns = useDateFns();
  const { userInfoRouterStorage } = useUserInfoRouter();
@@ -694,6 +697,7 @@ export function RoomsRackConfigProvider({
     {children}
     <RoomMenu
      isOpen={showRackMenu}
+     roomControlDic={roomControlDic}
      showRoomStateKind={showRoomStateKind}
      setShowRoomStateKind={setShowRoomStateKind}
      showRoomStateType={showRoomStateType}

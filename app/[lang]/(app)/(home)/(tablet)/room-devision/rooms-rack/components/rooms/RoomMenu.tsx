@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
+import { type RoomControlDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/room-control/dictionary';
 import {
  Drawer,
  DrawerContent,
@@ -54,8 +55,10 @@ export default function RoomMenu({
  setShowGuestMessages,
  showRoomNotes,
  setShowRoomNotes,
+ roomControlDic,
 }: {
  dic: RoomsRackDictionary;
+ roomControlDic: RoomControlDictionary;
  room: Rack | null;
  isOpen: boolean;
  setIsOpen: (state: boolean) => unknown;
@@ -268,7 +271,7 @@ export default function RoomMenu({
        onChangeOpen={setShowRoomGuests}
       />
       <RoomControl
-       dic={dic}
+       dic={roomControlDic}
        roomID={room.roomID!}
        registerID={room.registerID!}
        roomLabel={room.roomLabel!}
