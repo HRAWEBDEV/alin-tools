@@ -257,6 +257,22 @@ export default function RoomControl({
     <div className='p-4 grow overflow-auto'>
      <form>
       <h2 className='text-center mb-4 font-medium'>
+       {nextStep === 'done' ? (
+        <span
+         className={`text-lg ${getRoomControlStyles(nextStep === 'done' ? 'checkRoom' : nextStep).text}`}
+        >
+         {dic.houseControl[nextStep]} {dic.houseControl.title}
+        </span>
+       ) : (
+        <>
+         <span className='text-neutral-700 dark:text-neutral-400'>
+          {dic.houseControl.nextStep}:
+         </span>{' '}
+         <span className={`text-lg ${getRoomControlStyles(nextStep).text}`}>
+          {dic.houseControl[nextStep]}
+         </span>
+        </>
+       )}
        <span className='text-neutral-700 dark:text-neutral-400'>
         {dic.houseControl.nextStep}:
        </span>{' '}
@@ -278,6 +294,7 @@ export default function RoomControl({
           key={step.title}
           disabled={pendingAction}
           onClick={() => {
+           if (nextStep === 'done') return;
            if (step.title !== nextStep) {
             toast.error(
              `${dic.houseControl.nextStep}: ${dic.houseControl[nextStep]}`,
