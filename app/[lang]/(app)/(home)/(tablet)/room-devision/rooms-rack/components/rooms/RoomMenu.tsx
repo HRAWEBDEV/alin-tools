@@ -192,7 +192,7 @@ export default function RoomMenu({
              {room.hkStateID && (
               <div>
                <RoomControlIndicator
-                dic={dic}
+                dic={roomControlDic}
                 withText
                 hkStateID={room.hkStateID}
                />

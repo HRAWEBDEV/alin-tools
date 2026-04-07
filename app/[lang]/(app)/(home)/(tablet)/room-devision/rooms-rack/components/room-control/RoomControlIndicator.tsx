@@ -3,7 +3,7 @@ import {
  getRoomControlStyles,
 } from '../../utils/room-control/roomControl';
 import { HouseControlStates } from '../../utils/room-control/houseControlStates';
-import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
+import { type RoomControlDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/room-control/dictionary';
 
 export default function RoomControlIndicator({
  hkStateID,
@@ -11,7 +11,7 @@ export default function RoomControlIndicator({
  withText = false,
 }: {
  hkStateID: number;
- dic: RoomsRackDictionary;
+ dic: RoomControlDictionary;
  withText?: boolean;
 }) {
  let stepPassed = hkStateID;
