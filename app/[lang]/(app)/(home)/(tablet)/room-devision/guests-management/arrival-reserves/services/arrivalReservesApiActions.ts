@@ -44,15 +44,18 @@ const getInitDatas = (signal: AbortSignal) => {
 };
 
 let customerAbortController: AbortController | null = null;
-const getCustomers = (queryValues: GetSearchQueryValuesResult) => {
+const getCustomers = (
+ signal: AbortSignal,
+ queryValues?: GetSearchQueryValuesResult,
+) => {
  customerAbortController?.abort();
  customerAbortController = new AbortController();
  const queryPathname = SetSearchQueryOnPathname({
   pathname: getCustomerApi,
-  queryValues,
+  queryValues: queryValues || {},
  });
  return axios.get<ApiPagedData<Customer[]>>(queryPathname, {
-  signal: customerAbortController.signal,
+  signal,
  });
 };
 

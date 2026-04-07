@@ -2,11 +2,14 @@
 
 import { useState, useMemo } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { useDebounce } from '../../../hooks/useDebounce';
 import {
  getReserveRooms,
  getReserveRoomsQueryKey,
+ getInitDatas,
+ getInitDatasQueryKey,
+ getCustomers,
 } from '../services/arrivalReservesApiActions';
 import ArrivalReservesFilters from './ArrivalReservesFilters';
 import ArrivalReservesList from './ArrivalReservesList';
@@ -31,6 +34,25 @@ export default function ArrivalReservesWrapper({ dic }: Props) {
  const [selectedReserve, setSelectedReserve] = useState<ReserveRoom | null>(
   null,
  );
+
+ const { data: initData, isLoading: initDataIsLoading } = useQuery({
+  queryKey: [getInitDatasQueryKey, 'customers-list'],
+  queryFn: async ({ signal }) => {
+   const [initDatasRes, customersRes] = await Promise.all([
+    getInitDatas(signal),
+    getCustomers(signal),
+   ]);
+   return {
+    roomTypes: initDatasRes.data || [],
+    customers:
+     customersRes.data.rows?.map((c) => ({
+      key: String(c.id),
+      value: c.name,
+     })) || [],
+   };
+  },
+  staleTime: 5 * 60 * 1000,
+ });
 
  const methods = useForm<ArrivalReservesSchema>({
   resolver: zodResolver(createArrivalReservesSchema()),
@@ -95,7 +117,11 @@ export default function ArrivalReservesWrapper({ dic }: Props) {
  return (
   <div className='flex flex-col h-full'>
    <FormProvider {...methods}>
-    <ArrivalReservesFilters dic={dic} />
+    <ArrivalReservesFilters
+     dic={dic}
+     initData={initData}
+     initDataIsLoading={initDataIsLoading}
+    />
    </FormProvider>
 
    <div className='flex-1 overflow-y-auto p-4'>
