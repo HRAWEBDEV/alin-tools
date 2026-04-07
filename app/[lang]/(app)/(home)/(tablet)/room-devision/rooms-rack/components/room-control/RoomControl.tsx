@@ -273,14 +273,6 @@ export default function RoomControl({
          </span>
         </>
        )}
-       <span className='text-neutral-700 dark:text-neutral-400'>
-        {dic.houseControl.nextStep}:
-       </span>{' '}
-       <span
-        className={`text-lg ${getRoomControlStyles(nextStep === 'done' ? 'checkRoom' : nextStep).text}`}
-       >
-        {dic.houseControl[nextStep]}
-       </span>
       </h2>
       <div className='grid gap-4 grid-cols-[repeat(2,10rem)] justify-items-center justify-center mb-6'>
        {roomControlSteps.map((step) => {
