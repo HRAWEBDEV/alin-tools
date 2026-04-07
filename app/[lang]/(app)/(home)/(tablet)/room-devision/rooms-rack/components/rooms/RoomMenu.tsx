@@ -159,7 +159,12 @@ export default function RoomMenu({
      <>
       <div className='p-4 pb-6 grid sm:grid-cols-[max-content_1fr] gap-6 w-[min(100%,50rem)] mx-auto overflow-auto'>
        <div className='sm:w-48'>
-        <RackRoom dic={dic} room={room} mock={true} />
+        <RackRoom
+         dic={dic}
+         room={room}
+         mock={true}
+         roomControlDic={roomControlDic}
+        />
        </div>
        <div className='grid grid-cols-1 gap-2 content-start'>
         {!room.noRoom && (
