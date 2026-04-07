@@ -1,6 +1,5 @@
 import { type RoomControlDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/room-control/dictionary';
 import { type RoomControl } from '../../services/room-control/roomControlApiActions';
-import { MdTouchApp } from 'react-icons/md';
 import { useMemo } from 'react';
 import { FaCheck } from 'react-icons/fa6';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
@@ -40,9 +39,6 @@ export default function RoomControlHistoryItem({
 
  return (
   <button className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 relative isolate'>
-   <div className='absolute bottom-0 end-0 -z-1 opacity-60'>
-    <MdTouchApp className='size-24 text-neutral-200 dark:text-neutral-800' />
-   </div>
    <div className='flex justify-between items-center flex-wrap gap-1 mb-2'>
     <div className='flex gap-1 items-center grow'>
      <span className='font-medium text-sm text-neutral-700 dark:text-neutral-400 text-start min-w-20'>
