@@ -2,6 +2,7 @@ import { getRoomControlPageDictionary } from '@/internalization/app/dictionaries
 import { getRoomControlDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/room-control/dictionary';
 import { type Locale } from '@/internalization/app/localization';
 import { Metadata } from 'next';
+import RoomControlWrapper from './components/RoomControlWrapper';
 import * as icons from 'react-icons/md';
 
 export async function generateMetadata(
@@ -27,7 +28,9 @@ export default async function HomePage(
   locale: lang as Locale,
  });
  return (
-  <></>
+  <div className='p-4'>
+   <RoomControlWrapper dic={dic} roomControl={roomControlDic} />
+  </div>
   // <div className='grid grid-cols-5 gap-4 flex-wrap'>
   //  {Object.keys(icons).map((key) => {
   //   const Icon = icons[key as keyof typeof icons];

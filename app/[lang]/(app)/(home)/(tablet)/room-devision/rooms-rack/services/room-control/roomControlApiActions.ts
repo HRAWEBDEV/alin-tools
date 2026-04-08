@@ -1,36 +1,7 @@
 import { axios } from '@/app/[lang]/(app)/utils/defaultAxios';
+import { RoomControl } from '../../../room-control/services/roomControlApiActions';
 
 const roomControlBaseKey = 'rooms-control';
-
-interface RoomControl {
- id: number;
- roomID: number;
- registerID: number;
- receptionPersonID: number;
- receptionDateTimeOffset: string;
- maidPersonID: number | null;
- maidDateTimeOffset: string | null;
- minibarChecked: boolean;
- minibarDateTimeOffset: string | null;
- roomChecked: boolean;
- roomCheckDateTimeOffset: string | null;
- maidComment: string | null;
- closed: boolean;
- cancelled: boolean;
- deleted: boolean;
- ownerID: 1;
- roomNo: number;
- roomLabel: string;
- roomTypeID: number;
- floorNo: number;
- folioNo: number;
- receptionPersonFrisName: string;
- receptionPersonLatName: string;
- receptionPersonFullName: string;
- maidPersonFrisName: string | null;
- maidPersonLatName: string | null;
- maidPersonFullName: string | null;
-}
 
 type RoomControlStep = 'alert' | 'checkNow' | 'miniBar' | 'checkRoom';
 type RoomControlStepState = Record<RoomControlStep, boolean>;
