@@ -29,7 +29,7 @@ export default async function HomePage(
  });
  return (
   <div className='p-4'>
-   <RoomControlWrapper dic={dic} roomControl={roomControlDic} />
+   <RoomControlWrapper dic={dic} roomControlDic={roomControlDic} />
   </div>
   // <div className='grid grid-cols-5 gap-4 flex-wrap'>
   //  {Object.keys(icons).map((key) => {

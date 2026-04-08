@@ -1,4 +1,5 @@
 'use client';
+import { useState } from 'react';
 import { RoomControlPageDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/room-control/dictionary';
 import { type RoomControlDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/room-control/dictionary';
 import { useForm, FormProvider } from 'react-hook-form';
@@ -15,13 +16,20 @@ import {
  getRoomControls,
 } from '../services/roomControlApiActions';
 import RoomControlFilters from './RoomControlFilters';
+import RoomControl from '../../rooms-rack/components/room-control/RoomControl';
 
 export default function RoomControlWrapper({
  dic,
+ roomControlDic,
 }: {
  dic: RoomControlPageDictionary;
- roomControl: RoomControlDictionary;
+ roomControlDic: RoomControlDictionary;
 }) {
+ const [selectedRoomControlId, setSelectedRoomControlId] = useState<
+  number | null
+ >(null);
+ const [showEditRoomControl, setShowEditRoomControl] = useState(false);
+
  const filtersUseForm = useForm<RoomControlSchema>({
   defaultValues: {
    ...defaultValues,
@@ -65,14 +73,41 @@ export default function RoomControlWrapper({
   },
  });
 
+ function handleShowEditRoomControl(id: number) {
+  setShowEditRoomControl(true);
+  setSelectedRoomControlId(id);
+ }
+
+ function handleCloseEditRoomControl() {
+  setSelectedRoomControlId(null);
+  setShowEditRoomControl(false);
+ }
+
+ const targetRoomControl = selectedRoomControlId
+  ? data?.find((item) => item.id === selectedRoomControlId) || null
+  : null;
+
  return (
-  <FormProvider {...filtersUseForm}>
-   <RoomControlFilters
-    dic={dic}
-    initDataIsLoading={initDataIsLoading}
-    initData={initData}
-    roomControl={{ data, isFetching, refetch, isSuccess, isError }}
-   />
-  </FormProvider>
+  <>
+   <FormProvider {...filtersUseForm}>
+    <RoomControlFilters
+     dic={dic}
+     initDataIsLoading={initDataIsLoading}
+     initData={initData}
+     roomControl={{ data, isFetching, refetch, isSuccess, isError }}
+    />
+   </FormProvider>
+   {targetRoomControl && (
+    <RoomControl
+     dic={roomControlDic}
+     open={showEditRoomControl}
+     registerID={targetRoomControl.registerID}
+     roomID={targetRoomControl.roomID}
+     roomLabel={targetRoomControl.roomLabel}
+     onChangeOpen={() => handleCloseEditRoomControl()}
+     onSuccess={() => {}}
+    />
+   )}
+  </>
  );
 }
