@@ -4,7 +4,7 @@ import {
  DrawerHeader,
  DrawerTitle,
 } from '@/components/ui/drawer';
-import { ResidentGuest } from '../services/guestsListApiActions';
+import { type ResidentGuest } from '../services/guestsListApiActions';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import Link from 'next/link';
 import type { Route } from 'next';

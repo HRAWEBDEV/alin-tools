@@ -7,7 +7,7 @@ import {
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import Link from 'next/link';
 import type { Route } from 'next';
-import type { TReserveRoom } from '../services/arrivalReservesApiActions';
+import type { ReserveRoom } from '../services/arrivalReservesApiActions';
 import type { ArrivalReservesDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/arrival-reserves/dictionary';
 
 export default function ArrivalReserveDrawer({
@@ -15,7 +15,7 @@ export default function ArrivalReserveDrawer({
  dic,
  onClose,
 }: {
- reserve: TReserveRoom | null;
+ reserve: ReserveRoom | null;
  dic: ArrivalReservesDictionary;
  onClose: () => void;
 }) {

@@ -2,18 +2,27 @@
 
 import { useState, useMemo } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { useDebounce } from '../../../hooks/useDebounce';
 import {
  getReserveRooms,
  getReserveRoomsQueryKey,
+ getInitDatas,
+ getInitDatasQueryKey,
+ getCustomers,
 } from '../services/arrivalReservesApiActions';
 import ArrivalReservesFilters from './ArrivalReservesFilters';
 import ArrivalReservesList from './ArrivalReservesList';
 import ArrivalReserveDrawer from './ArrivalReserveDrawer';
-import type { TReserveRoom } from '../services/arrivalReservesApiActions';
+import {
+ createArrivalReservesSchema,
+ defaultValues,
+ type ArrivalReservesSchema,
+} from '../schemas/arrivalReservesSchema';
+import type { ReserveRoom } from '../services/arrivalReservesApiActions';
 import type { ArrivalReservesDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/arrival-reserves/dictionary';
 import { GetSearchQueryValuesResult } from '../../utils/searchQueryValues';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 type Props = {
  dic: ArrivalReservesDictionary;
@@ -22,26 +31,47 @@ type Props = {
 const PAGE_SIZE = 10;
 
 export default function ArrivalReservesWrapper({ dic }: Props) {
- const [selectedReserve, setSelectedReserve] = useState<TReserveRoom | null>(
+ const [selectedReserve, setSelectedReserve] = useState<ReserveRoom | null>(
   null,
  );
 
- const methods = useForm({
-  defaultValues: {
-   date: null as string | Date | null,
-   roomTypeID: null as string | null,
-   customerID: null as string | null,
-   withRoomNo: false,
-   withoutRoomNo: false,
-   charged: false,
-   notCharged: false,
-   noShow: false,
-   canceled: false,
-  },
+ const methods = useForm<ArrivalReservesSchema>({
+  resolver: zodResolver(createArrivalReservesSchema()),
+  defaultValues,
  });
 
  const formValues = useWatch({ control: methods.control });
  const debouncedFilters = useDebounce(formValues, 500);
+
+ const effectiveDate = useMemo(() => {
+  return debouncedFilters.date
+   ? new Date(debouncedFilters.date).toISOString()
+   : new Date().toISOString();
+ }, [debouncedFilters.date]);
+
+ const { data: initData, isLoading: initDataIsLoading } = useQuery({
+  queryKey: [getInitDatasQueryKey, 'customers-list', effectiveDate],
+  queryFn: async ({ signal }) => {
+   const queryValues: GetSearchQueryValuesResult = {
+    date: [effectiveDate],
+   };
+
+   const [initDatasRes, customersRes] = await Promise.all([
+    getInitDatas(signal, queryValues),
+    getCustomers(signal, queryValues),
+   ]);
+
+   return {
+    roomTypes: initDatasRes.data || [],
+    customers:
+     customersRes.data.rows?.map((c) => ({
+      key: String(c.id),
+      value: c.name,
+     })) || [],
+   };
+  },
+  staleTime: 5 * 60 * 1000,
+ });
 
  const {
   data,
@@ -57,6 +87,7 @@ export default function ArrivalReservesWrapper({ dic }: Props) {
    const formattedQueryValues: GetSearchQueryValuesResult = {
     limit: [String(PAGE_SIZE)],
     offset: [String(pageParam)],
+    date: [effectiveDate],
     withRoomNo: [debouncedFilters.withRoomNo ? 'true' : 'false'],
     withoutRoomNo: [debouncedFilters.withoutRoomNo ? 'true' : 'false'],
     charged: [debouncedFilters.charged ? 'true' : 'false'],
@@ -65,9 +96,6 @@ export default function ArrivalReservesWrapper({ dic }: Props) {
     canceled: [debouncedFilters.canceled ? 'true' : 'false'],
    };
 
-   if (debouncedFilters.date) {
-    formattedQueryValues.date = [new Date(debouncedFilters.date).toISOString()];
-   }
    if (debouncedFilters.roomTypeID) {
     formattedQueryValues.roomTypeID = [String(debouncedFilters.roomTypeID)];
    }
@@ -98,7 +126,11 @@ export default function ArrivalReservesWrapper({ dic }: Props) {
  return (
   <div className='flex flex-col h-full'>
    <FormProvider {...methods}>
-    <ArrivalReservesFilters dic={dic} />
+    <ArrivalReservesFilters
+     dic={dic}
+     initData={initData}
+     initDataIsLoading={initDataIsLoading}
+    />
    </FormProvider>
 
    <div className='flex-1 overflow-y-auto p-4'>
