@@ -310,7 +310,7 @@ export default function RoomControlFilters({
    </div>
    <div className='mt-2'>
     <div className='flex flex-wrap gap-3'>
-     {roomControlSteps.map((item) => {
+     {roomControlSteps.slice(0,2).map((item) => {
       const stepStyle = getRoomControlStyles(item);
       return (
        <div key={item} className='flex gap-1 items-center'>
