@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useMemo } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
@@ -23,21 +22,26 @@ import type { ReserveRoom } from '../services/arrivalReservesApiActions';
 import type { ArrivalReservesDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/arrival-reserves/dictionary';
 import { GetSearchQueryValuesResult } from '../../utils/searchQueryValues';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useDateFns } from '@/hooks/useDateFns';
 
 type Props = {
  dic: ArrivalReservesDictionary;
 };
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 50;
 
 export default function ArrivalReservesWrapper({ dic }: Props) {
+ const dateFns = useDateFns();
  const [selectedReserve, setSelectedReserve] = useState<ReserveRoom | null>(
   null,
  );
 
  const methods = useForm<ArrivalReservesSchema>({
   resolver: zodResolver(createArrivalReservesSchema()),
-  defaultValues,
+  defaultValues: {
+   ...defaultValues,
+   date: dateFns.startOfToday(),
+  },
  });
 
  const formValues = useWatch({ control: methods.control });

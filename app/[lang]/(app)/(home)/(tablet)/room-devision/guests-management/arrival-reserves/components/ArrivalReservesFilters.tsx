@@ -1,5 +1,4 @@
 'use client';
-
 import { useState } from 'react';
 import { useFormContext, Controller, useWatch } from 'react-hook-form';
 import { useKeenSlider } from 'keen-slider/react';
@@ -191,7 +190,6 @@ export default function ArrivalReservesFilters({
           <button
            onClick={() =>
             reset({
-             date: null,
              roomTypeID: null,
              customerID: null,
              withRoomNo: false,
@@ -223,33 +221,16 @@ export default function ArrivalReservesFilters({
                <Button
                 variant='outline'
                 id='date'
-                className={cn(
-                 'justify-between h-11 font-normal text-muted-foreground',
-                 field.value && 'border-primary text-primary',
-                )}
+                className={'justify-between h-11 font-normal'}
                 onBlur={field.onBlur}
                 ref={field.ref}
                >
                 <span className='text-start grow overflow-hidden text-ellipsis'>
                  {field.value
                   ? new Date(field.value).toLocaleDateString(locale)
-                  : dic.info?.selectDate}
+                  : ''}
                 </span>
                 <div className='flex gap-1 items-center -me-2'>
-                 {field.value && (
-                  <Button
-                   type='button'
-                   variant='ghost'
-                   size='icon'
-                   onClick={(e) => {
-                    e.stopPropagation();
-                    field.onChange(null);
-                   }}
-                   className='text-rose-700 dark:text-rose-400 h-8 w-8 bg-transparent!'
-                  >
-                   <FaRegTrashAlt className='size-4' />
-                  </Button>
-                 )}
                  <ChevronDownIcon className='opacity-50 size-4 shrink-0' />
                 </div>
                </Button>
@@ -278,7 +259,6 @@ export default function ArrivalReservesFilters({
           }}
          />
         </div>
-
         <div className='grid sm:grid-cols-2 grid-cols-1 gap-6 pb-2'>
          {(['roomTypeID', 'customerID'] as const).map((key) => (
           <Controller
@@ -293,17 +273,13 @@ export default function ArrivalReservesFilters({
                id={key}
                variant='outline'
                onClick={() => setSelectDrawerOpen(key)}
-               className={cn(
-                'justify-between h-11 font-normal',
-                field.value && 'border-primary text-primary',
-               )}
+               className={'justify-between h-11 font-normal'}
               >
                <span className='text-start grow overflow-hidden text-ellipsis'>
                 {initDataIsLoading ? (
                  <Spinner className='w-4 h-4' />
                 ) : (
-                 (filterLabel(key) ??
-                 `${dic.info?.select} ${filterKeyLabel(key)}`)
+                 filterLabel(key)
                 )}
                </span>
                <div className='flex gap-1 items-center -me-2'>
@@ -377,7 +353,7 @@ export default function ArrivalReservesFilters({
          ))}
         </div>
 
-        <div className='grid grid-cols-2 gap-4 pb-6 mt-2'>
+        <div className='grid grid-cols-2 gap-5 pb-6 mt-2'>
          {(
           [
            'withRoomNo',
@@ -388,14 +364,14 @@ export default function ArrivalReservesFilters({
            'canceled',
           ] as const
          ).map((boolKey) => (
-          <div key={boolKey} className='flex items-center gap-2'>
+          <div key={boolKey} className='flex items-center gap-4'>
            <Controller
             name={boolKey}
             control={control}
             render={({ field }) => (
              <Checkbox
               id={boolKey}
-              className='size-5 rounded-sm'
+              className='size-5 rounded-sm scale-125'
               checked={field.value}
               onCheckedChange={field.onChange}
              />
@@ -448,9 +424,11 @@ export default function ArrivalReservesFilters({
           variant='ghost'
           size='icon'
           className='text-destructive shrink-0 h-8 w-8'
-          onClick={() =>
-           setValue(key, typeof values[key] === 'boolean' ? false : null)
-          }
+          disabled={key === 'date'}
+          onClick={() => {
+           if (key === 'date') return;
+           setValue(key, typeof values[key] === 'boolean' ? false : null);
+          }}
          >
           <FaRegTrashAlt />
          </Button>

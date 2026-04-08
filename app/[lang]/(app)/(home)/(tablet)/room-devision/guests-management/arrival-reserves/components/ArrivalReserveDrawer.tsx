@@ -23,12 +23,12 @@ export default function ArrivalReserveDrawer({
 
  return (
   <Drawer open={!!reserve} onOpenChange={(open) => !open && onClose()}>
-   <DrawerContent dir='rtl' className='h-auto! sm:min-h-auto min-h-[89svh]'>
+   <DrawerContent className='h-[min(40svh,35rem)]'>
     <DrawerHeader>
      <DrawerTitle>{dic.detail.title}</DrawerTitle>
     </DrawerHeader>
     {reserve && (
-     <div className='grid sm:grid-cols-2 md:grid-cols-3 grid-cols-1 gap-x-8 gap-y-4 p-4 text-sm sm:justify-items-center justify-items-normal max-w-[70%] w-full mx-auto overflow-y-auto'>
+     <div className='grid sm:grid-cols-2 md:grid-cols-3 grid-cols-1 gap-x-8 gap-y-4 p-4 text-sm sm:justify-items-center justify-items-normal w-[min(100%,50rem)] mx-auto overflow-y-auto'>
       <DetailRow label={dic.fields.reserveNo} value={reserve.reserveNo} />
 
       {/* <DetailRow
