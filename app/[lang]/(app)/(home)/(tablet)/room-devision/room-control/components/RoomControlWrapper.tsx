@@ -112,6 +112,7 @@ export default function RoomControlWrapper({
      initDataIsLoading={initDataIsLoading}
      initData={initData}
      roomControl={roomControlProps}
+     roomControlDic={roomControlDic}
     />
     <RoomControlList
      dic={dic}
@@ -128,7 +129,9 @@ export default function RoomControlWrapper({
      roomID={targetRoomControl.roomID}
      roomLabel={targetRoomControl.roomLabel}
      onChangeOpen={() => handleCloseEditRoomControl()}
-     onSuccess={() => {}}
+     onSuccess={() => {
+      handleCloseEditRoomControl();
+     }}
     />
    )}
   </>

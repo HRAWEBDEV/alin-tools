@@ -31,6 +31,8 @@ import {
  getRoomControlHistory,
 } from '../../services/room-control/roomControlApiActions';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { roomControlBaseKey as roomControlBaseKeyPage } from '../../../room-control/services/roomControlApiActions';
+
 import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
@@ -50,6 +52,7 @@ export default function RoomControl({
  roomID,
  registerID,
  roomLabel,
+ onSuccess,
 }: {
  dic: RoomControlDictionary;
  open: boolean;
@@ -106,6 +109,9 @@ export default function RoomControl({
   queryClient.invalidateQueries({
    queryKey: [roomControlBaseKey, 'room', 'history', roomID.toString()],
   });
+  queryClient.invalidateQueries({
+   queryKey: [roomControlBaseKeyPage, 'room-control'],
+  });
  }
 
  const { mutate: saveRoomControlMutate, isPending: saveRoomControlIsPending } =
@@ -130,6 +136,7 @@ export default function RoomControl({
    },
    onSuccess() {
     handleInvalidateRoomControl();
+    onSuccess();
    },
    onError(err: AxiosError<string>) {
     toast.error(err.response?.data);

@@ -25,6 +25,9 @@ import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { type InitialData } from '../services/roomControlApiActions';
 import { Spinner } from '@/components/ui/spinner';
 import { type RoomControlProps } from '../utils/roomControlProps';
+import { roomControlSteps } from '../../rooms-rack/services/room-control/roomControlApiActions';
+import { getRoomControlStyles } from '../../rooms-rack/utils/room-control/roomControl';
+import { type RoomControlDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/room-control/dictionary';
 
 const smallBadgeKeys: (keyof RoomControlSchema)[] = ['floor'];
 const largeBadgeKeys: (keyof RoomControlSchema)[] = ['roomType'];
@@ -33,12 +36,14 @@ export default function RoomControlFilters({
  dic,
  initDataIsLoading,
  initData,
+ roomControlDic,
  roomControl,
 }: {
  dic: RoomControlPageDictionary;
  initData?: InitialData;
  initDataIsLoading: boolean;
  roomControl: RoomControlProps;
+ roomControlDic: RoomControlDictionary;
 }) {
  const [showDatePicker, setShowDatePicker] = useState(false);
  const { locale, localeInfo } = useBaseConfig();
@@ -302,12 +307,30 @@ export default function RoomControlFilters({
      })}
     </div>
    </div>
-   <div className='text-sm'>
-    <span className='text-neutral-700 dark:text-neutral-400'>
-     {dic.filters.result}:{' '}
-    </span>
-    <span>{roomControl.data?.length}</span>
+   <div className='mt-2'>
+    <div className='flex flex-wrap gap-3'>
+     {roomControlSteps.map((item) => {
+      const stepStyle = getRoomControlStyles(item);
+      return (
+       <div key={item} className='flex gap-1 items-center'>
+        <div
+         className={`w-7 aspect-square ${stepStyle.indicator}  rounded-lg`}
+        ></div>
+        <span className='text-neutral-700 dark:text-neutral-400 font-medium text-sm'>
+         {roomControlDic.houseControl[item]}
+        </span>
+       </div>
+      );
+     })}
+    </div>
    </div>
   </div>
  );
 }
+
+// <div className='text-sm'>
+//  <span className='text-neutral-700 dark:text-neutral-400'>
+//   {dic.filters.result}:{' '}
+//  </span>
+//  <span>{roomControl.data?.length}</span>
+// </div>

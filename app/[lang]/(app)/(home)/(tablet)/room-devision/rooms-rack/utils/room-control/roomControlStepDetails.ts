@@ -1,7 +1,7 @@
 import {
  type RoomControlStepDetails,
  type RoomControl,
- RoomControlStep,
+ type RoomControlStep,
 } from '../../services/room-control/roomControlApiActions';
 
 const roomControlStepDetailDefaults: RoomControlStepDetails = {

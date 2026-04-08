@@ -74,6 +74,13 @@ function changeRoomControl({
  );
 }
 
+const roomControlSteps: ReadonlyArray<RoomControlStep> = [
+ 'alert',
+ 'checkNow',
+ 'miniBar',
+ 'checkRoom',
+];
+
 export type {
  RoomControl,
  SaveRoomControl,
@@ -88,4 +95,5 @@ export {
  getRoomControls,
  saveRoomControl,
  changeRoomControl,
+ roomControlSteps,
 };
