@@ -4,6 +4,15 @@ import { RoomControl } from '../../../room-control/services/roomControlApiAction
 const roomControlBaseKey = 'rooms-control';
 
 type RoomControlStep = 'alert' | 'checkNow' | 'miniBar' | 'checkRoom';
+
+type RoomControlStepDetails = {
+ [key in RoomControlStep]: {
+  isChecked: boolean;
+  date: string | null;
+  fullName: string | null;
+ };
+};
+
 type RoomControlStepState = Record<RoomControlStep, boolean>;
 type SaveRoomControl = {
  roomControl: Pick<RoomControl, 'id' | 'roomID' | 'registerID' | 'maidComment'>;
@@ -69,6 +78,7 @@ export type {
  RoomControl,
  SaveRoomControl,
  RoomControlStep,
+ RoomControlStepDetails,
  RoomControlStepState,
 };
 export {

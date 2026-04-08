@@ -117,6 +117,7 @@ export default function RoomControlWrapper({
      dic={dic}
      roomControl={roomControlProps}
      editRoomControl={editRoomControlProps}
+     roomControlDic={roomControlDic}
     />
    </FormProvider>
    {targetRoomControl && (

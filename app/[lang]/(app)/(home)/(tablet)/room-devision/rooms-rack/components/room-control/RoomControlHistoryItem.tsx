@@ -3,6 +3,7 @@ import { type RoomControl } from '../../services/room-control/roomControlApiActi
 import { useMemo } from 'react';
 import { FaCheck } from 'react-icons/fa6';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
+import { getRoomControlStepDetails } from '../../utils/room-control/roomControlStepDetails';
 
 export default function RoomControlHistoryItem({
  dic,
@@ -13,28 +14,7 @@ export default function RoomControlHistoryItem({
 }) {
  const { locale } = useBaseConfig();
  const roomControlStepDetails = useMemo(() => {
-  return {
-   alert: {
-    isChecked: !!history,
-    fullName: history?.receptionPersonFullName || null,
-    date: history?.receptionDateTimeOffset || null,
-   },
-   checkNow: {
-    isChecked: !!history?.maidPersonID,
-    fullName: history?.maidPersonFullName || null,
-    date: history?.maidDateTimeOffset || null,
-   },
-   miniBar: {
-    isChecked: !!history?.minibarChecked,
-    fullName: history?.maidPersonFullName || null,
-    date: history?.minibarDateTimeOffset || null,
-   },
-   checkRoom: {
-    isChecked: !!history?.roomChecked,
-    fullName: history?.maidPersonFullName || null,
-    date: history?.roomCheckDateTimeOffset || null,
-   },
-  };
+  return getRoomControlStepDetails(history);
  }, [history]);
 
  return (

@@ -23,6 +23,7 @@ import { InputGroup, InputGroupTextarea } from '@/components/ui/input-group';
 import {
  type RoomControlStep,
  type SaveRoomControl,
+ type RoomControlStepDetails,
  roomControlBaseKey,
  getRoomControl,
  saveRoomControl,
@@ -36,37 +37,11 @@ import { AxiosError } from 'axios';
 import { BiError } from 'react-icons/bi';
 import { Badge } from '@/components/ui/badge';
 import RoomControlHistory from './RoomControlHistory';
-
-type RoomControlStepDetails = {
- [key in RoomControlStep]: {
-  isChecked: boolean;
-  date: string | null;
-  fullName: string | null;
- };
-};
-
-const roomControlStepDetailDefaults: RoomControlStepDetails = {
- alert: {
-  isChecked: false,
-  fullName: null,
-  date: null,
- },
- checkNow: {
-  isChecked: false,
-  fullName: null,
-  date: null,
- },
- miniBar: {
-  isChecked: false,
-  fullName: null,
-  date: null,
- },
- checkRoom: {
-  isChecked: false,
-  fullName: null,
-  date: null,
- },
-};
+import {
+ roomControlStepDetailDefaults,
+ getRoomControlStepDetails,
+ getNextStep,
+} from '../../utils/room-control/roomControlStepDetails';
 
 export default function RoomControl({
  dic,
@@ -181,34 +156,10 @@ export default function RoomControl({
  });
 
  const serverRoomControlStepDetails = useMemo(() => {
-  return {
-   alert: {
-    isChecked: !!roomControl,
-    fullName: roomControl?.receptionPersonFullName || null,
-    date: roomControl?.receptionDateTimeOffset || null,
-   },
-   checkNow: {
-    isChecked: !!roomControl?.maidPersonID,
-    fullName: roomControl?.maidPersonFullName || null,
-    date: roomControl?.maidDateTimeOffset || null,
-   },
-   miniBar: {
-    isChecked: !!roomControl?.minibarChecked,
-    fullName: roomControl?.maidPersonFullName || null,
-    date: roomControl?.minibarDateTimeOffset || null,
-   },
-   checkRoom: {
-    isChecked: !!roomControl?.roomChecked,
-    fullName: roomControl?.maidPersonFullName || null,
-    date: roomControl?.roomCheckDateTimeOffset || null,
-   },
-  };
+  return getRoomControlStepDetails(roomControl);
  }, [roomControl]);
 
- const nextStep = (Object.keys(serverRoomControlStepDetails).find((key) => {
-  const val = serverRoomControlStepDetails[key as RoomControlStep];
-  return !val.isChecked;
- }) || 'done') as RoomControlStep | 'done';
+ const nextStep = getNextStep(serverRoomControlStepDetails);
 
  useEffect(() => {
   setMaidComment(roomControl?.maidComment || '');
