@@ -11,6 +11,7 @@ import {
  FaHouseUser,
  FaCheckDouble,
 } from 'react-icons/fa6';
+import { MdDoneAll } from 'react-icons/md';
 
 export default function NavList() {
  const { locale } = useBaseConfig();
@@ -116,7 +117,7 @@ export default function NavList() {
       }
       className='flex w-auto h-auto items-center gap-4'
      >
-      <FaCheckDouble className='size-8' />
+      <MdDoneAll className='size-8' />
       <p className='text-base'>{navigation.roomsControl}</p>
      </Link>
     </Button>
