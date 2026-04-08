@@ -5,7 +5,13 @@ import Link from 'next/link';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { usePathname } from 'next/navigation';
 import { FaUserFriends } from 'react-icons/fa';
-import { FaHotel, FaClipboardList, FaHouseUser } from 'react-icons/fa6';
+import {
+ FaHotel,
+ FaClipboardList,
+ FaHouseUser,
+ FaCheckDouble,
+} from 'react-icons/fa6';
+import { MdDoneAll } from 'react-icons/md';
 
 export default function NavList() {
  const { locale } = useBaseConfig();
@@ -18,7 +24,7 @@ export default function NavList() {
   },
  } = useRoomDevisionShareDictionary();
  return (
-  <ul className='p-2 w-[min(100%,15rem)] mx-auto grid gap-2'>
+  <ul className='p-2 w-[min(100%,15rem)] mx-auto grid'>
    <li>
     <Button
      data-active={activePath === 'rooms-rack'}
@@ -36,6 +42,8 @@ export default function NavList() {
       <p className='text-base'>{navigation.roomsRack}</p>
      </Link>
     </Button>
+   </li>
+   <li>
     <Button
      data-active={activePath === 'rooms-management'}
      variant='ghost'
@@ -54,6 +62,8 @@ export default function NavList() {
       <p className='text-base'>{navigation.roomsManagement}</p>
      </Link>
     </Button>
+   </li>
+   <li>
     <Button
      data-active={activePath === 'guests-management'}
      variant='ghost'
@@ -72,6 +82,8 @@ export default function NavList() {
       <p className='text-base'>{navigation.guestsManagement}</p>
      </Link>
     </Button>
+   </li>
+   <li>
     <Button
      data-active={activePath === 'execution-management'}
      variant='ghost'
@@ -88,6 +100,25 @@ export default function NavList() {
      >
       <FaClipboardList className='size-8' />
       <p className='text-base'>{navigation.executionManagement}</p>
+     </Link>
+    </Button>
+   </li>
+   <li className='mt-4'>
+    <Button
+     data-active={activePath === 'room-control'}
+     className='w-full min-h-16 h-auto justify-start data-[active="true"]:bg-background border border-transparent data-[active="true"]:text-primary data-[active="true"]:border-primary'
+     asChild
+    >
+     <Link
+      href={
+       activePath === 'room-control'
+        ? '#'
+        : `/${locale}/room-devision/room-control`
+      }
+      className='flex w-auto h-auto items-center gap-4'
+     >
+      <MdDoneAll className='size-8' />
+      <p className='text-base'>{navigation.roomsControl}</p>
      </Link>
     </Button>
    </li>
