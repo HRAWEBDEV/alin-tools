@@ -85,6 +85,9 @@ export default function RoomControlFilters({
           {activeFilters.length}
          </Badge>
         )}
+        <span>
+         ({dic.filters.result}: {roomControl.data?.length})
+        </span>
        </Button>
       </DrawerTrigger>
       <DrawerContent className='h-[min(60svh,35rem)] flex flex-col'>
