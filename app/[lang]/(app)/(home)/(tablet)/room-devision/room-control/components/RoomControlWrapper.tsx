@@ -17,6 +17,9 @@ import {
 } from '../services/roomControlApiActions';
 import RoomControlFilters from './RoomControlFilters';
 import RoomControl from '../../rooms-rack/components/room-control/RoomControl';
+import { type RoomControlProps } from '../utils/roomControlProps';
+import { type EditRoomControlProps } from '../utils/editRoomControlProps';
+import RoomControlList from './RoomControlList';
 
 export default function RoomControlWrapper({
  dic,
@@ -87,6 +90,20 @@ export default function RoomControlWrapper({
   ? data?.find((item) => item.id === selectedRoomControlId) || null
   : null;
 
+ const roomControlProps: RoomControlProps = {
+  data,
+  isFetching,
+  refetch,
+  isSuccess,
+  isError,
+ };
+ const editRoomControlProps: EditRoomControlProps = {
+  handleCloseEditRoomControl,
+  handleShowEditRoomControl,
+  showEditRoomControl,
+  targetRoomControl,
+ };
+
  return (
   <>
    <FormProvider {...filtersUseForm}>
@@ -94,7 +111,12 @@ export default function RoomControlWrapper({
      dic={dic}
      initDataIsLoading={initDataIsLoading}
      initData={initData}
-     roomControl={{ data, isFetching, refetch, isSuccess, isError }}
+     roomControl={roomControlProps}
+    />
+    <RoomControlList
+     dic={dic}
+     roomControl={roomControlProps}
+     editRoomControl={editRoomControlProps}
     />
    </FormProvider>
    {targetRoomControl && (
