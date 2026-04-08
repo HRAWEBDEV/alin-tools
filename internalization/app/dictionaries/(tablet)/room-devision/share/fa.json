@@ -6,7 +6,8 @@
    "menus": "منو‌ها",
    "executionManagement": "اجرا",
    "guestsManagement": "مهمانان",
-   "roomsManagement": "اتاق ها"
+   "roomsManagement": "اتاق ها",
+   "roomsControl": "کنترل اتاق ها"
   },
   "profile": {
    "title": "پروفایل کاربر",
@@ -31,6 +32,7 @@
    }
   },
   "navigation": {
+   "roomsControl": "کنترل اتاق ها",
    "roomsRack": "رک اتاق ها",
    "executionManagement": "مدیریت اجرا",
    "guestsManagement": "مدیریت مهمانان",
