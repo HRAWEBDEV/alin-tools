@@ -45,10 +45,8 @@ export default function RoomControlFilters({
  roomControl: RoomControlProps;
  roomControlDic: RoomControlDictionary;
 }) {
- const [showDatePicker, setShowDatePicker] = useState(false);
- const { locale, localeInfo } = useBaseConfig();
- const { control, watch, setValue, getValues } =
-  useFormContext<RoomControlSchema>();
+ const { localeInfo } = useBaseConfig();
+ const { control, watch, setValue } = useFormContext<RoomControlSchema>();
 
  const [sliderRef] = useKeenSlider({
   rtl: localeInfo.contentDirection === 'rtl',
@@ -68,7 +66,7 @@ export default function RoomControlFilters({
  const activeFilters = filtersKeyValue.filter((item) => !!item.value);
 
  return (
-  <div className='[&]:[--default-top-offset:var(--top-offset,0)] sticky top-4 lg:top-(--default-top-offset) py-4 bg-background z-3'>
+  <div className='[&]:[--default-top-offset:var(--top-offset,0)] top-0 py-4 bg-background z-3 sticky'>
    <div className='flex gap-2 items-center mb-1'>
     <div>
      <Drawer>

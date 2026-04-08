@@ -107,6 +107,9 @@ export default function RoomControlWrapper({
  return (
   <>
    <FormProvider {...filtersUseForm}>
+    <h1 className='text-center md:text-start font-medium text-2xl lg:text-3xl'>
+     {dic.title}
+    </h1>
     <RoomControlFilters
      dic={dic}
      initDataIsLoading={initDataIsLoading}
