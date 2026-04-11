@@ -21,7 +21,6 @@ import {
 import { Field, FieldLabel } from '@/components/ui/field';
 import { InputGroup, InputGroupTextarea } from '@/components/ui/input-group';
 import {
- type RoomControlStep,
  type SaveRoomControl,
  type RoomControlStepDetails,
  roomControlBaseKey,
@@ -306,7 +305,7 @@ export default function RoomControl({
         );
        })}
       </div>
-      {nextStep === 'done' && (
+      {nextStep !== 'alert' && nextStep !== 'checkNow' && (
        <Field className='gap-2 mb-4'>
         <FieldLabel htmlFor='houseMaidDescription'>
          {dic.houseControl.houseMaidDescription}
