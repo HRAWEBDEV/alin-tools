@@ -10,6 +10,7 @@ export default function RoomControlHistory({
  isError,
  isFetching,
  isSuccess,
+ allHistory = false,
 }: {
  dic: RoomControlDictionary;
  data?: RoomControl[];
@@ -17,6 +18,7 @@ export default function RoomControlHistory({
  isLoading: boolean;
  isSuccess: boolean;
  isError: boolean;
+ allHistory?: boolean;
 }) {
  if (!isFetching && isError) {
   return <UnExpectedError />;
@@ -27,7 +29,12 @@ export default function RoomControlHistory({
  return (
   <div className='grid gap-2 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 pb-4'>
    {data?.map((history) => (
-    <RoomControlHistoryItem key={history.id} dic={dic} history={history} />
+    <RoomControlHistoryItem
+     key={history.id}
+     dic={dic}
+     history={history}
+     allHistory={allHistory}
+    />
    ))}
   </div>
  );

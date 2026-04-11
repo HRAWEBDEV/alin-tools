@@ -22,11 +22,16 @@ function getRoomControlHistory({
  roomID,
  signal,
 }: {
- roomID: number;
+ roomID?: number;
  signal: AbortSignal;
 }) {
+ const searchParams = new URLSearchParams([]);
+ if (roomID) {
+  searchParams.set('RoomID', roomID.toString());
+ }
+
  return axios.get<RoomControl[]>(
-  `/HouseKeeping/RoomControl/GetRoomControlHistory?RoomID=${roomID.toString()}`,
+  `/HouseKeeping/RoomControl/GetRoomControlHistory?${searchParams.toString()}`,
   {
    signal,
   },

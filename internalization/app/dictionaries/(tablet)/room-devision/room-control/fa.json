@@ -2,6 +2,7 @@
  "title": "کنترل اتاق ها",
  "filters": {
   "filters": "فیلترها",
+  "histroy":"سوابق",
   "result": "نتایج",
   "floor": "طبقه",
   "roomType": "نوع اتاق",

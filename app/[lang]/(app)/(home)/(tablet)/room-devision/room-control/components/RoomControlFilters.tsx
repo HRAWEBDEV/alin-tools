@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { type RoomControlPageDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/room-control/dictionary';
 import { FaFilter } from 'react-icons/fa';
 import { Field, FieldLabel } from '@/components/ui/field';
@@ -18,15 +19,28 @@ import {
  defaultValues,
 } from '../schemas/roomControlSchema';
 import { ChevronsUpDown } from 'lucide-react';
-import { FaRegTrashAlt } from 'react-icons/fa';
+import { FaRegTrashAlt, FaArchive } from 'react-icons/fa';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
-import { type InitialData } from '../services/roomControlApiActions';
+import {
+ roomControlBaseKey,
+ type InitialData,
+} from '../services/roomControlApiActions';
 import { Spinner } from '@/components/ui/spinner';
 import { type RoomControlProps } from '../utils/roomControlProps';
-import { roomControlSteps } from '../../rooms-rack/services/room-control/roomControlApiActions';
 import { getRoomControlStyles } from '../../rooms-rack/utils/room-control/roomControl';
 import { type RoomControlDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/room-control/dictionary';
+import { getRoomControlHistory } from '../../rooms-rack/services/room-control/roomControlApiActions';
+import { useQuery } from '@tanstack/react-query';
+import RoomControlHistory from '../../rooms-rack/components/room-control/RoomControlHistory';
+import {
+ Dialog,
+ DialogContent,
+ DialogHeader,
+ DialogTitle,
+ DialogTrigger,
+} from '@/components/ui/dialog';
+import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
 
 const smallBadgeKeys: (keyof RoomControlSchema)[] = ['floor'];
 const largeBadgeKeys: (keyof RoomControlSchema)[] = ['roomType'];
@@ -35,8 +49,8 @@ export default function RoomControlFilters({
  dic,
  initDataIsLoading,
  initData,
- roomControlDic,
  roomControl,
+ roomControlDic,
 }: {
  dic: RoomControlPageDictionary;
  initData?: InitialData;
@@ -44,6 +58,7 @@ export default function RoomControlFilters({
  roomControl: RoomControlProps;
  roomControlDic: RoomControlDictionary;
 }) {
+ const [showHistory, setShowHistory] = useState(false);
  const { localeInfo } = useBaseConfig();
  const { control, watch, setValue } = useFormContext<RoomControlSchema>();
 
@@ -64,9 +79,58 @@ export default function RoomControlFilters({
 
  const activeFilters = filtersKeyValue.filter((item) => !!item.value);
 
+ const {
+  data: roomControlHistory,
+  isFetching: roomControlHistoryIsFetching,
+  isLoading: roomControlHistoryIsLoading,
+  isSuccess: roomControlHistoryIsSuccess,
+  isError: roomControlHistoryIsError,
+ } = useQuery({
+  enabled: showHistory,
+  queryKey: [roomControlBaseKey, 'room', 'history'],
+  async queryFn({ signal }) {
+   const res = await getRoomControlHistory({
+    signal,
+   });
+   return res.data;
+  },
+ });
+
  return (
   <div className='[&]:[--default-top-offset:var(--top-offset,0)] top-0 py-4 bg-background z-3 sticky'>
    <div className='flex gap-2 items-center mb-1'>
+    <Dialog>
+     <DialogTrigger asChild>
+      <Button
+       size='lg'
+       onClick={() => setShowHistory(true)}
+       disabled={roomControlHistoryIsLoading}
+      >
+       <FaArchive className='size-4' />
+       {roomControlHistoryIsLoading && <Spinner />}
+       {roomControlDic.houseControl.history}
+      </Button>
+     </DialogTrigger>
+     <DialogContent className='flex flex-col w-[min(95%,60rem)] max-h-[95svh] max-w-none! p-0 overflow-hidden gap-0'>
+      <DialogHeader className='p-4 border-b border-input'>
+       <DialogTitle className='text-lg'>
+        {roomControlDic.houseControl.history}{' '}
+       </DialogTitle>
+      </DialogHeader>
+      {roomControlHistoryIsFetching && <LinearLoading />}
+      <div className='p-4 grow overflow-auto'>
+       <RoomControlHistory
+        dic={roomControlDic}
+        allHistory
+        data={roomControlHistory}
+        isFetching={roomControlHistoryIsFetching}
+        isLoading={roomControlHistoryIsLoading}
+        isSuccess={roomControlHistoryIsSuccess}
+        isError={roomControlHistoryIsError}
+       />
+      </div>
+     </DialogContent>
+    </Dialog>
     <div>
      <Drawer>
       <DrawerTrigger>

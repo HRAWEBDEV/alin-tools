@@ -8,9 +8,11 @@ import { getRoomControlStepDetails } from '../../utils/room-control/roomControlS
 export default function RoomControlHistoryItem({
  dic,
  history,
+ allHistory,
 }: {
  dic: RoomControlDictionary;
  history: RoomControl;
+ allHistory: boolean;
 }) {
  const { locale } = useBaseConfig();
  const roomControlStepDetails = useMemo(() => {
@@ -18,7 +20,12 @@ export default function RoomControlHistoryItem({
  }, [history]);
 
  return (
-  <button className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 relative isolate'>
+  <button className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 relative isolate flex flex-col text-start'>
+   {allHistory && (
+    <div>
+     <h3 className='text-3xl text-primary'>{history.roomLabel}</h3>
+    </div>
+   )}
    <div className='flex justify-between items-center flex-wrap gap-1 mb-2'>
     <div className='flex gap-1 items-center grow'>
      <span className='font-medium text-sm text-neutral-700 dark:text-neutral-400 text-start min-w-20'>
@@ -144,12 +151,14 @@ export default function RoomControlHistoryItem({
      <span className='font-medium'>{history.maidPersonFullName}</span>
     </div>
    </div>
-   <div className='flex flex-col gap-1 text-start'>
-    <span className='text-sm text-neutral-700 dark:text-neutral-400 text-start'>
-     {dic.houseControl.comment}:
-    </span>
-    <p>{history.maidComment}</p>
-   </div>
+   {history.maidComment && (
+    <div className='flex flex-col gap-1 text-start'>
+     <span className='text-sm text-neutral-700 dark:text-neutral-400 text-start'>
+      {dic.houseControl.comment}:
+     </span>
+     <p>{history.maidComment}</p>
+    </div>
+   )}
   </button>
  );
 }
