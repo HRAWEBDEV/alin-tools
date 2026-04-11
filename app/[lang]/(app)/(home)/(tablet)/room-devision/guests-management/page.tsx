@@ -13,17 +13,15 @@ export const generateMetadata = async (
  const { tab } = (await props.searchParams) ?? {};
  const dic = await getGuestsManagementDictionary({ locale: lang as Locale });
 
- let tabTitle: string | undefined;
+ const tabTitles: Record<string, string> = {
+  'guests-list': dic.tabs.guestsList,
+  'arrival-reserves': dic.tabs.arrivalReserves,
+  'guests-expenses': dic.tabs.guestsExpenses,
+ };
 
- switch (tab) {
-  case 'guests-list':
-   tabTitle = dic.tabs.guestsList;
-  case 'arrival-reserves':
-   tabTitle = dic.tabs.arrivalReserves;
-  case 'guests-expenses':
-   tabTitle = dic.tabs.guestsExpenses;
- }
- return { title: !tabTitle ? dic.title : dic.title + ' | ' + tabTitle };
+ const tabTitle = typeof tab === 'string' ? tabTitles[tab] : undefined;
+
+ return { title: !tabTitle ? dic.title : `${dic.title} | ${tabTitle}` };
 };
 
 export default async function page(
