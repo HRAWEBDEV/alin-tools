@@ -3,7 +3,7 @@ import { getRoomControlDictionary } from '@/internalization/app/dictionaries/(ta
 import { type Locale } from '@/internalization/app/localization';
 import { Metadata } from 'next';
 import RoomControlWrapper from './components/RoomControlWrapper';
-import * as icons from 'react-icons/md';
+// import * as icons from 'react-icons/md';
 
 export async function generateMetadata(
  props: PageProps<'/[lang]/room-devision/rooms-rack'>,
