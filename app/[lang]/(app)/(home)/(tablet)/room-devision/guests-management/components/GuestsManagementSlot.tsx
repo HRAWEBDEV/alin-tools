@@ -3,15 +3,19 @@ import GuestsListWrapper from '../resident-guests/components/GuestsListWrapper';
 import { ResidentGuestsDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/resident-guests/dictionary';
 import { type ArrivalReservesDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/arrival-reserves/dictionary';
 import ArrivalReservesWrapper from '../arrival-reserves/components/ArrivalReservesWrapper';
+import GuestsExpensesWrapper from '../guests-expenses/components/GuestsExpensesWrapper';
+import { GuestsExpensesDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/guests-expenses/dictionary';
 
 interface GuestsManagementSlot {
  residentGuestsDic: ResidentGuestsDictionary;
  arrivalReservesDic: ArrivalReservesDictionary;
+ guestsExpensesDic: GuestsExpensesDictionary;
  activeTab: string;
 }
 export default function GuestsManagementSlot({
  residentGuestsDic,
  arrivalReservesDic: arrivalReservesDic,
+ guestsExpensesDic: guestsExpensesDic,
  activeTab,
 }: GuestsManagementSlot) {
  return (
@@ -24,6 +28,11 @@ export default function GuestsManagementSlot({
    <Activity mode={activeTab === 'arrival-reserves' ? 'visible' : 'hidden'}>
     <div className='p-4 lg:pt-0'>
      <ArrivalReservesWrapper dic={arrivalReservesDic} />
+    </div>
+   </Activity>
+   <Activity mode={activeTab === 'guests-expenses' ? 'visible' : 'hidden'}>
+    <div className='p-4 lg:pt-0'>
+     <GuestsExpensesWrapper dic={guestsExpensesDic} />
     </div>
    </Activity>
   </main>
