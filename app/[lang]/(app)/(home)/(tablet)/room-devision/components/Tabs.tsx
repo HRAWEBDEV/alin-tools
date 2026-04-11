@@ -57,8 +57,3 @@ export default function Tabs() {
   </nav>
  );
 }
-
-// <Button variant='ghost' className={tabClass} onClick={() => toggleProfile()}>
-//  <FaUserCircle className={tabIconClass} />
-//  <p className='text-sm'>{tabsDic.profile}</p>
-// </Button>
