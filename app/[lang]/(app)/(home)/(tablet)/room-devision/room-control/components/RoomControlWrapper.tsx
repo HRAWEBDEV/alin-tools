@@ -131,7 +131,9 @@ export default function RoomControlWrapper({
      registerID={targetRoomControl.registerID}
      roomID={targetRoomControl.roomID}
      roomLabel={targetRoomControl.roomLabel}
-     onChangeOpen={() => handleCloseEditRoomControl()}
+     onChangeOpen={() => {
+      handleCloseEditRoomControl();
+     }}
      onSuccess={() => {
       handleCloseEditRoomControl();
      }}
