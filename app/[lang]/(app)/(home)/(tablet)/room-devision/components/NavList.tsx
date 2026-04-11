@@ -5,12 +5,7 @@ import Link from 'next/link';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { usePathname } from 'next/navigation';
 import { FaUserFriends } from 'react-icons/fa';
-import {
- FaHotel,
- FaClipboardList,
- FaHouseUser,
- FaCheckDouble,
-} from 'react-icons/fa6';
+import { FaHotel, FaClipboardList, FaHouseUser } from 'react-icons/fa6';
 import { MdDoneAll } from 'react-icons/md';
 
 export default function NavList() {

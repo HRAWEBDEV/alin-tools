@@ -2,21 +2,20 @@
 import { useRoomDevisionShareDictionary } from '../services/share-dictionary/roomDevisionShareDictionaryContext';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { useProfileContext } from '../services/profile/profileContext';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
-import { FaUserFriends, FaUserCircle } from 'react-icons/fa';
+import { FaUserFriends } from 'react-icons/fa';
 import { FaHotel, FaClipboardList, FaHouseUser } from 'react-icons/fa6';
+import { MdDoneAll } from 'react-icons/md';
 
 export default function Tabs() {
  const { locale } = useBaseConfig();
- const { toggleProfile } = useProfileContext();
  const {
   roomDevisionShareDictionary: {
    components: { tabs: tabsDic },
   },
  } = useRoomDevisionShareDictionary();
 
- const tabClass = 'h-auto flex-col p-1! grow sm:text-base';
+ const tabClass = 'h-auto flex-col p-1! grow basis-0 sm:text-base';
  const tabIconClass = 'size-7';
 
  return (
@@ -33,6 +32,16 @@ export default function Tabs() {
      <p className='text-sm'>{tabsDic.roomsManagement}</p>
     </Link>
    </Button>
+   <Button
+    variant='ghost'
+    className={`${tabClass} rounded-none bg-primary/30`}
+    asChild
+   >
+    <Link href={`/${locale}/room-devision/room-control`}>
+     <MdDoneAll className={tabIconClass} />
+     <p className='text-sm'>{tabsDic.roomsControl}</p>
+    </Link>
+   </Button>
    <Button variant='ghost' className={tabClass} asChild>
     <Link href={`/${locale}/room-devision/guests-management`}>
      <FaUserFriends className={tabIconClass} />
@@ -45,10 +54,11 @@ export default function Tabs() {
      <p className='text-sm'>{tabsDic.executionManagement}</p>
     </Link>
    </Button>
-   <Button variant='ghost' className={tabClass} onClick={() => toggleProfile()}>
-    <FaUserCircle className={tabIconClass} />
-    <p className='text-sm'>{tabsDic.profile}</p>
-   </Button>
   </nav>
  );
 }
+
+// <Button variant='ghost' className={tabClass} onClick={() => toggleProfile()}>
+//  <FaUserCircle className={tabIconClass} />
+//  <p className='text-sm'>{tabsDic.profile}</p>
+// </Button>
