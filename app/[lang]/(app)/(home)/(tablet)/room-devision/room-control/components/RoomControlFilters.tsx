@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { type RoomControlPageDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/room-control/dictionary';
 import { FaFilter } from 'react-icons/fa';
 import { Field, FieldLabel } from '@/components/ui/field';
@@ -83,8 +82,8 @@ export default function RoomControlFilters({
           {activeFilters.length}
          </Badge>
         )}
-        <span>
-         ({dic.filters.result}: {roomControl.data?.length})
+        <span className='border-s border-input ps-4'>
+         {dic.filters.result}: {roomControl.data?.length}
         </span>
        </Button>
       </DrawerTrigger>
@@ -310,28 +309,24 @@ export default function RoomControlFilters({
    </div>
    <div className='mt-2'>
     <div className='flex flex-wrap gap-3'>
-     {roomControlSteps.slice(0,2).map((item) => {
-      const stepStyle = getRoomControlStyles(item);
-      return (
-       <div key={item} className='flex gap-1 items-center'>
-        <div
-         className={`w-7 aspect-square ${stepStyle.indicator}  rounded-lg`}
-        ></div>
-        <span className='text-neutral-700 dark:text-neutral-400 font-medium text-sm'>
-         {roomControlDic.houseControl[item]}
-        </span>
-       </div>
-      );
-     })}
+     <div className='flex gap-1 items-center'>
+      <div
+       className={`w-7 aspect-square ${getRoomControlStyles('alert').indicator}  rounded-lg`}
+      ></div>
+      <span className='text-neutral-700 dark:text-neutral-400 font-medium text-sm'>
+       {dic.filters.startHouseControl}
+      </span>
+     </div>
+     <div className='flex gap-1 items-center'>
+      <div
+       className={`w-7 aspect-square ${getRoomControlStyles('checkNow').indicator}  rounded-lg`}
+      ></div>
+      <span className='text-neutral-700 dark:text-neutral-400 font-medium text-sm'>
+       {dic.filters.onHouseControl}
+      </span>
+     </div>
     </div>
    </div>
   </div>
  );
 }
-
-// <div className='text-sm'>
-//  <span className='text-neutral-700 dark:text-neutral-400'>
-//   {dic.filters.result}:{' '}
-//  </span>
-//  <span>{roomControl.data?.length}</span>
-// </div>

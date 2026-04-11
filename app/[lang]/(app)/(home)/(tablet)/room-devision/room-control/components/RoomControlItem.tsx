@@ -12,7 +12,6 @@ import { getRoomControlStyles } from '../../rooms-rack/utils/room-control/roomCo
 import { type RoomControlDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/room-control/dictionary';
 
 export default function RoomControlItem({
- dic,
  roomControl,
  editRoomControlProps,
  roomControlDic,
@@ -24,7 +23,9 @@ export default function RoomControlItem({
 }) {
  const roomStepDetails = getRoomControlStepDetails(roomControl);
  const activeStep = getActiveStep(roomStepDetails);
- const stepStyles = getRoomControlStyles(activeStep);
+ const stepStyles = getRoomControlStyles(
+  activeStep === 'alert' ? 'alert' : 'checkNow',
+ );
  return (
   <motion.div layout className='grid group'>
    <div className='relative min-h-auto'>

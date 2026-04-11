@@ -4,6 +4,8 @@
   "filters": "فیلترها",
   "result": "نتایج",
   "floor": "طبقه",
-  "roomType": "نوع اتاق"
+  "roomType": "نوع اتاق",
+  "startHouseControl": "اعلام به خانه داری",
+  "onHouseControl": "در حال کنترل خانه داری"
  }
 }
