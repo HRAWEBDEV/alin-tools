@@ -10,8 +10,20 @@ export const generateMetadata = async (
  props: PageProps<'/[lang]/room-devision/guests-management'>,
 ): Promise<Metadata> => {
  const { lang } = await props.params;
+ const { tab } = (await props.searchParams) ?? {};
  const dic = await getGuestsManagementDictionary({ locale: lang as Locale });
- return { title: dic.title };
+
+ let tabTitle: string | undefined;
+
+ switch (tab) {
+  case 'guests-list':
+   tabTitle = dic.tabs.guestsList;
+  case 'arrival-reserves':
+   tabTitle = dic.tabs.arrivalReserves;
+  case 'guests-expenses':
+   tabTitle = dic.tabs.guestsExpenses;
+ }
+ return { title: !tabTitle ? dic.title : dic.title + ' | ' + tabTitle };
 };
 
 export default async function page(
