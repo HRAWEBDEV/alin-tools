@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { axios } from '@/app/[lang]/(app)/utils/defaultAxios';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
+import { Departments } from '@/app/[lang]/(app)/login/services/userinfo-provider/utils/systems';
 
 export default function AxiosApiPackage() {
  const { locale } = useBaseConfig();

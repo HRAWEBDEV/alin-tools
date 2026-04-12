@@ -31,7 +31,6 @@ import {
 } from '../../services/room-control/roomControlApiActions';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { roomControlBaseKey as roomControlBaseKeyPage } from '../../../room-control/services/roomControlApiActions';
-
 import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
@@ -108,7 +107,7 @@ export default function RoomControl({
     signal,
    });
    const pages = Math.ceil((res.data.length || 0) / paging.limit);
-   const isOutOfRange = paging.offset + 1 >= pages;
+   const isOutOfRange = paging.offset + 1 > pages;
    if (isOutOfRange) {
     setPaging((pre) => ({ ...pre, offset: 0 }));
    }

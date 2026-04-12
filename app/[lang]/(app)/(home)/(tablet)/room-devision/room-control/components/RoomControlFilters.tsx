@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { type RoomControlPageDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/room-control/dictionary';
 import { FaFilter } from 'react-icons/fa';
 import { Field, FieldLabel } from '@/components/ui/field';
@@ -105,7 +105,7 @@ export default function RoomControlFilters({
     signal,
    });
    const pages = Math.ceil((res.data.length || 0) / paging.limit);
-   const isOutOfRange = paging.offset + 1 >= pages;
+   const isOutOfRange = paging.offset + 1 > pages;
    if (isOutOfRange) {
     setPaging((pre) => ({ ...pre, offset: 0 }));
    }

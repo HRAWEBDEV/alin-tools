@@ -35,6 +35,7 @@ import {
 } from './utils/userInfoRouterStorageManager';
 import { useQueryClient } from '@tanstack/react-query';
 import { handleScroll } from './utils/handleScroll';
+import { roomDevisionRoute, restaurantRotue } from './utils/departmentRoutes';
 
 export default function UserInfoRouterProvider({
  children,
@@ -74,11 +75,11 @@ export default function UserInfoRouterProvider({
   (depID: number) => {
    queryClient.clear();
    if (depID === Departments.foodAndBeverage) {
-    router.push(`/${locale}/restaurant`);
+    router.push(`/${locale}/${restaurantRotue}`);
     return;
    }
    if (depID === Departments.roomDivision) {
-    router.push(`/${locale}/room-devision`);
+    router.push(`/${locale}/${roomDevisionRoute}`);
     return;
    }
   },
