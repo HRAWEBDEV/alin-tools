@@ -18,6 +18,9 @@
   "reception": "پذیرش",
   "maid": "خانه دار",
   "roomNo": "اتاق",
-  "folioNo": "پذیرش"
+  "folioNo": "پذیرش",
+  "result": "نتایج",
+  "prev": "قبلی",
+  "next": "بعدی"
  }
 }

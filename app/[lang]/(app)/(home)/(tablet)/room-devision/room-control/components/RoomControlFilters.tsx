@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { type RoomControlPageDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/room-control/dictionary';
 import { FaFilter } from 'react-icons/fa';
 import { Field, FieldLabel } from '@/components/ui/field';
@@ -23,6 +23,12 @@ import { FaRegTrashAlt, FaArchive } from 'react-icons/fa';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import {
+ MdKeyboardDoubleArrowLeft,
+ MdKeyboardDoubleArrowRight,
+ MdKeyboardArrowLeft,
+ MdKeyboardArrowRight,
+} from 'react-icons/md';
+import {
  roomControlBaseKey,
  type InitialData,
 } from '../services/roomControlApiActions';
@@ -39,8 +45,10 @@ import {
  DialogHeader,
  DialogTitle,
  DialogTrigger,
+ DialogFooter,
 } from '@/components/ui/dialog';
 import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
+import { type Paging } from '../../utils/apiTypes';
 
 const smallBadgeKeys: (keyof RoomControlSchema)[] = ['floor'];
 const largeBadgeKeys: (keyof RoomControlSchema)[] = ['roomType'];
@@ -58,6 +66,10 @@ export default function RoomControlFilters({
  roomControl: RoomControlProps;
  roomControlDic: RoomControlDictionary;
 }) {
+ const [paging, setPaging] = useState<Paging>({
+  limit: 50,
+  offset: 0,
+ });
  const [showHistory, setShowHistory] = useState(false);
  const { localeInfo } = useBaseConfig();
  const { control, watch, setValue } = useFormContext<RoomControlSchema>();
@@ -92,14 +104,54 @@ export default function RoomControlFilters({
    const res = await getRoomControlHistory({
     signal,
    });
+   const pages = Math.ceil((res.data.length || 0) / paging.limit);
+   const isOutOfRange = paging.offset + 1 >= pages;
+   if (isOutOfRange) {
+    setPaging((pre) => ({ ...pre, offset: 0 }));
+   }
    return res.data;
   },
  });
 
+ const pages = Math.ceil((roomControlHistory?.length || 0) / paging.limit);
+ const isFirstPage = paging.offset === 0;
+ const isLastPage = paging.offset + 1 === pages;
+ function goToNextPage() {
+  setPaging((pre) => {
+   if (pre.offset + 1 === pages) return pre;
+   return { ...pre, offset: pre.offset + 1 };
+  });
+ }
+ function goToPrevPage() {
+  setPaging((pre) => {
+   if (pre.offset === 0) return pre;
+   return { ...pre, offset: pre.offset - 1 };
+  });
+ }
+ function goToLastPage() {
+  setPaging((pre) => ({ ...pre, offset: pages - 1 }));
+ }
+ function goToFirstPage() {
+  setPaging((pre) => ({ ...pre, offset: 0 }));
+ }
+
+ const visibleHistoryItems = roomControlHistory
+  ? roomControlHistory.slice(
+     paging.offset * paging.limit,
+     (paging.offset + 1) * paging.limit,
+    )
+  : [];
+
  return (
   <div className='[&]:[--default-top-offset:var(--top-offset,0)] top-0 py-4 bg-background z-3 sticky'>
    <div className='flex gap-2 items-center mb-1'>
-    <Dialog>
+    <Dialog
+     onOpenChange={(val) => {
+      if (!val) {
+       setPaging((pre) => ({ ...pre, offset: 0 }));
+      }
+     }}
+    >
      <DialogTrigger asChild>
       <Button
        size='lg'
@@ -122,13 +174,67 @@ export default function RoomControlFilters({
        <RoomControlHistory
         dic={roomControlDic}
         allHistory
-        data={roomControlHistory}
+        data={visibleHistoryItems}
         isFetching={roomControlHistoryIsFetching}
         isLoading={roomControlHistoryIsLoading}
         isSuccess={roomControlHistoryIsSuccess}
         isError={roomControlHistoryIsError}
        />
       </div>
+      <DialogFooter className='p-4 py-2 border-t border-input'>
+       <div className='flex gap-1 items-center'>
+        <div className='me-4'>
+         <span>{roomControlDic.houseControl.result}: </span>
+         <span>{roomControlHistory?.length}</span>
+        </div>
+        <Button
+         variant='outline'
+         size='icon'
+         onClick={goToFirstPage}
+         disabled={isFirstPage}
+        >
+         <MdKeyboardDoubleArrowRight className='size-4 ltr:rotate-180' />
+        </Button>
+        <Button
+         variant='outline'
+         className='gap-1'
+         onClick={goToPrevPage}
+         disabled={isFirstPage}
+        >
+         <MdKeyboardArrowRight />
+         <span className='hidden lg:inline'>
+          {roomControlDic.houseControl.prev}
+         </span>
+        </Button>
+        <div
+         style={{
+          direction: 'ltr',
+         }}
+         className='text-base'
+        >
+         <span>{paging.offset + 1}</span> / <span>{pages}</span>
+        </div>
+        <Button
+         variant='outline'
+         className='gap-1 ltr:rotate-180'
+         disabled={isLastPage}
+         onClick={goToNextPage}
+        >
+         <span className='hidden lg:inline'>
+          {roomControlDic.houseControl.next}
+         </span>
+         <MdKeyboardArrowLeft className='ltr:rotate-180' />
+        </Button>
+        <Button
+         variant='outline'
+         size='icon'
+         onClick={goToLastPage}
+         disabled={isLastPage}
+        >
+         <MdKeyboardDoubleArrowLeft className='size-4 ltr:rotate-180' />
+        </Button>
+       </div>
+      </DialogFooter>
      </DialogContent>
     </Dialog>
     <div>
