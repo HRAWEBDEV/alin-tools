@@ -21,14 +21,16 @@ export default function RoomControlHistoryItem({
 
  return (
   <button className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 relative isolate flex flex-col text-start'>
-   {allHistory && (
     <div className='flex justify-between gap-2 items-center mb-1 pb-1 border-b border-input'>
-     <div className='flex items-center gap-1'>
-      <span className='text-sm text-neutral-700 dark:text-neutral-400'>
-       {dic.houseControl.roomNo}:{' '}
-      </span>
-      <h3 className='text-2xl text-primary'>{history.roomLabel}</h3>
-     </div>
+       {
+         allHistory &&
+         <div className='flex items-center gap-1'>
+               <span className='text-sm text-neutral-700 dark:text-neutral-400'>
+                {dic.houseControl.roomNo}:{' '}
+               </span>
+               <h3 className='text-2xl text-primary'>{history.roomLabel}</h3>
+              </div>
+      }
      <div className='flex items-center gap-1'>
       <span className='text-sm text-neutral-700 dark:text-neutral-400'>
        {dic.houseControl.folioNo}:{' '}
@@ -36,7 +38,6 @@ export default function RoomControlHistoryItem({
       <h3 className='text-2xl text-primary'>{history.folioNo}</h3>
      </div>
     </div>
-   )}
    <div className='flex justify-between items-center flex-wrap gap-1 mb-2'>
     <div className='flex gap-1 items-center grow'>
      <span className='font-medium text-sm text-neutral-700 dark:text-neutral-400 text-start min-w-20'>
