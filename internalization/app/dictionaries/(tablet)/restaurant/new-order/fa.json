@@ -44,7 +44,8 @@
   "noSubscriberSelected": "کد اشتراک انتخاب نشده است",
   "enterFirstName": "نام را وارد کنید",
   "enterLastName": "نام خانوادگی را وارد کنید",
-  "contractNo": "شماره قرارداد"
+  "contractNo": "منو قراردادی",
+  "customerContractNo": "شماره قرارداد"
  },
  "orderQuickInfo": {
   "confirm": "تایید",
@@ -121,6 +122,11 @@
   "name": "نام",
   "nationalCode": "کد ملی",
   "phoneNumber": "شماره تماس"
+ },
+ "findCustomerContract": {
+  "search": "جستجو",
+  "code": "کد",
+  "customerName": "نام مشتری"
  },
  "findRooms": {
   "search": "جستجو",

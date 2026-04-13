@@ -47,6 +47,7 @@ import FindWaiters from '../find-waiters/FindWaiters';
 import { SaleTypes } from '../../utils/SaleTypes';
 import { IoReloadOutline } from 'react-icons/io5';
 import FindContract from '../find-contract/FindContract';
+import FindCustomerContract from '../find-customer-contract/FindCustomerContract';
 import {
  TimePickerRoot,
  TimePickerTitle,
@@ -744,7 +745,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        />
       </InputGroup>
      </Field>
-     <Field data-invalid={!!errors.contract} className='col-span-full'>
+     <Field data-invalid={!!errors.contract}>
       <FieldLabel htmlFor='contract'>{dic.orderInfo.contractNo}</FieldLabel>
       <Controller
        control={control}
@@ -787,6 +788,58 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
          )}
          {/* todo */}
          <FindContract dic={dic} />
+        </Drawer>
+       )}
+      />
+     </Field>
+     <Field
+      data-invalid={!!errors.customerContract}
+      data-disabled={!customerValue}
+     >
+      <FieldLabel htmlFor='customerContract'>
+       {dic.orderInfo.customerContractNo}
+      </FieldLabel>
+      <Controller
+       control={control}
+       name='customerContract'
+       render={({ field }) => (
+        <Drawer>
+         <DrawerTrigger asChild>
+          <Button
+           id='customerContract'
+           variant='outline'
+           role='combobox'
+           className='justify-between h-11'
+           onBlur={field.onBlur}
+           ref={field.ref}
+           disabled={!customerValue}
+          >
+           <span className='grow text-ellipsis overflow-hidden text-start'>
+            {field.value?.value || ''}
+           </span>
+           <div className='flex gap-2 items-center'>
+            {!!field.value && (
+             <Button
+              variant={'ghost'}
+              size={'icon-lg'}
+              onClick={(e) => {
+               e.stopPropagation();
+               field.onChange(null);
+              }}
+             >
+              <BsTrash className='size-5 text-red-700 dark:text-red-400' />
+             </Button>
+            )}
+            <ChevronsUpDown />
+           </div>
+          </Button>
+         </DrawerTrigger>
+         {!!errors.customerContract && (
+          <FieldContent>
+           <FieldError>{errors.customerContract.message}</FieldError>
+          </FieldContent>
+         )}
+         <FindCustomerContract dic={dic} />
         </Drawer>
        )}
       />
