@@ -26,7 +26,7 @@
 - add room control page (hra-done)
 - add room control menu form mobile (hra-done)
 - add mobile header profile (hra-done)
-- add room control history paging
+- add room control history paging (hra-done)
 ### bug fixes
 - remove main wrapper bottom padding in mobile mode, when scroll direction is down (hra-done)
 - use useThrottle instead of useDebouce to change scroll direction (hra-done)
