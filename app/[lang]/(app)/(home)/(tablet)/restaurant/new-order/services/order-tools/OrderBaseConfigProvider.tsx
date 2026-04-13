@@ -456,6 +456,9 @@ export default function OrderBaseConfigProvider({
     const newOrder = {
      ...(userOrder || {}),
      id: userOrder?.id || 0,
+     contractID: data.customerContract
+      ? Number(data.customerContract.key)
+      : null,
      orderStateID: initData.orderStateID || 1,
      occupied: data.table ? data.hasTableNo : false,
      registerID: data.room ? Number(data.room.key) : null,
@@ -676,6 +679,8 @@ export default function OrderBaseConfigProvider({
    comment,
    name,
    personID,
+   contractID,
+   contractNo,
   } = userOrder;
   if (tableID && tableNo) {
    orderInfoForm.setValue('table', {
@@ -691,6 +696,12 @@ export default function OrderBaseConfigProvider({
     key: subscriberPersonID.toString(),
     value: subscriberCode.toString(),
     customerName: '',
+   });
+  }
+  if (contractID && contractNo) {
+   orderInfoForm.setValue('customerContract', {
+    key: contractID.toString(),
+    value: contractNo.toString(),
    });
   }
   if (customerID) {

@@ -14,6 +14,12 @@ interface Contract {
  name: string;
 }
 
+interface CustomerContract {
+ id: number;
+ contractNo: number;
+ customerName: string;
+}
+
 type Person = {
  hasSubscriber: boolean;
  personData: {
@@ -117,6 +123,8 @@ interface Order {
  deliveryByAgent: boolean;
  occupied: boolean;
  personID: number | null;
+ contractID: number | null;
+ contractNo: number | null;
 }
 
 interface OrderItem {
@@ -150,6 +158,7 @@ type SaveOrderPackage = {
   | 'subscriberCode'
   | 'subscriberPersonFullName'
   | 'tableNo'
+  | 'contractNo'
   | 'contractMenuName'
   | 'customerCode'
  >;
@@ -557,6 +566,35 @@ function savePerson(newPerson: SavePersonPackage) {
  );
 }
 
+function getCustomerContract({
+ signal,
+ limit,
+ offset,
+ contractNo,
+ customerName,
+}: {
+ signal: AbortSignal;
+ limit: number;
+ offset: number;
+ contractNo?: string;
+ customerName?: string;
+}) {
+ const searchParams = new URLSearchParams([
+  ['limit', limit.toString()],
+  ['offset', offset.toString()],
+ ]);
+ if (contractNo) {
+  searchParams.set('contractNo', contractNo);
+ }
+ if (customerName) {
+  searchParams.set('customerName', customerName);
+ }
+ return axios.get<PagedData<CustomerContract[]>>(
+  `/Restaurant/Tablet/GetAssinableContracts?${searchParams.toString()}`,
+  { signal },
+ );
+}
+
 export type {
  InitialData,
  Subscriber,
@@ -564,6 +602,7 @@ export type {
  ItemGroup,
  ItemProgram,
  OrderItem,
+ CustomerContract,
  Order,
  OrderServiceRates,
  SaveOrderPackage,
@@ -571,6 +610,7 @@ export type {
  Tag,
  Person,
 };
+
 export {
  newOrderKey,
  personKey,
@@ -591,5 +631,6 @@ export {
  getContracts,
  getPerson,
  getPersonByNumber,
+ getCustomerContract,
  savePerson,
 };
