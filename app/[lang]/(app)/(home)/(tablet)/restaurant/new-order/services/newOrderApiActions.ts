@@ -16,6 +16,8 @@ interface Contract {
 
 interface CustomerContract {
  id: number;
+ contractNo: number;
+ customerName: string;
 }
 
 type Person = {

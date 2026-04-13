@@ -125,7 +125,7 @@
  },
  "findCustomerContract": {
   "search": "جستجو",
-  "code": "کد",
+  "code": "شماره",
   "customerName": "نام مشتری"
  },
  "findRooms": {

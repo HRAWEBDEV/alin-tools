@@ -146,7 +146,7 @@ export default function FindCustomerContract({
       <ul className='grid gap-2 grid-cols-[repeat(auto-fill,minmax(14rem,15rem))]'>
        {data?.pages.map((group, i) => (
         <Fragment key={i}>
-         {group.rows.map(({ id }) => (
+         {group.rows.map(({ id, customerName, contractNo }) => (
           <li key={id} className='bg-background shadow-md rounded-lg'>
            <DrawerClose asChild>
             <Button
@@ -159,7 +159,15 @@ export default function FindCustomerContract({
               });
              }}
             >
-             <div className='grid gap-1'></div>
+             <div className='grid gap-1'>
+              <div>
+               <span className='text-neutral-700 dark:text-neutral-400 text-sm'>
+                {dic.findCustomerContract.code}:{' '}
+               </span>
+               <span className='text-xl font-medium'>{contractNo}</span>
+              </div>
+              <p>{customerName}</p>
+             </div>
             </Button>
            </DrawerClose>
           </li>
