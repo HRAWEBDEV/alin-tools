@@ -1,13 +1,44 @@
 {
  "title": "هزینه‌های مهمان",
  "filters": {
-  "title": "فیلتر‌ها"
+  "title": "فیلتر‌ها",
+  "clearAll": "حذف همه"
  },
- "info": {},
+ "info": {
+  "results": "نتایج",
+  "noItemFound": "آیتمی یافت نشد"
+ },
  "detail": {
   "title": "جزئیات"
  },
  "fields": {
-  "title": ""
+  "date": "تاریخ",
+  "room": "اتاق",
+  "item": "عنوان",
+  "currency": "ارز",
+  "unitPrice": "قیمت واحد",
+  "amount": "مقدار",
+  "price": "قیمت",
+  "discount": "تخفیف",
+  "serviceRate": "نرخ سرویس",
+  "taxRate": "نرخ مالیات",
+  "total": "مجموع",
+  "comment": "کامنت"
+ },
+ "actions": {
+  "addExpense": "افزودن هزینه",
+  "editExpense": "ویرایش هزینه",
+  "viewExpense": "نمایش جزئیات",
+  "cancel": "لغو",
+  "edit": "ویرایش",
+  "save": "ذخیره",
+  "confirm": "تائید",
+  "deleteExpense": "حذف ",
+  "revertExpense": "بازگشت ",
+  "deleteDescription": "آیا از حذف این مورد اطمینان دارید؟ این عمل قابل بازگشت نیست!",
+  "revertDescription": "آیا از بازگشت این هزینه اطمینان دارید؟ این عمل قابل بازگشت نیست!"
+ },
+ "placeholders": {
+  "selectItem": "انتخاب عنوان"
  }
 }

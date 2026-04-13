@@ -33,12 +33,6 @@ type InitialData = {
  items: SelectOption[];
 };
 
-type LooseDictionary = {
- fields?: Record<string, string>;
- filters?: Record<string, string>;
- info?: Record<string, string>;
-};
-
 const FILTER_KEYS: (keyof GuestsExpensesSchema)[] = ['date', 'room', 'item'];
 
 const largeBadgeKeys: (keyof GuestsExpensesSchema)[] = ['room', 'item'];
@@ -67,8 +61,6 @@ export default function GuestsExpensesFilters({
  const [showDatePicker, setShowDatePicker] = useState(false);
  const { locale } = useBaseConfig();
 
- const looseDic = dic as unknown as LooseDictionary;
-
  const activeFilters = FILTER_KEYS.filter((k) => {
   const val = values[k];
   return val !== null && val !== undefined && val !== '';
@@ -80,14 +72,14 @@ export default function GuestsExpensesFilters({
  });
 
  const filterKeyLabel = (key: keyof GuestsExpensesSchema): string => {
-  const fieldsDic = looseDic.fields;
+  const fieldsDic = dic.fields;
   switch (key) {
    case 'date':
-    return fieldsDic?.date || 'Date';
+    return fieldsDic?.date;
    case 'room':
-    return fieldsDic?.room || 'Room';
+    return fieldsDic?.room;
    case 'item':
-    return fieldsDic?.item || 'Item';
+    return fieldsDic?.item;
    default:
     return key;
   }
@@ -141,9 +133,7 @@ export default function GuestsExpensesFilters({
         variant='outline'
        >
         <FaFilter className='size-4' />
-        <span className='hidden md:inline'>
-         {looseDic.filters?.title || 'Filters'}
-        </span>
+        <span className='hidden md:inline'>{dic.filters?.title}</span>
         {activeFilters.length > 0 && (
          <Badge variant='destructive' className='size-6'>
           {activeFilters.length}
@@ -154,10 +144,10 @@ export default function GuestsExpensesFilters({
       <DrawerContent className={SHARED_DRAWER_CLASSES} dir='rtl'>
        <DrawerHeader className='pb-1 shrink-0'>
         <DrawerTitle>
-         {looseDic.filters?.title || 'Filters'}{' '}
+         {dic.filters?.title}{' '}
          {totalResults !== undefined && (
           <span className='text-sm text-neutral-700 dark:text-neutral-400 font-normal ml-2'>
-           ({totalResults} {looseDic.info?.results || 'results'})
+           ({totalResults} {dic.info?.results})
           </span>
          )}
         </DrawerTitle>
@@ -175,7 +165,7 @@ export default function GuestsExpensesFilters({
            }
            className='text-xs text-destructive hover:underline cursor-pointer'
           >
-           {looseDic.filters?.clearAll || 'Clear All'}
+           {dic.filters?.clearAll}
           </button>
          )}
         </div>
@@ -314,7 +304,7 @@ export default function GuestsExpensesFilters({
                  ))}
                  {getOptions(key).length === 0 && (
                   <li className='text-center my-6 font-normal text-destructive'>
-                   {looseDic.info?.noItemFound || 'No items found'}
+                   {dic.info?.noItemFound}
                   </li>
                  )}
                 </ul>
@@ -374,12 +364,10 @@ export default function GuestsExpensesFilters({
    </div>
 
    {totalResults !== undefined && (
-    <div className='text-sm flex gap-4 items-center mt-1'>
-     <div>
-      <span className='text-neutral-700 dark:text-neutral-400'>
-       {looseDic.info?.results || 'Results'}:{' '}
-      </span>
-      <span className='font-medium'>{totalResults}</span>
+    <div className='flex gap-4 items-center'>
+     <div className='text-sm text-muted-foreground'>
+      <span className=''>{dic.info?.results}: </span>
+      <span className=''>{totalResults}</span>
      </div>
     </div>
    )}
