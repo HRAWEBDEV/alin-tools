@@ -101,7 +101,7 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
          <span className='dark:text-gray-200'>{profile.settings}</span>
         </Button>
        </li>
-       <li>
+       {/*<li>
         <Button
          variant='ghost'
          size={'icon-lg'}
@@ -114,7 +114,7 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
          <RiExchangeBoxLine className='size-8 ' />
          <span>{profile.changeProgram}</span>
         </Button>
-       </li>
+       </li>*/}
        <li>
         <Button
          variant='ghost'
