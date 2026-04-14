@@ -23,6 +23,7 @@ import {
  RotateCcwIcon,
  PencilIcon,
  ChevronsUpDown,
+ ChevronDownIcon,
 } from 'lucide-react';
 
 import {
@@ -35,7 +36,7 @@ import {
 } from '../services/guestsExpensesApiActions';
 import type { GuestsExpensesDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/guests-expenses/dictionary';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
-import { FaTimes } from 'react-icons/fa';
+import { FaRegTrashAlt, FaTimes } from 'react-icons/fa';
 import {
  Dialog,
  DialogContent,
@@ -44,6 +45,12 @@ import {
  DialogHeader,
  DialogTitle,
 } from '@/components/ui/dialog';
+import { Calendar } from '@/components/ui/calendar';
+import {
+ Popover,
+ PopoverContent,
+ PopoverTrigger,
+} from '@/components/ui/popover';
 
 export type InitData = {
  rooms: { key: string; value: string }[];
@@ -105,6 +112,8 @@ const deriveRate = ({
 
 const expenseFormSchema = z.object({
  itemID: z.string().min(1, 'Item is required'),
+ roomID: z.number().min(1).nullable(),
+ date: z.date().nullable(),
  amount: z
   .number()
   .nullable()
@@ -128,11 +137,13 @@ function DetailRow({
  value,
  wrapperClassName = '',
  valueClassName = '',
+ dic,
 }: {
  label: string;
  value: string | number | null | undefined;
  wrapperClassName?: string;
  valueClassName?: string;
+ dic?: GuestsExpensesDictionary;
 }) {
  return (
   <div
@@ -140,7 +151,7 @@ function DetailRow({
   >
    <span className='text-muted-foreground whitespace-nowrap'>{label}:</span>
    <span className={`font-normal text-end sm:text-start ${valueClassName}`}>
-    {value ?? '—'}
+    {value ?? dic?.info.rial}
    </span>
   </div>
  );
@@ -163,7 +174,9 @@ export default function GuestsExpenseActionDrawer({
   null,
  );
  const [itemDrawerOpen, setItemDrawerOpen] = useState(false);
+ const [roomDrawerOpen, setRoomDrawerOpen] = useState(false);
  const [discountMode, setDiscountMode] = useState<'fixed' | 'percent'>('fixed');
+ const [showDatePicker, setShowDatePicker] = useState(false);
  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
 
  if (isOpen !== prevIsOpen) {
@@ -188,6 +201,8 @@ export default function GuestsExpenseActionDrawer({
    discountPrice: 0,
    discountRate: 0,
    comment: '',
+   roomID: null,
+   date: null,
   },
  });
 
@@ -249,6 +264,8 @@ export default function GuestsExpenseActionDrawer({
      base: expense.sValue,
     }),
     comment: expense.comment || '',
+    roomID: expense.roomID,
+    date: new Date(expense.dateTimeDateTimeOffset),
    });
   } else if (mode === 'create') {
    reset({
@@ -258,6 +275,8 @@ export default function GuestsExpenseActionDrawer({
     discountPrice: 0,
     discountRate: 0,
     comment: '',
+    roomID: null,
+    date: new Date(),
    });
   }
  }, [isOpen, expense, mode, reset]);
@@ -299,12 +318,19 @@ export default function GuestsExpenseActionDrawer({
  const arzsArray = registerInfo?.arzs as unknown as Array<{ value: string }>;
  const currencyName = arzsArray?.length
   ? arzsArray[0].value
-  : expense?.arzName || '—';
+  : expense?.arzName || dic.info.rial;
 
  const selectedItemLabel = useMemo(
   () =>
    initData?.items.find((i) => i.key === watchedValues.itemID)?.value ?? null,
   [watchedValues.itemID, initData?.items],
+ );
+
+ const selectedRoomLabel = useMemo(
+  () =>
+   initData?.rooms.find((i) => Number(i.key) === watchedValues.roomID)?.value ??
+   null,
+  [initData?.rooms, watchedValues.roomID],
  );
 
  const handleItemSelect = (key: string) => {
@@ -315,15 +341,20 @@ export default function GuestsExpenseActionDrawer({
  };
 
  const onSubmit = (values: ExpenseFormValues) => {
-  const registerID = registerInfo?.register.id || expense?.registerID;
-  const roomID = registerInfo?.register.roomID || expense?.roomID;
+  const registerID =
+   registerInfo?.register.id ?? expense?.registerID ?? values.roomID;
+  const roomID =
+   values.roomID ?? registerInfo?.register?.roomID ?? expense?.roomID;
 
-  if (!registerID || !roomID) {
-   console.error('Missing Register or Room ID');
+  if (registerID == null || roomID == null) {
+   console.error(dic.info.onSubmitErrorMsg, {
+    registerID,
+    roomID,
+    formValues: values,
+   });
    return;
   }
 
-  // Safely extract the numbers (falling back to 0 if null)
   const amount = values.amount ?? 0;
   const unitPrice = values.unitPrice ?? 0;
   const discountPrice = values.discountPrice ?? 0;
@@ -340,25 +371,33 @@ export default function GuestsExpenseActionDrawer({
    discount: discountPrice,
   });
 
-  const revenuePayload = {
+  const effectiveDate = values.date
+   ? new Date(values.date).toISOString()
+   : new Date().toISOString();
+
+  const revenuePayload: Revenue = {
    ...(expense || {}),
    id: expense?.id || 0,
    registerID: registerID,
    roomID: roomID,
    itemID: Number(values.itemID),
-   amount: amount,
+   amount: values.amount ?? 0,
    sValue: newSValue,
    discount: discountPrice,
    service: newService,
    tax: newTax,
    comment: values.comment || null,
-   dateTimeDateTimeOffset: new Date().toISOString(),
+   dateTimeDateTimeOffset: effectiveDate,
    arzID: expense?.arzID || 0,
    progrmID: expense?.progrmID || 0,
    entityValue: expense?.entityValue || 0,
    totalValue: newSValue - discountPrice + newService + newTax,
   } as Revenue;
-
+  console.log(
+   'revenuePayload',
+   'dateOffset:',
+   revenuePayload.dateTimeDateTimeOffset,
+  );
   const payload = {
    registerID: registerID,
    roomID: roomID,
@@ -475,13 +514,62 @@ export default function GuestsExpenseActionDrawer({
        >
         <Controller
          control={control}
+         name='date'
+         render={({ field }) => {
+          const dateValue = field.value ? new Date(field.value) : undefined;
+          return (
+           <Field>
+            <FieldLabel htmlFor='date'>{dic.fields.date}</FieldLabel>
+            <Popover open={showDatePicker} onOpenChange={setShowDatePicker}>
+             <PopoverTrigger asChild>
+              <Button
+               variant='outline'
+               id='date'
+               disabled={isProcessing}
+               className={'justify-between h-11 font-normal'}
+               onBlur={field.onBlur}
+               ref={field.ref}
+              >
+               <span className='text-start grow overflow-hidden text-ellipsis'>
+                {field.value
+                 ? new Date(field.value).toLocaleDateString(locale)
+                 : ''}
+               </span>
+               <div className='flex gap-1 items-center -me-2'>
+                <ChevronDownIcon className='opacity-50 size-4 shrink-0' />
+               </div>
+              </Button>
+             </PopoverTrigger>
+             <PopoverContent
+              className='w-auto overflow-hidden p-0'
+              align='start'
+             >
+              <Calendar
+               mode='single'
+               captionLayout='dropdown'
+               className='[&]:[--cell-size:2.6rem]'
+               selected={dateValue}
+               defaultMonth={dateValue}
+               onSelect={(newValue) => {
+                if (newValue) {
+                 field.onChange(newValue);
+                 setShowDatePicker(false);
+                }
+               }}
+              />
+             </PopoverContent>
+            </Popover>
+           </Field>
+          );
+         }}
+        />
+        <Controller
+         control={control}
          name='itemID'
          render={({ field }) => (
           <>
            <Field>
-            <FieldLabel htmlFor='itemID'>
-             {dic.fields?.item || 'Item'}
-            </FieldLabel>
+            <FieldLabel htmlFor='itemID'>{dic.fields?.item}</FieldLabel>
             <Button
              id='itemID'
              type='button'
@@ -514,9 +602,7 @@ export default function GuestsExpenseActionDrawer({
            >
             <DrawerContent className={SHARED_DRAWER_CLASSES} dir='rtl'>
              <DrawerHeader className='shrink-0'>
-              <DrawerTitle className='text-xl'>
-               {dic.fields?.item || 'Item'}
-              </DrawerTitle>
+              <DrawerTitle className='text-xl'>{dic.fields?.item}</DrawerTitle>
              </DrawerHeader>
              <div className='grow overflow-hidden overflow-y-auto mb-6'>
               <ul>
@@ -551,6 +637,99 @@ export default function GuestsExpenseActionDrawer({
           </>
          )}
         />
+        {mode === 'create' && (
+         <Controller
+          control={control}
+          name='roomID'
+          render={({ field }) => {
+           return (
+            <>
+             <Field>
+              <FieldLabel htmlFor='roomSelector'>
+               {dic.placeholders.room}
+              </FieldLabel>
+              <Button
+               id='roomSelector'
+               type='button'
+               variant='outline'
+               onClick={() => setRoomDrawerOpen(true)}
+               disabled={isProcessing}
+               className='justify-between h-11 font-normal'
+              >
+               <span className='text-start grow overflow-hidden text-ellipsis'>
+                {selectedRoomLabel ?? (
+                 <span className='text-muted-foreground'>
+                  {dic.placeholders?.room}
+                 </span>
+                )}
+               </span>
+               <div className='flex gap-1 items-center -me-2'>
+                {field.value && (
+                 <Button
+                  type='button'
+                  variant='ghost'
+                  size='icon'
+                  onClick={(e) => {
+                   e.stopPropagation();
+                   field.onChange(null);
+                  }}
+                  className='text-rose-700 dark:text-rose-400 h-8 w-8 bg-transparent!'
+                 >
+                  <FaRegTrashAlt className='size-4' />
+                 </Button>
+                )}
+                <ChevronsUpDown className='opacity-50 size-4 shrink-0' />
+               </div>
+              </Button>
+             </Field>
+
+             <Drawer
+              open={roomDrawerOpen}
+              onOpenChange={(open) => !open && setRoomDrawerOpen(false)}
+             >
+              <DrawerContent className={SHARED_DRAWER_CLASSES} dir='rtl'>
+               <DrawerHeader className='shrink-0'>
+                <DrawerTitle className='text-xl'>
+                 {dic.placeholders.selectRoom || 'Select Room'}
+                </DrawerTitle>
+               </DrawerHeader>
+               <div className='grow overflow-hidden overflow-y-auto mb-6'>
+                <ul>
+                 {initData?.rooms?.map((opt) => (
+                  <li
+                   key={opt.key}
+                   className='flex gap-1 items-center ps-6 py-2 cursor-pointer hover:bg-muted/50 transition-colors'
+                   onClick={() => {
+                    const numericKey = Number(opt.key);
+                    field.onChange(
+                     field.value === numericKey ? null : numericKey,
+                    );
+                    setRoomDrawerOpen(false);
+                   }}
+                  >
+                   <Checkbox
+                    className='size-6 pointer-events-none'
+                    checked={field.value === Number(opt.key)}
+                   />
+                   <Button
+                    tabIndex={-1}
+                    type='button'
+                    variant='ghost'
+                    className='w-full justify-start h-auto text-lg pointer-events-none'
+                   >
+                    <span>{opt.value}</span>
+                   </Button>
+                  </li>
+                 ))}
+                </ul>
+               </div>
+              </DrawerContent>
+             </Drawer>
+            </>
+           );
+          }}
+         />
+        )}
 
         <Field>
          <FieldLabel>{dic.fields?.currency}</FieldLabel>
@@ -791,14 +970,6 @@ export default function GuestsExpenseActionDrawer({
        )}
       </div>
       <div className='flex gap-2'>
-       {/* <Button
-        type='button'
-        variant='ghost'
-        onClick={onClose}
-        disabled={isProcessing}
-       >
-        {dic.actions?.cancel}
-       </Button> */}
        {mode === 'view' && (
         <Button
          type='button'

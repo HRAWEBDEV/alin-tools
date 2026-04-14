@@ -182,6 +182,7 @@ export default function GuestsExpensesWrapper({ dic }: Props) {
      initData={initData}
      initDataIsLoading={initDataIsLoading}
      totalResults={totalResults}
+     onSetMode={setDrawerMode}
     />
    </FormProvider>
 

@@ -2,11 +2,14 @@
  "title": "هزینه‌های مهمان",
  "filters": {
   "title": "فیلتر‌ها",
-  "clearAll": "حذف همه"
+  "clearAll": "حذف همه",
+  "new": "افزودن"
  },
  "info": {
   "results": "نتایج",
-  "noItemFound": "آیتمی یافت نشد"
+  "noItemFound": "آیتمی یافت نشد",
+  "rial": "ریال",
+  "onSubmitErrorMsg": "لطفا از صحت فیلد roomID و itemID اطمینان حاصل کنید."
  },
  "detail": {
   "title": "جزئیات"
@@ -39,6 +42,8 @@
   "revertDescription": "آیا از بازگشت این هزینه اطمینان دارید؟ این عمل قابل بازگشت نیست!"
  },
  "placeholders": {
-  "selectItem": "انتخاب عنوان"
+  "selectItem": "انتخاب عنوان",
+  "room": "اتاق",
+  "selectRoom": "انتخاب اتاق"
  }
 }

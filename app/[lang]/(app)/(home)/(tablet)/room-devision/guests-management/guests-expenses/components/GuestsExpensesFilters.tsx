@@ -14,7 +14,7 @@ import {
 import { Spinner } from '@/components/ui/spinner';
 import { ChevronsUpDown, ChevronDownIcon } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
-import { FaFilter, FaRegTrashAlt } from 'react-icons/fa';
+import { FaFilter, FaPlus, FaRegTrashAlt } from 'react-icons/fa';
 import {
  Popover,
  PopoverContent,
@@ -37,12 +37,13 @@ const FILTER_KEYS: (keyof GuestsExpensesSchema)[] = ['date', 'room', 'item'];
 
 const largeBadgeKeys: (keyof GuestsExpensesSchema)[] = ['room', 'item'];
 const smallBadgeKeys: (keyof GuestsExpensesSchema)[] = [];
-
+type DrawerMode = 'create' | 'edit' | 'view' | null;
 type Props = {
  dic: GuestsExpensesDictionary;
  initData?: InitialData;
  initDataIsLoading?: boolean;
  totalResults?: number;
+ onSetMode: (mode: DrawerMode) => void;
 };
 
 const SHARED_DRAWER_CLASSES =
@@ -53,6 +54,7 @@ export default function GuestsExpensesFilters({
  initData,
  initDataIsLoading = false,
  totalResults,
+ onSetMode,
 }: Props) {
  const { control, setValue, reset } = useFormContext<GuestsExpensesSchema>();
  const values = useWatch({ control });
@@ -125,6 +127,17 @@ export default function GuestsExpensesFilters({
   <div className='flex flex-col gap-2 pt-2 bg-background'>
    <div className='flex gap-2 items-center mb-1'>
     <div className='flex items-center gap-2'>
+     <Button
+      size='lg'
+      className='px-3!'
+      disabled={initDataIsLoading}
+      onClick={() => {
+       onSetMode('create');
+      }}
+     >
+      {initDataIsLoading ? <Spinner /> : <FaPlus />}
+      <span className='hidden lg:inline'>{dic.filters.new}</span>
+     </Button>
      <Drawer open={filterDrawerOpen} onOpenChange={setFilterDrawerOpen}>
       <DrawerTrigger asChild>
        <Button
