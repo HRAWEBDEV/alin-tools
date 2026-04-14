@@ -51,6 +51,7 @@ import {
  PopoverContent,
  PopoverTrigger,
 } from '@/components/ui/popover';
+import { toast } from 'sonner';
 
 export type InitData = {
  rooms: { key: string; value: string }[];
@@ -341,17 +342,14 @@ export default function GuestsExpenseActionDrawer({
  };
 
  const onSubmit = (values: ExpenseFormValues) => {
-  const registerID =
-   registerInfo?.register.id ?? expense?.registerID ?? values.roomID;
+  const registerID = registerInfo?.register.id ?? expense?.registerID ?? null;
   const roomID =
-   values.roomID ?? registerInfo?.register?.roomID ?? expense?.roomID;
+   mode === 'create'
+    ? values.roomID
+    : (expense?.roomID ?? registerInfo?.register.roomID ?? null);
 
   if (registerID == null || roomID == null) {
-   console.error(dic.info.onSubmitErrorMsg, {
-    registerID,
-    roomID,
-    formValues: values,
-   });
+   toast.error(dic.info.onSubmitErrorMsg);
    return;
   }
 
@@ -393,11 +391,6 @@ export default function GuestsExpenseActionDrawer({
    entityValue: expense?.entityValue || 0,
    totalValue: newSValue - discountPrice + newService + newTax,
   } as Revenue;
-  console.log(
-   'revenuePayload',
-   'dateOffset:',
-   revenuePayload.dateTimeDateTimeOffset,
-  );
   const payload = {
    registerID: registerID,
    roomID: roomID,

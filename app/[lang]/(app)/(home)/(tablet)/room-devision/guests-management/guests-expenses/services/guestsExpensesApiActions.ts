@@ -1,9 +1,5 @@
 import { axios } from '@/app/[lang]/(app)/utils/defaultAxios';
 import {
- type GetSearchQueryValuesResult,
- SetSearchQueryOnPathname,
-} from '../../utils/searchQueryValues';
-import {
  type Combo,
  PagedData,
 } from '@/app/[lang]/(app)/(home)/(tablet)/restaurant/utils/apiTypes';
@@ -135,29 +131,46 @@ const getRevenues = ({
  );
 };
 
-let itemsAbortController: AbortController | null = null;
-const getItems = ({ limit, offset }: { limit: number; offset: number }) => {
- itemsAbortController?.abort();
- itemsAbortController = new AbortController();
+const getItems = ({
+ limit,
+ offset,
+ signal,
+}: {
+ limit: number;
+ offset: number;
+ signal: AbortSignal;
+}) => {
+ const searchParams = new URLSearchParams([
+  ['Limit', limit.toString()],
+  ['Offset', offset.toString()],
+ ]);
  return axios.get<PagedData<Item[]>>(
-  `${getItemsApi}?Limit=${limit}&Offset=${offset}`,
+  `${getItemsApi}?${searchParams.toString()}`,
   {
-   signal: itemsAbortController.signal,
+   signal: signal,
   },
  );
 };
 
-let getRoomsAbort: AbortController | null = null;
-const getRooms = (queryValues: GetSearchQueryValuesResult) => {
- getRoomsAbort?.abort();
- getRoomsAbort = new AbortController();
- const queryPathname = SetSearchQueryOnPathname({
-  queryValues,
-  pathname: getRoomsApi,
- });
- return axios.get<PagedData<Room[]>>(queryPathname, {
-  signal: getRoomsAbort.signal,
- });
+const getRooms = ({
+ limit,
+ offset,
+ signal,
+}: {
+ limit: number;
+ offset: number;
+ signal: AbortSignal;
+}) => {
+ const searchParams = new URLSearchParams([
+  ['Limit', limit.toString()],
+  ['Offset', offset.toString()],
+ ]);
+ return axios.get<PagedData<Room[]>>(
+  `${getRoomsApi}?${searchParams.toString()}`,
+  {
+   signal,
+  },
+ );
 };
 
 const getRegisterRoomNight = ({

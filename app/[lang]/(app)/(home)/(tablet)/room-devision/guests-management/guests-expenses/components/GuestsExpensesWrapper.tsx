@@ -9,8 +9,6 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useDateFns } from '@/hooks/useDateFns';
 import { useDebounce } from '../../../hooks/useDebounce';
-import { Button } from '@/components/ui/button';
-import { PlusIcon } from 'lucide-react';
 import type { GuestsExpensesDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/guests-expenses/dictionary';
 
 import {
@@ -63,12 +61,6 @@ export default function GuestsExpensesWrapper({ dic }: Props) {
  const formValues = useWatch({ control: methods.control });
  const debouncedFilters = useDebounce(formValues, 500);
 
- const effectiveDate = useMemo(() => {
-  return debouncedFilters.date
-   ? new Date(debouncedFilters.date).toISOString()
-   : new Date().toISOString();
- }, [debouncedFilters.date]);
-
  const isToday = useMemo(() => {
   if (!debouncedFilters.date) return false;
   return (
@@ -79,10 +71,10 @@ export default function GuestsExpensesWrapper({ dic }: Props) {
 
  const { data: initData, isLoading: initDataIsLoading } = useQuery<InitData>({
   queryKey: ['guests-expenses-init-data'],
-  queryFn: async () => {
+  queryFn: async ({ signal }) => {
    const [roomsRes, itemsRes] = await Promise.all([
-    getRooms({ limit: ['1000'], offset: ['1'] }),
-    getItems({ limit: 1000, offset: 1 }),
+    getRooms({ limit: 1000, offset: 1, signal }),
+    getItems({ limit: 1000, offset: 1, signal }),
    ]);
 
    return {
@@ -115,7 +107,6 @@ export default function GuestsExpensesWrapper({ dic }: Props) {
    return data;
   },
  });
-
  const { data: registerInfo } = useQuery({
   enabled: !!registerRoomNight?.registerID,
   queryKey: [getRegisterInfoApi, registerRoomNight?.registerID],
@@ -139,6 +130,9 @@ export default function GuestsExpensesWrapper({ dic }: Props) {
  } = useInfiniteQuery({
   queryKey: [getRevenuesApi, debouncedFilters],
   queryFn: async ({ pageParam = 1, signal }) => {
+   const effectiveDate = debouncedFilters.date
+    ? new Date(debouncedFilters.date).toISOString()
+    : new Date().toISOString();
    const response = await getRevenues({
     signal,
     limit: PAGE_SIZE,
@@ -183,23 +177,9 @@ export default function GuestsExpensesWrapper({ dic }: Props) {
      initDataIsLoading={initDataIsLoading}
      totalResults={totalResults}
      onSetMode={setDrawerMode}
+     registerInfo={registerInfo ?? null}
     />
    </FormProvider>
-
-   {registerInfo && (
-    <div className='px-4 pt-2 pb-0 flex justify-end shrink-0'>
-     <Button
-      onClick={() => {
-       setSelectedExpense(null);
-       setDrawerMode('create');
-      }}
-      className='w-full sm:w-auto shadow-sm'
-     >
-      <PlusIcon className='mr-2 h-4 w-4 rtl:ml-2 rtl:mr-0' />
-      {dic.actions?.addExpense}
-     </Button>
-    </div>
-   )}
 
    <div className='flex-1 overflow-y-auto p-4'>
     <GuestsExpensesList

@@ -62,7 +62,7 @@ export default function GuestsExpensesList({
       {isFetchingNextPage && (
        <Spinner className='text-primary mr-2 rtl:ml-2 rtl:mr-0' />
       )}
-      {/* {dic.info?.loadMore || 'Load More'} */}
+      {dic.info?.loadMore}
      </Button>
     </div>
    )}

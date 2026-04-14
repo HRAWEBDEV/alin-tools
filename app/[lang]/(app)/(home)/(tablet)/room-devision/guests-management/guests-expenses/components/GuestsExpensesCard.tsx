@@ -25,11 +25,10 @@ export default function GuestsExpenseCard({
     <MdTouchApp className='size-24 text-neutral-200 dark:text-neutral-800' />
    </div>
 
-   {/* Room Info */}
    <div className='flex flex-wrap justify-between gap-1 w-full'>
     <div className='flex items-center justify-between gap-2 w-full whitespace-nowrap'>
      <span className='text-sm text-neutral-600 dark:text-neutral-400'>
-      {/* {dic.fields?.room || 'Room'}:{' '} */}
+      {dic.fields?.room}:{' '}
      </span>
      <span className='text-base font-medium text-neutral-700 dark:text-neutral-400 text-start grow overflow-hidden text-ellipsis'>
       {expense.roomLabel || expense.roomNo || '-'}
@@ -37,17 +36,14 @@ export default function GuestsExpenseCard({
     </div>
    </div>
 
-   {/* Item Info */}
    <div className='flex items-center justify-between gap-2 w-full'>
     <p className='text-sm flex-1 font-medium text-neutral-700 truncate dark:text-neutral-400 text-start'>
      {expense.itemName || '-'}
     </p>
    </div>
 
-   {/* Financial Info (Total Value & Currency/Arz) */}
    <div className='flex items-center justify-between gap-2 w-full'>
     <p className='text-sm flex-1 truncate text-start text-primary font-semibold'>
-     {/* Assuming arzName is currency name (e.g., IRR, USD) */}
      {expense.totalValue ? expense.totalValue.toLocaleString(locale) : 0}{' '}
      <span className='text-xs font-normal text-primary/80'>
       {expense.arzName || ''}
@@ -55,7 +51,6 @@ export default function GuestsExpenseCard({
     </p>
    </div>
 
-   {/* Date & Time */}
    <div className='flex flex-wrap gap-1 justify-between w-full mt-1'>
     <span className='text-secondary/80 text-sm'>
      {expense.dateTimeDateTimeOffset

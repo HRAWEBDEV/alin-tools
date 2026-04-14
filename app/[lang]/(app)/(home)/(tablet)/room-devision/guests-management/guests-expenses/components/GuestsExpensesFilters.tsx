@@ -26,6 +26,7 @@ import { Field, FieldLabel } from '@/components/ui/field';
 
 import type { GuestsExpensesDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/guests-expenses/dictionary';
 import type { GuestsExpensesSchema } from '../schemas/guestsExpensesSchema';
+import type { RegisterInfo } from '../services/guestsExpensesApiActions';
 
 type SelectOption = { key: string | number; value: string };
 type InitialData = {
@@ -44,6 +45,7 @@ type Props = {
  initDataIsLoading?: boolean;
  totalResults?: number;
  onSetMode: (mode: DrawerMode) => void;
+ registerInfo: RegisterInfo | null;
 };
 
 const SHARED_DRAWER_CLASSES =
@@ -55,6 +57,7 @@ export default function GuestsExpensesFilters({
  initDataIsLoading = false,
  totalResults,
  onSetMode,
+ registerInfo,
 }: Props) {
  const { control, setValue, reset } = useFormContext<GuestsExpensesSchema>();
  const values = useWatch({ control });
@@ -130,7 +133,7 @@ export default function GuestsExpensesFilters({
      <Button
       size='lg'
       className='px-3!'
-      disabled={initDataIsLoading}
+      disabled={initDataIsLoading || !registerInfo}
       onClick={() => {
        onSetMode('create');
       }}
@@ -336,7 +339,7 @@ export default function GuestsExpensesFilters({
 
     {activeFilters.length > 0 && (
      <div
-      key={`expand-${activeFilters.length}`}
+      key={activeFilters.join('-')}
       ref={sliderRef}
       className='keen-slider grow relative'
       dir='rtl'

@@ -9,7 +9,8 @@
   "results": "نتایج",
   "noItemFound": "آیتمی یافت نشد",
   "rial": "ریال",
-  "onSubmitErrorMsg": "لطفا از صحت فیلد roomID و itemID اطمینان حاصل کنید."
+  "onSubmitErrorMsg": "لطفا از صحت فیلد roomID و itemID اطمینان حاصل کنید.",
+  "loadMore": "بارگزاری بیشتر"
  },
  "detail": {
   "title": "جزئیات"
