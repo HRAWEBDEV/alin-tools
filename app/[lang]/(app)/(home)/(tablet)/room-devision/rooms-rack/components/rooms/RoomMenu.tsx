@@ -126,12 +126,8 @@ export default function RoomMenu({
   },
  });
  // out of order
- const {
-  data: outOfOrder,
-  isSuccess: outOfOrderIsSuccess,
-  isFetching: outOfOrderIsFetching,
- } = useQuery({
-  enabled: !!room && RoomStateKindTypes.outOfService === room.roomStateKindID,
+ const { data: outOfOrder, isFetching: outOfOrderIsFetching } = useQuery({
+  enabled: !!room,
   queryKey: [outOfOrderRoomsBaseKey, 'rooms', room?.roomID.toString()],
   async queryFn({ signal }) {
    const res = await getOutOfOrderRoom({
@@ -210,6 +206,9 @@ export default function RoomMenu({
     queryClient.invalidateQueries({
      queryKey: [outOfOrderRoomsBaseKey, 'rooms'],
     });
+    queryClient.invalidateQueries({
+     queryKey: [outOfOrderRoomsBaseKey, 'rooms', room?.roomID.toString()],
+    });
    },
   });
 
@@ -257,38 +256,25 @@ export default function RoomMenu({
           >
            {dic.options.changeRoomStateType}
           </Button>
+          <Button
+           variant='outline'
+           className='justify-start text-start h-12'
+           size='lg'
+           disabled={pedingAction || outOfOrderIsFetching}
+           onClick={() => setShowOutOfOrder(true)}
+          >
+           {(pedingAction || outOfOrderIsFetching) && <Spinner />}
+           {dic.options.outOfOrder}
+           {!!outOfOrder && (
+            <div className='flex flex-wrap gap-2'>
+             <p className='text-destructive text-sm'>
+              ({outOfOrder.reasonName})
+             </p>
+            </div>
+           )}
+          </Button>
           {RoomStateKindTypes.outOfService === room.roomStateKindID && (
            <>
-            <Button
-             variant='outline'
-             className='justify-start text-start h-12'
-             size='lg'
-             disabled={
-              pedingAction ||
-              outOfOrderIsFetching ||
-              !outOfOrder ||
-              !outOfOrderIsSuccess
-             }
-             onClick={() => setShowOutOfOrder(true)}
-            >
-             {(pedingAction || outOfOrderIsFetching) && <Spinner />}
-             {dic.options.outOfOrder}
-             {!!outOfOrder && (
-              <div className='flex flex-wrap gap-2'>
-               <span className='text-secondary'>
-                {new Date(outOfOrder.fromDateTimeOffset).toLocaleDateString(
-                 locale,
-                )}
-               </span>
-               -
-               <span className='text-destructive'>
-                {new Date(outOfOrder.untilDateTimeOffset).toLocaleDateString(
-                 locale,
-                )}
-               </span>
-              </div>
-             )}
-            </Button>
             <Dialog>
              <DialogTrigger asChild>
               <Button
@@ -423,18 +409,17 @@ export default function RoomMenu({
        open={showRoomGuests}
        onChangeOpen={setShowRoomGuests}
       />
-      {outOfOrder && (
-       <NewOutOfOrderRoom
-        dic={outOfOrderDic}
-        editRoom={{
-         onCloseEdit: () => setShowOutOfOrder(false),
-         onShowEdit: () => {},
-         selectedOutOfOrderRoomID: outOfOrder.id,
-         showNew: showOutOfOrder,
-         targetEditRoom: outOfOrder,
-        }}
-       />
-      )}
+      <NewOutOfOrderRoom
+       dic={outOfOrderDic}
+       defaultRoomID={room.roomID}
+       editRoom={{
+        onCloseEdit: () => setShowOutOfOrder(false),
+        onShowEdit: () => {},
+        selectedOutOfOrderRoomID: outOfOrder?.id || 0,
+        showNew: showOutOfOrder,
+        targetEditRoom: outOfOrder || null,
+       }}
+      />
       <RoomControl
        dic={roomControlDic}
        roomID={room.roomID!}

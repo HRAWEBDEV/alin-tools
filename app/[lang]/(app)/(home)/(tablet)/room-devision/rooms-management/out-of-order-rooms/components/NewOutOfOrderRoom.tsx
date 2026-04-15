@@ -56,9 +56,11 @@ import { BiError } from 'react-icons/bi';
 export default function NewOutOfOrderRoom({
  dic,
  editRoom,
+ defaultRoomID,
 }: {
  dic: OutOfOrderRoomsDictionary;
  editRoom: EditOutOfOrderProps;
+ defaultRoomID?: number;
 }) {
  const { data: userInfo } = useUserInfoRouter();
  const queryClient = useQueryClient();
@@ -80,6 +82,20 @@ export default function NewOutOfOrderRoom({
  });
  const [fromDateValue, toDateValue] = watch(['fromDate', 'toDate']);
 
+ function invalideQueries() {
+  queryClient.invalidateQueries({
+   queryKey: [outOfOrderRoomsBaseKey, 'rooms'],
+  });
+  if (editRoom.targetEditRoom) {
+   queryClient.invalidateQueries({
+    queryKey: [
+     outOfOrderRoomsBaseKey,
+     'rooms',
+     editRoom.targetEditRoom?.roomID.toString(),
+    ],
+   });
+  }
+ }
  // save or update
  const { mutate, isPending } = useMutation({
   mutationFn(props: OutOfOrderRoomsSchema) {
@@ -100,9 +116,7 @@ export default function NewOutOfOrderRoom({
    toast.error(err.response?.data);
   },
   onSuccess() {
-   queryClient.invalidateQueries({
-    queryKey: [outOfOrderRoomsBaseKey, 'rooms'],
-   });
+   invalideQueries();
    editRoom.onCloseEdit();
   },
  });
@@ -116,9 +130,7 @@ export default function NewOutOfOrderRoom({
     toast.error(err.response?.data);
    },
    onSuccess() {
-    queryClient.invalidateQueries({
-     queryKey: [outOfOrderRoomsBaseKey, 'rooms'],
-    });
+    invalideQueries();
     editRoom.onCloseEdit();
    },
   });
@@ -144,9 +156,7 @@ export default function NewOutOfOrderRoom({
     toast.error(err.response?.data);
    },
    onSuccess() {
-    queryClient.invalidateQueries({
-     queryKey: [outOfOrderRoomsBaseKey, 'rooms'],
-    });
+    invalideQueries();
     editRoom.onCloseEdit();
    },
   });
@@ -188,12 +198,22 @@ export default function NewOutOfOrderRoom({
       }
     : null,
   );
-
   setValue(
    'comment',
    editRoom.targetEditRoom ? editRoom.targetEditRoom.comment || '' : '',
   );
- }, [setValue, editRoom.targetEditRoom]);
+ }, [setValue, editRoom]);
+
+ useEffect(() => {
+  if (editRoom.selectedOutOfOrderRoomID || !defaultRoomID || !initData?.rooms)
+   return;
+  const activeRoom = initData.rooms.find(
+   (item) => item.key === defaultRoomID.toString(),
+  );
+  if (activeRoom) {
+   setValue('room', activeRoom);
+  }
+ }, [editRoom, defaultRoomID, initData, setValue]);
 
  const pendActions =
   confirmRemoveIsPending || confirmExpireIsPending || isPending;
