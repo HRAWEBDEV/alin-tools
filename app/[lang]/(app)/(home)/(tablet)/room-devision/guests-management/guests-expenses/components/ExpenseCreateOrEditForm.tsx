@@ -170,7 +170,9 @@ export default function ExpenseCreateOrEditForm({
     render={({ field }) => (
      <>
       <Field>
-       <FieldLabel htmlFor='itemID'>{dic.fields?.item}</FieldLabel>
+       <FieldLabel htmlFor='itemID'>
+        {dic.fields?.item} <span className='text-destructive'>*</span>
+       </FieldLabel>
        <Button
         id='itemID'
         type='button'
@@ -242,7 +244,9 @@ export default function ExpenseCreateOrEditForm({
       return (
        <>
         <Field>
-         <FieldLabel htmlFor='roomSelector'>{dic.placeholders.room}</FieldLabel>
+         <FieldLabel htmlFor='roomSelector'>
+          {dic.placeholders.room} <span className='text-destructive'>*</span>
+         </FieldLabel>
          <Button
           id='roomSelector'
           type='button'
@@ -326,7 +330,9 @@ export default function ExpenseCreateOrEditForm({
      name='unitPrice'
      render={({ field }) => (
       <Field>
-       <FieldLabel htmlFor='unitPrice'>{dic.fields?.unitPrice}</FieldLabel>
+       <FieldLabel htmlFor='unitPrice'>
+        {dic.fields?.unitPrice} <span className='text-destructive'>*</span>
+       </FieldLabel>
        {/* <Input
         id='unitPrice'
         type='number'
@@ -346,13 +352,13 @@ export default function ExpenseCreateOrEditForm({
          disabled={isProcessing}
          thousandSeparator=','
          allowNegative={false}
-         {...field}
-         value={field.value ?? ''}
-         onChange={(e) => {
-          const val = e.target.value;
-          field.onChange(val === '' ? null : Number(val));
-         }}
+         name={field.name}
+         getInputRef={field.ref}
          onBlur={field.onBlur}
+         value={field.value ?? ''}
+         onValueChange={(values) => {
+          field.onChange(values.floatValue ?? null);
+         }}
         />
         {customInputGroupAddon(currencyName)}
         {errors.unitPrice && (
@@ -369,7 +375,9 @@ export default function ExpenseCreateOrEditForm({
      name='amount'
      render={({ field }) => (
       <Field>
-       <FieldLabel htmlFor='amount'>{dic.fields?.amount}</FieldLabel>
+       <FieldLabel htmlFor='amount'>
+        {dic.fields?.amount} <span className='text-destructive'>*</span>
+       </FieldLabel>
        <Input
         id='amount'
         type='number'
@@ -424,23 +432,23 @@ export default function ExpenseCreateOrEditForm({
            id='discountPrice'
            customInput={InputGroupInput}
            readOnly={isProcessing || sValue === 0}
+           allowNegative={false}
            getInputRef={field.ref}
+           name={field.name}
            onBlur={field.onBlur}
            value={
             discountMode === 'fixed'
              ? (field.value ?? '')
              : (watchedValues.discountRate ?? '')
            }
-           onChange={(e) => {
-            const rawVal = e.target.value;
+           onValueChange={(values) => {
+            const val = values.floatValue;
 
-            if (rawVal === '') {
+            if (val === undefined) {
              field.onChange(null);
              setValue('discountRate', null);
              return;
             }
-
-            const val = Number(rawVal);
 
             if (discountMode === 'fixed') {
              if (val > sValue) return;
@@ -524,6 +532,7 @@ export default function ExpenseCreateOrEditForm({
      <InputGroup className={SHARED_INPUT_HEIGHT}>
       {customInputGroupAddon(currencyName)}
       <NumericFormat
+       allowNegative={false}
        value={computedTotal.toLocaleString()}
        customInput={InputGroupInput}
        readOnly

@@ -249,7 +249,12 @@ export default function GuestsExpenseActionDrawer({
  });
 
  const isProcessing = isSaving || isUpdating || isDeleting || isReverting;
-
+ const isSaveDisabled =
+  isProcessing ||
+  !watchedValues.itemID ||
+  (watchedValues.amount ?? 0) < 1 ||
+  (watchedValues.unitPrice ?? -1) < 0 ||
+  (mode === 'create' && !watchedValues.roomID);
  const arzsArray = registerInfo?.arzs as unknown as Array<{ value: string }>;
  const currencyName = arzsArray?.length
   ? arzsArray[0].value
@@ -442,7 +447,7 @@ export default function GuestsExpenseActionDrawer({
          type='submit'
          form='expense-form'
          className='sm:flex-0 flex-1 px-8!'
-         disabled={isProcessing}
+         disabled={isSaveDisabled}
         >
          {isProcessing && (
           <Spinner className='mr-2 h-4 w-4 rtl:ml-2 rtl:mr-0' />
