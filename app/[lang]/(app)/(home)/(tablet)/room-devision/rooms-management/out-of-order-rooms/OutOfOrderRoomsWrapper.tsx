@@ -159,12 +159,7 @@ export default function OutOfOrderRoomsWrapper({
     />
     <OutOfOrderRooms dic={dic} editRoom={editRoomProps} rooms={roomsProps} />
    </FormProvider>
-   <NewOutOfOrderRoom
-    dic={dic}
-    initialData={initData}
-    initDataIsLoading={initDataIsLoading}
-    editRoom={editRoomProps}
-   />
+   <NewOutOfOrderRoom dic={dic} editRoom={editRoomProps} />
   </>
  );
 }

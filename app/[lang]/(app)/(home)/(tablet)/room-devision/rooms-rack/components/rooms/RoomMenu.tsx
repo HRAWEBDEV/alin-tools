@@ -57,7 +57,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
  expiredOutOfOrder,
  outOfOrderRoomsBaseKey,
+ getOutOfOrderRoom,
 } from '../../../rooms-management/out-of-order-rooms/services/outOfOrderApiActions';
+import { useBaseConfig } from '@/services/base-config/baseConfigContext';
+import NewOutOfOrderRoom from '../../../rooms-management/out-of-order-rooms/components/NewOutOfOrderRoom';
 
 export default function RoomMenu({
  dic,
@@ -78,6 +81,8 @@ export default function RoomMenu({
  setShowRoomNotes,
  roomControlDic,
  outOfOrderDic,
+ showOutOfOrder,
+ setShowOutOfOrder,
 }: {
  dic: RoomsRackDictionary;
  roomControlDic: RoomControlDictionary;
@@ -96,9 +101,12 @@ export default function RoomMenu({
  setShowGuestMessages: (state: boolean) => unknown;
  showRoomNotes: boolean;
  setShowRoomNotes: (state: boolean) => unknown;
+ showOutOfOrder: boolean;
+ setShowOutOfOrder: (state: boolean) => unknown;
  outOfOrderDic: OutOfOrderRoomsDictionary;
 }) {
  const queryClient = useQueryClient();
+ const { locale } = useBaseConfig();
  // guest messages setup
  const {
   data: guestMessages,
@@ -113,6 +121,22 @@ export default function RoomMenu({
    const res = await getRoomGuestMessages({
     signal,
     registerId: room!.registerID!,
+   });
+   return res.data;
+  },
+ });
+ // out of order
+ const {
+  data: outOfOrder,
+  isSuccess: outOfOrderIsSuccess,
+  isFetching: outOfOrderIsFetching,
+ } = useQuery({
+  enabled: !!room && RoomStateKindTypes.outOfService === room.roomStateKindID,
+  queryKey: [outOfOrderRoomsBaseKey, 'rooms', room?.roomID.toString()],
+  async queryFn({ signal }) {
+   const res = await getOutOfOrderRoom({
+    signal,
+    roomId: room!.roomID,
    });
    return res.data;
   },
@@ -234,48 +258,80 @@ export default function RoomMenu({
            {dic.options.changeRoomStateType}
           </Button>
           {RoomStateKindTypes.outOfService === room.roomStateKindID && (
-           <Dialog>
-            <DialogTrigger asChild>
-             <Button
-              variant='outline'
-              className='justify-start text-start h-12'
-              size='lg'
-              disabled={pedingAction}
-             >
-              {pedingAction && <Spinner />}
-              {dic.options.cancelOutOfOrder}
-             </Button>
-            </DialogTrigger>
-            <DialogContent className='p-0 gap-0'>
-             <DialogHeader className='p-4'>
-              <DialogTitle className='hidden'>
-               {outOfOrderDic.newOrEdit.expireConfirmMessage}
-              </DialogTitle>
-             </DialogHeader>
-             <div className='p-4'>
-              <div className='flex gap-1 items-center text-red-700 dark:text-red-400 font-medium'>
-               <BiError className='size-12' />
-               <p>{outOfOrderDic.newOrEdit.expireConfirmMessage}</p>
+           <>
+            <Button
+             variant='outline'
+             className='justify-start text-start h-12'
+             size='lg'
+             disabled={
+              pedingAction ||
+              outOfOrderIsFetching ||
+              !outOfOrder ||
+              !outOfOrderIsSuccess
+             }
+             onClick={() => setShowOutOfOrder(true)}
+            >
+             {(pedingAction || outOfOrderIsFetching) && <Spinner />}
+             {dic.options.outOfOrder}
+             {!!outOfOrder && (
+              <div className='flex flex-wrap gap-2'>
+               <span className='text-secondary'>
+                {new Date(outOfOrder.fromDateTimeOffset).toLocaleDateString(
+                 locale,
+                )}
+               </span>
+               -
+               <span className='text-destructive'>
+                {new Date(outOfOrder.untilDateTimeOffset).toLocaleDateString(
+                 locale,
+                )}
+               </span>
               </div>
-             </div>
-             <DialogFooter className='p-4'>
-              <DialogClose asChild>
-               <Button className='sm:w-24' variant='outline'>
-                {outOfOrderDic.newOrEdit.cancel}
-               </Button>
-              </DialogClose>
-              <DialogClose asChild>
-               <Button
-                className='sm:w-24'
-                variant='destructive'
-                onClick={() => confirmExpire()}
-               >
-                {outOfOrderDic.newOrEdit.confirm}
-               </Button>
-              </DialogClose>
-             </DialogFooter>
-            </DialogContent>
-           </Dialog>
+             )}
+            </Button>
+            <Dialog>
+             <DialogTrigger asChild>
+              <Button
+               variant='outline'
+               className='justify-start text-start h-12'
+               size='lg'
+               disabled={pedingAction}
+              >
+               {pedingAction && <Spinner />}
+               {dic.options.cancelOutOfOrder}
+              </Button>
+             </DialogTrigger>
+             <DialogContent className='p-0 gap-0'>
+              <DialogHeader className='p-4'>
+               <DialogTitle className='hidden'>
+                {outOfOrderDic.newOrEdit.expireConfirmMessage}
+               </DialogTitle>
+              </DialogHeader>
+              <div className='p-4'>
+               <div className='flex gap-1 items-center text-red-700 dark:text-red-400 font-medium'>
+                <BiError className='size-12' />
+                <p>{outOfOrderDic.newOrEdit.expireConfirmMessage}</p>
+               </div>
+              </div>
+              <DialogFooter className='p-4'>
+               <DialogClose asChild>
+                <Button className='sm:w-24' variant='outline'>
+                 {outOfOrderDic.newOrEdit.cancel}
+                </Button>
+               </DialogClose>
+               <DialogClose asChild>
+                <Button
+                 className='sm:w-24'
+                 variant='destructive'
+                 onClick={() => confirmExpire()}
+                >
+                 {outOfOrderDic.newOrEdit.confirm}
+                </Button>
+               </DialogClose>
+              </DialogFooter>
+             </DialogContent>
+            </Dialog>
+           </>
           )}
           {RoomStateGroup.occupiedRoom === room.roomStateGroupID && (
            <>
@@ -367,6 +423,18 @@ export default function RoomMenu({
        open={showRoomGuests}
        onChangeOpen={setShowRoomGuests}
       />
+      {outOfOrder && (
+       <NewOutOfOrderRoom
+        dic={outOfOrderDic}
+        editRoom={{
+         onCloseEdit: () => setShowOutOfOrder(false),
+         onShowEdit: () => {},
+         selectedOutOfOrderRoomID: outOfOrder.id,
+         showNew: showOutOfOrder,
+         targetEditRoom: outOfOrder,
+        }}
+       />
+      )}
       <RoomControl
        dic={roomControlDic}
        roomID={room.roomID!}

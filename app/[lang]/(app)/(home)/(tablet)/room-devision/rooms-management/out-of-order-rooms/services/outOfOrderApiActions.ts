@@ -55,7 +55,7 @@ function getOutOfOrderRoom({
  roomId: number;
  signal: AbortSignal;
 }) {
- return axios.get(
+ return axios.get<Room>(
   `/Reception/OutOfOrder/GetOutOfOrderByRoomID?RoomID=${roomId.toString()}`,
   { signal },
  );

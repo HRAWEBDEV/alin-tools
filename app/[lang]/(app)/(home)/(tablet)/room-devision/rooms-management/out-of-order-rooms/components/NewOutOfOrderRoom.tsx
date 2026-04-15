@@ -16,13 +16,13 @@ import {
  createOutOfOrderRoomsSchema,
 } from '../schemas/outOfOrderRoomsSchema';
 import {
- type InitialData,
  type SaveOutOfOrder,
  outOfOrderRoomsBaseKey,
  updateOutOfOrderRoom,
  saveOutOfOrderRoom,
  removeOutOfOrder,
  expiredOutOfOrder,
+ getInitialData,
 } from '../services/outOfOrderApiActions';
 import { EditOutOfOrderProps } from '../utils/editOutOfOrderProps';
 import { Field, FieldLabel } from '@/components/ui/field';
@@ -38,7 +38,7 @@ import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { Spinner } from '@/components/ui/spinner';
 import { Checkbox } from '@/components/ui/checkbox';
 import { InputGroup, InputGroupTextarea } from '@/components/ui/input-group';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { toast } from 'sonner';
 import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
@@ -55,13 +55,9 @@ import { BiError } from 'react-icons/bi';
 
 export default function NewOutOfOrderRoom({
  dic,
- initialData,
- initDataIsLoading,
  editRoom,
 }: {
  dic: OutOfOrderRoomsDictionary;
- initialData?: InitialData;
- initDataIsLoading: boolean;
  editRoom: EditOutOfOrderProps;
 }) {
  const { data: userInfo } = useUserInfoRouter();
@@ -126,6 +122,18 @@ export default function NewOutOfOrderRoom({
     editRoom.onCloseEdit();
    },
   });
+ // init data
+ const {
+  data: initData,
+  isLoading: initDataIsLoading,
+  isError: initDataIsError,
+ } = useQuery({
+  queryKey: [outOfOrderRoomsBaseKey, 'init-data'],
+  async queryFn({ signal }) {
+   const res = await getInitialData({ signal });
+   return res.data;
+  },
+ });
  // expire
  const { mutate: confirmExpire, isPending: confirmExpireIsPending } =
   useMutation({
@@ -437,7 +445,7 @@ export default function NewOutOfOrderRoom({
            </DrawerHeader>
            <div className='grow overflow-hidden overflow-y-auto'>
             <ul>
-             {initialData?.rooms.map((item) => (
+             {initData?.rooms.map((item) => (
               <DrawerClose asChild key={item.key}>
                <li
                 className='flex gap-1 items-center ps-6 py-2'
@@ -498,7 +506,7 @@ export default function NewOutOfOrderRoom({
            </DrawerHeader>
            <div className='grow overflow-hidden overflow-y-auto'>
             <ul>
-             {initialData?.reasons.map((item) => (
+             {initData?.reasons.map((item) => (
               <DrawerClose asChild key={item.key}>
                <li
                 className='flex gap-1 items-center ps-6 py-2'
