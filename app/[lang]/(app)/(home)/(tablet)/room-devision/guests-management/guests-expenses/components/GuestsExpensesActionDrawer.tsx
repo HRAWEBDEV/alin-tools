@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState, useMemo } from 'react';
-import { useForm, Controller, useWatch } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useMutation } from '@tanstack/react-query';
@@ -13,19 +13,9 @@ import {
  DrawerClose,
 } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Field, FieldLabel } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+
 import { Spinner } from '@/components/ui/spinner';
-import {
- Trash2Icon,
- RotateCcwIcon,
- PencilIcon,
- ChevronsUpDown,
- ChevronDownIcon,
- SaveIcon,
-} from 'lucide-react';
+import { Trash2Icon, RotateCcwIcon, PencilIcon, SaveIcon } from 'lucide-react';
 
 import {
  saveRegisterRevenue,
@@ -36,8 +26,7 @@ import {
  type RegisterInfo,
 } from '../services/guestsExpensesApiActions';
 import type { GuestsExpensesDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/guests-expenses/dictionary';
-import { useBaseConfig } from '@/services/base-config/baseConfigContext';
-import { FaRegTrashAlt, FaTimes } from 'react-icons/fa';
+import { FaTimes } from 'react-icons/fa';
 import {
  Dialog,
  DialogContent,
@@ -46,13 +35,20 @@ import {
  DialogHeader,
  DialogTitle,
 } from '@/components/ui/dialog';
-import { Calendar } from '@/components/ui/calendar';
-import {
- Popover,
- PopoverContent,
- PopoverTrigger,
-} from '@/components/ui/popover';
+// import { Calendar } from '@/components/ui/calendar';
+// import {
+//  Popover,
+//  PopoverContent,
+//  PopoverTrigger,
+// } from '@/components/ui/popover';
 import { toast } from 'sonner';
+import ExpenseDetails from './ExpenseReadonlyDetails';
+import {
+ calcPercentage,
+ calculateServiceAndTax,
+ deriveRate,
+} from '../utils/calcExpenses';
+import ExpenseCreateOrEditForm from './ExpenseCreateOrEditForm';
 
 export type InitData = {
  rooms: { key: string; value: string }[];
@@ -79,39 +75,6 @@ type Props = {
  onSetMode: (mode: DrawerMode) => void;
 };
 
-const calcPercentage = ({ value, base }: { value: number; base: number }) => {
- if (base === 0) return 0;
- return Number(((value / base) * 100).toFixed(2));
-};
-
-const calcPrice = ({ value, base }: { value: number; base: number }) => {
- return Number(((value * base) / 100).toFixed(4));
-};
-
-const calculateServiceAndTax = ({
- rate,
- sValue,
- discount,
-}: {
- rate: number;
- sValue: number;
- discount: number;
-}) => Number((((sValue - discount) * rate) / 100).toFixed(4));
-
-const deriveRate = ({
- price,
- sValue,
- discount,
-}: {
- price: number;
- sValue: number;
- discount: number;
-}) => {
- const base = sValue - discount;
- if (base === 0) return 0;
- return Number(((price / base) * 100).toFixed(2));
-};
-
 const expenseFormSchema = z.object({
  itemID: z.string().min(1, 'Item is required'),
  roomID: z.number().min(1).nullable(),
@@ -131,34 +94,6 @@ const expenseFormSchema = z.object({
 
 type ExpenseFormValues = z.infer<typeof expenseFormSchema>;
 
-const SHARED_DRAWER_CLASSES =
- 'sm:h-[min(85svh,30rem)] h-[min(95svh,66rem)] flex flex-col';
-
-function DetailRow({
- label,
- value,
- wrapperClassName = '',
- valueClassName = '',
- dic,
-}: {
- label: string;
- value: string | number | null | undefined;
- wrapperClassName?: string;
- valueClassName?: string;
- dic?: GuestsExpensesDictionary;
-}) {
- return (
-  <div
-   className={`flex items-center text-start gap-2 justify-between w-full ${wrapperClassName}`}
-  >
-   <span className='text-muted-foreground whitespace-nowrap'>{label}:</span>
-   <span className={`font-normal text-end sm:text-start ${valueClassName}`}>
-    {value ?? dic?.info.rial}
-   </span>
-  </div>
- );
-}
-
 export default function GuestsExpenseActionDrawer({
  isOpen,
  mode,
@@ -171,14 +106,12 @@ export default function GuestsExpenseActionDrawer({
  onSetMode,
 }: Props) {
  const isReadOnly = mode === 'view';
- const { locale } = useBaseConfig();
  const [confirmAction, setConfirmAction] = useState<'delete' | 'revert' | null>(
   null,
  );
  const [itemDrawerOpen, setItemDrawerOpen] = useState(false);
- const [roomDrawerOpen, setRoomDrawerOpen] = useState(false);
  const [discountMode, setDiscountMode] = useState<'fixed' | 'percent'>('fixed');
- const [showDatePicker, setShowDatePicker] = useState(false);
+ //  const [showDatePicker, setShowDatePicker] = useState(false);
  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
 
  if (isOpen !== prevIsOpen) {
@@ -405,26 +338,6 @@ export default function GuestsExpenseActionDrawer({
   }
  };
 
- const viewUnitPrice =
-  expense && expense.amount > 0 ? expense.sValue / expense.amount : 0;
- const viewDiscountRate = expense
-  ? calcPercentage({ value: expense.discount, base: expense.sValue })
-  : 0;
- const viewServiceRate = expense
-  ? deriveRate({
-     price: expense.service,
-     sValue: expense.sValue,
-     discount: expense.discount,
-    })
-  : 0;
- const viewTaxRate = expense
-  ? deriveRate({
-     price: expense.tax,
-     sValue: expense.sValue,
-     discount: expense.discount,
-    })
-  : 0;
-
  return (
   <>
    <Drawer open={isOpen} onOpenChange={(open) => !open && onClose()}>
@@ -448,499 +361,39 @@ export default function GuestsExpenseActionDrawer({
       </DrawerClose>
      </DrawerHeader>
 
-     <div className='p-5 pt-0 flex-1 overflow-y-auto w-full max-w-[min(100%,40rem)] mx-auto'>
+     <div className='sm:px-0! p-5 pt-0 flex-1 overflow-y-auto w-full max-w-[min(100%,40rem)] mx-auto'>
       {isReadOnly ? (
-       expense && (
-        <div className='grid sm:grid-cols-2 grid-cols-1 gap-x-10 gap-y-4 py-4'>
-         <DetailRow
-          wrapperClassName=''
-          label={dic.fields?.date}
-          value={new Date(expense.dateTimeDateTimeOffset).toLocaleDateString(
-           locale,
-          )}
-         />
-         <DetailRow label={dic.fields?.currency} value={currencyName} />
-         <DetailRow
-          label={dic.fields?.item}
-          value={expense.itemName}
-          valueClassName='text-primary'
-         />
-         <DetailRow label={dic.fields?.room} value={expense.roomLabel} />
-         <DetailRow
-          label={dic.fields?.unitPrice}
-          value={viewUnitPrice.toLocaleString()}
-         />
-         <DetailRow
-          label={dic.fields?.amount}
-          value={expense.amount.toLocaleString()}
-         />
-         <DetailRow
-          label={dic.fields?.price}
-          value={expense.sValue.toLocaleString()}
-         />
-         <DetailRow
-          label={dic.fields?.discount}
-          value={
-           expense.discount > 0
-            ? `${expense.discount.toLocaleString()} (%${viewDiscountRate})`
-            : '—'
-          }
-         />
-         <DetailRow
-          label={dic.fields?.serviceRate}
-          value={`%${viewServiceRate}`}
-         />
-         <DetailRow label={dic.fields?.taxRate} value={`%${viewTaxRate}`} />
-         <DetailRow
-          label={dic.fields?.total}
-          value={expense.totalValue?.toLocaleString()}
-         />
-         {expense.comment && (
-          <div className='sm:col-span-2 sm:border-t pt-4'>
-           <DetailRow
-            wrapperClassName='flex-col items-stretch'
-            label={dic.fields?.comment}
-            value={expense.comment}
-           />
-          </div>
-         )}
-        </div>
-       )
+       <ExpenseDetails
+        dic={dic}
+        expense={expense}
+        currencyName={currencyName}
+       />
       ) : (
-       <form
-        id='expense-form'
-        onSubmit={handleSubmit(onSubmit)}
-        className='flex flex-col gap-6 pt-4'
-       >
-        <Controller
-         control={control}
-         name='date'
-         render={({ field }) => {
-          const dateValue = field.value ? new Date(field.value) : undefined;
-          return (
-           <Field>
-            <FieldLabel htmlFor='date'>{dic.fields.date}</FieldLabel>
-            <Popover open={showDatePicker} onOpenChange={setShowDatePicker}>
-             <PopoverTrigger asChild>
-              <Button
-               variant='outline'
-               id='date'
-               disabled={isProcessing}
-               className={'justify-between h-11 font-normal'}
-               onBlur={field.onBlur}
-               ref={field.ref}
-              >
-               <span className='text-start grow overflow-hidden text-ellipsis'>
-                {field.value
-                 ? new Date(field.value).toLocaleDateString(locale)
-                 : ''}
-               </span>
-               <div className='flex gap-1 items-center -me-2'>
-                <ChevronDownIcon className='opacity-50 size-4 shrink-0' />
-               </div>
-              </Button>
-             </PopoverTrigger>
-             <PopoverContent
-              className='w-auto overflow-hidden p-0'
-              align='start'
-             >
-              <Calendar
-               mode='single'
-               captionLayout='dropdown'
-               className='[&]:[--cell-size:2.6rem]'
-               selected={dateValue}
-               defaultMonth={dateValue}
-               onSelect={(newValue) => {
-                if (newValue) {
-                 field.onChange(newValue);
-                 setShowDatePicker(false);
-                }
-               }}
-              />
-             </PopoverContent>
-            </Popover>
-           </Field>
-          );
-         }}
-        />
-        <Controller
-         control={control}
-         name='itemID'
-         render={({ field }) => (
-          <>
-           <Field>
-            <FieldLabel htmlFor='itemID'>{dic.fields?.item}</FieldLabel>
-            <Button
-             id='itemID'
-             type='button'
-             variant='outline'
-             disabled={isProcessing}
-             onClick={() => setItemDrawerOpen(true)}
-             className='justify-between h-11 font-normal'
-             ref={field.ref}
-             onBlur={field.onBlur}
-            >
-             <span className='text-start grow overflow-hidden text-ellipsis'>
-              {selectedItemLabel ?? (
-               <span className='text-muted-foreground'>
-                {dic.placeholders?.selectItem}
-               </span>
-              )}
-             </span>
-             <ChevronsUpDown className='opacity-50 size-4 shrink-0' />
-            </Button>
-            {errors.itemID && (
-             <span className='text-xs text-destructive'>
-              {errors.itemID.message}
-             </span>
-            )}
-           </Field>
-
-           <Drawer
-            open={itemDrawerOpen}
-            onOpenChange={(open) => !open && setItemDrawerOpen(false)}
-           >
-            <DrawerContent className={SHARED_DRAWER_CLASSES} dir='rtl'>
-             <DrawerHeader className='shrink-0'>
-              <DrawerTitle className='text-xl'>{dic.fields?.item}</DrawerTitle>
-             </DrawerHeader>
-             <div className='grow overflow-hidden overflow-y-auto mb-6'>
-              <ul>
-               {initData?.items.map((item) => (
-                <li
-                 key={item.key}
-                 className='flex gap-1 items-center ps-6 py-2 cursor-pointer hover:bg-muted/50 transition-colors'
-                 onClick={() => handleItemSelect(item.key)}
-                >
-                 <Checkbox
-                  className='size-6 pointer-events-none'
-                  checked={field.value === item.key}
-                 />
-                 <Button
-                  tabIndex={-1}
-                  variant='ghost'
-                  className='w-full justify-start h-auto text-lg pointer-events-none'
-                 >
-                  {item.value}
-                 </Button>
-                </li>
-               ))}
-               {!initData?.items.length && (
-                <li className='text-center my-6 font-normal text-destructive'>
-                 {dic.info?.noItemFound || 'No items found'}
-                </li>
-               )}
-              </ul>
-             </div>
-            </DrawerContent>
-           </Drawer>
-          </>
-         )}
-        />
-        {mode === 'create' && (
-         <Controller
-          control={control}
-          name='roomID'
-          render={({ field }) => {
-           return (
-            <>
-             <Field>
-              <FieldLabel htmlFor='roomSelector'>
-               {dic.placeholders.room}
-              </FieldLabel>
-              <Button
-               id='roomSelector'
-               type='button'
-               variant='outline'
-               onClick={() => setRoomDrawerOpen(true)}
-               disabled={isProcessing}
-               className='justify-between h-11 font-normal'
-              >
-               <span className='text-start grow overflow-hidden text-ellipsis'>
-                {selectedRoomLabel ?? (
-                 <span className='text-muted-foreground'>
-                  {dic.placeholders?.room}
-                 </span>
-                )}
-               </span>
-               <div className='flex gap-1 items-center -me-2'>
-                {field.value && (
-                 <Button
-                  type='button'
-                  variant='ghost'
-                  size='icon'
-                  onClick={(e) => {
-                   e.stopPropagation();
-                   field.onChange(null);
-                  }}
-                  className='text-rose-700 dark:text-rose-400 h-8 w-8 bg-transparent!'
-                 >
-                  <FaRegTrashAlt className='size-4' />
-                 </Button>
-                )}
-                <ChevronsUpDown className='opacity-50 size-4 shrink-0' />
-               </div>
-              </Button>
-             </Field>
-
-             <Drawer
-              open={roomDrawerOpen}
-              onOpenChange={(open) => !open && setRoomDrawerOpen(false)}
-             >
-              <DrawerContent className={SHARED_DRAWER_CLASSES} dir='rtl'>
-               <DrawerHeader className='shrink-0'>
-                <DrawerTitle className='text-xl'>
-                 {dic.placeholders.selectRoom || 'Select Room'}
-                </DrawerTitle>
-               </DrawerHeader>
-               <div className='grow overflow-hidden overflow-y-auto mb-6'>
-                <ul>
-                 {initData?.rooms?.map((opt) => (
-                  <li
-                   key={opt.key}
-                   className='flex gap-1 items-center ps-6 py-2 cursor-pointer hover:bg-muted/50 transition-colors'
-                   onClick={() => {
-                    const numericKey = Number(opt.key);
-                    field.onChange(
-                     field.value === numericKey ? null : numericKey,
-                    );
-                    setRoomDrawerOpen(false);
-                   }}
-                  >
-                   <Checkbox
-                    className='size-6 pointer-events-none'
-                    checked={field.value === Number(opt.key)}
-                   />
-                   <Button
-                    tabIndex={-1}
-                    type='button'
-                    variant='ghost'
-                    className='w-full justify-start h-auto text-lg pointer-events-none'
-                   >
-                    <span>{opt.value}</span>
-                   </Button>
-                  </li>
-                 ))}
-                </ul>
-               </div>
-              </DrawerContent>
-             </Drawer>
-            </>
-           );
-          }}
-         />
-        )}
-
-        <Field>
-         <FieldLabel>{dic.fields?.currency}</FieldLabel>
-         <Input
-          value={currencyName}
-          readOnly
-          disabled
-          className='bg-muted/50'
-         />
-        </Field>
-
-        <Controller
-         control={control}
-         name='unitPrice'
-         render={({ field }) => (
-          <Field>
-           <FieldLabel htmlFor='unitPrice'>{dic.fields?.unitPrice}</FieldLabel>
-           <Input
-            id='unitPrice'
-            type='number'
-            disabled={isProcessing}
-            {...field}
-            value={field.value ?? ''}
-            onChange={(e) => {
-             const val = e.target.value;
-             field.onChange(val === '' ? null : Number(val));
-            }}
-           />
-           {errors.unitPrice && (
-            <span className='text-xs text-destructive'>
-             {errors.unitPrice.message}
-            </span>
-           )}
-          </Field>
-         )}
-        />
-
-        <Controller
-         control={control}
-         name='amount'
-         render={({ field }) => (
-          <Field>
-           <FieldLabel htmlFor='amount'>{dic.fields?.amount}</FieldLabel>
-           <Input
-            id='amount'
-            type='number'
-            disabled={isProcessing}
-            {...field}
-            value={field.value ?? ''}
-            onChange={(e) => {
-             const val = e.target.value;
-             field.onChange(val === '' ? null : Number(val));
-            }}
-           />
-           {errors.amount && (
-            <span className='text-xs text-destructive'>
-             {errors.amount.message}
-            </span>
-           )}
-          </Field>
-         )}
-        />
-
-        <Field>
-         <FieldLabel>{dic.fields?.price || 'Price'}</FieldLabel>
-         <Input
-          value={sValue.toLocaleString()}
-          readOnly
-          disabled
-          className='bg-muted/50'
-         />
-        </Field>
-
-        <Controller
-         control={control}
-         name='discountPrice'
-         render={({ field }) => (
-          <Field>
-           <FieldLabel htmlFor='discountPrice'>
-            {dic.fields?.discount || 'Discount'}
-           </FieldLabel>
-           <div className='flex gap-2'>
-            <div className='relative flex-1'>
-             <Input
-              id='discountPrice'
-              type='number'
-              disabled={isProcessing || sValue === 0}
-              ref={field.ref}
-              onBlur={field.onBlur}
-              value={
-               discountMode === 'fixed'
-                ? (field.value ?? '')
-                : (watchedValues.discountRate ?? '')
-              }
-              onChange={(e) => {
-               const rawVal = e.target.value;
-
-               if (rawVal === '') {
-                field.onChange(null);
-                setValue('discountRate', null);
-                return;
-               }
-
-               const val = Number(rawVal);
-
-               if (discountMode === 'fixed') {
-                if (val > sValue) return;
-                field.onChange(val);
-                setValue(
-                 'discountRate',
-                 calcPercentage({ value: val, base: sValue }),
-                );
-               } else {
-                if (val > 100) return;
-                field.onChange(calcPrice({ value: val, base: sValue }));
-                setValue('discountRate', val);
-               }
-              }}
-             />
-             <span className='absolute end-8 top-1/2 -translate-y-1/2 text-xs text-muted-foreground pointer-events-none'>
-              {discountMode === 'fixed' && sValue > 0
-               ? `%${watchedValues.discountRate || 0}`
-               : discountMode === 'percent'
-                 ? (watchedValues.discountPrice || 0).toLocaleString()
-                 : ''}
-             </span>
-            </div>
-            <Button
-             type='button'
-             variant='outline'
-             size='sm'
-             className='shrink-0 w-12 h-9! font-mono'
-             onClick={() =>
-              setDiscountMode((d) => (d === 'fixed' ? 'percent' : 'fixed'))
-             }
-            >
-             {discountMode === 'fixed' ? '#' : '%'}
-            </Button>
-           </div>
-           {errors.discountPrice && (
-            <span className='text-xs text-destructive'>
-             {errors.discountPrice.message}
-            </span>
-           )}
-          </Field>
-         )}
-        />
-
-        <Field>
-         <FieldLabel>{dic.fields?.serviceRate}</FieldLabel>
-         <div className='flex gap-2'>
-          <Input
-           value={`%${rates.serviceRate}`}
-           readOnly
-           disabled
-           className='bg-muted/50 w-24 shrink-0'
-          />
-          <Input
-           value={computedService.toLocaleString()}
-           readOnly
-           disabled
-           className='bg-muted/50 flex-1'
-          />
-         </div>
-        </Field>
-
-        <Field>
-         <FieldLabel>{dic.fields?.taxRate}</FieldLabel>
-         <div className='flex gap-2'>
-          <Input
-           value={`%${rates.taxRate}`}
-           readOnly
-           disabled
-           className='bg-muted/50 w-24 shrink-0'
-          />
-          <Input
-           value={computedTax.toLocaleString()}
-           readOnly
-           disabled
-           className='bg-muted/50 flex-1'
-          />
-         </div>
-        </Field>
-
-        <Field>
-         <FieldLabel>{dic.fields?.total || 'Total'}</FieldLabel>
-         <Input
-          value={computedTotal.toLocaleString()}
-          readOnly
-          disabled
-          className='bg-muted/50'
-         />
-        </Field>
-        <Controller
-         control={control}
-         name='comment'
-         render={({ field }) => (
-          <Field>
-           <FieldLabel htmlFor='comment'>
-            {dic.fields?.comment || 'Comment'}
-           </FieldLabel>
-           <Textarea
-            id='comment'
-            disabled={isProcessing}
-            className='resize-none h-24'
-            {...field}
-           />
-          </Field>
-         )}
-        />
-       </form>
+       <ExpenseCreateOrEditForm
+        dic={dic}
+        mode={mode}
+        initData={initData}
+        handleSubmit={handleSubmit}
+        onSubmit={onSubmit}
+        control={control}
+        errors={errors}
+        setValue={setValue}
+        watchedValues={watchedValues}
+        currencyName={currencyName}
+        sValue={sValue}
+        computedService={computedService}
+        computedTax={computedTax}
+        computedTotal={computedTotal}
+        rates={rates}
+        discountMode={discountMode}
+        setDiscountMode={setDiscountMode}
+        itemDrawerOpen={itemDrawerOpen}
+        onItemDrawerOpen={setItemDrawerOpen}
+        handleItemSelect={handleItemSelect}
+        selectedItemLabel={selectedItemLabel}
+        selectedRoomLabel={selectedRoomLabel}
+        isProcessing={isProcessing}
+       />
       )}
      </div>
 

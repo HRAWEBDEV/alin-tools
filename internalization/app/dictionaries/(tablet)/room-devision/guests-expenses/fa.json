@@ -29,7 +29,7 @@
   "serviceRate": "نرخ سرویس",
   "taxRate": "نرخ مالیات",
   "total": "مجموع",
-  "comment": "کامنت"
+  "comment": "توضیحات"
  },
  "actions": {
   "addExpense": "افزودن هزینه",
