@@ -129,6 +129,24 @@ export default function OutOfOrderRoomsWrapper({
     ) || null
   : null;
 
+ const roomsProps = {
+  data,
+  hasNextPage,
+  fetchNextPage,
+  isFetching,
+  refetch,
+  isSuccess,
+  isError,
+ };
+
+ const editRoomProps = {
+  selectedOutOfOrderRoomID,
+  showNew,
+  onCloseEdit: handleCloseEdit,
+  onShowEdit: handleOpenEdit,
+  targetEditRoom,
+ };
+
  return (
   <>
    <FormProvider {...filtersUseForm}>
@@ -136,54 +154,16 @@ export default function OutOfOrderRoomsWrapper({
      dic={dic}
      initDataIsLoading={initDataIsLoading}
      initData={initData}
-     rooms={{
-      data,
-      hasNextPage,
-      fetchNextPage,
-      isFetching,
-      refetch,
-      isSuccess,
-      isError,
-     }}
-     editRoom={{
-      selectedOutOfOrderRoomID,
-      showNew,
-      onCloseEdit: handleCloseEdit,
-      onShowEdit: handleOpenEdit,
-      targetEditRoom,
-     }}
+     rooms={roomsProps}
+     editRoom={editRoomProps}
     />
-    <OutOfOrderRooms
-     dic={dic}
-     editRoom={{
-      selectedOutOfOrderRoomID,
-      showNew,
-      onCloseEdit: handleCloseEdit,
-      onShowEdit: handleOpenEdit,
-      targetEditRoom,
-     }}
-     rooms={{
-      data,
-      hasNextPage,
-      fetchNextPage,
-      isFetching,
-      refetch,
-      isSuccess,
-      isError,
-     }}
-    />
+    <OutOfOrderRooms dic={dic} editRoom={editRoomProps} rooms={roomsProps} />
    </FormProvider>
    <NewOutOfOrderRoom
     dic={dic}
     initialData={initData}
     initDataIsLoading={initDataIsLoading}
-    editRoom={{
-     selectedOutOfOrderRoomID,
-     showNew,
-     onCloseEdit: handleCloseEdit,
-     onShowEdit: handleOpenEdit,
-     targetEditRoom,
-    }}
+    editRoom={editRoomProps}
    />
   </>
  );

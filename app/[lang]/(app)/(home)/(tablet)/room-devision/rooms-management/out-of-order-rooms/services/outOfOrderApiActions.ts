@@ -48,6 +48,19 @@ function getInitialData({ signal }: { signal: AbortSignal }) {
  });
 }
 
+function getOutOfOrderRoom({
+ roomId,
+ signal,
+}: {
+ roomId: number;
+ signal: AbortSignal;
+}) {
+ return axios.get(
+  `/Reception/OutOfOrder/GetOutOfOrderByRoomID?RoomID=${roomId.toString()}`,
+  { signal },
+ );
+}
+
 function getOutOfOrderRooms({
  signal,
  fromDate,
@@ -111,6 +124,7 @@ export type { InitialData, Room, OutOfOrderResult, SaveOutOfOrder };
 export {
  outOfOrderRoomsBaseKey,
  getInitialData,
+ getOutOfOrderRoom,
  getOutOfOrderRooms,
  saveOutOfOrderRoom,
  updateOutOfOrderRoom,
