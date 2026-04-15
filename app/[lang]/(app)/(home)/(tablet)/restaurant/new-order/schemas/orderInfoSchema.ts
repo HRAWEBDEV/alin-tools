@@ -7,6 +7,7 @@ const defaultOrderInfo: Partial<OrderInfo> = {
  saleType: null,
  waiter: null,
  contract: null,
+ customerContract: null,
  subscriber: null,
  customer: null,
  room: null,
@@ -45,6 +46,12 @@ function createOrderInfoSchema({ dic }: { dic: NewOrderDictionary }) {
     })
     .nullable(),
    contract: z
+    .object({
+     key: z.string(),
+     value: z.string(),
+    })
+    .nullable(),
+   customerContract: z
     .object({
      key: z.string(),
      value: z.string(),
