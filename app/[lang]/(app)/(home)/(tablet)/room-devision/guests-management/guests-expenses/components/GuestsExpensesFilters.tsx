@@ -23,6 +23,7 @@ import {
 import { Calendar } from '@/components/ui/calendar';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { Field, FieldLabel } from '@/components/ui/field';
+import { useDateFns } from '@/hooks/useDateFns';
 
 import type { GuestsExpensesDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/guests-expenses/dictionary';
 import type { GuestsExpensesSchema } from '../schemas/guestsExpensesSchema';
@@ -59,12 +60,15 @@ export default function GuestsExpensesFilters({
  onSetMode,
  registerInfo,
 }: Props) {
- const { control, setValue, reset } = useFormContext<GuestsExpensesSchema>();
+ const dateFns = useDateFns();
+ const { control, setValue, reset, watch } =
+  useFormContext<GuestsExpensesSchema>();
  const values = useWatch({ control });
  const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
  const [selectDrawerOpen, setSelectDrawerOpen] = useState<string | null>(null);
  const [showDatePicker, setShowDatePicker] = useState(false);
  const { locale } = useBaseConfig();
+ const [dateValue] = watch(['date']);
 
  const activeFilters = FILTER_KEYS.filter((k) => {
   const val = values[k];
@@ -126,6 +130,16 @@ export default function GuestsExpensesFilters({
   }
  };
 
+ function goToNextDay() {
+  if (!dateValue) return;
+  setValue('date', dateFns.addDays(dateValue, 1));
+ }
+
+ function goToPrevDay() {
+  if (!dateValue) return;
+  setValue('date', dateFns.addDays(dateValue, -1));
+ }
+
  return (
   <div className='flex flex-col gap-2 pt-2 bg-background'>
    <div className='flex gap-2 items-center mb-1'>
@@ -168,24 +182,32 @@ export default function GuestsExpensesFilters({
          )}
         </DrawerTitle>
        </DrawerHeader>
-
        <div className='p-5 pt-0 flex flex-col gap-5 overflow-y-auto max-w-[min(100%,40rem)] mx-auto w-full'>
         <div className='flex items-center justify-end mb-4 mt-2 shrink-0'>
          {activeFilters.length > 0 && (
-          <button
+          <Button
+           type='button'
+           variant='outline'
            onClick={() =>
             reset({
              room: null,
              item: null,
             })
            }
-           className='text-xs text-destructive hover:underline cursor-pointer'
+           className='text-destructive border-destructive'
           >
            {dic.filters?.clearAll}
-          </button>
+          </Button>
          )}
         </div>
-
+        <div className='flex gap-2 justify-center items-end'>
+         <Button variant='outline' className='h-11 px-3' onClick={goToPrevDay}>
+          {dic.filters.prev}
+         </Button>
+         <Button variant='outline' className='h-11 px-3' onClick={goToNextDay}>
+          {dic.filters.next}
+         </Button>
+        </div>
         <div className='grid grid-cols-1 gap-6 shrink-0'>
          <Controller
           control={control}
@@ -238,7 +260,6 @@ export default function GuestsExpensesFilters({
           }}
          />
         </div>
-
         <div className='grid sm:grid-cols-2 grid-cols-1 gap-6 pb-6'>
          {(['room', 'item'] as const).map((key) => (
           <Controller
@@ -335,6 +356,14 @@ export default function GuestsExpensesFilters({
        </div>
       </DrawerContent>
      </Drawer>
+     <div className='flex gap-2 items-end'>
+      <Button variant='outline' className='h-11 px-3' onClick={goToPrevDay}>
+       {dic.filters.prev}
+      </Button>
+      <Button variant='outline' className='h-11 px-3' onClick={goToNextDay}>
+       {dic.filters.next}
+      </Button>
+     </div>
     </div>
 
     {activeFilters.length > 0 && (

@@ -10,7 +10,7 @@ function createGuestsExpensesFilterSchema() {
  return z.object({
   room: z.string().nullable(),
   item: z.string().nullable(),
-  date: z.union([z.string(), z.date()]).nullable(),
+  date: z.date().nullable(),
  });
 }
 
