@@ -24,6 +24,7 @@ import {
  PencilIcon,
  ChevronsUpDown,
  ChevronDownIcon,
+ SaveIcon,
 } from 'lucide-react';
 
 import {
@@ -943,7 +944,7 @@ export default function GuestsExpenseActionDrawer({
       )}
      </div>
 
-     <DrawerFooter className='shrink-0 flex-row justify-between gap-3 bg-background border-t p-4 sm:px-0 max-w-[min(100%,40rem)] mx-auto w-full'>
+     <DrawerFooter className='shrink-0 sm:flex-row flex-col justify-between gap-3 bg-background border-t p-4 sm:px-0 max-w-[min(100%,40rem)] mx-auto w-full'>
       <div className='flex gap-2'>
        {expense?.id && (mode === 'edit' || mode === 'view') && (
         <>
@@ -951,19 +952,21 @@ export default function GuestsExpenseActionDrawer({
           type='button'
           variant='destructive'
           disabled={isProcessing}
+          className='sm:flex-0 flex-1'
           onClick={() => setConfirmAction('delete')}
          >
           <Trash2Icon className='h-4 w-4' />
-          <span className='sm:inline hidden'>{dic.actions.deleteExpense}</span>
+          <span>{dic.actions.deleteExpense}</span>
          </Button>
          <Button
           type='button'
           variant='outline'
           disabled={isProcessing}
+          className='sm:flex-0 flex-1'
           onClick={() => setConfirmAction('revert')}
          >
           <RotateCcwIcon className='h-4 w-4' />
-          <span className='sm:inline hidden'>{dic.actions.revertExpense}</span>
+          <span>{dic.actions.revertExpense}</span>
          </Button>
         </>
        )}
@@ -974,19 +977,25 @@ export default function GuestsExpenseActionDrawer({
          type='button'
          disabled={isProcessing}
          onClick={() => onSetMode('edit')}
-         className='px-6'
+         className='px-8! sm:w-fit w-full'
         >
          <PencilIcon className=' h-4 w-4 sm:rtl:ml-2 rtl:mr-0' />
-         <span className='sm:inline hidden'>{dic.actions?.edit}</span>
+         <span>{dic.actions?.edit}</span>
         </Button>
        )}
 
        {(mode === 'create' || mode === 'edit') && (
-        <Button type='submit' form='expense-form' disabled={isProcessing}>
+        <Button
+         type='submit'
+         form='expense-form'
+         className='sm:flex-0 flex-1 px-8!'
+         disabled={isProcessing}
+        >
          {isProcessing && (
           <Spinner className='mr-2 h-4 w-4 rtl:ml-2 rtl:mr-0' />
          )}
-         <span className='sm:inline hidden'>{dic.actions?.save}</span>
+         <SaveIcon className=' h-4 w-4 sm:rtl:ml-2 rtl:mr-0' />
+         <span>{dic.actions?.save}</span>
         </Button>
        )}
       </div>
