@@ -6,7 +6,7 @@ import {
  UseFormSetValue,
 } from 'react-hook-form';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Field, FieldLabel } from '@/components/ui/field';
+import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useState } from 'react';
@@ -22,6 +22,12 @@ import { GuestsExpensesDictionary } from '@/internalization/app/dictionaries/(ta
 import { InitData } from './GuestsExpensesActionDrawer';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { calcPercentage, calcPrice } from '../utils/calcExpenses';
+import { NumericFormat } from 'react-number-format';
+import {
+ InputGroup,
+ InputGroupAddon,
+ InputGroupInput,
+} from '@/components/ui/input-group';
 
 type DrawerMode = 'create' | 'edit' | 'view' | null;
 type ExpenseFormValues = {
@@ -68,6 +74,11 @@ interface Props {
 const SHARED_DRAWER_CLASSES =
  'sm:h-[min(85svh,30rem)] h-[min(95svh,66rem)] flex flex-col';
 const SHARED_INPUT_HEIGHT = 'h-11!';
+
+function customInputGroupAddon(addon: string) {
+ return <InputGroupAddon align={'inline-end'}>{addon}</InputGroupAddon>;
+}
+
 export default function ExpenseCreateOrEditForm({
  dic,
  handleSubmit,
@@ -152,6 +163,7 @@ export default function ExpenseCreateOrEditForm({
           );
          }}
         /> */}
+
    <Controller
     control={control}
     name='itemID'
@@ -240,11 +252,7 @@ export default function ExpenseCreateOrEditForm({
           className='justify-between h-11 font-normal'
          >
           <span className='text-start grow overflow-hidden text-ellipsis'>
-           {selectedRoomLabel ?? (
-            <span className='text-muted-foreground'>
-             {dic.placeholders?.room}
-            </span>
-           )}
+           {selectedRoomLabel ?? <></>}
           </span>
           <div className='flex gap-1 items-center -me-2'>
            {field.value && (
@@ -312,192 +320,217 @@ export default function ExpenseCreateOrEditForm({
     />
    )}
 
-   <Field>
-    <FieldLabel>{dic.fields?.currency}</FieldLabel>
-    <Input
-     value={currencyName}
-     readOnly
-     className={`bg-muted/50 ${SHARED_INPUT_HEIGHT}`}
-    />
-   </Field>
-
-   <Controller
-    control={control}
-    name='unitPrice'
-    render={({ field }) => (
-     <Field>
-      <FieldLabel htmlFor='unitPrice'>{dic.fields?.unitPrice}</FieldLabel>
-      <Input
-       id='unitPrice'
-       type='number'
-       disabled={isProcessing}
-       {...field}
-       value={field.value ?? ''}
-       onChange={(e) => {
-        const val = e.target.value;
-        field.onChange(val === '' ? null : Number(val));
-       }}
-       className={`bg-muted/50 ${SHARED_INPUT_HEIGHT}`}
-      />
-      {errors.unitPrice && (
-       <span className='text-xs text-destructive'>
-        {errors.unitPrice.message}
-       </span>
-      )}
-     </Field>
-    )}
-   />
-
-   <Controller
-    control={control}
-    name='amount'
-    render={({ field }) => (
-     <Field>
-      <FieldLabel htmlFor='amount'>{dic.fields?.amount}</FieldLabel>
-      <Input
-       id='amount'
-       type='number'
-       disabled={isProcessing}
-       {...field}
-       value={field.value ?? ''}
-       onChange={(e) => {
-        const val = e.target.value;
-        field.onChange(val === '' ? null : Number(val));
-       }}
-       className={`bg-muted/50 ${SHARED_INPUT_HEIGHT}`}
-      />
-      {errors.amount && (
-       <span className='text-xs text-destructive'>{errors.amount.message}</span>
-      )}
-     </Field>
-    )}
-   />
-
-   <Field>
-    <FieldLabel>{dic.fields?.price || 'Price'}</FieldLabel>
-    <Input
-     value={sValue.toLocaleString()}
-     readOnly
-     className={`bg-muted/50 ${SHARED_INPUT_HEIGHT}`}
-    />
-   </Field>
-
-   <Controller
-    control={control}
-    name='discountPrice'
-    render={({ field }) => (
-     <Field>
-      <FieldLabel htmlFor='discountPrice'>
-       {dic.fields?.discount || 'Discount'}
-      </FieldLabel>
-      <div className='flex gap-2'>
-       <div className='relative flex-1'>
-        <Input
-         id='discountPrice'
-         type='number'
-         readOnly={isProcessing || sValue === 0}
-         ref={field.ref}
-         onBlur={field.onBlur}
-         value={
-          discountMode === 'fixed'
-           ? (field.value ?? '')
-           : (watchedValues.discountRate ?? '')
-         }
+   <FieldGroup className='grid! sm:grid-cols-2 grid-cols-1'>
+    <Controller
+     control={control}
+     name='unitPrice'
+     render={({ field }) => (
+      <Field>
+       <FieldLabel htmlFor='unitPrice'>{dic.fields?.unitPrice}</FieldLabel>
+       {/* <Input
+        id='unitPrice'
+        type='number'
+        disabled={isProcessing}
+        {...field}
+        value={field.value ?? ''}
+        onChange={(e) => {
+         const val = e.target.value;
+         field.onChange(val === '' ? null : Number(val));
+        }}
+        className={`bg-muted/50 ${SHARED_INPUT_HEIGHT}`}
+       /> */}
+       <InputGroup className={SHARED_INPUT_HEIGHT}>
+        <NumericFormat
+         id='unitPrice'
+         customInput={InputGroupInput}
+         disabled={isProcessing}
+         thousandSeparator=','
+         allowNegative={false}
+         {...field}
+         value={field.value ?? ''}
          onChange={(e) => {
-          const rawVal = e.target.value;
-
-          if (rawVal === '') {
-           field.onChange(null);
-           setValue('discountRate', null);
-           return;
-          }
-
-          const val = Number(rawVal);
-
-          if (discountMode === 'fixed') {
-           if (val > sValue) return;
-           field.onChange(val);
-           setValue(
-            'discountRate',
-            calcPercentage({ value: val, base: sValue }),
-           );
-          } else {
-           if (val > 100) return;
-           field.onChange(calcPrice({ value: val, base: sValue }));
-           setValue('discountRate', val);
-          }
+          const val = e.target.value;
+          field.onChange(val === '' ? null : Number(val));
          }}
-         className={`bg-muted/50 ${SHARED_INPUT_HEIGHT}`}
+         onBlur={field.onBlur}
         />
-        <span className='absolute end-8 top-1/2 -translate-y-1/2 text-xs text-muted-foreground pointer-events-none'>
-         {discountMode === 'fixed' && sValue > 0
-          ? `%${watchedValues.discountRate || 0}`
-          : discountMode === 'percent'
-            ? (watchedValues.discountPrice || 0).toLocaleString()
-            : ''}
-        </span>
-       </div>
-       <Button
-        type='button'
-        variant='outline'
-        size='sm'
-        className='shrink-0 w-12 h-9! font-mono'
-        onClick={() =>
-         setDiscountMode((d) => (d === 'fixed' ? 'percent' : 'fixed'))
-        }
-       >
-        {discountMode === 'fixed' ? '#' : '%'}
-       </Button>
-      </div>
-      {errors.discountPrice && (
-       <span className='text-xs text-destructive'>
-        {errors.discountPrice.message}
-       </span>
-      )}
-     </Field>
-    )}
-   />
-
-   <Field>
-    <FieldLabel>{dic.fields?.serviceRate}</FieldLabel>
-    <div className='flex gap-2'>
-     <Input
-      value={`%${rates.serviceRate}`}
-      readOnly
-      className={`bg-muted/50 w-24 shrink-0 ${SHARED_INPUT_HEIGHT}`}
-     />
-     <Input
-      value={computedService.toLocaleString()}
-      readOnly
-      className={`bg-muted/50 ${SHARED_INPUT_HEIGHT}`}
-     />
-    </div>
-   </Field>
-
-   <Field>
-    <FieldLabel>{dic.fields?.taxRate}</FieldLabel>
-    <div className='flex gap-2'>
-     <Input
-      value={`%${rates.taxRate}`}
-      readOnly
-      className={`bg-muted/50 w-24 shrink-0 ${SHARED_INPUT_HEIGHT}`}
-     />
-     <Input
-      value={computedTax.toLocaleString()}
-      readOnly
-      className={`bg-muted/50 ${SHARED_INPUT_HEIGHT}`}
-     />
-    </div>
-   </Field>
-
-   <Field>
-    <FieldLabel>{dic.fields?.total || 'Total'}</FieldLabel>
-    <Input
-     value={computedTotal.toLocaleString()}
-     readOnly
-     className={`bg-muted/50 ${SHARED_INPUT_HEIGHT}`}
+        {customInputGroupAddon(currencyName)}
+        {errors.unitPrice && (
+         <span className='text-xs text-destructive'>
+          {errors.unitPrice.message}
+         </span>
+        )}
+       </InputGroup>
+      </Field>
+     )}
     />
-   </Field>
+    <Controller
+     control={control}
+     name='amount'
+     render={({ field }) => (
+      <Field>
+       <FieldLabel htmlFor='amount'>{dic.fields?.amount}</FieldLabel>
+       <Input
+        id='amount'
+        type='number'
+        disabled={isProcessing}
+        {...field}
+        value={field.value ?? ''}
+        onChange={(e) => {
+         const val = e.target.value;
+         field.onChange(val === '' ? null : Number(val));
+        }}
+        className={` ${SHARED_INPUT_HEIGHT}`}
+       />
+       {errors.amount && (
+        <span className='text-xs text-destructive'>
+         {errors.amount.message}
+        </span>
+       )}
+      </Field>
+     )}
+    />
+   </FieldGroup>
+   <FieldGroup className='grid grid-cols-1 sm:grid-cols-2'>
+    <Field>
+     <FieldLabel>{dic.fields?.price}</FieldLabel>
+
+     <InputGroup className={SHARED_INPUT_HEIGHT}>
+      {customInputGroupAddon(currencyName)}
+      <NumericFormat
+       id='unitPrice'
+       customInput={InputGroupInput}
+       readOnly
+       thousandSeparator=','
+       allowNegative={false}
+       value={sValue.toLocaleString()}
+       className={SHARED_INPUT_HEIGHT}
+      />
+     </InputGroup>
+    </Field>
+    <Controller
+     control={control}
+     name='discountPrice'
+     render={({ field }) => (
+      <Field>
+       <FieldLabel htmlFor='discountPrice'>
+        {dic.fields?.discount || 'Discount'}
+       </FieldLabel>
+       <div className='flex gap-2'>
+        <div className='relative flex-1'>
+         <InputGroup className={SHARED_INPUT_HEIGHT}>
+          {customInputGroupAddon(currencyName)}
+          <NumericFormat
+           id='discountPrice'
+           customInput={InputGroupInput}
+           readOnly={isProcessing || sValue === 0}
+           getInputRef={field.ref}
+           onBlur={field.onBlur}
+           value={
+            discountMode === 'fixed'
+             ? (field.value ?? '')
+             : (watchedValues.discountRate ?? '')
+           }
+           onChange={(e) => {
+            const rawVal = e.target.value;
+
+            if (rawVal === '') {
+             field.onChange(null);
+             setValue('discountRate', null);
+             return;
+            }
+
+            const val = Number(rawVal);
+
+            if (discountMode === 'fixed') {
+             if (val > sValue) return;
+             field.onChange(val);
+             setValue(
+              'discountRate',
+              calcPercentage({ value: val, base: sValue }),
+             );
+            } else {
+             if (val > 100) return;
+             field.onChange(calcPrice({ value: val, base: sValue }));
+             setValue('discountRate', val);
+            }
+           }}
+          />
+         </InputGroup>
+         <span className='absolute end-10 top-1/2 -translate-y-1/2 text-xs text-muted-foreground pointer-events-none'>
+          {discountMode === 'fixed' && sValue > 0
+           ? `(%${watchedValues.discountRate || 0})`
+           : discountMode === 'percent'
+             ? (watchedValues.discountPrice || 0).toLocaleString()
+             : ''}
+         </span>
+        </div>
+        <Button
+         type='button'
+         variant='outline'
+         size='sm'
+         className='shrink-0 w-12 h-11! font-mono'
+         onClick={() =>
+          setDiscountMode((d) => (d === 'fixed' ? 'percent' : 'fixed'))
+         }
+        >
+         {discountMode === 'fixed' ? '#' : '%'}
+        </Button>
+       </div>
+       {errors.discountPrice && (
+        <span className='text-xs text-destructive'>
+         {errors.discountPrice.message}
+        </span>
+       )}
+      </Field>
+     )}
+    />
+   </FieldGroup>
+   <FieldGroup className='grid grid-cols-1 sm:grid-cols-2'>
+    <Field>
+     <FieldLabel>{dic.fields?.serviceRate}</FieldLabel>
+     <div className='flex gap-2'>
+      <Input
+       value={`%${rates.serviceRate}`}
+       readOnly
+       className={` w-24 shrink-0 ${SHARED_INPUT_HEIGHT}`}
+      />
+      <Input
+       value={computedService.toLocaleString()}
+       readOnly
+       className={SHARED_INPUT_HEIGHT}
+      />
+     </div>
+    </Field>
+    <Field>
+     <FieldLabel>{dic.fields?.taxRate}</FieldLabel>
+     <div className='flex gap-2'>
+      <Input
+       value={`%${rates.taxRate}`}
+       readOnly
+       className={`w-24 shrink-0 ${SHARED_INPUT_HEIGHT}`}
+      />
+      <Input
+       value={computedTax.toLocaleString()}
+       readOnly
+       className={SHARED_INPUT_HEIGHT}
+      />
+     </div>
+    </Field>
+   </FieldGroup>
+   <FieldGroup className='grid grid-cols-1 '>
+    <Field>
+     <FieldLabel>{dic.fields?.total}</FieldLabel>
+     <InputGroup className={SHARED_INPUT_HEIGHT}>
+      {customInputGroupAddon(currencyName)}
+      <NumericFormat
+       value={computedTotal.toLocaleString()}
+       customInput={InputGroupInput}
+       readOnly
+      />
+     </InputGroup>
+    </Field>
+   </FieldGroup>
    <Controller
     control={control}
     name='comment'
