@@ -85,7 +85,8 @@
   "guests": "مهمان ها",
   "houseControl": "کنترل خانه داری",
   "guestMessages": "پیام برای مهمان",
-  "roomNotes": "یادداشت ها"
+  "roomNotes": "یادداشت ها",
+  "cancelOutOfOrder": "اتمام خارج از سرویس"
  },
  "tools": {
   "lastUpdate": "آخرین بروزرسانی",

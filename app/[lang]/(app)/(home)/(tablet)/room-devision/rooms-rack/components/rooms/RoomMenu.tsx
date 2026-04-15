@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
 import { type RoomControlDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/room-control/dictionary';
+import { type OutOfOrderRoomsDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/out-of-order-rooms/dictionary';
 import {
  Drawer,
  DrawerContent,
@@ -8,7 +9,10 @@ import {
  DrawerTitle,
 } from '@/components/ui/drawer';
 import { type Rack } from '../../services/roomsRackApiActions';
-import { RoomStateGroup } from '../../utils/rackStates';
+import {
+ RoomStateGroup,
+ RoomStateKind as RoomStateKindTypes,
+} from '../../utils/rackStates';
 import RackRoom from './RackRoom';
 import { Button } from '@/components/ui/button';
 import RoomStateKind from './RoomStateKind';
@@ -37,6 +41,23 @@ import {
 import { useState, useEffect } from 'react';
 import { type Paging } from '../../../utils/apiTypes';
 import RoomNotesWrapper from '../room-notes/RoomNotesWrapper';
+import {
+ Dialog,
+ DialogClose,
+ DialogContent,
+ DialogFooter,
+ DialogHeader,
+ DialogTitle,
+ DialogTrigger,
+} from '@/components/ui/dialog';
+import { BiError } from 'react-icons/bi';
+import { AxiosError } from 'axios';
+import { toast } from 'sonner';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+ expiredOutOfOrder,
+ outOfOrderRoomsBaseKey,
+} from '../../../rooms-management/out-of-order-rooms/services/outOfOrderApiActions';
 
 export default function RoomMenu({
  dic,
@@ -56,6 +77,7 @@ export default function RoomMenu({
  showRoomNotes,
  setShowRoomNotes,
  roomControlDic,
+ outOfOrderDic,
 }: {
  dic: RoomsRackDictionary;
  roomControlDic: RoomControlDictionary;
@@ -74,7 +96,9 @@ export default function RoomMenu({
  setShowGuestMessages: (state: boolean) => unknown;
  showRoomNotes: boolean;
  setShowRoomNotes: (state: boolean) => unknown;
+ outOfOrderDic: OutOfOrderRoomsDictionary;
 }) {
+ const queryClient = useQueryClient();
  // guest messages setup
  const {
   data: guestMessages,
@@ -149,9 +173,27 @@ export default function RoomMenu({
   },
  });
 
+ // expire
+ const { mutate: confirmExpire, isPending: confirmExpireIsPending } =
+  useMutation({
+   mutationFn() {
+    return expiredOutOfOrder(room!.roomID);
+   },
+   onError(err: AxiosError<string>) {
+    toast.error(err.response?.data);
+   },
+   onSuccess() {
+    queryClient.invalidateQueries({
+     queryKey: [outOfOrderRoomsBaseKey, 'rooms'],
+    });
+   },
+  });
+
  useEffect(() => {
   setRoomNotesRowsCount(roomNotes?.rowsCount || 0);
  }, [roomNotes]);
+
+ const pedingAction = confirmExpireIsPending;
 
  return (
   <Drawer open={isOpen} onOpenChange={setIsOpen}>
@@ -177,6 +219,7 @@ export default function RoomMenu({
            variant='outline'
            className='justify-start text-start h-12'
            size='lg'
+           disabled={pedingAction}
            onClick={() => setShowRoomStateKind(true)}
           >
            {dic.options.changeRoomStateKind}
@@ -185,10 +228,55 @@ export default function RoomMenu({
            variant='outline'
            className='justify-start text-start h-12'
            size='lg'
+           disabled={pedingAction}
            onClick={() => setShowRoomStateType(true)}
           >
            {dic.options.changeRoomStateType}
           </Button>
+          {RoomStateKindTypes.outOfService === room.roomStateKindID && (
+           <Dialog>
+            <DialogTrigger asChild>
+             <Button
+              variant='outline'
+              className='justify-start text-start h-12'
+              size='lg'
+              disabled={pedingAction}
+             >
+              {pedingAction && <Spinner />}
+              {dic.options.cancelOutOfOrder}
+             </Button>
+            </DialogTrigger>
+            <DialogContent className='p-0 gap-0'>
+             <DialogHeader className='p-4'>
+              <DialogTitle className='hidden'>
+               {outOfOrderDic.newOrEdit.expireConfirmMessage}
+              </DialogTitle>
+             </DialogHeader>
+             <div className='p-4'>
+              <div className='flex gap-1 items-center text-red-700 dark:text-red-400 font-medium'>
+               <BiError className='size-12' />
+               <p>{outOfOrderDic.newOrEdit.expireConfirmMessage}</p>
+              </div>
+             </div>
+             <DialogFooter className='p-4'>
+              <DialogClose asChild>
+               <Button className='sm:w-24' variant='outline'>
+                {outOfOrderDic.newOrEdit.cancel}
+               </Button>
+              </DialogClose>
+              <DialogClose asChild>
+               <Button
+                className='sm:w-24'
+                variant='destructive'
+                onClick={() => confirmExpire()}
+               >
+                {outOfOrderDic.newOrEdit.confirm}
+               </Button>
+              </DialogClose>
+             </DialogFooter>
+            </DialogContent>
+           </Dialog>
+          )}
           {RoomStateGroup.occupiedRoom === room.roomStateGroupID && (
            <>
             <Button

@@ -9,6 +9,7 @@ import {
 } from './roomsRackConfigContext';
 import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
 import { type RoomControlDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/room-control/dictionary';
+import { type OutOfOrderRoomsDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/out-of-order-rooms/dictionary';
 import {
  type Rack,
  type RackDetails,
@@ -68,10 +69,12 @@ export function RoomsRackConfigProvider({
  children,
  dic,
  roomControlDic,
+ outOfOrderDic,
 }: {
  children: ReactNode;
  dic: RoomsRackDictionary;
  roomControlDic: RoomControlDictionary;
+ outOfOrderDic: OutOfOrderRoomsDictionary;
 }) {
  const dateFns = useDateFns();
  const { userInfoRouterStorage } = useUserInfoRouter();
@@ -697,6 +700,7 @@ export function RoomsRackConfigProvider({
     {children}
     <RoomMenu
      isOpen={showRackMenu}
+     outOfOrderDic={outOfOrderDic}
      roomControlDic={roomControlDic}
      showRoomStateKind={showRoomStateKind}
      setShowRoomStateKind={setShowRoomStateKind}
