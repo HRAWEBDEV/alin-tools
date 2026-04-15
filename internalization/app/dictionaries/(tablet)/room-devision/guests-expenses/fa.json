@@ -41,8 +41,8 @@
   "confirm": "تائید",
   "deleteExpense": "حذف ",
   "revertExpense": "بازگشت ",
-  "deleteDescription": "آیا از حذف این مورد اطمینان دارید؟ این عمل قابل بازگشت نیست!",
-  "revertDescription": "آیا از بازگشت این هزینه اطمینان دارید؟ این عمل قابل بازگشت نیست!"
+  "deleteDescription": "آیا از حذف این مورد اطمینان دارید؟",
+  "revertDescription": "آیا از بازگشت این هزینه اطمینان دارید؟"
  },
  "placeholders": {
   "selectItem": "انتخاب عنوان",

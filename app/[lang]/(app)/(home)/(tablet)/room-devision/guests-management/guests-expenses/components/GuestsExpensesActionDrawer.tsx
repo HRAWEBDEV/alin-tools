@@ -440,15 +440,17 @@ export default function GuestsExpenseActionDrawer({
           : dic.actions?.viewExpense}
       </DrawerTitle>
 
-      <DrawerClose className='absolute top-5 right-5 cursor-pointer'>
-       <FaTimes className='size-3.5' />
+      <DrawerClose className='absolute top-5 start-5 cursor-pointer' asChild>
+       <Button size='icon-lg' variant='outline'>
+        <FaTimes className='size-6' />
+       </Button>
       </DrawerClose>
      </DrawerHeader>
 
      <div className='p-5 pt-0 flex-1 overflow-y-auto w-full max-w-[min(100%,40rem)] mx-auto'>
       {isReadOnly ? (
        expense && (
-        <div className='grid sm:grid-cols-2 grid-cols-1 gap-x-10 gap-y-4 py-4 text-sm'>
+        <div className='grid sm:grid-cols-2 grid-cols-1 gap-x-10 gap-y-4 py-4'>
          <DetailRow
           wrapperClassName=''
           label={dic.fields?.date}
@@ -494,7 +496,11 @@ export default function GuestsExpenseActionDrawer({
          />
          {expense.comment && (
           <div className='sm:col-span-2 sm:border-t pt-4'>
-           <DetailRow label={dic.fields?.comment} value={expense.comment} />
+           <DetailRow
+            wrapperClassName='flex-col items-stretch'
+            label={dic.fields?.comment}
+            value={expense.comment}
+           />
           </div>
          )}
         </div>

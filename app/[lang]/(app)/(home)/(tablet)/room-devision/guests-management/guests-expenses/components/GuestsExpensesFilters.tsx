@@ -61,8 +61,7 @@ export default function GuestsExpensesFilters({
  registerInfo,
 }: Props) {
  const dateFns = useDateFns();
- const { control, setValue, reset, watch } =
-  useFormContext<GuestsExpensesSchema>();
+ const { control, setValue, watch } = useFormContext<GuestsExpensesSchema>();
  const values = useWatch({ control });
  const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
  const [selectDrawerOpen, setSelectDrawerOpen] = useState<string | null>(null);
@@ -188,12 +187,10 @@ export default function GuestsExpensesFilters({
           <Button
            type='button'
            variant='outline'
-           onClick={() =>
-            reset({
-             room: null,
-             item: null,
-            })
-           }
+           onClick={() => {
+            setValue('item', null);
+            setValue('room', null);
+           }}
            className='text-destructive border-destructive'
           >
            {dic.filters?.clearAll}
