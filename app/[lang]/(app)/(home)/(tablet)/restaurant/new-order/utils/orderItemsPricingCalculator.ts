@@ -11,7 +11,10 @@ const orderItemsPricingCalculator = ({
  amount: number;
 }) => {
  const serviceRate = orderItem.serviceRate;
- const discountRate = defaultDiscountRate || orderItem.discountRate || 0;
+ const discountRate =
+  defaultDiscountRate || defaultDiscountRate === 0
+   ? defaultDiscountRate
+   : orderItem.discountRate || 0;
  const sValue = orderItem.price * amount;
  const discount = Number(((sValue * discountRate) / 100).toFixed(4));
  const service = Number((((sValue - discount) * serviceRate) / 100).toFixed(4));

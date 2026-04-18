@@ -451,6 +451,7 @@ export default function OrderBaseConfigProvider({
   let newOrderData: SaveOrderPackage['order'] | null = null;
   let orderInfoData: OrderInfo | null = null;
   if (!initData) return null;
+
   await orderInfoForm.handleSubmit(
    (data) => {
     const newOrder = {
@@ -476,7 +477,8 @@ export default function OrderBaseConfigProvider({
      roundingValue: data.rounding || 0,
      tipValue: data.employeeTip || 0,
      delivaryValue: deliveryValue || 0,
-     discountRate: data.discountRate || null,
+     discountRate:
+      data.discountRate || data.discountRate === 0 ? data.discountRate : null,
      sValue: invoiceShopResult.totalSValue,
      tax: invoiceShopResult.totalTax,
      service: invoiceShopResult.totalService,
@@ -689,7 +691,10 @@ export default function OrderBaseConfigProvider({
    });
   }
   setPersonID(personID);
-  orderInfoForm.setValue('discountRate', discountRate || '');
+  orderInfoForm.setValue(
+   'discountRate',
+   discountRate || discountRate === 0 ? discountRate : '',
+  );
   orderInfoForm.setValue('rounding', roundingValue || '');
   if (subscriberPersonID && subscriberCode) {
    orderInfoForm.setValue('subscriber', {
@@ -840,6 +845,10 @@ export default function OrderBaseConfigProvider({
    onPaymentPcPos: handlePayment,
   },
  };
+
+ useEffect(() => {
+  // TODO in this effect, after changing item programs we should check if any of selected order items prices have been changed, and after that notify user that prices changed
+ }, []);
 
  return (
   <orderBaseConfigContext.Provider value={ctx}>

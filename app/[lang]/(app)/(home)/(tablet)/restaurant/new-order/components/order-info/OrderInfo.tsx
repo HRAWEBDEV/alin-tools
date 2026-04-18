@@ -873,7 +873,9 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
          <NumericFormat
           {...other}
           value={value}
-          onValueChange={({ floatValue }) => onChange(floatValue || '')}
+          onValueChange={({ floatValue }) =>
+           onChange(floatValue || floatValue === 0 ? floatValue : '')
+          }
           id='discount-rate'
           customInput={InputGroupInput}
           allowNegative={false}

@@ -27,6 +27,7 @@
 - add room control menu form mobile (hra-done)
 - add mobile header profile (hra-done)
 - add room control history paging (hra-done)
+- add new order change pricing monitor
 ### bug fixes
 - remove main wrapper bottom padding in mobile mode, when scroll direction is down (hra-done)
 - use useThrottle instead of useDebouce to change scroll direction (hra-done)
