@@ -79,10 +79,10 @@ function orderItemsReducer(state: OrderItem[], action: OrderItemActions) {
       price: item.price,
       sValue: 0,
       service: 0,
-      serviceRate: 0,
+      serviceRate: item.serviceRate,
       tagID: null,
       tax: 0,
-      taxRate: 0,
+      taxRate: item.taxRate,
       tagComment: null,
      };
      return newOrder;

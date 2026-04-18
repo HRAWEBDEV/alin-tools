@@ -57,6 +57,7 @@ import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { getOrderTypeID } from '../../utils/getOrderTypeID';
 import { SaleTypes } from '../../utils/SaleTypes';
 import { type OrderInvoicePayment } from '../../schemas/orderInvoicePaymentSchema';
+import { orderItemsPricingCalculator } from '../../utils/orderItemsPricingCalculator';
 
 export default function OrderBaseConfigProvider({
  children,
@@ -847,8 +848,34 @@ export default function OrderBaseConfigProvider({
  };
 
  useEffect(() => {
-  // TODO in this effect, after changing item programs we should check if any of selected order items prices have been changed, and after that notify user that prices changed
- }, []);
+  if (!itemProgramsData || !itemProgramsData.length) return;
+  pricedOrderItems.map((order) => {
+   const foundItem = itemProgramsData.find((item) => item.id === order.itemID);
+   if (!foundItem) return order;
+   const prices = orderItemsPricingCalculator({
+    amount: order.amount,
+    defaultDiscountRate: Number(userDiscountValue) || 0,
+    hasService: hasServiceValue,
+    orderItem: {
+     ...order,
+     price: foundItem.price,
+     serviceRate: foundItem.serviceRate,
+     taxRate: foundItem.taxRate,
+    },
+   });
+   if (
+    order.price !== foundItem.price ||
+    order.serviceRate !== foundItem.serviceRate ||
+    order.taxRate !== foundItem.taxRate
+   ) {
+    return {
+     ...order,
+     ...prices,
+    };
+   }
+   return order;
+  });
+ }, [pricedOrderItems, itemProgramsData, hasServiceValue, userDiscountValue]);
 
  return (
   <orderBaseConfigContext.Provider value={ctx}>
