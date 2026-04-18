@@ -6,6 +6,7 @@ import {
  type ItemProgram,
  type OrderItem,
  type Order,
+ type SystemPricing,
 } from '../newOrderApiActions';
 import { type OrderItemActions } from '../../utils/orderItemsActionsReducer';
 import { type ShopCalculatorResult } from '../../utils/shopCalculator';
@@ -95,6 +96,13 @@ interface OrderBaseConfig {
   orderTotals: ShopCalculatorResult;
   onPayment: (paymentData: OrderInvoicePayment) => unknown;
   onPaymentPcPos: (paymentData: OrderInvoicePayment) => unknown;
+ };
+ systemPricing: {
+  data?: SystemPricing;
+  handleSetSystemPricing: () => unknown;
+  isLoading: boolean;
+  isError: boolean;
+  isSuccess: boolean;
  };
 }
 

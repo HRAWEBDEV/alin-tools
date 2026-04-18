@@ -4,6 +4,11 @@ import type { Combo, PagedData } from '../../utils/apiTypes';
 const newOrderKey = 'restaurant-new-order';
 const personKey = 'person';
 
+type SystemPricing = {
+ serviceRate: number;
+ discountRate: number;
+} | null;
+
 interface Waiter {
  personID: number;
  personName: string;
@@ -325,11 +330,13 @@ function getOrderServiceRates({
  saleTypeID,
  registerID,
  signal,
+ customerID,
 }: {
  orderID: number;
  saleTypeID: number;
  registerID?: number;
- signal: AbortSignal;
+ customerID?: number;
+ signal?: AbortSignal;
 }) {
  const searchParams = new URLSearchParams([
   ['orderID', orderID.toString()],
@@ -338,10 +345,10 @@ function getOrderServiceRates({
  if (registerID) {
   searchParams.set('registerID', registerID.toString());
  }
- return axios.get<{
-  serviceRate: number;
-  discountRate: number;
- } | null>(
+ if (customerID) {
+  searchParams.set('customerID', customerID.toString());
+ }
+ return axios.get<SystemPricing>(
   `/Restaurant/SaleInvoice/GetServiceDiscountRates?${searchParams.toString()}`,
   {
    signal,
@@ -608,6 +615,7 @@ export type {
  SaveOrderPackage,
  Room,
  Tag,
+ SystemPricing,
  Person,
 };
 

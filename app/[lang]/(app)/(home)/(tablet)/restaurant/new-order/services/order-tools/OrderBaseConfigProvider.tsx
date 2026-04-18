@@ -21,6 +21,7 @@ import {
  getPersonByNumber,
  getPerson,
  savePerson,
+ getOrderServiceRates,
 } from '../newOrderApiActions';
 import { getHallKey } from '../../../salons/services/salonsApiActions';
 import {
@@ -221,6 +222,7 @@ export default function OrderBaseConfigProvider({
  const {
   data: userOrder,
   isLoading: userOrderLoading,
+  isFetching: userOrderIsFetching,
   isError: userOrderError,
   isSuccess: userOrderSuccess,
  } = useQuery({
@@ -360,6 +362,38 @@ export default function OrderBaseConfigProvider({
    (Number(deliveryValue) || 0) +
    (Number(roundingValue) || 0),
  );
+
+ const {
+  data: systemPricing,
+  isSuccess: systemPricingIsSuccess,
+  isError: systemPricingIsError,
+  isLoading: systemPricingIsLoading,
+ } = useQuery({
+  enabled: !!saleTypeValue,
+  queryKey: [
+   newOrderKey,
+   'system-pricing',
+   saleTypeValue?.key || 'all',
+   roomValue?.key || 'all',
+   customerValue?.key || 'all',
+  ],
+  async queryFn({ signal }) {
+   const res = await getOrderServiceRates({
+    orderID: userOrder?.id || 0,
+    saleTypeID: Number(saleTypeValue!.key),
+    customerID: customerValue ? Number(customerValue.key) : undefined,
+    registerID: roomValue ? Number(roomValue.key) : undefined,
+    signal,
+   });
+   return res.data;
+  },
+ });
+
+ function onSetSystemPricing() {
+  if (!systemPricing) return;
+  orderInfoForm.setValue('discountRate', systemPricing.discountRate);
+ }
+
  function onCloseOrder() {
   setShowCloseOrder(true);
  }
@@ -619,7 +653,8 @@ export default function OrderBaseConfigProvider({
   orderPaymentLoading ||
   saveOrderPending ||
   isPendingCloseOrder ||
-  isPendingConfirmPayment;
+  isPendingConfirmPayment ||
+  systemPricingIsLoading;
  const shopInfoLoading = shopLoading;
  useEffect(() => {
   if (!initData || !initSuccess) return;
@@ -845,6 +880,13 @@ export default function OrderBaseConfigProvider({
    onPayment: handlePayment,
    onPaymentPcPos: handlePayment,
   },
+  systemPricing: {
+   data: systemPricing,
+   isSuccess: systemPricingIsSuccess,
+   isError: systemPricingIsError,
+   isLoading: systemPricingIsLoading,
+   handleSetSystemPricing: onSetSystemPricing,
+  },
  };
 
  useEffect(() => {
@@ -876,6 +918,14 @@ export default function OrderBaseConfigProvider({
    return order;
   });
  }, [pricedOrderItems, itemProgramsData, hasServiceValue, userDiscountValue]);
+
+ useEffect(() => {
+  if (!systemPricingIsSuccess) return;
+  const discountValue = orderInfoForm.getValues('discountRate');
+  if (!!discountValue || discountValue === 0) return;
+  if (!systemPricing) return;
+  orderInfoForm.setValue('discountRate', systemPricing.discountRate);
+ }, [systemPricingIsSuccess, orderInfoForm, systemPricing]);
 
  return (
   <orderBaseConfigContext.Provider value={ctx}>

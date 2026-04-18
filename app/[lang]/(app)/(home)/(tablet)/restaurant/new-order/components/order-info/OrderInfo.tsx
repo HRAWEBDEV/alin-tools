@@ -83,6 +83,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
    personID,
    onChangePersonPhoneNumber,
   },
+  systemPricing,
  } = useOrderBaseConfigContext();
  const [showDateTimePicker, setShowDateTimePicker] = useState(false);
  const [showTimePicker, setShowTimePicker] = useState(false);
@@ -886,6 +887,21 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            return floatValue <= 100;
           }}
          />
+         {!!systemPricing.data && systemPricing.data.discountRate !== value && (
+          <InputGroupAddon align='inline-end' className='-me-2'>
+           <Button
+            variant='outline'
+            type='button'
+            onClick={(e) => {
+             e.stopPropagation();
+             systemPricing.handleSetSystemPricing();
+            }}
+           >
+            {dic.orderInfo.setSystemDiscountRate}:
+            <span> {systemPricing.data?.discountRate}</span>
+           </Button>
+          </InputGroupAddon>
+         )}
         </InputGroup>
        )}
       />
