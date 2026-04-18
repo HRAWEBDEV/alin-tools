@@ -919,13 +919,13 @@ export default function OrderBaseConfigProvider({
   });
  }, [pricedOrderItems, itemProgramsData, hasServiceValue, userDiscountValue]);
 
- useEffect(() => {
-  if (!systemPricingIsSuccess) return;
-  const discountValue = orderInfoForm.getValues('discountRate');
-  if (!!discountValue || discountValue === 0) return;
-  if (!systemPricing) return;
-  orderInfoForm.setValue('discountRate', systemPricing.discountRate);
- }, [systemPricingIsSuccess, orderInfoForm, systemPricing]);
+ // useEffect(() => {
+ //  if (!systemPricingIsSuccess || !!orderIDQuery) return;
+ //  const discountValue = orderInfoForm.getValues('discountRate');
+ //  if (!!discountValue || discountValue === 0) return;
+ //  if (!systemPricing) return;
+ //  orderInfoForm.setValue('discountRate', systemPricing.discountRate);
+ // }, [systemPricingIsSuccess, orderInfoForm, systemPricing, orderIDQuery]);
 
  return (
   <orderBaseConfigContext.Provider value={ctx}>
