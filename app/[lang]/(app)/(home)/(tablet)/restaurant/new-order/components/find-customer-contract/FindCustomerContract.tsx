@@ -153,9 +153,9 @@ export default function FindCustomerContract({
              variant={'outline'}
              className='py-4 items-start justify-start text-start w-full whitespace-normal bg-background shadow-md rounded-lg h-full'
              onClick={() => {
-              setValue('contract', {
+              setValue('customerContract', {
                key: id.toString(),
-               value: '',
+               value: contractNo.toString(),
               });
              }}
             >
