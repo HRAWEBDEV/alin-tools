@@ -1,3 +1,12 @@
+# 2.0.1
+### features
+- add sticky filters for pages
+- add new order wallet payment timer
+
+### bug fixes
+- fix drawer and dialog overflow
+- add reload button if necessary - for real time data
+
 # 2.0.0
 ### features
 - active house keeping program (hra-done)
@@ -18,23 +27,20 @@
 - add new order page orders list and switch functionality (hra-done)
 - add new order wallet payment (hra-done)
 - add new order OTP code resend button (hra-done)
-- add new order wallet payment timer
 - add rack room control (hra-done)
 - add rack room control history (hra-done)
 - add rack house control indicatro (hra-done)
-- add sticky filters for pages
 - add room control page (hra-done)
 - add room control menu form mobile (hra-done)
 - add mobile header profile (hra-done)
 - add room control history paging (hra-done)
-- add new order change pricing monitor
+- add new order change pricing monitor (hra-done)
+- add new order customer contract (hra-done)
 ### bug fixes
 - remove main wrapper bottom padding in mobile mode, when scroll direction is down (hra-done)
 - use useThrottle instead of useDebouce to change scroll direction (hra-done)
-- fix drawer and dialog overflow
 - fix order list cache bug (hra-done)
 - fix rooms statistics mobile responsive (hra-done)
-- add reload button if necessary - for real time data
 
 # 1.2.0
 ### features
