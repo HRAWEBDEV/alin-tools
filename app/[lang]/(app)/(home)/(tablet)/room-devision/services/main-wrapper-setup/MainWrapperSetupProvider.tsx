@@ -6,6 +6,8 @@ import {
  mainWrapperSetupContext,
 } from './mainWrapperSetupContext';
 import { useThrottledCallback } from '@tanstack/react-pacer';
+import { FaArrowAltCircleUp } from 'react-icons/fa';
+import { Button } from '@/components/ui/button';
 
 export default function MainWrapperSetupProvider({
  children,
@@ -79,6 +81,20 @@ export default function MainWrapperSetupProvider({
     className={`scroll-smooth grow pt-(--app-restaurant-header-height) pb-(--app-restaurant-tabs-height) in-data-[scroll-dicretion="down"]:pb-4 lg:py-0 overflow-auto`}
    >
     {children}
+    {scrollTop > 200 && (
+     <div className='fixed z-(--app-restaurant-tabs-zindex) end-4 bottom-(--app-restaurant-tabs-height) lg:bottom-2'>
+      <Button
+       variant='ghost'
+       size='icon-lg'
+       onClick={() => {
+        if (!mainWrapperRef.current) return;
+        mainWrapperRef.current.scrollTop = 0;
+       }}
+      >
+       <FaArrowAltCircleUp className='size-10 text-neutral-700 dark:text-neutral-400' />
+      </Button>
+     </div>
+    )}
    </main>
   </mainWrapperSetupContext.Provider>
  );
