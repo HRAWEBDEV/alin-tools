@@ -52,7 +52,7 @@ export default function ConfirmOrderModal({
     closeConfirmOrder();
    }}
   >
-   <DialogContent className='flex flex-col w-[min(95%,45rem)] max-h-[95svh] max-w-none! p-0 overflow-hidden'>
+   <DialogContent className='flex flex-col w-full max-h-dvh sm:w-[min(95%,45rem)] sm:max-h-[95svh] max-w-none! p-0 overflow-hidden'>
     <DialogHeader className='p-4'>
      <DialogTitle className='hidden'></DialogTitle>
      <DialogDescription className='hidden'></DialogDescription>

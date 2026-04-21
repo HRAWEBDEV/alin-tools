@@ -59,6 +59,7 @@ import { getOrderTypeID } from '../../utils/getOrderTypeID';
 import { SaleTypes } from '../../utils/SaleTypes';
 import { type OrderInvoicePayment } from '../../schemas/orderInvoicePaymentSchema';
 import { orderItemsPricingCalculator } from '../../utils/orderItemsPricingCalculator';
+import { MdImage, MdHideImage } from 'react-icons/md';
 
 export default function OrderBaseConfigProvider({
  children,
@@ -121,6 +122,7 @@ export default function OrderBaseConfigProvider({
   'table',
  ]);
  //
+ const [showOrderImage, setShowOrderImage] = useState(true);
  const [showCloseOrder, setShowCloseOrder] = useState(false);
  const [selectedItemGroup, setSelectedItemGroup] = useState<ItemGroup | null>(
   null,
@@ -855,6 +857,7 @@ export default function OrderBaseConfigProvider({
    },
   },
   order: {
+   showOrderImage,
    orderInfoName,
    orderItems: pricedOrderItems,
    onCloseOrder,
@@ -929,6 +932,21 @@ export default function OrderBaseConfigProvider({
 
  return (
   <orderBaseConfigContext.Provider value={ctx}>
+   <div className='fixed z-(--app-restaurant-tabs-zindex) start-4 lg:start-(--app-restaurant-nav-width) bottom-(--app-restaurant-tabs-height) in-data-[scroll-dicretion="down"]:bottom-2 lg:bottom-2 lg:ps-2'>
+    <Button
+     variant='ghost'
+     size='icon-lg'
+     onClick={() => {
+      setShowOrderImage((pre) => !pre);
+     }}
+    >
+     {showOrderImage ? (
+      <MdImage className='size-10 text-primary' />
+     ) : (
+      <MdHideImage className='size-10 text-destructive' />
+     )}
+    </Button>
+   </div>
    <FormProvider {...orderInfoForm}>{children}</FormProvider>
    <Dialog
     open={showCloseOrder}

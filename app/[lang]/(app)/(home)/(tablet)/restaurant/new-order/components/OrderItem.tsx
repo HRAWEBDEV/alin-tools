@@ -27,7 +27,7 @@ export default function OrderItem({
 }) {
  const {
   itemsInfo: { searchedItemName },
-  order: { orderItems, orderItemsDispatch },
+  order: { showOrderImage, orderItems, orderItemsDispatch },
   userOrder: {
    order: { isLoading: userOrderIsLoading },
    orderItems: { isLoading: userOrderItemsLoading },
@@ -38,25 +38,33 @@ export default function OrderItem({
   (order) => order.itemID === itemProgram.itemID,
  );
  return (
-  <motion.div layout className='flex flex-col min-h-60 pt-17'>
-   <div className='grow rounded-xl shadow-xl dark:bg-neutral-900'>
-    <div className='grid place-content-center -mt-17 mb-2'>
-     <div className='flex items-center justify-center rounded-full size-28 sm:size-34 bg-neutral-100 dark:bg-neutral-800 overflow-hidden object-center object-contain'>
-      <OrderItemImage
-       src={itemProgram.imageURL || undefined}
-       alt={itemProgram.itemName || undefined}
-       id={itemProgram.id}
-       activeID={activeImageModalID}
-       onChangeID={onChangeModalID}
-       overlayVisible={overlayVisible}
-       onOverlayChange={onOverlayChange}
-      >
-       <ServeDishIcon className='size-20 text-neutral-300 dark:text-neutral-700' />
-      </OrderItemImage>
+  <motion.div
+   layout
+   className={`flex flex-col ${showOrderImage ? 'pt-17 min-h-60' : 'pt-0'}`}
+  >
+   <div
+    className={`grow rounded-xl dark:bg-neutral-900 ${showOrderImage ? 'shadow-xl' : 'border shadow-lg border-input pt-2'}`}
+   >
+    {showOrderImage && (
+     <div className='grid place-content-center -mt-17 mb-2'>
+      <div className='flex items-center justify-center rounded-full size-28 sm:size-34 bg-neutral-100 dark:bg-neutral-800 overflow-hidden object-center object-contain'>
+       <OrderItemImage
+        src={itemProgram.imageURL || undefined}
+        alt={itemProgram.itemName || undefined}
+        id={itemProgram.id}
+        activeID={activeImageModalID}
+        onChangeID={onChangeModalID}
+        overlayVisible={overlayVisible}
+        onOverlayChange={onOverlayChange}
+       >
+        <ServeDishIcon className='size-20 text-neutral-300 dark:text-neutral-700' />
+       </OrderItemImage>
+      </div>
      </div>
-    </div>
+    )}
+
     <div className='text-center'>
-     <h3 className='text-base sm:text-lg font-medium text-neutral-600 dark:text-neutral-400 mb-1'>
+     <h3 className='text-base sm:text-lg font-medium text-neutral-800 dark:text-neutral-400 mb-1'>
       <Highlighter
        searchWords={[searchedItemName]}
        textToHighlight={itemProgram.itemName || ''}

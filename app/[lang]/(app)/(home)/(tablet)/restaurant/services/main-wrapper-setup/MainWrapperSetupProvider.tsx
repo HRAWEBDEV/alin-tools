@@ -82,7 +82,7 @@ export default function MainWrapperSetupProvider({
    >
     {children}
     {scrollTop > 200 && (
-     <div className='fixed z-(--app-restaurant-tabs-zindex) end-4 bottom-(--app-restaurant-tabs-height) lg:bottom-2'>
+     <div className='fixed z-(--app-restaurant-tabs-zindex) end-4 bottom-(--app-restaurant-tabs-height) lg:bottom-2 in-data-[scroll-dicretion="down"]:bottom-2'>
       <Button
        variant='ghost'
        size='icon-lg'

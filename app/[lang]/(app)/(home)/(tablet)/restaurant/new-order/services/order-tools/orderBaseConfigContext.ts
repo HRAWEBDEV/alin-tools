@@ -80,6 +80,7 @@ interface OrderBaseConfig {
   onChangePersonPhoneNumber: () => void;
  };
  order: {
+  showOrderImage: boolean;
   orderInfoName: string;
   orderItems: OrderItem[];
   onSaveOrder: () => unknown;
