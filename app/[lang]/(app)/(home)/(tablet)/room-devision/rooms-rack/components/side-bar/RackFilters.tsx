@@ -111,7 +111,7 @@ export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
            <li
             className='flex gap-1 items-center ps-6 py-2'
             onClick={() => {
-             onChangePaging((pre) => ({ ...pre, limit: item }));
+             onChangePaging({ ...paging, limit: item });
             }}
            >
             <Checkbox className='size-6' checked={item === paging.limit} />

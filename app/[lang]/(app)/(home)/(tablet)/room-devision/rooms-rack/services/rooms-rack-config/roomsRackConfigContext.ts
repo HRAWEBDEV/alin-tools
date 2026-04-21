@@ -52,7 +52,7 @@ type RackConfig = {
   isFirstPage: boolean;
   onChangePage: (action: ChangePageActions) => unknown;
   lastUpdate: Date | null;
-  onChangePaging: Dispatch<SetStateAction<Paging>>;
+  onChangePaging: (newPaging: Paging) => unknown;
   rackDetails: RackDetails | null;
   rackFutureDateStart: Date;
  };

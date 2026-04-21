@@ -183,6 +183,10 @@ export function RoomsRackConfigProvider({
    return;
   }
  }
+ function handleChangePaging(newPaging: Paging) {
+  setRackPaging(newPaging);
+  changeRackSetting('pageLimit', newPaging.limit);
+ }
 
  const rackFiltersUseForm = useForm<RackFiltersSchema>({
   resolver: zodResolver(createRackFiltersSchema()),
@@ -673,7 +677,7 @@ export function RoomsRackConfigProvider({
    isLastPage,
    pageCount,
    onChangePage: handleChangePage,
-   onChangePaging: setRackPaging,
+   onChangePaging: handleChangePaging,
    paging: rackPaging,
    rowsCount,
    lastUpdate: rackLastUpdate,
