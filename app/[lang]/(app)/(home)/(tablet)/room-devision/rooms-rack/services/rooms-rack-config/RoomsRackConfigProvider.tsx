@@ -437,6 +437,11 @@ export function RoomsRackConfigProvider({
     rack: PagedData<Rack[]>;
     rackInfos: RackDetails;
    };
+   const pages = Math.ceil(rowsCount / rackPaging.limit);
+   const isOutOfRange = rackPaging.offset + 1 > pages;
+   if (isOutOfRange) {
+    setRackPaging((pre) => ({ ...pre, offset: 0 }));
+   }
    setRackRooms(rows);
    setRackDetails(rackInfos);
    rackInfoRefetch();
@@ -444,7 +449,7 @@ export function RoomsRackConfigProvider({
    setRackLastUpdate(new Date());
   });
   return () => connection && connection.off('RackLastUpdate');
- }, [connection, rackInfoRefetch]);
+ }, [connection, rackInfoRefetch, rackPaging]);
 
  useEffect(() => {
   if (!connection) return;
@@ -630,24 +635,6 @@ export function RoomsRackConfigProvider({
   if (!!dateValue) return;
   rackFiltersUseForm.setValue('date', rackFutureDateStart);
  }, [showTypeValue, rackFiltersUseForm, dateFns, rackFutureDateStart]);
-
- useEffect(() => {
-  if (!rackIsSuccess) return;
-  if (rackPaging.offset + 1 >= pageCount) {
-   setRackPaging((pre) => ({
-    ...pre,
-    offset: pageCount - 1,
-   }));
-   return;
-  }
-  if (rackPaging.offset + 1 < pageCount) {
-   setRackPaging((pre) => ({
-    ...pre,
-    offset: pageCount - 1,
-   }));
-   return;
-  }
- }, [rackPaging.offset, rackIsSuccess, pageCount]);
 
  const ctx: RackConfig = {
   sidebar: {

@@ -185,7 +185,7 @@ export default function RoomMenu({
     messageTypeId: noteTypeValue?.key,
    });
    const pages = Math.ceil((res.data.rowsCount || 0) / roomNotesPaging.limit);
-   const isOutOfRange = roomNotesPaging.offset + 1 >= pages;
+   const isOutOfRange = roomNotesPaging.offset + 1 > pages;
    if (isOutOfRange) {
     setRoomNotesPaging((pre) => ({ ...pre, offset: 0 }));
    }
