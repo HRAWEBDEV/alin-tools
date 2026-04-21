@@ -46,9 +46,9 @@ export default function OrderShoppingItem({
  );
  return (
   <motion.div layout className='border-b border-input p-2'>
-   <div className='flex flex-col sm:flex-row gap-4 items-center'>
+   <div className='flex flex-col sm:flex-row gap-0 sm:gap-0 items-center'>
     <div className='flex flex-col items-center'>
-     <div className='flex items-center justify-center  shrink-0 rounded-full size-36 sm:size-24 bg-neutral-100 dark:bg-neutral-800 overflow-hidden object-center object-contain'>
+     <div className='flex items-center justify-center shrink-0 rounded-full size-24 bg-neutral-100 dark:bg-neutral-800 overflow-hidden object-center object-contain'>
       <OrderItemImage
        src={targetItemProgram?.imageURL || undefined}
        alt={orderItem.itemName || undefined}
@@ -114,7 +114,7 @@ export default function OrderShoppingItem({
         </Drawer>
        )}
       </div>
-      <div className='flex justify-center sm:justify-start mb-6 sm:mb-2 gap-4'>
+      <div className='flex justify-center sm:justify-start mb-2 gap-4'>
        {!!orderItem.discountRate && (
         <div className='text-[0.85rem] font-medium text-red-600 dark:text-red-400 line-through'>
          <Badge variant='destructive' className='p-1 me-2 text-sm'>
