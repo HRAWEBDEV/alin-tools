@@ -1,12 +1,15 @@
-# 2.0.1
-### features
+## TODO
 - add sticky filters for pages
 - add new order wallet payment timer
-- add new orer compact view
-
-### bug fixes
 - fix drawer and dialog overflow
 - add reload button if necessary - for real time data
+
+# 2.0.1
+### features
+- add new orer compact view (hra-done)
+- add new order settings (hra-done)
+
+### bug fixes
 - update rack paging (hra-done)
 
 # 2.0.0
