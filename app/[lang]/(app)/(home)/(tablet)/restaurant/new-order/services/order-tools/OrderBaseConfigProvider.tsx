@@ -60,6 +60,12 @@ import { SaleTypes } from '../../utils/SaleTypes';
 import { type OrderInvoicePayment } from '../../schemas/orderInvoicePaymentSchema';
 import { orderItemsPricingCalculator } from '../../utils/orderItemsPricingCalculator';
 import { MdImage, MdHideImage } from 'react-icons/md';
+import {
+ defaultNewOrderSettings,
+ getNewOrderSettings,
+ NewOrderSettings,
+ saveNewOrderSettings,
+} from '../../utils/newOrderSettings';
 
 export default function OrderBaseConfigProvider({
  children,
@@ -122,7 +128,17 @@ export default function OrderBaseConfigProvider({
   'table',
  ]);
  //
- const [showOrderImage, setShowOrderImage] = useState(true);
+ const [newOrderSettings, setNewOrderSettings] = useState<NewOrderSettings>(
+  () => {
+   if (typeof window !== 'undefined') {
+    return getNewOrderSettings();
+   }
+   return defaultNewOrderSettings;
+  },
+ );
+ const [showOrderImage, setShowOrderImage] = useState(
+  newOrderSettings.showOrderImage,
+ );
  const [showCloseOrder, setShowCloseOrder] = useState(false);
  const [selectedItemGroup, setSelectedItemGroup] = useState<ItemGroup | null>(
   null,
@@ -165,6 +181,19 @@ export default function OrderBaseConfigProvider({
     queryKey: [getHallKey, 'ordersList', tableValue.key],
    });
   }
+ }
+
+ // change setting
+ function changeNewOrderSettins<T extends keyof NewOrderSettings>(
+  key: T,
+  value: NewOrderSettings[T],
+ ) {
+  const newSetting = {
+   ...newOrderSettings,
+   [key]: value,
+  };
+  setNewOrderSettings(newSetting);
+  saveNewOrderSettings(newSetting);
  }
 
  const {
@@ -937,7 +966,9 @@ export default function OrderBaseConfigProvider({
      variant='ghost'
      size='icon-lg'
      onClick={() => {
-      setShowOrderImage((pre) => !pre);
+      const newValue = !showOrderImage;
+      changeNewOrderSettins('showOrderImage', newValue);
+      setShowOrderImage(newValue);
      }}
     >
      {showOrderImage ? (
