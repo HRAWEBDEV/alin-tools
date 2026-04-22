@@ -1,5 +1,5 @@
 'use client';
-import { useState, useReducer, useEffect } from 'react';
+import { useState, useReducer, useEffect, useCallback } from 'react';
 import { ReactNode } from 'react';
 import { type NewOrderDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/new-order/dictionary';
 import {
@@ -410,7 +410,7 @@ export default function OrderBaseConfigProvider({
   ],
   async queryFn({ signal }) {
    const res = await getOrderServiceRates({
-    orderID: userOrder?.id || 0,
+    orderID: 0,
     saleTypeID: Number(saleTypeValue!.key),
     customerID: customerValue ? Number(customerValue.key) : undefined,
     registerID: roomValue ? Number(roomValue.key) : undefined,
@@ -420,10 +420,10 @@ export default function OrderBaseConfigProvider({
   },
  });
 
- function onSetSystemPricing() {
+ const onSetSystemPricing = useCallback(() => {
   if (!systemPricing) return;
   orderInfoForm.setValue('discountRate', systemPricing.discountRate);
- }
+ }, [systemPricing, orderInfoForm]);
 
  function onCloseOrder() {
   setShowCloseOrder(true);
@@ -758,10 +758,6 @@ export default function OrderBaseConfigProvider({
    });
   }
   setPersonID(personID);
-  orderInfoForm.setValue(
-   'discountRate',
-   discountRate || discountRate === 0 ? discountRate : '',
-  );
   orderInfoForm.setValue('rounding', roundingValue || '');
   if (subscriberPersonID && subscriberCode) {
    orderInfoForm.setValue('subscriber', {
@@ -796,6 +792,7 @@ export default function OrderBaseConfigProvider({
     customerName: '',
    });
   }
+  orderInfoForm.setValue('discountRate', discountRate || '');
   orderInfoForm.setValue('customerName', name || '');
   orderInfoForm.setValue('bonNo', bonNo || '');
   orderInfoForm.setValue('comment', comment || '');
@@ -951,13 +948,10 @@ export default function OrderBaseConfigProvider({
   });
  }, [pricedOrderItems, itemProgramsData, hasServiceValue, userDiscountValue]);
 
- // useEffect(() => {
- //  if (!systemPricingIsSuccess || !!orderIDQuery) return;
- //  const discountValue = orderInfoForm.getValues('discountRate');
- //  if (!!discountValue || discountValue === 0) return;
- //  if (!systemPricing) return;
- //  orderInfoForm.setValue('discountRate', systemPricing.discountRate);
- // }, [systemPricingIsSuccess, orderInfoForm, systemPricing, orderIDQuery]);
+ useEffect(() => {
+  if (!systemPricingIsSuccess || !!orderIDQuery) return;
+  onSetSystemPricing();
+ }, [systemPricingIsSuccess, orderIDQuery, onSetSystemPricing]);
 
  return (
   <orderBaseConfigContext.Provider value={ctx}>
