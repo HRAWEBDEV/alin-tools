@@ -141,28 +141,30 @@ function orderItemsReducer(state: OrderItem[], action: OrderItemActions) {
    ];
   // split shop order item
   case 'splitShopOrderItem':
-   return [
-    ...state,
-    {
-     id: -Date.now(),
-     orderID: 0,
-     amount: 1,
-     discount: 0,
-     discountRate: 0,
-     itemCode: action.payload.itemCode,
-     itemName: action.payload.itemName || '',
-     itemID: action.payload.itemID,
-     netValue: 0,
-     price: action.payload.price,
-     sValue: 0,
-     service: 0,
-     serviceRate: action.payload.serviceRate,
-     tagID: null,
-     tax: 0,
-     taxRate: action.payload.taxRate,
-     tagComment: null,
-    },
-   ];
+   const orderItemIndex = state.findIndex(
+    (item) => item.id === action.payload.id,
+   );
+   const stateCopy = [...state];
+   stateCopy.splice(orderItemIndex!, 0, {
+    id: -Date.now(),
+    orderID: 0,
+    amount: 1,
+    discount: 0,
+    discountRate: 0,
+    itemCode: action.payload.itemCode,
+    itemName: action.payload.itemName || '',
+    itemID: action.payload.itemID,
+    netValue: 0,
+    price: action.payload.price,
+    sValue: 0,
+    service: 0,
+    serviceRate: action.payload.serviceRate,
+    tagID: null,
+    tax: 0,
+    taxRate: action.payload.taxRate,
+    tagComment: null,
+   });
+   return [...stateCopy];
   // remove
   case 'removeOrderItems':
    return removeOrderItems(state, action);
@@ -223,13 +225,12 @@ function orderItemsReducer(state: OrderItem[], action: OrderItemActions) {
     if (action.payload.id === order.id) {
      const newAmount = order.amount - action.payload.decreaseBy;
      if (newAmount > 0) {
-      // TODO should calculate prices
       return {
        ...order,
        amount: newAmount,
       };
      }
-     mustRemoveShopOrderIDs.push(order.itemID);
+     mustRemoveShopOrderIDs.push(order.id);
      return order;
     }
     return order;
