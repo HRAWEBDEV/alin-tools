@@ -25,7 +25,7 @@ export default function OrderShoppingList({
      <AnimatePresence>
       {visibleOrderItems.map((orderItem) => (
        <OrderShoppingItem
-        key={orderItem.itemID}
+        key={orderItem.id}
         dic={dic}
         orderItem={orderItem}
         searchedOrder={searchedOrder}

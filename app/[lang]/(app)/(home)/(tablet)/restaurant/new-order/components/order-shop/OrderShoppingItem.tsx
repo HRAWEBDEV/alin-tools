@@ -62,8 +62,8 @@ export default function OrderShoppingItem({
       className='text-red-600/50 dark:text-red-400/50 rounded-full'
       onClick={() => {
        orderItemsDispatch({
-        type: 'removeOrderItems',
-        payload: [orderItem.itemID],
+        type: 'removeShopOrderItems',
+        payload: [orderItem.id],
        });
       }}
      >
@@ -90,7 +90,7 @@ export default function OrderShoppingItem({
           orderItemsDispatch({
            type: 'removeTag',
            payload: {
-            itemID: orderItem.itemID,
+            id: orderItem.id,
             tagID: orderItem.tagID!,
            },
           });
@@ -110,7 +110,7 @@ export default function OrderShoppingItem({
            {dic.orderInfo.addTag}
           </Button>
          </DrawerTrigger>
-         <FindTags itemID={orderItem.itemID} dic={dic} />
+         <FindTags id={orderItem.id} dic={dic} />
         </Drawer>
        )}
       </div>
@@ -153,10 +153,10 @@ export default function OrderShoppingItem({
           setShowRemoveOrderItemConfirm(true);
          } else {
           orderItemsDispatch({
-           type: 'decreaseOrderItemsAmount',
+           type: 'decreaseShopOrderItemsAmount',
            payload: {
             decreaseBy: 1,
-            itemsIDs: [orderItem.itemID],
+            id: orderItem.id,
            },
           });
          }
@@ -173,10 +173,10 @@ export default function OrderShoppingItem({
         className='text-secondary rounded-full'
         onClick={() => {
          orderItemsDispatch({
-          type: 'increaseOrderItemsAmount',
+          type: 'increaseShopOrderItemAmount',
           payload: {
            increaseBy: 1,
-           itemsIDs: [orderItem.itemID],
+           id: orderItem.id,
           },
          });
         }}
@@ -211,10 +211,10 @@ export default function OrderShoppingItem({
         variant='destructive'
         onClick={() => {
          orderItemsDispatch({
-          type: 'decreaseOrderItemsAmount',
+          type: 'decreaseShopOrderItemsAmount',
           payload: {
            decreaseBy: 1,
-           itemsIDs: [orderItem.itemID],
+           id: orderItem.id,
           },
          });
         }}

@@ -8,7 +8,18 @@ type OrderItemActions =
  | { type: 'insertOrderItems'; payload: OrderItem[] }
  | {
     type: 'addOrderItems';
-    payload: ItemProgram[];
+    payload: Pick<
+     ItemProgram,
+     'itemCode' | 'itemName' | 'itemID' | 'serviceRate' | 'taxRate' | 'price'
+    >[];
+   }
+ | {
+    type: 'splitShopOrderItem';
+    payload: Pick<
+     ItemProgram,
+     'itemCode' | 'itemName' | 'itemID' | 'serviceRate' | 'taxRate' | 'price'
+    > &
+     Pick<OrderItem, 'id'>;
    }
  | {
     type: 'removeOrderItems';
@@ -29,19 +40,37 @@ type OrderItemActions =
     };
    }
  | {
+    type: 'removeShopOrderItems';
+    payload: OrderItem['id'][];
+   }
+ | {
+    type: 'increaseShopOrderItemAmount';
+    payload: {
+     id: OrderItem['id'];
+     increaseBy: number;
+    };
+   }
+ | {
+    type: 'decreaseShopOrderItemsAmount';
+    payload: {
+     id: OrderItem['id'];
+     decreaseBy: number;
+    };
+   }
+ | {
     type: 'clearOrderItems';
    }
  | {
     type: 'addTag';
     payload: {
-     itemID: ItemProgram['itemID'];
+     id: ItemProgram['id'];
      tag: Tag;
     };
    }
  | {
     type: 'removeTag';
     payload: {
-     itemID: ItemProgram['itemID'];
+     id: ItemProgram['id'];
      tagID: number;
     };
    };
@@ -53,7 +82,29 @@ function removeOrderItems(
   payload: ItemProgram['itemID'][];
  },
 ): OrderItem[] {
- return orderItems.filter((order) => !action.payload.includes(order.itemID));
+ return orderItems.filter((order) => {
+  let removeIds = action.payload;
+  if (removeIds.includes(order.itemID)) {
+   removeIds = action.payload.filter((id) => id !== order.itemID);
+   return false;
+  }
+  return true;
+ });
+}
+
+function removeShopOrderItems(
+ orderItems: OrderItem[],
+ action: {
+  type: 'removeShopOrderItems';
+  payload: OrderItem['id'][];
+ },
+): OrderItem[] {
+ return orderItems.filter((order) => {
+  if (action.payload.includes(order.id)) {
+   return false;
+  }
+  return true;
+ });
 }
 
 function orderItemsReducer(state: OrderItem[], action: OrderItemActions) {
@@ -67,7 +118,7 @@ function orderItemsReducer(state: OrderItem[], action: OrderItemActions) {
     ...state,
     ...action.payload.map((item) => {
      const newOrder: OrderItem = {
-      id: 0,
+      id: -Date.now(),
       orderID: 0,
       amount: 1,
       discount: 0,
@@ -88,15 +139,40 @@ function orderItemsReducer(state: OrderItem[], action: OrderItemActions) {
      return newOrder;
     }),
    ];
+  // split shop order item
+  case 'splitShopOrderItem':
+   return [
+    ...state,
+    {
+     id: -Date.now(),
+     orderID: 0,
+     amount: 1,
+     discount: 0,
+     discountRate: 0,
+     itemCode: action.payload.itemCode,
+     itemName: action.payload.itemName || '',
+     itemID: action.payload.itemID,
+     netValue: 0,
+     price: action.payload.price,
+     sValue: 0,
+     service: 0,
+     serviceRate: action.payload.serviceRate,
+     tagID: null,
+     tax: 0,
+     taxRate: action.payload.taxRate,
+     tagComment: null,
+    },
+   ];
   // remove
   case 'removeOrderItems':
    return removeOrderItems(state, action);
   // increase
   case 'increaseOrderItemsAmount':
    return state.map((order) => {
-    if (action.payload.itemsIDs.includes(order.itemID)) {
+    let increaseIds = action.payload.itemsIDs;
+    if (increaseIds.includes(order.itemID)) {
+     increaseIds = action.payload.itemsIDs.filter((id) => order.itemID !== id);
      const newAmount = order.amount + action.payload.increaseBy;
-     // TODO should calculate prices
      return {
       ...order,
       amount: newAmount,
@@ -108,7 +184,9 @@ function orderItemsReducer(state: OrderItem[], action: OrderItemActions) {
   case 'decreaseOrderItemsAmount':
    const mustRemoveOrderIDs: number[] = [];
    const newOrderItems = state.map((order) => {
-    if (action.payload.itemsIDs.includes(order.itemID)) {
+    let decreaseIds = action.payload.itemsIDs;
+    if (decreaseIds.includes(order.itemID)) {
+     decreaseIds = action.payload.itemsIDs.filter((id) => order.itemID !== id);
      const newAmount = order.amount - action.payload.decreaseBy;
      if (newAmount > 0) {
       // TODO should calculate prices
@@ -126,10 +204,47 @@ function orderItemsReducer(state: OrderItem[], action: OrderItemActions) {
     type: 'removeOrderItems',
     payload: mustRemoveOrderIDs,
    });
+  //  increase shop order
+  case 'increaseShopOrderItemAmount':
+   return state.map((order) => {
+    if (order.id === action.payload.id) {
+     const newAmount = order.amount + action.payload.increaseBy;
+     return {
+      ...order,
+      amount: newAmount,
+     };
+    }
+    return order;
+   });
+  //  decrease shop order
+  case 'decreaseShopOrderItemsAmount':
+   const mustRemoveShopOrderIDs: number[] = [];
+   const newShopOrderItems = state.map((order) => {
+    if (action.payload.id === order.id) {
+     const newAmount = order.amount - action.payload.decreaseBy;
+     if (newAmount > 0) {
+      // TODO should calculate prices
+      return {
+       ...order,
+       amount: newAmount,
+      };
+     }
+     mustRemoveShopOrderIDs.push(order.itemID);
+     return order;
+    }
+    return order;
+   });
+   return removeShopOrderItems(newShopOrderItems, {
+    type: 'removeShopOrderItems',
+    payload: mustRemoveShopOrderIDs,
+   });
+  // remove shop
+  case 'removeShopOrderItems':
+   return removeShopOrderItems(state, action);
   // tags
   case 'addTag':
    return state.map((order) => {
-    if (order.itemID === action.payload.itemID) {
+    if (order.id === action.payload.id) {
      return {
       ...order,
       tagID: action.payload.tag.id,
@@ -140,7 +255,7 @@ function orderItemsReducer(state: OrderItem[], action: OrderItemActions) {
    });
   case 'removeTag':
    return state.map((order) => {
-    if (order.itemID === action.payload.itemID) {
+    if (order.id === action.payload.id) {
      return {
       ...order,
       tagID: null,
