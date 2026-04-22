@@ -82,8 +82,8 @@ function removeOrderItems(
   payload: ItemProgram['itemID'][];
  },
 ): OrderItem[] {
+ let removeIds = action.payload;
  return orderItems.filter((order) => {
-  let removeIds = action.payload;
   if (removeIds.includes(order.itemID)) {
    removeIds = action.payload.filter((id) => id !== order.itemID);
    return false;
@@ -145,7 +145,7 @@ function orderItemsReducer(state: OrderItem[], action: OrderItemActions) {
     (item) => item.id === action.payload.id,
    );
    const stateCopy = [...state];
-   stateCopy.splice(orderItemIndex!, 0, {
+   stateCopy.splice(orderItemIndex! + 1, 0, {
     id: -Date.now(),
     orderID: 0,
     amount: 1,
@@ -170,8 +170,8 @@ function orderItemsReducer(state: OrderItem[], action: OrderItemActions) {
    return removeOrderItems(state, action);
   // increase
   case 'increaseOrderItemsAmount':
+   let increaseIds = action.payload.itemsIDs;
    return state.map((order) => {
-    let increaseIds = action.payload.itemsIDs;
     if (increaseIds.includes(order.itemID)) {
      increaseIds = action.payload.itemsIDs.filter((id) => order.itemID !== id);
      const newAmount = order.amount + action.payload.increaseBy;
@@ -185,8 +185,8 @@ function orderItemsReducer(state: OrderItem[], action: OrderItemActions) {
   // decreaseOrderItemsAmount
   case 'decreaseOrderItemsAmount':
    const mustRemoveOrderIDs: number[] = [];
+   let decreaseIds = action.payload.itemsIDs;
    const newOrderItems = state.map((order) => {
-    let decreaseIds = action.payload.itemsIDs;
     if (decreaseIds.includes(order.itemID)) {
      decreaseIds = action.payload.itemsIDs.filter((id) => order.itemID !== id);
      const newAmount = order.amount - action.payload.decreaseBy;
