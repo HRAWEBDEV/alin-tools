@@ -46,9 +46,9 @@ export default function OrderShoppingItem({
  );
  return (
   <motion.div layout className='border-b border-input p-2'>
-   <div className='flex flex-col sm:flex-row gap-0 sm:gap-0 items-center'>
+   <div className='flex flex-row gap-2 sm:gap-0 sm:items-center'>
     <div className='flex flex-col items-center'>
-     <div className='flex items-center justify-center shrink-0 rounded-full size-24 bg-neutral-100 dark:bg-neutral-800 overflow-hidden object-center object-contain'>
+     <div className='flex items-center justify-center shrink-0 rounded-full size-18 lg:size-24 bg-neutral-100 dark:bg-neutral-800 overflow-hidden object-center object-contain'>
       <OrderItemImage
        src={targetItemProgram?.imageURL || undefined}
        alt={orderItem.itemName || undefined}
@@ -70,9 +70,9 @@ export default function OrderShoppingItem({
       <BsTrash className='size-6 sm:size-5' />
      </Button>
     </div>
-    <div className='text-center sm:text-start grow flex flex-col sm:flex-row sm:items-center'>
+    <div className='text-start grow flex flex-col sm:flex-row sm:items-center'>
      <div className='grow'>
-      <h3 className='text-lg font-medium text-neutral-700 dark:text-neutral-300 mb-1'>
+      <h3 className='text-base lg:text-lg font-medium text-neutral-700 dark:text-neutral-300 mb-1'>
        <HighlightWords
         textToHighlight={orderItem.itemName || ''}
         searchWords={[searchedOrder]}
@@ -123,7 +123,7 @@ export default function OrderShoppingItem({
          <span>{format(orderItem.price)}</span>
         </div>
        )}
-       <p className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
+       <p className='text-lg lg:text-xl font-medium text-neutral-600 dark:text-neutral-400'>
         {format(
          orderItem.price - (orderItem.discountRate * orderItem.price) / 100,
         )}
@@ -131,9 +131,9 @@ export default function OrderShoppingItem({
        </p>
       </div>
      </div>
-     <div className='flex gap-2 justify-between sm:justify-start sm:flex-col items-center shrink-0'>
+     <div className='flex flex-wrap gap-2 justify-between sm:justify-start sm:flex-col items-center shrink-0'>
       <div>
-       <p className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
+       <p className='text-lg lg:text-xl font-medium text-neutral-600 dark:text-neutral-400'>
         {format(
          orderItem.sValue -
           orderItem.discount +
@@ -162,9 +162,9 @@ export default function OrderShoppingItem({
          }
         }}
        >
-        <CiCircleMinus className='size-10' />
+        <CiCircleMinus className='size-9 lg:size-10' />
        </Button>
-       <div className='text-primary text-xl px-2 shrink-0 text-center basis-8 font-medium'>
+       <div className='text-primary text-base lg:text-xl px-2 shrink-0 text-center basis-8 font-medium'>
         {orderItem.amount}
        </div>
        <Button
@@ -181,7 +181,7 @@ export default function OrderShoppingItem({
          });
         }}
        >
-        <CiCirclePlus className='size-10' />
+        <CiCirclePlus className='size-9 lg:size-10' />
        </Button>
       </div>
      </div>
