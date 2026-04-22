@@ -26,10 +26,10 @@ import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-pr
 
 export default function FindTags({
  dic,
- itemID,
+ id,
 }: {
  dic: NewOrderDictionary;
- itemID: OrderItem['itemID'];
+ id: OrderItem['id'];
 }) {
  const { userInfoRouterStorage } = useUserInfoRouter();
  const {
@@ -136,7 +136,7 @@ export default function FindTags({
               orderItemsDispatch({
                type: 'addTag',
                payload: {
-                itemID,
+                id,
                 tag,
                },
               });

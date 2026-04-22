@@ -23,6 +23,7 @@ import HighlightWords from 'react-highlight-words';
 import { motion } from 'motion/react';
 import { GoPlus } from 'react-icons/go';
 import { IoTrashOutline } from 'react-icons/io5';
+import { MdOutlineSplitscreen } from 'react-icons/md';
 import OrderItemImage from '../OrderItemImage';
 
 export default function OrderShoppingItem({
@@ -62,8 +63,8 @@ export default function OrderShoppingItem({
       className='text-red-600/50 dark:text-red-400/50 rounded-full'
       onClick={() => {
        orderItemsDispatch({
-        type: 'removeOrderItems',
-        payload: [orderItem.itemID],
+        type: 'removeShopOrderItems',
+        payload: [orderItem.id],
        });
       }}
      >
@@ -81,7 +82,7 @@ export default function OrderShoppingItem({
       <p className='px-2 text-sm text-neutral-600 dark:text-neutral-400 font-light mb-2 w-[min(100%,20rem)]'>
        {orderItem.tagComment || '---'}
       </p>
-      <div className='mb-1'>
+      <div className='mb-1 flex items-center gap-4'>
        {orderItem.tagID ? (
         <Button
          variant='outline'
@@ -90,7 +91,7 @@ export default function OrderShoppingItem({
           orderItemsDispatch({
            type: 'removeTag',
            payload: {
-            itemID: orderItem.itemID,
+            id: orderItem.id,
             tagID: orderItem.tagID!,
            },
           });
@@ -110,9 +111,30 @@ export default function OrderShoppingItem({
            {dic.orderInfo.addTag}
           </Button>
          </DrawerTrigger>
-         <FindTags itemID={orderItem.itemID} dic={dic} />
+         <FindTags id={orderItem.id} dic={dic} />
         </Drawer>
        )}
+       <Button
+        variant='outline'
+        className='text-sm p-0.5 py-1 gap-1 text-destructive border-destructive h-auto'
+        onClick={() => {
+         orderItemsDispatch({
+          type: 'splitShopOrderItem',
+          payload: {
+           id: orderItem.id,
+           itemCode: orderItem.itemCode,
+           itemID: orderItem.itemID,
+           itemName: orderItem.itemName,
+           price: orderItem.price,
+           serviceRate: orderItem.service,
+           taxRate: orderItem.taxRate,
+          },
+         });
+        }}
+       >
+        <MdOutlineSplitscreen />
+        {dic.orderInfo.duplicateOrderItem}
+       </Button>
       </div>
       <div className='flex justify-center sm:justify-start mb-2 gap-4'>
        {!!orderItem.discountRate && (
@@ -153,10 +175,10 @@ export default function OrderShoppingItem({
           setShowRemoveOrderItemConfirm(true);
          } else {
           orderItemsDispatch({
-           type: 'decreaseOrderItemsAmount',
+           type: 'decreaseShopOrderItemsAmount',
            payload: {
             decreaseBy: 1,
-            itemsIDs: [orderItem.itemID],
+            id: orderItem.id,
            },
           });
          }
@@ -173,10 +195,10 @@ export default function OrderShoppingItem({
         className='text-secondary rounded-full'
         onClick={() => {
          orderItemsDispatch({
-          type: 'increaseOrderItemsAmount',
+          type: 'increaseShopOrderItemAmount',
           payload: {
            increaseBy: 1,
-           itemsIDs: [orderItem.itemID],
+           id: orderItem.id,
           },
          });
         }}
@@ -211,10 +233,10 @@ export default function OrderShoppingItem({
         variant='destructive'
         onClick={() => {
          orderItemsDispatch({
-          type: 'decreaseOrderItemsAmount',
+          type: 'decreaseShopOrderItemsAmount',
           payload: {
            decreaseBy: 1,
-           itemsIDs: [orderItem.itemID],
+           id: orderItem.id,
           },
          });
         }}

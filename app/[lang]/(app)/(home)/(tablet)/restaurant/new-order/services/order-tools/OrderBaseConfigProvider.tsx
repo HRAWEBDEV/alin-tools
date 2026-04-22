@@ -22,6 +22,7 @@ import {
  getPerson,
  savePerson,
  getOrderServiceRates,
+ OrderItem,
 } from '../newOrderApiActions';
 import { getHallKey } from '../../../salons/services/salonsApiActions';
 import {
@@ -394,6 +395,33 @@ export default function OrderBaseConfigProvider({
    (Number(roundingValue) || 0),
  );
 
+ function getPackedOrderItems(orderItems: OrderItem[]) {
+  return orderItems.reduce((acc, cur) => {
+   const orderId = cur.id >= 0 ? cur.id : 0;
+   const findDuplicateItem = acc.find(
+    (item) => item.itemID === cur.itemID && item.tagID === cur.tagID,
+   );
+   if (!!findDuplicateItem) {
+    return acc.map((order) => {
+     if (order.itemID === cur.itemID && order.tagID === cur.tagID) {
+      return {
+       ...order,
+       amount: order.amount + cur.amount,
+      };
+     }
+     return order;
+    });
+   }
+   return [
+    ...acc,
+    {
+     ...cur,
+     id: orderId,
+    },
+   ];
+  }, [] as OrderItem[]);
+ }
+
  const {
   data: systemPricing,
   isSuccess: systemPricingIsSuccess,
@@ -439,7 +467,7 @@ export default function OrderBaseConfigProvider({
    }) {
     return saveAndCloseOrder({
      order: newOrder,
-     orderItems: pricedOrderItems,
+     orderItems: getPackedOrderItems(pricedOrderItems),
      printToCashBox: orderInfo.printCash,
      sendToKitchen: orderInfo.sendToKitchen,
     });
@@ -474,7 +502,7 @@ export default function OrderBaseConfigProvider({
    return saveOrder({
     orderPackage: {
      order,
-     orderItems: pricedOrderItems,
+     orderItems: getPackedOrderItems(pricedOrderItems),
     },
     sendToKitchen: data.sendToKitchen,
     printToCashBox: data.printCash,
@@ -627,7 +655,7 @@ export default function OrderBaseConfigProvider({
     if (paymentData.paymentType?.key === '2') {
      return sendToPcPos({
       order: newOrder,
-      orderItems: pricedOrderItems,
+      orderItems: getPackedOrderItems(pricedOrderItems),
       sendToKitchen: orderInfo.sendToKitchen,
       printToCashBox: orderInfo.sendToKitchen,
       bankID: Number(paymentData.bank!.key),
@@ -637,7 +665,7 @@ export default function OrderBaseConfigProvider({
     const isWalletPayment = paymentData.paymentType?.key === '2';
     return saveAndCloseOrder({
      order: newOrder,
-     orderItems: pricedOrderItems,
+     orderItems: getPackedOrderItems(pricedOrderItems),
      sendToKitchen: orderInfo.sendToKitchen,
      printToCashBox: orderInfo.sendToKitchen,
      walletID: isWalletPayment ? paymentData.walletKey : undefined,

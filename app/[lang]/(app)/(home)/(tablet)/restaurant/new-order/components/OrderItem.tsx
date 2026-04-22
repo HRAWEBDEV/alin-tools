@@ -34,9 +34,12 @@ export default function OrderItem({
   },
  } = useOrderBaseConfigContext();
  const { format } = useCurrencyFormatter();
- const targetOrderItem = orderItems.find(
+ const targetOrderItem = orderItems.filter(
   (order) => order.itemID === itemProgram.itemID,
  );
+ const itemAmount = targetOrderItem.reduce((acc, cur) => {
+  return acc + cur.amount;
+ }, 0);
  return (
   <motion.div
    layout
@@ -87,7 +90,7 @@ export default function OrderItem({
        <span className='ms-1 text-sm'>ریال</span>
       </p>
      </div>
-     {!targetOrderItem?.amount && (
+     {!itemAmount && (
       <div className='flex justify-center items-center mb-2'>
        <Button
         variant='ghost'
@@ -109,7 +112,7 @@ export default function OrderItem({
        </Button>
       </div>
      )}
-     {!userOrderIsLoading && !!targetOrderItem?.amount && (
+     {!userOrderIsLoading && !!itemAmount && (
       <div className='flex justify-center items-center mb-2 select-none'>
        <Button
         variant='ghost'
@@ -128,7 +131,7 @@ export default function OrderItem({
         <CiCircleMinus className='size-10' />
        </Button>
        <div className='text-xl py-[0.2rem] px-1 shrink-0 text-center basis-8 font-medium text-primary rounded'>
-        {targetOrderItem.amount}
+        {itemAmount || 0}
        </div>
        <Button
         variant='ghost'
