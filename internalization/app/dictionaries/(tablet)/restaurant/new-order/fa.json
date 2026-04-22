@@ -1,5 +1,6 @@
 {
  "title": "ثبت سفارش",
+ "setSystemPricingConfirm": "آیا تخفیف سیستمی اعمال شود؟",
  "tools": {
   "shoppingCard": "سبد خرید",
   "orderInfo": "اطلاعات سفارش",

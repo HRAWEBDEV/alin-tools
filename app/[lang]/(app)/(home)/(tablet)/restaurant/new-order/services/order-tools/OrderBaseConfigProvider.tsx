@@ -137,6 +137,7 @@ export default function OrderBaseConfigProvider({
    return defaultNewOrderSettings;
   },
  );
+ const [confirmSetSystemPricing, setConfirmSetSystemPricing] = useState(false);
  const [showOrderImage, setShowOrderImage] = useState(
   newOrderSettings.showOrderImage,
  );
@@ -977,9 +978,21 @@ export default function OrderBaseConfigProvider({
  }, [pricedOrderItems, itemProgramsData, hasServiceValue, userDiscountValue]);
 
  useEffect(() => {
-  if (!systemPricingIsSuccess || !!orderIDQuery) return;
-  onSetSystemPricing();
- }, [systemPricingIsSuccess, orderIDQuery, onSetSystemPricing]);
+  if (!systemPricingIsSuccess) return;
+  if (orderIDQuery) {
+   const discountRate = orderInfoForm.getValues('discountRate');
+   if (Number(discountRate) === systemPricing?.discountRate) return;
+   setConfirmSetSystemPricing(true);
+  } else {
+   onSetSystemPricing();
+  }
+ }, [
+  systemPricingIsSuccess,
+  orderIDQuery,
+  onSetSystemPricing,
+  orderInfoForm,
+  systemPricing,
+ ]);
 
  return (
   <orderBaseConfigContext.Provider value={ctx}>
@@ -1040,6 +1053,44 @@ export default function OrderBaseConfigProvider({
        >
         {isPendingCloseOrder && <Spinner />}
         {dic.closeOrder.confirm}
+       </Button>
+      </DialogClose>
+     </DialogFooter>
+    </DialogContent>
+   </Dialog>
+   <Dialog
+    open={confirmSetSystemPricing}
+    onOpenChange={setConfirmSetSystemPricing}
+   >
+    <DialogContent className='p-0 gap-0'>
+     <DialogHeader className='p-4'></DialogHeader>
+     <div className='p-4'>
+      <div className='flex gap-1 items-center text-red-700 dark:text-red-400 font-medium'>
+       <BiError className='size-12' />
+       <p>{dic.setSystemPricingConfirm}</p>
+       <p className='ms-4 text-primary'>
+        <span>{dic.orderInfo.discountRate}: </span>
+        <span>{systemPricing?.discountRate}</span>
+       </p>
+      </div>
+     </div>
+     <DialogFooter className='p-4'>
+      <DialogClose asChild>
+       <Button
+        className='sm:w-24'
+        variant='outline'
+        onClick={() => setConfirmSetSystemPricing(false)}
+       >
+        {dic.orderConfirm.cancel}
+       </Button>
+      </DialogClose>
+      <DialogClose asChild>
+       <Button
+        className='sm:w-24'
+        variant='destructive'
+        onClick={() => onSetSystemPricing()}
+       >
+        {dic.orderConfirm.confirm}
        </Button>
       </DialogClose>
      </DialogFooter>
