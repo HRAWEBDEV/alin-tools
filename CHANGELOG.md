@@ -8,6 +8,7 @@
 ### features
 - add new orer compact view (hra-done)
 - add new order settings (hra-done)
+- add salons multi order flag (hra-done)
 
 ### bug fixes
 - update rack paging (hra-done)
