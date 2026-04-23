@@ -126,7 +126,7 @@ export default function SalonTable({
        <Link href={newOrderRedirectLink}>
         <IoMdAddCircle className='size-8 text-inherit' />
         <DropdownMenuLabel className='text-base'>
-         {tableUtils.dic.tables.order}
+         {tableUtils.dic.tables.newOrder}
         </DropdownMenuLabel>
        </Link>
       </DropdownMenuItem>
