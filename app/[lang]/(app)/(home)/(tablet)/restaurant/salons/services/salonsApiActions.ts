@@ -8,6 +8,7 @@ interface InitiData {
  tableTypes: Combo[];
  defaultSaleTimeID: number;
  defaultPrintCashBox: number;
+ multiOrder: boolean;
 }
 
 type TableOrder = Combo;

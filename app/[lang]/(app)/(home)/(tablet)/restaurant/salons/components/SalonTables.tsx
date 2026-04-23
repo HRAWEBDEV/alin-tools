@@ -19,7 +19,7 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
   ? 'grid gap-2 gap-y-4 justify-center grid-cols-[repeat(auto-fill,minmax(6rem,1fr))]'
   : 'grid gap-6 grid-cols-[repeat(auto-fill,minmax(9rem,10rem))] sm:grid-cols-[repeat(auto-fill,minmax(10rem,11rem))] justify-center';
  const {
-  initData: { defaultSaleTimeID, salons, tableTypes },
+  initData: { defaultSaleTimeID, salons, tableTypes, multiOrder },
   hallsInfo: {
    selectedHall,
    isLoading: isLoadingHalls,
@@ -75,6 +75,7 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
     <div className={tablesGridClass + ' pb-4 mb-2 border-b border-input'}>
      <SalonTable
       dic={dic}
+      multiOrder={multiOrder}
       table={selectedTable}
       isMinimal={isDisplayMinimal}
       isBold={tempDisplayMode.boldStyle}
@@ -115,6 +116,7 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
     <div className={tablesGridClass + ' pb-4 mb-2 border-b border-input'}>
      <SalonTable
       dic={dic}
+      multiOrder={multiOrder}
       table={selectedTable}
       isMinimal={isDisplayMinimal}
       isBold={tempDisplayMode.boldStyle}
@@ -170,6 +172,7 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
         <SalonTable
          key={table.tableID}
          dic={dic}
+         multiOrder={multiOrder}
          table={table}
          tableType='normal'
          isMinimal={isDisplayMinimal}

@@ -7,6 +7,7 @@ export type TableUtils =
     tableType: 'normal';
     dic: SalonsDictionary;
     tableTypes: InitiData['tableTypes'];
+    multiOrder: InitiData['multiOrder'];
     selectedHall: SalonBaseConfig['hallsInfo']['selectedHall'];
     selectedTable: SalonBaseConfig['tablesInfo']['selectedTable'];
     showTransferTable: SalonBaseConfig['tablesInfo']['showTransferTable'];

@@ -121,16 +121,17 @@ export default function SalonTable({
         </DropdownMenuLabel>
        </DropdownMenuItem>
       )}
-     {table.tableStateTypeID !== TableStateTypes.outOfService && (
-      <DropdownMenuItem className='text-sky-700 dark:text-sky-400' asChild>
-       <Link href={newOrderRedirectLink}>
-        <IoMdAddCircle className='size-8 text-inherit' />
-        <DropdownMenuLabel className='text-base'>
-         {tableUtils.dic.tables.newOrder}
-        </DropdownMenuLabel>
-       </Link>
-      </DropdownMenuItem>
-     )}
+     {table.tableStateTypeID !== TableStateTypes.outOfService &&
+      (tableUtils.multiOrder || !table.orderID) && (
+       <DropdownMenuItem className='text-sky-700 dark:text-sky-400' asChild>
+        <Link href={newOrderRedirectLink}>
+         <IoMdAddCircle className='size-8 text-inherit' />
+         <DropdownMenuLabel className='text-base'>
+          {tableUtils.dic.tables.newOrder}
+         </DropdownMenuLabel>
+        </Link>
+       </DropdownMenuItem>
+      )}
      {(table.tableStateTypeID === TableStateTypes.outOfService ||
       table.tableStateTypeID === TableStateTypes.readyToService) &&
       table.orderCount <= 1 && (
