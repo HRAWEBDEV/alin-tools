@@ -33,7 +33,6 @@ export default function RackRooms({
   <div className='grow '>
    {rack.isLoading && <LinearLoading />}
    <div
-    dir='ltr'
     data-layout-minimal={rack.rackView === 'minimal'}
     className='grid gap-4 grid-cols-[repeat(auto-fill,minmax(9rem,9.5rem))] data-[layout-minimal=true]:grid-cols-[repeat(auto-fill,minmax(6.5rem,7rem))] justify-center pb-4 data-[layout-minimal=true]:gap-3'
    >

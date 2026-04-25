@@ -32,10 +32,7 @@ export default function RoomControlList({
  return (
   <div>
    {roomControl.isFetching && <LinearLoading />}
-   <div
-    dir='ltr'
-    className='grid grid-cols-[repeat(auto-fill,minmax(6.5rem,7rem))] justify-center gap-3'
-   >
+   <div className='grid grid-cols-[repeat(auto-fill,minmax(6.5rem,7rem))] justify-center gap-3'>
     {roomControl.data?.map((item) => (
      <RoomControlItem
       key={item.id}
