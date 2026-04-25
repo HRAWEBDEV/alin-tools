@@ -39,6 +39,15 @@ export default function GuestsManagementTabs({
         {dic.tabs.arrivalReserves}
        </Link>
       </TabsTrigger>
+      <TabsTrigger value='guests-expenses' asChild>
+       <Link
+        href={`${redirectPath}?tab=guests-expenses`}
+        className='font-medium'
+        key='guests-expenses'
+       >
+        {dic.tabs.guestsExpenses}
+       </Link>
+      </TabsTrigger>
      </TabsList>
     </Tabs>
    </div>

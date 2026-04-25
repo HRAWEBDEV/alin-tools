@@ -2,6 +2,7 @@
  "title": "مدیریت مهمانان",
  "tabs": {
   "guestsList": "لیست مهمانان مقیم",
-  "arrivalReserves": "رزرو‌های ورودی"
+  "arrivalReserves": "رزرو‌های ورودی",
+  "guestsExpenses": "هزینه‌های مهمان"
  }
 }

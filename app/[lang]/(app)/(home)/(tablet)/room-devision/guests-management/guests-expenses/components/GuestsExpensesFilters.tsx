@@ -12,77 +12,66 @@ import {
  DrawerTrigger,
 } from '@/components/ui/drawer';
 import { Spinner } from '@/components/ui/spinner';
-import { ChevronsUpDown } from 'lucide-react';
+import { ChevronsUpDown, ChevronDownIcon } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
-import { FaFilter, FaRegTrashAlt } from 'react-icons/fa';
-import type { ArrivalReservesDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/arrival-reserves/dictionary';
+import { FaFilter, FaPlus, FaRegTrashAlt } from 'react-icons/fa';
 import {
  Popover,
  PopoverContent,
  PopoverTrigger,
 } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
-import { ChevronDownIcon } from 'lucide-react';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { Field, FieldLabel } from '@/components/ui/field';
-import { ArrivalReservesSchema } from '../schemas/arrivalReservesSchema';
+import { useDateFns } from '@/hooks/useDateFns';
+
+import type { GuestsExpensesDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/guests-expenses/dictionary';
+import type { GuestsExpensesSchema } from '../schemas/guestsExpensesSchema';
+import type { RegisterInfo } from '../services/guestsExpensesApiActions';
+
 type SelectOption = { key: string | number; value: string };
 type InitialData = {
- customers: SelectOption[];
- roomTypes: SelectOption[];
+ rooms: SelectOption[];
+ items: SelectOption[];
 };
 
-const FILTER_KEYS: (keyof ArrivalReservesSchema)[] = [
- 'date',
- 'roomTypeID',
- 'customerID',
- 'withRoomNo',
- 'withoutRoomNo',
- 'charged',
- 'notCharged',
- 'noShow',
- 'canceled',
-];
+const FILTER_KEYS: (keyof GuestsExpensesSchema)[] = ['date', 'room', 'item'];
 
-const smallBadgeKeys: (keyof ArrivalReservesSchema)[] = [
- 'withRoomNo',
- 'withoutRoomNo',
- 'charged',
- 'notCharged',
- 'noShow',
- 'canceled',
-];
-const largeBadgeKeys: (keyof ArrivalReservesSchema)[] = [
- 'customerID',
- 'roomTypeID',
-];
-
+const largeBadgeKeys: (keyof GuestsExpensesSchema)[] = ['room', 'item'];
+const smallBadgeKeys: (keyof GuestsExpensesSchema)[] = [];
+type DrawerMode = 'create' | 'edit' | 'view' | null;
 type Props = {
- dic: ArrivalReservesDictionary;
+ dic: GuestsExpensesDictionary;
  initData?: InitialData;
  initDataIsLoading?: boolean;
  totalResults?: number;
+ onSetMode: (mode: DrawerMode) => void;
+ registerInfo: RegisterInfo | null;
 };
 
 const SHARED_DRAWER_CLASSES =
  'sm:h-[min(85svh,30rem)] h-[min(95svh,66rem)] flex flex-col';
 
-export default function ArrivalReservesFilters({
+export default function GuestsExpensesFilters({
  dic,
  initData,
  initDataIsLoading = false,
  totalResults,
+ onSetMode,
+ registerInfo,
 }: Props) {
- const { control, setValue, reset } = useFormContext<ArrivalReservesSchema>();
+ const dateFns = useDateFns();
+ const { control, setValue, watch } = useFormContext<GuestsExpensesSchema>();
  const values = useWatch({ control });
  const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
  const [selectDrawerOpen, setSelectDrawerOpen] = useState<string | null>(null);
  const [showDatePicker, setShowDatePicker] = useState(false);
  const { locale } = useBaseConfig();
+ const [dateValue] = watch(['date']);
 
  const activeFilters = FILTER_KEYS.filter((k) => {
   const val = values[k];
-  return val !== null && val !== false && val !== '';
+  return val !== null && val !== undefined && val !== '';
  });
 
  const [sliderRef] = useKeenSlider({
@@ -90,44 +79,33 @@ export default function ArrivalReservesFilters({
   rtl: true,
  });
 
- const filterKeyLabel = (key: keyof ArrivalReservesSchema): string => {
+ const filterKeyLabel = (key: keyof GuestsExpensesSchema): string => {
+  const fieldsDic = dic.fields;
   switch (key) {
    case 'date':
-    return dic.fields.arrivalDate;
-   case 'roomTypeID':
-    return dic.fields.roomType;
-   case 'customerID':
-    return dic.filters.customer;
-   case 'withRoomNo':
-    return dic.filters.withRoomNo;
-   case 'withoutRoomNo':
-    return dic.filters.withoutRoomNo;
-   case 'charged':
-    return dic.filters.charged;
-   case 'notCharged':
-    return dic.filters.notCharged;
-   case 'noShow':
-    return dic.filters.noShow;
-   case 'canceled':
-    return dic.filters.canceled;
+    return fieldsDic?.date;
+   case 'room':
+    return fieldsDic?.room;
+   case 'item':
+    return fieldsDic?.item;
    default:
     return key;
   }
  };
 
- const filterLabel = (key: keyof ArrivalReservesSchema): string | null => {
+ const filterLabel = (key: keyof GuestsExpensesSchema): string | null => {
   const val = values[key];
-  if (val === null || val === false || val === '') return null;
+  if (val === null || val === undefined || val === '') return null;
 
   switch (key) {
-   case 'roomTypeID':
+   case 'room':
     return (
-     initData?.roomTypes.find((r) => String(r.key) === String(val))?.value ??
+     initData?.rooms.find((r) => String(r.key) === String(val))?.value ??
      String(val)
     );
-   case 'customerID':
+   case 'item':
     return (
-     initData?.customers.find((c) => String(c.key) === String(val))?.value ??
+     initData?.items.find((i) => String(i.key) === String(val))?.value ??
      String(val)
     );
    case 'date':
@@ -139,22 +117,43 @@ export default function ArrivalReservesFilters({
   }
  };
 
- const getOptions = (key: 'roomTypeID' | 'customerID'): SelectOption[] => {
+ const getOptions = (key: 'room' | 'item'): SelectOption[] => {
   if (!initData) return [];
   switch (key) {
-   case 'roomTypeID':
-    return initData.roomTypes;
-   case 'customerID':
-    return initData.customers;
+   case 'room':
+    return initData.rooms;
+   case 'item':
+    return initData.items;
    default:
     return [];
   }
  };
 
+ function goToNextDay() {
+  if (!dateValue) return;
+  setValue('date', dateFns.addDays(dateValue, 1));
+ }
+
+ function goToPrevDay() {
+  if (!dateValue) return;
+  setValue('date', dateFns.addDays(dateValue, -1));
+ }
+
  return (
   <div className='flex flex-col gap-2 pt-2 bg-background'>
    <div className='flex gap-2 items-center mb-1'>
     <div className='flex items-center gap-2'>
+     <Button
+      size='lg'
+      className='px-3!'
+      disabled={initDataIsLoading || !registerInfo}
+      onClick={() => {
+       onSetMode('create');
+      }}
+     >
+      {initDataIsLoading ? <Spinner /> : <FaPlus />}
+      <span className='hidden lg:inline'>{dic.filters.new}</span>
+     </Button>
      <Drawer open={filterDrawerOpen} onOpenChange={setFilterDrawerOpen}>
       <DrawerTrigger asChild>
        <Button
@@ -163,7 +162,7 @@ export default function ArrivalReservesFilters({
         variant='outline'
        >
         <FaFilter className='size-4' />
-        <span className='hidden md:inline'>{dic.filters.title}</span>
+        <span className='hidden md:inline'>{dic.filters?.title}</span>
         {activeFilters.length > 0 && (
          <Badge variant='destructive' className='size-6'>
           {activeFilters.length}
@@ -174,7 +173,7 @@ export default function ArrivalReservesFilters({
       <DrawerContent className={SHARED_DRAWER_CLASSES} dir='rtl'>
        <DrawerHeader className='pb-1 shrink-0'>
         <DrawerTitle>
-         {dic.filters.title}{' '}
+         {dic.filters?.title}{' '}
          {totalResults !== undefined && (
           <span className='text-sm text-neutral-700 dark:text-neutral-400 font-normal ml-2'>
            ({totalResults} {dic.info?.results})
@@ -182,30 +181,30 @@ export default function ArrivalReservesFilters({
          )}
         </DrawerTitle>
        </DrawerHeader>
-
        <div className='p-5 pt-0 flex flex-col gap-5 overflow-y-auto max-w-[min(100%,40rem)] mx-auto w-full'>
         <div className='flex items-center justify-end mb-4 mt-2 shrink-0'>
          {activeFilters.length > 0 && (
-          <button
-           onClick={() =>
-            reset({
-             roomTypeID: null,
-             customerID: null,
-             withRoomNo: false,
-             withoutRoomNo: false,
-             charged: false,
-             notCharged: false,
-             noShow: false,
-             canceled: false,
-            })
-           }
-           className='text-xs text-destructive hover:underline cursor-pointer'
+          <Button
+           type='button'
+           variant='outline'
+           onClick={() => {
+            setValue('item', null);
+            setValue('room', null);
+           }}
+           className='text-destructive border-destructive'
           >
-           {dic.filters.clearAll}
-          </button>
+           {dic.filters?.clearAll}
+          </Button>
          )}
         </div>
-
+        <div className='flex gap-2 justify-center items-end'>
+         <Button variant='outline' className='h-11 px-3' onClick={goToPrevDay}>
+          {dic.filters.prev}
+         </Button>
+         <Button variant='outline' className='h-11 px-3' onClick={goToNextDay}>
+          {dic.filters.next}
+         </Button>
+        </div>
         <div className='grid grid-cols-1 gap-6 shrink-0'>
          <Controller
           control={control}
@@ -258,8 +257,8 @@ export default function ArrivalReservesFilters({
           }}
          />
         </div>
-        <div className='grid sm:grid-cols-2 grid-cols-1 gap-6 pb-2'>
-         {(['roomTypeID', 'customerID'] as const).map((key) => (
+        <div className='grid sm:grid-cols-2 grid-cols-1 gap-6 pb-6'>
+         {(['room', 'item'] as const).map((key) => (
           <Controller
            key={key}
            control={control}
@@ -351,48 +350,22 @@ export default function ArrivalReservesFilters({
           />
          ))}
         </div>
-
-        <div className='grid grid-cols-2 gap-5 pb-6 mt-2'>
-         {(
-          [
-           'withRoomNo',
-           'withoutRoomNo',
-           'charged',
-           'notCharged',
-           'noShow',
-           'canceled',
-          ] as const
-         ).map((boolKey) => (
-          <div key={boolKey} className='flex items-center gap-4'>
-           <Controller
-            name={boolKey}
-            control={control}
-            render={({ field }) => (
-             <Checkbox
-              id={boolKey}
-              className='size-5 rounded-sm scale-125'
-              checked={field.value}
-              onCheckedChange={field.onChange}
-             />
-            )}
-           />
-           <label
-            htmlFor={boolKey}
-            className='text-sm font-medium leading-none cursor-pointer'
-           >
-            {filterKeyLabel(boolKey)}
-           </label>
-          </div>
-         ))}
-        </div>
        </div>
       </DrawerContent>
      </Drawer>
+     <div className='flex gap-2 items-end'>
+      <Button variant='outline' className='h-11 px-3' onClick={goToPrevDay}>
+       {dic.filters.prev}
+      </Button>
+      <Button variant='outline' className='h-11 px-3' onClick={goToNextDay}>
+       {dic.filters.next}
+      </Button>
+     </div>
     </div>
 
     {activeFilters.length > 0 && (
      <div
-      key={`expand-${activeFilters.length}`}
+      key={activeFilters.join('-')}
       ref={sliderRef}
       className='keen-slider grow relative'
       dir='rtl'
@@ -410,14 +383,8 @@ export default function ArrivalReservesFilters({
          className='keen-slider__slide inline-flex justify-between items-center rounded-md py-0.5 font-medium bg-neutral-100 dark:bg-neutral-900 text-[0.85rem] data-[badge-size="small"]:basis-32 data-[badge-size="small"]:w-32 data-[badge-size="normal"]:basis-46 data-[badge-size="normal"]:w-46 data-[badge-size="large"]:basis-72 data-[badge-size="large"]:w-72 h-10'
         >
          <p className='text-start grow truncate'>
-          {typeof values[key] === 'boolean' ? (
-           <span>{filterKeyLabel(key)}</span>
-          ) : (
-           <>
-            <span className='text-neutral-500'>{filterKeyLabel(key)}: </span>
-            {filterLabel(key)}
-           </>
-          )}
+          <span className='text-neutral-500'>{filterKeyLabel(key)}: </span>
+          {filterLabel(key)}
          </p>
          <Button
           variant='ghost'
@@ -426,7 +393,7 @@ export default function ArrivalReservesFilters({
           disabled={key === 'date'}
           onClick={() => {
            if (key === 'date') return;
-           setValue(key, typeof values[key] === 'boolean' ? false : null);
+           setValue(key, null);
           }}
          >
           <FaRegTrashAlt />
@@ -439,12 +406,10 @@ export default function ArrivalReservesFilters({
    </div>
 
    {totalResults !== undefined && (
-    <div className='text-sm flex gap-4 items-center mt-1'>
-     <div>
-      <span className='text-neutral-700 dark:text-neutral-400'>
-       {dic.info?.results}:{' '}
-      </span>
-      <span className='font-medium'>{totalResults}</span>
+    <div className='flex gap-4 items-center'>
+     <div className='text-sm text-muted-foreground'>
+      <span className=''>{dic.info?.results}: </span>
+      <span className=''>{totalResults}</span>
      </div>
     </div>
    )}

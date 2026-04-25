@@ -1,0 +1,52 @@
+{
+ "title": "هزینه‌های مهمان",
+ "filters": {
+  "title": "فیلتر‌ها",
+  "clearAll": "حذف همه",
+  "new": "افزودن",
+  "prev": "روز قبل",
+  "next": "روز بعد"
+ },
+ "info": {
+  "results": "نتایج",
+  "noItemFound": "آیتمی یافت نشد",
+  "rial": "ریال",
+  "onSubmitErrorMsg": "لطفا از صحت فیلد roomID و itemID اطمینان حاصل کنید.",
+  "loadMore": "بارگزاری بیشتر"
+ },
+ "detail": {
+  "title": "جزئیات"
+ },
+ "fields": {
+  "date": "تاریخ",
+  "room": "اتاق",
+  "item": "عنوان",
+  "currency": "ارز",
+  "unitPrice": "قیمت واحد",
+  "amount": "مقدار",
+  "price": "قیمت",
+  "discount": "تخفیف",
+  "serviceRate": "نرخ سرویس",
+  "taxRate": "نرخ مالیات",
+  "total": "مجموع",
+  "comment": "توضیحات"
+ },
+ "actions": {
+  "addExpense": "افزودن هزینه",
+  "editExpense": "ویرایش هزینه",
+  "viewExpense": "نمایش جزئیات",
+  "cancel": "لغو",
+  "edit": "ویرایش",
+  "save": "ذخیره",
+  "confirm": "تائید",
+  "deleteExpense": "حذف ",
+  "revertExpense": "بازگشت ",
+  "deleteDescription": "آیا از حذف این مورد اطمینان دارید؟",
+  "revertDescription": "آیا از بازگشت این هزینه اطمینان دارید؟"
+ },
+ "placeholders": {
+  "selectItem": "انتخاب عنوان",
+  "room": "اتاق",
+  "selectRoom": "انتخاب اتاق"
+ }
+}
