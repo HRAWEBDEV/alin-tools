@@ -66,6 +66,7 @@ function getRackStatesStyles() {
   | 'occupiedCustomer'
   | 'waitForCheckin'
   | 'transferGuest'
+  | 'noShow'
   | (typeof roomStates)[number]
   | 'none',
   {
@@ -224,6 +225,14 @@ function getRackStatesStyles() {
     border: 'border-orange-600 dark:border-orange-300',
     backgoundColor: 'bg-orange-100 dark:bg-orange-900',
     text: 'text-orange-600 dark:text-orange-300',
+   },
+  ],
+  [
+   'noShow',
+   {
+    border: 'border-gray-700 dark:border-gray-300',
+    backgoundColor: 'bg-gray-300/80 dark:bg-gray-600/80!',
+    text: 'text-gray-700 dark:text-gray-300',
    },
   ],
   [

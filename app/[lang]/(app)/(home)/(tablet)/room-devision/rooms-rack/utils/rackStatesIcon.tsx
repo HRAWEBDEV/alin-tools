@@ -20,6 +20,7 @@ import {
  FaIdBadge,
  FaRegArrowAltCircleRight,
  FaLock,
+ FaUserCircle,
 } from 'react-icons/fa';
 import { WaitForCheckin } from '../../components/icons/WaitForCheckin';
 import { WaitForBook } from '../../components/icons/WaitForBook';
@@ -32,7 +33,7 @@ import { LightLuggage } from '../../components/icons/LightLuggage';
 import { NoShow } from '../../components/icons/NoShow';
 
 function getRoomStateIcon(
- type: RoomState,
+ type: RoomState | 'noShow',
  style: SVGProps<SVGSVGElement> = {},
 ) {
  switch (type) {
@@ -50,6 +51,8 @@ function getRoomStateIcon(
    return <Reserve {...style} />;
   case 'waitForCheckin':
    return <WaitForCheckin {...style} />;
+  case 'noShow':
+   return <FaUserCircle {...style} />;
  }
 }
 
