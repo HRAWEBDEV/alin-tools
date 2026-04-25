@@ -42,6 +42,19 @@ export default function RackHelp({ dic }: { dic: RoomsRackDictionary }) {
        )}
       </Fragment>
      ))}
+     <li className='flex gap-2 items-center'>
+      <div dir='ltr' className={`${getRackStatesStyles().get('noShow')?.text}`}>
+       {getRoomStateIcon('noShow', {
+        fontSize: '1.9rem',
+        width: '1.9rem',
+        height: '1.9rem',
+        fill: 'currentColor',
+       })}
+      </div>
+      <div className='text-neutral-700 dark:text-neutral-400 text-sm'>
+       {dic.help['noShowRoom']}
+      </div>
+     </li>
     </ul>
    </div>
    <div>

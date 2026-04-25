@@ -4,6 +4,12 @@
 - fix drawer and dialog overflow
 - add reload button if necessary - for real time data
 
+# 2.0.5
+### features
+- add rack no show
+
+### bug fixes
+
 # 2.0.1
 ### features
 - add new orer compact view (hra-done)

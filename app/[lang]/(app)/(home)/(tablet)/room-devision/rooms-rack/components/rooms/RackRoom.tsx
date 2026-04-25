@@ -44,7 +44,7 @@ export default function RackRoom({
  const {
   rack: { onShowRackMenu, rackView },
  } = useRackConfigContext();
- const { locale } = useBaseConfig();
+ const { locale, localeInfo } = useBaseConfig();
  const roomStateKind = RoomStateKind[
   room.roomStateKindID
  ] as (typeof roomStateKinds)[number];
@@ -59,7 +59,7 @@ export default function RackRoom({
 
  const roomStateInOutStyle = getRackStatesStyles().get(roomStateInOut);
 
- const roomState: RoomState = (() => {
+ const roomState: RoomState | 'noShow' = (() => {
   if (room.roomStateTypeID == RoomStateType.waitForCheckin) {
    return 'waitForCheckin';
   }
@@ -74,6 +74,9 @@ export default function RackRoom({
    room.reserveID
   ) {
    return 'reservedRoom';
+  }
+  if (room.noShow) {
+   return 'noShow';
   }
   if (
    room.roomStateGroupID == RoomStateGroup.occupiedRoom &&
@@ -108,6 +111,7 @@ export default function RackRoom({
    data-layout-minimal={activeMinimalView}
    layout
    className='grid group'
+   dir={localeInfo.contentDirection}
   >
    <div className='relative min-h-40 group-data-[layout-compact=true]:min-h-auto group-data-[layout-minimal=true]:min-h-auto'>
     <Button
@@ -161,7 +165,9 @@ export default function RackRoom({
          })}
         </div>
        ) : (
-        <span className='text-base font-medium'>{dic.help[roomState]}</span>
+        <span className='text-base font-medium'>
+         {roomState === 'noShow' ? dic.help['noShowRoom'] : dic.help[roomState]}
+        </span>
        )}
       </div>
       <div className='text-start ps-2 grow group-data-[layout-minimal=true]:ps-0 group-data-[layout-minimal=true]:pb-1 group-data-[layout-compact=true]:pb-1'>
@@ -179,11 +185,19 @@ export default function RackRoom({
          >
           {room.roomTypeAliasName}
          </p>
-         <p
-          className={`text-sm text-neutral-600 dark:text-neutral-400 text-wrap ${mock ? '' : 'text-ellipsis overflow-hidden text-start whitespace-nowrap'}`}
-         >
-          {room.guestName} {room.guestLastName}
-         </p>
+         {room.noShow && !room.guestName && !room.guestLastName ? (
+          <p
+           className={`text-sm text-neutral-600 dark:text-neutral-400 text-wrap ${mock ? '' : 'text-ellipsis overflow-hidden text-start whitespace-nowrap'}`}
+          >
+           {dic.info.noShowRoom}
+          </p>
+         ) : (
+          <p
+           className={`text-sm text-neutral-600 dark:text-neutral-400 text-wrap ${mock ? '' : 'text-ellipsis overflow-hidden text-start whitespace-nowrap'}`}
+          >
+           {room.guestName} {room.guestLastName}
+          </p>
+         )}
          {mock && (
           <>
            {!!room.customerName && (

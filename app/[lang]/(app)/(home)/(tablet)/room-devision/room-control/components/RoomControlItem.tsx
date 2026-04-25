@@ -10,6 +10,7 @@ import {
 } from '../../rooms-rack/utils/room-control/roomControlStepDetails';
 import { getRoomControlStyles } from '../../rooms-rack/utils/room-control/roomControl';
 import { type RoomControlDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/room-control/dictionary';
+import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 
 export default function RoomControlItem({
  roomControl,
@@ -21,13 +22,14 @@ export default function RoomControlItem({
  editRoomControlProps: EditRoomControlProps;
  roomControlDic: RoomControlDictionary;
 }) {
+ const { localeInfo } = useBaseConfig();
  const roomStepDetails = getRoomControlStepDetails(roomControl);
  const activeStep = getActiveStep(roomStepDetails);
  const stepStyles = getRoomControlStyles(
   activeStep === 'alert' ? 'alert' : 'checkNow',
  );
  return (
-  <motion.div layout className='grid group'>
+  <motion.div layout className='grid group' dir={localeInfo.contentDirection}>
    <div className='relative min-h-auto'>
     <Button
      variant={'outline'}
