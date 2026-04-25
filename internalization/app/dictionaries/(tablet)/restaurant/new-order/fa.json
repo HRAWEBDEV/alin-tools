@@ -132,7 +132,9 @@
   "customerName": "نام مشتری"
  },
  "findRooms": {
+  "result": "نتایج",
   "search": "جستجو",
+  "allGuests": "همه مهمانان",
   "roomNo": "شماره اتاق",
   "guestName": "نام مهمان",
   "reload": "بروزرسانی مجدد",

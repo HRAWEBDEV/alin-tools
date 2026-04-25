@@ -466,15 +466,23 @@ function getRooms({
  signal,
  offset,
  limit,
+ searchText,
+ showAllGuests,
 }: {
  signal: AbortSignal;
  offset: number;
  limit: number;
+ searchText?: string;
+ showAllGuests: boolean;
 }) {
  const searchParams = new URLSearchParams([
   ['limit', limit.toString()],
   ['offset', offset.toString()],
+  ['showAllGuests', String(showAllGuests)],
  ]);
+ if (searchText) {
+  searchParams.set('searchText', searchText);
+ }
  return axios.get<PagedData<Room[]>>(
   `/Restaurant/SaleInvoice/GetRegisterGuests?${searchParams.toString()}`,
   {
