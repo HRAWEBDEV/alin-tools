@@ -181,60 +181,62 @@ export default function RoomControlFilters({
         isError={roomControlHistoryIsError}
        />
       </div>
-      <DialogFooter className='p-4 py-2 border-t border-input'>
-       <div className='flex gap-1 items-center'>
-        <div className='me-4'>
-         <span>{roomControlDic.houseControl.result}: </span>
-         <span>{roomControlHistory?.length}</span>
+      {!!visibleHistoryItems.length && (
+       <DialogFooter className='p-4 py-2 border-t border-input'>
+        <div className='flex gap-1 items-center'>
+         <div className='me-4'>
+          <span>{roomControlDic.houseControl.result}: </span>
+          <span>{roomControlHistory?.length}</span>
+         </div>
+         <Button
+          variant='outline'
+          size='icon'
+          onClick={goToFirstPage}
+          disabled={isFirstPage}
+         >
+          <MdKeyboardDoubleArrowRight className='size-4 ltr:rotate-180' />
+         </Button>
+         <Button
+          variant='outline'
+          className='gap-1'
+          onClick={goToPrevPage}
+          disabled={isFirstPage}
+         >
+          <MdKeyboardArrowRight />
+          <span className='hidden lg:inline'>
+           {roomControlDic.houseControl.prev}
+          </span>
+         </Button>
+         <div
+          style={{
+           direction: 'ltr',
+          }}
+          className='text-base'
+         >
+          <span>{paging.offset + 1}</span> / <span>{pages}</span>
+         </div>
+         <Button
+          variant='outline'
+          className='gap-1 ltr:rotate-180'
+          disabled={isLastPage}
+          onClick={goToNextPage}
+         >
+          <span className='hidden lg:inline'>
+           {roomControlDic.houseControl.next}
+          </span>
+          <MdKeyboardArrowLeft className='ltr:rotate-180' />
+         </Button>
+         <Button
+          variant='outline'
+          size='icon'
+          onClick={goToLastPage}
+          disabled={isLastPage}
+         >
+          <MdKeyboardDoubleArrowLeft className='size-4 ltr:rotate-180' />
+         </Button>
         </div>
-        <Button
-         variant='outline'
-         size='icon'
-         onClick={goToFirstPage}
-         disabled={isFirstPage}
-        >
-         <MdKeyboardDoubleArrowRight className='size-4 ltr:rotate-180' />
-        </Button>
-        <Button
-         variant='outline'
-         className='gap-1'
-         onClick={goToPrevPage}
-         disabled={isFirstPage}
-        >
-         <MdKeyboardArrowRight />
-         <span className='hidden lg:inline'>
-          {roomControlDic.houseControl.prev}
-         </span>
-        </Button>
-        <div
-         style={{
-          direction: 'ltr',
-         }}
-         className='text-base'
-        >
-         <span>{paging.offset + 1}</span> / <span>{pages}</span>
-        </div>
-        <Button
-         variant='outline'
-         className='gap-1 ltr:rotate-180'
-         disabled={isLastPage}
-         onClick={goToNextPage}
-        >
-         <span className='hidden lg:inline'>
-          {roomControlDic.houseControl.next}
-         </span>
-         <MdKeyboardArrowLeft className='ltr:rotate-180' />
-        </Button>
-        <Button
-         variant='outline'
-         size='icon'
-         onClick={goToLastPage}
-         disabled={isLastPage}
-        >
-         <MdKeyboardDoubleArrowLeft className='size-4 ltr:rotate-180' />
-        </Button>
-       </div>
-      </DialogFooter>
+       </DialogFooter>
+      )}
      </DialogContent>
     </Dialog>
     <div>

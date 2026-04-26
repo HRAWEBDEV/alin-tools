@@ -8,8 +8,10 @@
 ### features
 - add rack no show (hra-done)
 - add new order find room - search text and all guests filters (hra-done)
+- hide room control history paging when no items found (hra-done)
 
 ### bug fixes
+- fix room note and guest message white space (hra-done)
 
 # 2.0.1
 ### features
