@@ -136,7 +136,7 @@ export default function RackRoom({
       </div>
       {room.msgFlag && (
        <div className='absolute top-1 end-0'>
-        <IoNotifications className='size-5 text-destructive' />
+        <IoNotifications className='size-7 text-destructive' />
        </div>
       )}
       {!isFutureRack && !activeMinimalView && (
