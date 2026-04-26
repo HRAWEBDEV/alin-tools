@@ -31,10 +31,10 @@ export default function GuestCard({
     </div>
     <div className='mb-1 flex items-center justify-between gap-2 whitespace-nowrap'>
      <span className='text-sm text-neutral-600 dark:text-neutral-400'>
-      {dic.fields.reserveNo}:{' '}
+      {dic.fields.registerNo}:{' '}
      </span>
      <span className='text-base mb-1 font-medium text-neutral-700 dark:text-neutral-400 text-start grow overflow-hidden text-ellipsis'>
-      {guest.reserveNo}
+      {guest.folioNo}
      </span>
     </div>
     {/* <div>
@@ -57,6 +57,11 @@ export default function GuestCard({
    <div className='mb-1 flex items-center justify-between gap-2'>
     <p className='text-sm flex-1 mb-1 truncate text-start text-primary'>
      {guest.roomTypeName}
+    </p>
+   </div>
+   <div className='mb-1 flex items-center justify-between gap-2'>
+    <p className='text-sm flex-1 mb-1 truncate text-start'>
+     {guest.customerName}
     </p>
    </div>
    <div className='flex flex-wrap gap-1 justify-between'>

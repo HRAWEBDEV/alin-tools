@@ -18,6 +18,8 @@
   "roomNo": "شماره اتاق",
   "roomType": "نوع اتاق",
   "reserveNo": "شماره رزرو",
+  "registerNo": "شماره پذیرش",
+  "nationalCode": "کدملی",
   "fullName": "نام و نام خانوادگی",
   "guestCount": "تعداد مهمان",
   "extraBed": "خواب اضافه",

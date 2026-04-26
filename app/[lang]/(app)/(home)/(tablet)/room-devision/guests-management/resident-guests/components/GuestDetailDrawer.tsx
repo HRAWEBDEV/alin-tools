@@ -32,11 +32,13 @@ export default function GuestDetailDrawer({
       <div className='grid sm:grid-cols-2 md:grid-cols-3 grid-cols-1 gap-4 p-4 text-sm w-[min(60rem,100%)] mx-auto'>
        <DetailRow label={dic.fields.roomNo} value={guest.roomNo} />
        <DetailRow label={dic.fields.reserveNo} value={guest.reserveNo} />
+       <DetailRow label={dic.fields.registerNo} value={guest.folioNo} />
        <DetailRow
         label={dic.fields.fullName}
         value={guest.guestFullName}
         valueClassName='text-primary'
        />
+       <DetailRow label={dic.fields.gender} value={guest.genderName} />
        <DetailRow label={dic.fields.fatherName} value={guest.fatherName} />
        <DetailRow label={dic.fields.floor} value={guest.floorNo} />
        <DetailRow label={dic.fields.roomType} value={guest.roomTypeName} />
@@ -69,18 +71,23 @@ export default function GuestDetailDrawer({
        <DetailRow
         label={dic.fields.phoneNumber}
         value={guest.mobileNo}
-        valueClassName='text-primary hover:border border border-b border-transparent hover:border-b hover:border-b-primary'
+        valueClassName='font-medium hover:border border border-b border-transparent hover:border-b hover:border-b-primary'
+        isLink
+       />
+       <DetailRow
+        label={dic.fields.nationalCode}
+        value={guest.nationalCode}
+        valueClassName='font-medium hover:border border border-b border-transparent hover:border-b hover:border-b-primary'
         isLink
        />
        <DetailRow
         label={dic.fields.email}
         value={guest.email}
-        valueClassName='text-primary hover:border border border-b border-transparent hover:border-b hover:border-b-primary'
+        valueClassName='hover:border border border-b border-transparent hover:border-b hover:border-b-primary'
         isLink
        ></DetailRow>
        <DetailRow label={dic.fields.homeCity} value={guest.sourceCityName} />
        <DetailRow label={dic.fields.address} value={guest.homeAddress} />
-       <DetailRow label={dic.fields.gender} value={guest.genderName} />
       </div>
      )}
     </div>
