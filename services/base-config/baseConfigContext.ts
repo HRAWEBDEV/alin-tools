@@ -15,7 +15,7 @@ interface BaseConfig {
  setLocale: (newLocale: Locale) => unknown;
 }
 
-const appVersion = '2.0.1';
+const appVersion = '2.0.5';
 const appBirthDate = new Date(2025, 1, 1);
 const baseConfigContext = createContext<BaseConfig | null>(null);
 
