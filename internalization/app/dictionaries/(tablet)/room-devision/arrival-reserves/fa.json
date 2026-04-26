@@ -39,7 +39,7 @@
   "roomType": "نوع اتاق",
   "pax": "پاکس",
   "arrivalDate": "تاریخ ورود",
-  "departureDate": "تاریخ عزیمت",
+  "departureDate": "تاریخ خروج",
   "phoneNumber": "شماره تلفن",
   "email": "ایمیل"
  }

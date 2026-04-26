@@ -45,11 +45,6 @@ export default function ArrivalReserveDrawer({
 
       <DetailRow label={dic.fields.roomType} value={reserve.roomTypeName} />
       <DetailRow
-       label={dic.fields.pax}
-       value={`${reserve.adultCount} ${dic.info.adults} / ${reserve.childCount} ${dic.info.children}`}
-      />
-
-      <DetailRow
        label={dic.fields.arrivalDate}
        value={
         reserve.arrivalDateTimeOffset
