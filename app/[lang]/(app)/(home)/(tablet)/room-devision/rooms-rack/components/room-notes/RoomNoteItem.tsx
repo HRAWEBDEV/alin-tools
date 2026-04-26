@@ -115,7 +115,7 @@ export default function RoomNoteItem({
      </div>
     </div>
     <div className='flex items-center justify-between gap-2 whitespace-nowrap'>
-     <p className='text-base mb-1 font-medium text-neutral-700 dark:text-neutral-400 text-start'>
+     <p className='text-base mb-1 font-medium text-neutral-700 dark:text-neutral-400 text-start whitespace-normal'>
       {note.message}
      </p>
     </div>

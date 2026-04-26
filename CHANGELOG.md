@@ -7,7 +7,7 @@
 # 2.0.5
 ### features
 - add rack no show (hra-done)
-- add new order find room - search text and all guests filters
+- add new order find room - search text and all guests filters (hra-done)
 
 ### bug fixes
 
