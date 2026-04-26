@@ -39,7 +39,7 @@ export default function GuestsManagementTabs({
         {dic.tabs.arrivalReserves}
        </Link>
       </TabsTrigger>
-      <TabsTrigger value='guests-expenses' asChild>
+      {/*<TabsTrigger value='guests-expenses' asChild>
        <Link
         href={`${redirectPath}?tab=guests-expenses`}
         className='font-medium'
@@ -47,7 +47,7 @@ export default function GuestsManagementTabs({
        >
         {dic.tabs.guestsExpenses}
        </Link>
-      </TabsTrigger>
+      </TabsTrigger>*/}
      </TabsList>
     </Tabs>
    </div>
