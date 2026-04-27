@@ -27,8 +27,6 @@ type PricesRate = {
 };
 
 type GetRevenuesProps = {
- limit: number;
- offset: number;
  date?: string;
  itemID?: number;
  roomID?: number;
@@ -105,16 +103,11 @@ const deleteRevenueApi = '/HouseKeeping/ChargingTheCost/RemoveRevenue';
 
 const getRevenues = ({
  signal,
- limit,
- offset,
  date,
  itemID,
  roomID,
 }: { signal: AbortSignal } & GetRevenuesProps) => {
- const searchParams = new URLSearchParams([
-  ['limit', limit.toString()],
-  ['offset', offset.toString()],
- ]);
+ const searchParams = new URLSearchParams([]);
  if (date) {
   searchParams.set('date', date);
  }
@@ -125,10 +118,9 @@ const getRevenues = ({
   searchParams.set('roomID', roomID.toString());
  }
 
- return axios.get<PagedData<Revenue[]>>(
-  `${getRevenuesApi}?${searchParams.toString()}`,
-  { signal },
- );
+ return axios.get<Revenue[]>(`${getRevenuesApi}?${searchParams.toString()}`, {
+  signal,
+ });
 };
 
 const getItems = ({

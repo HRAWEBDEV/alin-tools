@@ -119,49 +119,28 @@ export default function GuestsExpensesWrapper({ dic }: Props) {
   },
  });
 
- const {
-  data,
-  isLoading,
-  isFetching,
-  isError,
-  fetchNextPage,
-  hasNextPage,
-  isFetchingNextPage,
- } = useInfiniteQuery({
+ const { data, isLoading, isFetching, isError } = useQuery({
   queryKey: [getRevenuesApi, debouncedFilters],
-  queryFn: async ({ pageParam = 1, signal }) => {
+  queryFn: async ({ signal }) => {
    const effectiveDate = debouncedFilters.date
     ? new Date(debouncedFilters.date).toISOString()
     : new Date().toISOString();
    const response = await getRevenues({
     signal,
-    limit: PAGE_SIZE,
-    offset: pageParam,
     date: effectiveDate,
     roomID: debouncedFilters.room ? Number(debouncedFilters.room) : undefined,
     itemID: debouncedFilters.item ? Number(debouncedFilters.item) : undefined,
    });
    return response.data;
   },
-  getNextPageParam: (lastPage, allPages) => {
-   const loadedCount = allPages.reduce(
-    (acc, page) => acc + (page.rows?.length || 0),
-    0,
-   );
-   if (loadedCount < (lastPage.rowsCount || 0)) {
-    return allPages.length + 1;
-   }
-   return undefined;
-  },
-  initialPageParam: 1,
  });
 
  const expenses = useMemo(() => {
-  return data?.pages.flatMap((page) => page.rows || []) || [];
+  return data?.flatMap((page) => page || []) || [];
  }, [data]);
 
  const totalResults = useMemo(() => {
-  return data?.pages?.[0]?.rowsCount ?? undefined;
+  return data?.length ?? undefined;
  }, [data]);
 
  const handleRefresh = () => {
@@ -188,9 +167,6 @@ export default function GuestsExpensesWrapper({ dic }: Props) {
      isLoading={isLoading}
      isFetching={isFetching}
      isError={isError}
-     hasMore={!!hasNextPage}
-     isFetchingNextPage={isFetchingNextPage}
-     onLoadMore={() => fetchNextPage()}
      onSelectExpense={(expense: Revenue) => {
       setSelectedExpense(expense);
       setDrawerMode('view');

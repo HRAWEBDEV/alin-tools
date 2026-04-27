@@ -14,10 +14,7 @@ type Props = {
  expenses: Revenue[];
  isLoading: boolean;
  isFetching: boolean;
- isFetchingNextPage: boolean;
  isError: boolean;
- hasMore: boolean;
- onLoadMore: () => void;
  onSelectExpense: (expense: Revenue) => void;
 };
 
@@ -26,10 +23,7 @@ export default function GuestsExpensesList({
  expenses,
  isLoading,
  isFetching,
- isFetchingNextPage,
  isError,
- hasMore,
- onLoadMore,
  onSelectExpense,
 }: Props) {
  if (!isLoading && !expenses.length) return <NoItemFound />;
@@ -37,7 +31,7 @@ export default function GuestsExpensesList({
 
  return (
   <div>
-   {isFetching && !isFetchingNextPage && <LinearLoading />}
+   {isFetching && <LinearLoading />}
 
    <div className='grid gap-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 pb-4'>
     {expenses.map((expense) => (
@@ -49,23 +43,6 @@ export default function GuestsExpensesList({
      />
     ))}
    </div>
-
-   {hasMore && (
-    <div className='flex items-center justify-center mt-4'>
-     <Button
-      variant='outline'
-      size='lg'
-      disabled={isFetchingNextPage}
-      onClick={onLoadMore}
-      className='text-primary border-primary font-medium'
-     >
-      {isFetchingNextPage && (
-       <Spinner className='text-primary mr-2 rtl:ml-2 rtl:mr-0' />
-      )}
-      {dic.info?.loadMore}
-     </Button>
-    </div>
-   )}
   </div>
  );
 }
