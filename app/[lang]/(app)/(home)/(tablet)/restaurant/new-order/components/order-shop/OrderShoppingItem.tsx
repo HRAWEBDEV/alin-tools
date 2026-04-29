@@ -128,6 +128,7 @@ export default function OrderShoppingItem({
            price: orderItem.price,
            serviceRate: orderItem.service,
            taxRate: orderItem.taxRate,
+           noDiscount: orderItem.noDiscount,
           },
          });
         }}

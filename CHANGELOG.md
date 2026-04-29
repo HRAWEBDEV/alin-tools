@@ -4,6 +4,10 @@
 - fix drawer and dialog overflow
 - add reload button if necessary - for real time data
 
+# 2.1.0
+### features
+- add new order item no discount (hra-done) 
+
 # 2.0.5
 ### features
 - add rack no show (hra-done)
