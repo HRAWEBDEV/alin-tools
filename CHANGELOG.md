@@ -7,6 +7,7 @@
 # 2.1.0
 ### features
 - add new order item no discount (hra-done) 
+- add app user accessibility
 
 # 2.0.5
 ### features
