@@ -10,14 +10,26 @@ type OrderItemActions =
     type: 'addOrderItems';
     payload: Pick<
      ItemProgram,
-     'itemCode' | 'itemName' | 'itemID' | 'serviceRate' | 'taxRate' | 'price'
+     | 'itemCode'
+     | 'itemName'
+     | 'itemID'
+     | 'serviceRate'
+     | 'taxRate'
+     | 'price'
+     | 'noDiscount'
     >[];
    }
  | {
     type: 'splitShopOrderItem';
     payload: Pick<
      ItemProgram,
-     'itemCode' | 'itemName' | 'itemID' | 'serviceRate' | 'taxRate' | 'price'
+     | 'itemCode'
+     | 'itemName'
+     | 'itemID'
+     | 'serviceRate'
+     | 'taxRate'
+     | 'price'
+     | 'noDiscount'
     > &
      Pick<OrderItem, 'id'>;
    }
@@ -135,6 +147,7 @@ function orderItemsReducer(state: OrderItem[], action: OrderItemActions) {
       tax: 0,
       taxRate: item.taxRate,
       tagComment: null,
+      noDiscount: item.noDiscount,
      };
      return newOrder;
     }),
@@ -163,6 +176,7 @@ function orderItemsReducer(state: OrderItem[], action: OrderItemActions) {
     tax: 0,
     taxRate: action.payload.taxRate,
     tagComment: null,
+    noDiscount: action.payload.noDiscount,
    });
    return [...stateCopy];
   // remove

@@ -80,6 +80,7 @@ interface ItemProgram {
  itemName: string | null;
  isContract?: boolean;
  imageURL?: string | null;
+ noDiscount: boolean;
 }
 
 interface Order {
@@ -150,6 +151,7 @@ interface OrderItem {
  taxRate: number;
  tagID: number | null;
  tagComment: string | null;
+ noDiscount: boolean;
 }
 
 type SaveOrderPackage = {

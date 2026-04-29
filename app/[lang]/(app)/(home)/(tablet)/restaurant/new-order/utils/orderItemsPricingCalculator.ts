@@ -10,11 +10,15 @@ const orderItemsPricingCalculator = ({
  hasService: boolean;
  amount: number;
 }) => {
+ let discountRate = 0;
+ if (!orderItem.noDiscount) {
+  if (defaultDiscountRate || defaultDiscountRate === 0) {
+   discountRate = defaultDiscountRate;
+  } else if (orderItem.discountRate) {
+   discountRate = orderItem.discountRate;
+  }
+ }
  const serviceRate = orderItem.serviceRate;
- const discountRate =
-  defaultDiscountRate || defaultDiscountRate === 0
-   ? defaultDiscountRate
-   : orderItem.discountRate || 0;
  const sValue = orderItem.price * amount;
  const discount = Number(((sValue * discountRate) / 100).toFixed(4));
  const service = Number((((sValue - discount) * serviceRate) / 100).toFixed(4));
