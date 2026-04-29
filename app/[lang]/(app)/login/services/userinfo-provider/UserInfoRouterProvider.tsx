@@ -10,7 +10,7 @@ import Loading from '@/components/Loading';
 import { convertToUserInfoStore } from './userInfoApiActions';
 import { useLogout } from '../../hooks/useLogout';
 import { useShareDictionary } from '../../../services/share-dictionary/shareDictionaryContext';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { useIsHomePage } from '../../hooks/useIsHomePage';
 import {
@@ -35,7 +35,11 @@ import {
 } from './utils/userInfoRouterStorageManager';
 import { useQueryClient } from '@tanstack/react-query';
 import { handleScroll } from './utils/handleScroll';
-import { roomDevisionRoute, restaurantRotue } from './utils/departmentRoutes';
+import {
+ roomDevisionRoute,
+ restaurantRotue,
+ isTheRightPath,
+} from './utils/departmentRoutes';
 
 export default function UserInfoRouterProvider({
  children,
@@ -49,6 +53,7 @@ export default function UserInfoRouterProvider({
  const isHomePage = useIsHomePage();
  const { locale } = useBaseConfig();
  const router = useRouter();
+ const pathname = usePathname();
  const programsRef = useRef<HTMLDivElement | null>(null);
  const {
   shareDictionary: {
@@ -114,9 +119,14 @@ export default function UserInfoRouterProvider({
    setUserInfoRouterStorage(val);
    if (isHomePage) {
     redirectUser(val.departmentID);
+    return;
+   }
+   if (!isTheRightPath(location.pathname, val.departmentID)) {
+    logout();
    }
   }
- }, [isHomePage, redirectUser]);
+ }, [isHomePage, redirectUser, logout]);
+
  useEffect(() => {
   if (programsRef.current && selectedDialogDepartmentID) {
    setTimeout(() => {

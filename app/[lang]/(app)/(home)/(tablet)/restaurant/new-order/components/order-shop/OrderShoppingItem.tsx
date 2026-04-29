@@ -40,6 +40,7 @@ export default function OrderShoppingItem({
  const {
   itemsInfo: { data: itemsPrograms },
   order: { orderItemsDispatch },
+  accessibility,
  } = useOrderBaseConfigContext();
  const { format } = useCurrencyFormatter();
  const targetItemProgram = itemsPrograms?.find(
@@ -61,6 +62,7 @@ export default function OrderShoppingItem({
       variant='ghost'
       size='icon-lg'
       className='text-red-600/50 dark:text-red-400/50 rounded-full'
+      disabled={!accessibility}
       onClick={() => {
        orderItemsDispatch({
         type: 'removeShopOrderItems',
@@ -87,6 +89,7 @@ export default function OrderShoppingItem({
         <Button
          variant='outline'
          className='text-sm p-0.5 py-1 gap-1 text-red-700 border-red-700 dark:text-red-400 dark:border-red-400 h-auto'
+         disabled={!accessibility}
          onClick={() => {
           orderItemsDispatch({
            type: 'removeTag',
@@ -106,6 +109,7 @@ export default function OrderShoppingItem({
           <Button
            variant='outline'
            className='text-sm p-0.5 py-1 gap-1 text-primary border-primary h-auto'
+           disabled={!accessibility}
           >
            <GoPlus />
            {dic.orderInfo.addTag}
@@ -117,6 +121,7 @@ export default function OrderShoppingItem({
        <Button
         variant='outline'
         className='text-sm p-0.5 py-1 gap-1 text-destructive border-destructive h-auto'
+        disabled={!accessibility}
         onClick={() => {
          orderItemsDispatch({
           type: 'splitShopOrderItem',
@@ -171,6 +176,7 @@ export default function OrderShoppingItem({
         variant='ghost'
         size='icon-lg'
         className='text-orange-600 dark:text-orange-400 rounded-full'
+        disabled={!accessibility}
         onClick={() => {
          if (orderItem.amount <= 1) {
           setShowRemoveOrderItemConfirm(true);
@@ -194,6 +200,7 @@ export default function OrderShoppingItem({
         variant='ghost'
         size='icon-lg'
         className='text-secondary rounded-full'
+        disabled={!accessibility}
         onClick={() => {
          orderItemsDispatch({
           type: 'increaseShopOrderItemAmount',

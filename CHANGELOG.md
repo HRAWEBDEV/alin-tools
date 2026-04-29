@@ -7,8 +7,9 @@
 # 2.1.0
 ### features
 - add new order item no discount (hra-done) 
-- add app user accessibility
+- add app user accessibility (hra-done)
 - add apptype request header field (hra-done)
+- add check the right path (hra-done)
 
 # 2.0.5
 ### features

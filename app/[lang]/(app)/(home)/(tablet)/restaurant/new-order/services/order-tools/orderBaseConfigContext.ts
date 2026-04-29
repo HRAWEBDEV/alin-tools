@@ -12,6 +12,7 @@ import { type OrderItemActions } from '../../utils/orderItemsActionsReducer';
 import { type ShopCalculatorResult } from '../../utils/shopCalculator';
 import { type Combo } from '../../../utils/apiTypes';
 import { type OrderInvoicePayment } from '../../schemas/orderInvoicePaymentSchema';
+import { type UserAccessibilityContext } from '@/app/[lang]/(app)/login/services/user-accessibility/userAccessibilityContext';
 import { AxiosError } from 'axios';
 
 type ConfirmOrderType = (typeof confirmOrderTypes)[number];
@@ -105,6 +106,7 @@ interface OrderBaseConfig {
   isError: boolean;
   isSuccess: boolean;
  };
+ accessibility: UserAccessibilityContext['userAccessibility']['restaurant']['newOrder'];
 }
 
 const orderBaseConfigContext = createContext<OrderBaseConfig | null>(null);

@@ -1,6 +1,7 @@
 import AxiosCredentials from './services/axios-credentials/AxiosCredentials';
 import AxiosApiPackage from './services/axios-api-package/AxiosApiPackage';
 import UserInfoRouterProvider from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterProvider';
+import UserAccessibilityProvider from '../../login/services/user-accessibility/UserAccessibilityProvider';
 import LoginInterceptor from '../../login/services/LoginInterceptor';
 
 export default function TableLayout({
@@ -14,7 +15,7 @@ export default function TableLayout({
    <UserInfoRouterProvider>
     <AxiosApiPackage />
     <LoginInterceptor />
-    {children}
+    <UserAccessibilityProvider>{children}</UserAccessibilityProvider>
    </UserInfoRouterProvider>
   </>
  );
