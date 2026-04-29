@@ -8,6 +8,7 @@ export default function AxiosBaseConfig() {
  useEffect(() => {
   const reqID = axios.interceptors.request.use((config) => {
    config.headers.set('languageID', locale);
+   config.headers.set('apptype', 'tablet');
    return config;
   });
   return () => {
