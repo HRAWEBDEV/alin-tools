@@ -84,6 +84,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
    onChangePersonPhoneNumber,
   },
   systemPricing,
+  access,
  } = useOrderBaseConfigContext();
  const [showDateTimePicker, setShowDateTimePicker] = useState(false);
  const [showTimePicker, setShowTimePicker] = useState(false);
@@ -121,7 +122,13 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
       render={({ field }) => (
        <Field>
         <FieldLabel htmlFor='orderDate'>{dic.orderInfo.orderDate}</FieldLabel>
-        <Popover open={showDateTimePicker} onOpenChange={setShowDateTimePicker}>
+        <Popover
+         open={showDateTimePicker}
+         onOpenChange={(newValue) => {
+          if (!access['order']['edit']) return;
+          setShowDateTimePicker(newValue);
+         }}
+        >
          <PopoverTrigger asChild>
           <Button
            variant='outline'
@@ -133,7 +140,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            <span>
             {field.value ? field.value.toLocaleDateString(locale) : ''}
            </span>
-           <ChevronDownIcon />
+           {access['order']['edit'] && <ChevronDownIcon />}
           </Button>
          </PopoverTrigger>
          <PopoverContent className='w-auto overflow-hidden p-0' align='start'>
@@ -165,7 +172,13 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
       render={({ field }) => (
        <Field>
         <FieldLabel htmlFor='orderTime'>{dic.orderInfo.orderTime}</FieldLabel>
-        <Popover open={showTimePicker} onOpenChange={setShowTimePicker}>
+        <Popover
+         open={showTimePicker}
+         onOpenChange={(newValue) => {
+          if (!access['order']['edit']) return;
+          setShowTimePicker(newValue);
+         }}
+        >
          <PopoverTrigger asChild>
           <Button
            variant='outline'
@@ -183,7 +196,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
                })
              : ''}
            </span>
-           <ChevronDownIcon />
+           {access['order']['edit'] && <ChevronDownIcon />}
           </Button>
          </PopoverTrigger>
          <PopoverContent
@@ -258,7 +271,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        name='saleTime'
        render={({ field }) => (
         <Drawer>
-         <DrawerTrigger asChild>
+         <DrawerTrigger asChild disabled={!access['order']['edit']}>
           <Button
            id='saleTime'
            variant='outline'
@@ -322,7 +335,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        name='saleType'
        render={({ field }) => (
         <Drawer>
-         <DrawerTrigger asChild>
+         <DrawerTrigger asChild disabled={!access['order']['edit']}>
           <Button
            id='saleType'
            variant='outline'
@@ -396,6 +409,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
         render={({ field: { value, onChange, ...other } }) => (
          <InputGroup data-invalid={!!errors.phoneNumber}>
           <NumericFormat
+           disabled={!access['order']['edit']}
            {...other}
            onBlur={() => {
             const [firstName, lastName] = getValues(['firstName', 'lastName']);
@@ -417,7 +431,11 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            <Button
             variant='outline'
             className='rounded-ss-none rounded-es-none border-secondary text-secondary'
-            disabled={isPendingFindPerson || !phoneNumberValue}
+            disabled={
+             isPendingFindPerson ||
+             !phoneNumberValue ||
+             !access['order']['edit']
+            }
             onClick={() => {
              const phoneNumber = getValues('phoneNumber');
              if (!phoneNumber) return;
@@ -456,6 +474,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           readOnly={!!personID}
           id='firstName'
           {...register('firstName')}
+          disabled={!access['order']['edit']}
          />
         </InputGroup>
         {!!errors?.firstName && (
@@ -473,6 +492,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           readOnly={!!personID}
           id='lastName'
           {...register('lastName')}
+          disabled={!access['order']['edit']}
          />
         </InputGroup>
         {!!errors?.lastName && (
@@ -506,8 +526,9 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            role='combobox'
            className='justify-between h-11'
            disabled={
-            saleTypeValue?.key !== SaleTypes.delivery &&
-            saleTypeValue?.key !== SaleTypes.contract
+            (saleTypeValue?.key !== SaleTypes.delivery &&
+             saleTypeValue?.key !== SaleTypes.contract) ||
+            !access['order']['edit']
            }
            onBlur={field.onBlur}
            ref={field.ref}
@@ -516,7 +537,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
             {field.value?.value || ''}
            </span>
            <div className='flex gap-2 items-center'>
-            {subscriberValue && (
+            {subscriberValue && access['order']['edit'] && (
              <Button
               variant={'ghost'}
               size={'icon-lg'}
@@ -555,7 +576,9 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            variant='outline'
            role='combobox'
            className='justify-between h-11'
-           disabled={saleTypeValue?.key === SaleTypes.room}
+           disabled={
+            saleTypeValue?.key === SaleTypes.room || !access['order']['edit']
+           }
            onBlur={field.onBlur}
            ref={field.ref}
           >
@@ -563,7 +586,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
             {field.value?.key || ''}
            </span>
            <div className='flex gap-2 items-center'>
-            {customerValue && (
+            {customerValue && access['order']['edit'] && (
              <Button
               variant={'ghost'}
               size={'icon-lg'}
@@ -600,7 +623,9 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            variant='outline'
            role='combobox'
            className='justify-between h-11'
-           disabled={saleTypeValue?.key !== SaleTypes.room}
+           disabled={
+            saleTypeValue?.key !== SaleTypes.room || !access['order']['edit']
+           }
            onBlur={field.onBlur}
            ref={field.ref}
           >
@@ -608,7 +633,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
             {field.value?.value || ''}
            </span>
            <div className='flex gap-2 items-center'>
-            {!!roomValue && (
+            {!!roomValue && access['order']['edit'] && (
              <Button
               variant={'ghost'}
               size={'icon-lg'}
@@ -647,7 +672,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            variant='outline'
            role='combobox'
            className='justify-between h-11'
-           disabled={freeTablesLoading}
+           disabled={freeTablesLoading || !access['order']['edit']}
            onBlur={field.onBlur}
            ref={field.ref}
           >
@@ -721,6 +746,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
          <NumericFormat
           id='persons'
           {...other}
+          disabled={!access['order']['edit']}
           value={value}
           onValueChange={({ floatValue }) => onChange(floatValue || '')}
           customInput={InputGroupInput}
@@ -753,7 +779,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        name='contract'
        render={({ field }) => (
         <Drawer>
-         <DrawerTrigger asChild>
+         <DrawerTrigger asChild disabled={!access['order']['edit']}>
           <Button
            id='contract'
            variant='outline'
@@ -766,7 +792,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
             {field.value?.value || ''}
            </span>
            <div className='flex gap-2 items-center'>
-            {!!contractValue && (
+            {!!contractValue && access['order']['edit'] && (
              <Button
               variant={'ghost'}
               size={'icon-lg'}
@@ -813,13 +839,13 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            className='justify-between h-11'
            onBlur={field.onBlur}
            ref={field.ref}
-           disabled={!customerValue}
+           disabled={!customerValue || !access['order']['edit']}
           >
            <span className='grow text-ellipsis overflow-hidden text-start'>
             {field.value?.value || ''}
            </span>
            <div className='flex gap-2 items-center'>
-            {!!field.value && (
+            {!!field.value && !access['order']['edit'] && (
              <Button
               variant={'ghost'}
               size={'icon-lg'}
@@ -857,6 +883,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           placeholder={orderInfoName}
           value={value}
           {...other}
+          disabled={!access['order']['edit']}
          />
         </InputGroup>
        )}
@@ -873,6 +900,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
         <InputGroup className='h-11'>
          <NumericFormat
           {...other}
+          disabled={!access['order']['edit']}
           value={value}
           onValueChange={({ floatValue }) =>
            onChange(floatValue || floatValue === 0 ? floatValue : '')
@@ -892,6 +920,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            <Button
             variant='outline'
             type='button'
+            disabled={!access['order']['edit']}
             onClick={(e) => {
              e.stopPropagation();
              systemPricing.handleSetSystemPricing();
@@ -915,6 +944,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
         <InputGroup className='h-11'>
          <NumericFormat
           {...other}
+          disabled={!access['order']['edit']}
           value={value}
           onValueChange={({ floatValue }) => onChange(floatValue || '')}
           id='bonNo'
@@ -940,12 +970,13 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            variant='outline'
            role='combobox'
            className='justify-between h-11 overflow-hidden'
+           disabled={!access['order']['edit']}
           >
            <span className='grow text-ellipsis overflow-hidden text-start'>
             {field.value?.value || ''}
            </span>
            <div className='flex gap-2 items-center'>
-            {waiterValue && (
+            {waiterValue && access['order']['edit'] && (
              <Button
               variant={'ghost'}
               size={'icon-lg'}
@@ -976,6 +1007,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
          <NumericFormat
           id='rounding'
           {...other}
+          disabled={!access['order']['edit']}
           value={value}
           onValueChange={({ floatValue }) => onChange(floatValue || '')}
           customInput={InputGroupInput}
@@ -996,6 +1028,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
          <NumericFormat
           id='delivery'
           {...other}
+          disabled={!access['order']['edit']}
           value={value}
           onValueChange={({ floatValue }) => onChange(floatValue || '')}
           customInput={InputGroupInput}
@@ -1016,6 +1049,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
          <NumericFormat
           id='employeeTip'
           {...other}
+          disabled={!access['order']['edit']}
           value={value}
           onValueChange={({ value }) => onChange(Number(value) || '')}
           customInput={InputGroupInput}
@@ -1028,7 +1062,11 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
      <Field className='col-span-full'>
       <FieldLabel htmlFor='description'>{dic.orderInfo.description}</FieldLabel>
       <InputGroup>
-       <InputGroupTextarea id='description' {...register('comment')} />
+       <InputGroupTextarea
+        id='description'
+        disabled={!access['order']['edit']}
+        {...register('comment')}
+       />
       </InputGroup>
      </Field>
      <div className='col-span-full flex flex-wrap gap-8 mt-4 ps-4'>
@@ -1043,7 +1081,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           checked={!tableValue ? false : field.value}
           defaultChecked={field.value}
           onBlur={field.onBlur}
-          disabled={!tableValue}
+          disabled={!tableValue || !access['order']['edit']}
           onCheckedChange={(e) => {
            field.onChange(e);
           }}
@@ -1065,6 +1103,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           checked={field.value}
           defaultChecked={field.value}
           onBlur={field.onBlur}
+          disabled={!access['order']['edit']}
           onCheckedChange={(e) => {
            field.onChange(e);
           }}
@@ -1082,7 +1121,9 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
         <div className='flex gap-4 items-center'>
          <Checkbox
           id='deliveryAgent'
-          disabled={saleTypeValue?.key !== SaleTypes.delivery}
+          disabled={
+           saleTypeValue?.key !== SaleTypes.delivery || !access['order']['edit']
+          }
           className='scale-200'
           checked={field.value}
           defaultChecked={field.value}
@@ -1104,6 +1145,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
         <div className='flex gap-4 items-center'>
          <Checkbox
           id='sendToKitchen'
+          disabled={!access['order']['edit']}
           className='scale-200'
           checked={field.value}
           defaultChecked={field.value}

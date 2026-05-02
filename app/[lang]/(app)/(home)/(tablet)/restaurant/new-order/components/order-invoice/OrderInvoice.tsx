@@ -215,7 +215,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
    }
    return (
     <Button
-     disabled={isFetching || shopLoading}
+     disabled={isFetching || shopLoading || !access['order']['payment']}
      type='submit'
      className='h-11'
      onClick={(e) => {
@@ -238,7 +238,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
   if (paymentTypeValue?.key === '2') {
    return (
     <Button
-     disabled={isFetching || shopLoading}
+     disabled={isFetching || shopLoading || !access['order']['payment']}
      type='submit'
      className='h-11'
      onClick={handleConfirmPayment}
@@ -251,7 +251,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
   return (
    <Button
     type='submit'
-    disabled={isFetching || shopLoading}
+    disabled={isFetching || shopLoading || !access['order']['payment']}
     className='h-11'
     onClick={handleConfirmPayment}
    >
@@ -336,26 +336,30 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
     </div>
     <div className='grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6 border-b border-input pb-6'>
      <Button
-      disabled={shopLoading}
+      disabled={shopLoading || !access['order']['close']}
       variant='destructive'
       size='lg'
       className='font-medium disabled:bg-neutral-400 disabled:dark:bg-neutral-600'
-      onClick={onCloseOrder}
+      onClick={() => {
+       onCloseOrder();
+      }}
      >
       {shopLoading && <Spinner />}
       {dic.invoice.closeOrder}
      </Button>
      <Button
-      disabled={shopLoading}
+      disabled={shopLoading || !access['order']['edit']}
       size='lg'
       className='font-medium'
-      onClick={onSaveOrder}
+      onClick={() => {
+       onSaveOrder();
+      }}
      >
       {shopLoading && <Spinner />}
       {dic.invoice.confirmOrder}
      </Button>
      <Button
-      disabled={shopLoading || !isPayable}
+      disabled={shopLoading || !isPayable || !access['order']['payment']}
       variant='secondary'
       size='lg'
       className='font-medium col-span-2 sm:col-span-1'
@@ -367,7 +371,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
      </Button>
     </div>
     {/* payment setup */}
-    {isPayable && (
+    {isPayable && access['order']['payment'] && (
      <div
       className='rounded-md border border-input p-4'
       ref={invoicePaymentRef}
