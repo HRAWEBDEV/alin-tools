@@ -89,7 +89,7 @@ export default function NewOrderHeader({ dic }: { dic: NewOrderDictionary }) {
        orderCount={0}
        tableCapacity={0}
        tableStateType={TableStateTypes.regularCustomer}
-       fromNewOrder
+       canAddNewOrder={false}
       />
      </div>
     </DrawerContent>

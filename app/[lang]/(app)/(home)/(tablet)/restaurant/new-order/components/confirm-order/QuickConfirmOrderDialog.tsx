@@ -58,9 +58,12 @@ export default function QuickOrderInfoDialog({
    isPendingFindPerson,
    onChangePersonPhoneNumber,
   },
+  access,
  } = useOrderBaseConfigContext();
  const [open, setIsOpen] = useState(
-  !orderID && orderConfigSetup.orderConfig.getInitInfo === 'active',
+  !orderID &&
+   orderConfigSetup.orderConfig.getInitInfo === 'active' &&
+   access['order']['edit'],
  );
  const {
   register,

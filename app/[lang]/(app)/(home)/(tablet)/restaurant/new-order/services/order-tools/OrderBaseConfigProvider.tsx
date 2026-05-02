@@ -457,6 +457,7 @@ export default function OrderBaseConfigProvider({
  }, [systemPricing, orderInfoForm]);
 
  function onCloseOrder() {
+  if (!userAccessibility['restaurant']['order']['close']) return;
   setShowCloseOrder(true);
  }
  const { mutate: handleConfirmCloseOrder, isPending: isPendingCloseOrder } =
@@ -545,7 +546,6 @@ export default function OrderBaseConfigProvider({
   newOrderData: SaveOrderPackage['order'];
   orderInfoData: OrderInfo;
  } | null> {
-  if (!userAccessibility['restaurant']['newOrder']) return null;
   let newOrderData: SaveOrderPackage['order'] | null = null;
   let orderInfoData: OrderInfo | null = null;
   if (!initData) return null;
@@ -637,7 +637,11 @@ export default function OrderBaseConfigProvider({
   };
  }
 
+ const orderEditAccess = !!userOrder?.id
+  ? userAccessibility['restaurant']['order']['edit']
+  : userAccessibility['restaurant']['order']['add'];
  async function handleSaveOrder() {
+  if (!orderEditAccess) return;
   const orderInfoRes = await validateOrderInfo();
   if (!orderInfoRes) return;
   confirmSaveOrder({
@@ -701,6 +705,7 @@ export default function OrderBaseConfigProvider({
   });
 
  async function handlePayment(paymentData: OrderInvoicePayment) {
+  if (!userAccessibility['restaurant']['order']['payment']) return;
   const newOrderRes = await validateOrderInfo();
   if (!newOrderRes) return;
   handleConfirmPayment({
@@ -948,7 +953,13 @@ export default function OrderBaseConfigProvider({
    isLoading: systemPricingIsLoading,
    handleSetSystemPricing: onSetSystemPricing,
   },
-  accessibility: userAccessibility['restaurant']['newOrder'],
+  access: {
+   order: {
+    ...userAccessibility['restaurant']['order'],
+    edit: orderEditAccess,
+   },
+   shopItem: userAccessibility['restaurant']['orderItem'],
+  },
  };
 
  useEffect(() => {

@@ -123,7 +123,11 @@ export default function SalonTable({
       )}
      {table.tableStateTypeID !== TableStateTypes.outOfService &&
       (tableUtils.multiOrder || !table.orderID) && (
-       <DropdownMenuItem className='text-sky-700 dark:text-sky-400' asChild>
+       <DropdownMenuItem
+        className='text-sky-700 dark:text-sky-400'
+        asChild
+        disabled={!tableUtils.access.order.add}
+       >
         <Link href={newOrderRedirectLink}>
          <IoMdAddCircle className='size-8 text-inherit' />
          <DropdownMenuLabel className='text-base'>
@@ -158,6 +162,7 @@ export default function SalonTable({
           tableUtils.changeShowTransferTable(true);
           setIsOpen(false);
          }}
+         disabled={!tableUtils.access.table.change}
         >
          <TbTransfer className='size-8 text-inherit' />
          <DropdownMenuLabel className='text-base'>
@@ -169,6 +174,7 @@ export default function SalonTable({
          onClick={() => {
           tableUtils.changeShowMergeTable(true);
          }}
+         disabled={!tableUtils.access.table.merge}
         >
          <AiOutlineMergeCells className='size-8 text-inherit' />
          <DropdownMenuLabel className='text-base'>
@@ -375,6 +381,7 @@ export default function SalonTable({
         orderCount={table.orderCount}
         tableCapacity={table.tableCapacity}
         tableStateType={table.tableStateTypeID}
+        canAddNewOrder={tableUtils.access.order.add}
        />
       </div>
      </DrawerContent>

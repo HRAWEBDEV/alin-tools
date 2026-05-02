@@ -2,6 +2,7 @@ import { type InitiData, type Table } from '../salonsApiActions';
 import { use, createContext } from 'react';
 import { OutOfContext } from '@/utils/OutOfContext';
 import { type TablesReport } from '../../utils/getTablesReport';
+import { UserAccessibility } from '@/app/[lang]/(app)/login/services/user-accessibility/services/userAccessibilityApiActions';
 
 interface TablesFilters {
  showOccupiedTables: boolean;
@@ -54,6 +55,7 @@ interface SalonBaseConfig {
   changeShowMergeTableConfirm: (open?: boolean) => unknown;
   onCloseOrder: () => unknown;
  };
+ access: Pick<UserAccessibility['restaurant'], 'order' | 'table'>;
 }
 
 const salonBaseConfigContext = createContext<SalonBaseConfig | null>(null);

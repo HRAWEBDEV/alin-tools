@@ -40,7 +40,7 @@ export default function ConfirmOrderModal({
   closeConfirmOrder,
   shopInfoLoading,
   order: { orderItems, orderItemsDispatch, onCloseOrder, onSaveOrder },
-  accessibility,
+  access,
  } = useOrderBaseConfigContext();
  return (
   <Dialog
@@ -150,10 +150,12 @@ export default function ConfirmOrderModal({
       <div className='flex gap-2 sm:gap-4'>
        {confirmOrderActiveType === 'shoppingCard' && !!orderItems.length && (
         <Button
-         disabled={shopInfoLoading || !accessibility}
+         disabled={shopInfoLoading || !access['order']['close']}
          variant='destructive'
          className='h-11 max-sm:p-3 max-sm:grow'
-         onClick={onCloseOrder}
+         onClick={() => {
+          onCloseOrder();
+         }}
         >
          {shopInfoLoading && <Spinner />}
          {dic.invoice.closeOrder}
@@ -163,7 +165,7 @@ export default function ConfirmOrderModal({
         <Button
          variant='secondary'
          className='h-11 max-sm:p-3 max-sm:grow'
-         disabled={shopInfoLoading || !accessibility}
+         disabled={shopInfoLoading || !access['order']['edit']}
          onClick={() => {
           onSaveOrder();
          }}

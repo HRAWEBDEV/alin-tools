@@ -34,6 +34,7 @@ import { toast } from 'sonner';
 import { Spinner } from '@/components/ui/spinner';
 import { closeOrder } from '../../../new-order/services/newOrderApiActions';
 import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
+import { useUserAccessibilityContext } from '@/app/[lang]/(app)/login/services/user-accessibility/userAccessibilityContext';
 
 export default function SalonBaseConfigProvider({
  children,
@@ -42,6 +43,7 @@ export default function SalonBaseConfigProvider({
  dic: SalonsDictionary;
  children: ReactNode;
 }) {
+ const { userAccessibility } = useUserAccessibilityContext();
  const { userInfoRouterStorage } = useUserInfoRouter();
  const { scrollToTop } = useMainWrapperSetupContext();
  const [tableFilters, setTableFilters] = useState<TablesFilters>({
@@ -196,6 +198,7 @@ export default function SalonBaseConfigProvider({
  }
  const changeShowMergeTable = useCallback(
   (open?: boolean) => {
+   if (!userAccessibility['restaurant']['table']['merge']) return;
    scrollToTop();
    if (open) {
     setTableFilters({
@@ -229,6 +232,7 @@ export default function SalonBaseConfigProvider({
  //
  const changeShowTransferTable = useCallback(
   (open?: boolean) => {
+   if (!userAccessibility['restaurant']['table']['change']) return;
    scrollToTop();
    if (open) {
     setTableFilters({
@@ -248,7 +252,7 @@ export default function SalonBaseConfigProvider({
    setTrasnferToTable(null);
    setShowTransferTable((pre) => (open === undefined ? !pre : open));
   },
-  [scrollToTop],
+  [scrollToTop, userAccessibility],
  );
  // table report
  const tablesReport = getTablesReport(tables);
@@ -361,6 +365,10 @@ export default function SalonBaseConfigProvider({
    changeShowTransferTableConfirm,
    changeShowMergeTable,
    changeShowMergeTableConfirm,
+  },
+  access: {
+   order: userAccessibility['restaurant']['order'],
+   table: userAccessibility['restaurant']['table'],
   },
  };
 

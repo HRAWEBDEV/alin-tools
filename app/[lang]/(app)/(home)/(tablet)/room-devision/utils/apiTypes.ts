@@ -1,3 +1,9 @@
+interface CrudAccess {
+ add: boolean;
+ edit: boolean;
+ delete: boolean;
+}
+
 interface Combo {
  key: string;
  value: string;
@@ -12,4 +18,4 @@ type PagedData<T> = {
  rows: T;
 } & Paging;
 
-export type { Combo, PagedData, Paging };
+export type { Combo, PagedData, Paging, CrudAccess };

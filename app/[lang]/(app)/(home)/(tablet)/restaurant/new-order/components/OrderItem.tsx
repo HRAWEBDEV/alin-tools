@@ -32,7 +32,7 @@ export default function OrderItem({
    order: { isLoading: userOrderIsLoading },
    orderItems: { isLoading: userOrderItemsLoading },
   },
-  accessibility,
+  access,
  } = useOrderBaseConfigContext();
  const { format } = useCurrencyFormatter();
  const targetOrderItem = orderItems.filter(
@@ -41,6 +41,17 @@ export default function OrderItem({
  const itemAmount = targetOrderItem.reduce((acc, cur) => {
   return acc + cur.amount;
  }, 0);
+
+ let shopItemEditAccess = access['shopItem']['add'];
+ let shopItemDeleteAccess = access['shopItem']['add'];
+
+ if (!!targetOrderItem.length) {
+  if (targetOrderItem[0].id > 0) {
+   shopItemEditAccess = access['shopItem']['edit'];
+   shopItemDeleteAccess = access['shopItem']['delete'];
+  }
+ }
+
  return (
   <motion.div
    layout
@@ -97,8 +108,13 @@ export default function OrderItem({
         variant='ghost'
         size='icon-lg'
         className='text-primary rounded-full'
-        disabled={userOrderItemsLoading || userOrderIsLoading || !accessibility}
+        disabled={
+         userOrderItemsLoading ||
+         userOrderIsLoading ||
+         !access['shopItem']['add']
+        }
         onClick={() => {
+         if (!access['shopItem']['add']) return;
          orderItemsDispatch({
           type: 'addOrderItems',
           payload: [itemProgram],
@@ -119,8 +135,10 @@ export default function OrderItem({
         variant='ghost'
         size='icon-lg'
         className='text-rose-600 dark:text-rose-400 rounded-full'
-        disabled={!accessibility}
+        disabled={itemAmount <= 1 ? !shopItemDeleteAccess : !shopItemEditAccess}
         onClick={() => {
+         if (itemAmount <= 1 ? !shopItemDeleteAccess : !shopItemEditAccess)
+          return;
          orderItemsDispatch({
           type: 'decreaseOrderItemsAmount',
           payload: {
@@ -139,8 +157,9 @@ export default function OrderItem({
         variant='ghost'
         size='icon-lg'
         className='text-secondary rounded-full'
-        disabled={!accessibility}
+        disabled={!shopItemEditAccess}
         onClick={() => {
+         if (!shopItemEditAccess) return;
          orderItemsDispatch({
           type: 'increaseOrderItemsAmount',
           payload: {

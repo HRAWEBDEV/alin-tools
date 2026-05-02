@@ -12,8 +12,8 @@ import { type OrderItemActions } from '../../utils/orderItemsActionsReducer';
 import { type ShopCalculatorResult } from '../../utils/shopCalculator';
 import { type Combo } from '../../../utils/apiTypes';
 import { type OrderInvoicePayment } from '../../schemas/orderInvoicePaymentSchema';
-import { type UserAccessibilityContext } from '@/app/[lang]/(app)/login/services/user-accessibility/userAccessibilityContext';
 import { AxiosError } from 'axios';
+import { type UserAccessibility } from '@/app/[lang]/(app)/login/services/user-accessibility/services/userAccessibilityApiActions';
 
 type ConfirmOrderType = (typeof confirmOrderTypes)[number];
 const confirmOrderTypes = ['orderInfo', 'shoppingCard', 'invoice'] as const;
@@ -106,7 +106,10 @@ interface OrderBaseConfig {
   isError: boolean;
   isSuccess: boolean;
  };
- accessibility: UserAccessibilityContext['userAccessibility']['restaurant']['newOrder'];
+ access: {
+  order: Omit<UserAccessibility['restaurant']['order'], 'add'>;
+  shopItem: UserAccessibility['restaurant']['orderItem'];
+ };
 }
 
 const orderBaseConfigContext = createContext<OrderBaseConfig | null>(null);
