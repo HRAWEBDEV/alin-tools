@@ -11,7 +11,7 @@
 - add res salons user accessibility (hra-done)
 - add apptype request header field (hra-done)
 - add check the right path (hra-done)
-- add rack notif center
+- add rack notif center (hra-done)
 
 # 2.0.5
 ### features
