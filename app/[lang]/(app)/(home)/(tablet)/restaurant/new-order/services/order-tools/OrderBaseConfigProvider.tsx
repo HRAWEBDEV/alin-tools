@@ -545,7 +545,6 @@ export default function OrderBaseConfigProvider({
   newOrderData: SaveOrderPackage['order'];
   orderInfoData: OrderInfo;
  } | null> {
-  if (!userAccessibility['restaurant']['newOrder']) return null;
   let newOrderData: SaveOrderPackage['order'] | null = null;
   let orderInfoData: OrderInfo | null = null;
   if (!initData) return null;
@@ -948,7 +947,6 @@ export default function OrderBaseConfigProvider({
    isLoading: systemPricingIsLoading,
    handleSetSystemPricing: onSetSystemPricing,
   },
-  accessibility: userAccessibility['restaurant']['newOrder'],
  };
 
  useEffect(() => {

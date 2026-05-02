@@ -32,7 +32,6 @@ export default function OrderItem({
    order: { isLoading: userOrderIsLoading },
    orderItems: { isLoading: userOrderItemsLoading },
   },
-  accessibility,
  } = useOrderBaseConfigContext();
  const { format } = useCurrencyFormatter();
  const targetOrderItem = orderItems.filter(
@@ -97,7 +96,7 @@ export default function OrderItem({
         variant='ghost'
         size='icon-lg'
         className='text-primary rounded-full'
-        disabled={userOrderItemsLoading || userOrderIsLoading || !accessibility}
+        disabled={userOrderItemsLoading || userOrderIsLoading}
         onClick={() => {
          orderItemsDispatch({
           type: 'addOrderItems',
@@ -119,7 +118,6 @@ export default function OrderItem({
         variant='ghost'
         size='icon-lg'
         className='text-rose-600 dark:text-rose-400 rounded-full'
-        disabled={!accessibility}
         onClick={() => {
          orderItemsDispatch({
           type: 'decreaseOrderItemsAmount',
@@ -139,7 +137,6 @@ export default function OrderItem({
         variant='ghost'
         size='icon-lg'
         className='text-secondary rounded-full'
-        disabled={!accessibility}
         onClick={() => {
          orderItemsDispatch({
           type: 'increaseOrderItemsAmount',

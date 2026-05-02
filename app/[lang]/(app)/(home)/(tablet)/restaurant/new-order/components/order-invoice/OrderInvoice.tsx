@@ -71,7 +71,6 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
   shopLoading,
   confirmOrderActiveType,
   order: { orderItems, onCloseOrder, onSaveOrder },
-  accessibility,
   invoice: {
    isPayable,
    orderTotals: {
@@ -200,9 +199,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
    if (!walletInfoSuccess || !walletInfoData) {
     return (
      <Button
-      disabled={
-       isFetching || shopLoading || getWalletInfoIsPending || !accessibility
-      }
+      disabled={isFetching || shopLoading || getWalletInfoIsPending}
       type='submit'
       className='h-11'
       onClick={(e) => {
@@ -217,7 +214,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
    }
    return (
     <Button
-     disabled={isFetching || shopLoading || !accessibility}
+     disabled={isFetching || shopLoading}
      type='submit'
      className='h-11'
      onClick={(e) => {
@@ -240,7 +237,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
   if (paymentTypeValue?.key === '2') {
    return (
     <Button
-     disabled={isFetching || shopLoading || !accessibility}
+     disabled={isFetching || shopLoading}
      type='submit'
      className='h-11'
      onClick={handleConfirmPayment}
@@ -253,7 +250,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
   return (
    <Button
     type='submit'
-    disabled={isFetching || shopLoading || !accessibility}
+    disabled={isFetching || shopLoading}
     className='h-11'
     onClick={handleConfirmPayment}
    >
@@ -338,7 +335,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
     </div>
     <div className='grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6 border-b border-input pb-6'>
      <Button
-      disabled={shopLoading || !accessibility}
+      disabled={shopLoading}
       variant='destructive'
       size='lg'
       className='font-medium disabled:bg-neutral-400 disabled:dark:bg-neutral-600'
@@ -348,7 +345,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
       {dic.invoice.closeOrder}
      </Button>
      <Button
-      disabled={shopLoading || !accessibility}
+      disabled={shopLoading}
       size='lg'
       className='font-medium'
       onClick={onSaveOrder}

@@ -1,6 +1,6 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import { useState, ReactNode, useEffect, useRef, RefObject } from 'react';
+import { useState, ReactNode, useEffect, useRef } from 'react';
 import { RiEyeLine } from 'react-icons/ri';
 import { isHoverable } from '../utils/isHoverableDevice';
 import { cx } from 'class-variance-authority';
