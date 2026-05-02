@@ -185,9 +185,7 @@ export default function OrderShoppingItem({
         variant='ghost'
         size='icon-lg'
         className='text-orange-600 dark:text-orange-400 rounded-full'
-        disabled={
-         orderItem.amount === 1 ? !shopItemDeleteAccess : !shopItemEditAccess
-        }
+        disabled={!shopItemDeleteAccess}
         onClick={() => {
          if (orderItem.amount <= 1) {
           setShowRemoveOrderItemConfirm(true);
