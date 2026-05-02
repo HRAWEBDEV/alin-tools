@@ -17,8 +17,11 @@ import {
 } from '../../utils/rackStatesIcon';
 import { Fragment } from 'react';
 import { IoNotifications } from 'react-icons/io5';
+import { useRackConfigContext } from '../../services/rooms-rack-config/roomsRackConfigContext';
+import { getNoteTypeStyles } from '../../utils/room-notes/getNoteTypeStyles';
 
 export default function RackHelp({ dic }: { dic: RoomsRackDictionary }) {
+ const { noteTypes } = useRackConfigContext();
  return (
   <div>
    <div>
@@ -125,14 +128,18 @@ export default function RackHelp({ dic }: { dic: RoomsRackDictionary }) {
        </div>
       </li>
      ))}
-     <li className='flex gap-2 items-center'>
-      <div dir='ltr'>
-       <IoNotifications className='size-8 text-destructive' />
-      </div>
-      <div className='text-neutral-700 dark:text-neutral-400 text-sm'>
-       {dic.help.hasNotes}
-      </div>
-     </li>
+     {noteTypes.data?.messageTypes.map((item) => (
+      <li key={item.key} className='flex gap-2 items-center'>
+       <div dir='ltr'>
+        <IoNotifications
+         className={`size-8 ${getNoteTypeStyles(Number(item.key)).text}`}
+        />
+       </div>
+       <div className='text-neutral-700 dark:text-neutral-400 text-sm'>
+        {item.value}
+       </div>
+      </li>
+     ))}
     </ul>
    </div>
   </div>
