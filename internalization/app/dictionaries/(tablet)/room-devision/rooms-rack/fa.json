@@ -122,7 +122,8 @@
   "tabs": {
    "filters": "فیلترها",
    "info": "آمار",
-   "help": "راهنما"
+   "help": "راهنما",
+   "rackNotificationsBoard": "اعلانات"
   }
  },
  "pagination": {

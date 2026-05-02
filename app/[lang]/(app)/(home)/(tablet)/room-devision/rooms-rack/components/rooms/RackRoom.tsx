@@ -28,6 +28,7 @@ import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { IoNotifications } from 'react-icons/io5';
 import RoomControlIndicator from '../room-control/RoomControlIndicator';
 import { type RoomControlDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/room-control/dictionary';
+import { getNoteTypeStyles } from '../../utils/room-notes/getNoteTypeStyles';
 
 export default function RackRoom({
  dic,
@@ -105,6 +106,8 @@ export default function RackRoom({
  const activeCompactView = rackView === 'compact' && !mock;
  const activeMinimalView = rackView === 'minimal' && !mock;
 
+ const noteTypeStyles = getNoteTypeStyles(room.messageTypeID);
+
  return (
   <motion.div
    data-layout-compact={activeCompactView}
@@ -135,8 +138,8 @@ export default function RackRoom({
        )}
       </div>
       {room.msgFlag && (
-       <div className='absolute top-1 end-0'>
-        <IoNotifications className='size-6 text-destructive' />
+       <div className='absolute top-0 end-0 bg-background rounded-full w-8 h-8 grid place-content-center'>
+        <IoNotifications className={`size-7 ${noteTypeStyles.text}`} />
        </div>
       )}
       {!isFutureRack && !activeMinimalView && (

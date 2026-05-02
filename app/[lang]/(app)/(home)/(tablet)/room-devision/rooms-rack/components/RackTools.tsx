@@ -61,6 +61,11 @@ export default function RackTools({ dic }: { dic: RoomsRackDictionary }) {
    <div className='py-2 sticky top-0 z-2 bg-background'>
     <div className='flex gap-2 items-center mb-2'>
      <div className='flex gap-2'>
+      <Button size='lg'>
+       <span className='hidden md:inline'>
+        {dic.sidebar.tabs.rackNotificationsBoard}
+       </span>
+      </Button>
       <Button
        variant='outline'
        size='lg'

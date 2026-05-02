@@ -22,7 +22,7 @@ export default function RoomControlIndicator({
  }
  const stepPassedName = HouseControlStates[stepPassed] as RoomControlStep;
  return (
-  <div className='p-0.5 bg-neutral-200/60 dark:bg-neutral-800/60 flex gap-0.5 rounded-3xl px-1 items-center'>
+  <div className='p-0.5 bg-background flex gap-0.5 rounded-3xl px-1 items-center'>
    {Array.from({ length: 4 }, (_, i) => i + 1).map((i) => {
     const step = HouseControlStates[i] as RoomControlStep;
     const stepStyles = getRoomControlStyles(step);
