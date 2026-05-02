@@ -116,13 +116,15 @@
   "website": "وب‌سایت",
   "webService": "وب سرویس",
   "other": "سایر",
-  "newReserve": "رزرو جدید"
+  "newReserve": "رزرو جدید",
+  "message": "یادداشت"
  },
  "sidebar": {
   "tabs": {
    "filters": "فیلترها",
    "info": "آمار",
-   "help": "راهنما"
+   "help": "راهنما",
+   "rackNotificationsBoard": "اعلانات"
   }
  },
  "pagination": {
@@ -195,5 +197,8 @@
   "deactive": "غیرفعال",
   "deleted": "حذف شده",
   "disabledBy": "غیر فعال کننده"
+ },
+ "rackNotificationsBoard": {
+  "title": "اعلانات"
  }
 }

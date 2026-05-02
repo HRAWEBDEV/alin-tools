@@ -13,6 +13,7 @@ import {
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { rackShowTypes } from '../utils/rackShowTypes';
 import { getRackOccupancyStyles } from '../utils/rackOcuppancyStyles';
+import { FaArchive } from 'react-icons/fa';
 
 const smallBadgeKeys: (keyof RackFiltersSchema)[] = ['floor', 'building'];
 const largeBadgeKeys: (keyof RackFiltersSchema)[] = [
@@ -45,7 +46,7 @@ export default function RackTools({ dic }: { dic: RoomsRackDictionary }) {
 
  const {
   initData,
-  sidebar: { toggle, isOpen, isPin },
+  sidebar: { toggle, isOpen, isPin, toggleRackReport },
   rack: { lastUpdate, rowsCount },
   rackInfo,
  } = useRackConfigContext();
@@ -61,6 +62,12 @@ export default function RackTools({ dic }: { dic: RoomsRackDictionary }) {
    <div className='py-2 sticky top-0 z-2 bg-background'>
     <div className='flex gap-2 items-center mb-2'>
      <div className='flex gap-2'>
+      <Button size='lg' onClick={() => toggleRackReport()}>
+       <FaArchive className='size-4' />
+       <span className='hidden md:inline'>
+        {dic.sidebar.tabs.rackNotificationsBoard}
+       </span>
+      </Button>
       <Button
        variant='outline'
        size='lg'

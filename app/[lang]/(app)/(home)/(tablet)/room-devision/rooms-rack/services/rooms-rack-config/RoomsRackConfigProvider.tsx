@@ -64,6 +64,12 @@ import {
  defaultRackSetting,
  saveRackSetting,
 } from '../../utils/rackSettingLocalStorage';
+import { getRackReport } from '../../utils/rackReport';
+import {
+ rackRoomNotesBaseKey,
+ getInitialData as getNotesInitData,
+} from '../room-notes/RackRoomNotesApiActions';
+import RackNotifsBoard from '../../components/rack-notifs-board/RackNotifsBoard';
 
 export function RoomsRackConfigProvider({
  children,
@@ -84,6 +90,7 @@ export function RoomsRackConfigProvider({
   }
   return defaultRackSetting;
  });
+ const [showRackBoard, setShowRackBoard] = useState(false);
  const [rackIsError, setRackIsError] = useState(false);
  const [rackIsSuccess, setRackIsSuccess] = useState(false);
  const [rackIsLoading, setRackIsLoading] = useState(false);
@@ -359,6 +366,10 @@ export function RoomsRackConfigProvider({
   setSidebarIsOpen(sidebarState);
  }
 
+ function handleToggleRackReport(open?: boolean) {
+  setShowRackBoard((pre) => (open === undefined ? !pre : open));
+ }
+
  function handleToggleSidebarPin(pin?: boolean) {
   const newPin = pin === undefined ? !sidebarIsPin : pin;
   setSidebarIsPin(newPin);
@@ -383,7 +394,15 @@ export function RoomsRackConfigProvider({
    return res.data;
   },
  });
-
+ // note types
+ const { data: noteTypes, isLoading: noteTypesIsLoading } = useQuery({
+  staleTime: 'static',
+  queryKey: [rackRoomNotesBaseKey, 'initial-data'],
+  async queryFn({ signal }) {
+   const res = await getNotesInitData({ signal });
+   return res.data;
+  },
+ });
  // rack info
  const {
   data: rackInfo,
@@ -640,6 +659,8 @@ export function RoomsRackConfigProvider({
   rackFiltersUseForm.setValue('date', rackFutureDateStart);
  }, [showTypeValue, rackFiltersUseForm, dateFns, rackFutureDateStart]);
 
+ const rackReport = getRackReport(rackRooms);
+
  const ctx: RackConfig = {
   sidebar: {
    isPin: sidebarIsPin,
@@ -648,6 +669,7 @@ export function RoomsRackConfigProvider({
    toggle: handleToggleSidebar,
    togglePin: handleToggleSidebarPin,
    onChangeActivePanel: handleChangeActivePanel,
+   toggleRackReport: handleToggleRackReport,
   },
   initData: {
    data: initData,
@@ -684,6 +706,11 @@ export function RoomsRackConfigProvider({
    rackDetails,
    rackFutureDateStart,
   },
+  noteTypes: {
+   data: noteTypes,
+   isLoading: noteTypesIsLoading,
+  },
+  rackReport,
  };
 
  return (
@@ -719,6 +746,7 @@ export function RoomsRackConfigProvider({
      room={targetSelectedRoom}
     />
    </FormProvider>
+   <RackNotifsBoard open={showRackBoard} setOpen={setShowRackBoard} dic={dic} />
   </rackConfigContext.Provider>
  );
 }

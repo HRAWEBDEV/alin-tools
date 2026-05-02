@@ -71,6 +71,8 @@ type Rack = {
  floorNo: number;
  folioID: number;
  folioNo: number;
+ messageTypeID: number | null;
+ messageTypeName: string | null;
  buildingNo: number;
  sortNo: number;
  roomTypeName: string | null;

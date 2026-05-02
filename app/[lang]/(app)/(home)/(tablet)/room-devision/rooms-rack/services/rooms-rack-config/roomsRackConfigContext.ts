@@ -1,4 +1,4 @@
-import { use, createContext, Dispatch, SetStateAction } from 'react';
+import { use, createContext } from 'react';
 import { OutOfContext } from '@/utils/OutOfContext';
 import {
  type InitialData,
@@ -8,6 +8,8 @@ import {
 } from '../roomsRackApiActions';
 import { type Paging } from '../../../utils/apiTypes';
 import { type RackLayout } from '../../utils/rackLayout';
+import { getRackReport } from '../../utils/rackReport';
+import { type InitialData as NoteTypes } from '../room-notes/RackRoomNotesApiActions';
 
 type RackView = RackLayout;
 type ChangePageActions = 'next' | 'prev' | 'last' | 'first';
@@ -20,6 +22,7 @@ type RackConfig = {
   onChangeActivePanel: (panel: SidebarPanel) => unknown;
   toggle: (open?: boolean, activePanel?: SidebarPanel) => unknown;
   togglePin: (pin?: boolean) => unknown;
+  toggleRackReport: (open?: boolean) => unknown;
  };
  initData: {
   data?: InitialData;
@@ -32,6 +35,10 @@ type RackConfig = {
   isLoading: boolean;
   isSuccess: boolean;
   isError: boolean;
+ };
+ noteTypes: {
+  data?: NoteTypes;
+  isLoading: boolean;
  };
  rack: {
   data: Rack[];
@@ -56,6 +63,7 @@ type RackConfig = {
   rackDetails: RackDetails | null;
   rackFutureDateStart: Date;
  };
+ rackReport: ReturnType<typeof getRackReport>;
 };
 
 const rackConfigContext = createContext<RackConfig | null>(null);

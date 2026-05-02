@@ -28,6 +28,8 @@ import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { IoNotifications } from 'react-icons/io5';
 import RoomControlIndicator from '../room-control/RoomControlIndicator';
 import { type RoomControlDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/room-control/dictionary';
+import { getNoteTypeStyles } from '../../utils/room-notes/getNoteTypeStyles';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export default function RackRoom({
  dic,
@@ -105,6 +107,8 @@ export default function RackRoom({
  const activeCompactView = rackView === 'compact' && !mock;
  const activeMinimalView = rackView === 'minimal' && !mock;
 
+ const noteTypeStyles = getNoteTypeStyles(room.messageTypeID);
+
  return (
   <motion.div
    data-layout-compact={activeCompactView}
@@ -135,8 +139,8 @@ export default function RackRoom({
        )}
       </div>
       {room.msgFlag && (
-       <div className='absolute top-1 end-0'>
-        <IoNotifications className='size-6 text-destructive' />
+       <div className='absolute top-0 end-0 bg-background rounded-full w-8 h-8 grid place-content-center'>
+        <IoNotifications className={`size-6 ${noteTypeStyles.text}`} />
        </div>
       )}
       {!isFutureRack && !activeMinimalView && (
@@ -315,6 +319,20 @@ export default function RackRoom({
      </Link>
     </Button>
    </div>
+   {mock && room.msgFlag && (
+    <div className='mt-1 px-2'>
+     <Alert className={`flex gap-1 items-center p-2`}>
+      <AlertDescription className={`flex gap-1 items-center`}>
+       <div className={`${noteTypeStyles.text}`}>
+        <IoNotifications className={`size-7 ${noteTypeStyles.text}`} />
+       </div>
+       <span className='font-medium'>
+        {dic.info.message} {room.messageTypeName}
+       </span>
+      </AlertDescription>
+     </Alert>
+    </div>
+   )}
   </motion.div>
  );
 }

@@ -9,7 +9,7 @@ interface RackSetting {
 
 const defaultRackSetting: RackSetting = {
  layout: 'detailed',
- pageLimit: rackLimitOptions[0],
+ pageLimit: rackLimitOptions[2],
  sidebarIsPin: false,
 };
 
