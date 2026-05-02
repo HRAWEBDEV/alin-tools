@@ -29,6 +29,7 @@ import { IoNotifications } from 'react-icons/io5';
 import RoomControlIndicator from '../room-control/RoomControlIndicator';
 import { type RoomControlDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/room-control/dictionary';
 import { getNoteTypeStyles } from '../../utils/room-notes/getNoteTypeStyles';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 export default function RackRoom({
  dic,
@@ -318,6 +319,20 @@ export default function RackRoom({
      </Link>
     </Button>
    </div>
+   {mock && room.msgFlag && (
+    <div className='mt-1 px-2'>
+     <Alert className={`flex gap-1 items-center p-2`}>
+      <AlertDescription className={`flex gap-1 items-center`}>
+       <div className={`${noteTypeStyles.text}`}>
+        <IoNotifications className={`size-7 ${noteTypeStyles.text}`} />
+       </div>
+       <span className='font-medium'>
+        {dic.info.message} {room.messageTypeName}
+       </span>
+      </AlertDescription>
+     </Alert>
+    </div>
+   )}
   </motion.div>
  );
 }

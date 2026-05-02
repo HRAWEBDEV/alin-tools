@@ -13,6 +13,8 @@ import {
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { rackShowTypes } from '../utils/rackShowTypes';
 import { getRackOccupancyStyles } from '../utils/rackOcuppancyStyles';
+import { FaArchive } from 'react-icons/fa';
+import { FaA } from 'react-icons/fa6';
 
 const smallBadgeKeys: (keyof RackFiltersSchema)[] = ['floor', 'building'];
 const largeBadgeKeys: (keyof RackFiltersSchema)[] = [
@@ -62,6 +64,7 @@ export default function RackTools({ dic }: { dic: RoomsRackDictionary }) {
     <div className='flex gap-2 items-center mb-2'>
      <div className='flex gap-2'>
       <Button size='lg'>
+       <FaArchive className='size-4' />
        <span className='hidden md:inline'>
         {dic.sidebar.tabs.rackNotificationsBoard}
        </span>
