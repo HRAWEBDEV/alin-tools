@@ -18,5 +18,6 @@ export type TableUtils =
     changeShowMergeTable: SalonBaseConfig['tablesInfo']['changeShowMergeTable'];
     mergeTableTo: SalonBaseConfig['tablesInfo']['mergeTableTo'];
     transferTableTo: SalonBaseConfig['tablesInfo']['transferTableTo'];
+    access: SalonBaseConfig['access'];
    }
  | { tableType: 'mock' };

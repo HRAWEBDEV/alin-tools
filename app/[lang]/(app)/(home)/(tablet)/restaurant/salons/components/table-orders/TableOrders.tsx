@@ -15,7 +15,7 @@ export default function TableOrders({
  orderRedirectLink,
  tableCapacity,
  tableStateType,
- fromNewOrder = false,
+ canAddNewOrder = true,
 }: {
  dic: SalonsDictionary['multiOrder'];
  data?: TableOrderType[];
@@ -24,7 +24,7 @@ export default function TableOrders({
  orderCount: number;
  isLoading: boolean;
  orderRedirectLink: ReturnType<typeof useOrderRedirectLink>;
- fromNewOrder?: boolean;
+ canAddNewOrder?: boolean;
 }) {
  if (isLoading)
   return (
@@ -36,7 +36,7 @@ export default function TableOrders({
   );
  return (
   <div className='flex gap-4 flex-wrap'>
-   {!fromNewOrder && (
+   {canAddNewOrder && (
     <DrawerClose asChild>
      <Link
       className='size-40 border border-input rounded-md grid place-content-center bg-secondary/10 text-secondary'
