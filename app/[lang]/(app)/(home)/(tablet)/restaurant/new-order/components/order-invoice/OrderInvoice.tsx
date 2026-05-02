@@ -85,6 +85,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
    onPayment,
    onPaymentPcPos,
   },
+  access,
  } = useOrderBaseConfigContext();
  const { format } = useCurrencyFormatter();
 

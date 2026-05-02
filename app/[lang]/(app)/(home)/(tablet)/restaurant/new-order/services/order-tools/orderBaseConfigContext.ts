@@ -13,6 +13,7 @@ import { type ShopCalculatorResult } from '../../utils/shopCalculator';
 import { type Combo } from '../../../utils/apiTypes';
 import { type OrderInvoicePayment } from '../../schemas/orderInvoicePaymentSchema';
 import { AxiosError } from 'axios';
+import { type UserAccessibility } from '@/app/[lang]/(app)/login/services/user-accessibility/services/userAccessibilityApiActions';
 
 type ConfirmOrderType = (typeof confirmOrderTypes)[number];
 const confirmOrderTypes = ['orderInfo', 'shoppingCard', 'invoice'] as const;
@@ -104,6 +105,10 @@ interface OrderBaseConfig {
   isLoading: boolean;
   isError: boolean;
   isSuccess: boolean;
+ };
+ access: {
+  order: Omit<UserAccessibility['restaurant']['order'], 'add'>;
+  shopItem: UserAccessibility['restaurant']['orderItem'];
  };
 }
 

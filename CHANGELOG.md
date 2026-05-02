@@ -8,6 +8,7 @@
 ### features
 - add new order item no discount (hra-done) 
 - add app user accessibility (hra-done)
+- add res salons user accessibility (hra-done)
 - add apptype request header field (hra-done)
 - add check the right path (hra-done)
 

@@ -5,6 +5,7 @@ interface UserAccessibility {
  restaurant: {
   order: {
    close: boolean;
+   payment: boolean;
   } & CrudAccess;
   orderItem: CrudAccess;
   table: {
