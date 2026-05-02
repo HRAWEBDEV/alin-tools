@@ -32,7 +32,6 @@ export default function RackNotifsBoard({
     <div className='grow overflow-auto p-4'>
      {!!rackReport.notes.length && (
       <div>
-       <h3 className='text-xl font-medium mb-2'>{dic.options.roomNotes}</h3>
        <ul>
         {rackReport.notes.map((room) => {
          const noteStyles = getNoteTypeStyles(room.messageTypeID);
