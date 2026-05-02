@@ -40,11 +40,21 @@ export default function OrderShoppingItem({
  const {
   itemsInfo: { data: itemsPrograms },
   order: { orderItemsDispatch },
+  access,
  } = useOrderBaseConfigContext();
  const { format } = useCurrencyFormatter();
  const targetItemProgram = itemsPrograms?.find(
   (item) => item.itemID === orderItem.itemID,
  );
+
+ let shopItemEditAccess = access['shopItem']['add'];
+ let shopItemDeleteAccess = access['shopItem']['add'];
+
+ if (orderItem.id > 0) {
+  shopItemEditAccess = access['shopItem']['edit'];
+  shopItemDeleteAccess = access['shopItem']['delete'];
+ }
+
  return (
   <motion.div layout className='border-b border-input p-2'>
    <div className='flex flex-row gap-2 sm:gap-0 sm:items-center'>
@@ -61,6 +71,7 @@ export default function OrderShoppingItem({
       variant='ghost'
       size='icon-lg'
       className='text-red-600/50 dark:text-red-400/50 rounded-full'
+      disabled={!shopItemDeleteAccess}
       onClick={() => {
        orderItemsDispatch({
         type: 'removeShopOrderItems',
@@ -87,6 +98,7 @@ export default function OrderShoppingItem({
         <Button
          variant='outline'
          className='text-sm p-0.5 py-1 gap-1 text-red-700 border-red-700 dark:text-red-400 dark:border-red-400 h-auto'
+         disabled={!shopItemEditAccess}
          onClick={() => {
           orderItemsDispatch({
            type: 'removeTag',
@@ -106,6 +118,7 @@ export default function OrderShoppingItem({
           <Button
            variant='outline'
            className='text-sm p-0.5 py-1 gap-1 text-primary border-primary h-auto'
+           disabled={!shopItemEditAccess}
           >
            <GoPlus />
            {dic.orderInfo.addTag}
@@ -117,6 +130,7 @@ export default function OrderShoppingItem({
        <Button
         variant='outline'
         className='text-sm p-0.5 py-1 gap-1 text-destructive border-destructive h-auto'
+        disabled={!access['shopItem']['add']}
         onClick={() => {
          orderItemsDispatch({
           type: 'splitShopOrderItem',
@@ -171,6 +185,9 @@ export default function OrderShoppingItem({
         variant='ghost'
         size='icon-lg'
         className='text-orange-600 dark:text-orange-400 rounded-full'
+        disabled={
+         orderItem.amount === 1 ? !shopItemDeleteAccess : !shopItemEditAccess
+        }
         onClick={() => {
          if (orderItem.amount <= 1) {
           setShowRemoveOrderItemConfirm(true);
@@ -194,6 +211,7 @@ export default function OrderShoppingItem({
         variant='ghost'
         size='icon-lg'
         className='text-secondary rounded-full'
+        disabled={!shopItemEditAccess}
         onClick={() => {
          orderItemsDispatch({
           type: 'increaseShopOrderItemAmount',
