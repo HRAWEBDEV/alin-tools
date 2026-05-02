@@ -198,6 +198,7 @@ export default function SalonBaseConfigProvider({
  }
  const changeShowMergeTable = useCallback(
   (open?: boolean) => {
+   if (!userAccessibility['restaurant']['table']['merge']) return;
    scrollToTop();
    if (open) {
     setTableFilters({
@@ -231,6 +232,7 @@ export default function SalonBaseConfigProvider({
  //
  const changeShowTransferTable = useCallback(
   (open?: boolean) => {
+   if (!userAccessibility['restaurant']['table']['change']) return;
    scrollToTop();
    if (open) {
     setTableFilters({
@@ -250,7 +252,7 @@ export default function SalonBaseConfigProvider({
    setTrasnferToTable(null);
    setShowTransferTable((pre) => (open === undefined ? !pre : open));
   },
-  [scrollToTop],
+  [scrollToTop, userAccessibility],
  );
  // table report
  const tablesReport = getTablesReport(tables);
