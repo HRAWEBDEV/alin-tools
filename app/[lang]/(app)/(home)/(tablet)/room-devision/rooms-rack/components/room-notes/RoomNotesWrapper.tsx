@@ -506,7 +506,7 @@ export default function RoomNotesWrapper({
        editRoomNotes={editRoomNoteProps}
       />
      </div>
-     {roomNotes.data?.rowsCount && (
+     {!!roomNotes.data?.rowsCount && (
       <DialogFooter className='p-4 py-2 border-t border-input'>
        <div className='flex gap-1 items-center'>
         <div className='me-4'>

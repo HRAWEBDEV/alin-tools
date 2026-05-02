@@ -1,4 +1,4 @@
-import { use, createContext, Dispatch, SetStateAction } from 'react';
+import { use, createContext } from 'react';
 import { OutOfContext } from '@/utils/OutOfContext';
 import {
  type InitialData,
@@ -8,6 +8,7 @@ import {
 } from '../roomsRackApiActions';
 import { type Paging } from '../../../utils/apiTypes';
 import { type RackLayout } from '../../utils/rackLayout';
+import { getRackReport } from '../../utils/rackReport';
 
 type RackView = RackLayout;
 type ChangePageActions = 'next' | 'prev' | 'last' | 'first';
@@ -56,6 +57,7 @@ type RackConfig = {
   rackDetails: RackDetails | null;
   rackFutureDateStart: Date;
  };
+ rackReport: ReturnType<typeof getRackReport>;
 };
 
 const rackConfigContext = createContext<RackConfig | null>(null);

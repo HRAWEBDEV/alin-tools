@@ -64,6 +64,7 @@ import {
  defaultRackSetting,
  saveRackSetting,
 } from '../../utils/rackSettingLocalStorage';
+import { getRackReport } from '../../utils/rackReport';
 
 export function RoomsRackConfigProvider({
  children,
@@ -640,6 +641,8 @@ export function RoomsRackConfigProvider({
   rackFiltersUseForm.setValue('date', rackFutureDateStart);
  }, [showTypeValue, rackFiltersUseForm, dateFns, rackFutureDateStart]);
 
+ const rackReport = getRackReport(rackRooms);
+
  const ctx: RackConfig = {
   sidebar: {
    isPin: sidebarIsPin,
@@ -684,6 +687,7 @@ export function RoomsRackConfigProvider({
    rackDetails,
    rackFutureDateStart,
   },
+  rackReport,
  };
 
  return (

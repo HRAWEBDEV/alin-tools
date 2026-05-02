@@ -29,7 +29,7 @@ import { IoNotifications } from 'react-icons/io5';
 import RoomControlIndicator from '../room-control/RoomControlIndicator';
 import { type RoomControlDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/room-control/dictionary';
 import { getNoteTypeStyles } from '../../utils/room-notes/getNoteTypeStyles';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export default function RackRoom({
  dic,
@@ -140,7 +140,7 @@ export default function RackRoom({
       </div>
       {room.msgFlag && (
        <div className='absolute top-0 end-0 bg-background rounded-full w-8 h-8 grid place-content-center'>
-        <IoNotifications className={`size-7 ${noteTypeStyles.text}`} />
+        <IoNotifications className={`size-6 ${noteTypeStyles.text}`} />
        </div>
       )}
       {!isFutureRack && !activeMinimalView && (
