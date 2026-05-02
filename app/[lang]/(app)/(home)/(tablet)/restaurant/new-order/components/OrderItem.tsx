@@ -135,10 +135,9 @@ export default function OrderItem({
         variant='ghost'
         size='icon-lg'
         className='text-rose-600 dark:text-rose-400 rounded-full'
-        disabled={!shopItemDeleteAccess }
+        disabled={!shopItemDeleteAccess}
         onClick={() => {
-         if (!shopItemDeleteAccess)
-          return;
+         if (!shopItemDeleteAccess) return;
          orderItemsDispatch({
           type: 'decreaseOrderItemsAmount',
           payload: {
