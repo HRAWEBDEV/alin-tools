@@ -12,6 +12,7 @@
 - add apptype request header field (hra-done)
 - add check the right path (hra-done)
 - add rack notif center (hra-done)
+- add order change customer and discount access (hra-done)
 
 # 2.0.5
 ### features
