@@ -24,6 +24,7 @@ import OrderInvoice from '../order-invoice/OrderInvoice';
 import { BiError } from 'react-icons/bi';
 import { Activity } from 'react';
 import { Spinner } from '@/components/ui/spinner';
+import { ArrowLeft } from 'lucide-react';
 
 export default function ConfirmOrderModal({
  dic,
@@ -39,7 +40,7 @@ export default function ConfirmOrderModal({
   showConfirmOrder,
   closeConfirmOrder,
   shopInfoLoading,
-  order: { orderItems, orderItemsDispatch, onCloseOrder, onSaveOrder },
+  order: { orderItems, orderItemsDispatch, onSaveOrder },
   access,
  } = useOrderBaseConfigContext();
  return (
@@ -150,19 +151,6 @@ export default function ConfirmOrderModal({
       <div className='flex gap-2 sm:gap-4'>
        {confirmOrderActiveType === 'shoppingCard' && !!orderItems.length && (
         <Button
-         disabled={shopInfoLoading || !access['order']['close']}
-         variant='destructive'
-         className='h-11 max-sm:p-3 max-sm:grow'
-         onClick={() => {
-          onCloseOrder();
-         }}
-        >
-         {shopInfoLoading && <Spinner />}
-         {dic.invoice.closeOrder}
-        </Button>
-       )}
-       {confirmOrderActiveType === 'shoppingCard' && !!orderItems.length && (
-        <Button
          variant='secondary'
          className='h-11 max-sm:p-3 max-sm:grow'
          disabled={shopInfoLoading || !access['order']['edit']}
@@ -184,6 +172,7 @@ export default function ConfirmOrderModal({
         >
          {shopInfoLoading && <Spinner />}
          {dic.orderConfirm.invoice}
+         <ArrowLeft />
         </Button>
        )}
       </div>
