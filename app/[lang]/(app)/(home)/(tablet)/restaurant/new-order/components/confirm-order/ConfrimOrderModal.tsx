@@ -172,7 +172,7 @@ export default function ConfirmOrderModal({
         >
          {shopInfoLoading && <Spinner />}
          {dic.orderConfirm.invoice}
-         <ArrowLeft />
+         <ArrowLeft className='ltr:rotate-180' />
         </Button>
        )}
       </div>

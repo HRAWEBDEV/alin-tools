@@ -6,6 +6,8 @@ interface UserAccessibility {
   order: {
    close: boolean;
    payment: boolean;
+   changeCustomer: boolean;
+   changeDiscount: boolean;
   } & CrudAccess;
   orderItem: CrudAccess;
   table: {

@@ -577,7 +577,9 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            role='combobox'
            className='justify-between h-11'
            disabled={
-            saleTypeValue?.key === SaleTypes.room || !access['order']['edit']
+            saleTypeValue?.key === SaleTypes.room ||
+            !access['order']['edit'] ||
+            !access['order']['changeCustomer']
            }
            onBlur={field.onBlur}
            ref={field.ref}
@@ -586,18 +588,20 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
             {field.value?.key || ''}
            </span>
            <div className='flex gap-2 items-center'>
-            {customerValue && access['order']['edit'] && (
-             <Button
-              variant={'ghost'}
-              size={'icon-lg'}
-              onClick={(e) => {
-               e.stopPropagation();
-               setValue('customer', null);
-              }}
-             >
-              <BsTrash className='size-5 text-red-700 dark:text-red-400' />
-             </Button>
-            )}
+            {customerValue &&
+             access['order']['edit'] &&
+             access['order']['changeCustomer'] && (
+              <Button
+               variant={'ghost'}
+               size={'icon-lg'}
+               onClick={(e) => {
+                e.stopPropagation();
+                setValue('customer', null);
+               }}
+              >
+               <BsTrash className='size-5 text-red-700 dark:text-red-400' />
+              </Button>
+             )}
             <ChevronsUpDown />
            </div>
           </Button>
@@ -900,7 +904,9 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
         <InputGroup className='h-11'>
          <NumericFormat
           {...other}
-          disabled={!access['order']['edit']}
+          disabled={
+           !access['order']['edit'] || !access['order']['changeDiscount']
+          }
           value={value}
           onValueChange={({ floatValue }) =>
            onChange(floatValue || floatValue === 0 ? floatValue : '')
@@ -920,7 +926,9 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            <Button
             variant='outline'
             type='button'
-            disabled={!access['order']['edit']}
+            disabled={
+             !access['order']['edit'] || !access['order']['changeDiscount']
+            }
             onClick={(e) => {
              e.stopPropagation();
              systemPricing.handleSetSystemPricing();
