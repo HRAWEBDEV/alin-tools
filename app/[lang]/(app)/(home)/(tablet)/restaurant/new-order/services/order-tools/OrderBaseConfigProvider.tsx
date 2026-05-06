@@ -491,7 +491,7 @@ export default function OrderBaseConfigProvider({
     setConfirmOrderIsOpen(false);
    },
    onError(err: AxiosError<string>) {
-    toast.error(err.message || '');
+    toast.error(err.response?.data || '');
    },
   });
 
@@ -700,7 +700,7 @@ export default function OrderBaseConfigProvider({
     setConfirmOrderIsOpen(false);
    },
    onError(err: AxiosError<string>) {
-    toast.error(err.message || '');
+    toast.error(err.response?.data || '');
    },
   });
 
