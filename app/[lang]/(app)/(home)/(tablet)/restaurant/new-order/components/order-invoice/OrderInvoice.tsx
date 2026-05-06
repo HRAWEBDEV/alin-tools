@@ -264,7 +264,8 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
      variant='destructive'
      className='font-medium disabled:bg-neutral-400 disabled:dark:bg-neutral-600 h-11'
      type='submit'
-     onClick={() => {
+     onClick={(e) => {
+      e.preventDefault();
       onCloseOrder();
      }}
     >
