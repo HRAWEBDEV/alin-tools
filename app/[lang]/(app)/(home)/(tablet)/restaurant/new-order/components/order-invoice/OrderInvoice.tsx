@@ -42,6 +42,7 @@ import { getWalletInfo } from '../../services/wallet/walletApiActiions';
 import { toast } from 'sonner';
 import { NumericFormat } from 'react-number-format';
 import { AxiosError } from 'axios';
+import { useDebouncedCallback } from '@tanstack/react-pacer';
 
 const invoiceRowClass =
  'flex justify-between gap-2 items-center text-base pb-3 mb-3 border-b border-input font-medium';
@@ -88,6 +89,14 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
   access,
  } = useOrderBaseConfigContext();
  const { format } = useCurrencyFormatter();
+
+ function scrollToPaymentSection() {
+  invoicePaymentRef.current?.scrollIntoView();
+ }
+
+ const scrollToPaymentSectionDB = useDebouncedCallback(scrollToPaymentSection, {
+  wait: 500,
+ });
 
  const { data, isSuccess, isFetching } = useQuery({
   enabled: confirmOrderActiveType === 'invoice',
@@ -248,6 +257,22 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
     </Button>
    );
   }
+  if (paymentTypeValue?.key === 'nonCash') {
+   return (
+    <Button
+     disabled={shopLoading || !access['order']['close']}
+     variant='destructive'
+     className='font-medium disabled:bg-neutral-400 disabled:dark:bg-neutral-600 h-11'
+     type='submit'
+     onClick={() => {
+      onCloseOrder();
+     }}
+    >
+     {shopLoading && <Spinner />}
+     {dic.invoice.closeOrder}
+    </Button>
+   );
+  }
   return (
    <Button
     type='submit'
@@ -334,19 +359,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
       <span>{format(remained)} ریال</span>
      </div>
     </div>
-    <div className='grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6 border-b border-input pb-6'>
-     <Button
-      disabled={shopLoading || !access['order']['close']}
-      variant='destructive'
-      size='lg'
-      className='font-medium disabled:bg-neutral-400 disabled:dark:bg-neutral-600'
-      onClick={() => {
-       onCloseOrder();
-      }}
-     >
-      {shopLoading && <Spinner />}
-      {dic.invoice.closeOrder}
-     </Button>
+    <div className='grid grid-cols-2 gap-3 mb-6 border-b border-input pb-6'>
      <Button
       disabled={shopLoading || !access['order']['edit']}
       size='lg'
@@ -362,8 +375,8 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
       disabled={shopLoading || !isPayable || !access['order']['payment']}
       variant='secondary'
       size='lg'
-      className='font-medium col-span-2 sm:col-span-1'
-      onClick={() => invoicePaymentRef.current?.scrollIntoView()}
+      className='font-medium'
+      onClick={() => scrollToPaymentSection()}
      >
       {shopLoading && <Spinner />}
       {dic.invoice.paymentInfo}
@@ -398,7 +411,11 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
                ref={field.ref}
               >
                <span className='grow text-ellipsis overflow-hidden text-start'>
-                {field.value?.value || ''}
+                {field.value
+                 ? field.value.value === 'nonCash'
+                   ? dic.invoice[field.value.value]
+                   : field.value.value
+                 : ''}
                </span>
                <div className='flex gap-2 items-center'>
                 <ChevronsUpDown />
@@ -422,7 +439,13 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
               <div className='overflow-hidden overflow-y-auto'>
                {data?.payTypes.length ? (
                 <ul>
-                 {data.payTypes.map((item) => (
+                 {[
+                  {
+                   key: 'nonCash',
+                   value: 'nonCash',
+                  },
+                  ...data.payTypes,
+                 ].map((item) => (
                   <DrawerClose asChild key={item.key}>
                    <li
                     className='flex gap-1 items-center ps-6 py-2'
@@ -440,7 +463,11 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
                      variant='ghost'
                      className='w-full justify-start h-auto text-lg'
                     >
-                     <span>{item.value}</span>
+                     <span>
+                      {item.key === 'nonCash'
+                       ? dic.invoice[item.key]
+                       : item.value}
+                     </span>
                     </Button>
                    </li>
                   </DrawerClose>
@@ -455,82 +482,84 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
            )}
           />
          </Field>
-         {paymentTypeValue?.key !== '1' && paymentTypeValue?.key !== '6' && (
-          <Field data-invalid={!!errors.bank}>
-           <FieldLabel htmlFor='bank'>{dic.invoice.bank} *</FieldLabel>
-           <Controller
-            control={control}
-            name='bank'
-            render={({ field }) => (
-             <Drawer>
-              <DrawerTrigger asChild>
-               <Button
-                id='bank'
-                variant='outline'
-                role='combobox'
-                className='justify-between h-11 overflow-hidden'
-                onBlur={field.onBlur}
-                ref={field.ref}
-               >
-                <span className='grow text-ellipsis overflow-hidden text-start'>
-                 {field.value?.value || ''}
-                </span>
-                <div className='flex gap-2 items-center'>
-                 <ChevronsUpDown />
+         {paymentTypeValue?.key !== '1' &&
+          paymentTypeValue?.key !== '6' &&
+          paymentTypeValue?.key !== 'nonCash' && (
+           <Field data-invalid={!!errors.bank}>
+            <FieldLabel htmlFor='bank'>{dic.invoice.bank} *</FieldLabel>
+            <Controller
+             control={control}
+             name='bank'
+             render={({ field }) => (
+              <Drawer>
+               <DrawerTrigger asChild>
+                <Button
+                 id='bank'
+                 variant='outline'
+                 role='combobox'
+                 className='justify-between h-11 overflow-hidden'
+                 onBlur={field.onBlur}
+                 ref={field.ref}
+                >
+                 <span className='grow text-ellipsis overflow-hidden text-start'>
+                  {field.value?.value || ''}
+                 </span>
+                 <div className='flex gap-2 items-center'>
+                  <ChevronsUpDown />
+                 </div>
+                </Button>
+               </DrawerTrigger>
+               {!!errors.bank && (
+                <FieldContent>
+                 <FieldError>{errors.bank.message}</FieldError>
+                </FieldContent>
+               )}
+               <DrawerContent className='h-[min(80svh,35rem)]'>
+                <DrawerHeader className='hidden'>
+                 <DrawerTitle>{dic.invoice.bank}</DrawerTitle>
+                </DrawerHeader>
+                <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+                 <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
+                  {dic.invoice.bank}
+                 </h1>
                 </div>
-               </Button>
-              </DrawerTrigger>
-              {!!errors.bank && (
-               <FieldContent>
-                <FieldError>{errors.bank.message}</FieldError>
-               </FieldContent>
-              )}
-              <DrawerContent className='h-[min(80svh,35rem)]'>
-               <DrawerHeader className='hidden'>
-                <DrawerTitle>{dic.invoice.bank}</DrawerTitle>
-               </DrawerHeader>
-               <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
-                <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
-                 {dic.invoice.bank}
-                </h1>
-               </div>
-               <div className='overflow-hidden overflow-y-auto'>
-                {data?.banks.length ? (
-                 <ul>
-                  {data.banks.map((item) => (
-                   <DrawerClose asChild key={item.key}>
-                    <li
-                     className='flex gap-1 items-center ps-6 py-2'
-                     onClick={() => {
-                      setValue('cardReader', null);
-                      field.onChange(item);
-                     }}
-                    >
-                     <Checkbox
-                      className='size-6'
-                      checked={field.value?.key === item.key}
-                     />
-                     <Button
-                      tabIndex={-1}
-                      variant='ghost'
-                      className='w-full justify-start h-auto text-lg'
+                <div className='overflow-hidden overflow-y-auto'>
+                 {data?.banks.length ? (
+                  <ul>
+                   {data.banks.map((item) => (
+                    <DrawerClose asChild key={item.key}>
+                     <li
+                      className='flex gap-1 items-center ps-6 py-2'
+                      onClick={() => {
+                       setValue('cardReader', null);
+                       field.onChange(item);
+                      }}
                      >
-                      <span>{item.value}</span>
-                     </Button>
-                    </li>
-                   </DrawerClose>
-                  ))}
-                 </ul>
-                ) : (
-                 <NoItemFound />
-                )}
-               </div>
-              </DrawerContent>
-             </Drawer>
-            )}
-           />
-          </Field>
-         )}
+                      <Checkbox
+                       className='size-6'
+                       checked={field.value?.key === item.key}
+                      />
+                      <Button
+                       tabIndex={-1}
+                       variant='ghost'
+                       className='w-full justify-start h-auto text-lg'
+                      >
+                       <span>{item.value}</span>
+                      </Button>
+                     </li>
+                    </DrawerClose>
+                   ))}
+                  </ul>
+                 ) : (
+                  <NoItemFound />
+                 )}
+                </div>
+               </DrawerContent>
+              </Drawer>
+             )}
+            />
+           </Field>
+          )}
         </div>
         {paymentTypeValue?.key === '2' && (
          <Field data-invalid={!!errors.cardReader} data-disabled={!bankValue}>
@@ -611,21 +640,23 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
           />
          </Field>
         )}
-        {paymentTypeValue?.key !== '1' && paymentTypeValue?.key !== '6' && (
-         <Field data-invalid={!!errors.paymentRefNo}>
-          <FieldLabel htmlFor='paymentRefNo'>
-           {dic.invoice.paymentRefNo}
-          </FieldLabel>
-          <InputGroup className='h-11'>
-           <InputGroupInput />
-          </InputGroup>
-          {!!errors.paymentRefNo && (
-           <FieldContent>
-            <FieldError>{errors.paymentRefNo.message}</FieldError>
-           </FieldContent>
-          )}
-         </Field>
-        )}
+        {paymentTypeValue?.key !== '1' &&
+         paymentTypeValue?.key !== '6' &&
+         paymentTypeValue?.key !== 'nonCash' && (
+          <Field data-invalid={!!errors.paymentRefNo}>
+           <FieldLabel htmlFor='paymentRefNo'>
+            {dic.invoice.paymentRefNo}
+           </FieldLabel>
+           <InputGroup className='h-11'>
+            <InputGroupInput />
+           </InputGroup>
+           {!!errors.paymentRefNo && (
+            <FieldContent>
+             <FieldError>{errors.paymentRefNo.message}</FieldError>
+            </FieldContent>
+           )}
+          </Field>
+         )}
         {paymentTypeValue?.key === '6' && (
          <>
           <div className='flex gap-4 items-end'>

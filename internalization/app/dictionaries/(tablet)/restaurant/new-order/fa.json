@@ -105,7 +105,8 @@
   "confirm": "تایید",
   "firstName": "نام",
   "lastName": "نام خانوادگی",
-  "credit": "اعتبار"
+  "credit": "اعتبار",
+  "nonCash": "غیر نقدی"
  },
  "closeOrder": {
   "confirmMessage": "آیا از بستن سفارش اطمینان دارید؟",
