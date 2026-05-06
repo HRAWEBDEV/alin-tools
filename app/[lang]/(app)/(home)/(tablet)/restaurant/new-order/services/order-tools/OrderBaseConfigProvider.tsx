@@ -246,6 +246,37 @@ export default function OrderBaseConfigProvider({
     hasService: hasServiceValue,
     registerID: roomValue?.key,
    });
+   if (!res.data || !res.data.length) {
+    orderItemsDispatch({
+     type: 'insertOrderItems',
+     payload: pricedOrderItems.map((order) => {
+      const foundItem = res.data.find((item) => item.id === order.itemID);
+      if (!foundItem) return order;
+      const prices = orderItemsPricingCalculator({
+       amount: order.amount,
+       defaultDiscountRate: Number(userDiscountValue) || 0,
+       hasService: hasServiceValue,
+       orderItem: {
+        ...order,
+        price: foundItem.price,
+        serviceRate: foundItem.serviceRate,
+        taxRate: foundItem.taxRate,
+       },
+      });
+      if (
+       order.price !== foundItem.price ||
+       order.serviceRate !== foundItem.serviceRate ||
+       order.taxRate !== foundItem.taxRate
+      ) {
+       return {
+        ...order,
+        ...prices,
+       };
+      }
+      return order;
+     }),
+    });
+   }
    return res.data;
   },
  });
@@ -962,35 +993,12 @@ export default function OrderBaseConfigProvider({
   },
  };
 
- useEffect(() => {
-  if (!itemProgramsData || !itemProgramsData.length) return;
-  pricedOrderItems.map((order) => {
-   const foundItem = itemProgramsData.find((item) => item.id === order.itemID);
-   if (!foundItem) return order;
-   const prices = orderItemsPricingCalculator({
-    amount: order.amount,
-    defaultDiscountRate: Number(userDiscountValue) || 0,
-    hasService: hasServiceValue,
-    orderItem: {
-     ...order,
-     price: foundItem.price,
-     serviceRate: foundItem.serviceRate,
-     taxRate: foundItem.taxRate,
-    },
-   });
-   if (
-    order.price !== foundItem.price ||
-    order.serviceRate !== foundItem.serviceRate ||
-    order.taxRate !== foundItem.taxRate
-   ) {
-    return {
-     ...order,
-     ...prices,
-    };
-   }
-   return order;
-  });
- }, [pricedOrderItems, itemProgramsData, hasServiceValue, userDiscountValue]);
+ useEffect(() => {}, [
+  pricedOrderItems,
+  itemProgramsData,
+  hasServiceValue,
+  userDiscountValue,
+ ]);
 
  useEffect(() => {
   if (!systemPricingIsSuccess) return;
