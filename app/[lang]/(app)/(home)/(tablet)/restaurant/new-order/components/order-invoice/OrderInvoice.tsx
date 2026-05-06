@@ -441,11 +441,11 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
                {data?.payTypes.length ? (
                 <ul>
                  {[
+                  ...data.payTypes,
                   {
                    key: 'nonCash',
                    value: 'nonCash',
                   },
-                  ...data.payTypes,
                  ].map((item) => (
                   <DrawerClose asChild key={item.key}>
                    <li
