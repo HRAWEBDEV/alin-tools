@@ -4,6 +4,10 @@
 - fix drawer and dialog overflow
 - add reload button if necessary - for real time data
 
+
+# 2.1.1
+- update new order cash bank type when pay type is check (hra-done)
+
 # 2.1.0
 ### features
 - add new order item no discount (hra-done) 

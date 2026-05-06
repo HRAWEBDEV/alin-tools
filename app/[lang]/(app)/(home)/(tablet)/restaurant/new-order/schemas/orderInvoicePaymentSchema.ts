@@ -66,7 +66,11 @@ function createOrderInvoicePaymentSchema({ dic }: { dic: NewOrderDictionary }) {
   )
   .refine(
    ({ paymentType, bank }) => {
-    return paymentType?.key !== '1' && paymentType?.key !== '6' ? !!bank : true;
+    return paymentType?.key !== '1' &&
+     paymentType?.key !== '6' &&
+     paymentType?.key !== '4'
+     ? !!bank
+     : true;
    },
    {
     path: ['bank'],

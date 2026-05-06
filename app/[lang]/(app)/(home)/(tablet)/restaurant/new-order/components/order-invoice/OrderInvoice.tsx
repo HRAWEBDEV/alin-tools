@@ -485,6 +485,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
          </Field>
          {paymentTypeValue?.key !== '1' &&
           paymentTypeValue?.key !== '6' &&
+          paymentTypeValue?.key !== '4' &&
           paymentTypeValue?.key !== 'nonCash' && (
            <Field data-invalid={!!errors.bank}>
             <FieldLabel htmlFor='bank'>{dic.invoice.bank} *</FieldLabel>
