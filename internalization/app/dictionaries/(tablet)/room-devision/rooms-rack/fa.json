@@ -88,7 +88,8 @@
   "guestMessages": "پیام برای مهمان",
   "roomNotes": "یادداشت ها",
   "cancelOutOfOrder": "اتمام خارج از سرویس",
-  "outOfOrder": "خارج از سرویس"
+  "outOfOrder": "خارج از سرویس",
+  "guestExpenses": "هزینه های مهمان"
  },
  "tools": {
   "lastUpdate": "آخرین بروزرسانی",
@@ -200,5 +201,8 @@
  },
  "rackNotificationsBoard": {
   "title": "اعلانات"
+ },
+ "guestExpenses": {
+  "title": "هزینه های مهمان"
  }
 }
