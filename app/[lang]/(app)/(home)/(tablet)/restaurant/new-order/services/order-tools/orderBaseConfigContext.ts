@@ -48,6 +48,7 @@ interface OrderBaseConfig {
  };
  itemsInfo: {
   data?: ItemProgram[];
+  itemProgramAllGroup: ItemProgram[];
   filteredData: ItemProgram[];
   searchedItemName: string;
   isLoading: boolean;

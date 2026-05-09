@@ -23,6 +23,7 @@ import {
  savePerson,
  getOrderServiceRates,
  OrderItem,
+ ItemProgram,
 } from '../newOrderApiActions';
 import { getHallKey } from '../../../salons/services/salonsApiActions';
 import {
@@ -230,8 +231,8 @@ export default function OrderBaseConfigProvider({
   queryKey: [
    newOrderKey,
    'item-programs',
-   saleTypeValue?.key || '',
    selectedItemGroup?.key || '',
+   saleTypeValue?.key || '',
    String(hasServiceValue),
    roomValue?.key || 'all',
    contractValue?.key || 'all',
@@ -253,6 +254,10 @@ export default function OrderBaseConfigProvider({
   items: itemProgramsData,
   searchedItemName,
  });
+
+ const itemProgramAllGroup = (queryClient.getQueriesData({
+  queryKey: [newOrderKey, 'item-programs', selectedItemGroup?.key || ''],
+ })[0][1] || []) as ItemProgram[];
 
  const {
   data: userOrder,
@@ -896,6 +901,7 @@ export default function OrderBaseConfigProvider({
   itemsInfo: {
    selectedItemGroup,
    data: itemProgramsData,
+   itemProgramAllGroup,
    filteredData: filteredItemPrograms,
    isLoading: itemProgramsLoading,
    isFetching: itemProgramsFetching,

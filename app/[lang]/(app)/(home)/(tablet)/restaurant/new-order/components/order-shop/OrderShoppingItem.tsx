@@ -38,12 +38,12 @@ export default function OrderShoppingItem({
  const [showRemoveOrderItemConfirm, setShowRemoveOrderItemConfirm] =
   useState(false);
  const {
-  itemsInfo: { data: itemsPrograms },
+  itemsInfo: { itemProgramAllGroup },
   order: { orderItemsDispatch },
   access,
  } = useOrderBaseConfigContext();
  const { format } = useCurrencyFormatter();
- const targetItemProgram = itemsPrograms?.find(
+ const targetItemProgram = itemProgramAllGroup?.find(
   (item) => item.itemID === orderItem.itemID,
  );
 
