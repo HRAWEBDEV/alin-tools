@@ -43,6 +43,8 @@ interface Table {
  remained: number | null;
  occupiedPerson: number | null;
  OccupiedDateTimeOffset: string | null;
+ printed: boolean;
+ printCount: number | null;
 }
 
 function generateTableMockData(updateTable: Partial<Table> = {}): Table {
@@ -72,6 +74,8 @@ function generateTableMockData(updateTable: Partial<Table> = {}): Table {
   occupiedPerson: null,
   OccupiedDateTimeOffset: null,
   orderCount: 1,
+  printed: false,
+  printCount: 0,
   ...updateTable,
  };
 }

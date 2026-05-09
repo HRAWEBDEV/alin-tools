@@ -20,4 +20,8 @@ export type TableUtils =
     transferTableTo: SalonBaseConfig['tablesInfo']['transferTableTo'];
     access: SalonBaseConfig['access'];
    }
- | { tableType: 'mock' };
+ | {
+    tableType: 'mock';
+    tableTypeName?: string;
+    tableStateName?: string;
+   };

@@ -15,7 +15,6 @@ import {
  DrawerTitle,
  DrawerTrigger,
 } from '@/components/ui/drawer';
-import { DropdownMenuGroup } from '@/components/ui/dropdown-menu';
 import { TbTransfer } from 'react-icons/tb';
 import { IoIosInformationCircle, IoMdAddCircle } from 'react-icons/io';
 import { GrStatusUnknown } from 'react-icons/gr';
@@ -51,7 +50,7 @@ export default function SalonTable({
   if (newOpen) tableUtils.changeSelectedTable(table);
  };
  const tableStyles = getTableStateStyles(table.tableStateTypeID);
- const { locale, localeInfo } = useBaseConfig();
+ const { locale } = useBaseConfig();
  const tableRows = getTableRows(table.tableCapacity, table.occupiedPerson || 0);
 
  const { data: ordersList, isLoading: isLoadingOrdersList } = useQuery({
@@ -68,7 +67,7 @@ export default function SalonTable({
 
  const tableTypeName =
   tableUtils.tableType === 'mock'
-   ? '---'
+   ? tableUtils.tableTypeName || '---'
    : tableUtils.tableTypes.find(
       (item: { key: string; value: string }) =>
        item.key === table.tableTypeID.toString(),
@@ -108,6 +107,8 @@ export default function SalonTable({
        isBold={isBold}
        tableType='mock'
        isMinimal={false}
+       tableTypeName={tableTypeName}
+       tableStateName={tableUtils.dic.tables[tableStyles.type]}
       />
      </div>
      <div className='grid grid-cols-1 gap-2 content-start'>
@@ -287,7 +288,7 @@ export default function SalonTable({
         <span className='text-base font-medium group-data-[bold=true]:font-bold'>
          <span>{tableTypeName} </span>
          {tableUtils.tableType === 'mock'
-          ? ''
+          ? tableUtils.tableStateName || ''
           : tableUtils.dic.tables[tableStyles.type]}
          {getTableExtensionTitle()}
         </span>
