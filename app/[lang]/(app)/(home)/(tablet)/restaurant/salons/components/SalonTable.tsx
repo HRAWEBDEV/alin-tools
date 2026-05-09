@@ -74,7 +74,8 @@ export default function SalonTable({
      )?.value || '';
 
  function getTableExtensionTitle() {
-  if (tableUtils.tableType === 'mock') return;
+  if (tableUtils.tableType === 'mock')
+   return tableUtils.tableStateTypeName || '';
   switch (table.tableStateTypeID) {
    case TableStateTypes.VIPCustomer:
     return ` (${tableUtils.dic.tables.vip})`;
@@ -109,6 +110,7 @@ export default function SalonTable({
        isMinimal={false}
        tableTypeName={tableTypeName}
        tableStateName={tableUtils.dic.tables[tableStyles.type]}
+       tableStateTypeName={getTableExtensionTitle()}
       />
      </div>
      <div className='grid grid-cols-1 gap-2 content-start'>

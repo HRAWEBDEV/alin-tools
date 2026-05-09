@@ -24,4 +24,5 @@ export type TableUtils =
     tableType: 'mock';
     tableTypeName?: string;
     tableStateName?: string;
+    tableStateTypeName?: string;
    };
