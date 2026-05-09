@@ -24,7 +24,7 @@ import { getHallKey, getTableOrders } from '../services/salonsApiActions';
 import TableOrders from './table-orders/TableOrders';
 import { useOrderRedirectLink } from '../hooks/useOrderRedirectLink';
 import { TableUtils } from '../utils/tableUtils';
-import { IoAlbums } from 'react-icons/io5';
+import { IoAlbums, IoPrint } from 'react-icons/io5';
 
 export default function SalonTable({
  table,
@@ -112,6 +112,34 @@ export default function SalonTable({
        tableStateName={tableUtils.dic.tables[tableStyles.type]}
        tableStateTypeName={getTableExtensionTitle()}
       />
+      <div className='p-3'>
+       {table.printed && (
+        <div className='flex gap-2 items-center'>
+         <IoPrint className='size-8 text-secondary' />
+         <p>
+          {tableUtils.dic.tables.printed}{' '}
+          {!!table.printCount && table.printCount > 1 && (
+           <span>(table.printCount)</span>
+          )}{' '}
+         </p>
+        </div>
+       )}
+       {table.OccupiedDateTimeOffset ? (
+        <div className='flex gap-2 items-center'>
+         <span className='text-sm'>
+          {tableUtils.dic.tables.occupiedDateTime}:{' '}
+         </span>
+         <p>
+          {new Date(table.OccupiedDateTimeOffset).toLocaleTimeString(locale, {
+           hour: '2-digit',
+           minute: '2-digit',
+          })}
+         </p>
+        </div>
+       ) : (
+        ''
+       )}
+      </div>
      </div>
      <div className='grid grid-cols-1 gap-2 content-start'>
       {table.tableStateTypeID !== TableStateTypes.outOfService &&
@@ -320,14 +348,13 @@ export default function SalonTable({
       </div>
       <div className='flex items-center justify-between gap-4'>
        <div className='flex items-center gap-1 text-base text-neutral-600 dark:text-neutral-400 font-medium group-data-[bold=true]:font-bold'>
-        <span>
-         {table.OccupiedDateTimeOffset
-          ? new Date(table.OccupiedDateTimeOffset).toLocaleTimeString(locale, {
-             hour: '2-digit',
-             minute: '2-digit',
-            })
-          : ''}
-        </span>
+        <div className='flex gap-1 items-center'>
+         {table.printed && (
+          <IoPrint
+           className={`${isMinimal ? 'size-5' : 'size-7'} text-secondary`}
+          />
+         )}
+        </div>
        </div>
        <div
         style={{

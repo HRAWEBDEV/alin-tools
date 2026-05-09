@@ -9,6 +9,7 @@
 - update new order cash bank type when pay type is check (hra-done)
 - show two tables(normal-mode) in mobile resolution (hra-done)
 - update salons tables actions (hra-done)
+- show printed orders in salons table (hra-done)
 
 # 2.1.0
 ### features

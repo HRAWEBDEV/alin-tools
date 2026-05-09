@@ -40,7 +40,9 @@
   "newOrder": "سفارش جدید",
   "showOrder": "مشاهده سفارش",
   "changeTableState": "تغییر وضعیت میز",
-  "tableActions": "عملیات میز"
+  "tableActions": "عملیات میز",
+  "printed": "پرینت شده",
+  "occupiedDateTime": "زمان اشغال"
  },
  "tableStateModal": {
   "title": "تغییر وضعیت میز",
