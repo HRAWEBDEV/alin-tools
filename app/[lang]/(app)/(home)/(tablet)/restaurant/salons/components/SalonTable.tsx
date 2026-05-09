@@ -13,17 +13,11 @@ import {
  DrawerContent,
  DrawerHeader,
  DrawerTitle,
+ DrawerTrigger,
 } from '@/components/ui/drawer';
-import {
- DropdownMenu,
- DropdownMenuTrigger,
- DropdownMenuContent,
- DropdownMenuGroup,
- DropdownMenuItem,
- DropdownMenuLabel,
-} from '@/components/ui/dropdown-menu';
+import { DropdownMenuGroup } from '@/components/ui/dropdown-menu';
 import { TbTransfer } from 'react-icons/tb';
-import { IoMdAddCircle, IoIosInformationCircle } from 'react-icons/io';
+import { IoIosInformationCircle, IoMdAddCircle } from 'react-icons/io';
 import { GrStatusUnknown } from 'react-icons/gr';
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
@@ -101,99 +95,105 @@ export default function SalonTable({
 
  const menuContent =
   tableUtils.tableType === 'mock' ? null : (
-   <DropdownMenuContent align='start' className='w-56'>
-    <DropdownMenuGroup>
-     {table.tableStateTypeID !== TableStateTypes.outOfService &&
-      !!table.orderID && (
-       <DropdownMenuItem
-        className='text-purple-700 dark:text-purple-400'
-        onClick={() => {
-         if (table.orderCount <= 1) {
-          router.push(showOrderRedirectLink);
-          return;
-         }
-         setShowTableOrdersList(true);
-        }}
-       >
-        <IoIosInformationCircle className='size-8 text-inherit' />
-        <DropdownMenuLabel className='text-base'>
-         {tableUtils.dic.tables.showOrder}
-        </DropdownMenuLabel>
-       </DropdownMenuItem>
-      )}
-     {table.tableStateTypeID !== TableStateTypes.outOfService &&
-      (tableUtils.multiOrder || !table.orderID) && (
-       <DropdownMenuItem
-        className='text-sky-700 dark:text-sky-400'
-        asChild
-        disabled={!tableUtils.access.order.add}
-       >
-        <Link href={newOrderRedirectLink}>
-         <IoMdAddCircle className='size-8 text-inherit' />
-         <DropdownMenuLabel className='text-base'>
-          {tableUtils.dic.tables.newOrder}
-         </DropdownMenuLabel>
-        </Link>
-       </DropdownMenuItem>
-      )}
-     {(table.tableStateTypeID === TableStateTypes.outOfService ||
-      table.tableStateTypeID === TableStateTypes.readyToService) &&
-      table.orderCount <= 1 && (
-       <DropdownMenuItem
-        className='text-yellow-600 dark:text-yellow-400'
-        onClick={() => {
-         tableUtils.onShowChangeTableState(true);
-         setIsOpen(false);
-        }}
-       >
-        <GrStatusUnknown className='size-8 text-inherit' />
-        <DropdownMenuLabel className='text-base'>
-         {tableUtils.dic.tables.changeTableState}
-        </DropdownMenuLabel>
-       </DropdownMenuItem>
-      )}
-     {table.tableStateTypeID !== TableStateTypes.outOfService &&
-      table.tableStateTypeID !== TableStateTypes.readyToService &&
-      table.orderCount <= 1 && (
-       <>
-        <DropdownMenuItem
-         className='text-teal-700 dark:text-teal-400'
+   <DrawerContent className='h-[min(55svh,45rem)]'>
+    <DrawerHeader className='border-b border-input'>
+     <DrawerTitle className='text-2xl'>
+      {tableUtils.dic.tables.tableActions}
+     </DrawerTitle>
+    </DrawerHeader>
+    <div className='p-4 pb-6 grid sm:grid-cols-[max-content_1fr] gap-6 w-[min(100%,50rem)] mx-auto overflow-auto'>
+     <div className='sm:w-48'>
+      <SalonTable
+       table={table}
+       isBold={isBold}
+       tableType='mock'
+       isMinimal={false}
+      />
+     </div>
+     <div className='grid grid-cols-1 gap-2 content-start'>
+      {table.tableStateTypeID !== TableStateTypes.outOfService &&
+       !!table.orderID && (
+        <Button
+         variant='outline'
+         className='justify-start text-start h-12 text-purple-700 dark:text-purple-400'
+         size='lg'
          onClick={() => {
-          tableUtils.changeShowTransferTable(true);
+          if (table.orderCount <= 1) {
+           router.push(showOrderRedirectLink);
+           return;
+          }
+          setShowTableOrdersList(true);
+         }}
+        >
+         <IoIosInformationCircle className='size-8 text-inherit' />
+         {tableUtils.dic.tables.showOrder}
+         {table.orderCount > 1 && <span>({table.orderCount})</span>}
+        </Button>
+       )}
+      {table.tableStateTypeID !== TableStateTypes.outOfService &&
+       (tableUtils.multiOrder || !table.orderID) && (
+        <Button
+         variant='outline'
+         className='justify-start text-start h-12 text-sky-700 dark:text-sky-400'
+         size='lg'
+         asChild
+        >
+         <Link href={newOrderRedirectLink}>
+          <IoMdAddCircle className='size-8 text-inherit' />
+          {tableUtils.dic.tables.newOrder}
+         </Link>
+        </Button>
+       )}
+      {(table.tableStateTypeID === TableStateTypes.outOfService ||
+       table.tableStateTypeID === TableStateTypes.readyToService) &&
+       table.orderCount <= 1 && (
+        <Button
+         variant='outline'
+         className='justify-start text-start h-12 text-yellow-600 dark:text-yellow-400'
+         size='lg'
+         onClick={() => {
+          tableUtils.onShowChangeTableState(true);
           setIsOpen(false);
          }}
-         disabled={!tableUtils.access.table.change}
         >
-         <TbTransfer className='size-8 text-inherit' />
-         <DropdownMenuLabel className='text-base'>
+         <GrStatusUnknown className='size-8 text-inherit' />
+         {tableUtils.dic.tables.changeTableState}
+        </Button>
+       )}
+      {table.tableStateTypeID !== TableStateTypes.outOfService &&
+       table.tableStateTypeID !== TableStateTypes.readyToService &&
+       table.orderCount <= 1 && (
+        <>
+         <Button
+          variant='outline'
+          className='justify-start text-start h-12 text-teal-700 dark:text-teal-400'
+          size='lg'
+          onClick={() => {
+           tableUtils.changeShowTransferTable(true);
+           setIsOpen(false);
+          }}
+          disabled={!tableUtils.access.table.change}
+         >
+          <TbTransfer className='size-8 text-inherit' />
           {tableUtils.dic.tables.transferTable}
-         </DropdownMenuLabel>
-        </DropdownMenuItem>
-        <DropdownMenuItem
-         className='text-orange-700 dark:text-orange-400'
-         onClick={() => {
-          tableUtils.changeShowMergeTable(true);
-         }}
-         disabled={!tableUtils.access.table.merge}
-        >
-         <AiOutlineMergeCells className='size-8 text-inherit' />
-         <DropdownMenuLabel className='text-base'>
+         </Button>
+         <Button
+          variant='outline'
+          className='justify-start text-start h-12 text-orange-700 dark:text-orange-400'
+          size='lg'
+          onClick={() => {
+           tableUtils.changeShowMergeTable(true);
+          }}
+          disabled={!tableUtils.access.table.merge}
+         >
+          <AiOutlineMergeCells className='size-8 text-inherit' />
           {tableUtils.dic.tables.mergeTables}
-         </DropdownMenuLabel>
-        </DropdownMenuItem>
-        {/* <DropdownMenuItem */}
-        {/*  className='text-rose-700 dark:text-rose-400' */}
-        {/*  onClick={onCloseOrder} */}
-        {/* > */}
-        {/*  <IoMdCloseCircleOutline className='size-8 text-inherit' /> */}
-        {/*  <DropdownMenuLabel className='text-base'> */}
-        {/*   {dic.tables.closeOrder} */}
-        {/*  </DropdownMenuLabel> */}
-        {/* </DropdownMenuItem> */}
-       </>
-      )}
-    </DropdownMenuGroup>
-   </DropdownMenuContent>
+         </Button>
+        </>
+       )}
+     </div>
+    </div>
+   </DrawerContent>
   );
 
  const salonsInAction =
@@ -296,7 +296,7 @@ export default function SalonTable({
       <div className='text-start ps-2 grow'>
        <div className='flex items-center'>
         <h3
-         className={`text-2xl lg:text-3xl ${tableStyles.text} font-en-roboto group-data-[bold=true]:font-black`}
+         className={`text-wrap text-2xl ${tableStyles.text} font-en-roboto group-data-[bold=true]:font-black ${isMinimal ? '' : 'lg:text-3xl'}`}
         >
          {table.tableNo.toString().padStart(2, '0')}
         </h3>
@@ -305,11 +305,11 @@ export default function SalonTable({
         )}
        </div>
        {!isMinimal && (
-        <div>
-         <p className='text-sm text-primary text-wrap group-data-[bold=true]:font-medium'>
+        <div className='whitespace-nowrap grid'>
+         <p className='text-sm text-primary group-data-[bold=true]:font-medium truncate'>
           {table.saleTypeName || ''}
          </p>
-         <p className='text-md text-neutral-500 dark:text-neutral-400 text-wrap group-data-[bold=true]:font-medium'>
+         <p className='text-md text-neutral-500 dark:text-neutral-400 group-data-[bold=true]:font-medium truncate'>
           {table.customerName || ''}
          </p>
         </div>
@@ -339,15 +339,11 @@ export default function SalonTable({
     </Button>
    </div>
    <div className='mx-3 -mt-4 group-data-[layout-minimal="true"]:m-0 group-data-[layout-minimal="true"]:h-0 group-data-[layout-minimal="true"]:overflow-hidden'>
-    <DropdownMenu
-     open={isOpen}
-     dir={localeInfo.contentDirection}
-     onOpenChange={handleOpenChange}
-    >
+    <Drawer open={isOpen} onOpenChange={handleOpenChange}>
      {tableUtils.tableType === 'normal' &&
       !tableUtils.showTransferTable &&
       !tableUtils.showMergeTable && (
-       <DropdownMenuTrigger asChild>
+       <DrawerTrigger asChild>
         <Button
          variant='outline'
          onPointerDown={(e) => e.preventDefault()}
@@ -356,10 +352,10 @@ export default function SalonTable({
         >
          <SlOptions className='size-6' />
         </Button>
-       </DropdownMenuTrigger>
+       </DrawerTrigger>
       )}
      {menuContent}
-    </DropdownMenu>
+    </Drawer>
    </div>
    {tableUtils.tableType === 'normal' && (
     <Drawer

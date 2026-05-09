@@ -39,7 +39,8 @@
   "order": "سفارش",
   "newOrder": "سفارش جدید",
   "showOrder": "مشاهده سفارش",
-  "changeTableState": "تغییر وضعیت میز"
+  "changeTableState": "تغییر وضعیت میز",
+  "tableActions": "عملیات میز"
  },
  "tableStateModal": {
   "title": "تغییر وضعیت میز",

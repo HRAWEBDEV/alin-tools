@@ -17,7 +17,7 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
  const isDisplayMinimal = tempDisplayMode.displayMode === 'minimal';
  const tablesGridClass = isDisplayMinimal
   ? 'grid gap-2 gap-y-4 justify-center grid-cols-[repeat(auto-fill,minmax(6rem,1fr))]'
-  : 'grid gap-6 grid-cols-[repeat(auto-fill,minmax(9rem,10rem))] sm:grid-cols-[repeat(auto-fill,minmax(10rem,11rem))] justify-center';
+  : 'grid gap-4 sm:gap-6 grid-cols-[repeat(auto-fill,minmax(9rem,9.5rem))] sm:grid-cols-[repeat(auto-fill,minmax(10rem,11rem))] justify-center';
  const {
   access,
   initData: { defaultSaleTimeID, salons, tableTypes, multiOrder },
