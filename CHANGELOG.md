@@ -10,6 +10,8 @@
 - show two tables(normal-mode) in mobile resolution (hra-done)
 - update salons tables actions (hra-done)
 - show printed orders in salons table (hra-done)
+### bug fixes
+- use all item program cache to load shop items data 
 
 # 2.1.0
 ### features

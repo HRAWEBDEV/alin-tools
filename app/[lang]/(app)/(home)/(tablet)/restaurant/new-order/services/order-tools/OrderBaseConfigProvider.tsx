@@ -231,11 +231,11 @@ export default function OrderBaseConfigProvider({
   queryKey: [
    newOrderKey,
    'item-programs',
-   selectedItemGroup?.key || '',
    saleTypeValue?.key || '',
    String(hasServiceValue),
    roomValue?.key || 'all',
    contractValue?.key || 'all',
+   selectedItemGroup?.key || '',
   ],
   async queryFn({ signal }) {
    const res = await getItemPrograms({
@@ -255,9 +255,46 @@ export default function OrderBaseConfigProvider({
   searchedItemName,
  });
 
- const itemProgramAllGroup = (queryClient.getQueriesData({
-  queryKey: [newOrderKey, 'item-programs', selectedItemGroup?.key || ''],
- })[0][1] || []) as ItemProgram[];
+ const itemProgramAllGroup: ItemProgram[] = (() => {
+  if (
+   initSuccess &&
+   !!initData.itemGroups.length &&
+   !!queryClient.getQueriesData({
+    queryKey: [
+     newOrderKey,
+     'item-programs',
+     saleTypeValue?.key || '',
+     String(hasServiceValue),
+     roomValue?.key || 'all',
+     contractValue?.key || 'all',
+     initData?.itemGroups[0].key,
+    ],
+   })[0] &&
+   !!queryClient.getQueriesData({
+    queryKey: [
+     newOrderKey,
+     'item-programs',
+     saleTypeValue?.key || '',
+     String(hasServiceValue),
+     roomValue?.key || 'all',
+     contractValue?.key || 'all',
+     initData?.itemGroups[0].key,
+    ],
+   })[0][1]
+  )
+   return (queryClient.getQueriesData({
+    queryKey: [
+     newOrderKey,
+     'item-programs',
+     saleTypeValue?.key || '',
+     String(hasServiceValue),
+     roomValue?.key || 'all',
+     contractValue?.key || 'all',
+     '-1',
+    ],
+   })[0][1] || []) as ItemProgram[];
+  return itemProgramsData || [];
+ })();
 
  const {
   data: userOrder,
