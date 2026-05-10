@@ -7,6 +7,8 @@
 # 2.2.0
 ### features
 - do not allow on close when mutation action is pending (hra-done)
+### bug 
+- always get all item group in new order for loading images (hra-done)
 
 
 # 2.1.1
