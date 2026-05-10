@@ -60,7 +60,13 @@ export default function ChangeTableState({
  });
 
  return (
-  <Dialog open={open} onOpenChange={changeOpen}>
+  <Dialog
+   open={open}
+   onOpenChange={(newValue) => {
+    if (isPending) return;
+    changeOpen(newValue);
+   }}
+  >
    <DialogContent className='gap-0 p-0'>
     <DialogHeader className='p-4 py-6'>
      <DialogTitle>{dic.tableStateModal.title}</DialogTitle>

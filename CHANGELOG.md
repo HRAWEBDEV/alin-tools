@@ -4,8 +4,13 @@
 - fix drawer and dialog overflow
 - add reload button if necessary - for real time data
 
+# 2.2.0
+### features
+- do not allow on close when mutation action is pending (hra-done)
+
 
 # 2.1.1
+### features
 - update new order cash bank type when pay type is check (hra-done)
 - show two tables(normal-mode) in mobile resolution (hra-done)
 - update salons tables actions (hra-done)

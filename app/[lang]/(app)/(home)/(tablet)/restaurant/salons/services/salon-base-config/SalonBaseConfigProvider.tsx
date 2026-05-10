@@ -390,7 +390,10 @@ export default function SalonBaseConfigProvider({
    {children}
    <Dialog
     open={showCloseOrder}
-    onOpenChange={(newValue) => setShowCloseOrder(newValue)}
+    onOpenChange={(newValue) => {
+     if (isPendingCloseOrder) return;
+     setShowCloseOrder(newValue);
+    }}
    >
     <DialogContent className='p-0 gap-0'>
      <DialogHeader className='p-4'></DialogHeader>

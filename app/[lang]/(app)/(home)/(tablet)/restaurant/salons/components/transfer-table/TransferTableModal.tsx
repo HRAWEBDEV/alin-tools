@@ -51,7 +51,13 @@ export default function TransferTableModal({
   },
  });
  return (
-  <Dialog open={open} onOpenChange={changeOpen}>
+  <Dialog
+   open={open}
+   onOpenChange={(newValue) => {
+    if (isPending) return;
+    changeOpen(newValue);
+   }}
+  >
    <DialogContent className='gap-0 p-0 sm:max-w-3xl'>
     <DialogHeader className='p-4 py-6'>
      <DialogTitle>{dic.transferTableModal.title}</DialogTitle>
