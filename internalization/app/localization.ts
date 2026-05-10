@@ -1,21 +1,12 @@
 import * as dateFns from 'date-fns';
 import * as dateFnsJalali from 'date-fns-jalali';
 
-type ContentDirection = 'rtl' | 'ltr';
-type Calendar = 'jalali' | 'gregorian';
-type Locale = 'fa' | 'en';
+type LocaleInfo = (typeof locales)[keyof typeof locales];
+type Locale = LocaleInfo['locale'];
+type Calendar = LocaleInfo['calendar'];
+type ContentDirection = LocaleInfo['contentDirection'];
 
-interface LocaleInfo {
- locale: Locale;
- extension: string;
- contentDirection: ContentDirection;
- calendar: Calendar;
- localeName: string;
- localeShortName: string;
- active: boolean;
-}
-
-const locales: Record<Locale, LocaleInfo> = {
+const locales = {
  fa: {
   locale: 'fa',
   extension: 'IR',
@@ -24,6 +15,8 @@ const locales: Record<Locale, LocaleInfo> = {
   localeName: 'فارسی',
   localeShortName: 'فا',
   active: true,
+  timezone: 'Asia/Tehran',
+  country: 'iran',
  },
  en: {
   locale: 'en',
@@ -33,6 +26,8 @@ const locales: Record<Locale, LocaleInfo> = {
   localeName: 'English',
   localeShortName: 'EN',
   active: false,
+  timezone: '',
+  country: 'iran',
  },
 } as const;
 

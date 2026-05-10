@@ -13,6 +13,7 @@ interface BaseConfig {
  appBirthDate: Date;
  windowWatcher: WindowResizeWatcherUtils;
  setLocale: (newLocale: Locale) => unknown;
+ userActiveTimeZone: string;
 }
 
 const appVersion = '2.2.0';

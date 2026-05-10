@@ -5,6 +5,9 @@
    "light": "حالت روز",
    "dark": "حالت شب",
    "system": "سیستمی"
+  },
+  "countries": {
+   "iran": "ایران"
   }
  },
  "components": {
@@ -26,6 +29,13 @@
    "selectProgram": "انتخاب برنامه",
    "selectActiveProgram": "برنامه مورد نظر را انتخاب کنید",
    "errorOccuredTryAgainLater": "خطایی رخ داده است لطفا دوباره تلاش کنید"
+  },
+  "userRegionCheck": {
+   "title": "تنظیم تاریخ و ساعت",
+   "toDisplayInformationIn": "برای نمایش اطلاعات به وقت",
+   "setYourSystemDateAndTime": "تاریخ و ساعت دستگاه خود را تنظیم کنید",
+   "activeRegion": "تاریخ و ساعت فعلی",
+   "okay": "باشه"
   }
  }
 }

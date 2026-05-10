@@ -11,19 +11,17 @@ import {
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useRestaurantShareDictionary } from '../share-dictionary/restaurantShareDictionaryContext';
 import { Button } from '@/components/ui/button';
-import {
- RiLogoutBoxRLine,
- RiExchangeBoxLine,
- RiSettings5Line,
-} from 'react-icons/ri';
+import { RiLogoutBoxRLine, RiSettings5Line } from 'react-icons/ri';
 import { useLogout } from '@/app/[lang]/(app)/login/hooks/useLogout';
 import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
 import { useSettingsContext } from './settings/settingsContext';
 import HeaderDate from '../../components/HeaderDate';
 import { appVersion } from '@/services/base-config/baseConfigContext';
+import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 
 export default function ProfileProvider({ children }: { children: ReactNode }) {
- const { userInfoRouterStorage, data, changeProgram } = useUserInfoRouter();
+ const { userActiveTimeZone } = useBaseConfig();
+ const { userInfoRouterStorage, data } = useUserInfoRouter();
  const logout = useLogout();
  const {
   restaurantShareDictionary: {
@@ -63,7 +61,7 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
         {userInfoRouterStorage.departmentName} -{' '}
         {userInfoRouterStorage.programName}{' '}
         <span className='uppercase font-en-roboto text-neutral-500 ms-2'>
-         {new Intl.DateTimeFormat().resolvedOptions().timeZone}
+         {userActiveTimeZone}
         </span>
         <span className='uppercase font-en-roboto text-neutral-500 ms-2'>
          v({appVersion})

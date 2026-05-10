@@ -6,6 +6,7 @@ import { type Locale, locales } from '@/internalization/app/localization';
 import { Toaster } from '@/components/ui/sonner';
 import AxiosBaseConfig from './services/axios-base-config/AxiosBaseConfig';
 import LoginProvider from './login/services/login/LoginProvider';
+import UserRegionCheck from './services/user-region/UserRegionCheck';
 
 export default async function AppLayout({
  children,
@@ -23,7 +24,9 @@ export default async function AppLayout({
    loginDictionary={loginDic}
   >
    <AxiosBaseConfig />
-   <LoginProvider>{children}</LoginProvider>
+   <LoginProvider>
+    <UserRegionCheck>{children}</UserRegionCheck>
+   </LoginProvider>
    <Toaster
     className='font-[inherit]!'
     position={contentDirection === 'rtl' ? 'top-right' : 'top-left'}
