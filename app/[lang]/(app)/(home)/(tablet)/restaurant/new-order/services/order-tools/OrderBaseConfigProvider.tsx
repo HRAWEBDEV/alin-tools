@@ -221,6 +221,34 @@ export default function OrderBaseConfigProvider({
   setSearchedItemName(newSearch);
  }
 
+ const itemProgramIsEnabled =
+  initSuccess && !!selectedItemGroup && !!saleTypeValue;
+ const itemProgramQueryKey = [
+  newOrderKey,
+  'item-programs',
+  saleTypeValue?.key || '',
+  String(hasServiceValue),
+  roomValue?.key || 'all',
+  contractValue?.key || 'all',
+ ];
+ async function itemProgramQueryFn({
+  signal,
+  itemGroupID,
+ }: {
+  signal: AbortSignal;
+  itemGroupID: string;
+ }) {
+  const res = await getItemPrograms({
+   signal,
+   contractMenuID: contractValue?.key,
+   itemGroupID,
+   orderDateTime: new Date().toISOString(),
+   saleTypeID: saleTypeValue!.key,
+   hasService: hasServiceValue,
+   registerID: roomValue?.key,
+  });
+  return res.data;
+ }
  const {
   data: itemProgramsData,
   isLoading: itemProgramsLoading,
@@ -228,27 +256,25 @@ export default function OrderBaseConfigProvider({
   isSuccess: itemProgramsSuccess,
   isError: itemProgramsError,
  } = useQuery({
-  enabled: !!selectedItemGroup && !!saleTypeValue,
-  queryKey: [
-   newOrderKey,
-   'item-programs',
-   saleTypeValue?.key || '',
-   String(hasServiceValue),
-   roomValue?.key || 'all',
-   contractValue?.key || 'all',
-   selectedItemGroup?.key || '',
-  ],
+  enabled: itemProgramIsEnabled,
+  queryKey: [...itemProgramQueryKey, selectedItemGroup?.key || ''],
   async queryFn({ signal }) {
-   const res = await getItemPrograms({
+   return await itemProgramQueryFn({
     signal,
-    contractMenuID: contractValue?.key,
-    itemGroupID: selectedItemGroup!.key,
-    orderDateTime: new Date().toISOString(),
-    saleTypeID: saleTypeValue!.key,
-    hasService: hasServiceValue,
-    registerID: roomValue?.key,
+    itemGroupID: selectedItemGroup!.key!,
    });
-   return res.data;
+  },
+ });
+ // get all items
+ const {} = useQuery({
+  enabled:
+   itemProgramIsEnabled && selectedItemGroup.key !== initData.itemGroups[0].key,
+  queryKey: [...itemProgramQueryKey, initData?.itemGroups[0].key],
+  async queryFn({ signal }) {
+   return await itemProgramQueryFn({
+    signal,
+    itemGroupID: initData!.itemGroups[0].key,
+   });
   },
  });
 
