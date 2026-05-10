@@ -47,6 +47,7 @@ export default function ConfirmOrderModal({
   <Dialog
    open={confirmOrderIsOpen}
    onOpenChange={(open) => {
+    if (shopInfoLoading) return;
     if (open) {
      showConfirmOrder();
      return;

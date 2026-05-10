@@ -220,6 +220,7 @@ export default function OrderBaseConfigProvider({
  function handleChangeSearchedItemName(newSearch: string) {
   setSearchedItemName(newSearch);
  }
+
  const {
   data: itemProgramsData,
   isLoading: itemProgramsLoading,
@@ -250,6 +251,7 @@ export default function OrderBaseConfigProvider({
    return res.data;
   },
  });
+
  const filteredItemPrograms = filterItemPrograms({
   items: itemProgramsData,
   searchedItemName,
