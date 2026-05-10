@@ -100,7 +100,10 @@ export default function NewRoomNote({
  return (
   <Dialog
    open={editRoomNote.showEdit}
-   onOpenChange={() => editRoomNote.closeShowEdit()}
+   onOpenChange={() => {
+    if (isPending) return;
+    editRoomNote.closeShowEdit();
+   }}
   >
    <DialogContent className='flex flex-col w-[min(95%,35rem)] max-h-[95svh] max-w-none! p-0 overflow-hidden gap-0'>
     <DialogHeader className='p-4 border-b border-input'>

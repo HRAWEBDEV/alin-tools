@@ -52,7 +52,13 @@ export default function RoomStateType({
  });
 
  return (
-  <Dialog open={open} onOpenChange={onChangeOpen}>
+  <Dialog
+   open={open}
+   onOpenChange={(newValue) => {
+    if (isPending) return;
+    onChangeOpen(newValue);
+   }}
+  >
    <DialogContent className='gap-0 p-0 max-h-[95svh] overflow-hidden flex flex-col'>
     <DialogHeader className='p-4 border-b border-input'>
      <DialogHeader>

@@ -77,7 +77,6 @@ export default function NewRoomGuestMessage({
    toast.error(err.response?.data);
   },
  });
- 
 
  useEffect(() => {
   setValue('fromPerson', editRoomGuestMessage.targetNote?.messageFrom || '');
@@ -88,7 +87,10 @@ export default function NewRoomGuestMessage({
  return (
   <Dialog
    open={editRoomGuestMessage.showEdit}
-   onOpenChange={() => editRoomGuestMessage.closeShowEdit()}
+   onOpenChange={() => {
+    if (isPending) return;
+    editRoomGuestMessage.closeShowEdit();
+   }}
   >
    <DialogContent className='flex flex-col w-[min(95%,35rem)] max-h-[95svh] max-w-none! p-0 overflow-hidden gap-0'>
     <DialogHeader className='p-4 border-b border-input'>
@@ -142,7 +144,7 @@ export default function NewRoomGuestMessage({
      <Button
       size='lg'
       className='sm:w-28'
-      disabled={isPending }
+      disabled={isPending}
       onClick={() => {
        handleSubmit((data) => mutate(data))();
       }}

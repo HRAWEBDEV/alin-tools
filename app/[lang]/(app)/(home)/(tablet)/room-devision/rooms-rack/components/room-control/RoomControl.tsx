@@ -238,6 +238,7 @@ export default function RoomControl({
   <Dialog
    open={open}
    onOpenChange={(value) => {
+    if (pendingAction) return;
     onChangeOpen(value);
     if (!value) {
      setMaidComment('');

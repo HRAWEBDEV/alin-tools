@@ -222,6 +222,7 @@ export default function NewOutOfOrderRoom({
   <Drawer
    open={editRoom.showNew}
    onOpenChange={(newValue) => {
+    if (pendActions) return;
     if (newValue) return;
     editRoom.onCloseEdit();
     setFormDefaults();

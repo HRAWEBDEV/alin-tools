@@ -184,6 +184,7 @@ export default function NewGuestCheckoutChecklist({
   <Drawer
    open={editChecklist.showNew}
    onOpenChange={(newValue) => {
+    if (pendActions) return;
     if (newValue) return;
     setFormDefaults();
     editChecklist.onCloseEdit();
