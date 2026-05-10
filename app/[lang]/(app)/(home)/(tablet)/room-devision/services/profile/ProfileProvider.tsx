@@ -55,16 +55,17 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
        <AvatarFallback className='bg-neutral-200'>H</AvatarFallback>
       </Avatar>
       <div className='grow text-start overflow-hidden'>
-       <p className='text-lg truncate w-full font-medium'>
-        {data.user.personFullName}
-       </p>
-       <p className='text-base truncate w-full text-primary mb-1 font-medium'>
+       <p className='text-lg w-full font-medium'>{data.user.personFullName}</p>
+       <p className='text-base w-full text-primary mb-1 font-medium'>
         {userInfoRouterStorage.ownerName}
        </p>
-       <p className='text-sm truncate w-full mb-3 font-medium'>
+       <p className='text-sm w-full mb-3 font-medium'>
         {userInfoRouterStorage.departmentName} -{' '}
         {userInfoRouterStorage.programName}{' '}
-        <span className='uppercase font-en-roboto text-neutral-500'>
+        <span className='uppercase font-en-roboto text-neutral-500 ms-2'>
+         {new Intl.DateTimeFormat().resolvedOptions().timeZone}
+        </span>
+        <span className='uppercase font-en-roboto text-neutral-500 ms-2'>
          v({appVersion})
         </span>
        </p>

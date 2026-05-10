@@ -7,6 +7,8 @@
 # 2.2.0
 ### features
 - do not allow on close when mutation action is pending (hra-done)
+- check user time zone and notify user (hra-done)
+- show user time zone in user profile (hra-done)
 ### bug 
 - always get all item group in new order for loading images (hra-done)
 
