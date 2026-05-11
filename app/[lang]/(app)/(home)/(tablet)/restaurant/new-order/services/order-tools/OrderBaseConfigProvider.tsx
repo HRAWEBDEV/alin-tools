@@ -60,7 +60,6 @@ import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { getOrderTypeID } from '../../utils/getOrderTypeID';
 import { SaleTypes } from '../../utils/SaleTypes';
 import { type OrderInvoicePayment } from '../../schemas/orderInvoicePaymentSchema';
-import { orderItemsPricingCalculator } from '../../utils/orderItemsPricingCalculator';
 import { MdImage, MdHideImage } from 'react-icons/md';
 import {
  defaultNewOrderSettings,
@@ -116,7 +115,7 @@ export default function OrderBaseConfigProvider({
   roomValue,
   contractValue,
   tableValue,
-  fixedDiscountRateValue,
+  fixedDiscountValue,
  ] = orderInfoForm.watch([
   'saleType',
   'hasService',
@@ -131,7 +130,7 @@ export default function OrderBaseConfigProvider({
   'room',
   'contract',
   'table',
-  'fixedDiscountRate',
+  'fixedDiscount',
  ]);
  //
  const [newOrderSettings, setNewOrderSettings] = useState<NewOrderSettings>(
@@ -461,7 +460,7 @@ export default function OrderBaseConfigProvider({
   orderItems,
   hasService: hasServiceValue,
   userDiscount: Number(userDiscountValue) || 0,
-  fixedDiscountRate: Number(fixedDiscountRateValue) || 0,
+  fixedDiscount: Number(fixedDiscountValue) || 0,
  });
  const invoiceShopResult = shopCalculator(
   pricedOrderItems,
@@ -527,6 +526,7 @@ export default function OrderBaseConfigProvider({
  const onSetSystemPricing = useCallback(() => {
   if (!systemPricing) return;
   orderInfoForm.setValue('discountRate', systemPricing.discountRate);
+  orderInfoForm.setValue('fixedDiscount', '');
  }, [systemPricing, orderInfoForm]);
 
  function onCloseOrder() {
@@ -655,6 +655,7 @@ export default function OrderBaseConfigProvider({
      service: invoiceShopResult.totalService,
      payment: invoiceShopResult.payment,
      discount: invoiceShopResult.totalDiscount,
+     fixedDiscount: !!data.fixedDiscount,
      payableValue: invoiceShopResult.remained,
      comment: data.comment || null,
      arzID: 1,
@@ -832,6 +833,7 @@ export default function OrderBaseConfigProvider({
    tableID,
    tableNo,
    discountRate,
+   discount,
    roundingValue,
    subscriberPersonID,
    subscriberCode,
@@ -860,6 +862,7 @@ export default function OrderBaseConfigProvider({
    personID,
    contractID,
    contractNo,
+   fixedDiscount,
   } = userOrder;
   if (tableID && tableNo) {
    orderInfoForm.setValue('table', {
@@ -881,6 +884,9 @@ export default function OrderBaseConfigProvider({
     key: contractID.toString(),
     value: contractNo.toString(),
    });
+  }
+  if (fixedDiscount) {
+   orderInfoForm.setValue('fixedDiscount', discount);
   }
   if (customerID) {
    orderInfoForm.setValue('customer', {
@@ -1010,6 +1016,7 @@ export default function OrderBaseConfigProvider({
    onChangePersonPhoneNumber: handleChangePersonPhoneNumber,
   },
   invoice: {
+   isFixedDiscount: !!fixedDiscountValue,
    isPayable: saleTypeValue?.key !== SaleTypes.room,
    orderTotals: invoiceShopResult,
    payment: {
@@ -1068,17 +1075,6 @@ export default function OrderBaseConfigProvider({
      (item) => item.itemID === order.itemID,
     );
     if (!foundItem) return order;
-    const prices = orderItemsPricingCalculator({
-     amount: order.amount,
-     defaultDiscountRate: Number(userDiscountValue) || 0,
-     hasService: hasServiceValue,
-     orderItem: {
-      ...order,
-      price: foundItem.price,
-      serviceRate: foundItem.serviceRate,
-      taxRate: foundItem.taxRate,
-     },
-    });
     if (
      order.price !== foundItem.price ||
      order.serviceRate !== foundItem.serviceRate ||
@@ -1087,7 +1083,9 @@ export default function OrderBaseConfigProvider({
      shopItemsHasChanged = true;
      return {
       ...order,
-      ...prices,
+      taxRate: foundItem.taxRate,
+      serviceRate: foundItem.serviceRate,
+      price: foundItem.price,
      };
     }
     return order;

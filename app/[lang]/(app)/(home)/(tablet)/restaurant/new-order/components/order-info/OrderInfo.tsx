@@ -83,6 +83,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
    personID,
    onChangePersonPhoneNumber,
   },
+  invoice: { orderTotals },
   systemPricing,
   access,
  } = useOrderBaseConfigContext();
@@ -909,7 +910,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           }
           value={value}
           onChange={() => {
-           setValue('fixedDiscountRate', '');
+           setValue('fixedDiscount', '');
           }}
           onValueChange={({ floatValue }) => {
            onChange(floatValue || floatValue === 0 ? floatValue : '');
@@ -952,9 +953,9 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
       </FieldLabel>
       <Controller
        control={control}
-       name='fixedDiscountRate'
+       name='fixedDiscount'
        render={({ field: { value, onChange, ...other } }) => (
-        <InputGroup>
+        <InputGroup className='h-11'>
          <NumericFormat
           id='fixed-discount'
           {...other}
@@ -969,6 +970,11 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           customInput={InputGroupInput}
           thousandSeparator
           allowLeadingZeros={false}
+          allowNegative={false}
+          isAllowed={({ floatValue }) => {
+           if (!floatValue) return true;
+           return floatValue < orderTotals.totalSValue;
+          }}
          />
         </InputGroup>
        )}

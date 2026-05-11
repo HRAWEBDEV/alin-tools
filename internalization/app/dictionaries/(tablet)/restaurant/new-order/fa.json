@@ -107,7 +107,8 @@
   "firstName": "نام",
   "lastName": "نام خانوادگی",
   "credit": "اعتبار",
-  "nonCash": "غیر نقدی"
+  "nonCash": "غیر نقدی",
+  "fixedDiscount": "تخفیف ثابت"
  },
  "closeOrder": {
   "confirmMessage": "آیا از بستن سفارش اطمینان دارید؟",

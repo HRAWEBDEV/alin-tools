@@ -40,6 +40,7 @@ export default function OrderShoppingItem({
  const {
   itemsInfo: { itemProgramAllGroup },
   order: { orderItemsDispatch },
+  invoice: { isFixedDiscount },
   access,
  } = useOrderBaseConfigContext();
  const { format } = useCurrencyFormatter();
@@ -152,7 +153,7 @@ export default function OrderShoppingItem({
        </Button>
       </div>
       <div className='flex justify-center sm:justify-start mb-2 gap-4'>
-       {!!orderItem.discountRate && (
+       {!isFixedDiscount && !!orderItem.discountRate && (
         <div className='text-[0.85rem] font-medium text-red-600 dark:text-red-400 line-through'>
          <Badge variant='destructive' className='p-1 me-2 text-sm'>
           {orderItem.discountRate}%
