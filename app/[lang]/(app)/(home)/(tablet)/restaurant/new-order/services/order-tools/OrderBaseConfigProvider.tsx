@@ -116,6 +116,7 @@ export default function OrderBaseConfigProvider({
   roomValue,
   contractValue,
   tableValue,
+  fixedDiscountRateValue,
  ] = orderInfoForm.watch([
   'saleType',
   'hasService',
@@ -130,6 +131,7 @@ export default function OrderBaseConfigProvider({
   'room',
   'contract',
   'table',
+  'fixedDiscountRate',
  ]);
  //
  const [newOrderSettings, setNewOrderSettings] = useState<NewOrderSettings>(
@@ -459,6 +461,7 @@ export default function OrderBaseConfigProvider({
   orderItems,
   hasService: hasServiceValue,
   userDiscount: Number(userDiscountValue) || 0,
+  fixedDiscountRate: Number(fixedDiscountRateValue) || 0,
  });
  const invoiceShopResult = shopCalculator(
   pricedOrderItems,

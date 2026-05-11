@@ -4,10 +4,12 @@ import { orderItemsPricingCalculator } from './orderItemsPricingCalculator';
 export function effectOrderItemsServiceRates({
  orderItems,
  userDiscount,
+ fixedDiscountRate,
  hasService,
 }: {
  orderItems: OrderItem[];
  userDiscount: number;
+ fixedDiscountRate: number;
  hasService: boolean;
 }) {
  return orderItems.map((orderItem) => {

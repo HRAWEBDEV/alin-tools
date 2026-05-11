@@ -908,9 +908,12 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            !access['order']['edit'] || !access['order']['changeDiscount']
           }
           value={value}
-          onValueChange={({ floatValue }) =>
-           onChange(floatValue || floatValue === 0 ? floatValue : '')
-          }
+          onChange={() => {
+           setValue('fixedDiscountRate', '');
+          }}
+          onValueChange={({ floatValue }) => {
+           onChange(floatValue || floatValue === 0 ? floatValue : '');
+          }}
           id='discount-rate'
           customInput={InputGroupInput}
           allowNegative={false}
@@ -939,6 +942,34 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            </Button>
           </InputGroupAddon>
          )}
+        </InputGroup>
+       )}
+      />
+     </Field>
+     <Field>
+      <FieldLabel htmlFor='fixed-discount'>
+       {dic.orderInfo.fixedDiscount}
+      </FieldLabel>
+      <Controller
+       control={control}
+       name='fixedDiscountRate'
+       render={({ field: { value, onChange, ...other } }) => (
+        <InputGroup>
+         <NumericFormat
+          id='fixed-discount'
+          {...other}
+          disabled={!access['order']['edit']}
+          value={value}
+          onChange={() => {
+           setValue('discountRate', '');
+          }}
+          onValueChange={({ floatValue }) => {
+           onChange(floatValue || '');
+          }}
+          customInput={InputGroupInput}
+          thousandSeparator
+          allowLeadingZeros={false}
+         />
         </InputGroup>
        )}
       />

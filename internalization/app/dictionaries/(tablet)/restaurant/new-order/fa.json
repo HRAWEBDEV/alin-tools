@@ -19,6 +19,7 @@
   "saleType": "نوع فروش",
   "customerName": "نام مشتری",
   "discountRate": "درصد تخفیف",
+  "fixedDiscount": "تخفیف ثابت",
   "bonNo": "شماره بن",
   "tableNo": "شماره میز",
   "guestCount": "تعداد مهمان",
