@@ -83,6 +83,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
    personID,
    onChangePersonPhoneNumber,
   },
+  invoice: { orderTotals },
   systemPricing,
   access,
  } = useOrderBaseConfigContext();
@@ -908,9 +909,12 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            !access['order']['edit'] || !access['order']['changeDiscount']
           }
           value={value}
-          onValueChange={({ floatValue }) =>
-           onChange(floatValue || floatValue === 0 ? floatValue : '')
-          }
+          onChange={() => {
+           setValue('fixedDiscount', '');
+          }}
+          onValueChange={({ floatValue }) => {
+           onChange(floatValue || floatValue === 0 ? floatValue : '');
+          }}
           id='discount-rate'
           customInput={InputGroupInput}
           allowNegative={false}
@@ -939,6 +943,39 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            </Button>
           </InputGroupAddon>
          )}
+        </InputGroup>
+       )}
+      />
+     </Field>
+     <Field>
+      <FieldLabel htmlFor='fixed-discount'>
+       {dic.orderInfo.fixedDiscount}
+      </FieldLabel>
+      <Controller
+       control={control}
+       name='fixedDiscount'
+       render={({ field: { value, onChange, ...other } }) => (
+        <InputGroup className='h-11'>
+         <NumericFormat
+          id='fixed-discount'
+          {...other}
+          disabled={!access['order']['edit']}
+          value={value}
+          onChange={() => {
+           setValue('discountRate', '');
+          }}
+          onValueChange={({ floatValue }) => {
+           onChange(floatValue || '');
+          }}
+          customInput={InputGroupInput}
+          thousandSeparator
+          allowLeadingZeros={false}
+          allowNegative={false}
+          isAllowed={({ floatValue }) => {
+           if (!floatValue) return true;
+           return floatValue < orderTotals.totalSValue;
+          }}
+         />
         </InputGroup>
        )}
       />

@@ -19,6 +19,7 @@
   "saleType": "نوع فروش",
   "customerName": "نام مشتری",
   "discountRate": "درصد تخفیف",
+  "fixedDiscount": "تخفیف ثابت",
   "bonNo": "شماره بن",
   "tableNo": "شماره میز",
   "guestCount": "تعداد مهمان",
@@ -106,7 +107,8 @@
   "firstName": "نام",
   "lastName": "نام خانوادگی",
   "credit": "اعتبار",
-  "nonCash": "غیر نقدی"
+  "nonCash": "غیر نقدی",
+  "fixedDiscount": "تخفیف ثابت"
  },
  "closeOrder": {
   "confirmMessage": "آیا از بستن سفارش اطمینان دارید؟",

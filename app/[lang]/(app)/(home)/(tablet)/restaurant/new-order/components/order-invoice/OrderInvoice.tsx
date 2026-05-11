@@ -73,6 +73,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
   confirmOrderActiveType,
   order: { orderItems, onCloseOrder, onSaveOrder },
   invoice: {
+   isFixedDiscount,
    isPayable,
    orderTotals: {
     totalTax,
@@ -315,7 +316,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
      <div className={invoiceRowClass}>
       <span className={invoiceLabelClass}>
        {'- '}
-       {dic.invoice.discount}
+       {isFixedDiscount ? dic.invoice.fixedDiscount : dic.invoice.discount}
       </span>
       <span>{format(totalDiscount)} ریال</span>
      </div>

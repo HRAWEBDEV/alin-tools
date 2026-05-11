@@ -90,6 +90,7 @@ interface OrderBaseConfig {
   onCloseOrder: () => unknown;
  };
  invoice: {
+  isFixedDiscount: boolean;
   isPayable: boolean;
   payment: {
    data?: number;

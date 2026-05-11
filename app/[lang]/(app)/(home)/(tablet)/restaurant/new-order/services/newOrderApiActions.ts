@@ -103,6 +103,7 @@ interface Order {
  orderStateID: number;
  name: string | null;
  discountRate: number | null;
+ fixedDiscount: boolean;
  tableID: number | null;
  tableNo: number | null;
  bonNo: number | null;
