@@ -19,6 +19,7 @@ export function effectOrderItemsServiceRates({
   return remainedFixedDiscount;
  }
  const totalSValue = orderItems.reduce((acc, cur) => {
+  if (cur.noDiscount) return acc;
   return acc + cur.amount * cur.price;
  }, 0);
 
