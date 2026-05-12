@@ -22,7 +22,9 @@ export function effectOrderItemsServiceRates({
   if (cur.noDiscount) return acc;
   return acc + cur.amount * cur.price;
  }, 0);
-
+ const lastNoDiscountItemIndex = orderItems.findLastIndex(
+  (item) => !item.noDiscount,
+ );
  return orderItems.map((orderItem, i) => {
   const pricing = orderItemsPricingCalculator({
    orderItem,
@@ -33,7 +35,7 @@ export function effectOrderItemsServiceRates({
    remainedFixedDiscount,
    usedRemainedFixedDiscount,
    shopSValue: totalSValue,
-   isLastItem: i === orderItems.length - 1,
+   isLastItem: i === lastNoDiscountItemIndex,
   });
   return {
    ...orderItem,
