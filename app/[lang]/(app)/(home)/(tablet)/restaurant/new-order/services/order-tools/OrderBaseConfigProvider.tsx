@@ -1070,11 +1070,11 @@ export default function OrderBaseConfigProvider({
 
  useEffect(() => {
   if (!systemPricingIsSuccess) return;
-  if (systempricingCheckFirstRenderRef.current) {
-   systempricingCheckFirstRenderRef.current = false;
-   return;
-  }
   if (orderIDQuery) {
+   if (systempricingCheckFirstRenderRef.current) {
+    systempricingCheckFirstRenderRef.current = false;
+    return;
+   }
    const discountRate = orderInfoForm.getValues('discountRate');
    if (Number(discountRate) === systemPricing?.discountRate) return;
    setConfirmSetSystemPricing(true);
