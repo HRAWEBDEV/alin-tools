@@ -4,6 +4,9 @@
 - fix drawer and dialog overflow
 - add reload button if necessary - for real time data
 
+# 2.2.4
+- add rooms rack reserve pie chart 
+
 # 2.2.0
 ### features
 - do not allow on close when mutation action is pending (hra-done)

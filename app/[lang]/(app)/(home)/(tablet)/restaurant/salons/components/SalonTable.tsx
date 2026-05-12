@@ -95,7 +95,7 @@ export default function SalonTable({
 
  const menuContent =
   tableUtils.tableType === 'mock' ? null : (
-   <DrawerContent className='h-[min(55svh,45rem)]'>
+   <DrawerContent className='h-[min(60svh,50rem)]'>
     <DrawerHeader className='border-b border-input'>
      <DrawerTitle className='text-2xl'>
       {tableUtils.dic.tables.tableActions}
@@ -119,7 +119,7 @@ export default function SalonTable({
          <p>
           {tableUtils.dic.tables.printed}{' '}
           {!!table.printCount && table.printCount > 1 && (
-           <span>(table.printCount)</span>
+           <span>({table.printCount})</span>
           )}{' '}
          </p>
         </div>
