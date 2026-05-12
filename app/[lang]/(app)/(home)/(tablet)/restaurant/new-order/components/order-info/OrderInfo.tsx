@@ -66,6 +66,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
   getValues,
   formState: { errors },
   clearErrors,
+  setFocus,
  } = useFormContext<OrderInfo>();
  const {
   initialDataInfo: {
@@ -947,15 +948,15 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        )}
       />
      </Field>
-     <Field>
+     <Field data-invalid={!!errors.fixedDiscount}>
       <FieldLabel htmlFor='fixed-discount'>
        {dic.orderInfo.fixedDiscount}
       </FieldLabel>
       <Controller
        control={control}
        name='fixedDiscount'
-       render={({ field: { value, onChange, ...other } }) => (
-        <InputGroup className='h-11'>
+       render={({ field: { value, onChange, ref, ...other } }) => (
+        <InputGroup className='h-11' data-invalid={!!errors.fixedDiscount}>
          <NumericFormat
           id='fixed-discount'
           {...other}
@@ -971,14 +972,14 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           thousandSeparator
           allowLeadingZeros={false}
           allowNegative={false}
-          isAllowed={({ floatValue }) => {
-           if (!floatValue) return true;
-           return floatValue < orderTotals.totalSValue;
-          }}
+          getInputRef={ref}
          />
         </InputGroup>
        )}
       />
+      {!!errors.fixedDiscount && (
+       <FieldError>{errors.fixedDiscount.message}</FieldError>
+      )}
      </Field>
      <Field>
       <FieldLabel htmlFor='bonNo'>{dic.orderInfo.bonNo}</FieldLabel>

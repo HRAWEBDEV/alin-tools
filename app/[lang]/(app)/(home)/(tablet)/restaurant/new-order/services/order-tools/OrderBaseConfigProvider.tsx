@@ -1,5 +1,5 @@
 'use client';
-import { useState, useReducer, useEffect, useCallback } from 'react';
+import { useState, useReducer, useEffect, useCallback, useRef } from 'react';
 import { ReactNode } from 'react';
 import { type NewOrderDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/new-order/dictionary';
 import {
@@ -76,6 +76,7 @@ export default function OrderBaseConfigProvider({
  children: ReactNode;
  dic: NewOrderDictionary;
 }) {
+ const systempricingCheckFirstRenderRef = useRef(true);
  const { userAccessibility } = useUserAccessibilityContext();
  const queryClient = useQueryClient();
  const router = useRouter();
@@ -622,7 +623,24 @@ export default function OrderBaseConfigProvider({
   let newOrderData: SaveOrderPackage['order'] | null = null;
   let orderInfoData: OrderInfo | null = null;
   if (!initData) return null;
-
+  const fixedDiscountValue = orderInfoForm.getValues('fixedDiscount');
+  // check fixed discount
+  if (
+   fixedDiscountValue &&
+   fixedDiscountValue > invoiceShopResult.totalSValue
+  ) {
+   showConfirmOrder('orderInfo');
+   setTimeout(() => {
+    orderInfoForm.setError('fixedDiscount', {
+     type: 'value',
+    });
+    orderInfoForm.setFocus('fixedDiscount', {
+     shouldSelect: true,
+    });
+    toast.error(dic.orderInfo.fixedDiscountCannotBeMoreThanTotalSvalues);
+   });
+   return null;
+  }
   await orderInfoForm.handleSubmit(
    (data) => {
     const newOrder = {
@@ -1052,6 +1070,10 @@ export default function OrderBaseConfigProvider({
 
  useEffect(() => {
   if (!systemPricingIsSuccess) return;
+  if (systempricingCheckFirstRenderRef.current) {
+   systempricingCheckFirstRenderRef.current = false;
+   return;
+  }
   if (orderIDQuery) {
    const discountRate = orderInfoForm.getValues('discountRate');
    if (Number(discountRate) === systemPricing?.discountRate) return;

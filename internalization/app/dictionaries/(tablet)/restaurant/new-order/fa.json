@@ -49,7 +49,8 @@
   "enterLastName": "نام خانوادگی را وارد کنید",
   "contractNo": "منو قراردادی",
   "customerContractNo": "شماره قرارداد",
-  "setSystemDiscountRate": "اعمال تخفیف سیستمی"
+  "setSystemDiscountRate": "اعمال تخفیف سیستمی",
+  "fixedDiscountCannotBeMoreThanTotalSvalues": "تخفیف ثابت نمی تواند از جمع آیتم ها بیشتر باشد"
  },
  "orderQuickInfo": {
   "confirm": "تایید",
