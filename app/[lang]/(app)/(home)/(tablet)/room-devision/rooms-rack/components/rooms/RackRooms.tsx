@@ -29,7 +29,6 @@ export default function RackRooms({
    </div>
   );
 
- console.log(rack.data);
  return (
   <div className='grow '>
    {rack.isLoading && <LinearLoading />}

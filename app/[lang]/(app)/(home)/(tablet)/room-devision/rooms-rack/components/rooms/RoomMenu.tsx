@@ -61,6 +61,7 @@ import {
 } from '../../../rooms-management/out-of-order-rooms/services/outOfOrderApiActions';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import NewOutOfOrderRoom from '../../../rooms-management/out-of-order-rooms/components/NewOutOfOrderRoom';
+import GuestExpenses from '../guest-expenses/GuestExpenses';
 
 export default function RoomMenu({
  dic,
@@ -83,6 +84,8 @@ export default function RoomMenu({
  outOfOrderDic,
  showOutOfOrder,
  setShowOutOfOrder,
+ showGuestExpenses,
+ setShowGuestExpenses,
 }: {
  dic: RoomsRackDictionary;
  roomControlDic: RoomControlDictionary;
@@ -103,6 +106,8 @@ export default function RoomMenu({
  setShowRoomNotes: (state: boolean) => unknown;
  showOutOfOrder: boolean;
  setShowOutOfOrder: (state: boolean) => unknown;
+ showGuestExpenses: boolean;
+ setShowGuestExpenses: (state: boolean) => unknown;
  outOfOrderDic: OutOfOrderRoomsDictionary;
 }) {
  const queryClient = useQueryClient();
@@ -342,6 +347,16 @@ export default function RoomMenu({
              variant='outline'
              className='justify-start text-start h-12'
              size='lg'
+             onClick={() => {
+              setShowGuestExpenses(true);
+             }}
+            >
+             {dic.options.guestExpenses}
+            </Button>
+            <Button
+             variant='outline'
+             className='justify-start text-start h-12'
+             size='lg'
              onClick={() => setShowRoomNotes(true)}
             >
              {dic.options.roomNotes}
@@ -459,6 +474,12 @@ export default function RoomMenu({
         }}
        />
       </FormProvider>
+      <GuestExpenses
+       dic={dic}
+       registerID={room.registerID!}
+       open={showGuestExpenses}
+       onChangeOpen={setShowGuestExpenses}
+      />
       <RoomGuestMessagesWrapper
        dic={dic}
        room={room}
