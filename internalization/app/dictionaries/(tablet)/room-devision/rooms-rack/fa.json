@@ -206,5 +206,13 @@
   "title": "هزینه های مهمان اتاق",
   "stay": "اقامت",
   "revenueCenter": "مرکز درآمد"
+ },
+ "guestExpensesStay": {
+  "filters": "فیلترها",
+  "nextDay": "روز بعدی",
+  "prevDay": "روز قبل",
+  "date": "تاریخ",
+  "results": "نتایج",
+  "revenueType": "نوع هزینه"
  }
 }
