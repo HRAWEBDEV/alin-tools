@@ -1,7 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
 import { roomsRackBaseKey } from '../../../services/roomsRackApiActions';
-import { getInitialData } from '../../../services/guest-expenses/guestExpensesApiActions';
+import {
+ getInitialData,
+ getRevenues,
+} from '../../../services/guest-expenses/guestExpensesApiActions';
 import {
  type GuestExpensesSchema,
  createGuestExpensesSchema,
@@ -27,6 +30,10 @@ export default function StayExpenses({
    date: dateFns.startOfToday(),
   },
  });
+ const [dateValue, revenueTypeValue] = filtersUseForm.watch([
+  'date',
+  'revenueType',
+ ]);
 
  const { data: initialData, isLoading: initialDataIsLoading } = useQuery({
   queryKey: [roomsRackBaseKey, 'guest-expenses', 'initial-data'],
@@ -34,6 +41,27 @@ export default function StayExpenses({
    const res = await getInitialData({
     registerID,
     signal,
+   });
+   return res.data;
+  },
+ });
+
+ const { data: revenues, isLoading: revenuesIsLoading } = useQuery({
+  enabled: !!dateValue,
+  queryKey: [
+   roomsRackBaseKey,
+   'guest-expenses',
+   'revenues',
+   dateValue?.toISOString(),
+   revenueTypeValue?.key || 'all',
+  ],
+  async queryFn({ signal }) {
+   const res = await getRevenues({
+    signal,
+    registerID: registerID,
+    date: dateValue?.toISOString(),
+    itemID: revenueTypeValue?.key,
+    deleted: 'false',
    });
    return res.data;
   },
