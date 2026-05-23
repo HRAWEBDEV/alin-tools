@@ -213,6 +213,12 @@
   "prevDay": "روز قبل",
   "date": "تاریخ",
   "results": "نتایج",
-  "revenueType": "نوع هزینه"
+  "revenueType": "نوع هزینه",
+  "room": "اتاق",
+  "amount": "تعداد",
+  "sValue": "مبلغ",
+  "discount": "تخفیف",
+  "service": "سرویس",
+  "totalPrice": "جمع کل"
  }
 }

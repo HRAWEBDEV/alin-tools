@@ -12,8 +12,9 @@ import {
 } from '../../../schemas/guest-expenses/guestExpensesSchema';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useDateFns } from '@/hooks/useDateFns';
 import StayExpensesFilters from './StayExpensesFilters';
+import StayExpensesList from './StayExpensesList';
+import { StayRevenueProps } from '../../../utils/guest-expenses/StayRevenueProps';
 
 export default function StayExpenses({
  dic,
@@ -22,12 +23,10 @@ export default function StayExpenses({
  dic: RoomsRackDictionary;
  registerID: number;
 }) {
- const dateFns = useDateFns();
  const filtersUseForm = useForm<GuestExpensesSchema>({
   resolver: zodResolver(createGuestExpensesSchema()),
   defaultValues: {
    ...defaultValues,
-   date: dateFns.startOfToday(),
   },
  });
  const [dateValue, revenueTypeValue] = filtersUseForm.watch([
@@ -46,12 +45,19 @@ export default function StayExpenses({
   },
  });
 
- const { data: revenues, isLoading: revenuesIsLoading } = useQuery({
-  enabled: !!dateValue,
+ const {
+  data: revenues,
+  isSuccess: revenuesIsSuccess,
+  isLoading: revenuesIsLoading,
+  isError: revenuesIsError,
+  isFetching: revenuesIsFetching,
+  refetch: revenuesRefetch,
+ } = useQuery({
   queryKey: [
    roomsRackBaseKey,
    'guest-expenses',
    'revenues',
+   registerID.toString(),
    dateValue?.toISOString(),
    revenueTypeValue?.key || 'all',
   ],
@@ -67,6 +73,16 @@ export default function StayExpenses({
   },
  });
 
+ const stayRevenueTypes: StayRevenueProps = {
+  data: revenues,
+  isError: revenuesIsError,
+  isFetching: revenuesIsFetching,
+  isSuccess: revenuesIsSuccess,
+  isLoading: revenuesIsLoading,
+  refetch: revenuesRefetch,
+ };
+ console.log(stayRevenueTypes);
+
  return (
   <div>
    <FormProvider {...filtersUseForm}>
@@ -75,6 +91,7 @@ export default function StayExpenses({
      initialData={initialData}
      initialDataIsLoading={initialDataIsLoading}
     />
+    <StayExpensesList dic={dic} stayRevenueTypes={stayRevenueTypes} />
    </FormProvider>
   </div>
  );

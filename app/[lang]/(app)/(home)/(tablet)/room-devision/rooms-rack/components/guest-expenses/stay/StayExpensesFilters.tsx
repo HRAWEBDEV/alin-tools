@@ -303,7 +303,6 @@ export default function StayExpensesFilters({
         <Button
          variant='ghost'
          size='icon-sm'
-         disabled={item.key === 'date'}
          className='text-destructive'
          onClick={() => {
           setValue(
