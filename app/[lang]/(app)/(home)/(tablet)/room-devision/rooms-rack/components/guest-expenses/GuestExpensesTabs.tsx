@@ -26,7 +26,7 @@ export default function GuestExpensesTabs({
     >
      <TabsList className='h-11 w-[min(100%,30rem)] mx-auto bg-neutral-200 dark:bg-neutral-800'>
       <TabsTrigger value='stay'>{dic.guestExpenses.stay}</TabsTrigger>
-      <TabsTrigger value='reserve-ceneter'>
+      <TabsTrigger value='revenue-center'>
        {dic.guestExpenses.revenueCenter}
       </TabsTrigger>
      </TabsList>

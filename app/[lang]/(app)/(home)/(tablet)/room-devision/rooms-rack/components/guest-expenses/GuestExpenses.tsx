@@ -51,7 +51,7 @@ export default function GuestExpenses({
       <Activity
        mode={activeExpenses === 'revenue-center' ? 'visible' : 'hidden'}
       >
-       <RevenueExpenses dic={dic} />
+       <RevenueExpenses dic={dic} registerID={registerID} roomID={roomID} />
       </Activity>
      </div>
     </div>

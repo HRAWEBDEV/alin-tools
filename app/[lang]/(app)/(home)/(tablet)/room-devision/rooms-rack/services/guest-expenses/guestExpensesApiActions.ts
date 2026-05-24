@@ -125,5 +125,33 @@ function updateRevenue({ registerID, roomID, revenue }: SaveRevenuePackage) {
  });
 }
 
+function getInvoices({
+ signal,
+ registerID,
+ date,
+ programID,
+}: {
+ signal: AbortSignal;
+ registerID: number;
+ date?: string;
+ programID?: string;
+}) {
+ const searchParams = new URLSearchParams([
+  ['registerID', registerID.toString()],
+ ]);
+ if (date) {
+  searchParams.set('date', date);
+ }
+ if (programID) {
+  searchParams.set('programID', programID);
+ }
+ return axios.get<Revenue[]>(
+  `/Reception/RoomGuestCost/GetProgramRevenues?${searchParams.toString()}`,
+  {
+   signal,
+  },
+ );
+}
+
 export type { InitialData, Revenue, SaveRevenuePackage };
-export { getInitialData, getRevenues, saveRevenue, updateRevenue };
+export { getInitialData, getRevenues, getInvoices, saveRevenue, updateRevenue };
