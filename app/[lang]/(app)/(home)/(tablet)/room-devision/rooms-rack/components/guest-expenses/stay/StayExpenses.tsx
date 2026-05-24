@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
 import { roomsRackBaseKey } from '../../../services/roomsRackApiActions';
 import {
@@ -22,10 +22,13 @@ import NewStayExpense from './NewStayExpense';
 export default function StayExpenses({
  dic,
  registerID,
+ roomID,
 }: {
  dic: RoomsRackDictionary;
  registerID: number;
+ roomID: number;
 }) {
+ const queryClient = useQueryClient();
  const filtersUseForm = useForm<GuestExpensesSchema>({
   resolver: zodResolver(createGuestExpensesSchema()),
   defaultValues: {
@@ -94,6 +97,12 @@ export default function StayExpenses({
   setShowEditRevenue(false);
  }
 
+ function invalidateRevenues() {
+  queryClient.invalidateQueries({
+   queryKey: [roomsRackBaseKey, 'guest-expenses', 'revenues'],
+  });
+ }
+
  const stayRevenueTypes: StayRevenueProps = {
   data: revenues,
   isError: revenuesIsError,
@@ -104,11 +113,15 @@ export default function StayExpenses({
  };
 
  const editRevenueProps: EditStayRevenueProps = {
+  registerID,
+  roomID,
   showEdit: showEditRevenue,
   selectedRevenue,
   selectedRevenueID,
   onCloseEditRevenue: handleCloseEditRevenue,
+  invalidateRevenues,
   onShowEditRevenue: handleShowEditRevenue,
+  arzs: initialData?.arzs,
  };
 
  return (

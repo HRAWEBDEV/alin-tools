@@ -1,3 +1,4 @@
+import { useMemo, useState } from 'react';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { type Locale } from '@/internalization/app/localization';
 
@@ -15,6 +16,10 @@ function getLocaleNumberFormatter(
 }
 
 export function useCurrencyFormatter(options?: Intl.NumberFormatOptions) {
+ const [optionsRef] = useState(options);
  const { locale } = useBaseConfig();
- return getLocaleNumberFormatter(locale, options);
+ const val = useMemo(() => {
+  return getLocaleNumberFormatter(locale, optionsRef);
+ }, [locale, optionsRef]);
+ return val;
 }

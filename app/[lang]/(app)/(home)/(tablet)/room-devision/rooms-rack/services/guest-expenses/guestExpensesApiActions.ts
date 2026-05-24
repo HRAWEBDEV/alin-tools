@@ -40,6 +40,26 @@ interface Revenue {
  refProgramID: number | null;
 }
 
+type SaveRevenuePackage = {
+ registerID: number;
+ roomID: number;
+ revenue: Pick<
+  Revenue,
+  | 'id'
+  | 'roomID'
+  | 'dateTimeDateTimeOffset'
+  | 'itemID'
+  | 'amount'
+  | 'sValue'
+  | 'discount'
+  | 'discountRate'
+  | 'service'
+  | 'tax'
+  | 'arzID'
+  | 'comment'
+ >;
+};
+
 function getInitialData({
  registerID,
  signal,
@@ -89,5 +109,21 @@ function getRevenues({
  );
 }
 
-export type { InitialData, Revenue };
-export { getInitialData, getRevenues };
+function saveRevenue({ registerID, roomID, revenue }: SaveRevenuePackage) {
+ return axios.post('/Reception/RoomGuestCost/SaveRegisterRevenue', {
+  registerID,
+  roomID,
+  revenues: [revenue],
+ });
+}
+
+function updateRevenue({ registerID, roomID, revenue }: SaveRevenuePackage) {
+ return axios.put('/Reception/RoomGuestCost/UpdateRegisterRevenue', {
+  registerID,
+  roomID,
+  revenues: [revenue],
+ });
+}
+
+export type { InitialData, Revenue, SaveRevenuePackage };
+export { getInitialData, getRevenues, saveRevenue, updateRevenue };

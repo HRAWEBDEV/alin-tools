@@ -1,6 +1,9 @@
 import { z } from 'zod';
 
-const defaultValues: Partial<NewStayExpenseSchema> = {
+const defaultValues: Pick<
+ NewStayExpenseSchema,
+ 'amount' | 'arz' | 'item' | 'discount' | 'discountPercentage' | 'comment'
+> = {
  amount: 1,
  arz: null,
  item: null,

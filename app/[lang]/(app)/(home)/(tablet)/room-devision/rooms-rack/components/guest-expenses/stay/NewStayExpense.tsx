@@ -49,6 +49,16 @@ import {
  InputGroupInput,
  InputGroupTextarea,
 } from '@/components/ui/input-group';
+import { toast } from 'sonner';
+import { AxiosError } from 'axios';
+import { useMutation } from '@tanstack/react-query';
+import {
+ type SaveRevenuePackage,
+ saveRevenue,
+ updateRevenue,
+} from '../../../services/guest-expenses/guestExpensesApiActions';
+import { Spinner } from '@/components/ui/spinner';
+import { Checkbox } from '@/components/ui/checkbox';
 
 export default function NewStayExpense({
  dic,
@@ -64,32 +74,131 @@ export default function NewStayExpense({
   setValue,
   register,
   formState: { errors },
+  watch,
+  handleSubmit,
+  clearErrors,
  } = useForm<NewStayExpenseSchema>({
   resolver: zodResolver(createNewStayExpenseSchema()),
   defaultValues,
  });
+ const [itemService, setItemService] = useState(0);
+ const [itemTax, setItemTax] = useState(0);
+ const [amountValue, priceValue, discountValue] = watch([
+  'amount',
+  'price',
+  'discount',
+ ]);
  const [showDateTimePicker, setShowDateTimePicker] = useState(false);
  const [showTimePicker, setShowTimePicker] = useState(false);
+ const sValue = priceValue && amountValue ? priceValue * amountValue : '';
 
  const setFormDefaults = useCallback(() => {
   setValue('dateTime', new Date());
- }, [setValue]);
+  setItemService(0);
+  setItemTax(0);
+  setValue('dateTime', new Date());
+  setValue('amount', defaultValues['amount']);
+  setValue('comment', defaultValues['comment']);
+  setValue('discount', defaultValues['discount']);
+  setValue('discountPercentage', defaultValues['discountPercentage']);
+  setValue('item', defaultValues['item']);
+  if (editRevenue.arzs) {
+   setValue('arz', editRevenue.arzs[0]);
+  }
+  setValue('price', 0);
+ }, [setValue, editRevenue]);
+
+ const { mutate: confirmSave, isPending: saveIsPending } = useMutation({
+  mutationFn(data: NewStayExpenseSchema) {
+   const revenue: SaveRevenuePackage['revenue'] = {
+    ...(editRevenue.selectedRevenue || {}),
+    id: editRevenue.selectedRevenueID ? editRevenue.selectedRevenueID : 0,
+    roomID: editRevenue.roomID,
+    dateTimeDateTimeOffset: data.dateTime!.toISOString(),
+    itemID: Number(data.item!.key),
+    amount: data.amount,
+    sValue: sValue || 0,
+    discount: data.discount ? data.discount : 0,
+    discountRate: data.discountPercentage || 0,
+    service: itemService,
+    tax: itemTax,
+    arzID: Number(data.arz!.key),
+    comment: data.comment ? data.comment : null,
+   };
+   return editRevenue.selectedRevenue
+    ? updateRevenue({
+       roomID: editRevenue.roomID,
+       registerID: editRevenue.registerID,
+       revenue,
+      })
+    : saveRevenue({
+       roomID: editRevenue.roomID,
+       registerID: editRevenue.registerID,
+       revenue,
+      });
+  },
+  onSuccess() {
+   editRevenue.onCloseEditRevenue();
+   editRevenue.invalidateRevenues();
+   clearErrors();
+  },
+  onError(err: AxiosError<string>) {
+   toast.error(err.response?.data);
+  },
+ });
 
  useEffect(() => {
   if (editRevenue.selectedRevenue) {
+   setItemService(editRevenue.selectedRevenue.service);
+   setItemTax(editRevenue.selectedRevenue.tax);
+   setValue(
+    'dateTime',
+    new Date(editRevenue.selectedRevenue.dateTimeDateTimeOffset),
+   );
+   setValue('amount', editRevenue.selectedRevenue.amount);
+   setValue('comment', editRevenue.selectedRevenue.comment || '');
+   setValue('discount', editRevenue.selectedRevenue.discount);
+   setValue('discountPercentage', editRevenue.selectedRevenue.discountRate);
+   setValue('item', {
+    key: editRevenue.selectedRevenue.itemID.toString(),
+    value: editRevenue.selectedRevenue.itemName || '',
+   });
+   setValue('arz', {
+    key: editRevenue.selectedRevenue.arzID.toString(),
+    value: editRevenue.selectedRevenue.arzName || '',
+   });
+   if (editRevenue.selectedRevenue.amount) {
+    setValue(
+     'price',
+     editRevenue.selectedRevenue.sValue / editRevenue.selectedRevenue.amount,
+    );
+   }
   } else {
    setFormDefaults();
   }
- }, [editRevenue, setFormDefaults]);
+  clearErrors();
+ }, [editRevenue, setFormDefaults, setValue, clearErrors]);
+
+ const pendAction = saveIsPending;
+
+ useEffect(() => {
+  if (sValue && discountValue) {
+   const discountPercentage = (discountValue / sValue) * 100;
+   setValue('discountPercentage', discountPercentage);
+  } else {
+   setValue('discountPercentage', 0);
+  }
+ }, [sValue, setValue, discountValue, clearErrors]);
 
  return (
   <Dialog
    open={editRevenue.showEdit}
    onOpenChange={() => {
+    if (pendAction) return;
     editRevenue.onCloseEditRevenue();
    }}
   >
-   <DialogContent className='max-sm:rounded-none max-w-[unset]! sm:w-[min(95%,30rem)] gap-0 p-0 sm:max-h-[95svh] overflow-hidden flex flex-col'>
+   <DialogContent className='w-full h-full max-sm:rounded-none max-w-[unset]! sm:w-[min(95%,30rem)] gap-0 p-0 sm:h-auto sm:max-h-[95svh] overflow-hidden flex flex-col'>
     <form className='grow flex flex-col overflow-hidden'>
      <DialogHeader className='p-4 border-b border-input'>
       <DialogHeader>
@@ -279,7 +388,7 @@ export default function NewStayExpense({
               {field.value?.value || ''}
              </span>
              <div className='flex gap-2 items-center'>
-              {field.value && (
+              {/*{field.value && (
                <Button
                 variant={'ghost'}
                 size={'icon-lg'}
@@ -290,7 +399,7 @@ export default function NewStayExpense({
                >
                 <BsTrash className='size-5 text-red-700 dark:text-red-400' />
                </Button>
-              )}
+              )}*/}
               <ChevronsUpDown />
              </div>
             </Button>
@@ -343,12 +452,12 @@ export default function NewStayExpense({
         <Controller
          control={control}
          name='amount'
-         render={({ field: { value, onChange, ...other } }) => (
-          <Field>
+         render={({ field: { value, onChange, ref, ...other } }) => (
+          <Field data-invalid={!!errors.amount}>
            <FieldLabel htmlFor='amount'>
             {dic.guestExpensesStay.amount} *
            </FieldLabel>
-           <InputGroup className='h-11'>
+           <InputGroup className='h-11' data-invalid={!!errors.amount}>
             <NumericFormat
              id='amount'
              {...other}
@@ -357,6 +466,7 @@ export default function NewStayExpense({
              customInput={InputGroupInput}
              decimalScale={0}
              allowLeadingZeros={false}
+             getInputRef={ref}
             />
            </InputGroup>
           </Field>
@@ -365,12 +475,12 @@ export default function NewStayExpense({
         <Controller
          control={control}
          name='price'
-         render={({ field: { value, onChange, ...other } }) => (
-          <Field>
+         render={({ field: { value, onChange, ref, ...other } }) => (
+          <Field data-invalid={!!errors.price}>
            <FieldLabel htmlFor='price'>
             {dic.guestExpensesStay.itemPrice} *
            </FieldLabel>
-           <InputGroup className='h-11'>
+           <InputGroup className='h-11' data-invalid={!!errors.price}>
             <NumericFormat
              id='price'
              {...other}
@@ -380,14 +490,15 @@ export default function NewStayExpense({
              thousandSeparator
              decimalScale={0}
              allowLeadingZeros={false}
+             getInputRef={ref}
             />
            </InputGroup>
           </Field>
          )}
         />
-        <Field className='col-span-full'>
+        <Field>
          <FieldLabel htmlFor='sValue'>
-          {dic.guestExpensesStay.sValue} *
+          {dic.guestExpensesStay.sValue}
          </FieldLabel>
          <InputGroup className='h-11'>
           <NumericFormat
@@ -396,8 +507,90 @@ export default function NewStayExpense({
            customInput={InputGroupInput}
            thousandSeparator
            allowLeadingZeros={false}
+           value={sValue}
           />
          </InputGroup>
+        </Field>
+        <Field data-invalid={!!errors.arz}>
+         <FieldLabel htmlFor='arz'>{dic.guestExpensesStay.arz} *</FieldLabel>
+         <Controller
+          control={control}
+          name='arz'
+          render={({ field }) => (
+           <Drawer>
+            <DrawerTrigger asChild>
+             <Button
+              data-invalid={!!errors.arz}
+              id='arz'
+              variant='outline'
+              role='combobox'
+              className='justify-between h-11'
+              onBlur={field.onBlur}
+              ref={field.ref}
+             >
+              <span className='grow text-ellipsis overflow-hidden text-start'>
+               {field.value?.value || ''}
+              </span>
+              <div className='flex gap-2 items-center'>
+               {/*{field.value && (
+                       <Button
+                        variant={'ghost'}
+                        size={'icon-lg'}
+                        onClick={(e) => {
+                         e.stopPropagation();
+                         field.onChange(null);
+                        }}
+                       >
+                        <BsTrash className='size-5 text-red-700 dark:text-red-400' />
+                       </Button>
+                      )}*/}
+               <ChevronsUpDown />
+              </div>
+             </Button>
+            </DrawerTrigger>
+            <DrawerContent className='h-[min(80svh,35rem)]'>
+             <DrawerHeader className='hidden'>
+              <DrawerTitle>{dic.guestExpensesStay.arz} *</DrawerTitle>
+             </DrawerHeader>
+             <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+              <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
+               {dic.guestExpensesStay.arz}
+              </h1>
+             </div>
+             <div className='overflow-hidden overflow-y-auto'>
+              {editRevenue.arzs?.length ? (
+               <ul>
+                {editRevenue.arzs.map((item) => (
+                 <DrawerClose asChild key={item.key}>
+                  <li
+                   className='flex gap-1 items-center ps-6 py-2'
+                   onClick={() => {
+                    field.onChange(item);
+                   }}
+                  >
+                   <Checkbox
+                    className='size-6'
+                    checked={field.value?.key === item.key}
+                   />
+                   <Button
+                    tabIndex={-1}
+                    variant='ghost'
+                    className='w-full justify-start h-auto text-lg'
+                   >
+                    <span>{item.value}</span>
+                   </Button>
+                  </li>
+                 </DrawerClose>
+                ))}
+               </ul>
+              ) : (
+               <div className='text-center font-medium'></div>
+              )}
+             </div>
+            </DrawerContent>
+           </Drawer>
+          )}
+         />
         </Field>
         <Controller
          control={control}
@@ -436,8 +629,20 @@ export default function NewStayExpense({
              {...other}
              value={value}
              onValueChange={({ floatValue }) => onChange(floatValue || '')}
+             onChange={(e) => {
+              const newValue = e.target.value;
+
+              if (newValue) {
+               if (sValue) {
+                const discount = (sValue * Number(newValue)) / 100;
+                setValue('discount', discount);
+               }
+              } else {
+               setValue('discount', 0);
+              }
+             }}
              customInput={InputGroupInput}
-             decimalScale={0}
+             decimalScale={2}
              isAllowed={({ floatValue }) => {
               if (!floatValue) return true;
               return floatValue <= 100;
@@ -467,11 +672,25 @@ export default function NewStayExpense({
        className='sm:w-24'
        size='lg'
        variant='outline'
-       onClick={() => editRevenue.onCloseEditRevenue()}
+       onClick={() => {
+        editRevenue.onCloseEditRevenue();
+       }}
+       disabled={pendAction}
       >
+       {pendAction && <Spinner />}
        {dic.guestExpensesStay.cancel}
       </Button>
-      <Button type='submit' className='sm:w-24' size='lg'>
+      <Button
+       type='submit'
+       className='sm:w-24'
+       size='lg'
+       disabled={pendAction}
+       onClick={(e) => {
+        e.preventDefault();
+        handleSubmit((data) => confirmSave(data))();
+       }}
+      >
+       {pendAction && <Spinner />}
        {dic.guestExpensesStay.confirm}
       </Button>
      </DialogFooter>

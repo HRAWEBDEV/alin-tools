@@ -16,10 +16,12 @@ export default function GuestExpenses({
  open,
  onChangeOpen,
  registerID,
+ roomID,
 }: {
  dic: RoomsRackDictionary;
  open: boolean;
  registerID: number;
+ roomID: number;
  onChangeOpen: (state: boolean) => unknown;
 }) {
  const [activeExpenses, setActiveExpenses] = useState<GuestExpenseTabs>('stay');
@@ -44,7 +46,7 @@ export default function GuestExpenses({
      />
      <div className='grow order-1'>
       <Activity mode={activeExpenses === 'stay' ? 'visible' : 'hidden'}>
-       <StayExpenses dic={dic} registerID={registerID} />
+       <StayExpenses dic={dic} registerID={registerID} roomID={roomID} />
       </Activity>
       <Activity
        mode={activeExpenses === 'revenue-center' ? 'visible' : 'hidden'}
