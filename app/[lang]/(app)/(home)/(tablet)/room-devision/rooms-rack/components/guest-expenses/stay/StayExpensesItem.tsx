@@ -4,20 +4,26 @@ import { MdTouchApp } from 'react-icons/md';
 import { type Revenue } from '../../../services/guest-expenses/guestExpensesApiActions';
 import { useCurrencyFormatter } from '@/hooks/useCurrencyFormatter';
 import { calculateTotalValue } from '../../../utils/guest-expenses/revenueCalculator';
+import { type EditStayRevenueProps } from '../../../utils/guest-expenses/EditStayRevenueProps';
 
 export default function StayExpensesItem({
  dic,
  revenue,
+ editRevenue,
 }: {
  dic: RoomsRackDictionary;
  revenue: Revenue;
+ editRevenue: EditStayRevenueProps;
 }) {
  const { locale } = useBaseConfig();
  const { format } = useCurrencyFormatter();
 
  return (
   <>
-   <button className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 relative isolate'>
+   <button
+    className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 relative isolate'
+    onClick={() => editRevenue.onShowEditRevenue(revenue.id)}
+   >
     <div className='absolute bottom-0 end-0 -z-1 opacity-60'>
      <MdTouchApp className='size-24 text-neutral-200 dark:text-neutral-800' />
     </div>
@@ -29,11 +35,14 @@ export default function StayExpensesItem({
       <span className='font-medium text-xl'>{revenue.roomLabel}</span>
      </div>
      <div>
-      <span className='text-sm text-neutral-600 dark:text-neutral-400'>
-       {dic.guestExpensesStay.date}:{' '}
-      </span>
-      <span className='font-medium'>
-       {new Date(revenue.dateTimeDateTimeOffset).toLocaleDateString(locale)}
+      <span className='font-medium text-sm text-neutral-800 dark:text-neutral-200'>
+       {new Date(revenue.dateTimeDateTimeOffset).toLocaleDateString(locale, {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+       })}
       </span>
      </div>
     </div>
@@ -47,6 +56,14 @@ export default function StayExpensesItem({
       {dic.guestExpensesStay.amount}:{' '}
      </span>
      <span className='font-medium text-lg'>{revenue.amount}</span>
+     <p className='ms-2 text-neutral-400 dark:text-neutral-600'>
+      <span>{dic.guestExpensesStay.payBy} </span>
+      <span className='font-medium'>
+       {!revenue.entityID || revenue.entityID == 1
+        ? dic.guestExpensesStay.guest
+        : dic.guestExpensesStay.group}
+      </span>
+     </p>
     </div>
     <div className='flex flex-wrap gap-1 items-center'>
      <span className='text-sm text-neutral-600 dark:text-neutral-400 basis-16 text-start'>
@@ -78,6 +95,18 @@ export default function StayExpensesItem({
      </span>
      <p className='font-medium text-lg text-destructive'>
       {format(revenue.service)}
+      <span className='text-sm text-neutral-700 dark:text-neutral-400'>
+       {' '}
+       {revenue.arzName}
+      </span>
+     </p>
+    </div>
+    <div className='flex flex-wrap gap-1 items-center'>
+     <span className='text-sm text-neutral-600 dark:text-neutral-400 basis-16 text-start'>
+      + {dic.guestExpensesStay.tax}:{' '}
+     </span>
+     <p className='font-medium text-lg text-destructive'>
+      {format(revenue.tax)}
       <span className='text-sm text-neutral-700 dark:text-neutral-400'>
        {' '}
        {revenue.arzName}

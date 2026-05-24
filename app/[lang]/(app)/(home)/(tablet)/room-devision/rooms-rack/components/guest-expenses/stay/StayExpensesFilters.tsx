@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
-import { FaFilter } from 'react-icons/fa';
+import { FaFilter, FaPlus } from 'react-icons/fa';
 import { Field, FieldLabel } from '@/components/ui/field';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -31,6 +31,7 @@ import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { Spinner } from '@/components/ui/spinner';
 import { useDateFns } from '@/hooks/useDateFns';
 import { type InitialData } from '../../../services/guest-expenses/guestExpensesApiActions';
+import { type EditStayRevenueProps } from '../../../utils/guest-expenses/EditStayRevenueProps';
 
 const smallBadgeKeys: (keyof GuestExpensesSchema)[] = [];
 const largeBadgeKeys: (keyof GuestExpensesSchema)[] = ['date', 'revenueType'];
@@ -39,10 +40,12 @@ export default function StayExpensesFilters({
  dic,
  initialData,
  initialDataIsLoading,
+ editRevenueProps,
 }: {
  dic: RoomsRackDictionary;
  initialData?: InitialData;
  initialDataIsLoading: boolean;
+ editRevenueProps: EditStayRevenueProps;
 }) {
  const dateFns = useDateFns();
  const [showDatePicker, setShowDatePicker] = useState(false);
@@ -79,8 +82,19 @@ export default function StayExpensesFilters({
  }
 
  return (
-  <div className='[&]:[--default-top-offset:var(--top-offset,0)] sticky top-4 lg:top-(--default-top-offset) bg-background z-3'>
+  <div className='[&]:[--default-top-offset:var(--top-offset,0)] sticky top-0 lg:top-(--default-top-offset) bg-background z-3 py-2'>
    <div className='flex gap-2 items-center mb-1'>
+    <Button
+     size='lg'
+     className='px-3!'
+     disabled={initialDataIsLoading}
+     onClick={() => {
+      editRevenueProps.onShowEditRevenue(null);
+     }}
+    >
+     {initialDataIsLoading ? <Spinner /> : <FaPlus />}
+     <span className='hidden lg:inline'>{dic.guestExpensesStay.new}</span>
+    </Button>
     <div>
      <Drawer>
       <DrawerTrigger>

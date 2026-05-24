@@ -14,7 +14,10 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import StayExpensesFilters from './StayExpensesFilters';
 import StayExpensesList from './StayExpensesList';
-import { StayRevenueProps } from '../../../utils/guest-expenses/StayRevenueProps';
+import { type StayRevenueProps } from '../../../utils/guest-expenses/StayRevenueProps';
+import { type EditStayRevenueProps } from '../../../utils/guest-expenses/EditStayRevenueProps';
+import { useState } from 'react';
+import NewStayExpense from './NewStayExpense';
 
 export default function StayExpenses({
  dic,
@@ -29,6 +32,10 @@ export default function StayExpenses({
    ...defaultValues,
   },
  });
+ const [selectedRevenueID, setSelectedRevenueID] = useState<number | null>(
+  null,
+ );
+ const [showEditRevenue, setShowEditRevenue] = useState(false);
  const [dateValue, revenueTypeValue] = filtersUseForm.watch([
   'date',
   'revenueType',
@@ -72,6 +79,20 @@ export default function StayExpenses({
    return res.data;
   },
  });
+ const selectedRevenue =
+  selectedRevenueID && revenuesIsSuccess
+   ? revenues.find((rev) => rev.id === selectedRevenueID) || null
+   : null;
+
+ function handleShowEditRevenue(id: number | null) {
+  setSelectedRevenueID(id);
+  setShowEditRevenue(true);
+ }
+
+ function handleCloseEditRevenue() {
+  setSelectedRevenueID(null);
+  setShowEditRevenue(false);
+ }
 
  const stayRevenueTypes: StayRevenueProps = {
   data: revenues,
@@ -81,7 +102,14 @@ export default function StayExpenses({
   isLoading: revenuesIsLoading,
   refetch: revenuesRefetch,
  };
- console.log(stayRevenueTypes);
+
+ const editRevenueProps: EditStayRevenueProps = {
+  showEdit: showEditRevenue,
+  selectedRevenue,
+  selectedRevenueID,
+  onCloseEditRevenue: handleCloseEditRevenue,
+  onShowEditRevenue: handleShowEditRevenue,
+ };
 
  return (
   <div>
@@ -90,9 +118,15 @@ export default function StayExpenses({
      dic={dic}
      initialData={initialData}
      initialDataIsLoading={initialDataIsLoading}
+     editRevenueProps={editRevenueProps}
     />
-    <StayExpensesList dic={dic} stayRevenueTypes={stayRevenueTypes} />
+    <StayExpensesList
+     dic={dic}
+     stayRevenueTypes={stayRevenueTypes}
+     editRevenue={editRevenueProps}
+    />
    </FormProvider>
+   <NewStayExpense editRevenue={editRevenueProps} dic={dic} />
   </div>
  );
 }

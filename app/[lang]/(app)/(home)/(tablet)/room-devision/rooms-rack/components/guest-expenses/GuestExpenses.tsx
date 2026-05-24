@@ -36,7 +36,7 @@ export default function GuestExpenses({
       <DialogTitle className='text-lg'>{dic.guestExpenses.title}</DialogTitle>
      </DialogHeader>
     </DialogHeader>
-    <div className='p-2 px-4 grow overflow-auto flex flex-col'>
+    <div className='p-2 px-4 grow overflow-auto flex flex-col [&]:[--top-offset:3.75rem]'>
      <GuestExpensesTabs
       dic={dic}
       activeExpenses={activeExpenses}
