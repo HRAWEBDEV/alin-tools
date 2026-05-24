@@ -618,12 +618,15 @@ export default function NewStayExpense({
         <Controller
          control={control}
          name='discountPercentage'
-         render={({ field: { value, onChange, ...other } }) => (
-          <Field>
+         render={({ field: { value, onChange, ref, ...other } }) => (
+          <Field data-invalid={!!errors.discountPercentage}>
            <FieldLabel htmlFor='discoundiscountPercentage'>
             {dic.guestExpensesStay.discountPercentage}
            </FieldLabel>
-           <InputGroup className='h-11'>
+           <InputGroup
+            className='h-11'
+            data-invalid={!!errors.discountPercentage}
+           >
             <NumericFormat
              id='discoundiscountPercentage'
              {...other}
@@ -641,6 +644,7 @@ export default function NewStayExpense({
                setValue('discount', 0);
               }
              }}
+             getInputRef={ref}
              customInput={InputGroupInput}
              decimalScale={2}
              isAllowed={({ floatValue }) => {
@@ -687,7 +691,14 @@ export default function NewStayExpense({
        disabled={pendAction}
        onClick={(e) => {
         e.preventDefault();
-        handleSubmit((data) => confirmSave(data))();
+        handleSubmit(
+         (data) => confirmSave(data),
+         (err) => {
+          if ('item' in err) {
+           toast.error(dic.guestExpensesStay.noItemIsSelected);
+          }
+         },
+        )();
        }}
       >
        {pendAction && <Spinner />}

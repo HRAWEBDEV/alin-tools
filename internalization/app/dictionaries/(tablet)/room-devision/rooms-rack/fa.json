@@ -208,6 +208,7 @@
   "revenueCenter": "مرکز درآمد"
  },
  "guestExpensesStay": {
+  "noItemIsSelected": "آیتم انتخاب نشده است",
   "filters": "فیلترها",
   "new": "جدید",
   "edit": "ویرایش",
