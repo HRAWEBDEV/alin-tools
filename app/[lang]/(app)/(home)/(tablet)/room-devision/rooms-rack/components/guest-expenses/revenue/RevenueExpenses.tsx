@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
 import { roomsRackBaseKey } from '../../../services/roomsRackApiActions';
@@ -48,7 +49,11 @@ export default function RevenueExpenses({
   'costCenter',
  ]);
 
- const { data: initialData, isLoading: initialDataIsLoading } = useQuery({
+ const {
+  data: initialData,
+  isLoading: initialDataIsLoading,
+  isSuccess: initialDataIsSuccess,
+ } = useQuery({
   queryKey: [roomsRackBaseKey, 'guest-expenses', 'initial-data'],
   async queryFn({ signal }) {
    const res = await getInitialData({
@@ -126,6 +131,18 @@ export default function RevenueExpenses({
   onShowEditInvoice: handleShowEditInvoice,
   arzs: initialData?.arzs,
  };
+
+ useEffect(() => {
+  if (!initialDataIsSuccess) return;
+  const costCenterValue = filtersUseForm.getValues('costCenter');
+  if (
+   !!costCenterValue ||
+   !initialData.minibarPrograms.length ||
+   initialData.minibarPrograms.length > 1
+  )
+   return;
+  filtersUseForm.setValue('costCenter', initialData.minibarPrograms[0]);
+ }, [initialDataIsSuccess, filtersUseForm, initialData?.minibarPrograms]);
 
  return (
   <div>

@@ -13,10 +13,18 @@ export default function InvoiceDetailsList({
  invoiceDetailProps: InvoiceDetailProps;
 }) {
  if (invoiceDetailProps.isSuccess && !invoiceDetailProps.data?.length) {
-  return <NoItemFound />;
+  return (
+   <div className='grow'>
+    <NoItemFound />
+   </div>
+  );
  }
  if (!invoiceDetailProps.isFetching && invoiceDetailProps.isError) {
-  return <UnExpectedError />;
+  return (
+   <div className='grow'>
+    <UnExpectedError />
+   </div>
+  );
  }
  return (
   <div className='grow'>

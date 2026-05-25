@@ -4,6 +4,9 @@
 - fix drawer and dialog overflow
 - add reload button if necessary - for real time data
 
+# 2.3.0
+- add rack guest expenses 
+
 # 2.2.4
 - add rooms rack reserve pie chart 
 

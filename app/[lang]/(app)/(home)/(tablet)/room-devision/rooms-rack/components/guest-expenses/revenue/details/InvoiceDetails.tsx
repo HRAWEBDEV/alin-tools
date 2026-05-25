@@ -31,7 +31,7 @@ export default function InvoiceDetails({
   refetch: detailRefetch,
  } = useQuery({
   enabled: !!editInvoice.selectedInvoice?.orderID,
-  queryKey: [getRevenueInvoicesApi],
+  queryKey: [getRevenueInvoicesApi, editInvoice.selectedInvoice?.orderID],
   placeholderData: [],
   async queryFn({ signal }) {
    const res = await getRevenueInvoices({
@@ -66,6 +66,12 @@ export default function InvoiceDetails({
         ? dic.invoiceDetails.editTitle
         : dic.invoiceDetails.addTitle}
        {editInvoice.selectedInvoice && (
+        <span className='text-xl text-primary'>
+         {' '}
+         {editInvoice.selectedInvoice.orderNo}
+        </span>
+       )}
+       {editInvoice.selectedInvoice && (
         <>
          <span> _ {dic.guestExpensesInvoice.room}: </span>
          <span className='text-xl text-primary'>
@@ -78,7 +84,9 @@ export default function InvoiceDetails({
     </DialogHeader>
     <div className='p-2 px-4 grow overflow-auto flex flex-col'>
      <InvoiceDetailsList dic={dic} invoiceDetailProps={invoiceDetailProps} />
-     <InvoiceDetailsFooter dic={dic} invoiceDetailProps={invoiceDetailProps} />
+     {invoiceDetailProps.isSuccess && !!invoiceDetailProps.data?.length && (
+      <InvoiceDetailsFooter dic={dic} invoiceDetailProps={invoiceDetailProps} />
+     )}
     </div>
    </DialogContent>
   </Dialog>

@@ -63,7 +63,7 @@ export default function StayExpensesItem({
      </div>
     </div>
     <div className='flex items-center justify-between gap-2 whitespace-nowrap'>
-     <p className='text-xl mb-1 font-medium text-primary text-start grow overflow-hidden text-ellipsis'>
+     <p className='text-lg mb-1 font-medium text-primary text-start grow overflow-hidden text-ellipsis'>
       {revenue.itemName}
      </p>
     </div>

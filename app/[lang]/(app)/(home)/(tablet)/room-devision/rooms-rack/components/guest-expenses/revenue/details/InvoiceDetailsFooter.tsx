@@ -43,7 +43,7 @@ export default function InvoiceDetailsFooter({
  );
 
  return (
-  <footer className='sticky bottom-0 bg-background z-3 mt-2 pt-2 border-t border-input grid gap-3 grid-cols-2 md:grid-cols-5'>
+  <footer className='sticky bottom-0 bg-background z-3 mt-1 pt-1 border-t border-input grid gap-1 grid-cols-2 md:grid-cols-5'>
    <Field className='gap-0.5'>
     <FieldLabel>{dic.invoiceDetails.sValue}</FieldLabel>
     <InputGroup>

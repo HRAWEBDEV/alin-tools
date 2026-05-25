@@ -34,7 +34,7 @@ import { type InitialData } from '../../../services/guest-expenses/guestExpenses
 import { EditInvoiceProps } from '../../../utils/guest-expenses/EditInvoiceProps';
 
 const smallBadgeKeys: (keyof GuestExpensesInvoice)[] = [];
-const largeBadgeKeys: (keyof GuestExpensesInvoice)[] = ['date', 'costCenter'];
+const largeBadgeKeys: (keyof GuestExpensesInvoice)[] = [];
 
 export default function RevenueExpensesFilters({
  dic,
@@ -153,7 +153,23 @@ export default function RevenueExpensesFilters({
                <span>
                 {field.value ? field.value.toLocaleDateString(locale) : ''}
                </span>
-               <ChevronDownIcon />
+               <div className='flex gap-1 items-center -me-2'>
+                {field.value && (
+                 <Button
+                  type='button'
+                  variant={'ghost'}
+                  size={'icon'}
+                  onClick={(e) => {
+                   e.stopPropagation();
+                   field.onChange(null);
+                  }}
+                  className='text-rose-700 dark:text-rose-400'
+                 >
+                  <FaRegTrashAlt />
+                 </Button>
+                )}
+                <ChevronDownIcon />
+               </div>
               </Button>
              </PopoverTrigger>
              <PopoverContent

@@ -34,7 +34,7 @@ import { type InitialData } from '../../../services/guest-expenses/guestExpenses
 import { type EditStayRevenueProps } from '../../../utils/guest-expenses/EditStayRevenueProps';
 
 const smallBadgeKeys: (keyof GuestExpensesSchema)[] = [];
-const largeBadgeKeys: (keyof GuestExpensesSchema)[] = ['date', 'revenueType'];
+const largeBadgeKeys: (keyof GuestExpensesSchema)[] = [];
 
 export default function StayExpensesFilters({
  dic,
@@ -151,7 +151,23 @@ export default function StayExpensesFilters({
                <span>
                 {field.value ? field.value.toLocaleDateString(locale) : ''}
                </span>
-               <ChevronDownIcon />
+               <div className='flex gap-1 items-center -me-2'>
+                {field.value && (
+                 <Button
+                  type='button'
+                  variant={'ghost'}
+                  size={'icon'}
+                  onClick={(e) => {
+                   e.stopPropagation();
+                   field.onChange(null);
+                  }}
+                  className='text-rose-700 dark:text-rose-400'
+                 >
+                  <FaRegTrashAlt />
+                 </Button>
+                )}
+                <ChevronDownIcon />
+               </div>
               </Button>
              </PopoverTrigger>
              <PopoverContent
