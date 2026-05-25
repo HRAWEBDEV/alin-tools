@@ -30,6 +30,15 @@ import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { Spinner } from '@/components/ui/spinner';
 import { type InitialData } from '../../../../services/guest-expenses/guestExpensesApiActions';
 import { Checkbox } from '@/components/ui/checkbox';
+import { useDateFns } from '@/hooks/useDateFns';
+import {
+ TimePickerButton,
+ TimePickerRoot,
+ TimePickerSeparator,
+ TimePickerTitle,
+ TimePickerWheel,
+ TimePickerWheels,
+} from '@poursha98/react-ios-time-picker';
 
 const smallBadgeKeys: (keyof InvoiceDetailsFiltersSchema)[] = [];
 const largeBadgeKeys: (keyof InvoiceDetailsFiltersSchema)[] = ['costCenter'];
@@ -43,7 +52,9 @@ export default function InvoiceDetailsFilters({
  results: number;
  costCenters: InitialData['minibarPrograms'];
 }) {
- const [showDatePicker, setShowDatePicker] = useState(false);
+ const dateFns = useDateFns();
+ const [showDateTimePicker, setShowDateTimePicker] = useState(false);
+ const [showTimePicker, setShowTimePicker] = useState(false);
  const { locale, localeInfo } = useBaseConfig();
  const { control, watch } = useFormContext<InvoiceDetailsFiltersSchema>();
  const dateValue = watch('date');
@@ -104,8 +115,13 @@ export default function InvoiceDetailsFilters({
           name='date'
           render={({ field }) => (
            <Field>
-            <FieldLabel htmlFor='date'>{dic.filters.date}</FieldLabel>
-            <Popover open={showDatePicker} onOpenChange={setShowDatePicker}>
+            <FieldLabel htmlFor='date'>{dic.invoiceDetails.date}</FieldLabel>
+            <Popover
+             open={showDateTimePicker}
+             onOpenChange={(newValue) => {
+              setShowDateTimePicker(newValue);
+             }}
+            >
              <PopoverTrigger asChild>
               <Button
                variant='outline'
@@ -117,9 +133,7 @@ export default function InvoiceDetailsFilters({
                <span>
                 {field.value ? field.value.toLocaleDateString(locale) : ''}
                </span>
-               <div className='flex gap-1 items-center -me-2'>
-                <ChevronDownIcon />
-               </div>
+               <ChevronDownIcon />
               </Button>
              </PopoverTrigger>
              <PopoverContent
@@ -130,12 +144,19 @@ export default function InvoiceDetailsFilters({
                mode='single'
                captionLayout='dropdown'
                className='[&]:[--cell-size:2.6rem]'
-               defaultMonth={dateValue || undefined}
                selected={field.value || undefined}
+               defaultMonth={field.value || undefined}
+               endMonth={dateFns.addMonths(new Date(), 1)}
+               disabled={(date) => date.getTime() > Date.now()}
                onSelect={(newValue) => {
                 if (newValue) {
-                 field.onChange(newValue);
-                 setShowDatePicker(false);
+                 const now = new Date();
+                 const newDate = newValue;
+                 newDate.setHours(now.getHours());
+                 newDate.setMinutes(now.getMinutes());
+                 newDate.setSeconds(now.getSeconds());
+                 field.onChange(newDate);
+                 setShowDateTimePicker(false);
                 }
                }}
               />
@@ -144,7 +165,106 @@ export default function InvoiceDetailsFilters({
            </Field>
           )}
          />
-         <Field>
+         <Controller
+          control={control}
+          name='date'
+          render={({ field }) => (
+           <Field>
+            <FieldLabel htmlFor='time'>{dic.invoiceDetails.time}</FieldLabel>
+            <Popover
+             open={showTimePicker}
+             onOpenChange={(newValue) => {
+              setShowTimePicker(newValue);
+             }}
+            >
+             <PopoverTrigger asChild>
+              <Button
+               variant='outline'
+               id='time'
+               className='justify-between font-normal h-11'
+               onBlur={field.onBlur}
+               ref={field.ref}
+              >
+               <span>
+                {field.value
+                 ? field.value.toLocaleTimeString('en', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false,
+                   })
+                 : ''}
+               </span>
+               <ChevronDownIcon />
+              </Button>
+             </PopoverTrigger>
+             <PopoverContent
+              className='overflow-hidden p-0'
+              style={{ width: '320px' }}
+              align='start'
+              onWheel={(e) => e.stopPropagation()}
+              onTouchMove={(e) => e.stopPropagation()}
+             >
+              <TimePickerRoot
+               value={
+                field.value?.toLocaleTimeString('en', {
+                 hour: '2-digit',
+                 minute: '2-digit',
+                 hour12: false,
+                }) || ''
+               }
+               onChange={(timeString) => {
+                if (typeof timeString === 'string') {
+                 const [hour, minute] = timeString
+                  .split(':')
+                  .map((item) => Number(item));
+                 const newDate = new Date(field.value || new Date());
+                 newDate.setHours(hour);
+                 newDate.setMinutes(minute);
+                 field.onChange(newDate);
+                }
+               }}
+               numerals='fa'
+               className='w-full rounded-3xl!'
+               loop
+              >
+               <TimePickerTitle className='text-primary text-xl font-bold mb-4'>
+                {dic.invoiceDetails.time}
+               </TimePickerTitle>
+               <TimePickerWheels className='flex justify-center items-center gap-2'>
+                <TimePickerWheel
+                 type='hour'
+                 classNames={{
+                  item: 'text-gray-400',
+                  selectedItem: 'text-primary',
+                 }}
+                />
+
+                <TimePickerSeparator className='text-primary! text-2xl font-bold'>
+                 :
+                </TimePickerSeparator>
+
+                <TimePickerWheel
+                 type='minute'
+                 classNames={{
+                  item: 'text-gray-400',
+                  selectedItem: 'text-primary',
+                 }}
+                />
+               </TimePickerWheels>
+
+               <TimePickerButton
+                className='mt-6 w-full bg-primary text-white py-3 rounded-2xl'
+                onClick={() => setShowTimePicker(!showTimePicker)}
+               >
+                {dic.invoiceDetails.confirm}
+               </TimePickerButton>
+              </TimePickerRoot>
+             </PopoverContent>
+            </Popover>
+           </Field>
+          )}
+         />
+         <Field className='col-span-full'>
           <FieldLabel htmlFor='revenue-type'>
            {dic.invoiceDetails.costCenter}
           </FieldLabel>
@@ -235,6 +355,8 @@ export default function InvoiceDetailsFilters({
         year: 'numeric',
         month: '2-digit',
         day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
        });
       }
 

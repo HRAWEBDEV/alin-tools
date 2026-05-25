@@ -42,7 +42,6 @@ import {
  DrawerTitle,
  DrawerTrigger,
 } from '@/components/ui/drawer';
-import { BsTrash } from 'react-icons/bs';
 import { NumericFormat } from 'react-number-format';
 import {
  InputGroup,
