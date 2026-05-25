@@ -112,6 +112,7 @@ export function RoomsRackConfigProvider({
  const [showRoomStateType, setShowRoomStateType] = useState(false);
  const [showRoomControl, setShowRoomControl] = useState(false);
  const [showGuestMessages, setShowGuestMessages] = useState(false);
+ const [showGuestExpenses, setShowGuestExpenses] = useState(false);
  const [showRoomNotes, setShowRoomNotes] = useState(false);
  const [rackView, setRackView] = useState<RackView>(rackSetting.layout);
  const targetSelectedRoom = selectedRoom
@@ -735,6 +736,8 @@ export function RoomsRackConfigProvider({
      setShowRoomNotes={setShowRoomNotes}
      showOutOfOrder={showOutOfOrder}
      setShowOutOfOrder={setShowOutOfOrder}
+     showGuestExpenses={showGuestExpenses}
+     setShowGuestExpenses={setShowGuestExpenses}
      setIsOpen={(value) => {
       if (value) {
        return;
