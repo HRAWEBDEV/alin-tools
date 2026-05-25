@@ -14,20 +14,23 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { type InvoicesProps } from '../../../utils/guest-expenses/InvoicesProps';
 import { type EditInvoiceProps } from '../../../utils/guest-expenses/EditInvoiceProps';
-// import StayExpensesFilters from './StayExpensesFilters';
-// import StayExpensesList from './StayExpensesList';
 import RevenueExpensesFilters from './RevenueExpensesFilters';
 import RevenueExpensesList from './RevenueExpensesList';
 import { useState } from 'react';
+import InvoiceDetails from './details/InvoiceDetails';
 
 export default function RevenueExpenses({
  dic,
  registerID,
  roomID,
+ onCloseGuestExpenses,
+ onOpenGuestExpenses,
 }: {
  dic: RoomsRackDictionary;
  registerID: number;
  roomID: number;
+ onOpenGuestExpenses: () => unknown;
+ onCloseGuestExpenses: () => unknown;
 }) {
  const queryClient = useQueryClient();
  const filtersUseForm = useForm<GuestExpensesInvoice>({
@@ -139,6 +142,9 @@ export default function RevenueExpenses({
      editRevenue={editInvoiceProps}
     />
    </FormProvider>
+   {showEditInvoice && (
+    <InvoiceDetails dic={dic} editInvoice={editInvoiceProps} />
+   )}
   </div>
  );
 }

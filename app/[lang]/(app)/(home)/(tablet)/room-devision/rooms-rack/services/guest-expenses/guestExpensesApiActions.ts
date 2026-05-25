@@ -1,6 +1,9 @@
 import { axios } from '@/app/[lang]/(app)/utils/defaultAxios';
 import { type Combo } from '../../../../restaurant/utils/apiTypes';
 
+const getRevenueInvoicesApi =
+ '/Reception/RoomGuestCost/GetProgramDetailRevenues';
+
 interface InitialData {
  items: Combo[];
  programs: Combo[];
@@ -38,6 +41,26 @@ interface Revenue {
  comment: string | null;
  refProgramName: string | null;
  refProgramID: number | null;
+}
+
+interface Invoice {
+ id: number;
+ itemName: string;
+ itemCode: number;
+ itemID: number;
+ amount: number;
+ sValue: number;
+ discount: number;
+ service: number;
+ serviceRate: number;
+ taxRate: number;
+ tax: number;
+ arzID: number;
+ programID: number;
+ refProgramID: number;
+ roomingDateTimeOffset: string | null;
+ dateTimeDateTimeOffset: string | null;
+ comment: string | null;
 }
 
 type SaveRevenuePackage = {
@@ -153,5 +176,27 @@ function getInvoices({
  );
 }
 
-export type { InitialData, Revenue, SaveRevenuePackage };
-export { getInitialData, getRevenues, getInvoices, saveRevenue, updateRevenue };
+function getRevenueInvoices({
+ signal,
+ orderID,
+}: {
+ signal: AbortSignal;
+ orderID: number;
+}) {
+ const searchParams = new URLSearchParams([['orderID', orderID.toString()]]);
+ return axios.get<{ revenues: Invoice[] }>(
+  `${getRevenueInvoicesApi}?${searchParams.toString()}`,
+  { signal },
+ );
+}
+
+export type { InitialData, Revenue, SaveRevenuePackage, Invoice };
+export {
+ getInitialData,
+ getRevenues,
+ getInvoices,
+ saveRevenue,
+ updateRevenue,
+ getRevenueInvoicesApi,
+ getRevenueInvoices,
+};

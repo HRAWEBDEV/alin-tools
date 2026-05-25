@@ -478,6 +478,7 @@ export default function RoomMenu({
        dic={dic}
        registerID={room.registerID!}
        roomID={room.roomID}
+       roomLabel={room.roomLabel}
        open={showGuestExpenses}
        onChangeOpen={setShowGuestExpenses}
       />

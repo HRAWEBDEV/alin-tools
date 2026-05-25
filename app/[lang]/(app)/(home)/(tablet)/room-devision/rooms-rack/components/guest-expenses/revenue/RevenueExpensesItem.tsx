@@ -30,9 +30,9 @@ export default function RevenueExpensesItem({
     <div className='flex flex-wrap justify-between gap-1 mb-1'>
      <div>
       <span className='text-sm text-neutral-600 dark:text-neutral-400'>
-       {dic.guestExpensesInvoice.room}:{' '}
+       {dic.guestExpensesInvoice.orderNo}:{' '}
       </span>
-      <span className='font-medium text-xl'>{revenue.roomLabel}</span>
+      <span className='font-medium text-xl'>{revenue.orderNo}</span>
      </div>
      <div>
       <span className='font-medium text-sm text-neutral-800 dark:text-neutral-200'>
@@ -47,7 +47,7 @@ export default function RevenueExpensesItem({
      </div>
     </div>
     <div className='flex items-center justify-between gap-2 whitespace-nowrap'>
-     <p className='text-base mb-1 font-medium text-primary text-start grow overflow-hidden text-ellipsis'>
+     <p className='text-xl mb-1 font-medium text-primary text-start grow overflow-hidden text-ellipsis'>
       {revenue.itemName}
      </p>
     </div>

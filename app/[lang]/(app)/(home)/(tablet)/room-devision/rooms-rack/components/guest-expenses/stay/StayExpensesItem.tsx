@@ -1,6 +1,6 @@
 import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
-import { MdTouchApp } from 'react-icons/md';
+import { MdTouchApp, MdArrowBack } from 'react-icons/md';
 import { type Revenue } from '../../../services/guest-expenses/guestExpensesApiActions';
 import { useCurrencyFormatter } from '@/hooks/useCurrencyFormatter';
 import { calculateTotalValue } from '../../../utils/guest-expenses/revenueCalculator';
@@ -18,14 +18,30 @@ export default function StayExpensesItem({
  const { locale } = useBaseConfig();
  const { format } = useCurrencyFormatter();
 
+ const totalPrice = calculateTotalValue({
+  sValue: revenue.sValue,
+  discount: revenue.discount,
+  serviceRate: revenue.serviceRate,
+  taxRate: revenue.taxRate,
+ });
+
+ const returnedRevenue = revenue.id < 0;
+
  return (
   <>
    <button
     className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 relative isolate'
-    onClick={() => editRevenue.onShowEditRevenue(revenue.id)}
+    onClick={() => {
+     if (returnedRevenue) return;
+     editRevenue.onShowEditRevenue(revenue.id);
+    }}
    >
     <div className='absolute bottom-0 end-0 -z-1 opacity-60'>
-     <MdTouchApp className='size-24 text-neutral-200 dark:text-neutral-800' />
+     {returnedRevenue ? (
+      <MdArrowBack className='size-24 text-neutral-300 dark:text-neutral-700' />
+     ) : (
+      <MdTouchApp className='size-24 text-neutral-200 dark:text-neutral-800' />
+     )}
     </div>
     <div className='flex flex-wrap justify-between gap-1 mb-1'>
      <div>
@@ -47,7 +63,7 @@ export default function StayExpensesItem({
      </div>
     </div>
     <div className='flex items-center justify-between gap-2 whitespace-nowrap'>
-     <p className='text-base mb-1 font-medium text-primary text-start grow overflow-hidden text-ellipsis'>
+     <p className='text-xl mb-1 font-medium text-primary text-start grow overflow-hidden text-ellipsis'>
       {revenue.itemName}
      </p>
     </div>
@@ -70,7 +86,9 @@ export default function StayExpensesItem({
       {dic.guestExpensesStay.sValue}:{' '}
      </span>
      <p className='font-medium text-lg'>
-      {format(revenue.sValue)}
+      {revenue.sValue >= 0
+       ? format(revenue.sValue)
+       : `( ${format(revenue.sValue)} )`}
       <span className='text-sm text-neutral-700 dark:text-neutral-400'>
        {' '}
        {revenue.arzName}
@@ -118,14 +136,7 @@ export default function StayExpensesItem({
       = {dic.guestExpensesStay.totalPrice}:{' '}
      </span>
      <p className='font-medium text-lg text-primary'>
-      {format(
-       calculateTotalValue({
-        sValue: revenue.sValue,
-        discount: revenue.discount,
-        serviceRate: revenue.serviceRate,
-        taxRate: revenue.taxRate,
-       }),
-      )}
+      {totalPrice >= 0 ? format(totalPrice) : `( ${format(totalPrice)} )`}
       <span className='text-sm text-neutral-700 dark:text-neutral-400'>
        {' '}
        {revenue.arzName}
