@@ -270,7 +270,11 @@
  "invoiceDetails": {
   "addTitle": "صورتحساب جدید",
   "editTitle": "صورتحساب",
+  "filters": "فیلترها",
+  "results": "نتایج",
   "new": "جدید",
+  "nextDay": "روز بعد",
+  "prevDay": "روز قبل",
   "date": "تاریخ",
   "time": "ساعت",
   "orderNo": "سفارش",

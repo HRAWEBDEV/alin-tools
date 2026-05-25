@@ -12,6 +12,7 @@ import {
  getRevenueInvoices,
 } from '../../../../services/guest-expenses/guestExpensesApiActions';
 import { InvoiceDetailProps } from '../../../../utils/guest-expenses/InvoiceDetailProps';
+import InvoiceDetailsFilters from './InvoiceDetailsFilters';
 import InvoiceDetailsList from './InvoiceDetailsList';
 import InvoiceDetailsFooter from './InvoiceDetailsFooter';
 
@@ -83,6 +84,7 @@ export default function InvoiceDetails({
      </DialogHeader>
     </DialogHeader>
     <div className='p-2 px-4 grow overflow-auto flex flex-col'>
+     <InvoiceDetailsFilters dic={dic} />
      <InvoiceDetailsList dic={dic} invoiceDetailProps={invoiceDetailProps} />
      {invoiceDetailProps.isSuccess && !!invoiceDetailProps.data?.length && (
       <InvoiceDetailsFooter dic={dic} invoiceDetailProps={invoiceDetailProps} />
