@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
-import { FaFilter, FaPlus } from 'react-icons/fa';
+import { FaPlus } from 'react-icons/fa';
 import { Field, FieldLabel } from '@/components/ui/field';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -24,26 +24,28 @@ import {
  PopoverTrigger,
 } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
-import { ChevronsUpDown, ChevronDownIcon } from 'lucide-react';
-import { FaRegTrashAlt } from 'react-icons/fa';
-import { Checkbox } from '@/components/ui/checkbox';
+import { ChevronDownIcon, ChevronsUpDown } from 'lucide-react';
+import { FaInfoCircle } from 'react-icons/fa';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { Spinner } from '@/components/ui/spinner';
-import { useDateFns } from '@/hooks/useDateFns';
+import { type InitialData } from '../../../../services/guest-expenses/guestExpensesApiActions';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const smallBadgeKeys: (keyof InvoiceDetailsFiltersSchema)[] = [];
-const largeBadgeKeys: (keyof InvoiceDetailsFiltersSchema)[] = [];
+const largeBadgeKeys: (keyof InvoiceDetailsFiltersSchema)[] = ['costCenter'];
 
 export default function InvoiceDetailsFilters({
  dic,
+ results,
+ costCenters,
 }: {
  dic: RoomsRackDictionary;
+ results: number;
+ costCenters: InitialData['minibarPrograms'];
 }) {
- const dateFns = useDateFns();
  const [showDatePicker, setShowDatePicker] = useState(false);
  const { locale, localeInfo } = useBaseConfig();
- const { control, watch, setValue, getValues } =
-  useFormContext<InvoiceDetailsFiltersSchema>();
+ const { control, watch } = useFormContext<InvoiceDetailsFiltersSchema>();
  const dateValue = watch('date');
 
  const [sliderRef] = useKeenSlider({
@@ -59,21 +61,11 @@ export default function InvoiceDetailsFilters({
  const filtersKeyValue = filterValues.map((value, i) => {
   return {
    key: filterKeys[i],
-   value: value instanceof Date ? value.toISOString() : '',
+   value: value instanceof Date ? value.toISOString() : value?.value,
   };
  });
 
  const activeFilters = filtersKeyValue.filter((item) => !!item.value);
-
- function goToNextDay() {
-  const dateValue = getValues('date') || dateFns.startOfToday();
-  setValue('date', dateFns.addDays(dateValue, 1));
- }
-
- function goToPrevDay() {
-  const dateValue = getValues('date') || dateFns.startOfToday();
-  setValue('date', dateFns.addDays(dateValue, -1));
- }
 
  return (
   <div className='[&]:[--default-top-offset:var(--top-offset,0)] sticky top-0 lg:top-(--default-top-offset) bg-background z-3 py-1'>
@@ -90,39 +82,28 @@ export default function InvoiceDetailsFilters({
         size='lg'
         className='text-neutral-600 dark:text-neutral-400'
        >
-        <FaFilter className='size-4' />
-        <span className='hidden md:inline'>{dic.invoiceDetails.filters}</span>
-        {true && (
-         <Badge variant='destructive' className='size-6'>
-          {activeFilters.length}
-         </Badge>
-        )}
+        <FaInfoCircle className='size-5' />
+        <span className='hidden md:inline'>
+         {dic.invoiceDetails.invoiceInfo}
+        </span>
        </Button>
       </DrawerTrigger>
       <DrawerContent className='h-[min(60svh,30rem)] flex flex-col'>
        <DrawerHeader>
         <DrawerTitle className='text-xl'>
-         {dic.invoiceDetails.filters}{' '}
+         {dic.invoiceDetails.invoiceInfo}{' '}
          <span className='text-sm text-neutral-700 dark:text-neutral-400'>
-          ({dic.invoiceDetails.results}: {1})
+          ({dic.invoiceDetails.results}: {results})
          </span>
         </DrawerTitle>
        </DrawerHeader>
        <div className='grow overflow-auto p-4'>
-        <div className='mx-auto w-[min(100%,25rem)] grid grid-cols-1 sm:grid-cols-2 gap-4'>
-         <div className='col-span-full flex justify-center items-center gap-4'>
-          <Button size='lg' variant='outline' onClick={goToPrevDay}>
-           {dic.invoiceDetails.prevDay}
-          </Button>
-          <Button size='lg' variant='outline' onClick={goToNextDay}>
-           {dic.invoiceDetails.nextDay}
-          </Button>
-         </div>
+        <div className='mx-auto w-[min(100%,35rem)] grid grid-cols-1 sm:grid-cols-2 gap-4'>
          <Controller
           control={control}
           name='date'
           render={({ field }) => (
-           <Field className='col-span-full'>
+           <Field>
             <FieldLabel htmlFor='date'>{dic.filters.date}</FieldLabel>
             <Popover open={showDatePicker} onOpenChange={setShowDatePicker}>
              <PopoverTrigger asChild>
@@ -137,20 +118,6 @@ export default function InvoiceDetailsFilters({
                 {field.value ? field.value.toLocaleDateString(locale) : ''}
                </span>
                <div className='flex gap-1 items-center -me-2'>
-                {field.value && (
-                 <Button
-                  type='button'
-                  variant={'ghost'}
-                  size={'icon'}
-                  onClick={(e) => {
-                   e.stopPropagation();
-                   field.onChange(null);
-                  }}
-                  className='text-rose-700 dark:text-rose-400'
-                 >
-                  <FaRegTrashAlt />
-                 </Button>
-                )}
                 <ChevronDownIcon />
                </div>
               </Button>
@@ -177,27 +144,77 @@ export default function InvoiceDetailsFilters({
            </Field>
           )}
          />
+         <Field>
+          <FieldLabel htmlFor='revenue-type'>
+           {dic.invoiceDetails.costCenter}
+          </FieldLabel>
+          <Controller
+           control={control}
+           name='costCenter'
+           render={({ field }) => (
+            <Drawer>
+             <DrawerTrigger asChild>
+              <Button
+               id='revenue-type'
+               variant='outline'
+               role='combobox'
+               className='justify-between h-11'
+               onBlur={field.onBlur}
+               ref={field.ref}
+              >
+               <span className='text-start grow overflow-hidden text-ellipsis'>
+                {field.value ? field.value.value : ''}
+               </span>
+               <div className='flex gap-1 items-center -me-2'>
+                <ChevronsUpDown className='opacity-50' />
+               </div>
+              </Button>
+             </DrawerTrigger>
+             <DrawerContent className='h-[min(60svh,35rem)]'>
+              <DrawerHeader className='hidden'>
+               <DrawerTitle>{dic.guestExpensesInvoice.costCenter}</DrawerTitle>
+              </DrawerHeader>
+              <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+               <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
+                {dic.guestExpensesInvoice.costCenter}
+               </h1>
+              </div>
+              <div>
+               <ul>
+                {costCenters.map((item) => (
+                 <DrawerClose asChild key={item.key}>
+                  <li
+                   className='flex gap-1 items-center ps-6 py-2'
+                   onClick={() => {
+                    field.onChange(item);
+                   }}
+                  >
+                   <Checkbox
+                    className='size-6'
+                    checked={field.value?.key === item.key}
+                   />
+                   <Button
+                    tabIndex={-1}
+                    variant='ghost'
+                    className='w-full justify-start h-auto text-lg'
+                   >
+                    <span>{item.value}</span>
+                   </Button>
+                  </li>
+                 </DrawerClose>
+                ))}
+               </ul>
+              </div>
+             </DrawerContent>
+            </Drawer>
+           )}
+          />
+         </Field>
         </div>
        </div>
       </DrawerContent>
      </Drawer>
     </div>
-    <Button
-     size='lg'
-     className='px-3 hidden lg:flex'
-     variant='outline'
-     onClick={goToPrevDay}
-    >
-     {dic.invoiceDetails.prevDay}
-    </Button>
-    <Button
-     size='lg'
-     className='px-3 hidden lg:flex'
-     variant='outline'
-     onClick={goToNextDay}
-    >
-     {dic.invoiceDetails.nextDay}
-    </Button>
     <div
      key={`expand-${activeFilters.length}`}
      ref={sliderRef}
@@ -234,21 +251,6 @@ export default function InvoiceDetailsFilters({
          </span>
          {badgeValue}
         </p>
-        <Button
-         variant='ghost'
-         size='icon-sm'
-         className='text-destructive'
-         onClick={() => {
-          setValue(
-           item.key,
-           defaultValues[
-            item.key
-           ] as InvoiceDetailsFiltersSchema[keyof InvoiceDetailsFiltersSchema],
-          );
-         }}
-        >
-         <FaRegTrashAlt />
-        </Button>
        </Badge>
       );
      })}

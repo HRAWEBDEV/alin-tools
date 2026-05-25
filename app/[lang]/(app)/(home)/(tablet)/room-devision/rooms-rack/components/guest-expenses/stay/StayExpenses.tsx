@@ -132,6 +132,7 @@ export default function StayExpenses({
      initialData={initialData}
      initialDataIsLoading={initialDataIsLoading}
      editRevenueProps={editRevenueProps}
+     results={revenues?.length || 0}
     />
     <StayExpensesList
      dic={dic}

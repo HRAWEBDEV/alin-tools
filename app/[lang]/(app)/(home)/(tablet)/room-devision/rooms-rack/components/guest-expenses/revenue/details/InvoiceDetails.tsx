@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
 import {
  Dialog,
@@ -11,18 +12,34 @@ import {
  getRevenueInvoicesApi,
  getRevenueInvoices,
 } from '../../../../services/guest-expenses/guestExpensesApiActions';
-import { InvoiceDetailProps } from '../../../../utils/guest-expenses/InvoiceDetailProps';
+import { type InvoiceDetailProps } from '../../../../utils/guest-expenses/InvoiceDetailProps';
 import InvoiceDetailsFilters from './InvoiceDetailsFilters';
 import InvoiceDetailsList from './InvoiceDetailsList';
 import InvoiceDetailsFooter from './InvoiceDetailsFooter';
+import { type InitialData } from '../../../../services/guest-expenses/guestExpensesApiActions';
+import {
+ type InvoiceDetailsFiltersSchema,
+ defaultValues,
+ createInvoiceDetailsFiltersSchema,
+} from '../../../../schemas/guest-expenses/invoiceDetailsFiltersSchema';
+import { useForm, FormProvider } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 export default function InvoiceDetails({
  dic,
  editInvoice,
+ costCenters,
+ defaultCostCenter,
 }: {
  dic: RoomsRackDictionary;
  editInvoice: EditInvoiceProps;
+ costCenters: InitialData['minibarPrograms'];
+ defaultCostCenter: InitialData['minibarPrograms'][number];
 }) {
+ const filtersUseForm = useForm<InvoiceDetailsFiltersSchema>({
+  defaultValues,
+  resolver: zodResolver(createInvoiceDetailsFiltersSchema()),
+ });
  const {
   data: detailInvoices = [],
   isFetching: detailIsFetching,
@@ -52,6 +69,29 @@ export default function InvoiceDetails({
   isSuccess: detailIsSuccess,
  };
 
+ useEffect(() => {
+  if (editInvoice.selectedInvoice) {
+   filtersUseForm.setValue(
+    'date',
+    new Date(editInvoice.selectedInvoice.dateTimeDateTimeOffset),
+   );
+   if (editInvoice.selectedInvoice.refProgramID) {
+    filtersUseForm.setValue('costCenter', {
+     key: editInvoice.selectedInvoice.refProgramID?.toString(),
+     value: editInvoice.selectedInvoice.refProgramName || '',
+    });
+   }
+  } else {
+   filtersUseForm.setValue('costCenter', defaultCostCenter);
+   filtersUseForm.setValue('date', new Date());
+  }
+ }, [
+  editInvoice.selectedInvoice,
+  invoiceDetailProps.isSuccess,
+  defaultCostCenter,
+  filtersUseForm,
+ ]);
+
  return (
   <Dialog
    open={editInvoice.showEdit}
@@ -74,9 +114,17 @@ export default function InvoiceDetails({
        )}
        {editInvoice.selectedInvoice && (
         <>
-         <span> _ {dic.guestExpensesInvoice.room}: </span>
+         <span> _ {dic.invoiceDetails.room}: </span>
          <span className='text-xl text-primary'>
           {editInvoice.selectedInvoice.roomLabel}
+         </span>
+        </>
+       )}
+       {editInvoice.selectedInvoice && (
+        <>
+         <span> _ {dic.invoiceDetails.bonNo}: </span>
+         <span className='text-xl text-primary'>
+          {editInvoice.selectedInvoice.bonNo}
          </span>
         </>
        )}
@@ -84,11 +132,20 @@ export default function InvoiceDetails({
      </DialogHeader>
     </DialogHeader>
     <div className='p-2 px-4 grow overflow-auto flex flex-col'>
-     <InvoiceDetailsFilters dic={dic} />
-     <InvoiceDetailsList dic={dic} invoiceDetailProps={invoiceDetailProps} />
-     {invoiceDetailProps.isSuccess && !!invoiceDetailProps.data?.length && (
-      <InvoiceDetailsFooter dic={dic} invoiceDetailProps={invoiceDetailProps} />
-     )}
+     <FormProvider {...filtersUseForm}>
+      <InvoiceDetailsFilters
+       dic={dic}
+       results={detailInvoices.length || 0}
+       costCenters={costCenters}
+      />
+      <InvoiceDetailsList dic={dic} invoiceDetailProps={invoiceDetailProps} />
+      {invoiceDetailProps.isSuccess && !!invoiceDetailProps.data?.length && (
+       <InvoiceDetailsFooter
+        dic={dic}
+        invoiceDetailProps={invoiceDetailProps}
+       />
+      )}
+     </FormProvider>
     </div>
    </DialogContent>
   </Dialog>

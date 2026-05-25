@@ -2,17 +2,24 @@ import { z } from 'zod';
 
 const defaultValues: Partial<InvoiceDetailsFiltersSchema> = {
  date: null,
+ costCenter: null,
 };
 
-function invoiceDetailsFiltersSchema() {
+function createInvoiceDetailsFiltersSchema() {
  return z.object({
   date: z.date().nullable(),
+  costCenter: z
+   .object({
+    key: z.string(),
+    value: z.string(),
+   })
+   .nullable(),
  });
 }
 
 type InvoiceDetailsFiltersSchema = z.infer<
- ReturnType<typeof invoiceDetailsFiltersSchema>
+ ReturnType<typeof createInvoiceDetailsFiltersSchema>
 >;
 
 export type { InvoiceDetailsFiltersSchema };
-export { defaultValues, invoiceDetailsFiltersSchema };
+export { defaultValues, createInvoiceDetailsFiltersSchema };

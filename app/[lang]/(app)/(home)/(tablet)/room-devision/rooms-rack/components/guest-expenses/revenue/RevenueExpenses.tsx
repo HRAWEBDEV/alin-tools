@@ -24,8 +24,6 @@ export default function RevenueExpenses({
  dic,
  registerID,
  roomID,
- onCloseGuestExpenses,
- onOpenGuestExpenses,
 }: {
  dic: RoomsRackDictionary;
  registerID: number;
@@ -152,6 +150,7 @@ export default function RevenueExpenses({
      initialData={initialData}
      initialDataIsLoading={initialDataIsLoading}
      editRevenueProps={editInvoiceProps}
+     results={invoices?.length || 0}
     />
     <RevenueExpensesList
      dic={dic}
@@ -160,7 +159,12 @@ export default function RevenueExpenses({
     />
    </FormProvider>
    {showEditInvoice && (
-    <InvoiceDetails dic={dic} editInvoice={editInvoiceProps} />
+    <InvoiceDetails
+     dic={dic}
+     editInvoice={editInvoiceProps}
+     costCenters={initialData!.minibarPrograms}
+     defaultCostCenter={costCenterValue || initialData!.minibarPrograms[0]}
+    />
    )}
   </div>
  );

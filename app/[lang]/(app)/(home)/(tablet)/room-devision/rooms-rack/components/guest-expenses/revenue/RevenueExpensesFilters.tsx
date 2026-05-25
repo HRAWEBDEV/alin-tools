@@ -41,11 +41,13 @@ export default function RevenueExpensesFilters({
  initialData,
  initialDataIsLoading,
  editRevenueProps,
+ results,
 }: {
  dic: RoomsRackDictionary;
  initialData?: InitialData;
  initialDataIsLoading: boolean;
  editRevenueProps: EditInvoiceProps;
+ results: number;
 }) {
  const dateFns = useDateFns();
  const [showDatePicker, setShowDatePicker] = useState(false);
@@ -121,7 +123,7 @@ export default function RevenueExpensesFilters({
         <DrawerTitle className='text-xl'>
          {dic.guestExpensesInvoice.filters}{' '}
          <span className='text-sm text-neutral-700 dark:text-neutral-400'>
-          ({dic.guestExpensesInvoice.results}: {1})
+          ({dic.guestExpensesInvoice.results}: {results})
          </span>
         </DrawerTitle>
        </DrawerHeader>

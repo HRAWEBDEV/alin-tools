@@ -41,11 +41,13 @@ export default function StayExpensesFilters({
  initialData,
  initialDataIsLoading,
  editRevenueProps,
+ results,
 }: {
  dic: RoomsRackDictionary;
  initialData?: InitialData;
  initialDataIsLoading: boolean;
  editRevenueProps: EditStayRevenueProps;
+ results: number;
 }) {
  const dateFns = useDateFns();
  const [showDatePicker, setShowDatePicker] = useState(false);
@@ -119,7 +121,7 @@ export default function StayExpensesFilters({
         <DrawerTitle className='text-xl'>
          {dic.guestExpensesStay.filters}{' '}
          <span className='text-sm text-neutral-700 dark:text-neutral-400'>
-          ({dic.guestExpensesStay.results}: {1})
+          ({dic.guestExpensesStay.results}: {results})
          </span>
         </DrawerTitle>
        </DrawerHeader>
