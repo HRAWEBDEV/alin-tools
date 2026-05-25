@@ -109,7 +109,7 @@ export default function InvoiceDetailsFilters({
         </DrawerTitle>
        </DrawerHeader>
        <div className='grow overflow-auto p-4'>
-        <div className='mx-auto w-[min(100%,35rem)] grid grid-cols-1 sm:grid-cols-2 gap-4'>
+        <div className='mx-auto w-[min(100%,28rem)] grid grid-cols-1 sm:grid-cols-2 gap-4'>
          <Controller
           control={control}
           name='date'
