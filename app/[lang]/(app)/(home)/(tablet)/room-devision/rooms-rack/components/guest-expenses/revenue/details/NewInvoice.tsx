@@ -134,7 +134,7 @@ export default function NewInvoice({
    setValue('amount', editInvoice.selectedInvoice.amount);
    setValue('comment', editInvoice.selectedInvoice.comment || '');
    setValue('discount', editInvoice.selectedInvoice.discount);
-   setValue('discountPercentage', editInvoice.selectedInvoice.discountRate);
+   // setValue('discountPercentage', editInvoice.selectedInvoice.discountRate);
    setValue('item', {
     key: editInvoice.selectedInvoice.itemID.toString(),
     value: editInvoice.selectedInvoice.itemName || '',

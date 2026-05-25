@@ -687,7 +687,7 @@ export default function NewStayExpense({
        type='submit'
        className='sm:w-24'
        size='lg'
-       disabled={pendAction}
+       disabled={true}
        onClick={(e) => {
         e.preventDefault();
         handleSubmit(

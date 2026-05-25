@@ -16,7 +16,7 @@ interface BaseConfig {
  userActiveTimeZone: string;
 }
 
-const appVersion = '2.2.0';
+const appVersion = '2.3.0';
 const appBirthDate = new Date(2025, 1, 1);
 const baseConfigContext = createContext<BaseConfig | null>(null);
 
