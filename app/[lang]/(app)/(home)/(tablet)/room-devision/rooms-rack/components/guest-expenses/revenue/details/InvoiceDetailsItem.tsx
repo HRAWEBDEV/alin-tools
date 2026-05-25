@@ -3,19 +3,25 @@ import { MdTouchApp } from 'react-icons/md';
 import { type Invoice } from '../../../../services/guest-expenses/guestExpensesApiActions';
 import { useCurrencyFormatter } from '@/hooks/useCurrencyFormatter';
 import { calculateInvoiceTotalValue } from '../../../../utils/guest-expenses/invoiceCalculator';
+import { type EditInvoiceDetailProps } from '../../../../utils/guest-expenses/EditInvoiceDetailProps';
 
 export default function InvoiceDetailsItem({
  dic,
  invoice,
+ editInvoiceProps,
 }: {
  dic: RoomsRackDictionary;
  invoice: Invoice;
+ editInvoiceProps: EditInvoiceDetailProps;
 }) {
  const { format } = useCurrencyFormatter();
 
  return (
   <>
-   <button className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 relative isolate'>
+   <button
+    className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 relative isolate'
+    onClick={() => editInvoiceProps.onShowEditInvoice(invoice.id)}
+   >
     <div className='absolute bottom-0 end-0 -z-1 opacity-60'>
      <MdTouchApp className='size-24 text-neutral-200 dark:text-neutral-800' />
     </div>

@@ -67,6 +67,7 @@ export default function GuestExpenses({
         dic={dic}
         registerID={registerID}
         roomID={roomID}
+        roomLabel={roomLabel}
         onCloseGuestExpenses={handleCloseGuestExpenses}
         onOpenGuestExpenses={handleOpenGuestExpenses}
        />

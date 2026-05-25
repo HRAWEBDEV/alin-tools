@@ -39,6 +39,7 @@ import {
  TimePickerWheel,
  TimePickerWheels,
 } from '@poursha98/react-ios-time-picker';
+import { type EditInvoiceDetailProps } from '../../../../utils/guest-expenses/EditInvoiceDetailProps';
 
 const smallBadgeKeys: (keyof InvoiceDetailsFiltersSchema)[] = [];
 const largeBadgeKeys: (keyof InvoiceDetailsFiltersSchema)[] = ['costCenter'];
@@ -47,10 +48,12 @@ export default function InvoiceDetailsFilters({
  dic,
  results,
  costCenters,
+ editInvoiceProps,
 }: {
  dic: RoomsRackDictionary;
  results: number;
  costCenters: InitialData['minibarPrograms'];
+ editInvoiceProps: EditInvoiceDetailProps;
 }) {
  const dateFns = useDateFns();
  const [showDateTimePicker, setShowDateTimePicker] = useState(false);
@@ -81,7 +84,11 @@ export default function InvoiceDetailsFilters({
  return (
   <div className='[&]:[--default-top-offset:var(--top-offset,0)] sticky top-0 lg:top-(--default-top-offset) bg-background z-3 py-1'>
    <div className='flex gap-2 items-center mb-1'>
-    <Button size='lg' className='px-3!'>
+    <Button
+     size='lg'
+     className='px-3!'
+     onClick={() => editInvoiceProps.onShowEditInvoice(null)}
+    >
      {false ? <Spinner /> : <FaPlus />}
      <span className='hidden lg:inline'>{dic.invoiceDetails.new}</span>
     </Button>

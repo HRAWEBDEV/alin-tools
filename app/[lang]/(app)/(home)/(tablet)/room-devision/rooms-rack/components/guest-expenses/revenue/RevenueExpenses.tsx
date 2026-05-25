@@ -24,10 +24,12 @@ export default function RevenueExpenses({
  dic,
  registerID,
  roomID,
+ roomLabel,
 }: {
  dic: RoomsRackDictionary;
  registerID: number;
  roomID: number;
+ roomLabel: string;
  onOpenGuestExpenses: () => unknown;
  onCloseGuestExpenses: () => unknown;
 }) {
@@ -121,6 +123,7 @@ export default function RevenueExpenses({
  const editInvoiceProps: EditInvoiceProps = {
   registerID,
   roomID,
+  roomLabel,
   showEdit: showEditInvoice,
   selectedInvoice,
   selectedInvoiceID,

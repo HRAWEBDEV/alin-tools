@@ -6,6 +6,7 @@ import {
 export interface EditInvoiceProps {
  showEdit: boolean;
  roomID: number;
+ roomLabel: string;
  registerID: number;
  selectedInvoiceID: number | null;
  selectedInvoice: Revenue | null;

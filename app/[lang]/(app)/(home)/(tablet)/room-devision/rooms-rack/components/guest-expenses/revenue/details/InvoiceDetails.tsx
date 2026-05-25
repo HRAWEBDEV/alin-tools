@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
 import {
  Dialog,
@@ -7,12 +7,13 @@ import {
  DialogContent,
 } from '@/components/ui/dialog';
 import { type EditInvoiceProps } from '../../../../utils/guest-expenses/EditInvoiceProps';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
  getRevenueInvoicesApi,
  getRevenueInvoices,
 } from '../../../../services/guest-expenses/guestExpensesApiActions';
 import { type InvoiceDetailProps } from '../../../../utils/guest-expenses/InvoiceDetailProps';
+import { type EditInvoiceDetailProps } from '../../../../utils/guest-expenses/EditInvoiceDetailProps';
 import InvoiceDetailsFilters from './InvoiceDetailsFilters';
 import InvoiceDetailsList from './InvoiceDetailsList';
 import InvoiceDetailsFooter from './InvoiceDetailsFooter';
@@ -24,6 +25,7 @@ import {
 } from '../../../../schemas/guest-expenses/invoiceDetailsFiltersSchema';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import NewInvoice from './NewInvoice';
 
 export default function InvoiceDetails({
  dic,
@@ -36,6 +38,11 @@ export default function InvoiceDetails({
  costCenters: InitialData['minibarPrograms'];
  defaultCostCenter: InitialData['minibarPrograms'][number];
 }) {
+ const queryClient = useQueryClient();
+ const [showEditInvoice, setShowEditInvoice] = useState(false);
+ const [selectedInvoiceID, setSelectedInvoiceID] = useState<number | null>(
+  null,
+ );
  const filtersUseForm = useForm<InvoiceDetailsFiltersSchema>({
   defaultValues,
   resolver: zodResolver(createInvoiceDetailsFiltersSchema()),
@@ -67,6 +74,37 @@ export default function InvoiceDetails({
   isError: detailIsError,
   refetch: detailRefetch,
   isSuccess: detailIsSuccess,
+ };
+
+ const selectedDetailInvoice = selectedInvoiceID
+  ? detailInvoices.find((item) => item.id === selectedInvoiceID) || null
+  : null;
+
+ function handleShowEditInvoice(id: number | null) {
+  setSelectedInvoiceID(id);
+  setShowEditInvoice(true);
+ }
+
+ function handleCloseEditInvoice() {
+  setSelectedInvoiceID(null);
+  setShowEditInvoice(false);
+ }
+
+ function invalidateInvoices() {
+  queryClient.invalidateQueries({
+   queryKey: [getRevenueInvoicesApi, editInvoice.selectedInvoice?.orderID],
+  });
+ }
+
+ const editInvoiceProps: EditInvoiceDetailProps = {
+  showEdit: showEditInvoice,
+  registerID: editInvoice.registerID,
+  roomID: editInvoice.roomID,
+  onShowEditInvoice: handleShowEditInvoice,
+  onCloseEditInvoice: handleCloseEditInvoice,
+  selectedInvoice: selectedDetailInvoice,
+  selectedInvoiceID,
+  invalidateInvoices,
  };
 
  useEffect(() => {
@@ -112,14 +150,10 @@ export default function InvoiceDetails({
          {editInvoice.selectedInvoice.orderNo}
         </span>
        )}
-       {editInvoice.selectedInvoice && (
-        <>
-         <span> _ {dic.invoiceDetails.room}: </span>
-         <span className='text-xl text-primary'>
-          {editInvoice.selectedInvoice.roomLabel}
-         </span>
-        </>
-       )}
+       <>
+        <span> _ {dic.invoiceDetails.room}: </span>
+        <span className='text-xl text-primary'>{editInvoice.roomLabel}</span>
+       </>
        {editInvoice.selectedInvoice && (
         <>
          <span> _ {dic.invoiceDetails.bonNo}: </span>
@@ -137,8 +171,13 @@ export default function InvoiceDetails({
        dic={dic}
        results={detailInvoices.length || 0}
        costCenters={costCenters}
+       editInvoiceProps={editInvoiceProps}
       />
-      <InvoiceDetailsList dic={dic} invoiceDetailProps={invoiceDetailProps} />
+      <InvoiceDetailsList
+       dic={dic}
+       invoiceDetailProps={invoiceDetailProps}
+       editInvoiceProps={editInvoiceProps}
+      />
       {invoiceDetailProps.isSuccess && !!invoiceDetailProps.data?.length && (
        <InvoiceDetailsFooter
         dic={dic}
@@ -146,6 +185,9 @@ export default function InvoiceDetails({
        />
       )}
      </FormProvider>
+     {showEditInvoice && (
+      <NewInvoice dic={dic} editInvoice={editInvoiceProps} />
+     )}
     </div>
    </DialogContent>
   </Dialog>

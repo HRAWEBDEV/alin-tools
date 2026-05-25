@@ -4,13 +4,16 @@ import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
 import UnExpectedError from '@/app/[lang]/(app)/components/UnExpectedError';
 import { InvoiceDetailProps } from '../../../../utils/guest-expenses/InvoiceDetailProps';
 import InvoiceDetailsItem from './InvoiceDetailsItem';
+import { type EditInvoiceDetailProps } from '../../../../utils/guest-expenses/EditInvoiceDetailProps';
 
 export default function InvoiceDetailsList({
  dic,
  invoiceDetailProps,
+ editInvoiceProps,
 }: {
  dic: RoomsRackDictionary;
  invoiceDetailProps: InvoiceDetailProps;
+ editInvoiceProps: EditInvoiceDetailProps;
 }) {
  if (invoiceDetailProps.isSuccess && !invoiceDetailProps.data?.length) {
   return (
@@ -31,7 +34,12 @@ export default function InvoiceDetailsList({
    {invoiceDetailProps.isFetching && <LinearLoading />}
    <div className='grid gap-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 pb-4'>
     {invoiceDetailProps.data?.map((invoice) => (
-     <InvoiceDetailsItem key={invoice.id} dic={dic} invoice={invoice} />
+     <InvoiceDetailsItem
+      key={invoice.id}
+      dic={dic}
+      invoice={invoice}
+      editInvoiceProps={editInvoiceProps}
+     />
     ))}
    </div>
   </div>
