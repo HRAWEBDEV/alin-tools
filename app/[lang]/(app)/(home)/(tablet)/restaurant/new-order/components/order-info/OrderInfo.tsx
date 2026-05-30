@@ -879,6 +879,46 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        )}
       />
      </Field>
+     <Field>
+      <FieldLabel htmlFor='waiter'>{dic.orderInfo.waiter}</FieldLabel>
+      <Controller
+       control={control}
+       name='waiter'
+       render={({ field }) => (
+        <Drawer>
+         <DrawerTrigger asChild>
+          <Button
+           id='waiter'
+           variant='outline'
+           role='combobox'
+           className='justify-between h-11 overflow-hidden'
+           disabled={!access['order']['edit']}
+          >
+           <span className='grow text-ellipsis overflow-hidden text-start'>
+            {field.value?.value || ''}
+           </span>
+           <div className='flex gap-2 items-center'>
+            {waiterValue && access['order']['edit'] && (
+             <Button
+              variant={'ghost'}
+              size={'icon-lg'}
+              onClick={(e) => {
+               e.stopPropagation();
+               setValue('waiter', null);
+              }}
+             >
+              <BsTrash className='size-5 text-red-700 dark:text-red-400' />
+             </Button>
+            )}
+            <ChevronsUpDown />
+           </div>
+          </Button>
+         </DrawerTrigger>
+         <FindWaiters dic={dic} />
+        </Drawer>
+       )}
+      />
+     </Field>
      <Field className={`${!showPersonDetails && 'col-span-full'}`}>
       <FieldLabel htmlFor='customer'>{dic.orderInfo.customerName}</FieldLabel>
       <Controller
@@ -1002,46 +1042,6 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           allowLeadingZeros={false}
          />
         </InputGroup>
-       )}
-      />
-     </Field>
-     <Field>
-      <FieldLabel htmlFor='waiter'>{dic.orderInfo.waiter}</FieldLabel>
-      <Controller
-       control={control}
-       name='waiter'
-       render={({ field }) => (
-        <Drawer>
-         <DrawerTrigger asChild>
-          <Button
-           id='waiter'
-           variant='outline'
-           role='combobox'
-           className='justify-between h-11 overflow-hidden'
-           disabled={!access['order']['edit']}
-          >
-           <span className='grow text-ellipsis overflow-hidden text-start'>
-            {field.value?.value || ''}
-           </span>
-           <div className='flex gap-2 items-center'>
-            {waiterValue && access['order']['edit'] && (
-             <Button
-              variant={'ghost'}
-              size={'icon-lg'}
-              onClick={(e) => {
-               e.stopPropagation();
-               setValue('waiter', null);
-              }}
-             >
-              <BsTrash className='size-5 text-red-700 dark:text-red-400' />
-             </Button>
-            )}
-            <ChevronsUpDown />
-           </div>
-          </Button>
-         </DrawerTrigger>
-         <FindWaiters dic={dic} />
-        </Drawer>
        )}
       />
      </Field>
