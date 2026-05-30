@@ -114,6 +114,8 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
   'phoneNumber',
  ]);
 
+ const showPersonDetails = personID || isErrorFindPerson;
+
  return (
   <form onSubmit={(e) => e.preventDefault()} className='py-5 px-1'>
    <FieldGroup>
@@ -409,7 +411,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
         control={control}
         name='phoneNumber'
         render={({ field: { value, onChange, ...other } }) => (
-         <InputGroup data-invalid={!!errors.phoneNumber}>
+         <InputGroup data-invalid={!!errors.phoneNumber} className='h-11'>
           <NumericFormat
            disabled={!access['order']['edit']}
            {...other}
@@ -432,7 +434,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           <InputGroupAddon align='inline-end' className='-me-3'>
            <Button
             variant='outline'
-            className='rounded-ss-none rounded-es-none border-secondary text-secondary'
+            className='rounded-ss-none rounded-es-none border-secondary text-secondary h-11'
             disabled={
              isPendingFindPerson ||
              !phoneNumberValue ||
@@ -465,13 +467,13 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        </Alert>
       )}
      </div>
-     {(personID || isErrorFindPerson) && (
+     {showPersonDetails && (
       <div className='grid gap-4 grid-cols-2'>
        <Field data-invalid={!!errors?.firstName}>
         <FieldLabel htmlFor='firstName'>
          {dic.orderInfo.firstName} {isErrorFindPerson && '*'}
         </FieldLabel>
-        <InputGroup data-invalid={!!errors?.firstName}>
+        <InputGroup data-invalid={!!errors?.firstName} className='h-11'>
          <InputGroupInput
           readOnly={!!personID}
           id='firstName'
@@ -489,7 +491,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
         <FieldLabel htmlFor='lastName'>
          {dic.orderInfo.lastName} {isErrorFindPerson && '*'}
         </FieldLabel>
-        <InputGroup data-invalid={!!errors?.lastName}>
+        <InputGroup data-invalid={!!errors?.lastName} className='h-11'>
          <InputGroupInput
           readOnly={!!personID}
           id='lastName'
@@ -877,7 +879,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        )}
       />
      </Field>
-     <Field className='col-span-full'>
+     <Field className={`${!showPersonDetails && 'col-span-full'}`}>
       <FieldLabel htmlFor='customer'>{dic.orderInfo.customerName}</FieldLabel>
       <Controller
        control={control}
