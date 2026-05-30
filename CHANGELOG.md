@@ -5,7 +5,7 @@
 - add reload button if necessary - for real time data
 
 # 2.3.0
-- add rack guest expenses 
+- add rack preview guest expenses (hre-done)
 
 # 2.2.4
 - add rooms rack reserve pie chart 

@@ -391,37 +391,39 @@ export default function NewInvoice({
        </Field>
       </FieldGroup>
      </div>
-     <DialogFooter className='p-4 py-2 border-t border-input'>
-      <Button
-       type='button'
-       className='sm:w-24'
-       size='lg'
-       variant='outline'
-       onClick={() => {
-        editInvoice.onCloseEditInvoice();
-       }}
-       disabled={pendAction}
-      >
-       {pendAction && <Spinner />}
-       {dic.invoiceDetails.cancel}
-      </Button>
-      <Button
-       type='submit'
-       className='sm:w-24'
-       size='lg'
-       disabled={pendAction}
-       onClick={(e) => {
-        e.preventDefault();
-        handleSubmit(
-         (data) => {},
-         (err) => {},
-        )();
-       }}
-      >
-       {pendAction && <Spinner />}
-       {dic.invoiceDetails.confirm}
-      </Button>
-     </DialogFooter>
+     {/*
+       <DialogFooter className='p-4 py-2 border-t border-input'>
+             <Button
+              type='button'
+              className='sm:w-24'
+              size='lg'
+              variant='outline'
+              onClick={() => {
+               editInvoice.onCloseEditInvoice();
+              }}
+              disabled={pendAction}
+             >
+              {pendAction && <Spinner />}
+              {dic.invoiceDetails.cancel}
+             </Button>
+             <Button
+              type='submit'
+              className='sm:w-24'
+              size='lg'
+              disabled={pendAction}
+              onClick={(e) => {
+               e.preventDefault();
+               handleSubmit(
+                (data) => {},
+                (err) => {},
+               )();
+              }}
+             >
+              {pendAction && <Spinner />}
+              {dic.invoiceDetails.confirm}
+             </Button>
+            </DialogFooter>
+       */}
     </form>
    </DialogContent>
   </Dialog>

@@ -243,24 +243,28 @@ export default function RoomMenu({
        <div className='grid grid-cols-1 gap-2 content-start'>
         {!room.noRoom && (
          <>
-          <Button
-           variant='outline'
-           className='justify-start text-start h-12'
-           size='lg'
-           disabled={pedingAction}
-           onClick={() => setShowRoomStateKind(true)}
-          >
-           {dic.options.changeRoomStateKind}
-          </Button>
-          <Button
-           variant='outline'
-           className='justify-start text-start h-12'
-           size='lg'
-           disabled={pedingAction}
-           onClick={() => setShowRoomStateType(true)}
-          >
-           {dic.options.changeRoomStateType}
-          </Button>
+          {RoomStateKindTypes.outOfService !== room.roomStateKindID && (
+           <>
+            <Button
+             variant='outline'
+             className='justify-start text-start h-12'
+             size='lg'
+             disabled={pedingAction}
+             onClick={() => setShowRoomStateKind(true)}
+            >
+             {dic.options.changeRoomStateKind}
+            </Button>
+            <Button
+             variant='outline'
+             className='justify-start text-start h-12'
+             size='lg'
+             disabled={pedingAction}
+             onClick={() => setShowRoomStateType(true)}
+            >
+             {dic.options.changeRoomStateType}
+            </Button>
+           </>
+          )}
           <Button
            variant='outline'
            className='justify-start text-start h-12'
