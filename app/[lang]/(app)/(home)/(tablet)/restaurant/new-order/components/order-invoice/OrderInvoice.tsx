@@ -1,5 +1,5 @@
 'use client';
-import { useRef, useEffect, MouseEvent } from 'react';
+import { useRef, useEffect, MouseEvent, useState } from 'react';
 import { type NewOrderDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/new-order/dictionary';
 import NoItemFound from '@/app/[lang]/(app)/components/NoItemFound';
 import { Button } from '@/components/ui/button';
@@ -23,7 +23,11 @@ import {
  Field,
  FieldLabel,
 } from '@/components/ui/field';
-import { InputGroup, InputGroupInput } from '@/components/ui/input-group';
+import {
+ InputGroup,
+ InputGroupAddon,
+ InputGroupInput,
+} from '@/components/ui/input-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useForm, Controller } from 'react-hook-form';
 import {
@@ -38,17 +42,30 @@ import {
  getOrderInvoicePaymentInitData,
  getPcPoses,
 } from '../../services/orderInvoicePaymentApiActions';
-import { getWalletInfo } from '../../services/wallet/walletApiActiions';
 import { toast } from 'sonner';
 import { NumericFormat } from 'react-number-format';
 import { AxiosError } from 'axios';
 import { useDebouncedCallback } from '@tanstack/react-pacer';
+import {
+ type InvoiceWalletSchema,
+ defaultValues as invoiceWalletDefaultValues,
+ createInvoiceWalletSchema,
+} from '../../schemas/wallet/invoiceWalletSchema';
+import { MaskedInputGroupInput } from '@/components/ui/MaskedInputGroupInput';
+import { PaymentType } from '../../utils/PaymentTypes';
+import { useTimer } from '@/hooks/useTimer';
+import {
+ getWalletInfo,
+ sendWalletOtpCode,
+} from '../../services/wallet/orderWalletApiActions';
 
 const invoiceRowClass =
  'flex justify-between gap-2 items-center text-base pb-3 mb-3 border-b border-input font-medium';
 const invoiceLabelClass = 'shrink-0 w-32';
 
 export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
+ const { minutes, seconds, start, reset, stop, isRunning } = useTimer(120);
+ const [canEditMobileNo, setCanEditMobileNo] = useState(true);
  const {
   control,
   formState: { errors },
@@ -57,12 +74,17 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
   watch,
   handleSubmit,
   clearErrors,
-  setError,
+  trigger,
+  setFocus,
  } = useForm<OrderInvoicePayment>({
   resolver: zodResolver(createOrderInvoicePaymentSchema({ dic })),
   defaultValues: {
    ...defaultValues,
   },
+ });
+ const invoiceWalletUseForm = useForm<InvoiceWalletSchema>({
+  resolver: zodResolver(createInvoiceWalletSchema({ dic })),
+  defaultValues: invoiceWalletDefaultValues,
  });
 
  const [paymentTypeValue, bankValue] = watch(['paymentType', 'bank']);
@@ -117,64 +139,72 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
   },
  });
 
+ const {
+  mutate: confirmGetWalletInfo,
+  isPending: confirmGetWalletInfoIsPending,
+  data: walletInfo,
+  reset: resetWalletInfo,
+ } = useMutation({
+  mutationFn({ mobileNo, otpCode }: { otpCode: string; mobileNo: string }) {
+   return getWalletInfo({
+    mobileNo,
+    otpCode,
+    sValue: remained.toString(),
+   });
+  },
+  onSuccess() {
+   reset();
+   stop();
+   setCanEditMobileNo(false);
+  },
+  onError(err: AxiosError<string>) {
+   toast.error(err.response?.data);
+  },
+ });
+
+ const { mutate: confirmSendOtp, isPending: sendOtpIsPending } = useMutation({
+  mutationFn(data: InvoiceWalletSchema) {
+   return sendWalletOtpCode({ mobileNo: data.phoneNumber });
+  },
+  onSuccess() {
+   reset();
+   start();
+   setCanEditMobileNo(false);
+  },
+  onError(err: AxiosError<string>) {
+   toast.error(err.response?.data);
+  },
+ });
+
+ function handleCanEditMobileNo() {
+  setCanEditMobileNo(true);
+  stop();
+  reset();
+ }
+
  function handleConfirmPayment(e: MouseEvent<HTMLButtonElement>) {
   e.preventDefault();
   handleSubmit(
    (data) => {
-    if (data.paymentType?.key === '2') {
-     onPaymentPcPos(data);
+    const { otpCode, ...restData } = data;
+    if (data.paymentType?.key === PaymentType.creditCard) {
+     onPaymentPcPos(restData);
      return;
     }
-    onPayment(data);
+    if (data.paymentType?.key === PaymentType.wallet) {
+     onPaymentPcPos({
+      ...restData,
+      walletKey: walletInfo?.data.id.toString(),
+      otpCode,
+     });
+     return;
+    }
+    onPayment(restData);
    },
    (err) => {
     Object.keys(err).forEach((errKey) => {
      toast.error(err[errKey as keyof typeof err]?.message);
     });
-   },
-  )();
- }
-
- // wallet setup
- const {
-  mutate: getWalletInfoMutate,
-  isPending: getWalletInfoIsPending,
-  data: walletInfoData,
-  isError: walletInfoError,
-  isSuccess: walletInfoSuccess,
-  reset: walletInfoReset,
- } = useMutation({
-  mutationFn({
-   mobileNo,
-   nationalCode,
-  }: Pick<OrderInvoicePayment, 'nationalCode' | 'mobileNo'>) {
-   return getWalletInfo({
-    mobileNo: mobileNo!,
-    nationalCode: nationalCode!,
-    sValue: remained.toString(),
-   });
-  },
-  onError(err: AxiosError<string>) {
-   toast.error(err.response?.data);
-   setValue('walletKey', '');
-  },
-  onSuccess(res) {
-   setValue('walletKey', res.data.id.toString());
-  },
- });
-
- function confirmGetWalletInfo() {
-  handleSubmit(
-   (props) => {
-    getWalletInfoMutate({
-     mobileNo: props.mobileNo!,
-     nationalCode: props.nationalCode!,
-    });
-   },
-   (err) => {
-    if (err.nationalCode) {
-     toast.error(err.nationalCode.message);
-    }
    },
   )();
  }
@@ -206,19 +236,36 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
  }, [pcPoseData, setValue]);
 
  function renderSubmitPaymentFormButton() {
-  if (paymentTypeValue?.key === '6') {
-   if (!walletInfoSuccess || !walletInfoData) {
+  if (paymentTypeValue?.key === PaymentType.wallet) {
+   if (!walletInfo) {
     return (
      <Button
-      disabled={isFetching || shopLoading || getWalletInfoIsPending}
+      disabled={
+       isFetching ||
+       shopLoading ||
+       !access['order']['payment'] ||
+       confirmGetWalletInfoIsPending
+      }
       type='submit'
-      className='h-11'
+      className='h-11 sm:w-32'
       onClick={(e) => {
        e.preventDefault();
-       confirmGetWalletInfo();
+       invoiceWalletUseForm.handleSubmit(async (data) => {
+        if (await trigger('otpCode')) {
+         const otpCode = getValues('otpCode');
+         confirmGetWalletInfo({
+          mobileNo: data.phoneNumber,
+          otpCode: otpCode!,
+         });
+        } else {
+         setFocus('otpCode');
+        }
+       })();
       }}
      >
-      {(isFetching || shopLoading || getWalletInfoIsPending) && <Spinner />}
+      {(isFetching || shopLoading || confirmGetWalletInfoIsPending) && (
+       <Spinner />
+      )}
       {dic.invoice.confirm}
      </Button>
     );
@@ -227,16 +274,9 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
     <Button
      disabled={isFetching || shopLoading || !access['order']['payment']}
      type='submit'
-     className='h-11'
+     className='h-11 sm:w-32'
      onClick={(e) => {
       e.preventDefault();
-      const otpCode = getValues('otpCode');
-      if (!otpCode) {
-       setError('otpCode', {
-        message: dic.invoice.fillOtpCode,
-       });
-       return;
-      }
       handleConfirmPayment(e);
      }}
     >
@@ -245,7 +285,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
     </Button>
    );
   }
-  if (paymentTypeValue?.key === '2') {
+  if (paymentTypeValue?.key === PaymentType.creditCard) {
    return (
     <Button
      disabled={isFetching || shopLoading || !access['order']['payment']}
@@ -263,7 +303,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
     <Button
      disabled={shopLoading || !access['order']['close']}
      variant='destructive'
-     className='font-medium disabled:bg-neutral-400 disabled:dark:bg-neutral-600 h-11'
+     className='font-medium disabled:bg-neutral-400 disabled:dark:bg-neutral-600 h-11 sm:w-32'
      type='submit'
      onClick={(e) => {
       e.preventDefault();
@@ -279,7 +319,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
    <Button
     type='submit'
     disabled={isFetching || shopLoading || !access['order']['payment']}
-    className='h-11'
+    className='h-11 sm:w-32'
     onClick={handleConfirmPayment}
    >
     {(isFetching || shopLoading) && <Spinner />}
@@ -378,7 +418,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
       variant='secondary'
       size='lg'
       className='font-medium'
-      onClick={() => scrollToPaymentSection()}
+      onClick={() => scrollToPaymentSectionDB()}
      >
       {shopLoading && <Spinner />}
       {dic.invoice.paymentInfo}
@@ -484,9 +524,9 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
            )}
           />
          </Field>
-         {paymentTypeValue?.key !== '1' &&
-          paymentTypeValue?.key !== '6' &&
-          paymentTypeValue?.key !== '4' &&
+         {paymentTypeValue?.key !== PaymentType.cash &&
+          paymentTypeValue?.key !== PaymentType.wallet &&
+          paymentTypeValue?.key !== PaymentType.check &&
           paymentTypeValue?.key !== 'nonCash' && (
            <Field data-invalid={!!errors.bank}>
             <FieldLabel htmlFor='bank'>{dic.invoice.bank} *</FieldLabel>
@@ -564,7 +604,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
            </Field>
           )}
         </div>
-        {paymentTypeValue?.key === '2' && (
+        {paymentTypeValue?.key === PaymentType.creditCard && (
          <Field data-invalid={!!errors.cardReader} data-disabled={!bankValue}>
           <FieldLabel htmlFor='cardReader'>
            {dic.invoice.cardReader} *
@@ -643,8 +683,8 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
           />
          </Field>
         )}
-        {paymentTypeValue?.key !== '1' &&
-         paymentTypeValue?.key !== '6' &&
+        {paymentTypeValue?.key !== PaymentType.cash &&
+         paymentTypeValue?.key !== PaymentType.wallet &&
          paymentTypeValue?.key !== 'nonCash' && (
           <Field data-invalid={!!errors.paymentRefNo}>
            <FieldLabel htmlFor='paymentRefNo'>
@@ -660,151 +700,171 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
            )}
           </Field>
          )}
-        {paymentTypeValue?.key === '6' && (
+        {paymentTypeValue?.key === PaymentType.wallet && (
          <>
-          <div className='flex gap-4 items-end'>
-           <Controller
-            control={control}
-            name='mobileNo'
-            render={({ field: { value, onChange, ...other } }) => (
-             <Field data-invalid={!!errors.mobileNo}>
-              <FieldLabel htmlFor='mobileNo'>{dic.invoice.mobileNo}</FieldLabel>
-              <InputGroup data-invalid={!!errors.mobileNo} className='h-11'>
-               <NumericFormat
-                id='mobileNo'
-                {...other}
-                value={value}
-                onValueChange={({ value }) => {
-                 walletInfoReset();
-                 onChange(value);
-                }}
-                customInput={InputGroupInput}
-                allowLeadingZeros
-                decimalScale={0}
-               />
-              </InputGroup>
-             </Field>
-            )}
-           />
-           <div> {dic.invoice.or} </div>
-           <Controller
-            control={control}
-            name='nationalCode'
-            render={({ field: { value, onChange, ...other } }) => (
-             <Field data-invalid={!!errors.nationalCode}>
-              <FieldLabel htmlFor='national-code'>
-               {dic.invoice.nationalCode}
-              </FieldLabel>
-              <InputGroup data-invalid={!!errors.nationalCode} className='h-11'>
-               <NumericFormat
-                id='national-code'
-                {...other}
-                value={value}
-                onValueChange={({ value }) => {
-                 walletInfoReset();
-                 onChange(value);
-                }}
-                customInput={InputGroupInput}
-                allowLeadingZeros
-                decimalScale={0}
-               />
-              </InputGroup>
-             </Field>
-            )}
-           />
-          </div>
-          {!!errors.nationalCode && (
-           <Alert className='bg-destructive/10'>
-            <AlertDescription className='text-destructive font-medium'>
-             {dic.invoice.fillMobileNoOrNationalCode}
-            </AlertDescription>
-           </Alert>
-          )}
-          {walletInfoSuccess && (
-           <>
-            <div className='grid grid-cols-2 gap-4 gap-y-5'>
-             <Field>
-              <FieldLabel htmlFor='firstName'>
-               {dic.invoice.firstName}
-              </FieldLabel>
-              <InputGroup className='h-11'>
-               <InputGroupInput
-                id='firstName'
-                readOnly
-                value={walletInfoData?.data.personFrisName}
-               />
-              </InputGroup>
-             </Field>
-             <Field>
-              <FieldLabel htmlFor='lastName'>{dic.invoice.lastName}</FieldLabel>
-              <InputGroup className='h-11'>
-               <InputGroupInput
-                id='lastName'
-                readOnly
-                value={walletInfoData?.data.personLatName}
-               />
-              </InputGroup>
-             </Field>
-             <Field className='col-span-full'>
-              <FieldLabel htmlFor='wallet-remained'>
-               {dic.invoice.credit}
-              </FieldLabel>
-              <InputGroup className='h-11'>
-               <NumericFormat
-                id='wallet-remained'
-                readOnly
-                value={walletInfoData?.data.remainWallet}
-                thousandSeparator
-                customInput={InputGroupInput}
-               />
-              </InputGroup>
-             </Field>
-            </div>
-            <Controller
-             control={control}
-             name='otpCode'
-             render={({ field: { value, onChange, ...other } }) => (
-              <Field data-invalid={!!errors.otpCode}>
-               <FieldLabel htmlFor='otpCode'>
-                {dic.invoice.otpCode} *
-               </FieldLabel>
-               <InputGroup data-invalid={!!errors.otpCode} className='h-11'>
-                <NumericFormat
-                 id='otpCode'
-                 {...other}
-                 value={value}
-                 onValueChange={({ value }) => onChange(value)}
-                 customInput={InputGroupInput}
-                 allowLeadingZeros
-                 decimalScale={0}
-                />
-               </InputGroup>
-               {!!errors.otpCode && (
-                <FieldError>{errors.otpCode?.message}</FieldError>
+          <Controller
+           control={invoiceWalletUseForm.control}
+           name='phoneNumber'
+           render={({ field: { onChange, ref, ...other } }) => (
+            <Field
+             data-disabled={!canEditMobileNo}
+             data-invalid={!!invoiceWalletUseForm.formState.errors.phoneNumber}
+            >
+             <FieldLabel
+              htmlFor='phone-number'
+              data-disabled={!canEditMobileNo}
+             >
+              {dic.invoice.mobileNo} *
+             </FieldLabel>
+             <InputGroup
+              className='h-11'
+              data-disabled={!canEditMobileNo}
+              data-invalid={!!invoiceWalletUseForm.formState.errors.phoneNumber}
+             >
+              <MaskedInputGroupInput
+               id='phone-number'
+               disabled={!canEditMobileNo}
+               mask={/^[+\d]+$/}
+               {...other}
+               inputRef={ref}
+               onChange={(e) => {
+                onChange(e);
+               }}
+              />
+              <InputGroupAddon align='inline-end' className='-me-3'>
+               {!canEditMobileNo && (
+                <Button
+                 type='button'
+                 className='h-11 w-32 text-destructive border-destructive rounded-ss-none rounded-es-none'
+                 variant='outline'
+                 onClick={() => {
+                  resetWalletInfo();
+                  handleCanEditMobileNo();
+                 }}
+                >
+                 {dic.invoice.edit}
+                </Button>
                )}
-              </Field>
-             )}
-            />
+              </InputGroupAddon>
+             </InputGroup>
+             <FieldContent>
+              {!!invoiceWalletUseForm.formState.errors.phoneNumber && (
+               <FieldError>
+                {invoiceWalletUseForm.formState.errors.phoneNumber.message}
+               </FieldError>
+              )}
+             </FieldContent>
+            </Field>
+           )}
+          />
+          <Controller
+           control={control}
+           name='otpCode'
+           render={({ field: { onChange, ref, ...other } }) => (
+            <Field data-invalid={!!errors.otpCode}>
+             <FieldLabel htmlFor='opt-code'>{dic.invoice.otpCode} *</FieldLabel>
+             <InputGroup className='h-11' data-invalid={!!errors.otpCode}>
+              <NumericFormat
+               id='opt-code'
+               {...other}
+               onChange={() => {
+                resetWalletInfo();
+               }}
+               onValueChange={({ value }) => {
+                onChange(value);
+               }}
+               getInputRef={ref}
+               allowLeadingZeros={true}
+               allowNegative={false}
+               decimalScale={0}
+               customInput={InputGroupInput}
+              />
+             </InputGroup>
+             <FieldContent>
+              {!!errors.otpCode && (
+               <FieldError>{errors.otpCode.message}</FieldError>
+              )}
+             </FieldContent>
+            </Field>
+           )}
+          />
+          {!!walletInfo && (
+           <>
+            <Field>
+             <FieldLabel htmlFor='wallet-credit'>
+              {dic.invoice.walletCredit}
+             </FieldLabel>
+             <InputGroup className='h-11'>
+              <InputGroupInput
+               id='wallet-credit'
+               readOnly
+               value={
+                walletInfo
+                 ? walletInfo.data.remainWallet > 0
+                   ? format(walletInfo.data.remainWallet)
+                   : `( ${format(walletInfo.data.remainWallet)} )`
+                 : ''
+               }
+              />
+             </InputGroup>
+            </Field>
+            <Field>
+             <FieldLabel htmlFor='wallet-credit-remained'>
+              {dic.invoice.remainedWalletCreditAfterPayment}
+             </FieldLabel>
+             <InputGroup className='h-11'>
+              <InputGroupInput
+               id='wallet-credit-remained'
+               readOnly
+               value={
+                walletInfo
+                 ? walletInfo.data.remainWallet - remained
+                   ? format(walletInfo.data.remainWallet - remained)
+                   : `( ${format(walletInfo.data.remainWallet - remained)} )`
+                 : ''
+               }
+              />
+             </InputGroup>
+            </Field>
            </>
           )}
          </>
         )}
-        <div className='grid sm:grid-cols-3 gap-3 sm:justify-end items-center'>
-         <div>
-          {walletInfoSuccess && paymentTypeValue?.key === '6' && (
-           <Button
-            type='button'
-            variant='ghost'
-            onClick={() => {
-             walletInfoReset();
-             confirmGetWalletInfo();
-            }}
-           >
-            {dic.invoice.resendCode}
-           </Button>
+        <div className='flex flex-col-reverse sm:flex-row justify-between gap-4 flex-wrap'>
+         <div className='flex gap-4'>
+          {paymentTypeValue?.key === PaymentType.wallet && (
+           <>
+            <Button
+             type='button'
+             className='h-11'
+             variant='outline'
+             disabled={isRunning || sendOtpIsPending}
+             onClick={() => {
+              invoiceWalletUseForm.handleSubmit(
+               (data) => {
+                resetWalletInfo();
+                confirmSendOtp(data);
+               },
+               (err) => {
+                Object.values(err).forEach((item) => {
+                 toast.error(item.message);
+                });
+               },
+              )();
+             }}
+            >
+             {sendOtpIsPending && <Spinner />}
+             {dic.invoice.resendCode}
+             {isRunning && (
+              <span>
+               ({minutes.toString().padStart(2, '0')}:
+               {seconds.toString().padStart(2, '0')})
+              </span>
+             )}
+            </Button>
+           </>
           )}
          </div>
-         <div></div>
          {renderSubmitPaymentFormButton()}
         </div>
        </FieldGroup>

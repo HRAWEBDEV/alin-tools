@@ -1,13 +1,12 @@
 import { z } from 'zod';
 import { type NewOrderDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/new-order/dictionary';
+import { PaymentType } from '../utils/PaymentTypes';
 
 const defaultValues: Partial<OrderInvoicePayment> = {
  paymentRefNo: '',
  bank: null,
  cardReader: null,
  paymentType: null,
- mobileNo: '',
- nationalCode: '',
  otpCode: '',
  walletKey: '',
 };
@@ -37,8 +36,6 @@ function createOrderInvoicePaymentSchema({ dic }: { dic: NewOrderDictionary }) {
     .nullable()
     .optional(),
    paymentRefNo: z.string().optional(),
-   nationalCode: z.string().optional(),
-   mobileNo: z.string().optional(),
    otpCode: z.string().optional(),
    walletKey: z.string().optional(),
   })
@@ -53,9 +50,9 @@ function createOrderInvoicePaymentSchema({ dic }: { dic: NewOrderDictionary }) {
   )
   .refine(
    ({ paymentType, paymentRefNo }) => {
-    return paymentType?.key !== '1' &&
-     paymentType?.key !== '2' &&
-     paymentType?.key !== '6'
+    return paymentType?.key !== PaymentType.cash &&
+     paymentType?.key !== PaymentType.creditCard &&
+     paymentType?.key !== PaymentType.wallet
      ? !!paymentRefNo
      : true;
    },
@@ -87,15 +84,15 @@ function createOrderInvoicePaymentSchema({ dic }: { dic: NewOrderDictionary }) {
    },
   )
   .refine(
-   ({ paymentType, nationalCode, mobileNo }) => {
-    if (paymentType?.key === '6') {
-     return !!nationalCode || !!mobileNo;
+   ({ paymentType, otpCode }) => {
+    if (paymentType?.key === PaymentType.wallet) {
+     return !!otpCode;
     }
     return true;
    },
    {
-    path: ['nationalCode'],
-    message: dic.invoice.fillMobileNoOrNationalCode,
+    path: ['otpCode'],
+    message: dic.invoice.fillOtpCode,
    },
   );
 }
