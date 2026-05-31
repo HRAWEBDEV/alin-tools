@@ -68,6 +68,7 @@ import {
  saveNewOrderSettings,
 } from '../../utils/newOrderSettings';
 import { useUserAccessibilityContext } from '@/app/[lang]/(app)/login/services/user-accessibility/userAccessibilityContext';
+import { PaymentType } from '../../utils/PaymentTypes';
 
 export default function OrderBaseConfigProvider({
  children,
@@ -752,7 +753,7 @@ export default function OrderBaseConfigProvider({
     newOrder: SaveOrderPackage['order'];
     orderInfo: OrderInfo;
    }) {
-    if (paymentData.paymentType?.key === '2') {
+    if (paymentData.paymentType?.key === PaymentType.creditCard) {
      return sendToPcPos({
       order: newOrder,
       orderItems: getPackedOrderItems(pricedOrderItems),
@@ -762,7 +763,7 @@ export default function OrderBaseConfigProvider({
       posID: Number(paymentData.cardReader!.key),
      });
     }
-    const isWalletPayment = paymentData.paymentType?.key === '2';
+    const isWalletPayment = paymentData.paymentType?.key === PaymentType.wallet;
     return saveAndCloseOrder({
      order: newOrder,
      orderItems: getPackedOrderItems(pricedOrderItems),

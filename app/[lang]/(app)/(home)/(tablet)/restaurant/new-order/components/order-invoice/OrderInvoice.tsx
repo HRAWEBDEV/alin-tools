@@ -55,7 +55,6 @@ import { MaskedInputGroupInput } from '@/components/ui/MaskedInputGroupInput';
 import { PaymentType } from '../../utils/PaymentTypes';
 import { useTimer } from '@/hooks/useTimer';
 import {
- type WalletInfo,
  getWalletInfo,
  sendWalletOtpCode,
 } from '../../services/wallet/orderWalletApiActions';
@@ -75,7 +74,8 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
   watch,
   handleSubmit,
   clearErrors,
-  setError,
+  trigger,
+  setFocus,
  } = useForm<OrderInvoicePayment>({
   resolver: zodResolver(createOrderInvoicePaymentSchema({ dic })),
   defaultValues: {
@@ -139,6 +139,29 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
   },
  });
 
+ const {
+  mutate: confirmGetWalletInfo,
+  isPending: confirmGetWalletInfoIsPending,
+  data: walletInfo,
+  reset: resetWalletInfo,
+ } = useMutation({
+  mutationFn({ mobileNo, otpCode }: { otpCode: string; mobileNo: string }) {
+   return getWalletInfo({
+    mobileNo,
+    otpCode,
+    sValue: remained.toString(),
+   });
+  },
+  onSuccess() {
+   reset();
+   stop();
+   setCanEditMobileNo(false);
+  },
+  onError(err: AxiosError<string>) {
+   toast.error(err.response?.data);
+  },
+ });
+
  const { mutate: confirmSendOtp, isPending: sendOtpIsPending } = useMutation({
   mutationFn(data: InvoiceWalletSchema) {
    return sendWalletOtpCode({ mobileNo: data.phoneNumber });
@@ -163,11 +186,20 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
   e.preventDefault();
   handleSubmit(
    (data) => {
+    const { otpCode, ...restData } = data;
     if (data.paymentType?.key === PaymentType.creditCard) {
-     onPaymentPcPos(data);
+     onPaymentPcPos(restData);
      return;
     }
-    onPayment(data);
+    if (data.paymentType?.key === PaymentType.wallet) {
+     onPaymentPcPos({
+      ...restData,
+      walletKey: walletInfo?.data.id.toString(),
+      otpCode,
+     });
+     return;
+    }
+    onPayment(restData);
    },
    (err) => {
     Object.keys(err).forEach((errKey) => {
@@ -205,6 +237,39 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
 
  function renderSubmitPaymentFormButton() {
   if (paymentTypeValue?.key === PaymentType.wallet) {
+   if (!walletInfo) {
+    return (
+     <Button
+      disabled={
+       isFetching ||
+       shopLoading ||
+       !access['order']['payment'] ||
+       confirmGetWalletInfoIsPending
+      }
+      type='submit'
+      className='h-11 sm:w-32'
+      onClick={(e) => {
+       e.preventDefault();
+       invoiceWalletUseForm.handleSubmit(async (data) => {
+        if (await trigger('otpCode')) {
+         const otpCode = getValues('otpCode');
+         confirmGetWalletInfo({
+          mobileNo: data.phoneNumber,
+          otpCode: otpCode!,
+         });
+        } else {
+         setFocus('otpCode');
+        }
+       })();
+      }}
+     >
+      {(isFetching || shopLoading || confirmGetWalletInfoIsPending) && (
+       <Spinner />
+      )}
+      {dic.invoice.confirm}
+     </Button>
+    );
+   }
    return (
     <Button
      disabled={isFetching || shopLoading || !access['order']['payment']}
@@ -667,12 +732,13 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
                }}
               />
               <InputGroupAddon align='inline-end' className='-me-3'>
-               {isRunning && (
+               {!canEditMobileNo && (
                 <Button
                  type='button'
                  className='h-11 w-32 text-destructive border-destructive rounded-ss-none rounded-es-none'
                  variant='outline'
                  onClick={() => {
+                  resetWalletInfo();
                   handleCanEditMobileNo();
                  }}
                 >
@@ -681,6 +747,13 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
                )}
               </InputGroupAddon>
              </InputGroup>
+             <FieldContent>
+              {!!invoiceWalletUseForm.formState.errors.phoneNumber && (
+               <FieldError>
+                {invoiceWalletUseForm.formState.errors.phoneNumber.message}
+               </FieldError>
+              )}
+             </FieldContent>
             </Field>
            )}
           />
@@ -703,8 +776,12 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
                decimalScale={0}
                customInput={InputGroupInput}
               />
-              <InputGroupAddon></InputGroupAddon>
              </InputGroup>
+             <FieldContent>
+              {!!errors.otpCode && (
+               <FieldError>{errors.otpCode.message}</FieldError>
+              )}
+             </FieldContent>
             </Field>
            )}
           />
@@ -722,6 +799,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
              onClick={() => {
               invoiceWalletUseForm.handleSubmit(
                (data) => {
+                resetWalletInfo();
                 confirmSendOtp(data);
                },
                (err) => {

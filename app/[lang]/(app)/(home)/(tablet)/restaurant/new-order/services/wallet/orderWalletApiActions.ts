@@ -12,7 +12,7 @@ function getWalletInfo({
  mobileNo,
  otpCode,
 }: {
- signal: AbortSignal;
+ signal?: AbortSignal;
  sValue: string;
  mobileNo: string;
  otpCode: string;
