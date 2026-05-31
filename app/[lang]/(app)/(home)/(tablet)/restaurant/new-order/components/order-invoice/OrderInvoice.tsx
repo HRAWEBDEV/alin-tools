@@ -23,7 +23,11 @@ import {
  Field,
  FieldLabel,
 } from '@/components/ui/field';
-import { InputGroup, InputGroupInput } from '@/components/ui/input-group';
+import {
+ InputGroup,
+ InputGroupAddon,
+ InputGroupInput,
+} from '@/components/ui/input-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useForm, Controller } from 'react-hook-form';
 import {
@@ -42,6 +46,12 @@ import { toast } from 'sonner';
 import { NumericFormat } from 'react-number-format';
 import { AxiosError } from 'axios';
 import { useDebouncedCallback } from '@tanstack/react-pacer';
+import {
+ type InvoiceWalletSchema,
+ defaultValues as invoiceWalletDefaultValues,
+ createInvoiceWalletSchema,
+} from '../../schemas/wallet/invoiceWalletSchema';
+import { MaskedInputGroupInput } from '@/components/ui/MaskInputGroupInput';
 
 const invoiceRowClass =
  'flex justify-between gap-2 items-center text-base pb-3 mb-3 border-b border-input font-medium';
@@ -169,13 +179,6 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
      className='h-11'
      onClick={(e) => {
       e.preventDefault();
-      const otpCode = getValues('otpCode');
-      if (!otpCode) {
-       setError('otpCode', {
-        message: dic.invoice.fillOtpCode,
-       });
-       return;
-      }
       handleConfirmPayment(e);
      }}
     >
@@ -599,7 +602,31 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
            )}
           </Field>
          )}
-        {paymentTypeValue?.key === '6' && <></>}
+        {paymentTypeValue?.key === '6' && (
+         <>
+          <Field>
+           <FieldLabel htmlFor='phone-number'>
+            {dic.invoice.mobileNo} *
+           </FieldLabel>
+           <InputGroup className='h-11'>
+            <MaskedInputGroupInput id='phone-number' mask={/^[+\d]+$/} />
+           </InputGroup>
+          </Field>
+          <Field>
+           <FieldLabel htmlFor='opt-code'>{dic.invoice.otpCode} *</FieldLabel>
+           <InputGroup className='h-11'>
+            <NumericFormat
+             id='opt-code'
+             allowLeadingZeros={true}
+             allowNegative={false}
+             decimalScale={0}
+             customInput={InputGroupInput}
+            />
+            <InputGroupAddon></InputGroupAddon>
+           </InputGroup>
+          </Field>
+         </>
+        )}
         <div className='grid sm:grid-cols-3 gap-3 sm:justify-end items-center'>
          <div></div>
          <div></div>

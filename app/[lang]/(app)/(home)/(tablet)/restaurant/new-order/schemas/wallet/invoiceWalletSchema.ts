@@ -7,8 +7,8 @@ const defaultValues: InvoiceWalletSchema = {
 
 function createInvoiceWalletSchema() {
  return z.object({
-  phoneNumber: z.string(),
-  otpCode: z.string(),
+  phoneNumber: z.string().min(1),
+  otpCode: z.string().min(1),
  });
 }
 
