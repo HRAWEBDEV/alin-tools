@@ -1,14 +1,13 @@
+import { type NewOrderDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/new-order/dictionary';
 import { z } from 'zod';
 
 const defaultValues: InvoiceWalletSchema = {
  phoneNumber: '',
- otpCode: '',
 };
 
-function createInvoiceWalletSchema() {
+function createInvoiceWalletSchema({ dic }: { dic: NewOrderDictionary }) {
  return z.object({
-  phoneNumber: z.string().min(1),
-  otpCode: z.string().min(1),
+  phoneNumber: z.string().min(1, dic.invoice.fillMobileNo),
  });
 }
 
