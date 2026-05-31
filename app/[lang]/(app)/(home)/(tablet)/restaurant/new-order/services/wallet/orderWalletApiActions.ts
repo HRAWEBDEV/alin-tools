@@ -2,6 +2,7 @@ import { axios } from '@/app/[lang]/(app)/utils/defaultAxios';
 
 interface WalletInfo {
  id: number;
+ remainWallet: number;
 }
 
 const getWalletInfoApi = '/Public/Cash/GetWalletCredit';

@@ -418,7 +418,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
       variant='secondary'
       size='lg'
       className='font-medium'
-      onClick={() => scrollToPaymentSection()}
+      onClick={() => scrollToPaymentSectionDB()}
      >
       {shopLoading && <Spinner />}
       {dic.invoice.paymentInfo}
@@ -767,6 +767,9 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
               <NumericFormat
                id='opt-code'
                {...other}
+               onChange={() => {
+                resetWalletInfo();
+               }}
                onValueChange={({ value }) => {
                 onChange(value);
                }}
@@ -785,6 +788,46 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
             </Field>
            )}
           />
+          {!!walletInfo && (
+           <>
+            <Field>
+             <FieldLabel htmlFor='wallet-credit'>
+              {dic.invoice.walletCredit}
+             </FieldLabel>
+             <InputGroup className='h-11'>
+              <InputGroupInput
+               id='wallet-credit'
+               readOnly
+               value={
+                walletInfo
+                 ? walletInfo.data.remainWallet > 0
+                   ? format(walletInfo.data.remainWallet)
+                   : `( ${format(walletInfo.data.remainWallet)} )`
+                 : ''
+               }
+              />
+             </InputGroup>
+            </Field>
+            <Field>
+             <FieldLabel htmlFor='wallet-credit-remained'>
+              {dic.invoice.remainedWalletCreditAfterPayment}
+             </FieldLabel>
+             <InputGroup className='h-11'>
+              <InputGroupInput
+               id='wallet-credit-remained'
+               readOnly
+               value={
+                walletInfo
+                 ? walletInfo.data.remainWallet - remained
+                   ? format(walletInfo.data.remainWallet - remained)
+                   : `( ${format(walletInfo.data.remainWallet - remained)} )`
+                 : ''
+               }
+              />
+             </InputGroup>
+            </Field>
+           </>
+          )}
          </>
         )}
         <div className='flex flex-col-reverse sm:flex-row justify-between gap-4 flex-wrap'>
