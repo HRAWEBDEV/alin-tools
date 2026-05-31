@@ -1,5 +1,5 @@
 'use client';
-import { useRef, useEffect, MouseEvent } from 'react';
+import { useRef, useEffect, MouseEvent, useState } from 'react';
 import { type NewOrderDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/new-order/dictionary';
 import NoItemFound from '@/app/[lang]/(app)/components/NoItemFound';
 import { Button } from '@/components/ui/button';
@@ -52,12 +52,14 @@ import {
  createInvoiceWalletSchema,
 } from '../../schemas/wallet/invoiceWalletSchema';
 import { MaskedInputGroupInput } from '@/components/ui/MaskedInputGroupInput';
+import { PaymentType } from '../../utils/PaymentTypes';
 
 const invoiceRowClass =
  'flex justify-between gap-2 items-center text-base pb-3 mb-3 border-b border-input font-medium';
 const invoiceLabelClass = 'shrink-0 w-32';
 
 export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
+ const [canEditMobileNo, setCanEditMobileNo] = useState(true);
  const {
   control,
   formState: { errors },
@@ -171,12 +173,12 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
  }, [pcPoseData, setValue]);
 
  function renderSubmitPaymentFormButton() {
-  if (paymentTypeValue?.key === '6') {
+  if (paymentTypeValue?.key === PaymentType.wallet) {
    return (
     <Button
      disabled={isFetching || shopLoading || !access['order']['payment']}
      type='submit'
-     className='h-11'
+     className='h-11 sm:w-32'
      onClick={(e) => {
       e.preventDefault();
       handleConfirmPayment(e);
@@ -187,7 +189,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
     </Button>
    );
   }
-  if (paymentTypeValue?.key === '2') {
+  if (paymentTypeValue?.key === PaymentType.creditCard) {
    return (
     <Button
      disabled={isFetching || shopLoading || !access['order']['payment']}
@@ -205,7 +207,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
     <Button
      disabled={shopLoading || !access['order']['close']}
      variant='destructive'
-     className='font-medium disabled:bg-neutral-400 disabled:dark:bg-neutral-600 h-11'
+     className='font-medium disabled:bg-neutral-400 disabled:dark:bg-neutral-600 h-11 sm:w-32'
      type='submit'
      onClick={(e) => {
       e.preventDefault();
@@ -221,7 +223,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
    <Button
     type='submit'
     disabled={isFetching || shopLoading || !access['order']['payment']}
-    className='h-11'
+    className='h-11 sm:w-32'
     onClick={handleConfirmPayment}
    >
     {(isFetching || shopLoading) && <Spinner />}
@@ -426,9 +428,9 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
            )}
           />
          </Field>
-         {paymentTypeValue?.key !== '1' &&
-          paymentTypeValue?.key !== '6' &&
-          paymentTypeValue?.key !== '4' &&
+         {paymentTypeValue?.key !== PaymentType.cash &&
+          paymentTypeValue?.key !== PaymentType.wallet &&
+          paymentTypeValue?.key !== PaymentType.check &&
           paymentTypeValue?.key !== 'nonCash' && (
            <Field data-invalid={!!errors.bank}>
             <FieldLabel htmlFor='bank'>{dic.invoice.bank} *</FieldLabel>
@@ -506,7 +508,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
            </Field>
           )}
         </div>
-        {paymentTypeValue?.key === '2' && (
+        {paymentTypeValue?.key === PaymentType.creditCard && (
          <Field data-invalid={!!errors.cardReader} data-disabled={!bankValue}>
           <FieldLabel htmlFor='cardReader'>
            {dic.invoice.cardReader} *
@@ -585,8 +587,8 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
           />
          </Field>
         )}
-        {paymentTypeValue?.key !== '1' &&
-         paymentTypeValue?.key !== '6' &&
+        {paymentTypeValue?.key !== PaymentType.cash &&
+         paymentTypeValue?.key !== PaymentType.wallet &&
          paymentTypeValue?.key !== 'nonCash' && (
           <Field data-invalid={!!errors.paymentRefNo}>
            <FieldLabel htmlFor='paymentRefNo'>
@@ -602,14 +604,27 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
            )}
           </Field>
          )}
-        {paymentTypeValue?.key === '6' && (
+        {paymentTypeValue?.key === PaymentType.wallet && (
          <>
-          <Field>
-           <FieldLabel htmlFor='phone-number'>
+          <Field data-disabled={!canEditMobileNo}>
+           <FieldLabel htmlFor='phone-number' data-disabled={!canEditMobileNo}>
             {dic.invoice.mobileNo} *
            </FieldLabel>
-           <InputGroup className='h-11'>
-            <MaskedInputGroupInput id='phone-number' mask={/^[+\d]+$/} />
+           <InputGroup className='h-11' data-disabled={!canEditMobileNo}>
+            <MaskedInputGroupInput
+             id='phone-number'
+             disabled={!canEditMobileNo}
+             mask={/^[+\d]+$/}
+            />
+            <InputGroupAddon align='inline-end' className='-me-3'>
+             <Button
+              type='button'
+              className='h-11 w-32 text-destructive border-destructive rounded-ss-none rounded-es-none'
+              variant='outline'
+             >
+              {dic.invoice.edit}
+             </Button>
+            </InputGroupAddon>
            </InputGroup>
           </Field>
           <Field>
@@ -627,9 +642,20 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
           </Field>
          </>
         )}
-        <div className='grid sm:grid-cols-3 gap-3 sm:justify-end items-center'>
-         <div></div>
-         <div></div>
+        <div className='flex flex-col sm:flex-row justify-between gap-4 flex-wrap'>
+         <div className='flex gap-4'>
+          {paymentTypeValue?.key === PaymentType.wallet && (
+           <>
+            <Button
+             type='button'
+             className='h-11 text-primary border-primary'
+             variant='outline'
+            >
+             {dic.invoice.resendCode}
+            </Button>
+           </>
+          )}
+         </div>
          {renderSubmitPaymentFormButton()}
         </div>
        </FieldGroup>
