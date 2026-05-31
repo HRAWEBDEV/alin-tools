@@ -53,12 +53,19 @@ import {
 } from '../../schemas/wallet/invoiceWalletSchema';
 import { MaskedInputGroupInput } from '@/components/ui/MaskedInputGroupInput';
 import { PaymentType } from '../../utils/PaymentTypes';
+import { useTimer } from '@/hooks/useTimer';
+import {
+ type WalletInfo,
+ getWalletInfo,
+ sendWalletOtpCode,
+} from '../../services/wallet/orderWalletApiActions';
 
 const invoiceRowClass =
  'flex justify-between gap-2 items-center text-base pb-3 mb-3 border-b border-input font-medium';
 const invoiceLabelClass = 'shrink-0 w-32';
 
 export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
+ const { minutes, seconds, start, reset, stop } = useTimer(120);
  const [canEditMobileNo, setCanEditMobileNo] = useState(true);
  const {
   control,
@@ -642,7 +649,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
           </Field>
          </>
         )}
-        <div className='flex flex-col sm:flex-row justify-between gap-4 flex-wrap'>
+        <div className='flex flex-col-reverse sm:flex-row justify-between gap-4 flex-wrap'>
          <div className='flex gap-4'>
           {paymentTypeValue?.key === PaymentType.wallet && (
            <>
@@ -652,6 +659,10 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
              variant='outline'
             >
              {dic.invoice.resendCode}
+             <span>
+              ({minutes.toString().padStart(2, '0')}:
+              {seconds.toString().padStart(2, '0')})
+             </span>
             </Button>
            </>
           )}
