@@ -51,7 +51,7 @@ import {
  defaultValues as invoiceWalletDefaultValues,
  createInvoiceWalletSchema,
 } from '../../schemas/wallet/invoiceWalletSchema';
-import { MaskedInputGroupInput } from '@/components/ui/MaskInputGroupInput';
+import { MaskedInputGroupInput } from '@/components/ui/MaskedInputGroupInput';
 
 const invoiceRowClass =
  'flex justify-between gap-2 items-center text-base pb-3 mb-3 border-b border-input font-medium';
