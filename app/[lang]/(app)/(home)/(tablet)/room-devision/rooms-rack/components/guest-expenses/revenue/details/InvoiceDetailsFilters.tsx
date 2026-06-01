@@ -49,11 +49,13 @@ export default function InvoiceDetailsFilters({
  results,
  costCenters,
  editInvoiceProps,
+ checkinDate,
 }: {
  dic: RoomsRackDictionary;
  results: number;
  costCenters: InitialData['minibarPrograms'];
  editInvoiceProps: EditInvoiceDetailProps;
+ checkinDate: string | null;
 }) {
  const dateFns = useDateFns();
  const [showDateTimePicker, setShowDateTimePicker] = useState(false);
@@ -133,6 +135,7 @@ export default function InvoiceDetailsFilters({
               <Button
                variant='outline'
                id='date'
+               disabled={!!editInvoiceProps.invoices.length}
                className='justify-between font-normal h-11'
                onBlur={field.onBlur}
                ref={field.ref}
@@ -154,7 +157,12 @@ export default function InvoiceDetailsFilters({
                selected={field.value || undefined}
                defaultMonth={field.value || undefined}
                endMonth={dateFns.addMonths(new Date(), 1)}
-               disabled={(date) => date.getTime() > Date.now()}
+               disabled={(date) =>
+                checkinDate
+                 ? dateFns.addDays(new Date(checkinDate), -1).getTime() >
+                   date.getTime()
+                 : false
+               }
                onSelect={(newValue) => {
                 if (newValue) {
                  const now = new Date();
@@ -191,6 +199,7 @@ export default function InvoiceDetailsFilters({
                className='justify-between font-normal h-11'
                onBlur={field.onBlur}
                ref={field.ref}
+               disabled={!!editInvoiceProps.invoices.length}
               >
                <span>
                 {field.value
@@ -283,6 +292,7 @@ export default function InvoiceDetailsFilters({
              <DrawerTrigger asChild>
               <Button
                id='revenue-type'
+               disabled={!!editInvoiceProps.invoices.length}
                variant='outline'
                role='combobox'
                className='justify-between h-11'

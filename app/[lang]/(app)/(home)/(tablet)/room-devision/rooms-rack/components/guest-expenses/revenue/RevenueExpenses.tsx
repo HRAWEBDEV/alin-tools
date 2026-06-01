@@ -169,6 +169,7 @@ export default function RevenueExpenses({
    {showEditInvoice && (
     <InvoiceDetails
      dic={dic}
+     checkinDate={checkinDate}
      editInvoice={editInvoiceProps}
      costCenters={initialData!.minibarPrograms}
      defaultCostCenter={costCenterValue || initialData!.minibarPrograms[0]}

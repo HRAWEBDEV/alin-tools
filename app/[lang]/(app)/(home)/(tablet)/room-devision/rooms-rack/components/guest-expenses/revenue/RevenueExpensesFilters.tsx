@@ -188,7 +188,8 @@ export default function RevenueExpensesFilters({
                selected={field.value || undefined}
                disabled={(date) =>
                 checkinDate
-                 ? new Date(checkinDate).getTime() > date.getTime()
+                 ? dateFns.addDays(new Date(checkinDate), -1).getTime() >
+                   date.getTime()
                  : false
                }
                onSelect={(newValue) => {

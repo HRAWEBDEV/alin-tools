@@ -32,8 +32,10 @@ export default function InvoiceDetails({
  editInvoice,
  costCenters,
  defaultCostCenter,
+ checkinDate,
 }: {
  dic: RoomsRackDictionary;
+ checkinDate: string | null;
  editInvoice: EditInvoiceProps;
  costCenters: InitialData['minibarPrograms'];
  defaultCostCenter: InitialData['minibarPrograms'][number];
@@ -174,6 +176,7 @@ export default function InvoiceDetails({
        results={detailInvoices.length || 0}
        costCenters={costCenters}
        editInvoiceProps={editInvoiceProps}
+       checkinDate={checkinDate}
       />
       <InvoiceDetailsList
        dic={dic}

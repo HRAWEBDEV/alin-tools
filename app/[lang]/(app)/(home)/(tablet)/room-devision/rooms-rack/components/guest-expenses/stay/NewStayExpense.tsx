@@ -58,6 +58,7 @@ import {
 } from '../../../services/guest-expenses/guestExpensesApiActions';
 import { Spinner } from '@/components/ui/spinner';
 import { Checkbox } from '@/components/ui/checkbox';
+import { useCurrencyFormatter } from '@/hooks/useCurrencyFormatter';
 
 export default function NewStayExpense({
  dic,
@@ -66,6 +67,7 @@ export default function NewStayExpense({
  dic: RoomsRackDictionary;
  editRevenue: EditStayRevenueProps;
 }) {
+ const { format } = useCurrencyFormatter();
  const isRevenueEditable =
   !!editRevenue.selectedRevenue && !!editRevenue.selectedRevenueID
    ? !!editRevenue.selectedRevenue?.userPersonID &&
@@ -666,6 +668,18 @@ export default function NewStayExpense({
           </Field>
          )}
         />
+        <Field>
+         <FieldLabel htmlFor='service'>{dic.invoiceDetails.service}</FieldLabel>
+         <InputGroup className='h-11'>
+          <InputGroupInput id='service' readOnly value={format(itemService)} />
+         </InputGroup>
+        </Field>
+        <Field>
+         <FieldLabel htmlFor='tax'>{dic.invoiceDetails.tax}</FieldLabel>
+         <InputGroup className='h-11'>
+          <InputGroupInput id='tax' readOnly value={format(itemTax)} />
+         </InputGroup>
+        </Field>
        </div>
        <Field>
         <FieldLabel htmlFor='comment'>

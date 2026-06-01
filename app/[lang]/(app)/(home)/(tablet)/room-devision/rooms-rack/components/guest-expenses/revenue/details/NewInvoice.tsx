@@ -40,6 +40,7 @@ import {
  saveGuestInvoices,
 } from '../../../../services/guest-expenses/guestExpensesApiActions';
 import { ItemProgram } from '@/app/[lang]/(app)/(home)/(tablet)/restaurant/new-order/services/newOrderApiActions';
+import { useCurrencyFormatter } from '@/hooks/useCurrencyFormatter';
 
 export default function NewInvoice({
  dic,
@@ -48,6 +49,7 @@ export default function NewInvoice({
  dic: RoomsRackDictionary;
  editInvoice: EditInvoiceDetailProps;
 }) {
+ const { format } = useCurrencyFormatter();
  const [selectedItemProgram, setSelectedItemProgram] =
   useState<ItemProgram | null>(null);
  const {
@@ -356,6 +358,18 @@ export default function NewInvoice({
           </Field>
          )}
         />
+        <Field>
+         <FieldLabel htmlFor='service'>{dic.invoiceDetails.service}</FieldLabel>
+         <InputGroup className='h-11'>
+          <InputGroupInput id='service' readOnly value={format(itemService)} />
+         </InputGroup>
+        </Field>
+        <Field>
+         <FieldLabel htmlFor='tax'>{dic.invoiceDetails.tax}</FieldLabel>
+         <InputGroup className='h-11'>
+          <InputGroupInput id='tax' readOnly value={format(itemTax)} />
+         </InputGroup>
+        </Field>
        </div>
        <Field>
         <FieldLabel htmlFor='comment'>
