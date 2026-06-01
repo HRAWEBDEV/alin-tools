@@ -5,6 +5,7 @@ import { type RoomStatisticsDictionary } from '@/internalization/app/dictionarie
 import { Button } from '@/components/ui/button';
 import { FaInfoCircle } from 'react-icons/fa';
 import RoomsStatisticsDialog from '../../../rooms-management/rooms-statistics/components/RoomsStatisticsDialog';
+import { ReserveChart } from './ReserveChart';
 
 export default function RackInfo({
  dic,
@@ -78,7 +79,7 @@ export default function RackInfo({
       <span>{rackInfo.data?.notCheckout}</span>
      </div>
     </div>
-    <div className='grid grid-cols-1 gap-2 text-sm'>
+    <div className='grid grid-cols-1 gap-2 text-sm border-b border-input pb-2 mb-2'>
      <div className='font-medium flex gap-1'>
       <span className='text-neutral-500'>{dic.info.guestsCount}: </span>
       <span>{rackInfo.data?.guestCout}</span>
@@ -87,6 +88,9 @@ export default function RackInfo({
       <span className='text-neutral-500'>{dic.info.extraBedsCount}: </span>
       <span>{rackInfo.data?.extraBed}</span>
      </div>
+    </div>
+    <div>
+     <ReserveChart dic={dic} />
     </div>
    </div>
    <RoomsStatisticsDialog
