@@ -51,7 +51,6 @@ import {
  defaultValues as invoiceWalletDefaultValues,
  createInvoiceWalletSchema,
 } from '../../schemas/wallet/invoiceWalletSchema';
-import { MaskedInputGroupInput } from '@/components/ui/MaskedInputGroupInput';
 import { PaymentType } from '../../utils/PaymentTypes';
 import { useTimer } from '@/hooks/useTimer';
 import {
@@ -721,15 +720,18 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
               data-disabled={!canEditMobileNo}
               data-invalid={!!invoiceWalletUseForm.formState.errors.phoneNumber}
              >
-              <MaskedInputGroupInput
+              <NumericFormat
                id='phone-number'
                disabled={!canEditMobileNo}
-               mask={/^[+\d]+$/}
                {...other}
-               inputRef={ref}
-               onChange={(e) => {
-                onChange(e);
+               onValueChange={({ value }) => {
+                onChange(value);
                }}
+               getInputRef={ref}
+               allowLeadingZeros={true}
+               allowNegative={false}
+               decimalScale={0}
+               customInput={InputGroupInput}
               />
               <InputGroupAddon align='inline-end' className='-me-3'>
                {!canEditMobileNo && (
