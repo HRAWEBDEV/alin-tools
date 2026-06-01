@@ -6,9 +6,7 @@
 
 # 2.3.0
 - add rack preview guest expenses (hre-done)
-
-# 2.2.4
-- add rooms rack reserve pie chart 
+- add rooms rack reserve pie chart (hra-done)
 
 # 2.2.0
 ### features
