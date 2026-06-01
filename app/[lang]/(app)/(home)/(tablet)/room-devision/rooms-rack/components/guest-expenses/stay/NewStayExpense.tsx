@@ -66,6 +66,14 @@ export default function NewStayExpense({
  dic: RoomsRackDictionary;
  editRevenue: EditStayRevenueProps;
 }) {
+ const isRevenueEditable =
+  !!editRevenue.selectedRevenue && !!editRevenue.selectedRevenueID
+   ? !!editRevenue.selectedRevenue?.userPersonID &&
+     editRevenue.selectedRevenue?.itemID != 3 &&
+     editRevenue.selectedRevenue?.itemID != 4 &&
+     editRevenue.selectedRevenueID > 0
+   : false;
+
  const dateFns = useDateFns();
  const { locale } = useBaseConfig();
  const {
@@ -669,43 +677,42 @@ export default function NewStayExpense({
        </Field>
       </FieldGroup>
      </div>
-     {/*
-       <DialogFooter className='p-4 py-2 border-t border-input'>
-             <Button
-              type='button'
-              className='sm:w-24'
-              size='lg'
-              variant='outline'
-              onClick={() => {
-               editRevenue.onCloseEditRevenue();
-              }}
-              disabled={pendAction}
-             >
-              {pendAction && <Spinner />}
-              {dic.guestExpensesStay.cancel}
-             </Button>
-             <Button
-              type='submit'
-              className='sm:w-24'
-              size='lg'
-              disabled={true}
-              onClick={(e) => {
-               e.preventDefault();
-               handleSubmit(
-                (data) => confirmSave(data),
-                (err) => {
-                 if ('item' in err) {
-                  toast.error(dic.guestExpensesStay.noItemIsSelected);
-                 }
-                },
-               )();
-              }}
-             >
-              {pendAction && <Spinner />}
-              {dic.guestExpensesStay.confirm}
-             </Button>
-            </DialogFooter>
-       */}
+     <DialogFooter className='p-4 py-2 border-t border-input'>
+      <Button
+       type='button'
+       className='sm:w-24'
+       size='lg'
+       variant='outline'
+       onClick={() => {
+        editRevenue.onCloseEditRevenue();
+       }}
+       disabled={pendAction}
+      >
+       {pendAction && <Spinner />}
+       {dic.guestExpensesStay.cancel}
+      </Button>
+      <Button
+       type='submit'
+       className='sm:w-24'
+       size='lg'
+       disabled={!isRevenueEditable}
+       onClick={(e) => {
+        if (!isRevenueEditable) return;
+        e.preventDefault();
+        handleSubmit(
+         (data) => confirmSave(data),
+         (err) => {
+          if ('item' in err) {
+           toast.error(dic.guestExpensesStay.noItemIsSelected);
+          }
+         },
+        )();
+       }}
+      >
+       {pendAction && <Spinner />}
+       {dic.guestExpensesStay.confirm}
+      </Button>
+     </DialogFooter>
     </form>
    </DialogContent>
   </Dialog>

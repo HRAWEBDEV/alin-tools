@@ -41,6 +41,7 @@ interface Revenue {
  comment: string | null;
  refProgramName: string | null;
  refProgramID: number | null;
+ userPersonID: number | null;
 }
 
 interface Invoice {
