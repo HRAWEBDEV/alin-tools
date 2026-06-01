@@ -64,6 +64,18 @@ interface Invoice {
  comment: string | null;
 }
 
+type TItemProgram = {
+ id: number;
+ itemID: number;
+ itemName: string | null;
+ itemCode: number;
+ price: number;
+ arzID: number;
+ programID: number;
+ serviceRate: number;
+ taxRate: number;
+};
+
 type SaveRevenuePackage = {
  registerID: number;
  roomID: number;
@@ -83,6 +95,8 @@ type SaveRevenuePackage = {
   | 'comment'
  >;
 };
+
+type SaveInvoicePackage = Omit<Invoice, 'itemName'>;
 
 function getInitialData({
  registerID,
@@ -191,7 +205,36 @@ function getRevenueInvoices({
  );
 }
 
-export type { InitialData, Revenue, SaveRevenuePackage, Invoice };
+function saveGuestInvoices({
+ invoices,
+ registerID,
+ orderID,
+}: {
+ invoices: SaveInvoicePackage[];
+ registerID: number;
+ orderID: number | null;
+}) {
+ const searchParams = new URLSearchParams([
+  ['registerID', registerID.toString()],
+  ['isCustomer', 'false'],
+ ]);
+ if (orderID) {
+  searchParams.set('orderID', orderID.toString());
+ }
+ return axios.post(
+  `/Reception/RoomGuestCost/SaveProgramRegisterRevenues?${searchParams.toString()}`,
+  invoices,
+ );
+}
+
+export type {
+ TItemProgram,
+ InitialData,
+ Revenue,
+ SaveRevenuePackage,
+ Invoice,
+ SaveInvoicePackage,
+};
 export {
  getInitialData,
  getRevenues,
@@ -200,4 +243,5 @@ export {
  updateRevenue,
  getRevenueInvoicesApi,
  getRevenueInvoices,
+ saveGuestInvoices,
 };

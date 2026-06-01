@@ -84,16 +84,14 @@ export default function InvoiceDetailsFilters({
  return (
   <div className='[&]:[--default-top-offset:var(--top-offset,0)] sticky top-0 lg:top-(--default-top-offset) bg-background z-3 py-1'>
    <div className='flex gap-2 items-center mb-1'>
-    {/*
-       <Button
-            size='lg'
-            className='px-3!'
-            onClick={() => editInvoiceProps.onShowEditInvoice(null)}
-           >
-            {false ? <Spinner /> : <FaPlus />}
-            <span className='hidden lg:inline'>{dic.invoiceDetails.new}</span>
-       </Button>
-    */}
+    <Button
+     size='lg'
+     className='px-3!'
+     onClick={() => editInvoiceProps.onShowEditInvoice(null)}
+    >
+     {false ? <Spinner /> : <FaPlus />}
+     <span className='hidden lg:inline'>{dic.invoiceDetails.new}</span>
+    </Button>
     <div>
      <Drawer>
       <DrawerTrigger>

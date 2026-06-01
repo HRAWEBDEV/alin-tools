@@ -97,6 +97,7 @@ export default function InvoiceDetails({
  }
 
  const editInvoiceProps: EditInvoiceDetailProps = {
+  invoices: detailInvoices,
   showEdit: showEditInvoice,
   registerID: editInvoice.registerID,
   roomID: editInvoice.roomID,
@@ -105,6 +106,7 @@ export default function InvoiceDetails({
   selectedInvoice: selectedDetailInvoice,
   selectedInvoiceID,
   invalidateInvoices,
+  orderID: editInvoice.selectedInvoice?.orderID || null,
  };
 
  useEffect(() => {

@@ -42,12 +42,14 @@ export default function RevenueExpensesFilters({
  initialDataIsLoading,
  editRevenueProps,
  results,
+ checkinDate,
 }: {
  dic: RoomsRackDictionary;
  initialData?: InitialData;
  initialDataIsLoading: boolean;
  editRevenueProps: EditInvoiceProps;
  results: number;
+ checkinDate: string | null;
 }) {
  const dateFns = useDateFns();
  const [showDatePicker, setShowDatePicker] = useState(false);
@@ -88,19 +90,17 @@ export default function RevenueExpensesFilters({
  return (
   <div className='[&]:[--default-top-offset:var(--top-offset,0)] sticky top-0 lg:top-(--default-top-offset) bg-background z-3 py-2'>
    <div className='flex gap-2 items-center mb-1'>
-    {/*
-       <Button
-            size='lg'
-            className='px-3!'
-            disabled={initialDataIsLoading}
-            onClick={() => {
-             editRevenueProps.onShowEditInvoice(null);
-            }}
-           >
-            {initialDataIsLoading ? <Spinner /> : <FaPlus />}
-            <span className='hidden lg:inline'>{dic.guestExpensesInvoice.new}</span>
-           </Button>
-    */}
+    <Button
+     size='lg'
+     className='px-3!'
+     disabled={initialDataIsLoading}
+     onClick={() => {
+      editRevenueProps.onShowEditInvoice(null);
+     }}
+    >
+     {initialDataIsLoading ? <Spinner /> : <FaPlus />}
+     <span className='hidden lg:inline'>{dic.guestExpensesInvoice.new}</span>
+    </Button>
     <div>
      <Drawer>
       <DrawerTrigger>
@@ -186,6 +186,11 @@ export default function RevenueExpensesFilters({
                className='[&]:[--cell-size:2.6rem]'
                defaultMonth={dateValue || undefined}
                selected={field.value || undefined}
+               disabled={(date) =>
+                checkinDate
+                 ? new Date(checkinDate).getTime() > date.getTime()
+                 : false
+               }
                onSelect={(newValue) => {
                 if (newValue) {
                  field.onChange(newValue);
