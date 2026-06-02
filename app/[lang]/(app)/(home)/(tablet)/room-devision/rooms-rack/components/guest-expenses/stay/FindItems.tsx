@@ -42,7 +42,7 @@ export default function FindItems({
   useInfiniteQuery({
    queryKey: [getStayExpenseItemsApi, debouncedSearch],
    initialPageParam: {
-    limit: 2,
+    limit: 100,
     offset: 1,
    },
    async queryFn({ signal, pageParam }) {

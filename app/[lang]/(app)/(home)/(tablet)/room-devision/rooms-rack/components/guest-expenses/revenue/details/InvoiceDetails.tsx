@@ -17,7 +17,11 @@ import { type EditInvoiceDetailProps } from '../../../../utils/guest-expenses/Ed
 import InvoiceDetailsFilters from './InvoiceDetailsFilters';
 import InvoiceDetailsList from './InvoiceDetailsList';
 import InvoiceDetailsFooter from './InvoiceDetailsFooter';
-import { type InitialData } from '../../../../services/guest-expenses/guestExpensesApiActions';
+import {
+ type InitialData,
+ getDefaultPayByApi,
+ getDefaultPayBy,
+} from '../../../../services/guest-expenses/guestExpensesApiActions';
 import {
  type InvoiceDetailsFiltersSchema,
  defaultValues,
@@ -49,6 +53,7 @@ export default function InvoiceDetails({
   defaultValues,
   resolver: zodResolver(createInvoiceDetailsFiltersSchema()),
  });
+ const [costCenterValue] = filtersUseForm.watch(['costCenter']);
  const {
   data: detailInvoices = [],
   isFetching: detailIsFetching,
@@ -66,6 +71,27 @@ export default function InvoiceDetails({
     orderID: editInvoice.selectedInvoice!.orderID!,
    });
    return res.data.revenues;
+  },
+ });
+
+ const { data: defaultPayBy, isSuccess: defaultPayByIsSuccess } = useQuery({
+  enabled:
+   !editInvoice.selectedInvoiceID &&
+   !!costCenterValue?.key &&
+   !!editInvoice.registerID,
+  queryKey: [
+   getDefaultPayByApi,
+   editInvoice.registerID.toString(),
+   costCenterValue?.key || 'all',
+  ],
+  staleTime: 'static',
+  async queryFn({ signal }) {
+   const res = await getDefaultPayBy({
+    signal,
+    registerID: editInvoice.registerID,
+    programID: Number(costCenterValue!.key),
+   });
+   return res.data;
   },
  });
 
@@ -117,6 +143,13 @@ export default function InvoiceDetails({
     'date',
     new Date(editInvoice.selectedInvoice.dateTimeDateTimeOffset),
    );
+   filtersUseForm.setValue('payBy', 'group');
+   if (
+    !editInvoice.selectedInvoice.entityID ||
+    editInvoice.selectedInvoice.entityID === 1
+   ) {
+    filtersUseForm.setValue('payBy', 'guest');
+   }
    if (editInvoice.selectedInvoice.refProgramID) {
     filtersUseForm.setValue('costCenter', {
      key: editInvoice.selectedInvoice.refProgramID?.toString(),
@@ -126,6 +159,7 @@ export default function InvoiceDetails({
   } else {
    filtersUseForm.setValue('costCenter', defaultCostCenter);
    filtersUseForm.setValue('date', new Date());
+   filtersUseForm.setValue('payBy', defaultValues['payBy']);
   }
  }, [
   editInvoice.selectedInvoice,
@@ -133,6 +167,11 @@ export default function InvoiceDetails({
   defaultCostCenter,
   filtersUseForm,
  ]);
+
+ useEffect(() => {
+  if (!defaultPayByIsSuccess) return;
+  filtersUseForm.setValue('payBy', defaultPayBy === 1 ? 'guest' : 'group');
+ }, [defaultPayByIsSuccess, filtersUseForm, defaultPayBy]);
 
  return (
   <Dialog

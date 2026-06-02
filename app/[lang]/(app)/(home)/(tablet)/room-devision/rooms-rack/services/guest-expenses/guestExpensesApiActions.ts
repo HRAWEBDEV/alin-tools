@@ -5,6 +5,7 @@ import { type ApiPagedData } from '../../../guests-management/arrival-reserves/s
 const getRevenueInvoicesApi =
  '/Reception/RoomGuestCost/GetProgramDetailRevenues';
 const getStayExpenseItemsApi = '/Reception/RoomGuestCost/GetItems';
+const getDefaultPayByApi = '/Reception/RoomGuestCost/GetProgramAccountSide';
 
 interface InitialData {
  items: Combo[];
@@ -16,7 +17,7 @@ interface InitialData {
 type StayExpenseItem = {
  itemID: number;
  itemName: string | null;
- price: number;
+ price: number | null;
  serviceRate: number | null;
  taxRate: number | null;
 };
@@ -256,6 +257,24 @@ function getStayExpenseItems({
  );
 }
 
+function getDefaultPayBy({
+ registerID,
+ programID,
+ signal,
+}: {
+ registerID: number;
+ programID: number;
+ signal: AbortSignal;
+}) {
+ const searchParams = new URLSearchParams([
+  ['registerID', registerID.toString()],
+  ['programID', programID.toString()],
+ ]);
+ return axios.get<number>(`${getDefaultPayByApi}?${searchParams.toString()}`, {
+  signal,
+ });
+}
+
 export type {
  TItemProgram,
  InitialData,
@@ -276,4 +295,6 @@ export {
  saveGuestInvoices,
  getStayExpenseItemsApi,
  getStayExpenseItems,
+ getDefaultPayByApi,
+ getDefaultPayBy,
 };

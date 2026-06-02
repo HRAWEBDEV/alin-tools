@@ -77,7 +77,12 @@ export default function InvoiceDetailsFilters({
  const filtersKeyValue = filterValues.map((value, i) => {
   return {
    key: filterKeys[i],
-   value: value instanceof Date ? value.toISOString() : value?.value,
+   value:
+    value instanceof Date
+     ? value.toISOString()
+     : typeof value === 'string'
+       ? value
+       : value?.value,
   };
  });
 
@@ -375,6 +380,9 @@ export default function InvoiceDetailsFilters({
         hour: '2-digit',
         minute: '2-digit',
        });
+      }
+      if (item.key === 'payBy' && badgeValue) {
+       badgeValue = dic.invoiceDetails[badgeValue as 'group'];
       }
 
       return (

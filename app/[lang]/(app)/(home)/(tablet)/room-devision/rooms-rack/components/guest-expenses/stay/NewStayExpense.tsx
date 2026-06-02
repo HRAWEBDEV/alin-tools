@@ -105,8 +105,8 @@ export default function NewStayExpense({
  ]);
  const [showDateTimePicker, setShowDateTimePicker] = useState(false);
  const [showTimePicker, setShowTimePicker] = useState(false);
- const sValue = priceValue && amountValue ? priceValue * amountValue : '';
 
+ const sValue = priceValue && amountValue ? priceValue * amountValue : '';
  const itemService =
   (((sValue || 0) - (discountValue || 0)) * itemServiceRate) / 100;
  const itemTax =
@@ -119,7 +119,7 @@ export default function NewStayExpense({
    key: item.itemID.toString(),
    value: item.itemName || '',
   });
-  setValue('price', item.price);
+  setValue('price', item.price || 0);
  }
 
  const setFormDefaults = useCallback(() => {

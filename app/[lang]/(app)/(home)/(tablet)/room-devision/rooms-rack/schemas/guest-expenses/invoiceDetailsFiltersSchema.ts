@@ -1,8 +1,9 @@
 import { z } from 'zod';
 
-const defaultValues: Partial<InvoiceDetailsFiltersSchema> = {
+const defaultValues: InvoiceDetailsFiltersSchema = {
  date: null,
  costCenter: null,
+ payBy: 'guest',
 };
 
 function createInvoiceDetailsFiltersSchema() {
@@ -14,6 +15,7 @@ function createInvoiceDetailsFiltersSchema() {
     value: z.string(),
    })
    .nullable(),
+  payBy: z.enum(['guest', 'group']),
  });
 }
 
