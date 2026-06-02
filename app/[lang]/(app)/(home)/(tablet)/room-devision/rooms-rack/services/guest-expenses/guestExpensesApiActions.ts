@@ -1,8 +1,10 @@
 import { axios } from '@/app/[lang]/(app)/utils/defaultAxios';
 import { type Combo } from '../../../../restaurant/utils/apiTypes';
+import { type ApiPagedData } from '../../../guests-management/arrival-reserves/services/arrivalReservesApiActions';
 
 const getRevenueInvoicesApi =
  '/Reception/RoomGuestCost/GetProgramDetailRevenues';
+const getStayExpenseItemsApi = '/Reception/RoomGuestCost/GetItems';
 
 interface InitialData {
  items: Combo[];
@@ -10,6 +12,14 @@ interface InitialData {
  minibarPrograms: Combo[];
  arzs: Combo[];
 }
+
+type StayExpenseItem = {
+ itemID: number;
+ itemName: string | null;
+ price: number;
+ serviceRate: number | null;
+ taxRate: number | null;
+};
 
 interface Revenue {
  id: number;
@@ -227,6 +237,25 @@ function saveGuestInvoices({
  );
 }
 
+function getStayExpenseItems({
+ limit,
+ offset,
+ signal,
+}: {
+ limit: number;
+ offset: number;
+ signal: AbortSignal;
+}) {
+ const searchParams = new URLSearchParams([
+  ['limit', limit.toString()],
+  ['offset', offset.toString()],
+ ]);
+ return axios.get<ApiPagedData<StayExpenseItem[]>>(
+  `${getStayExpenseItemsApi}?${searchParams.toString()}`,
+  { signal },
+ );
+}
+
 export type {
  TItemProgram,
  InitialData,
@@ -234,6 +263,7 @@ export type {
  SaveRevenuePackage,
  Invoice,
  SaveInvoicePackage,
+ StayExpenseItem,
 };
 export {
  getInitialData,
@@ -244,4 +274,6 @@ export {
  getRevenueInvoicesApi,
  getRevenueInvoices,
  saveGuestInvoices,
+ getStayExpenseItemsApi,
+ getStayExpenseItems,
 };

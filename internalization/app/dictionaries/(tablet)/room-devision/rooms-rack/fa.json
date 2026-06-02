@@ -235,7 +235,8 @@
   "group": "گروه",
   "payBy": "به حساب",
   "cancel": "انصراف",
-  "confirm": "تایید"
+  "confirm": "تایید",
+  "loadMore": "موارد بیشتر"
  },
  "guestExpensesInvoice": {
   "noItemIsSelected": "آیتم انتخاب نشده است",
@@ -296,6 +297,7 @@
   "tax": "مالیات",
   "totalPrice": "جمع کل",
   "cancel": "انصراف",
-  "confirm": "تایید"
+  "confirm": "تایید",
+  "loadMore": "موارد بیشتر"
  }
 }

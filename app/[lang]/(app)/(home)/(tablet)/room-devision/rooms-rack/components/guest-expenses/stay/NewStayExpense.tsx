@@ -53,12 +53,14 @@ import { AxiosError } from 'axios';
 import { useMutation } from '@tanstack/react-query';
 import {
  type SaveRevenuePackage,
+ type StayExpenseItem,
  saveRevenue,
  updateRevenue,
 } from '../../../services/guest-expenses/guestExpensesApiActions';
 import { Spinner } from '@/components/ui/spinner';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useCurrencyFormatter } from '@/hooks/useCurrencyFormatter';
+import FindItems from './FindItems';
 
 export default function NewStayExpense({
  dic,
@@ -74,7 +76,7 @@ export default function NewStayExpense({
      editRevenue.selectedRevenue?.itemID != 3 &&
      editRevenue.selectedRevenue?.itemID != 4 &&
      editRevenue.selectedRevenueID > 0
-   : false;
+   : true;
 
  const dateFns = useDateFns();
  const { locale } = useBaseConfig();
@@ -90,8 +92,12 @@ export default function NewStayExpense({
   resolver: zodResolver(createNewStayExpenseSchema()),
   defaultValues,
  });
- const [itemService, setItemService] = useState(0);
- const [itemTax, setItemTax] = useState(0);
+ const [itemServiceRate, setItemServiceRate] = useState(
+  editRevenue.selectedRevenue ? editRevenue.selectedRevenue.serviceRate : 0,
+ );
+ const [itemTaxRate, setItemTaxRate] = useState(
+  editRevenue.selectedRevenue ? editRevenue.selectedRevenue.taxRate : 0,
+ );
  const [amountValue, priceValue, discountValue] = watch([
   'amount',
   'price',
@@ -101,10 +107,25 @@ export default function NewStayExpense({
  const [showTimePicker, setShowTimePicker] = useState(false);
  const sValue = priceValue && amountValue ? priceValue * amountValue : '';
 
+ const itemService =
+  (((sValue || 0) - (discountValue || 0)) * itemServiceRate) / 100;
+ const itemTax =
+  (((sValue || 0) - (discountValue || 0) + itemService) * itemTaxRate) / 100;
+
+ function handleChangeItem(item: StayExpenseItem) {
+  setItemServiceRate(item.serviceRate || 0);
+  setItemTaxRate(item.taxRate || 0);
+  setValue('item', {
+   key: item.itemID.toString(),
+   value: item.itemName || '',
+  });
+  setValue('price', item.price);
+ }
+
  const setFormDefaults = useCallback(() => {
   setValue('dateTime', new Date());
-  setItemService(0);
-  setItemTax(0);
+  setItemServiceRate(0);
+  setItemTaxRate(0);
   setValue('dateTime', new Date());
   setValue('amount', defaultValues['amount']);
   setValue('comment', defaultValues['comment']);
@@ -158,8 +179,8 @@ export default function NewStayExpense({
 
  useEffect(() => {
   if (editRevenue.selectedRevenue) {
-   setItemService(editRevenue.selectedRevenue.service);
-   setItemTax(editRevenue.selectedRevenue.tax);
+   setItemServiceRate(editRevenue.selectedRevenue.serviceRate);
+   setItemTaxRate(editRevenue.selectedRevenue.taxRate);
    setValue(
     'dateTime',
     new Date(editRevenue.selectedRevenue.dateTimeDateTimeOffset),
@@ -413,46 +434,7 @@ export default function NewStayExpense({
              </div>
             </Button>
            </DrawerTrigger>
-           <DrawerContent className='h-[min(80svh,35rem)]'>
-            <DrawerHeader className='hidden'>
-             <DrawerTitle>{dic.guestExpensesStay.item}</DrawerTitle>
-            </DrawerHeader>
-            <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
-             <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
-              {dic.guestExpensesStay.item}
-             </h1>
-            </div>
-            <div className='overflow-hidden overflow-y-auto'>
-             {/*{data?.saleTypes.length ? (
-              <ul>
-               {data.saleTypes.map((item) => (
-                <DrawerClose asChild key={item.key}>
-                 <li
-                  className='flex gap-1 items-center ps-6 py-2'
-                  onClick={() => {
-                   field.onChange(item);
-                  }}
-                 >
-                  <Checkbox
-                   className='size-6'
-                   checked={field.value?.key === item.key}
-                  />
-                  <Button
-                   tabIndex={-1}
-                   variant='ghost'
-                   className='w-full justify-start h-auto text-lg'
-                  >
-                   <span>{item.value}</span>
-                  </Button>
-                 </li>
-                </DrawerClose>
-               ))}
-              </ul>
-             ) : (
-              <div className='text-center font-medium'></div>
-             )}*/}
-            </div>
-           </DrawerContent>
+           <FindItems dic={dic} onChangeItem={handleChangeItem} />
           </Drawer>
          )}
         />
