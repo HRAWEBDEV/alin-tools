@@ -37,12 +37,14 @@ export default function InvoiceDetails({
  costCenters,
  defaultCostCenter,
  checkinDate,
+ customerID,
 }: {
  dic: RoomsRackDictionary;
  checkinDate: string | null;
  editInvoice: EditInvoiceProps;
  costCenters: InitialData['minibarPrograms'];
  defaultCostCenter: InitialData['minibarPrograms'][number];
+ customerID: number | null;
 }) {
  const queryClient = useQueryClient();
  const [showEditInvoice, setShowEditInvoice] = useState(false);
@@ -219,6 +221,7 @@ export default function InvoiceDetails({
      <FormProvider {...filtersUseForm}>
       <InvoiceDetailsFilters
        dic={dic}
+       customerID={customerID}
        results={detailInvoices.length || 0}
        costCenters={costCenters}
        editInvoiceProps={editInvoiceProps}

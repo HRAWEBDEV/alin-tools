@@ -40,6 +40,7 @@ import {
  TimePickerWheels,
 } from '@poursha98/react-ios-time-picker';
 import { type EditInvoiceDetailProps } from '../../../../utils/guest-expenses/EditInvoiceDetailProps';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const smallBadgeKeys: (keyof InvoiceDetailsFiltersSchema)[] = [];
 const largeBadgeKeys: (keyof InvoiceDetailsFiltersSchema)[] = ['costCenter'];
@@ -50,19 +51,22 @@ export default function InvoiceDetailsFilters({
  costCenters,
  editInvoiceProps,
  checkinDate,
+ customerID,
 }: {
  dic: RoomsRackDictionary;
  results: number;
  costCenters: InitialData['minibarPrograms'];
  editInvoiceProps: EditInvoiceDetailProps;
  checkinDate: string | null;
+ customerID: number | null;
 }) {
  const dateFns = useDateFns();
  const [showDateTimePicker, setShowDateTimePicker] = useState(false);
  const [showTimePicker, setShowTimePicker] = useState(false);
  const { locale, localeInfo } = useBaseConfig();
- const { control, watch } = useFormContext<InvoiceDetailsFiltersSchema>();
- const dateValue = watch('date');
+ const { control, watch, setValue } =
+  useFormContext<InvoiceDetailsFiltersSchema>();
+ const [payByValue] = watch(['payBy']);
 
  const [sliderRef] = useKeenSlider({
   rtl: localeInfo.contentDirection === 'rtl',
@@ -124,6 +128,30 @@ export default function InvoiceDetailsFilters({
        </DrawerHeader>
        <div className='grow overflow-auto p-4'>
         <div className='mx-auto w-[min(100%,28rem)] grid grid-cols-1 sm:grid-cols-2 gap-4'>
+         <div className='col-span-full'>
+          <Tabs
+           dir={localeInfo.contentDirection}
+           value={payByValue}
+           onValueChange={(newValue) =>
+            setValue('payBy', newValue as InvoiceDetailsFiltersSchema['payBy'])
+           }
+          >
+           <TabsList className='h-11 w-[min(100%,30rem)] mx-auto bg-neutral-200 dark:bg-neutral-800'>
+            <TabsTrigger
+             value='guest'
+             disabled={!!editInvoiceProps.invoices.length || customerID === 1}
+            >
+             {dic.invoiceDetails.guest}
+            </TabsTrigger>
+            <TabsTrigger
+             value='group'
+             disabled={!!editInvoiceProps.invoices.length || customerID === 1}
+            >
+             {dic.invoiceDetails.group}
+            </TabsTrigger>
+           </TabsList>
+          </Tabs>
+         </div>
          <Controller
           control={control}
           name='date'
