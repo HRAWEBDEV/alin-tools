@@ -53,7 +53,10 @@ export default function InvoiceDetails({
   defaultValues,
   resolver: zodResolver(createInvoiceDetailsFiltersSchema()),
  });
- const [costCenterValue] = filtersUseForm.watch(['costCenter']);
+ const [costCenterValue, dateValue] = filtersUseForm.watch([
+  'costCenter',
+  'date',
+ ]);
  const {
   data: detailInvoices = [],
   isFetching: detailIsFetching,
@@ -122,19 +125,23 @@ export default function InvoiceDetails({
   queryClient.invalidateQueries({
    queryKey: [getRevenueInvoicesApi, editInvoice.selectedInvoice?.orderID],
   });
+  editInvoice.invalidateInvoices();
  }
 
  const editInvoiceProps: EditInvoiceDetailProps = {
+  costCenterID: costCenterValue?.key,
   invoices: detailInvoices,
   showEdit: showEditInvoice,
   registerID: editInvoice.registerID,
   roomID: editInvoice.roomID,
   onShowEditInvoice: handleShowEditInvoice,
   onCloseEditInvoice: handleCloseEditInvoice,
+  onCloseDetailedInvoice: editInvoice.onCloseEditInvoice,
   selectedInvoice: selectedDetailInvoice,
   selectedInvoiceID,
   invalidateInvoices,
   orderID: editInvoice.selectedInvoice?.orderID || null,
+  date: dateValue ? dateValue.toISOString() : new Date().toISOString(),
  };
 
  useEffect(() => {

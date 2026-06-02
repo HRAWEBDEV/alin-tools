@@ -122,8 +122,8 @@ export default function RevenueExpensesItem({
        calculateTotalValue({
         sValue: revenue.sValue,
         discount: revenue.discount,
-        serviceRate: revenue.serviceRate,
-        taxRate: revenue.taxRate,
+        serviceRate: revenue.service,
+        taxRate: revenue.tax,
        }),
       )}
       <span className='text-sm text-neutral-700 dark:text-neutral-400'>

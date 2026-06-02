@@ -6,6 +6,7 @@ const getRevenueInvoicesApi =
  '/Reception/RoomGuestCost/GetProgramDetailRevenues';
 const getStayExpenseItemsApi = '/Reception/RoomGuestCost/GetItems';
 const getDefaultPayByApi = '/Reception/RoomGuestCost/GetProgramAccountSide';
+const getItemProgramsApi = '/Reception/RoomGuestCost/GetItemPrograms';
 
 interface InitialData {
  items: Combo[];
@@ -72,10 +73,12 @@ interface Invoice {
  refProgramID: number;
  roomingDateTimeOffset: string | null;
  dateTimeDateTimeOffset: string | null;
+ registerID: number | null;
+ roomID: number | null;
  comment: string | null;
 }
 
-type TItemProgram = {
+type ItemProgram = {
  id: number;
  itemID: number;
  itemName: string | null;
@@ -104,6 +107,8 @@ type SaveRevenuePackage = {
   | 'tax'
   | 'arzID'
   | 'comment'
+  | 'taxRate'
+  | 'serviceRate'
  >;
 };
 
@@ -275,8 +280,35 @@ function getDefaultPayBy({
  });
 }
 
+function getItemPrograms({
+ limit,
+ offset,
+ signal,
+ searchText,
+ programID,
+}: {
+ limit: number;
+ offset: number;
+ searchText?: string;
+ programID: string;
+ signal: AbortSignal;
+}) {
+ const searchParams = new URLSearchParams([
+  ['limit', limit.toString()],
+  ['offset', offset.toString()],
+  ['programID', programID.toString()],
+ ]);
+ if (searchText) {
+  searchParams.set('searchText', searchText);
+ }
+ return axios.get<ApiPagedData<ItemProgram[]>>(
+  `${getItemProgramsApi}?${searchParams.toString()}`,
+  { signal },
+ );
+}
+
 export type {
- TItemProgram,
+ ItemProgram,
  InitialData,
  Revenue,
  SaveRevenuePackage,
@@ -297,4 +329,6 @@ export {
  getStayExpenseItems,
  getDefaultPayByApi,
  getDefaultPayBy,
+ getItemProgramsApi,
+ getItemPrograms,
 };

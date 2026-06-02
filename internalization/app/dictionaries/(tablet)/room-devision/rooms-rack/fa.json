@@ -269,6 +269,7 @@
   "confirm": "تایید"
  },
  "invoiceDetails": {
+  "search": "جستجو",
   "addTitle": "صورتحساب جدید",
   "editTitle": "صورتحساب",
   "filters": "فیلترها",
@@ -301,6 +302,8 @@
   "totalPrice": "جمع کل",
   "cancel": "انصراف",
   "confirm": "تایید",
-  "loadMore": "موارد بیشتر"
+  "loadMore": "موارد بیشتر",
+  "remove": "حذف",
+  "removeInvoiceConfirmMessage": "آیا از حذف این آیتم اطمینان دارید؟"
  }
 }

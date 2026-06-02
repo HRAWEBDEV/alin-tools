@@ -154,6 +154,8 @@ export default function NewStayExpense({
     tax: itemTax,
     arzID: Number(data.arz!.key),
     comment: data.comment ? data.comment : null,
+    taxRate: itemTaxRate,
+    serviceRate: itemServiceRate,
    };
    return editRevenue.selectedRevenue
     ? updateRevenue({
