@@ -18,12 +18,16 @@ export default function GuestExpenses({
  registerID,
  roomID,
  roomLabel,
+ checkinDate,
+ customerID,
 }: {
  dic: RoomsRackDictionary;
  open: boolean;
  registerID: number;
  roomID: number;
  roomLabel: string;
+ checkinDate: string | null;
+ customerID: number | null;
  onChangeOpen: (state: boolean) => unknown;
 }) {
  const [activeExpenses, setActiveExpenses] = useState<GuestExpenseTabs>('stay');
@@ -68,6 +72,8 @@ export default function GuestExpenses({
         registerID={registerID}
         roomID={roomID}
         roomLabel={roomLabel}
+        checkinDate={checkinDate}
+        customerID={customerID}
         onCloseGuestExpenses={handleCloseGuestExpenses}
         onOpenGuestExpenses={handleOpenGuestExpenses}
        />

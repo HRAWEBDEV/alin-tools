@@ -1,8 +1,12 @@
 import { axios } from '@/app/[lang]/(app)/utils/defaultAxios';
 import { type Combo } from '../../../../restaurant/utils/apiTypes';
+import { type ApiPagedData } from '../../../guests-management/arrival-reserves/services/arrivalReservesApiActions';
 
 const getRevenueInvoicesApi =
  '/Reception/RoomGuestCost/GetProgramDetailRevenues';
+const getStayExpenseItemsApi = '/Reception/RoomGuestCost/GetItems';
+const getDefaultPayByApi = '/Reception/RoomGuestCost/GetProgramAccountSide';
+const getItemProgramsApi = '/Reception/RoomGuestCost/GetItemPrograms';
 
 interface InitialData {
  items: Combo[];
@@ -10,6 +14,14 @@ interface InitialData {
  minibarPrograms: Combo[];
  arzs: Combo[];
 }
+
+type StayExpenseItem = {
+ itemID: number;
+ itemName: string | null;
+ price: number | null;
+ serviceRate: number | null;
+ taxRate: number | null;
+};
 
 interface Revenue {
  id: number;
@@ -41,6 +53,7 @@ interface Revenue {
  comment: string | null;
  refProgramName: string | null;
  refProgramID: number | null;
+ userPersonID: number | null;
 }
 
 interface Invoice {
@@ -60,8 +73,22 @@ interface Invoice {
  refProgramID: number;
  roomingDateTimeOffset: string | null;
  dateTimeDateTimeOffset: string | null;
+ registerID: number | null;
+ roomID: number | null;
  comment: string | null;
 }
+
+type ItemProgram = {
+ id: number;
+ itemID: number;
+ itemName: string | null;
+ itemCode: number;
+ price: number;
+ arzID: number;
+ programID: number;
+ serviceRate: number;
+ taxRate: number;
+};
 
 type SaveRevenuePackage = {
  registerID: number;
@@ -80,8 +107,12 @@ type SaveRevenuePackage = {
   | 'tax'
   | 'arzID'
   | 'comment'
+  | 'taxRate'
+  | 'serviceRate'
  >;
 };
+
+type SaveInvoicePackage = Omit<Invoice, 'itemName'>;
 
 function getInitialData({
  registerID,
@@ -190,7 +221,101 @@ function getRevenueInvoices({
  );
 }
 
-export type { InitialData, Revenue, SaveRevenuePackage, Invoice };
+function saveGuestInvoices({
+ invoices,
+ registerID,
+ orderID,
+}: {
+ invoices: SaveInvoicePackage[];
+ registerID: number;
+ orderID: number | null;
+}) {
+ const searchParams = new URLSearchParams([
+  ['registerID', registerID.toString()],
+  ['isCustomer', 'false'],
+ ]);
+ if (orderID) {
+  searchParams.set('orderID', orderID.toString());
+ }
+ return axios.post(
+  `/Reception/RoomGuestCost/SaveProgramRegisterRevenues?${searchParams.toString()}`,
+  invoices,
+ );
+}
+
+function getStayExpenseItems({
+ limit,
+ offset,
+ signal,
+}: {
+ limit: number;
+ offset: number;
+ signal: AbortSignal;
+}) {
+ const searchParams = new URLSearchParams([
+  ['limit', limit.toString()],
+  ['offset', offset.toString()],
+ ]);
+ return axios.get<ApiPagedData<StayExpenseItem[]>>(
+  `${getStayExpenseItemsApi}?${searchParams.toString()}`,
+  { signal },
+ );
+}
+
+function getDefaultPayBy({
+ registerID,
+ programID,
+ signal,
+}: {
+ registerID: number;
+ programID: number;
+ signal: AbortSignal;
+}) {
+ const searchParams = new URLSearchParams([
+  ['registerID', registerID.toString()],
+  ['programID', programID.toString()],
+ ]);
+ return axios.get<number>(`${getDefaultPayByApi}?${searchParams.toString()}`, {
+  signal,
+ });
+}
+
+function getItemPrograms({
+ limit,
+ offset,
+ signal,
+ searchText,
+ programID,
+}: {
+ limit: number;
+ offset: number;
+ searchText?: string;
+ programID: string;
+ signal: AbortSignal;
+}) {
+ const searchParams = new URLSearchParams([
+  ['limit', limit.toString()],
+  ['offset', offset.toString()],
+  ['programID', programID.toString()],
+ ]);
+ if (searchText) {
+  searchParams.set('searchText', searchText);
+ }
+ return axios.get<ApiPagedData<ItemProgram[]>>(
+  `${getItemProgramsApi}?${searchParams.toString()}`,
+  { signal },
+ );
+}
+
+export type {
+ ItemProgram,
+ InitialData,
+ Revenue,
+ SaveRevenuePackage,
+ Invoice,
+ SaveInvoicePackage,
+ StayExpenseItem,
+};
 export {
  getInitialData,
  getRevenues,
@@ -199,4 +324,11 @@ export {
  updateRevenue,
  getRevenueInvoicesApi,
  getRevenueInvoices,
+ saveGuestInvoices,
+ getStayExpenseItemsApi,
+ getStayExpenseItems,
+ getDefaultPayByApi,
+ getDefaultPayBy,
+ getItemProgramsApi,
+ getItemPrograms,
 };

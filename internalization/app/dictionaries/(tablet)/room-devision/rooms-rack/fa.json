@@ -235,7 +235,8 @@
   "group": "گروه",
   "payBy": "به حساب",
   "cancel": "انصراف",
-  "confirm": "تایید"
+  "confirm": "تایید",
+  "loadMore": "موارد بیشتر"
  },
  "guestExpensesInvoice": {
   "noItemIsSelected": "آیتم انتخاب نشده است",
@@ -268,6 +269,8 @@
   "confirm": "تایید"
  },
  "invoiceDetails": {
+  "noItemIsSelected": "آیتم انتخاب نشده است",
+  "search": "جستجو",
   "addTitle": "صورتحساب جدید",
   "editTitle": "صورتحساب",
   "filters": "فیلترها",
@@ -280,6 +283,9 @@
   "prevDay": "روز قبل",
   "item": "آیتم",
   "date": "تاریخ",
+  "payBy": "به حساب",
+  "guest": "مهمان",
+  "group": "گروه",
   "itemPrice": "قیمت واحد",
   "time": "ساعت",
   "room": "اتاق",
@@ -296,6 +302,9 @@
   "tax": "مالیات",
   "totalPrice": "جمع کل",
   "cancel": "انصراف",
-  "confirm": "تایید"
+  "confirm": "تایید",
+  "loadMore": "موارد بیشتر",
+  "remove": "حذف",
+  "removeInvoiceConfirmMessage": "آیا از حذف این آیتم اطمینان دارید؟"
  }
 }

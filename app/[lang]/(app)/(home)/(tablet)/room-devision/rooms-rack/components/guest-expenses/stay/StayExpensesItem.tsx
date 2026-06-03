@@ -21,8 +21,8 @@ export default function StayExpensesItem({
  const totalPrice = calculateTotalValue({
   sValue: revenue.sValue,
   discount: revenue.discount,
-  serviceRate: revenue.serviceRate,
-  taxRate: revenue.taxRate,
+  serviceRate: revenue.service,
+  taxRate: revenue.tax,
  });
 
  const returnedRevenue = revenue.id < 0;

@@ -42,12 +42,14 @@ export default function RevenueExpensesFilters({
  initialDataIsLoading,
  editRevenueProps,
  results,
+ checkinDate,
 }: {
  dic: RoomsRackDictionary;
  initialData?: InitialData;
  initialDataIsLoading: boolean;
  editRevenueProps: EditInvoiceProps;
  results: number;
+ checkinDate: string | null;
 }) {
  const dateFns = useDateFns();
  const [showDatePicker, setShowDatePicker] = useState(false);
@@ -88,36 +90,40 @@ export default function RevenueExpensesFilters({
  return (
   <div className='[&]:[--default-top-offset:var(--top-offset,0)] sticky top-0 lg:top-(--default-top-offset) bg-background z-3 py-2'>
    <div className='flex gap-2 items-center mb-1'>
-    {/*
-       <Button
-            size='lg'
-            className='px-3!'
-            disabled={initialDataIsLoading}
-            onClick={() => {
-             editRevenueProps.onShowEditInvoice(null);
-            }}
-           >
-            {initialDataIsLoading ? <Spinner /> : <FaPlus />}
-            <span className='hidden lg:inline'>{dic.guestExpensesInvoice.new}</span>
-           </Button>
-    */}
+    <Button
+     size='lg'
+     className='px-3!'
+     disabled={initialDataIsLoading}
+     onClick={() => {
+      editRevenueProps.onShowEditInvoice(null);
+     }}
+    >
+     {initialDataIsLoading ? <Spinner /> : <FaPlus />}
+     <span className='hidden lg:inline'>{dic.guestExpensesInvoice.new}</span>
+    </Button>
     <div>
      <Drawer>
       <DrawerTrigger>
        <Button
         variant='outline'
         size='lg'
-        className='text-neutral-600 dark:text-neutral-400'
+        className='text-neutral-600 dark:text-neutral-400 justify-start gap-0 px-2'
        >
-        <FaFilter className='size-4' />
-        <span className='hidden md:inline'>
-         {dic.guestExpensesInvoice.filters}
-        </span>
-        {true && (
-         <Badge variant='destructive' className='size-6'>
-          {activeFilters.length}
-         </Badge>
-        )}
+        <div className='flex gap-1 items-center border-e border-input pe-1 me-1'>
+         <FaFilter className='size-4' />
+         <span className='hidden md:inline'>
+          {dic.guestExpensesInvoice.filters}
+         </span>
+         {true && (
+          <Badge variant='destructive' className='size-6'>
+           {activeFilters.length}
+          </Badge>
+         )}
+        </div>
+        <div className='flex gap-1 items-center'>
+         <span>{dic.guestExpensesInvoice.results}: </span>
+         <span>{results}</span>
+        </div>
        </Button>
       </DrawerTrigger>
       <DrawerContent className='h-[min(60svh,35rem)] flex flex-col'>
@@ -186,6 +192,12 @@ export default function RevenueExpensesFilters({
                className='[&]:[--cell-size:2.6rem]'
                defaultMonth={dateValue || undefined}
                selected={field.value || undefined}
+               disabled={(date) =>
+                checkinDate
+                 ? dateFns.addDays(new Date(checkinDate), -1).getTime() >
+                   date.getTime()
+                 : false
+               }
                onSelect={(newValue) => {
                 if (newValue) {
                  field.onChange(newValue);

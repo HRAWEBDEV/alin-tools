@@ -483,6 +483,8 @@ export default function RoomMenu({
        registerID={room.registerID!}
        roomID={room.roomID}
        roomLabel={room.roomLabel}
+       customerID={room.customerID}
+       checkinDate={room.checkinDateTimeOffset}
        open={showGuestExpenses}
        onChangeOpen={setShowGuestExpenses}
       />

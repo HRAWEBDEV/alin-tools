@@ -40,6 +40,7 @@ import {
  TimePickerWheels,
 } from '@poursha98/react-ios-time-picker';
 import { type EditInvoiceDetailProps } from '../../../../utils/guest-expenses/EditInvoiceDetailProps';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const smallBadgeKeys: (keyof InvoiceDetailsFiltersSchema)[] = [];
 const largeBadgeKeys: (keyof InvoiceDetailsFiltersSchema)[] = ['costCenter'];
@@ -49,18 +50,23 @@ export default function InvoiceDetailsFilters({
  results,
  costCenters,
  editInvoiceProps,
+ checkinDate,
+ customerID,
 }: {
  dic: RoomsRackDictionary;
  results: number;
  costCenters: InitialData['minibarPrograms'];
  editInvoiceProps: EditInvoiceDetailProps;
+ checkinDate: string | null;
+ customerID: number | null;
 }) {
  const dateFns = useDateFns();
  const [showDateTimePicker, setShowDateTimePicker] = useState(false);
  const [showTimePicker, setShowTimePicker] = useState(false);
  const { locale, localeInfo } = useBaseConfig();
- const { control, watch } = useFormContext<InvoiceDetailsFiltersSchema>();
- const dateValue = watch('date');
+ const { control, watch, setValue } =
+  useFormContext<InvoiceDetailsFiltersSchema>();
+ const [payByValue] = watch(['payBy']);
 
  const [sliderRef] = useKeenSlider({
   rtl: localeInfo.contentDirection === 'rtl',
@@ -75,7 +81,12 @@ export default function InvoiceDetailsFilters({
  const filtersKeyValue = filterValues.map((value, i) => {
   return {
    key: filterKeys[i],
-   value: value instanceof Date ? value.toISOString() : value?.value,
+   value:
+    value instanceof Date
+     ? value.toISOString()
+     : typeof value === 'string'
+       ? value
+       : value?.value,
   };
  });
 
@@ -84,28 +95,37 @@ export default function InvoiceDetailsFilters({
  return (
   <div className='[&]:[--default-top-offset:var(--top-offset,0)] sticky top-0 lg:top-(--default-top-offset) bg-background z-3 py-1'>
    <div className='flex gap-2 items-center mb-1'>
-    {/*
-       <Button
-            size='lg'
-            className='px-3!'
-            onClick={() => editInvoiceProps.onShowEditInvoice(null)}
-           >
-            {false ? <Spinner /> : <FaPlus />}
-            <span className='hidden lg:inline'>{dic.invoiceDetails.new}</span>
-       </Button>
-    */}
+    <Button
+     size='lg'
+     className='px-3!'
+     onClick={() => editInvoiceProps.onShowEditInvoice(null)}
+    >
+     {false ? <Spinner /> : <FaPlus />}
+     <span className='hidden lg:inline'>{dic.invoiceDetails.new}</span>
+    </Button>
     <div>
      <Drawer>
       <DrawerTrigger>
        <Button
         variant='outline'
         size='lg'
-        className='text-neutral-600 dark:text-neutral-400'
+        className='text-neutral-600 dark:text-neutral-400 justify-start gap-0 px-2'
        >
-        <FaInfoCircle className='size-5' />
-        <span className='hidden md:inline'>
-         {dic.invoiceDetails.invoiceInfo}
-        </span>
+        <div className='flex gap-1 items-center border-e border-input pe-1 me-1'>
+         <FaInfoCircle className='size-5' />
+         <span className='hidden md:inline'>
+          {dic.invoiceDetails.invoiceInfo}
+         </span>
+         {true && (
+          <Badge variant='destructive' className='size-6'>
+           {activeFilters.length}
+          </Badge>
+         )}
+        </div>
+        <div className='flex gap-1 items-center'>
+         <span>{dic.invoiceDetails.results}: </span>
+         <span>{results}</span>
+        </div>
        </Button>
       </DrawerTrigger>
       <DrawerContent className='h-[min(60svh,30rem)] flex flex-col'>
@@ -119,6 +139,30 @@ export default function InvoiceDetailsFilters({
        </DrawerHeader>
        <div className='grow overflow-auto p-4'>
         <div className='mx-auto w-[min(100%,28rem)] grid grid-cols-1 sm:grid-cols-2 gap-4'>
+         <div className='col-span-full'>
+          <Tabs
+           dir={localeInfo.contentDirection}
+           value={payByValue}
+           onValueChange={(newValue) =>
+            setValue('payBy', newValue as InvoiceDetailsFiltersSchema['payBy'])
+           }
+          >
+           <TabsList className='h-11 w-[min(100%,30rem)] mx-auto bg-neutral-200 dark:bg-neutral-800'>
+            <TabsTrigger
+             value='guest'
+             disabled={!!editInvoiceProps.invoices.length || customerID === 1}
+            >
+             {dic.invoiceDetails.guest}
+            </TabsTrigger>
+            <TabsTrigger
+             value='group'
+             disabled={!!editInvoiceProps.invoices.length || customerID === 1}
+            >
+             {dic.invoiceDetails.group}
+            </TabsTrigger>
+           </TabsList>
+          </Tabs>
+         </div>
          <Controller
           control={control}
           name='date'
@@ -135,6 +179,7 @@ export default function InvoiceDetailsFilters({
               <Button
                variant='outline'
                id='date'
+               disabled={!!editInvoiceProps.invoices.length}
                className='justify-between font-normal h-11'
                onBlur={field.onBlur}
                ref={field.ref}
@@ -156,7 +201,12 @@ export default function InvoiceDetailsFilters({
                selected={field.value || undefined}
                defaultMonth={field.value || undefined}
                endMonth={dateFns.addMonths(new Date(), 1)}
-               disabled={(date) => date.getTime() > Date.now()}
+               disabled={(date) =>
+                checkinDate
+                 ? dateFns.addDays(new Date(checkinDate), -1).getTime() >
+                   date.getTime()
+                 : false
+               }
                onSelect={(newValue) => {
                 if (newValue) {
                  const now = new Date();
@@ -193,6 +243,7 @@ export default function InvoiceDetailsFilters({
                className='justify-between font-normal h-11'
                onBlur={field.onBlur}
                ref={field.ref}
+               disabled={!!editInvoiceProps.invoices.length}
               >
                <span>
                 {field.value
@@ -285,6 +336,7 @@ export default function InvoiceDetailsFilters({
              <DrawerTrigger asChild>
               <Button
                id='revenue-type'
+               disabled={!!editInvoiceProps.invoices.length}
                variant='outline'
                role='combobox'
                className='justify-between h-11'
@@ -367,6 +419,9 @@ export default function InvoiceDetailsFilters({
         hour: '2-digit',
         minute: '2-digit',
        });
+      }
+      if (item.key === 'payBy' && badgeValue) {
+       badgeValue = dic.invoiceDetails[badgeValue as 'group'];
       }
 
       return (

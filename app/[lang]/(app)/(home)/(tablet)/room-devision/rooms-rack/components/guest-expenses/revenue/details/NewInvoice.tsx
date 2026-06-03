@@ -5,6 +5,8 @@ import {
  DialogHeader,
  DialogTitle,
  DialogFooter,
+ DialogTrigger,
+ DialogClose,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { type RoomsRackDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/dictionary';
@@ -17,17 +19,9 @@ import {
  createNewInvoiceSchema,
 } from '../../../../schemas/guest-expenses/newInvoiceSchema';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
-import {
- Popover,
- PopoverContent,
- PopoverTrigger,
-} from '@/components/ui/popover';
-import { ChevronDownIcon, ChevronsUpDown } from 'lucide-react';
-import { useBaseConfig } from '@/services/base-config/baseConfigContext';
-import { useDateFns } from '@/hooks/useDateFns';
+import { ChevronsUpDown } from 'lucide-react';
 import {
  Drawer,
- DrawerClose,
  DrawerContent,
  DrawerHeader,
  DrawerTitle,
@@ -43,7 +37,14 @@ import { toast } from 'sonner';
 import { AxiosError } from 'axios';
 import { useMutation } from '@tanstack/react-query';
 import { Spinner } from '@/components/ui/spinner';
-import { Checkbox } from '@/components/ui/checkbox';
+import {
+ type SaveInvoicePackage,
+ type ItemProgram,
+ saveGuestInvoices,
+} from '../../../../services/guest-expenses/guestExpensesApiActions';
+import { useCurrencyFormatter } from '@/hooks/useCurrencyFormatter';
+import FindItemPrograms from './FindItemPrograms';
+import { BiError } from 'react-icons/bi';
 
 export default function NewInvoice({
  dic,
@@ -52,8 +53,9 @@ export default function NewInvoice({
  dic: RoomsRackDictionary;
  editInvoice: EditInvoiceDetailProps;
 }) {
- const dateFns = useDateFns();
- const { locale } = useBaseConfig();
+ const { format } = useCurrencyFormatter();
+ const [selectedItemProgram, setSelectedItemProgram] =
+  useState<ItemProgram | null>(null);
  const {
   control,
   setValue,
@@ -66,79 +68,137 @@ export default function NewInvoice({
   resolver: zodResolver(createNewInvoiceSchema()),
   defaultValues,
  });
- const [itemService, setItemService] = useState(0);
- const [itemTax, setItemTax] = useState(0);
+ const [itemServiceRate, setItemServiceRate] = useState(
+  editInvoice.selectedInvoice ? editInvoice.selectedInvoice.serviceRate : 0,
+ );
+ const [itemTaxRate, setItemTaxRate] = useState(
+  editInvoice.selectedInvoice ? editInvoice.selectedInvoice.taxRate : 0,
+ );
+
  const [amountValue, priceValue, discountValue] = watch([
   'amount',
   'price',
   'discount',
  ]);
- const [showDateTimePicker, setShowDateTimePicker] = useState(false);
- const [showTimePicker, setShowTimePicker] = useState(false);
  const sValue = priceValue && amountValue ? priceValue * amountValue : '';
+ const itemService =
+  (((sValue || 0) - (discountValue || 0)) * itemServiceRate) / 100;
+ const itemTax =
+  (((sValue || 0) - (discountValue || 0) + itemService) * itemTaxRate) / 100;
+
+ function handleChangeItem(item: ItemProgram) {
+  setSelectedItemProgram(item);
+  setValue('itemName', item.itemName || '');
+  setItemTaxRate(item.taxRate);
+  setItemServiceRate(item.serviceRate);
+  setValue('price', item.price || 0);
+ }
 
  const setFormDefaults = useCallback(() => {
-  setItemService(0);
-  setItemTax(0);
+  setItemServiceRate(0);
+  setItemTaxRate(0);
   setValue('amount', defaultValues['amount']);
   setValue('comment', defaultValues['comment']);
   setValue('discount', defaultValues['discount']);
   setValue('discountPercentage', defaultValues['discountPercentage']);
-  setValue('item', defaultValues['item']);
+  setSelectedItemProgram(null);
   setValue('price', 0);
+  setValue('itemName', defaultValues['itemName']);
  }, [setValue]);
 
- // const { mutate: confirmSave, isPending: saveIsPending } = useMutation({
- //  mutationFn(data: NewInvoiceSchema) {
- //   const revenue: SaveRevenuePackage['revenue'] = {
- //    ...(editRevenue.selectedRevenue || {}),
- //    id: editRevenue.selectedRevenueID ? editRevenue.selectedRevenueID : 0,
- //    roomID: editRevenue.roomID,
- //    dateTimeDateTimeOffset: data.dateTime!.toISOString(),
- //    itemID: Number(data.item!.key),
- //    amount: data.amount,
- //    sValue: sValue || 0,
- //    discount: data.discount ? data.discount : 0,
- //    discountRate: data.discountPercentage || 0,
- //    service: itemService,
- //    tax: itemTax,
- //    arzID: Number(data.arz!.key),
- //    comment: data.comment ? data.comment : null,
- //   };
- //   return editRevenue.selectedRevenue
- //    ? updateRevenue({
- //       roomID: editRevenue.roomID,
- //       registerID: editRevenue.registerID,
- //       revenue,
- //      })
- //    : saveRevenue({
- //       roomID: editRevenue.roomID,
- //       registerID: editRevenue.registerID,
- //       revenue,
- //      });
- //  },
- //  onSuccess() {
- //   editRevenue.onCloseEditRevenue();
- //   editRevenue.invalidateRevenues();
- //   clearErrors();
- //  },
- //  onError(err: AxiosError<string>) {
- //   toast.error(err.response?.data);
- //  },
- // });
+ const { mutate: confirmSave, isPending: saveIsPending } = useMutation({
+  mutationFn(data: NewInvoiceSchema) {
+   let invoices: SaveInvoicePackage[] = editInvoice.invoices;
+   if (editInvoice.selectedInvoiceID) {
+    invoices = invoices.map((invoice) => {
+     if (invoice.id === editInvoice.selectedInvoiceID) {
+      return {
+       ...invoice,
+       taxRate: itemTaxRate,
+       serviceRate: itemServiceRate,
+       tax: itemTax,
+       service: itemService,
+       sValue: sValue || 0,
+       discount: data.discount || 0,
+       amount: data.amount,
+       comment: data.comment,
+      };
+     }
+     return invoice;
+    });
+   } else if (selectedItemProgram) {
+    invoices = [
+     ...invoices,
+     {
+      id: 0,
+      discount: 0,
+      itemCode: selectedItemProgram.itemCode,
+      itemID: selectedItemProgram.itemID,
+      amount: data.amount,
+      sValue: sValue || 0,
+      arzID: selectedItemProgram.arzID,
+      service: itemService,
+      serviceRate: itemServiceRate,
+      taxRate: itemTaxRate,
+      tax: itemTax,
+      programID: selectedItemProgram.programID,
+      refProgramID: selectedItemProgram.programID,
+      dateTimeDateTimeOffset: editInvoice.date,
+      roomingDateTimeOffset: null,
+      registerID: editInvoice.registerID,
+      roomID: editInvoice.roomID,
+      comment: null,
+     },
+    ];
+   }
+   return saveGuestInvoices({
+    registerID: editInvoice.registerID,
+    invoices,
+    orderID: editInvoice.orderID,
+   });
+  },
+  onSuccess() {
+   editInvoice.invalidateInvoices();
+   editInvoice.onCloseEditInvoice();
+   clearErrors();
+   if (!editInvoice.invoices.length) {
+    editInvoice.onCloseDetailedInvoice();
+   }
+  },
+  onError(err: AxiosError<string>) {
+   toast.error(err.response?.data);
+  },
+ });
+ const { mutate: confirmRemove, isPending: RemoveIsPending } = useMutation({
+  mutationFn(selectedInvoiceID: number) {
+   const invoices: SaveInvoicePackage[] = editInvoice.invoices.filter(
+    (item) => item.id !== selectedInvoiceID,
+   );
+   return saveGuestInvoices({
+    registerID: editInvoice.registerID,
+    invoices,
+    orderID: editInvoice.orderID,
+   });
+  },
+  onSuccess() {
+   editInvoice.invalidateInvoices();
+   editInvoice.onCloseEditInvoice();
+   clearErrors();
+   editInvoice.onCloseDetailedInvoice();
+  },
+  onError(err: AxiosError<string>) {
+   toast.error(err.response?.data);
+  },
+ });
 
  useEffect(() => {
   if (editInvoice.selectedInvoice) {
-   setItemService(editInvoice.selectedInvoice.service);
-   setItemTax(editInvoice.selectedInvoice.tax);
+   setItemServiceRate(editInvoice.selectedInvoice.serviceRate);
+   setItemTaxRate(editInvoice.selectedInvoice.taxRate);
    setValue('amount', editInvoice.selectedInvoice.amount);
    setValue('comment', editInvoice.selectedInvoice.comment || '');
    setValue('discount', editInvoice.selectedInvoice.discount);
-   // setValue('discountPercentage', editInvoice.selectedInvoice.discountRate);
-   setValue('item', {
-    key: editInvoice.selectedInvoice.itemID.toString(),
-    value: editInvoice.selectedInvoice.itemName || '',
-   });
+   setValue('itemName', editInvoice.selectedInvoice.itemName);
    if (editInvoice.selectedInvoice.amount) {
     setValue(
      'price',
@@ -151,7 +211,7 @@ export default function NewInvoice({
   clearErrors();
  }, [editInvoice, setFormDefaults, setValue, clearErrors]);
 
- const pendAction = false;
+ const pendAction = saveIsPending || RemoveIsPending;
 
  useEffect(() => {
   if (sValue && discountValue) {
@@ -183,75 +243,47 @@ export default function NewInvoice({
      </DialogHeader>
      <div className='p-4 grow overflow-auto'>
       <FieldGroup className='gap-4'>
-       <Field data-invalid={!!errors.item}>
-        <FieldLabel htmlFor='item'>{dic.invoiceDetails.item} *</FieldLabel>
-        <Controller
-         control={control}
-         name='item'
-         render={({ field }) => (
-          <Drawer>
-           <DrawerTrigger asChild>
-            <Button
-             data-invalid={!!errors.item}
-             id='item'
-             variant='outline'
-             role='combobox'
-             className='justify-between h-11'
-             onBlur={field.onBlur}
-             ref={field.ref}
-            >
-             <span className='grow text-ellipsis overflow-hidden text-start'>
-              {field.value?.value || ''}
-             </span>
-             <div className='flex gap-2 items-center'>
-              <ChevronsUpDown />
-             </div>
-            </Button>
-           </DrawerTrigger>
-           <DrawerContent className='h-[min(80svh,35rem)]'>
-            <DrawerHeader className='hidden'>
-             <DrawerTitle>{dic.invoiceDetails.item}</DrawerTitle>
-            </DrawerHeader>
-            <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
-             <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
-              {dic.invoiceDetails.item}
-             </h1>
+       {editInvoice.selectedInvoice ? (
+        <Field>
+         <FieldLabel htmlFor='item'>{dic.invoiceDetails.item}</FieldLabel>
+         <InputGroup className='h-11'>
+          <InputGroupInput
+           id='item'
+           readOnly
+           value={editInvoice?.selectedInvoice.itemName || ''}
+          />
+         </InputGroup>
+        </Field>
+       ) : (
+        <Field data-invalid={!!errors.itemName}>
+         <FieldLabel htmlFor='item'>{dic.invoiceDetails.item} *</FieldLabel>
+         <Drawer>
+          <DrawerTrigger asChild>
+           <Button
+            data-invalid={!!errors.itemName}
+            id='item'
+            variant='outline'
+            role='combobox'
+            className='justify-between h-11'
+            disabled={!editInvoice.costCenterID}
+           >
+            <span className='grow text-ellipsis overflow-hidden text-start'>
+             {selectedItemProgram?.itemName || ''}
+            </span>
+            <div className='flex gap-2 items-center'>
+             <ChevronsUpDown />
             </div>
-            <div className='overflow-hidden overflow-y-auto'>
-             {/*{data?.saleTypes.length ? (
-              <ul>
-               {data.saleTypes.map((item) => (
-                <DrawerClose asChild key={item.key}>
-                 <li
-                  className='flex gap-1 items-center ps-6 py-2'
-                  onClick={() => {
-                   field.onChange(item);
-                  }}
-                 >
-                  <Checkbox
-                   className='size-6'
-                   checked={field.value?.key === item.key}
-                  />
-                  <Button
-                   tabIndex={-1}
-                   variant='ghost'
-                   className='w-full justify-start h-auto text-lg'
-                  >
-                   <span>{item.value}</span>
-                  </Button>
-                 </li>
-                </DrawerClose>
-               ))}
-              </ul>
-             ) : (
-              <div className='text-center font-medium'></div>
-             )}*/}
-            </div>
-           </DrawerContent>
-          </Drawer>
-         )}
-        />
-       </Field>
+           </Button>
+          </DrawerTrigger>
+          <FindItemPrograms
+           dic={dic}
+           programID={editInvoice.costCenterID!}
+           onChangeItem={handleChangeItem}
+          />
+         </Drawer>
+        </Field>
+       )}
+
        <div className='grid sm:grid-cols-2 gap-4'>
         <Controller
          control={control}
@@ -380,6 +412,18 @@ export default function NewInvoice({
           </Field>
          )}
         />
+        <Field>
+         <FieldLabel htmlFor='service'>{dic.invoiceDetails.service}</FieldLabel>
+         <InputGroup className='h-11'>
+          <InputGroupInput id='service' readOnly value={format(itemService)} />
+         </InputGroup>
+        </Field>
+        <Field>
+         <FieldLabel htmlFor='tax'>{dic.invoiceDetails.tax}</FieldLabel>
+         <InputGroup className='h-11'>
+          <InputGroupInput id='tax' readOnly value={format(itemTax)} />
+         </InputGroup>
+        </Field>
        </div>
        <Field>
         <FieldLabel htmlFor='comment'>
@@ -391,39 +435,104 @@ export default function NewInvoice({
        </Field>
       </FieldGroup>
      </div>
-     {/*
-       <DialogFooter className='p-4 py-2 border-t border-input'>
+     <DialogFooter className='p-4 py-2 border-t border-input'>
+      <div className='flex gap-2 justify-between grow'>
+       {!!editInvoice.selectedInvoiceID ? (
+        <div className='flex gap-2 items-center justify-end col-span-full'>
+         <Dialog>
+          <DialogTrigger asChild>
+           <Button
+            type='button'
+            variant='outline'
+            className='text-destructive border-destructive w-full sm:w-24'
+            disabled={pendAction}
+           >
+            {pendAction && <Spinner />}
+            {dic.invoiceDetails.remove}
+           </Button>
+          </DialogTrigger>
+          <DialogContent className='p-0 gap-0'>
+           <DialogHeader className='p-4'>
+            <DialogTitle className='hidden'>
+             {dic.invoiceDetails.remove}
+            </DialogTitle>
+           </DialogHeader>
+           <div className='p-4'>
+            <div className='flex gap-1 items-center text-red-700 dark:text-red-400 font-medium'>
+             <BiError className='size-12' />
+             <p>{dic.invoiceDetails.removeInvoiceConfirmMessage}</p>
+            </div>
+           </div>
+           <DialogFooter className='p-4'>
+            <DialogClose asChild>
              <Button
-              type='button'
               className='sm:w-24'
-              size='lg'
               variant='outline'
-              onClick={() => {
-               editInvoice.onCloseEditInvoice();
-              }}
               disabled={pendAction}
              >
               {pendAction && <Spinner />}
               {dic.invoiceDetails.cancel}
              </Button>
+            </DialogClose>
+            <DialogClose asChild>
              <Button
-              type='submit'
               className='sm:w-24'
-              size='lg'
+              variant='destructive'
               disabled={pendAction}
-              onClick={(e) => {
-               e.preventDefault();
-               handleSubmit(
-                (data) => {},
-                (err) => {},
-               )();
+              onClick={() => {
+               confirmRemove(editInvoice.selectedInvoiceID!);
               }}
              >
               {pendAction && <Spinner />}
               {dic.invoiceDetails.confirm}
              </Button>
-            </DialogFooter>
-       */}
+            </DialogClose>
+           </DialogFooter>
+          </DialogContent>
+         </Dialog>
+        </div>
+       ) : (
+        <div></div>
+       )}
+       <div className='flex gap-2'>
+        <Button
+         type='button'
+         className='sm:w-24'
+         size='lg'
+         variant='outline'
+         onClick={() => {
+          editInvoice.onCloseEditInvoice();
+         }}
+         disabled={pendAction}
+        >
+         {pendAction && <Spinner />}
+         {dic.invoiceDetails.cancel}
+        </Button>
+        <Button
+         type='submit'
+         className='sm:w-24'
+         size='lg'
+         disabled={pendAction}
+         onClick={(e) => {
+          e.preventDefault();
+          handleSubmit(
+           (data) => {
+            confirmSave(data);
+           },
+           (err) => {
+            if ('itemName' in err) {
+             toast.error(dic.invoiceDetails.noItemIsSelected);
+            }
+           },
+          )();
+         }}
+        >
+         {pendAction && <Spinner />}
+         {dic.invoiceDetails.confirm}
+        </Button>
+       </div>
+      </div>
+     </DialogFooter>
     </form>
    </DialogContent>
   </Dialog>

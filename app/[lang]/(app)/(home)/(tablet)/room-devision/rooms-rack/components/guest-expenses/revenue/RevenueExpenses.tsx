@@ -25,11 +25,15 @@ export default function RevenueExpenses({
  registerID,
  roomID,
  roomLabel,
+ customerID,
+ checkinDate,
 }: {
  dic: RoomsRackDictionary;
  registerID: number;
  roomID: number;
  roomLabel: string;
+ checkinDate: string | null;
+ customerID: number | null;
  onOpenGuestExpenses: () => unknown;
  onCloseGuestExpenses: () => unknown;
 }) {
@@ -154,6 +158,7 @@ export default function RevenueExpenses({
      initialDataIsLoading={initialDataIsLoading}
      editRevenueProps={editInvoiceProps}
      results={invoices?.length || 0}
+     checkinDate={checkinDate}
     />
     <RevenueExpensesList
      dic={dic}
@@ -164,6 +169,8 @@ export default function RevenueExpenses({
    {showEditInvoice && (
     <InvoiceDetails
      dic={dic}
+     customerID={customerID}
+     checkinDate={checkinDate}
      editInvoice={editInvoiceProps}
      costCenters={initialData!.minibarPrograms}
      defaultCostCenter={costCenterValue || initialData!.minibarPrograms[0]}
