@@ -26,9 +26,57 @@ export default function RackHelp({ dic }: { dic: RoomsRackDictionary }) {
   <div>
    <div>
     <ul className='px-4 py-2 grid gap-2'>
+     <li className='flex gap-2 items-center'>
+      <div
+       dir='ltr'
+       className={`${getRackStatesStyles().get('readyToService')?.text}`}
+      >
+       {getRoomStateIcon('readyRoom', {
+        fontSize: '1.9rem',
+        width: '1.9rem',
+        height: '1.9rem',
+        fill: 'currentColor',
+       })}
+      </div>
+      <div className='text-neutral-700 dark:text-neutral-400 text-sm'>
+       {dic.help['readyToService']}
+      </div>
+     </li>
+     <li className='flex gap-2 items-center'>
+      <div
+       dir='ltr'
+       className={`${getRackStatesStyles().get('notCleaned')?.text}`}
+      >
+       {getRoomStateIcon('notCleanedRoom', {
+        fontSize: '1.9rem',
+        width: '1.9rem',
+        height: '1.9rem',
+        fill: 'currentColor',
+       })}
+      </div>
+      <div className='text-neutral-700 dark:text-neutral-400 text-sm'>
+       {dic.help['notCleaned']}
+      </div>
+     </li>
+     <li className='flex gap-2 items-center'>
+      <div
+       dir='ltr'
+       className={`${getRackStatesStyles().get('waitingForQC')?.text}`}
+      >
+       {getRoomStateIcon('waitingForQCRoom', {
+        fontSize: '1.9rem',
+        width: '1.9rem',
+        height: '1.9rem',
+        fill: 'currentColor',
+       })}
+      </div>
+      <div className='text-neutral-700 dark:text-neutral-400 text-sm'>
+       {dic.help['waitingForQC']}
+      </div>
+     </li>
      {roomStates.map((state) => (
       <Fragment key={state}>
-       {state === 'waitForCheckin' ? null : (
+       {state === 'waitForCheckin' || state === 'emptyRoom' ? null : (
         <li className='flex gap-2 items-center'>
          <div dir='ltr' className={`${getRackStatesStyles().get(state)?.text}`}>
           {getRoomStateIcon(state, {

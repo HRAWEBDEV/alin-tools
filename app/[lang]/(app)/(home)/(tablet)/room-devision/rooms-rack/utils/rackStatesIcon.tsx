@@ -12,7 +12,7 @@ import { DayUseIcon } from '../../components/icons/DayUseIcon';
 import { Room as RoomIcon } from '../../components/icons/Room';
 import { Checkin } from '../../components/icons/Chekin';
 import { Checkout } from '../../components/icons/Checkout';
-import { QCRoomIcon } from '../../components/icons/QCRoomIcon';
+import { QCRoomIconKind } from '../../components/icons/QCRoomIconKind';
 import { CleanRoomIcon } from '../../components/icons/CleanRoomIcon';
 import { ServiceRoomIcon } from '../../components/icons/ServiceRoomIcon';
 import {
@@ -31,14 +31,28 @@ import { SleptOut } from '../../components/icons/SleptOut';
 import { NoLuggage } from '../../components/icons/NoLuggage';
 import { LightLuggage } from '../../components/icons/LightLuggage';
 import { NoShow } from '../../components/icons/NoShow';
+import { QCRoomIcon } from '../../components/icons/QCRoomIcon';
+import { NotCleanedRoom } from '../../components/icons/NotCleanedRoom';
+import { ReadyRoomIcon } from '../../components/icons/ReadyRoomIcon';
 
 function getRoomStateIcon(
- type: RoomState | 'noShow',
+ type:
+  | RoomState
+  | 'notCleanedRoom'
+  | 'waitingForQCRoom'
+  | 'readyRoom'
+  | 'noShow',
  style: SVGProps<SVGSVGElement> = {},
 ) {
  switch (type) {
   case 'emptyRoom':
    return <RoomIcon {...style} />;
+  case 'readyRoom':
+   return <ReadyRoomIcon {...style} />;
+  case 'notCleanedRoom':
+   return <NotCleanedRoom {...style} />;
+  case 'waitingForQCRoom':
+   return <QCRoomIcon {...style} />;
   case 'closedRoom':
    return <UserLock {...style} />;
   case 'dayUse':
@@ -82,7 +96,7 @@ function getStateKindIcon(
   case RoomStateKind.readyToService:
    return null;
   case RoomStateKind.waitingForQC:
-   return <QCRoomIcon {...style} />;
+   return <QCRoomIconKind {...style} />;
   case RoomStateKind.notCleaned:
    return <CleanRoomIcon {...style} />;
   case RoomStateKind.outOfService:

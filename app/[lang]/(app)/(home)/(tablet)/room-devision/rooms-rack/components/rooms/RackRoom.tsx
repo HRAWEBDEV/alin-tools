@@ -161,12 +161,24 @@ export default function RackRoom({
       >
        {activeMinimalView ? (
         <div className='flex justify-center'>
-         {getRoomStateIcon(roomState, {
-          fontSize: '2.2rem',
-          width: '2.2rem',
-          height: '2.2rem',
-          fill: 'currentColor',
-         })}
+         {getRoomStateIcon(
+          (() => {
+           if (roomState === 'emptyRoom') {
+            if (room.roomStateKindID === RoomStateKind.waitingForQC)
+             return 'waitingForQCRoom';
+            if (room.roomStateKindID === RoomStateKind.notCleaned)
+             return 'notCleanedRoom';
+            return 'readyRoom';
+           }
+           return roomState;
+          })(),
+          {
+           fontSize: '2.2rem',
+           width: '2.2rem',
+           height: '2.2rem',
+           fill: 'currentColor',
+          },
+         )}
         </div>
        ) : (
         <span className='text-base font-medium'>
