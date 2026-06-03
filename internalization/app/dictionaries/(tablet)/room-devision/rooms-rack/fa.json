@@ -269,6 +269,7 @@
   "confirm": "تایید"
  },
  "invoiceDetails": {
+  "noItemIsSelected": "آیتم انتخاب نشده است",
   "search": "جستجو",
   "addTitle": "صورتحساب جدید",
   "editTitle": "صورتحساب",

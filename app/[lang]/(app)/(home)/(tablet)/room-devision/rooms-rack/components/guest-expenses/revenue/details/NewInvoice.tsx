@@ -88,6 +88,7 @@ export default function NewInvoice({
 
  function handleChangeItem(item: ItemProgram) {
   setSelectedItemProgram(item);
+  setValue('itemName', item.itemName || '');
   setItemTaxRate(item.taxRate);
   setItemServiceRate(item.serviceRate);
   setValue('price', item.price || 0);
@@ -102,6 +103,7 @@ export default function NewInvoice({
   setValue('discountPercentage', defaultValues['discountPercentage']);
   setSelectedItemProgram(null);
   setValue('price', 0);
+  setValue('itemName', defaultValues['itemName']);
  }, [setValue]);
 
  const { mutate: confirmSave, isPending: saveIsPending } = useMutation({
@@ -196,6 +198,7 @@ export default function NewInvoice({
    setValue('amount', editInvoice.selectedInvoice.amount);
    setValue('comment', editInvoice.selectedInvoice.comment || '');
    setValue('discount', editInvoice.selectedInvoice.discount);
+   setValue('itemName', editInvoice.selectedInvoice.itemName);
    if (editInvoice.selectedInvoice.amount) {
     setValue(
      'price',
@@ -252,11 +255,12 @@ export default function NewInvoice({
          </InputGroup>
         </Field>
        ) : (
-        <Field>
+        <Field data-invalid={!!errors.itemName}>
          <FieldLabel htmlFor='item'>{dic.invoiceDetails.item} *</FieldLabel>
          <Drawer>
           <DrawerTrigger asChild>
            <Button
+            data-invalid={!!errors.itemName}
             id='item'
             variant='outline'
             role='combobox'
@@ -515,7 +519,11 @@ export default function NewInvoice({
            (data) => {
             confirmSave(data);
            },
-           (err) => {},
+           (err) => {
+            if ('itemName' in err) {
+             toast.error(dic.invoiceDetails.noItemIsSelected);
+            }
+           },
           )();
          }}
         >
