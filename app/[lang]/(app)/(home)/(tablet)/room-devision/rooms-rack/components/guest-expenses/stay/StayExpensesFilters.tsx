@@ -103,17 +103,23 @@ export default function StayExpensesFilters({
        <Button
         variant='outline'
         size='lg'
-        className='text-neutral-600 dark:text-neutral-400'
+        className='text-neutral-600 dark:text-neutral-400 justify-start gap-0 px-2'
        >
-        <FaFilter className='size-4' />
-        <span className='hidden md:inline'>
-         {dic.guestExpensesStay.filters}
-        </span>
-        {true && (
-         <Badge variant='destructive' className='size-6'>
-          {activeFilters.length}
-         </Badge>
-        )}
+        <div className='flex gap-1 items-center border-e border-input pe-1 me-1'>
+         <FaFilter className='size-4' />
+         <span className='hidden md:inline'>
+          {dic.guestExpensesStay.filters}
+         </span>
+         {true && (
+          <Badge variant='destructive' className='size-6'>
+           {activeFilters.length}
+          </Badge>
+         )}
+        </div>
+        <div className='flex gap-1 items-center'>
+         <span>{dic.guestExpensesStay.results}: </span>
+         <span>{results}</span>
+        </div>
        </Button>
       </DrawerTrigger>
       <DrawerContent className='h-[min(60svh,35rem)] flex flex-col'>

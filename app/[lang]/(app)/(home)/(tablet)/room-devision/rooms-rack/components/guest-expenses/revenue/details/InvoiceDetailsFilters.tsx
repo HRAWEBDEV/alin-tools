@@ -109,12 +109,23 @@ export default function InvoiceDetailsFilters({
        <Button
         variant='outline'
         size='lg'
-        className='text-neutral-600 dark:text-neutral-400'
+        className='text-neutral-600 dark:text-neutral-400 justify-start gap-0 px-2'
        >
-        <FaInfoCircle className='size-5' />
-        <span className='hidden md:inline'>
-         {dic.invoiceDetails.invoiceInfo}
-        </span>
+        <div className='flex gap-1 items-center border-e border-input pe-1 me-1'>
+         <FaInfoCircle className='size-5' />
+         <span className='hidden md:inline'>
+          {dic.invoiceDetails.invoiceInfo}
+         </span>
+         {true && (
+          <Badge variant='destructive' className='size-6'>
+           {activeFilters.length}
+          </Badge>
+         )}
+        </div>
+        <div className='flex gap-1 items-center'>
+         <span>{dic.invoiceDetails.results}: </span>
+         <span>{results}</span>
+        </div>
        </Button>
       </DrawerTrigger>
       <DrawerContent className='h-[min(60svh,30rem)] flex flex-col'>
