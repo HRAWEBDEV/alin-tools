@@ -7,6 +7,7 @@
 # 2.3.0
 - add rack preview guest expenses (hre-done)
 - add rooms rack reserve pie chart (hra-done)
+- update rack out of service and not cleaned and waiting for QC states icons (hra-done)
 
 # 2.2.0
 ### features
