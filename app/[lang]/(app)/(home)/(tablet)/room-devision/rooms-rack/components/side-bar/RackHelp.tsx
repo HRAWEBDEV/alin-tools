@@ -74,6 +74,22 @@ export default function RackHelp({ dic }: { dic: RoomsRackDictionary }) {
        {dic.help['waitingForQC']}
       </div>
      </li>
+     <li className='flex gap-2 items-center'>
+      <div
+       dir='ltr'
+       className={`${getRackStatesStyles().get('outOfService')?.text}`}
+      >
+       {getRoomStateIcon('outOfService', {
+        fontSize: '1.9rem',
+        width: '1.9rem',
+        height: '1.9rem',
+        fill: 'currentColor',
+       })}
+      </div>
+      <div className='text-neutral-700 dark:text-neutral-400 text-sm'>
+       {dic.help['outOfService']}
+      </div>
+     </li>
      {roomStates.map((state) => (
       <Fragment key={state}>
        {state === 'waitForCheckin' || state === 'emptyRoom' ? null : (

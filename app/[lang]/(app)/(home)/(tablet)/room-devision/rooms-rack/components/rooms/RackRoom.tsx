@@ -160,12 +160,14 @@ export default function RackRoom({
        className={`rounded-2xl border border-dashed ${roomStateStyle?.border} ${roomStateStyle?.text} ${roomStateStyle?.backgoundColor} text-center ${activeMinimalView ? 'p-0' : 'p-1'}`}
       >
        {activeMinimalView ? (
-        <div className='flex justify-center'>
+        <div dir='ltr' className='flex justify-center'>
          {getRoomStateIcon(
           (() => {
            if (roomState === 'emptyRoom') {
             if (room.roomStateKindID === RoomStateKind.waitingForQC)
              return 'waitingForQCRoom';
+            if (room.roomStateKindID === RoomStateKind.outOfService)
+             return 'outOfService';
             if (room.roomStateKindID === RoomStateKind.notCleaned)
              return 'notCleanedRoom';
             return 'readyRoom';

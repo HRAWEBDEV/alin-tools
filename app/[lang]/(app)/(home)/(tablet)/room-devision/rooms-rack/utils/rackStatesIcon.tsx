@@ -31,7 +31,8 @@ import { SleptOut } from '../../components/icons/SleptOut';
 import { NoLuggage } from '../../components/icons/NoLuggage';
 import { LightLuggage } from '../../components/icons/LightLuggage';
 import { NoShow } from '../../components/icons/NoShow';
-import { QCRoomIcon } from '../../components/icons/QCRoomIcon';
+import { OutofOrderRoomIcon } from '../../components/icons/OutofOrderRoomIcon';
+import { QcRoomIcon } from '../../components/icons/QcRoomIcon';
 import { NotCleanedRoom } from '../../components/icons/NotCleanedRoom';
 import { ReadyRoomIcon } from '../../components/icons/ReadyRoomIcon';
 
@@ -41,7 +42,8 @@ function getRoomStateIcon(
   | 'notCleanedRoom'
   | 'waitingForQCRoom'
   | 'readyRoom'
-  | 'noShow',
+  | 'noShow'
+  | 'outOfService',
  style: SVGProps<SVGSVGElement> = {},
 ) {
  switch (type) {
@@ -51,8 +53,10 @@ function getRoomStateIcon(
    return <ReadyRoomIcon {...style} />;
   case 'notCleanedRoom':
    return <NotCleanedRoom {...style} />;
+  case 'outOfService':
+   return <OutofOrderRoomIcon {...style} />;
   case 'waitingForQCRoom':
-   return <QCRoomIcon {...style} />;
+   return <QcRoomIcon {...style} />;
   case 'closedRoom':
    return <UserLock {...style} />;
   case 'dayUse':
