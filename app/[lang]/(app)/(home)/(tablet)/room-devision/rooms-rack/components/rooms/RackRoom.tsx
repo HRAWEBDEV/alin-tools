@@ -30,6 +30,9 @@ import RoomControlIndicator from '../room-control/RoomControlIndicator';
 import { type RoomControlDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/room-control/dictionary';
 import { getNoteTypeStyles } from '../../utils/room-notes/getNoteTypeStyles';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { AnimateIcon } from '@/components/animate-ui/icons/icon';
+import { PartyPopper } from '@/components/animate-ui/icons/party-popper';
+import { BsCake2Fill } from 'react-icons/bs';
 
 export default function RackRoom({
  dic,
@@ -143,15 +146,42 @@ export default function RackRoom({
         <IoNotifications className={`size-6 ${noteTypeStyles.text}`} />
        </div>
       )}
+      {/*{[
+       '202',
+       '203',
+       '227',
+       '228',
+       '300',
+       '304',
+       '301',
+       '306',
+       '309',
+       '312',
+      ].includes(room.roomLabel) && (
+       <div className='absolute bottom-0 end-0 rounded-full grid place-content-center -z-1 opacity-15'>
+        <AnimateIcon
+         animateOnView
+         animateOnHover
+         loop
+         loopDelay={1000 * 60 * 5}
+        >
+         <PartyPopper
+          width='5rem'
+          height='5rem'
+          className='text-destructive/75'
+         />
+        </AnimateIcon>
+       </div>
+      )}*/}
       {!isFutureRack && !activeMinimalView && (
        <div
         dir='ltr'
         className={`absolute top-12 start-1 ${room.roomStateKindID !== RoomStateKind.waitingForQC ? 'opacity-60' : 'opacity-80'}  ${roomStateKindStyle?.text}`}
        >
         {getStateKindIcon(room.roomStateKindID, {
-         fontSize: '3rem',
-         width: '3rem',
-         height: '3rem',
+         fontSize: '2.8rem',
+         width: '2.8rem',
+         height: '2.8rem',
          fill: 'currentColor',
         })}
        </div>
@@ -189,7 +219,12 @@ export default function RackRoom({
        )}
       </div>
       <div className='text-start ps-2 grow group-data-[layout-minimal=true]:ps-0 group-data-[layout-minimal=true]:pb-1 group-data-[layout-compact=true]:pb-1'>
-       <div className='flex items-center group-data-[layout-minimal=true]:justify-center gap-1'>
+       <div className='relative flex items-center group-data-[layout-minimal=true]:justify-center gap-1'>
+        {!!room.bithday && (
+         <div className='absolute bottom-[90%] start-0 text-orange-800/65 dark:text-orange-300/65'>
+          <BsCake2Fill className='text-[1.3rem]' />
+         </div>
+        )}
         <h3
          className={`text-2xl lg:text-3xl group-data-[layout-minimal=true]:text-2xl font-en-roboto ${roomStateStyle?.text}`}
         >
@@ -334,7 +369,7 @@ export default function RackRoom({
     </Button>
    </div>
    {mock && room.msgFlag && (
-    <div className='mt-1 px-2'>
+    <div className='mt-1'>
      <Alert className={`flex gap-1 items-center p-2`}>
       <AlertDescription className={`flex gap-1 items-center`}>
        <div className={`${noteTypeStyles.text}`}>
@@ -342,6 +377,24 @@ export default function RackRoom({
        </div>
        <span className='font-medium'>
         {dic.info.message} {room.messageTypeName}
+       </span>
+      </AlertDescription>
+     </Alert>
+    </div>
+   )}
+   {mock && room.bithday && (
+    <div className='mt-1'>
+     <Alert className={`flex gap-1 items-center p-2`}>
+      <AlertDescription className={`flex gap-1 items-center`}>
+       <AnimateIcon animateOnHover animateOnView loop loopDelay={1000 * 50 * 3}>
+        <PartyPopper
+         width='1.8rem'
+         height='1.8rem'
+         className='text-orange-800'
+        />
+       </AnimateIcon>
+       <span className='font-medium'>
+        {dic.help.birtdate}: {room.bornName || '---'}
        </span>
       </AlertDescription>
      </Alert>

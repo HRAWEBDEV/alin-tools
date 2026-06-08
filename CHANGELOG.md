@@ -4,10 +4,12 @@
 - fix drawer and dialog overflow
 - add reload button if necessary - for real time data
 
+
 # 2.3.0
 - add rack preview guest expenses (hre-done)
 - add rooms rack reserve pie chart (hra-done)
 - update rack out of service and not cleaned and waiting for QC states icons (hra-done)
+- add rack room birthday notifier icon  (hra-done)
 
 # 2.2.0
 ### features

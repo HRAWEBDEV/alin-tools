@@ -19,6 +19,7 @@ import { Fragment } from 'react';
 import { IoNotifications } from 'react-icons/io5';
 import { useRackConfigContext } from '../../services/rooms-rack-config/roomsRackConfigContext';
 import { getNoteTypeStyles } from '../../utils/room-notes/getNoteTypeStyles';
+import { BsCake2Fill } from 'react-icons/bs';
 
 export default function RackHelp({ dic }: { dic: RoomsRackDictionary }) {
  const { noteTypes } = useRackConfigContext();
@@ -117,6 +118,14 @@ export default function RackHelp({ dic }: { dic: RoomsRackDictionary }) {
         height: '1.9rem',
         fill: 'currentColor',
        })}
+      </div>
+      <div className='text-neutral-700 dark:text-neutral-400 text-sm'>
+       {dic.help['noShowRoom']}
+      </div>
+     </li>
+     <li className='flex gap-2 items-center'>
+      <div dir='ltr' className=''>
+       <BsCake2Fill className='w-[1.9rem] h-[1.9rem] text-orange-800 dark:text-orange-300' />
       </div>
       <div className='text-neutral-700 dark:text-neutral-400 text-sm'>
        {dic.help['noShowRoom']}

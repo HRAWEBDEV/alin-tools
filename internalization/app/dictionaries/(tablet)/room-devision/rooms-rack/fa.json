@@ -77,7 +77,8 @@
   "reserveDeparture": "تاریخ خروج رزرو",
   "parking": "پارکینگ",
   "guest": "مهمان",
-  "hasNotes": "یادداشت"
+  "hasNotes": "یادداشت",
+  "birtdate": "تولد"
  },
  "options": {
   "title": "عملیات اتاق",

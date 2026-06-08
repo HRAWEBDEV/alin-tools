@@ -103,6 +103,8 @@ type Rack = {
  dayUse: boolean;
  carFlag: boolean;
  complimentaryID: number | null;
+ bithday: boolean;
+ bornName: string | null;
 };
 
 type RackDetails = {
