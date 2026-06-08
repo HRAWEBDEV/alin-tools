@@ -221,8 +221,8 @@ export default function RackRoom({
       <div className='text-start ps-2 grow group-data-[layout-minimal=true]:ps-0 group-data-[layout-minimal=true]:pb-1 group-data-[layout-compact=true]:pb-1'>
        <div className='relative flex items-center group-data-[layout-minimal=true]:justify-center gap-1'>
         {!!room.bithday && (
-         <div className='absolute bottom-[90%] start-0 text-orange-800/65 dark:text-orange-300/65'>
-          <BsCake2Fill className='text-[1.3rem]' />
+         <div className='absolute bottom-[90%] start-0 text-orange-800/75 dark:text-orange-300/75'>
+          <BsCake2Fill className='text-[1.5rem]' />
          </div>
         )}
         <h3
