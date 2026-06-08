@@ -123,14 +123,6 @@ export default function RackHelp({ dic }: { dic: RoomsRackDictionary }) {
        {dic.help['noShowRoom']}
       </div>
      </li>
-     <li className='flex gap-2 items-center'>
-      <div dir='ltr' className=''>
-       <BsCake2Fill className='w-[1.9rem] h-[1.9rem] text-orange-800 dark:text-orange-300' />
-      </div>
-      <div className='text-neutral-700 dark:text-neutral-400 text-sm'>
-       {dic.help['noShowRoom']}
-      </div>
-     </li>
     </ul>
    </div>
    <div>
@@ -213,6 +205,14 @@ export default function RackHelp({ dic }: { dic: RoomsRackDictionary }) {
        </div>
       </li>
      ))}
+     <li className='flex gap-2 items-center'>
+      <div dir='ltr' className=''>
+       <BsCake2Fill className='w-[1.9rem] h-[1.9rem] text-orange-800 dark:text-orange-300' />
+      </div>
+      <div className='text-neutral-700 dark:text-neutral-400 text-sm'>
+       {dic.help['birtdate']}
+      </div>
+     </li>
     </ul>
    </div>
   </div>
