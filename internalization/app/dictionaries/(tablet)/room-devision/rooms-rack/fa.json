@@ -1,6 +1,7 @@
 {
  "title": "رک اتاق ها",
  "filters": {
+  "page": "صفحه",
   "rackRoomsLimit": "تعداد اتاق نمایشی در هر صفحه",
   "roomType": "نوع اتاق",
   "building": "ساختمان",
