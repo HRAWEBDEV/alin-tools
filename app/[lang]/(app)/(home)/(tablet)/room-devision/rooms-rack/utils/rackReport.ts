@@ -11,11 +11,35 @@ function getRackBirthdayReport(rooms: Rack[]) {
 }
 
 function getRackReport(rooms: Rack[]) {
- return {
-  houseControl: getRackHouseControlReport(rooms),
-  notes: getRackNotesReport(rooms),
-  birthDays: getRackBirthdayReport(rooms),
- };
+ return rooms.reduce(
+  (acc, cur) => {
+   let { birthDays, houseControl, notes } = acc;
+   if (cur.msgFlag) {
+    notes = [...notes, cur];
+   }
+   if (cur.hkStateID) {
+    houseControl = [...houseControl, cur];
+   }
+   if (cur.bithday) {
+    birthDays = [...birthDays, cur];
+   }
+   return {
+    houseControl,
+    notes,
+    birthDays,
+   };
+  },
+  {
+   houseControl: [] as Rack[],
+   notes: [] as Rack[],
+   birthDays: [] as Rack[],
+  },
+ );
 }
 
-export { getRackHouseControlReport, getRackNotesReport, getRackReport };
+export {
+ getRackHouseControlReport,
+ getRackNotesReport,
+ getRackBirthdayReport,
+ getRackReport,
+};
