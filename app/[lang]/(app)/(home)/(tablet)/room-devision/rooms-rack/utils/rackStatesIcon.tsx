@@ -32,7 +32,7 @@ import { NoLuggage } from '../../components/icons/NoLuggage';
 import { LightLuggage } from '../../components/icons/LightLuggage';
 import { NoShow } from '../../components/icons/NoShow';
 import { OutofOrderRoomIcon } from '../../components/icons/OutofOrderRoomIcon';
-import { QcRoomIcon } from '../../components/icons/QcRoomIcon';
+import { QcRoomIcon } from '../../components/icons/WaitForQCRoomIcon';
 import { NotCleanedRoom } from '../../components/icons/NotCleanedRoom';
 import { ReadyRoomIcon } from '../../components/icons/ReadyRoomIcon';
 
