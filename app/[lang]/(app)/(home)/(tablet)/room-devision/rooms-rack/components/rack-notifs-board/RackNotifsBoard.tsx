@@ -42,8 +42,8 @@ export default function RackNotifsBoard({
       )}
      </DialogTitle>
     </DialogHeader>
-    <div className='grow overflow-auto'>
-     <header className='p-2 sticky bottom-0 pb-0 order-2 lg:order-1 lg:pb-2 lg:top-0 lg:bottom-auto bg-background z-3'>
+    <div className='grow overflow-auto flex flex-col'>
+     <header className='p-2 sticky bottom-1 pb-0 order-2 lg:order-0 lg:pb-2 lg:top-0 lg:bottom-auto bg-background z-3'>
       <div>
        <Tabs
         dir={localeInfo.contentDirection}
