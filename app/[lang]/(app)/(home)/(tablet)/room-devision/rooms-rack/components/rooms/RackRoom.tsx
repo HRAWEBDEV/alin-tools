@@ -191,25 +191,29 @@ export default function RackRoom({
       >
        {activeMinimalView ? (
         <div dir='ltr' className='flex justify-center'>
-         {getRoomStateIcon(
-          (() => {
-           if (roomState === 'emptyRoom') {
-            if (room.roomStateKindID === RoomStateKind.waitingForQC)
-             return 'waitingForQCRoom';
-            if (room.roomStateKindID === RoomStateKind.outOfService)
-             return 'outOfService';
-            if (room.roomStateKindID === RoomStateKind.notCleaned)
-             return 'notCleanedRoom';
-            return 'readyRoom';
-           }
-           return roomState;
-          })(),
-          {
-           fontSize: '2.2rem',
-           width: '2.2rem',
-           height: '2.2rem',
-           fill: 'currentColor',
-          },
+         {roomState === 'occupiedRoom' && room.bithday ? (
+          <BsCake2Fill className='text-[2.2rem]' />
+         ) : (
+          getRoomStateIcon(
+           (() => {
+            if (roomState === 'emptyRoom') {
+             if (room.roomStateKindID === RoomStateKind.waitingForQC)
+              return 'waitingForQCRoom';
+             if (room.roomStateKindID === RoomStateKind.outOfService)
+              return 'outOfService';
+             if (room.roomStateKindID === RoomStateKind.notCleaned)
+              return 'notCleanedRoom';
+             return 'readyRoom';
+            }
+            return roomState;
+           })(),
+           {
+            fontSize: '2.2rem',
+            width: '2.2rem',
+            height: '2.2rem',
+            fill: 'currentColor',
+           },
+          )
          )}
         </div>
        ) : (
@@ -220,7 +224,7 @@ export default function RackRoom({
       </div>
       <div className='text-start ps-2 grow group-data-[layout-minimal=true]:ps-0 group-data-[layout-minimal=true]:pb-1 group-data-[layout-compact=true]:pb-1'>
        <div className='relative flex items-center group-data-[layout-minimal=true]:justify-center gap-1'>
-        {!!room.bithday && !isFutureRack && (
+        {!!room.bithday && !isFutureRack && !activeMinimalView && (
          <div className='absolute bottom-[90%] start-0 text-orange-800/75 dark:text-orange-300/75'>
           <BsCake2Fill className='text-[1.5rem]' />
          </div>
