@@ -141,7 +141,7 @@ export default function RackRoom({
         <RoomControlIndicator dic={roomControlDic} hkStateID={room.hkStateID} />
        )}
       </div>
-      {room.msgFlag && (
+      {!isFutureRack && room.msgFlag && (
        <div className='absolute top-0 end-0 bg-background rounded-full w-8 h-8 grid place-content-center'>
         <IoNotifications className={`size-6 ${noteTypeStyles.text}`} />
        </div>
@@ -220,7 +220,7 @@ export default function RackRoom({
       </div>
       <div className='text-start ps-2 grow group-data-[layout-minimal=true]:ps-0 group-data-[layout-minimal=true]:pb-1 group-data-[layout-compact=true]:pb-1'>
        <div className='relative flex items-center group-data-[layout-minimal=true]:justify-center gap-1'>
-        {!!room.bithday && (
+        {!!room.bithday && !isFutureRack && (
          <div className='absolute bottom-[90%] start-0 text-orange-800/75 dark:text-orange-300/75'>
           <BsCake2Fill className='text-[1.5rem]' />
          </div>

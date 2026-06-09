@@ -29,6 +29,7 @@ export default function RackTools({ dic }: { dic: RoomsRackDictionary }) {
 
  const filterKeys = Object.keys(defaultValues) as (keyof RackFiltersSchema)[];
  const filterValues = watch(filterKeys);
+ const isFutureRack = watch('showType')?.value === 'future';
 
  const filtersKeyValue = filterValues.map((value, i) => {
   return {
@@ -62,12 +63,14 @@ export default function RackTools({ dic }: { dic: RoomsRackDictionary }) {
    <div className='py-2 sticky top-0 z-2 bg-background'>
     <div className='flex gap-2 items-center mb-2'>
      <div className='flex gap-2'>
-      <Button size='lg' onClick={() => toggleRackReport()}>
-       <FaArchive className='size-4' />
-       <span className='hidden md:inline'>
-        {dic.sidebar.tabs.rackNotificationsBoard}
-       </span>
-      </Button>
+      {!isFutureRack && (
+       <Button size='lg' onClick={() => toggleRackReport()}>
+        <FaArchive className='size-4' />
+        <span className='hidden md:inline'>
+         {dic.sidebar.tabs.rackNotificationsBoard}
+        </span>
+       </Button>
+      )}
       <Button
        variant='outline'
        size='lg'
