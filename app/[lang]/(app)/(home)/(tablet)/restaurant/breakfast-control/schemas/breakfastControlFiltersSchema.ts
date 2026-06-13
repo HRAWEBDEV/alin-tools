@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const defaultValues: BreakfastControlFilters = {
+const defaultValues: BreakfastControlFiltersSchema = {
  search: '',
  showServed: true,
  showNotServed: true,
