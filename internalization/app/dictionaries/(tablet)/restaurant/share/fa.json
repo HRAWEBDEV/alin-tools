@@ -68,11 +68,13 @@
    "salons": "سالن‌ها",
    "newOrder": "ثبت سفارش",
    "profile": "پروفایل",
-   "menus": "منو‌ها"
+   "menus": "منو‌ها",
+   "breakfastControl": "آمار صبحانه"
   },
   "navigation": {
    "salons": "سالن‌هـــا",
-   "newOrder": "ثبت سفــارش"
+   "newOrder": "ثبت سفــارش",
+   "breakfastControl": "آمار صبحانه"
   },
   "noItemFound": {
    "title": "آیتمی یافت نشد"

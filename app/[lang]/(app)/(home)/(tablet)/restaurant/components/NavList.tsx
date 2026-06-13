@@ -6,6 +6,7 @@ import { useRestaurantShareDictionary } from '../services/share-dictionary/resta
 import Link from 'next/link';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { usePathname } from 'next/navigation';
+import { MdDoneAll } from 'react-icons/md';
 
 export default function NavList() {
  const { locale } = useBaseConfig();
@@ -50,6 +51,25 @@ export default function NavList() {
      >
       <DishIcon className='size-12' />
       <p className='text-base'>{navigation.newOrder}</p>
+     </Link>
+    </Button>
+   </li>
+   <li className='mt-4'>
+    <Button
+     data-active={activePath === 'breakfast-control'}
+     className='w-full min-h-16 h-auto justify-start data-[active="true"]:bg-background border border-transparent data-[active="true"]:text-primary data-[active="true"]:border-primary'
+     asChild
+    >
+     <Link
+      href={
+       activePath === 'breakfast-control'
+        ? '#'
+        : `/${locale}/restaurant/breakfast-control`
+      }
+      className='flex w-auto h-auto items-center gap-4'
+     >
+      <MdDoneAll className='size-8' />
+      <p className='text-base'>{navigation.breakfastControl}</p>
      </Link>
     </Button>
    </li>

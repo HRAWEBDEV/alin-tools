@@ -7,6 +7,7 @@ import DishIcon from '@/app/[lang]/(app)/components/icons/DishIcon';
 import DinnerIcon from '@/app/[lang]/(app)/components/icons/DinnerIcon';
 import { useProfileContext } from '../services/profile/profileContext';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
+import { MdDoneAll } from 'react-icons/md';
 
 export default function Tabs() {
  const { locale } = useBaseConfig();
@@ -32,6 +33,16 @@ export default function Tabs() {
     <Link href={`/${locale}/restaurant/new-order`}>
      <DishIcon className={tabIconClass} />
      <p>{tabsDic.newOrder}</p>
+    </Link>
+   </Button>
+   <Button
+    variant='ghost'
+    className={`${tabClass} rounded-none bg-primary/30`}
+    asChild
+   >
+    <Link href={`/${locale}/restaurant/breakfast-control`}>
+     <MdDoneAll className={tabIconClass} />
+     <p className='text-sm'>{tabsDic.breakfastControl}</p>
     </Link>
    </Button>
    <Button variant='ghost' className={tabClass} onClick={() => toggleProfile()}>
