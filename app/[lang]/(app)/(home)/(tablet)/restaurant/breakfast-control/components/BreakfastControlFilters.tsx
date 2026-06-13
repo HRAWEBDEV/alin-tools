@@ -5,11 +5,14 @@ import { Button } from '@/components/ui/button';
 import { Drawer, DrawerTrigger } from '@/components/ui/drawer';
 import { BsTrash } from 'react-icons/bs';
 import { ChevronsUpDown } from 'lucide-react';
+import { type BreakfastControlProps } from '../utils/BreakfastControlProps';
 
 export default function BreakfastControlFilters({
  dic,
+ breakfastControlProps,
 }: {
  dic: BreakfastControlDictionary;
+ breakfastControlProps: BreakfastControlProps;
 }) {
  return (
   <>
@@ -64,15 +67,25 @@ export default function BreakfastControlFilters({
     <div className='flex flex-wrap gap-4 justify-center md:justify-end'>
      <div className='flex gap-1 items-center text-primary'>
       <span>{dic.filters.total}:</span>
-      <span className='font-medium text-lg'>12312</span>
+      <span className='font-medium text-lg'>
+       {breakfastControlProps.isSuccess ? breakfastControlProps.data?.total : 0}
+      </span>
      </div>
      <div className='flex gap-1 items-center text-secondary'>
       <span>{dic.filters.served}:</span>
-      <span className='font-medium text-lg'>12312</span>
+      <span className='font-medium text-lg'>
+       {breakfastControlProps.isSuccess
+        ? breakfastControlProps.data?.served
+        : 0}
+      </span>
      </div>
      <div className='flex gap-1 items-center text-destructive'>
       <span>{dic.filters.notServed}:</span>
-      <span className='font-medium text-lg'>12312</span>
+      <span className='font-medium text-lg'>
+       {breakfastControlProps.isSuccess
+        ? breakfastControlProps.data?.notServed
+        : 0}
+      </span>
      </div>
     </div>
    </div>
