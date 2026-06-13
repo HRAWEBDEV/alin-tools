@@ -18,9 +18,11 @@ import { Label } from '@/components/ui/label';
 export default function BreakfastControlFilters({
  dic,
  breakfastControlProps,
+ date,
 }: {
  dic: BreakfastControlDictionary;
  breakfastControlProps: BreakfastControlProps;
+ date?: string;
 }) {
  const { control, register, setValue } =
   useFormContext<BreakfastControlFiltersSchema>();
@@ -42,8 +44,8 @@ export default function BreakfastControlFilters({
         {dic.filters.date}:
        </FieldLabel>
        <span className='font-medium'>
-        {breakfastControlProps.isSuccess
-         ? new Date().toLocaleDateString(locale)
+        {breakfastControlProps.isSuccess && date
+         ? new Date(date).toLocaleDateString(locale)
          : '---'}
        </span>
       </Button>

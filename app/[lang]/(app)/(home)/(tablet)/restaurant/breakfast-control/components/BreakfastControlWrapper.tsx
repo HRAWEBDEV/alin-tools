@@ -84,6 +84,7 @@ export default function BreakfastControlWrapper({
     <BreakfastControlFilters
      dic={dic}
      breakfastControlProps={breakfastControlProps}
+     date={breakfastControlDetails?.dateTimeDateTimeOffset}
     />
     <BreakfastControlList
      dic={dic}
