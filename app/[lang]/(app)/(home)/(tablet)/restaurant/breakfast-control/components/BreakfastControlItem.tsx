@@ -7,15 +7,17 @@ import { AxiosError } from 'axios';
 import { toast } from 'sonner';
 import { FaCheck } from 'react-icons/fa';
 import { Spinner } from '@/components/ui/spinner';
+import Highlighter from 'react-highlight-words';
 
 export default function BreakfastControlItem({
- dic,
  checklist,
  onInvalidQueries,
+ searchText,
 }: {
  dic: BreakfastControlDictionary;
  checklist: BreackfastControlRes['bfCheckListDatas'][number];
  onInvalidQueries: () => unknown;
+ searchText: string;
 }) {
  const { mutate, isPending } = useMutation({
   mutationFn() {
@@ -42,8 +44,12 @@ export default function BreakfastControlItem({
      <MdTouchApp className='size-24 text-neutral-200 dark:text-neutral-800' />
     </div>
     <div className='flex flex-wrap justify-between gap-1 mb-2 items-center'>
-     <div>
-      <span className='font-medium text-2xl'>{checklist.roomNo}</span>
+     <div className='font-medium text-2xl'>
+      <Highlighter
+       searchWords={[searchText]}
+       autoEscape={true}
+       textToHighlight={checklist.roomNo.toString()}
+      />
      </div>
      <div>
       {isPending ? (
@@ -57,12 +63,20 @@ export default function BreakfastControlItem({
     </div>
     <div className='mb-1 flex items-center justify-between gap-2'>
      <p className='text-base mb-1 font-medium text-primary text-start grow'>
-      {checklist.customerName}
+      <Highlighter
+       searchWords={[searchText]}
+       autoEscape={true}
+       textToHighlight={checklist.customerName}
+      />
      </p>
     </div>
     <div className='mb-1 flex items-center justify-between gap-2'>
      <p className='text-base mb-1 font-medium text-neutral-700 dark:text-neutral-300 text-start grow'>
-      {checklist.guestFullName}
+      <Highlighter
+       searchWords={[searchText]}
+       autoEscape={true}
+       textToHighlight={checklist.guestFullName}
+      />
      </p>
     </div>
    </button>

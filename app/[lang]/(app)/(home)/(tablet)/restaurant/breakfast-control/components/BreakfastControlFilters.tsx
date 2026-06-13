@@ -1,13 +1,19 @@
 'use client';
 import { type BreakfastControlDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/breakfastControl/dictionary';
 import { Field, FieldLabel } from '@/components/ui/field';
+import {
+ InputGroupInput,
+ InputGroup,
+ InputGroupAddon,
+} from '@/components/ui/input-group';
 import { Button } from '@/components/ui/button';
-import { Drawer, DrawerTrigger } from '@/components/ui/drawer';
-import { BsTrash } from 'react-icons/bs';
-import { ChevronsUpDown } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { type BreakfastControlProps } from '../utils/BreakfastControlProps';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
-import { Spinner } from '@/components/ui/spinner';
+import { useFormContext, Controller } from 'react-hook-form';
+import { type BreakfastControlFiltersSchema } from '../schemas/breakfastControlFiltersSchema';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 
 export default function BreakfastControlFilters({
  dic,
@@ -16,6 +22,8 @@ export default function BreakfastControlFilters({
  dic: BreakfastControlDictionary;
  breakfastControlProps: BreakfastControlProps;
 }) {
+ const { control, register, setValue } =
+  useFormContext<BreakfastControlFiltersSchema>();
  const { locale } = useBaseConfig();
  return (
   <>
@@ -23,7 +31,7 @@ export default function BreakfastControlFilters({
     {dic.title}
    </h1>
    <div className='bg-background sticky top-0 z-2 p-4 lg:p-6 pt-4! pb-2! flex gap-2 justify-between md:items-center flex-col md:flex-row'>
-    <div className='grid gap-2 grid-cols-2 md:grid-cols-[repeat(2,minmax(10rem,12rem))]'>
+    <div className='grid gap-2 grid-cols-2 md:grid-cols-[minmax(9rem,9.5rem)_minmax(10rem,15rem)]'>
      <Field className='gap-1'>
       <Button
        variant='outline'
@@ -41,33 +49,17 @@ export default function BreakfastControlFilters({
       </Button>
      </Field>
      <Field>
-      <Drawer>
-       <DrawerTrigger asChild>
-        <Button id='room' variant='outline' role='combobox' className='h-11'>
-         <div className='grow flex gap-1 overflow-hidden'>
-          <FieldLabel htmlFor='room' className='text-neutral-500'>
-           {dic.filters.roomNo}:
-          </FieldLabel>
-          <span className='font-medium grow text-ellipsis overflow-hidden text-start'></span>
-         </div>
-         <div className='flex gap-2 items-center'>
-          {breakfastControlProps.isFetching && <Spinner />}
-          {false && (
-           <Button
-            variant={'ghost'}
-            size={'icon-lg'}
-            onClick={(e) => {
-             e.stopPropagation();
-            }}
-           >
-            <BsTrash className='size-5 text-red-700 dark:text-red-400' />
-           </Button>
-          )}
-          <ChevronsUpDown />
-         </div>
-        </Button>
-       </DrawerTrigger>
-      </Drawer>
+      <InputGroup className='h-11'>
+       <InputGroupInput
+        placeholder={dic.filters.search}
+        id='search'
+        type='search'
+        {...register('search')}
+       />
+       <InputGroupAddon align='inline-end'>
+        <Search className='size-5 text-primary' />
+       </InputGroupAddon>
+      </InputGroup>
      </Field>
     </div>
     {breakfastControlProps.isSuccess && (
@@ -80,22 +72,58 @@ export default function BreakfastControlFilters({
          : 0}
        </span>
       </div>
-      <div className='flex gap-1 items-center text-secondary'>
-       <span>{dic.filters.served}:</span>
-       <span className='font-medium text-lg'>
-        {breakfastControlProps.isSuccess
-         ? breakfastControlProps.data?.served
-         : 0}
-       </span>
-      </div>
-      <div className='flex gap-1 items-center text-destructive'>
-       <span>{dic.filters.notServed}:</span>
-       <span className='font-medium text-lg'>
-        {breakfastControlProps.isSuccess
-         ? breakfastControlProps.data?.notServed
-         : 0}
-       </span>
-      </div>
+      <Controller
+       name='showServed'
+       control={control}
+       render={({ field: { onChange, value, ...other } }) => (
+        <div className='flex gap-2 items-center text-secondary'>
+         <Switch
+          {...other}
+          style={{
+           direction: 'ltr',
+          }}
+          checked={value}
+          onCheckedChange={(newValue) => {
+           if (!newValue) {
+            setValue('showNotServed', true);
+           }
+           onChange(newValue);
+          }}
+          id='served'
+          className='scale-125'
+         />
+         <Label htmlFor='served'>
+          {dic.filters.served} ({breakfastControlProps.data?.served})
+         </Label>
+        </div>
+       )}
+      />
+      <Controller
+       name='showNotServed'
+       control={control}
+       render={({ field: { onChange, value, ...other } }) => (
+        <div className='flex gap-2 items-center text-destructive'>
+         <Switch
+          {...other}
+          style={{
+           direction: 'ltr',
+          }}
+          checked={value}
+          onCheckedChange={(newValue) => {
+           if (!newValue) {
+            setValue('showServed', true);
+           }
+           onChange(newValue);
+          }}
+          id='notServed'
+          className='scale-125'
+         />
+         <Label htmlFor='notServed'>
+          {dic.filters.notServed} ({breakfastControlProps.data?.notServed})
+         </Label>
+        </div>
+       )}
+      />
      </div>
     )}
    </div>

@@ -10,12 +10,23 @@ import {
  getBreakfastControlDataApi,
 } from '../services/BreakfastControlApiActions';
 import { type BreakfastControlProps } from '../utils/BreakfastControlProps';
+import { useForm, FormProvider } from 'react-hook-form';
+import {
+ type BreakfastControlFiltersSchema,
+ createBreakfastControlFiltersSchema,
+ defaultValues,
+} from '../schemas/breakfastControlFiltersSchema';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 export default function BreakfastControlWrapper({
  dic,
 }: {
  dic: BreakfastControlDictionary;
 }) {
+ const filtersUseForm = useForm<BreakfastControlFiltersSchema>({
+  defaultValues,
+  resolver: zodResolver(createBreakfastControlFiltersSchema()),
+ });
  const queryClient = useQueryClient();
  const {
   data: breakfastControlDetails,
@@ -24,6 +35,7 @@ export default function BreakfastControlWrapper({
   isError: isErrorBreakfastControlDetails,
   isSuccess: isSuccessBreakfastControlDetails,
  } = useQuery({
+  gcTime: 0,
   staleTime: 'static',
   queryKey: [getBreakfastControlDetailsApi],
   async queryFn({ signal }) {
@@ -68,14 +80,16 @@ export default function BreakfastControlWrapper({
 
  return (
   <div>
-   <BreakfastControlFilters
-    dic={dic}
-    breakfastControlProps={breakfastControlProps}
-   />
-   <BreakfastControlList
-    dic={dic}
-    breakfastControlProps={breakfastControlProps}
-   />
+   <FormProvider {...filtersUseForm}>
+    <BreakfastControlFilters
+     dic={dic}
+     breakfastControlProps={breakfastControlProps}
+    />
+    <BreakfastControlList
+     dic={dic}
+     breakfastControlProps={breakfastControlProps}
+    />
+   </FormProvider>
   </div>
  );
 }
