@@ -1,0 +1,16 @@
+{
+ "title": "کنترل آمار صبحانه",
+ "filters": {
+  "date": "تاریخ",
+  "total": "جمع کل",
+  "served": "سرو شده",
+  "notServed": "سرو نشده",
+  "roomNo": "اتاق",
+  "search": "جستجو"
+ },
+ "info": {
+  "customerName": "نام مشتری",
+  "guestName": "نام مهمان",
+  "roomNo": "شماره اتاق"
+ }
+}
