@@ -51,10 +51,11 @@ export default function BreakfastControlWrapper({
 
  const breakfastControlProps: BreakfastControlProps = {
   data: breakfastControlData,
-  isLoading: isLoadingBreakfastControlData,
-  isFetching: isFetchingBreakfastControlData,
-  isError: isErrorBreakfastControlData,
-  isSuccess: isSuccessBreakfastControlData,
+  isLoading: isLoadingBreakfastControlData || isLoadingBreakfastControlDetails,
+  isFetching:
+   isFetchingBreakfastControlData || isFetchingBreakfastControlDetails,
+  isError: isErrorBreakfastControlData || isErrorBreakfastControlDetails,
+  isSuccess: isSuccessBreakfastControlData || isSuccessBreakfastControlDetails,
  };
 
  return (
@@ -63,7 +64,10 @@ export default function BreakfastControlWrapper({
     dic={dic}
     breakfastControlProps={breakfastControlProps}
    />
-   <BreakfastControlList dic={dic} />
+   <BreakfastControlList
+    dic={dic}
+    breakfastControlProps={breakfastControlProps}
+   />
   </div>
  );
 }
