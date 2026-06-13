@@ -31,6 +31,7 @@ export default function BreakfastControlList({
        key={checklist.id}
        dic={dic}
        checklist={checklist}
+       onInvalidQueries={breakfastControlProps.onInvalidateQueries}
       />
      ))
     ) : (

@@ -6,6 +6,8 @@ import { Drawer, DrawerTrigger } from '@/components/ui/drawer';
 import { BsTrash } from 'react-icons/bs';
 import { ChevronsUpDown } from 'lucide-react';
 import { type BreakfastControlProps } from '../utils/BreakfastControlProps';
+import { useBaseConfig } from '@/services/base-config/baseConfigContext';
+import { Spinner } from '@/components/ui/spinner';
 
 export default function BreakfastControlFilters({
  dic,
@@ -14,6 +16,7 @@ export default function BreakfastControlFilters({
  dic: BreakfastControlDictionary;
  breakfastControlProps: BreakfastControlProps;
 }) {
+ const { locale } = useBaseConfig();
  return (
   <>
    <h1 className='text-center md:text-start font-medium text-2xl lg:text-3xl p-4 lg:p-6 pb-0!'>
@@ -30,7 +33,11 @@ export default function BreakfastControlFilters({
        <FieldLabel htmlFor='date' className='text-neutral-500'>
         {dic.filters.date}:
        </FieldLabel>
-       <span className='font-medium'>1996/12/12</span>
+       <span className='font-medium'>
+        {breakfastControlProps.isSuccess
+         ? new Date().toLocaleDateString(locale)
+         : '---'}
+       </span>
       </Button>
      </Field>
      <Field>
@@ -41,12 +48,11 @@ export default function BreakfastControlFilters({
           <FieldLabel htmlFor='room' className='text-neutral-500'>
            {dic.filters.roomNo}:
           </FieldLabel>
-          <span className='font-medium grow text-ellipsis overflow-hidden text-start'>
-           12312
-          </span>
+          <span className='font-medium grow text-ellipsis overflow-hidden text-start'></span>
          </div>
          <div className='flex gap-2 items-center'>
-          {true && (
+          {breakfastControlProps.isFetching && <Spinner />}
+          {false && (
            <Button
             variant={'ghost'}
             size={'icon-lg'}
@@ -64,30 +70,34 @@ export default function BreakfastControlFilters({
       </Drawer>
      </Field>
     </div>
-    <div className='flex flex-wrap gap-4 justify-center md:justify-end'>
-     <div className='flex gap-1 items-center text-primary'>
-      <span>{dic.filters.total}:</span>
-      <span className='font-medium text-lg'>
-       {breakfastControlProps.isSuccess ? breakfastControlProps.data?.total : 0}
-      </span>
+    {breakfastControlProps.isSuccess && (
+     <div className='flex flex-wrap gap-4 justify-center md:justify-end'>
+      <div className='flex gap-1 items-center text-primary'>
+       <span>{dic.filters.total}:</span>
+       <span className='font-medium text-lg'>
+        {breakfastControlProps.isSuccess
+         ? breakfastControlProps.data?.total
+         : 0}
+       </span>
+      </div>
+      <div className='flex gap-1 items-center text-secondary'>
+       <span>{dic.filters.served}:</span>
+       <span className='font-medium text-lg'>
+        {breakfastControlProps.isSuccess
+         ? breakfastControlProps.data?.served
+         : 0}
+       </span>
+      </div>
+      <div className='flex gap-1 items-center text-destructive'>
+       <span>{dic.filters.notServed}:</span>
+       <span className='font-medium text-lg'>
+        {breakfastControlProps.isSuccess
+         ? breakfastControlProps.data?.notServed
+         : 0}
+       </span>
+      </div>
      </div>
-     <div className='flex gap-1 items-center text-secondary'>
-      <span>{dic.filters.served}:</span>
-      <span className='font-medium text-lg'>
-       {breakfastControlProps.isSuccess
-        ? breakfastControlProps.data?.served
-        : 0}
-      </span>
-     </div>
-     <div className='flex gap-1 items-center text-destructive'>
-      <span>{dic.filters.notServed}:</span>
-      <span className='font-medium text-lg'>
-       {breakfastControlProps.isSuccess
-        ? breakfastControlProps.data?.notServed
-        : 0}
-      </span>
-     </div>
-    </div>
+    )}
    </div>
   </>
  );

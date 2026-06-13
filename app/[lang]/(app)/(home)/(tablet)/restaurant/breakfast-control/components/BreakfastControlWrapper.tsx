@@ -2,7 +2,7 @@
 import { type BreakfastControlDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/breakfastControl/dictionary';
 import BreakfastControlFilters from './BreakfastControlFilters';
 import BreakfastControlList from './BreakfastControlList';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
  getBreakfastControlDetailsApi,
  getBreakfastControlDetails,
@@ -16,6 +16,7 @@ export default function BreakfastControlWrapper({
 }: {
  dic: BreakfastControlDictionary;
 }) {
+ const queryClient = useQueryClient();
  const {
   data: breakfastControlDetails,
   isLoading: isLoadingBreakfastControlDetails,
@@ -38,7 +39,7 @@ export default function BreakfastControlWrapper({
   isError: isErrorBreakfastControlData,
   isSuccess: isSuccessBreakfastControlData,
  } = useQuery({
-  queryKey: [getBreakfastControlDataApi],
+  queryKey: [getBreakfastControlDataApi, breakfastControlDetails?.id || 'all'],
   enabled: isSuccessBreakfastControlDetails,
   async queryFn({ signal }) {
    const res = await getBreakfastControlData({
@@ -49,13 +50,20 @@ export default function BreakfastControlWrapper({
   },
  });
 
+ function handleInvalidateQueries() {
+  queryClient.invalidateQueries({
+   queryKey: [getBreakfastControlDataApi, breakfastControlDetails?.id || 'all'],
+  });
+ }
+
  const breakfastControlProps: BreakfastControlProps = {
   data: breakfastControlData,
+  onInvalidateQueries: handleInvalidateQueries,
   isLoading: isLoadingBreakfastControlData || isLoadingBreakfastControlDetails,
   isFetching:
    isFetchingBreakfastControlData || isFetchingBreakfastControlDetails,
   isError: isErrorBreakfastControlData || isErrorBreakfastControlDetails,
-  isSuccess: isSuccessBreakfastControlData || isSuccessBreakfastControlDetails,
+  isSuccess: isSuccessBreakfastControlData && isSuccessBreakfastControlDetails,
  };
 
  return (

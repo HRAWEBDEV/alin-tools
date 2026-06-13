@@ -1,26 +1,58 @@
 import { type BreakfastControlDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/breakfastControl/dictionary';
-import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { MdTouchApp } from 'react-icons/md';
 import { type BreackfastControlRes } from '../services/BreakfastControlApiActions';
+import { useMutation } from '@tanstack/react-query';
+import { updateBreakfastState } from '../services/BreakfastControlApiActions';
+import { AxiosError } from 'axios';
+import { toast } from 'sonner';
+import { FaCheck } from 'react-icons/fa';
+import { Spinner } from '@/components/ui/spinner';
 
 export default function BreakfastControlItem({
  dic,
  checklist,
+ onInvalidQueries,
 }: {
  dic: BreakfastControlDictionary;
  checklist: BreackfastControlRes['bfCheckListDatas'][number];
+ onInvalidQueries: () => unknown;
 }) {
- const { locale } = useBaseConfig();
-
+ const { mutate, isPending } = useMutation({
+  mutationFn() {
+   return updateBreakfastState({ id: checklist.id });
+  },
+  onSuccess() {
+   onInvalidQueries();
+  },
+  onError(err: AxiosError<string>) {
+   toast.error(err.response?.data);
+  },
+ });
  return (
   <>
-   <button className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 relative isolate whitespace-normal'>
+   <button
+    data-is-served={checklist.served}
+    className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 data-[is-served="true"]:bg-secondary/10 relative isolate whitespace-normal'
+    onClick={() => {
+     if (isPending) return;
+     mutate();
+    }}
+   >
     <div className='absolute bottom-0 end-0 -z-1 opacity-60'>
      <MdTouchApp className='size-24 text-neutral-200 dark:text-neutral-800' />
     </div>
-    <div className='flex flex-wrap justify-between gap-1 mb-2'>
+    <div className='flex flex-wrap justify-between gap-1 mb-2 items-center'>
      <div>
       <span className='font-medium text-2xl'>{checklist.roomNo}</span>
+     </div>
+     <div>
+      {isPending ? (
+       <Spinner className='size-9 text-primary' />
+      ) : checklist.served ? (
+       <FaCheck className='text-secondary size-9' />
+      ) : (
+       <div className='size-9 border border-neutral-400 dark:border-neutral-600 rounded-lg'></div>
+      )}
      </div>
     </div>
     <div className='mb-1 flex items-center justify-between gap-2'>

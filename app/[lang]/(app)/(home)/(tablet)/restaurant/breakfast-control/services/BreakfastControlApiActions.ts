@@ -50,10 +50,20 @@ function getBreakfastControlData({
  );
 }
 
+function updateBreakfastState({ id }: { id: number }) {
+ const searchParams = new URLSearchParams([
+  ['BFCheckListDataID', id.toString()],
+ ]);
+ return axios.get(
+  `/Reception/BFCheckList/UpdateBFCheckListData?${searchParams.toString()}`,
+ );
+}
+
 export type { BreakfastControlDetails, BreackfastControlRes };
 export {
  getBreakfastControlDetailsApi,
  getBreakfastControlDetails,
  getBreakfastControlDataApi,
  getBreakfastControlData,
+ updateBreakfastState,
 };
