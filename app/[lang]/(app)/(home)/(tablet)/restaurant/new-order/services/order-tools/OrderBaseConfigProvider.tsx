@@ -192,6 +192,16 @@ export default function OrderBaseConfigProvider({
   }
  }
 
+ // salons redirect
+ function redirectToSalons() {
+  const searchParams = new URLSearchParams([]);
+  if (salonIDQuery && salonNameQuery) {
+   searchParams.set('hallName', salonNameQuery);
+   searchParams.set('hallKey', salonIDQuery);
+  }
+  router.push(`/${locale}/restaurant/salons?${searchParams.toString()}`);
+ }
+
  // change setting
  function changeNewOrderSettins<T extends keyof NewOrderSettings>(
   key: T,
@@ -576,7 +586,7 @@ export default function OrderBaseConfigProvider({
     if (res.data.message) {
      toast.warning(res.data.message);
     }
-    router.push(`/${locale}/restaurant/salons`);
+    redirectToSalons();
     setShowCloseOrder(false);
     setConfirmOrderIsOpen(false);
    },
@@ -612,7 +622,7 @@ export default function OrderBaseConfigProvider({
    if (res.data.message) {
     toast.warning(res.data.message);
    }
-   router.push(`/${locale}/restaurant/salons`);
+   redirectToSalons();
   },
   onError(err: AxiosError<string>) {
    toast.error(err.response?.data || '');
@@ -804,7 +814,7 @@ export default function OrderBaseConfigProvider({
     if (res.data.message) {
      toast.warning(res.data.message);
     }
-    router.push(`/${locale}/restaurant/salons`);
+    redirectToSalons();
     setConfirmOrderIsOpen(false);
    },
    onError(err: AxiosError<string>) {
