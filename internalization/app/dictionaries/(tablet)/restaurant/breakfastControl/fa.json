@@ -11,6 +11,11 @@
  "info": {
   "customerName": "نام مشتری",
   "guestName": "نام مهمان",
-  "roomNo": "شماره اتاق"
+  "roomNo": "شماره اتاق",
+  "served": "سرو شده",
+  "notServed": "سرو نشده",
+  "confirm": "تایید",
+  "cancel": "انصراف",
+  "changeState": "تغییر وضعیت"
  }
 }
