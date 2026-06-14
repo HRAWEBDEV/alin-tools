@@ -567,7 +567,12 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        )}
       />
      </Field>
-     <Field data-disabled={saleTypeValue?.key === SaleTypes.room}>
+     <Field
+      data-disabled={
+       saleTypeValue?.key === SaleTypes.room ||
+       saleTypeValue?.key === SaleTypes.employee
+      }
+     >
       <FieldLabel htmlFor='customer'>{dic.orderInfo.customer}</FieldLabel>
       <Controller
        control={control}
@@ -583,7 +588,8 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            disabled={
             saleTypeValue?.key === SaleTypes.room ||
             !access['order']['edit'] ||
-            !access['order']['changeCustomer']
+            !access['order']['changeCustomer'] ||
+            saleTypeValue?.key === SaleTypes.employee
            }
            onBlur={field.onBlur}
            ref={field.ref}
