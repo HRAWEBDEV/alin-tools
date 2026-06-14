@@ -5,8 +5,11 @@
 - add reload button if necessary - for real time data
 
 # 2.3.1
+### features
 - add restaurant breakfast checklist menu(hra-done)
-
+### bug fixes
+- move salons filters to url query (hra-done)
+- replace redirect link in table orders (hra-done)
 
 # 2.3.0
 - add rack preview guest expenses (hre-done)

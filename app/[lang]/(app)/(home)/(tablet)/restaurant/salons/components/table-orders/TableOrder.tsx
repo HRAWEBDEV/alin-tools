@@ -54,6 +54,7 @@ export default function TableOrder({
        ? `${orderRedirectLink}&orderID=${order.key}`
        : '#'
      }
+     replace
     >
      {!userOrderLoading && userOrderSuccess ? (
       <>

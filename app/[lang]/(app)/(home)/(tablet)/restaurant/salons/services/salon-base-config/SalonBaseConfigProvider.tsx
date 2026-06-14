@@ -43,14 +43,24 @@ export default function SalonBaseConfigProvider({
  dic: SalonsDictionary;
  children: ReactNode;
 }) {
+ const router = useRouter();
+ const searchQueries = useSearchParams();
+ const showEmptyTablesQuery = searchQueries.get('showEmptyTables');
+ const showOccupiedTablesQuery = searchQueries.get('showOccupiedTables');
+ const showOutOfServiceTablesQuery = searchQueries.get(
+  'showOutOfServiceTables',
+ );
+ const showReservedTablesQuery = searchQueries.get('showReservedTables');
+ const hallName = searchQueries.get('hallName');
+ const hallKey = searchQueries.get('hallKey');
  const { userAccessibility } = useUserAccessibilityContext();
  const { userInfoRouterStorage } = useUserInfoRouter();
  const { scrollToTop } = useMainWrapperSetupContext();
  const [tableFilters, setTableFilters] = useState<TablesFilters>({
-  showEmptyTables: true,
-  showOccupiedTables: true,
-  showOutOfServiceTables: true,
-  showReservedTables: true,
+  showEmptyTables: showEmptyTablesQuery !== 'false',
+  showOccupiedTables: showOccupiedTablesQuery !== 'false',
+  showOutOfServiceTables: showOutOfServiceTablesQuery !== 'false',
+  showReservedTables: showReservedTablesQuery !== 'false',
  });
  const [selectedTable, setSelectedTable] = useState<Table | null>(null);
  const [tables, setTables] = useState<Table[]>([]);
@@ -72,11 +82,17 @@ export default function SalonBaseConfigProvider({
   null,
  );
  const { locale } = useBaseConfig();
- const router = useRouter();
- const searchQueries = useSearchParams();
  const [selectedHall, setSelectedHall] = useState<
   InitiData['salons'][number] | null
- >(null);
+ >(() => {
+  if (hallName && hallKey) {
+   return {
+    key: hallKey,
+    value: hallName,
+   };
+  }
+  return null;
+ });
 
  const {
   data: initData = {
@@ -384,6 +400,32 @@ export default function SalonBaseConfigProvider({
    setSelectedHall(initData!.salons[0]);
   }
  }, [handleChangeHall, searchQueries, initData]);
+
+ useEffect(() => {
+  const newSearchParams = new URLSearchParams(location.search);
+  const {
+   showEmptyTables,
+   showOccupiedTables,
+   showOutOfServiceTables,
+   showReservedTables,
+  } = tableFilters;
+
+  if (selectedHall) {
+   newSearchParams.set('hallName', selectedHall.value);
+   newSearchParams.set('hallKey', selectedHall.key);
+  } else {
+   newSearchParams.delete('hallName');
+   newSearchParams.delete('hallKey');
+  }
+  newSearchParams.set('showEmptyTables', showEmptyTables.toString());
+  newSearchParams.set('showOccupiedTables', showOccupiedTables.toString());
+  newSearchParams.set(
+   'showOutOfServiceTables',
+   showOutOfServiceTables.toString(),
+  );
+  newSearchParams.set('showReservedTables', showReservedTables.toString());
+  router.replace(`/${locale}/restaurant/salons?${newSearchParams.toString()}`);
+ }, [selectedHall, locale, router, tableFilters]);
 
  return (
   <salonBaseConfigContext.Provider value={ctx}>
