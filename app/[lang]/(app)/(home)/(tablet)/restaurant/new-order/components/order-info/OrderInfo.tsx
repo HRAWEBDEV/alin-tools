@@ -595,7 +595,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            ref={field.ref}
           >
            <span className='grow text-ellipsis overflow-hidden text-start'>
-            {field.value?.key || ''}
+            {field.value?.code || ''}
            </span>
            <div className='flex gap-2 items-center'>
             {customerValue &&
