@@ -717,7 +717,6 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
              </FieldLabel>
              <InputGroup
               className='h-11'
-              data-disabled={!canEditMobileNo}
               data-invalid={!!invoiceWalletUseForm.formState.errors.phoneNumber}
              >
               <NumericFormat
@@ -807,6 +806,18 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
                    : `( ${format(walletInfo.data.remainWallet)} )`
                  : ''
                }
+              />
+             </InputGroup>
+            </Field>
+            <Field>
+             <FieldLabel htmlFor='payment-value'>
+              {dic.invoice.paymentValue}
+             </FieldLabel>
+             <InputGroup className='h-11'>
+              <InputGroupInput
+               id='payment-value'
+               readOnly
+               value={format(remained)}
               />
              </InputGroup>
             </Field>
