@@ -191,7 +191,9 @@ export default function RackRoom({
       >
        {activeMinimalView ? (
         <div dir='ltr' className='flex justify-center'>
-         {roomState === 'occupiedRoom' && room.bithday ? (
+         {(roomState === 'occupiedRoom' ||
+          roomState === 'occupiedCustomerRoom') &&
+         room.bithday ? (
           <BsCake2Fill className='text-[2.2rem]' />
          ) : (
           getRoomStateIcon(
