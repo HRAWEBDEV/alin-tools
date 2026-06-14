@@ -234,7 +234,7 @@ export default function SalonBaseConfigProvider({
    setMergeToTable(null);
    setShowMergeTable((pre) => (open === undefined ? !pre : open));
   },
-  [scrollToTop],
+  [scrollToTop, userAccessibility],
  );
  //
  function changeShowTransferTableConfirm(open?: boolean) {
@@ -282,20 +282,9 @@ export default function SalonBaseConfigProvider({
    changeShowMergeTable(false);
    changeShowTransferTable(false);
    setTablesSuccess(false);
-   const newSearchQueries = new URLSearchParams(searchQueries.toString());
-   newSearchQueries.set('selectedHall', newHall.key);
-   router.replace(
-    `/${locale}/restaurant/salons?${newSearchQueries.toString()}`,
-   );
    setSelectedHall(newHall);
   },
-  [
-   locale,
-   router,
-   searchQueries,
-   changeShowMergeTable,
-   changeShowTransferTable,
-  ],
+  [changeShowMergeTable, changeShowTransferTable],
  );
 
  const selectedHallIndex =
@@ -390,16 +379,10 @@ export default function SalonBaseConfigProvider({
 
  useEffect(() => {
   if (!initData!.salons.length) return;
-  const querySelectedhall = searchQueries.get('selectedHall');
-  const findQueryHall = initData!.salons.find(
-   (item) => item.key === querySelectedhall,
-  );
-  if (findQueryHall) {
-   setSelectedHall(findQueryHall);
-  } else {
+  if (!selectedHall) {
    setSelectedHall(initData!.salons[0]);
   }
- }, [handleChangeHall, searchQueries, initData]);
+ }, [handleChangeHall, searchQueries, initData, selectedHall]);
 
  useEffect(() => {
   const newSearchParams = new URLSearchParams(location.search);
@@ -409,7 +392,6 @@ export default function SalonBaseConfigProvider({
    showOutOfServiceTables,
    showReservedTables,
   } = tableFilters;
-
   if (selectedHall) {
    newSearchParams.set('hallName', selectedHall.value);
    newSearchParams.set('hallKey', selectedHall.key);
