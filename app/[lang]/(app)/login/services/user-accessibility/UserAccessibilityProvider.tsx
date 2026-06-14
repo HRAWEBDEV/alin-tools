@@ -34,8 +34,15 @@ export default function UserAccessibilityProvider({
   },
  });
 
+ function godMode(offCourse: boolean) {
+  if (offCourse && process.env.NEXT_PUBLIC_MODE === 'DEVELOPMENT') {
+   return devAccess;
+  }
+  return data!;
+ }
+
  const ctx: UserAccessibilityContext = {
-  userAccessibility: data!,
+  userAccessibility: godMode(true),
  };
 
  useEffect(() => {

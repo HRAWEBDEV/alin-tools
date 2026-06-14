@@ -24,6 +24,7 @@ import {
  getOrderServiceRates,
  OrderItem,
  ItemProgram,
+ getEmployeeCustomer,
 } from '../newOrderApiActions';
 import { getHallKey } from '../../../salons/services/salonsApiActions';
 import {
@@ -361,6 +362,19 @@ export default function OrderBaseConfigProvider({
     payload: data,
    });
    return data;
+  },
+ });
+
+ const {
+  data: employeeCustomer,
+  isLoading: employeeCustomerIsLoading,
+  isSuccess: employeeCustomerIsSuccess,
+ } = useQuery({
+  enabled: saleTypeValue?.key === SaleTypes.employee,
+  queryKey: [newOrderKey, 'employee-customer'],
+  async queryFn({ signal }) {
+   const res = await getEmployeeCustomer({ signal });
+   return res.data;
   },
  });
  // person setup
@@ -1121,6 +1135,25 @@ export default function OrderBaseConfigProvider({
    }
   }
  }, [hasServiceValue, itemProgramsData, pricedOrderItems, userDiscountValue]);
+
+ useEffect(() => {
+  if (
+   !employeeCustomerIsSuccess ||
+   !employeeCustomer ||
+   saleTypeValue?.key !== SaleTypes.employee
+  )
+   return;
+  orderInfoForm.setValue('customer', {
+   key: employeeCustomer.id.toString(),
+   value: employeeCustomer.name,
+   code: employeeCustomer.code,
+  });
+ }, [
+  employeeCustomerIsSuccess,
+  employeeCustomer,
+  orderInfoForm,
+  saleTypeValue,
+ ]);
 
  return (
   <orderBaseConfigContext.Provider value={ctx}>

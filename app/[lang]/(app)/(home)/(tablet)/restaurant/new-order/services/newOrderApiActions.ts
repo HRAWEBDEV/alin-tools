@@ -613,6 +613,12 @@ function getCustomerContract({
  );
 }
 
+function getEmployeeCustomer({ signal }: { signal: AbortSignal }) {
+ return axios.get<Customer>('/Restaurant/Tablet/GetEmployeeCustomer', {
+  signal,
+ });
+}
+
 export type {
  InitialData,
  Subscriber,
@@ -652,4 +658,5 @@ export {
  getPersonByNumber,
  getCustomerContract,
  savePerson,
+ getEmployeeCustomer,
 };
