@@ -140,7 +140,7 @@ export default function GuestsExpensesFilters({
  }
 
  return (
-  <div className='flex flex-col gap-2 pt-2 bg-background'>
+  <div className='flex flex-col gap-2 pt-2 bg-background [&]:[--default-top-offset:var(--top-offset,0)] sticky top-4 lg:top-(--default-top-offset) py-4 z-3'>
    <div className='flex gap-2 items-center mb-1'>
     <div className='flex items-center gap-2'>
      <Button

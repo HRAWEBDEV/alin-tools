@@ -1,7 +1,4 @@
 ## TODO
-- add sticky filters for pages
-- add new order wallet payment timer
-- fix drawer and dialog overflow
 - add reload button if necessary - for real time data
 
 # 2.3.1
@@ -10,6 +7,9 @@
 ### bug fixes
 - move salons filters to url query (hra-done)
 - replace redirect link in table orders (hra-done)
+- add sticky filters for pages (hra-done)
+- add new order wallet payment timer (hra-done)
+- fix drawer and dialog overflow (hra-done)
 
 # 2.3.0
 - add rack preview guest expenses (hre-done)

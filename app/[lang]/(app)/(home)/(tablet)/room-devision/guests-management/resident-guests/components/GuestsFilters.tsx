@@ -122,7 +122,7 @@ export default function GuestsFilters({
  };
 
  return (
-  <div className='flex flex-col gap-2 pt-2'>
+  <div className='flex flex-col gap-2 pt-2 [&]:[--default-top-offset:var(--top-offset,0)] sticky top-4 lg:top-(--default-top-offset) py-4 bg-background z-3'>
    <div className='flex items-center gap-2 justify-between'>
     <Drawer open={filterDrawerOpen} onOpenChange={setFilterDrawerOpen}>
      <DrawerTrigger asChild>
