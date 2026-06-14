@@ -370,6 +370,7 @@ export default function OrderBaseConfigProvider({
   isLoading: employeeCustomerIsLoading,
   isSuccess: employeeCustomerIsSuccess,
  } = useQuery({
+  staleTime: 'static',
   enabled: saleTypeValue?.key === SaleTypes.employee,
   queryKey: [newOrderKey, 'employee-customer'],
   async queryFn({ signal }) {
