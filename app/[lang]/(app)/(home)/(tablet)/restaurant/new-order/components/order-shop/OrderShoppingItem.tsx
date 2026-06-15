@@ -20,7 +20,12 @@ import {
  DialogTitle,
  DialogTrigger,
 } from '@/components/ui/dialog';
-import { Field, FieldLabel } from '@/components/ui/field';
+import {
+ Field,
+ FieldLabel,
+ FieldContent,
+ FieldDescription,
+} from '@/components/ui/field';
 import { InputGroup, InputGroupTextarea } from '@/components/ui/input-group';
 import { Drawer, DrawerTrigger } from '@/components/ui/drawer';
 import FindTags from '../find-tags/FindTags';
@@ -209,6 +214,13 @@ export default function OrderShoppingItem({
               }}
              />
             </InputGroup>
+            {orderItem.id > 0 && (
+             <FieldContent>
+              <FieldDescription className='text-destructive'>
+               {dic.orderInfo.noEdit}
+              </FieldDescription>
+             </FieldContent>
+            )}
            </Field>
           </div>
           <DialogFooter className='p-4 py-2 pt-0'>

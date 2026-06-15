@@ -8,6 +8,7 @@
   "search": "جستجو"
  },
  "orderInfo": {
+  "noEdit": "غیر قابل ویرایش",
   "phoneNumber": "شماره تماس",
   "firstName": "نام",
   "lastName": "نام خانوادگی",
