@@ -32,7 +32,6 @@ export default function BreakfastControlWrapper({
  const [debouncedSearchValue] = useDebouncedValue(searchValue, {
   wait: 500,
  });
- console.log(debouncedSearchValue);
  const queryClient = useQueryClient();
  const {
   data: breakfastControlDetails,
