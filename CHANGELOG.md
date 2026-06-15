@@ -1,6 +1,10 @@
 ## TODO
 - add reload button if necessary - for real time data
 
+
+# 2.3.2
+- add order items description (hra-done)
+
 # 2.3.1
 ### features
 - add restaurant breakfast checklist menu (hra-done)

@@ -85,6 +85,13 @@ type OrderItemActions =
      id: ItemProgram['id'];
      tagID: number;
     };
+   }
+ | {
+    type: 'updateComment';
+    payload: {
+     id: ItemProgram['id'];
+     comment: string | null;
+    };
    };
 
 function removeOrderItems(
@@ -148,6 +155,7 @@ function orderItemsReducer(state: OrderItem[], action: OrderItemActions) {
       taxRate: item.taxRate,
       tagComment: null,
       noDiscount: item.noDiscount,
+      comment: null,
      };
      return newOrder;
     }),
@@ -177,6 +185,7 @@ function orderItemsReducer(state: OrderItem[], action: OrderItemActions) {
     taxRate: action.payload.taxRate,
     tagComment: null,
     noDiscount: action.payload.noDiscount,
+    comment: null,
    });
    return [...stateCopy];
   // remove
@@ -275,6 +284,17 @@ function orderItemsReducer(state: OrderItem[], action: OrderItemActions) {
       ...order,
       tagID: null,
       tagComment: null,
+     };
+    }
+    return order;
+   });
+  // comment
+  case 'updateComment':
+   return state.map((order) => {
+    if (order.id === action.payload.id) {
+     return {
+      ...order,
+      comment: action.payload.comment,
      };
     }
     return order;
