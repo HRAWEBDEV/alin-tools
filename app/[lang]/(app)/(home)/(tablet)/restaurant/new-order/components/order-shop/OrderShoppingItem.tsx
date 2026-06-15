@@ -188,20 +188,22 @@ export default function OrderShoppingItem({
           e.preventDefault();
          }}
         >
-         <DialogContent className='p-0 gap-0'>
+         <DialogContent className='p-0 gap-0 flex flex-col w-[min(90%,45rem)] sm:max-h-[95svh] overflow-hidden'>
           <DialogHeader className='p-4'>
            <DialogTitle>{dic.orderInfo.description}</DialogTitle>
           </DialogHeader>
-          <div className='p-4'>
+          <div className='p-4 overflow-auto grow'>
            <Field data-disabled={orderItem.id > 0}>
             <FieldLabel htmlFor='description' className='hidden'>
              {dic.orderInfo.description}
             </FieldLabel>
             <InputGroup data-disabled={orderItem.id > 0}>
              <InputGroupTextarea
+              className='field-sizing-fixed'
+              rows={5}
               id='description'
               value={orderItem.comment || ''}
-              disabled={orderItem.id > 0}
+              readOnly={orderItem.id > 0}
               onChange={(e) => {
                const val = e.target.value;
                orderItemsDispatch({
