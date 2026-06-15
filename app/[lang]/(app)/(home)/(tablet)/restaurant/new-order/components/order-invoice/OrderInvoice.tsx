@@ -29,7 +29,7 @@ import {
  InputGroupInput,
 } from '@/components/ui/input-group';
 import { Checkbox } from '@/components/ui/checkbox';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, useFormContext } from 'react-hook-form';
 import {
  type OrderInvoicePayment,
  defaultValues,
@@ -57,6 +57,7 @@ import {
  getWalletInfo,
  sendWalletOtpCode,
 } from '../../services/wallet/orderWalletApiActions';
+import { type OrderInfo } from '../../schemas/orderInfoSchema';
 
 const invoiceRowClass =
  'flex justify-between gap-2 items-center text-base pb-3 mb-3 border-b border-input font-medium';
@@ -65,6 +66,8 @@ const invoiceLabelClass = 'shrink-0 w-32';
 export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
  const { minutes, seconds, start, reset, stop, isRunning } = useTimer(120);
  const [canEditMobileNo, setCanEditMobileNo] = useState(true);
+ const { watch: watchOrderInfo } = useFormContext<OrderInfo>();
+ const [orderInfoWalletOtpCode] = watchOrderInfo(['walletOtpCode']);
  const {
   control,
   formState: { errors },
@@ -233,6 +236,12 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
    ) || pcPoseData.pcPoses[0];
   setValue('cardReader', activePos);
  }, [pcPoseData, setValue]);
+
+ useEffect(() => {
+  const otpCode = getValues('otpCode');
+  if (!orderInfoWalletOtpCode || otpCode) return;
+  setValue('otpCode', orderInfoWalletOtpCode);
+ }, [orderInfoWalletOtpCode, getValues, setValue]);
 
  function renderSubmitPaymentFormButton() {
   if (paymentTypeValue?.key === PaymentType.wallet) {
