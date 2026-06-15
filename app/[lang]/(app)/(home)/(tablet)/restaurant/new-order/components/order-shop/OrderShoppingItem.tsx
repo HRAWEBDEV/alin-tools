@@ -10,13 +10,18 @@ import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseC
 import ServeDishIcon from '@/app/[lang]/(app)/components/icons/ServeDishIcon';
 import { BsTrash } from 'react-icons/bs';
 import { BiError } from 'react-icons/bi';
+import { TbFileDescription } from 'react-icons/tb';
 import {
  Dialog,
  DialogContent,
  DialogHeader,
  DialogFooter,
  DialogClose,
+ DialogTitle,
+ DialogTrigger,
 } from '@/components/ui/dialog';
+import { Field, FieldLabel } from '@/components/ui/field';
+import { InputGroup, InputGroupTextarea } from '@/components/ui/input-group';
 import { Drawer, DrawerTrigger } from '@/components/ui/drawer';
 import FindTags from '../find-tags/FindTags';
 import HighlightWords from 'react-highlight-words';
@@ -56,6 +61,11 @@ export default function OrderShoppingItem({
   shopItemDeleteAccess = access['shopItem']['delete'];
  }
 
+ let previewOrderItemComment = orderItem.comment || '';
+ if (previewOrderItemComment.length > 100) {
+  previewOrderItemComment = `${previewOrderItemComment?.slice(0, 100)}...`;
+ }
+
  return (
   <motion.div layout className='border-b border-input p-2'>
    <div className='flex flex-row gap-2 sm:gap-0 sm:items-center'>
@@ -92,9 +102,14 @@ export default function OrderShoppingItem({
        />
       </h3>
       <p className='px-2 text-sm text-neutral-600 dark:text-neutral-400 font-light mb-2 w-[min(100%,20rem)]'>
-       {orderItem.tagComment || '---'}
+       <span>{previewOrderItemComment || '---'}</span>
+       {orderItem.tagComment && (
+        <span className='ms-2 text-primary font-medium'>
+         {` - ${orderItem.tagComment}`}
+        </span>
+       )}
       </p>
-      <div className='mb-1 flex items-center gap-4'>
+      <div className='mb-1 flex items-center gap-2 flex-wrap'>
        {orderItem.tagID ? (
         <Button
          variant='outline'
@@ -151,6 +166,60 @@ export default function OrderShoppingItem({
         <MdOutlineSplitscreen />
         {dic.orderInfo.duplicateOrderItem}
        </Button>
+       <Dialog>
+        <DialogTrigger asChild>
+         <Button
+          variant='outline'
+          className='text-sm p-0.5 py-1 gap-1 text-secondary border-secondary h-auto'
+          disabled={!access['shopItem']['add']}
+          onClick={() => {}}
+         >
+          <TbFileDescription />
+          {dic.orderInfo.description}
+         </Button>
+        </DialogTrigger>
+        <form
+         onSubmit={(e) => {
+          e.preventDefault();
+         }}
+        >
+         <DialogContent className='p-0 gap-0'>
+          <DialogHeader className='p-4'>
+           <DialogTitle>{dic.orderInfo.description}</DialogTitle>
+          </DialogHeader>
+          <div className='p-4'>
+           <Field>
+            <FieldLabel htmlFor='description' className='hidden'>
+             {dic.orderInfo.description}
+            </FieldLabel>
+            <InputGroup>
+             <InputGroupTextarea
+              id='description'
+              value={orderItem.comment || ''}
+              onChange={(e) => {
+               const val = e.target.value;
+               orderItemsDispatch({
+                type: 'updateComment',
+                payload: {
+                 id: orderItem.id,
+                 comment: val,
+                },
+               });
+              }}
+             />
+            </InputGroup>
+           </Field>
+          </div>
+          <DialogFooter className='p-4 py-2 pt-0'>
+           <DialogTrigger asChild>
+            <Button variant='outline' type='submit' className='w-32 h-11'>
+             {dic.orderInfo.close}
+            </Button>
+           </DialogTrigger>
+          </DialogFooter>
+         </DialogContent>
+        </form>
+       </Dialog>
       </div>
       <div className='flex justify-center sm:justify-start mb-2 gap-4'>
        {!isFixedDiscount && !!orderItem.discountRate && (

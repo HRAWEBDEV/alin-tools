@@ -111,7 +111,6 @@ interface Order {
  persons: number | null;
  waiterPersonID: number | null;
  waiterPersonFullName: string | null;
- comment: string | null;
  sValue: number;
  discount: number;
  service: number;
@@ -132,6 +131,7 @@ interface Order {
  personID: number | null;
  contractID: number | null;
  contractNo: number | null;
+ comment: string | null;
 }
 
 interface OrderItem {
@@ -153,6 +153,7 @@ interface OrderItem {
  tagID: number | null;
  tagComment: string | null;
  noDiscount: boolean;
+ comment: string | null;
 }
 
 type SaveOrderPackage = {
