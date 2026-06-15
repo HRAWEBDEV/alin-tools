@@ -70,6 +70,7 @@ import {
 } from '../../utils/newOrderSettings';
 import { useUserAccessibilityContext } from '@/app/[lang]/(app)/login/services/user-accessibility/userAccessibilityContext';
 import { PaymentType } from '../../utils/PaymentTypes';
+import { useSettingsContext } from '../../../services/profile/settings/settingsContext';
 
 export default function OrderBaseConfigProvider({
  children,
@@ -136,6 +137,7 @@ export default function OrderBaseConfigProvider({
   'fixedDiscount',
  ]);
  //
+ const { orderConfigSetup } = useSettingsContext();
  const [newOrderSettings, setNewOrderSettings] = useState<NewOrderSettings>(
   () => {
    if (typeof window !== 'undefined') {
@@ -154,7 +156,9 @@ export default function OrderBaseConfigProvider({
  );
  const [personID, setPersonID] = useState<number | null>(null);
  const [searchedItemName, setSearchedItemName] = useState('');
- const [confirmOrderIsOpen, setConfirmOrderIsOpen] = useState(false);
+ const [confirmOrderIsOpen, setConfirmOrderIsOpen] = useState(
+  !orderIDQuery && orderConfigSetup.orderConfig.getInitInfo === 'active',
+ );
  const [confirmOrderActiveType, setConfirmOrderActiveType] =
   useState<ConfirmOrderType>('orderInfo');
  const [orderItems, orderItemsDispatch] = useReducer(orderItemsReducer, []);

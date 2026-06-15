@@ -150,6 +150,17 @@ export default function ConfirmOrderModal({
        )}
       </div>
       <div className='flex gap-2 sm:gap-4'>
+       {confirmOrderActiveType === 'orderInfo' && (
+        <Button
+         variant='outline'
+         className='h-11 max-sm:p-3 max-sm:grow sm:w-36'
+         onClick={() => {
+          closeConfirmOrder();
+         }}
+        >
+         {dic.orderInfo.close}
+        </Button>
+       )}
        {confirmOrderActiveType === 'shoppingCard' && !!orderItems.length && (
         <Button
          variant='secondary'

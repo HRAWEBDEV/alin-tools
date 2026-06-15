@@ -60,11 +60,7 @@ export default function QuickOrderInfoDialog({
   },
   access,
  } = useOrderBaseConfigContext();
- const [open, setIsOpen] = useState(
-  !orderID &&
-   orderConfigSetup.orderConfig.getInitInfo === 'active' &&
-   access['order']['edit'],
- );
+ const [open, setIsOpen] = useState(false);
  const {
   register,
   control,
