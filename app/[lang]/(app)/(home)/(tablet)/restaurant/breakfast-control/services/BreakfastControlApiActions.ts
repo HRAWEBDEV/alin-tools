@@ -30,17 +30,17 @@ function getBreakfastControlDetails({ signal }: { signal: AbortSignal }) {
 function getBreakfastControlData({
  signal,
  checkListId,
- roomNo,
+ searchText,
 }: {
  signal: AbortSignal;
  checkListId: number;
- roomNo?: string;
+ searchText?: string;
 }) {
  const searchParams = new URLSearchParams([
   ['BFCheckListID', checkListId.toString()],
  ]);
- if (roomNo) {
-  searchParams.set('RoomNo', roomNo);
+ if (searchText) {
+  searchParams.set('searchText', searchText);
  }
  return axios.get<BreackfastControlRes>(
   `${getBreakfastControlDataApi}?${searchParams.toString()}`,

@@ -17,6 +17,7 @@ import {
  defaultValues,
 } from '../schemas/breakfastControlFiltersSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useDebouncedValue } from '@tanstack/react-pacer';
 
 export default function BreakfastControlWrapper({
  dic,
@@ -27,6 +28,11 @@ export default function BreakfastControlWrapper({
   defaultValues,
   resolver: zodResolver(createBreakfastControlFiltersSchema()),
  });
+ const [searchValue] = filtersUseForm.watch(['search']);
+ const [debouncedSearchValue] = useDebouncedValue(searchValue, {
+  wait: 500,
+ });
+ console.log(debouncedSearchValue);
  const queryClient = useQueryClient();
  const {
   data: breakfastControlDetails,
@@ -51,12 +57,17 @@ export default function BreakfastControlWrapper({
   isError: isErrorBreakfastControlData,
   isSuccess: isSuccessBreakfastControlData,
  } = useQuery({
-  queryKey: [getBreakfastControlDataApi, breakfastControlDetails?.id || 'all'],
+  queryKey: [
+   getBreakfastControlDataApi,
+   breakfastControlDetails?.id || 'all',
+   debouncedSearchValue || 'all',
+  ],
   enabled: isSuccessBreakfastControlDetails,
   async queryFn({ signal }) {
    const res = await getBreakfastControlData({
     signal,
     checkListId: breakfastControlDetails!.id,
+    searchText: debouncedSearchValue,
    });
    return res.data;
   },

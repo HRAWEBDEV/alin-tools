@@ -16,10 +16,10 @@ export default function BreakfastControlList({
  breakfastControlProps: BreakfastControlProps;
 }) {
  const { watch } = useFormContext<BreakfastControlFiltersSchema>();
- const [search, showNotServed, showServed] = watch([
-  'search',
+ const [showNotServed, showServed, searchedValue] = watch([
   'showNotServed',
   'showServed',
+  'search',
  ]);
  if (
   breakfastControlProps.isSuccess &&
@@ -32,7 +32,7 @@ export default function BreakfastControlList({
  }
  const visibleCheckLists = filterCheckLists({
   checkLists: breakfastControlProps.data?.bfCheckListDatas ?? [],
-  search,
+  search: '',
   showNotServed,
   showServed,
  });
@@ -47,7 +47,7 @@ export default function BreakfastControlList({
        dic={dic}
        checklist={checklist}
        onInvalidQueries={breakfastControlProps.onInvalidateQueries}
-       searchText={search}
+       searchText={searchedValue}
       />
      ))
     ) : (
