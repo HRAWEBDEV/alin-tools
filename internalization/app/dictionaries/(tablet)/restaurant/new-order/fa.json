@@ -20,6 +20,7 @@
   "customerName": "نام مشتری",
   "discountRate": "درصد تخفیف",
   "fixedDiscount": "تخفیف ثابت",
+  "walletOtpCode": "کد تایید کیف پول",
   "bonNo": "شماره بن",
   "tableNo": "شماره میز",
   "guestCount": "تعداد مهمان",

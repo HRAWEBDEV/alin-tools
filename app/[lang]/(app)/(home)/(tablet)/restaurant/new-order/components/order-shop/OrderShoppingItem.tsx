@@ -202,7 +202,7 @@ export default function OrderShoppingItem({
                 type: 'updateComment',
                 payload: {
                  id: orderItem.id,
-                 comment: val,
+                 comment: val || null,
                 },
                });
               }}

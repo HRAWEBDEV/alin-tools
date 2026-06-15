@@ -90,7 +90,7 @@ type OrderItemActions =
     type: 'updateComment';
     payload: {
      id: ItemProgram['id'];
-     comment: string;
+     comment: string | null;
     };
    };
 

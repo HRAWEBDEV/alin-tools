@@ -675,6 +675,7 @@ export default function OrderBaseConfigProvider({
      contractID: data.customerContract
       ? Number(data.customerContract.key)
       : null,
+     OTPCode: data.walletOtpCode || null,
      orderStateID: initData.orderStateID || 1,
      occupied: data.table ? data.hasTableNo : false,
      registerID: data.room ? Number(data.room.key) : null,
@@ -907,6 +908,7 @@ export default function OrderBaseConfigProvider({
    contractID,
    contractNo,
    fixedDiscount,
+   OTPCode,
   } = userOrder;
   if (tableID && tableNo) {
    orderInfoForm.setValue('table', {
@@ -916,6 +918,7 @@ export default function OrderBaseConfigProvider({
   }
   setPersonID(personID);
   orderInfoForm.setValue('rounding', roundingValue || '');
+  orderInfoForm.setValue('walletOtpCode', OTPCode || '');
   if (subscriberPersonID && subscriberCode) {
    orderInfoForm.setValue('subscriber', {
     key: subscriberPersonID.toString(),

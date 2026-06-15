@@ -567,12 +567,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        )}
       />
      </Field>
-     <Field
-      data-disabled={
-       saleTypeValue?.key === SaleTypes.room ||
-       saleTypeValue?.key === SaleTypes.employee
-      }
-     >
+     <Field data-disabled={saleTypeValue?.key === SaleTypes.room}>
       <FieldLabel htmlFor='customer'>{dic.orderInfo.customer}</FieldLabel>
       <Controller
        control={control}
@@ -588,8 +583,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
            disabled={
             saleTypeValue?.key === SaleTypes.room ||
             !access['order']['edit'] ||
-            !access['order']['changeCustomer'] ||
-            saleTypeValue?.key === SaleTypes.employee
+            !access['order']['changeCustomer']
            }
            onBlur={field.onBlur}
            ref={field.ref}
@@ -925,8 +919,36 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        )}
       />
      </Field>
-     <Field className={`${!showPersonDetails && 'col-span-full'}`}>
-      <FieldLabel htmlFor='customer'>{dic.orderInfo.customerName}</FieldLabel>
+     <Field>
+      <FieldLabel htmlFor='walletOtpCode'>
+       {dic.orderInfo.walletOtpCode}
+      </FieldLabel>
+      <Controller
+       control={control}
+       name='walletOtpCode'
+       render={({ field: { value, onChange, ...other } }) => (
+        <InputGroup className='h-11'>
+         <NumericFormat
+          {...other}
+          disabled={!access['order']['edit']}
+          value={value}
+          onValueChange={({ value }) => {
+           onChange(value);
+          }}
+          id='walletOtpCode'
+          customInput={InputGroupInput}
+          allowNegative={false}
+          decimalScale={0}
+          allowLeadingZeros={true}
+         />
+        </InputGroup>
+       )}
+      />
+     </Field>
+     <Field className={`${showPersonDetails && 'col-span-full'}`}>
+      <FieldLabel htmlFor='customerName'>
+       {dic.orderInfo.customerName}
+      </FieldLabel>
       <Controller
        control={control}
        name='customerName'

@@ -132,6 +132,7 @@ interface Order {
  contractID: number | null;
  contractNo: number | null;
  comment: string | null;
+ OTPCode: string | null;
 }
 
 interface OrderItem {

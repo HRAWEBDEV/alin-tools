@@ -28,6 +28,7 @@ const defaultOrderInfo: Partial<OrderInfo> = {
  phoneNumber: '',
  firstName: '',
  lastName: '',
+ walletOtpCode: '',
 };
 
 function createOrderInfoSchema({ dic }: { dic: NewOrderDictionary }) {
@@ -108,6 +109,7 @@ function createOrderInfoSchema({ dic }: { dic: NewOrderDictionary }) {
    phoneNumber: z.string(),
    firstName: z.string(),
    lastName: z.string(),
+   walletOtpCode: z.string(),
   })
   .refine(
    ({ phoneNumber, firstName }) => {
