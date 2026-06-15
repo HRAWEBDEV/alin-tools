@@ -188,14 +188,15 @@ export default function OrderShoppingItem({
            <DialogTitle>{dic.orderInfo.description}</DialogTitle>
           </DialogHeader>
           <div className='p-4'>
-           <Field>
+           <Field data-disabled={orderItem.id > 0}>
             <FieldLabel htmlFor='description' className='hidden'>
              {dic.orderInfo.description}
             </FieldLabel>
-            <InputGroup>
+            <InputGroup data-disabled={orderItem.id > 0}>
              <InputGroupTextarea
               id='description'
               value={orderItem.comment || ''}
+              disabled={orderItem.id > 0}
               onChange={(e) => {
                const val = e.target.value;
                orderItemsDispatch({
