@@ -67,7 +67,10 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
  const { minutes, seconds, start, reset, stop, isRunning } = useTimer(120);
  const [canEditMobileNo, setCanEditMobileNo] = useState(true);
  const { watch: watchOrderInfo } = useFormContext<OrderInfo>();
- const [orderInfoWalletOtpCode] = watchOrderInfo(['walletOtpCode']);
+ const [orderInfoWalletOtpCode, orderInfoPhoneNumber] = watchOrderInfo([
+  'walletOtpCode',
+  'phoneNumber',
+ ]);
  const {
   control,
   formState: { errors },
@@ -242,6 +245,12 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
   if (!orderInfoWalletOtpCode || otpCode) return;
   setValue('otpCode', orderInfoWalletOtpCode);
  }, [orderInfoWalletOtpCode, getValues, setValue]);
+
+ useEffect(() => {
+  const phoneNumber = invoiceWalletUseForm.getValues('phoneNumber');
+  if (!orderInfoPhoneNumber || phoneNumber) return;
+  invoiceWalletUseForm.setValue('phoneNumber', orderInfoPhoneNumber);
+ }, [orderInfoPhoneNumber, invoiceWalletUseForm]);
 
  function renderSubmitPaymentFormButton() {
   if (paymentTypeValue?.key === PaymentType.wallet) {
