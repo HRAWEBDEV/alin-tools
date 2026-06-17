@@ -1,6 +1,5 @@
 import { type OrderItem } from '../services/newOrderApiActions';
 import { orderItemsPricingCalculator } from './orderItemsPricingCalculator';
-import { shopCalculator } from './shopCalculator';
 
 export function effectOrderItemsServiceRates({
  orderItems,

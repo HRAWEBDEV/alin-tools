@@ -158,7 +158,7 @@ export default function ConfirmOrderModal({
           closeConfirmOrder();
          }}
         >
-         {dic.orderInfo.close}
+         {dic.orderInfo.confirm}
         </Button>
        )}
        {confirmOrderActiveType === 'shoppingCard' && !!orderItems.length && (
