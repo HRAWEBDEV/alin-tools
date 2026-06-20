@@ -7,7 +7,6 @@ import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseC
 import { useCurrencyFormatter } from '@/hooks/useCurrencyFormatter';
 import { Spinner } from '@/components/ui/spinner';
 import { ChevronsUpDown, ArrowDown } from 'lucide-react';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
  Drawer,
  DrawerTrigger,
@@ -766,47 +765,55 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
                )}
               </InputGroupAddon>
              </InputGroup>
-             <FieldContent>
-              {!!invoiceWalletUseForm.formState.errors.phoneNumber && (
+
+             {!!invoiceWalletUseForm.formState.errors.phoneNumber && (
+              <FieldContent>
                <FieldError>
                 {invoiceWalletUseForm.formState.errors.phoneNumber.message}
                </FieldError>
-              )}
-             </FieldContent>
+              </FieldContent>
+             )}
             </Field>
            )}
           />
-          <Controller
-           control={control}
-           name='otpCode'
-           render={({ field: { onChange, ref, ...other } }) => (
-            <Field data-invalid={!!errors.otpCode}>
-             <FieldLabel htmlFor='opt-code'>{dic.invoice.otpCode} *</FieldLabel>
-             <InputGroup className='h-11' data-invalid={!!errors.otpCode}>
-              <NumericFormat
-               id='opt-code'
-               {...other}
-               onChange={() => {
-                resetWalletInfo();
-               }}
-               onValueChange={({ value }) => {
-                onChange(value);
-               }}
-               getInputRef={ref}
-               allowLeadingZeros={true}
-               allowNegative={false}
-               decimalScale={0}
-               customInput={InputGroupInput}
-              />
-             </InputGroup>
-             <FieldContent>
-              {!!errors.otpCode && (
-               <FieldError>{errors.otpCode.message}</FieldError>
-              )}
-             </FieldContent>
-            </Field>
-           )}
-          />
+          <div className='bg-neutral-200 dark:bg-neutral-800 rounded-md p-2'>
+           <Controller
+            control={control}
+            name='otpCode'
+            render={({ field: { onChange, ref, ...other } }) => (
+             <Field data-invalid={!!errors.otpCode}>
+              <FieldLabel htmlFor='opt-code'>
+               {dic.invoice.otpCode} *
+              </FieldLabel>
+              <InputGroup
+               className='h-11 bg-background'
+               data-invalid={!!errors.otpCode}
+              >
+               <NumericFormat
+                id='opt-code'
+                {...other}
+                onChange={() => {
+                 resetWalletInfo();
+                }}
+                onValueChange={({ value }) => {
+                 onChange(value);
+                }}
+                getInputRef={ref}
+                allowLeadingZeros={true}
+                allowNegative={false}
+                decimalScale={0}
+                customInput={InputGroupInput}
+               />
+              </InputGroup>
+              <FieldContent>
+               {!!errors.otpCode && (
+                <FieldError>{errors.otpCode.message}</FieldError>
+               )}
+              </FieldContent>
+             </Field>
+            )}
+           />
+          </div>
           {!!walletInfo && (
            <>
             <Field>
