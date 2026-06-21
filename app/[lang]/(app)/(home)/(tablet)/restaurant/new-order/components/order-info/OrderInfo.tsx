@@ -44,6 +44,7 @@ import FindRooms from '../find-room/FindRooms';
 import FindSubscribers from '../find-subscriber/FindSubscribers';
 import FindCustomer from '../find-customer/FindCustomer';
 import FindWaiters from '../find-waiters/FindWaiters';
+import FindEmployees from '../find-employee/FindEmployees';
 import { SaleTypes } from '../../utils/SaleTypes';
 import { IoReloadOutline } from 'react-icons/io5';
 import FindContract from '../find-contract/FindContract';
@@ -102,6 +103,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
   tableValue,
   contractValue,
   phoneNumberValue,
+  employeeValue,
  ] = watch([
   'saleType',
   'subscriber',
@@ -112,6 +114,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
   'table',
   'contract',
   'phoneNumber',
+  'employee',
  ]);
 
  const showPersonDetails = personID || isErrorFindPerson;
@@ -374,6 +377,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
                  setValue('subscriber', null);
                  setValue('contract', null);
                  setValue('customer', null);
+                 setValue('employee', null);
                  setValue('deliveryAgent', item?.key === SaleTypes.delivery);
                  clearErrors(['room', 'subscriber']);
                 }}
@@ -667,6 +671,59 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        )}
       />
      </Field>
+     <Field
+      data-invalid={!!errors.employee}
+      data-disabled={saleTypeValue?.key !== SaleTypes.employee}
+     >
+      <FieldLabel htmlFor='employee'>{dic.orderInfo.employee} *</FieldLabel>
+      <Controller
+       control={control}
+       name='employee'
+       render={({ field }) => (
+        <Drawer>
+         <DrawerTrigger asChild>
+          <Button
+           id='employee'
+           variant='outline'
+           role='combobox'
+           className='justify-between h-11'
+           disabled={
+            saleTypeValue?.key !== SaleTypes.employee ||
+            !access['order']['edit']
+           }
+           onBlur={field.onBlur}
+           ref={field.ref}
+          >
+           <span className='grow text-ellipsis overflow-hidden text-start'>
+            {field.value?.code || ''}
+           </span>
+           <div className='flex gap-2 items-center'>
+            {!!employeeValue && access['order']['edit'] && (
+             <Button
+              variant={'ghost'}
+              size={'icon-lg'}
+              onClick={(e) => {
+               e.stopPropagation();
+               setValue('employee', null);
+              }}
+             >
+              <BsTrash className='size-5 text-red-700 dark:text-red-400' />
+             </Button>
+            )}
+            <ChevronsUpDown />
+           </div>
+          </Button>
+         </DrawerTrigger>
+         {!!errors.employee && (
+          <FieldContent>
+           <FieldError>{errors.employee.message}</FieldError>
+          </FieldContent>
+         )}
+         <FindEmployees dic={dic} />
+        </Drawer>
+       )}
+      />
+     </Field>
      <Field>
       <FieldLabel htmlFor='tableNo'>{dic.orderInfo.tableNo}</FieldLabel>
       <Controller
@@ -945,7 +1002,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        )}
       />
      </Field>
-     <Field className={`${showPersonDetails && 'col-span-full'}`}>
+     <Field className={`${!showPersonDetails && 'col-span-full'}`}>
       <FieldLabel htmlFor='customerName'>
        {dic.orderInfo.customerName}
       </FieldLabel>

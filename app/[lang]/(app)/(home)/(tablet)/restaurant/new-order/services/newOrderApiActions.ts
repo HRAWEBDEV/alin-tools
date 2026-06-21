@@ -19,6 +19,13 @@ interface Contract {
  name: string;
 }
 
+interface Employee {
+ id: number;
+ code: number;
+ personFirstName: string;
+ personLastName: string;
+}
+
 interface CustomerContract {
  id: number;
  contractNo: number;
@@ -133,6 +140,9 @@ interface Order {
  contractNo: number | null;
  comment: string | null;
  otpCode: string | null;
+ employeeID: number | null;
+ employeeCode: number | null;
+ employeeName: string | null;
 }
 
 interface OrderItem {
@@ -621,6 +631,26 @@ function getEmployeeCustomer({ signal }: { signal: AbortSignal }) {
  });
 }
 
+function getPagedEmployee({
+ signal,
+ limit,
+ offset,
+}: {
+ signal: AbortSignal;
+ limit: number;
+ offset: number;
+}) {
+ return axios.post<PagedData<Employee[]>>(
+  '/Restaurant/Tablet/GetPagedEmployees',
+  {
+   active: true,
+   limit,
+   offset,
+  },
+  { signal },
+ );
+}
+
 export type {
  InitialData,
  Subscriber,
@@ -661,4 +691,5 @@ export {
  getCustomerContract,
  savePerson,
  getEmployeeCustomer,
+ getPagedEmployee,
 };

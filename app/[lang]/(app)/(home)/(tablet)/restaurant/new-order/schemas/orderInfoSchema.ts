@@ -10,6 +10,7 @@ const defaultOrderInfo: Partial<OrderInfo> = {
  customerContract: null,
  subscriber: null,
  customer: null,
+ employee: null,
  room: null,
  comment: '',
  hasService: true,
@@ -93,6 +94,13 @@ function createOrderInfoSchema({ dic }: { dic: NewOrderDictionary }) {
      value: z.string(),
     })
     .nullable(),
+   employee: z
+    .object({
+     key: z.string(),
+     code: z.string(),
+     value: z.string(),
+    })
+    .nullable(),
    comment: z.string(),
    persons: z.literal('').or(z.number()),
    discountRate: z.literal('').or(z.number()),
@@ -136,6 +144,15 @@ function createOrderInfoSchema({ dic }: { dic: NewOrderDictionary }) {
    {
     path: ['room'],
     message: dic.orderInfo.noRoomSelected,
+   },
+  )
+  .refine(
+   ({ employee, saleType }) => {
+    return saleType?.key === SaleTypes.employee ? !!employee : true;
+   },
+   {
+    path: ['employee'],
+    message: dic.orderInfo.noEmployeeSelected,
    },
   )
   .refine(
