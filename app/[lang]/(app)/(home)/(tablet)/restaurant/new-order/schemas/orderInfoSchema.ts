@@ -32,7 +32,13 @@ const defaultOrderInfo: Partial<OrderInfo> = {
  walletOtpCode: '',
 };
 
-function createOrderInfoSchema({ dic }: { dic: NewOrderDictionary }) {
+function createOrderInfoSchema({
+ dic,
+ personIsCreated,
+}: {
+ dic: NewOrderDictionary;
+ personIsCreated: boolean;
+}) {
  return z
   .object({
    orderDate: z.date(),
@@ -120,8 +126,8 @@ function createOrderInfoSchema({ dic }: { dic: NewOrderDictionary }) {
    walletOtpCode: z.string(),
   })
   .refine(
-   ({ phoneNumber, firstName, walletOtpCode }) => {
-    return phoneNumber && !walletOtpCode ? !!firstName : true;
+   ({ phoneNumber, firstName }) => {
+    return phoneNumber && !personIsCreated ? !!firstName : true;
    },
    {
     path: ['firstName'],
@@ -129,8 +135,8 @@ function createOrderInfoSchema({ dic }: { dic: NewOrderDictionary }) {
    },
   )
   .refine(
-   ({ phoneNumber, lastName, walletOtpCode }) => {
-    return phoneNumber && !walletOtpCode ? !!lastName : true;
+   ({ phoneNumber, lastName }) => {
+    return phoneNumber && !personIsCreated ? !!lastName : true;
    },
    {
     path: ['lastName'],

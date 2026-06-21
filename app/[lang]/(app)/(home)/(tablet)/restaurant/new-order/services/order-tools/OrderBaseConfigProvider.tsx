@@ -91,8 +91,11 @@ export default function OrderBaseConfigProvider({
  const salonNameQuery = searchQuery.get('salonName');
  const tableIDQuery = Number(searchQuery.get('tableID')) || null;
  const tableNoQuery = searchQuery.get('tableNo');
+ const [personID, setPersonID] = useState<number | null>(null);
  const orderInfoForm = useForm<OrderInfo>({
-  resolver: zodResolver(createOrderInfoSchema({ dic })),
+  resolver: zodResolver(
+   createOrderInfoSchema({ dic, personIsCreated: !!personID }),
+  ),
   defaultValues: {
    ...defaultOrderInfo,
    orderDate: new Date(),
@@ -156,7 +159,6 @@ export default function OrderBaseConfigProvider({
  const [selectedItemGroup, setSelectedItemGroup] = useState<ItemGroup | null>(
   null,
  );
- const [personID, setPersonID] = useState<number | null>(null);
  const [searchedItemName, setSearchedItemName] = useState('');
  const [confirmOrderIsOpen, setConfirmOrderIsOpen] = useState(
   !orderIDQuery && orderConfigSetup.orderConfig.getInitInfo === 'active',
