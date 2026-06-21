@@ -120,6 +120,7 @@ export default function OrderBaseConfigProvider({
   contractValue,
   tableValue,
   fixedDiscountValue,
+  employeeValue,
  ] = orderInfoForm.watch([
   'saleType',
   'hasService',
@@ -135,6 +136,7 @@ export default function OrderBaseConfigProvider({
   'contract',
   'table',
   'fixedDiscount',
+  'employee',
  ]);
  //
  const { orderConfigSetup } = useSettingsContext();
@@ -635,6 +637,7 @@ export default function OrderBaseConfigProvider({
 
  let orderInfoName =
   roomValue?.customerName ||
+  employeeValue?.value ||
   subscriberValue?.customerName ||
   customerValue?.value ||
   '';
@@ -723,6 +726,9 @@ export default function OrderBaseConfigProvider({
      personID,
      dateTimeDateTimeOffset:
       userOrder?.dateTimeDateTimeOffset || new Date().toISOString(),
+     employeeID: data.employee ? Number(data.employee.key) : null,
+     employeeCode: data.employee ? Number(data.employee.code) : null,
+     employeeName: data.employee ? data.employee.value : null,
     } as SaveOrderPackage['order'];
     newOrderData = newOrder;
     orderInfoData = data;
@@ -913,6 +919,9 @@ export default function OrderBaseConfigProvider({
    contractNo,
    fixedDiscount,
    otpCode,
+   employeeID,
+   employeeName,
+   employeeCode,
   } = userOrder;
   if (tableID && tableNo) {
    orderInfoForm.setValue('table', {
@@ -923,6 +932,13 @@ export default function OrderBaseConfigProvider({
   setPersonID(personID);
   orderInfoForm.setValue('rounding', roundingValue || '');
   orderInfoForm.setValue('walletOtpCode', otpCode || '');
+  if (employeeCode && employeeID) {
+   orderInfoForm.setValue('employee', {
+    key: employeeID.toString(),
+    code: employeeCode.toString(),
+    value: employeeName || '',
+   });
+  }
   if (subscriberPersonID && subscriberCode) {
    orderInfoForm.setValue('subscriber', {
     key: subscriberPersonID.toString(),

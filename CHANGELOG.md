@@ -4,6 +4,7 @@
 
 # 2.3.2
 - add order items description (hra-done)
+- add new order employee sale type (hra-done)
 
 # 2.3.1
 ### features
