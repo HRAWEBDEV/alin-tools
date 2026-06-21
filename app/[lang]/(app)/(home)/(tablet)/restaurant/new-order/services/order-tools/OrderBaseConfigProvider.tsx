@@ -750,8 +750,8 @@ export default function OrderBaseConfigProvider({
       modifySubscriber: false,
       personAddress: null,
       personID: 0,
-      personName: typedOrderInfoData.firstName,
-      personLastName: typedOrderInfoData.lastName,
+      personName: typedOrderInfoData.firstName || '',
+      personLastName: typedOrderInfoData.lastName || '',
       personPhoneNumber: typedOrderInfoData.phoneNumber,
      })
     ).data;

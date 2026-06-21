@@ -120,8 +120,8 @@ function createOrderInfoSchema({ dic }: { dic: NewOrderDictionary }) {
    walletOtpCode: z.string(),
   })
   .refine(
-   ({ phoneNumber, firstName }) => {
-    return phoneNumber ? !!firstName : true;
+   ({ phoneNumber, firstName, walletOtpCode }) => {
+    return phoneNumber && !walletOtpCode ? !!firstName : true;
    },
    {
     path: ['firstName'],
@@ -129,8 +129,8 @@ function createOrderInfoSchema({ dic }: { dic: NewOrderDictionary }) {
    },
   )
   .refine(
-   ({ phoneNumber, lastName }) => {
-    return phoneNumber ? !!lastName : true;
+   ({ phoneNumber, lastName, walletOtpCode }) => {
+    return phoneNumber && !walletOtpCode ? !!lastName : true;
    },
    {
     path: ['lastName'],
