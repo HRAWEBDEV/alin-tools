@@ -155,7 +155,7 @@
  },
  "findEmployees": {
   "result": "نتایج",
-  "search": "جستجو",
+  "searchName": "جستجو نام",
   "reload": "بروزرسانی مجدد",
   "loadMore": "موارد بیشتر",
   "code": "کد"

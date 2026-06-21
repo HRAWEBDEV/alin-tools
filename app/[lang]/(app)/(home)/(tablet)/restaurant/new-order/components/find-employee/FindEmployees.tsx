@@ -50,6 +50,7 @@ export default function FindEmployees({ dic }: { dic: NewOrderDictionary }) {
      signal,
      limit: pageParam.limit,
      offset: pageParam.offset,
+     employeeName: debouncedSearch,
     });
     return res.data;
    },
@@ -90,7 +91,7 @@ export default function FindEmployees({ dic }: { dic: NewOrderDictionary }) {
      <InputGroup>
       <InputGroupInput
        type='search'
-       placeholder={dic.findEmployees.search}
+       placeholder={dic.findEmployees.searchName}
        value={searchedText}
        onChange={(e) => setSearchedText(e.target.value)}
       />

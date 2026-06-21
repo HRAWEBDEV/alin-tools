@@ -635,10 +635,12 @@ function getPagedEmployee({
  signal,
  limit,
  offset,
+ employeeName,
 }: {
  signal: AbortSignal;
  limit: number;
  offset: number;
+ employeeName?: string;
 }) {
  return axios.post<PagedData<Employee[]>>(
   '/Restaurant/Tablet/GetPagedEmployees',
@@ -646,6 +648,7 @@ function getPagedEmployee({
    active: true,
    limit,
    offset,
+   employeeName,
   },
   { signal },
  );
