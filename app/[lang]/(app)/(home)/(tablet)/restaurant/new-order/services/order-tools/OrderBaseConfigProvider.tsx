@@ -11,6 +11,7 @@ import {
  type ItemGroup,
  type SaveOrderPackage,
  newOrderKey,
+ getOrderOtpCodes,
  getInitData,
  getItemPrograms,
  getOrderItems,
@@ -92,6 +93,9 @@ export default function OrderBaseConfigProvider({
  const tableIDQuery = Number(searchQuery.get('tableID')) || null;
  const tableNoQuery = searchQuery.get('tableNo');
  const [personID, setPersonID] = useState<number | null>(null);
+ const [otpCodes, setOtpCodes] = useState<{ code: string; isNew: boolean }[]>(
+  [],
+ );
  const orderInfoForm = useForm<OrderInfo>({
   resolver: zodResolver(
    createOrderInfoSchema({ dic, personIsCreated: !!personID }),
@@ -364,6 +368,23 @@ export default function OrderBaseConfigProvider({
  });
 
  const {
+  data: orderOtps,
+  isLoading: orderOtpsLoading,
+  isFetching: orderOtpsIsFetching,
+  isError: orderOtpsIsError,
+  isSuccess: orderOtpsIsSuccess,
+ } = useQuery({
+  staleTime: 'static',
+  gcTime: 0,
+  enabled: !!orderIDQuery,
+  queryKey: [newOrderKey, 'order-otps', orderIDQuery?.toString()],
+  async queryFn({ signal }) {
+   const { data } = await getOrderOtpCodes({ signal, orderID: orderIDQuery! });
+   return data;
+  },
+ });
+
+ const {
   data: userOrderItems,
   isLoading: userOrderItemsLoading,
   isError: userOrderItemsError,
@@ -505,6 +526,10 @@ export default function OrderBaseConfigProvider({
    (Number(roundingValue) || 0),
  );
 
+ function getOtpCodes(): string[] {
+  return otpCodes.map((item) => item.code);
+ }
+
  function getPackedOrderItems(orderItems: OrderItem[]) {
   return orderItems.reduce((acc, cur) => {
    const orderId = cur.id >= 0 ? cur.id : 0;
@@ -582,6 +607,7 @@ export default function OrderBaseConfigProvider({
      orderItems: getPackedOrderItems(pricedOrderItems),
      printToCashBox: orderInfo.printCash,
      sendToKitchen: orderInfo.sendToKitchen,
+     otpCodes: getOtpCodes(),
     });
    },
    onSuccess(res) {
@@ -615,6 +641,7 @@ export default function OrderBaseConfigProvider({
     orderPackage: {
      order,
      orderItems: getPackedOrderItems(pricedOrderItems),
+     otpCodes: getOtpCodes(),
     },
     sendToKitchen: data.sendToKitchen,
     printToCashBox: data.printCash,
@@ -799,6 +826,7 @@ export default function OrderBaseConfigProvider({
       printToCashBox: orderInfo.sendToKitchen,
       bankID: Number(paymentData.bank!.key),
       posID: Number(paymentData.cardReader!.key),
+      otpCodes: getOtpCodes(),
      });
     }
     const isWalletPayment = paymentData.paymentType?.key === PaymentType.wallet;
@@ -809,6 +837,7 @@ export default function OrderBaseConfigProvider({
      printToCashBox: orderInfo.sendToKitchen,
      walletID: isWalletPayment ? paymentData.walletKey : undefined,
      otpCode: isWalletPayment ? paymentData.otpCode : undefined,
+     otpCodes: getOtpCodes(),
      cash: {
       bankAccountID: Number(paymentData.bank?.key) || null,
       payRefNo: paymentData.paymentRefNo || null,
@@ -1103,6 +1132,14 @@ export default function OrderBaseConfigProvider({
    isLoading: systemPricingIsLoading,
    handleSetSystemPricing: onSetSystemPricing,
   },
+  orderOtps: {
+   data: orderOtps,
+   otpCodes: otpCodes,
+   setOtpCodes: setOtpCodes,
+   isLoading: orderOtpsLoading,
+   isError: orderOtpsIsError,
+   isSuccess: orderOtpsIsSuccess,
+  },
   access: {
    order: {
     ...userAccessibility['restaurant']['order'],
@@ -1190,6 +1227,11 @@ export default function OrderBaseConfigProvider({
   orderInfoForm,
   saleTypeValue,
  ]);
+
+ useEffect(() => {
+  if (!orderOtpsIsSuccess) return;
+  setOtpCodes(orderOtps.map((item) => ({ code: item, isNew: false })));
+ }, [orderOtpsIsSuccess, orderOtps]);
 
  return (
   <orderBaseConfigContext.Provider value={ctx}>

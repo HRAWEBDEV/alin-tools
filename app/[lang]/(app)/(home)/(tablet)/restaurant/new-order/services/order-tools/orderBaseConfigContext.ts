@@ -1,4 +1,10 @@
-import { use, createContext, ActionDispatch } from 'react';
+import {
+ use,
+ createContext,
+ ActionDispatch,
+ SetStateAction,
+ Dispatch,
+} from 'react';
 import { OutOfContext } from '@/utils/OutOfContext';
 import {
  type InitialData,
@@ -104,6 +110,14 @@ interface OrderBaseConfig {
  systemPricing: {
   data?: SystemPricing;
   handleSetSystemPricing: () => unknown;
+  isLoading: boolean;
+  isError: boolean;
+  isSuccess: boolean;
+ };
+ orderOtps: {
+  data?: string[];
+  otpCodes: { code: string; isNew: boolean }[];
+  setOtpCodes: Dispatch<SetStateAction<{ code: string; isNew: boolean }[]>>;
   isLoading: boolean;
   isError: boolean;
   isSuccess: boolean;

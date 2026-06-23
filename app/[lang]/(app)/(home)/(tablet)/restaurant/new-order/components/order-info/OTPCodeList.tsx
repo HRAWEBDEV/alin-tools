@@ -13,12 +13,22 @@ import { Button } from '@/components/ui/button';
 import NoItemFound from '@/app/[lang]/(app)/components/NoItemFound';
 import { BsTrash } from 'react-icons/bs';
 import { toast } from 'sonner';
+import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseConfigContext';
 
-export default function OTPCodeList({ dic }: { dic: NewOrderDictionary }) {
- const [codes, setCodes] = useState<string[]>([]);
+export default function OTPCodeList({
+ dic,
+ isEditalbe,
+}: {
+ dic: NewOrderDictionary;
+ isEditalbe: boolean;
+}) {
+ const {
+  orderOtps: { otpCodes, setOtpCodes },
+ } = useOrderBaseConfigContext();
  const [otpCode, setOtpCode] = useState<string>('');
  const [mode, setMode] = useState<'edit' | 'insert'>('insert');
  const inputRef = useRef<HTMLInputElement>(null);
+
  return (
   <DialogContent className='flex flex-col w-full max-h-dvh sm:w-[min(95%,25rem)] sm:max-h-[80svh] max-w-none! p-0 overflow-hidden'>
    <DialogHeader className='p-4 py-1'>
@@ -34,6 +44,7 @@ export default function OTPCodeList({ dic }: { dic: NewOrderDictionary }) {
        </FieldLabel>
        <InputGroup className='h-11'>
         <NumericFormat
+         disabled={!isEditalbe}
          id='addwalletOtpCode'
          className='text-center font-medium'
          getInputRef={inputRef}
@@ -52,14 +63,21 @@ export default function OTPCodeList({ dic }: { dic: NewOrderDictionary }) {
        type='submit'
        className='h-11'
        variant='secondary'
+       disabled={!isEditalbe}
        onClick={(e) => {
         e.preventDefault();
         const trimmedOtpCode = otpCode.trim();
         if (!trimmedOtpCode) {
-        } else if (codes.some((item) => item === trimmedOtpCode)) {
+        } else if (otpCodes.some((item) => item.code === trimmedOtpCode)) {
          toast.error(dic.addOTPModal.duplicateOtpCode);
         } else {
-         setCodes((prev) => [...prev, trimmedOtpCode]);
+         setOtpCodes((prev) => [
+          ...prev,
+          {
+           code: trimmedOtpCode,
+           isNew: true,
+          },
+         ]);
          setOtpCode('');
         }
         inputRef.current?.focus();
@@ -70,35 +88,28 @@ export default function OTPCodeList({ dic }: { dic: NewOrderDictionary }) {
      </FieldGroup>
     </form>
     <div>
-     {codes.length ? (
+     {otpCodes.length ? (
       <div>
        <h3 className='mb-2 text-sm text-neutral-700 dark:text-neutral-400'>
-        {dic.addOTPModal.addedCodes} ({codes.length}):{' '}
+        {dic.addOTPModal.addedCodes} ({otpCodes.length}):{' '}
        </h3>
        <ul className='grid gap-3'>
-        {codes.map((code) => (
-         <li key={code}>
-          <Button
-           type='button'
-           className='w-full h-11 p-0'
-           variant='outline'
-           // onClick={() => {
-           //  setMode('edit');
-           //  setOtpCode(code);
-           // }}
-          >
+        {otpCodes.map((item) => (
+         <li key={item.code}>
+          <Button type='button' className='w-full h-11 p-0' variant='outline'>
            <div className='basis-18'></div>
            <div className='grow'>
-            <span>{code}</span>
+            <span>{item.code}</span>
            </div>
            <div className='basis-18 flex justify-end'>
             <Button
              className='text-destructive h-full rounded-ss-none rounded-es-none border-y-0 border-e-0'
              variant='outline'
              type='button'
+             disabled={!item.isNew || !isEditalbe}
              onClick={(e) => {
               e.stopPropagation();
-              setCodes(codes.filter((c) => c !== code));
+              setOtpCodes(otpCodes.filter((c) => c.code !== item.code));
              }}
             >
              <BsTrash className='size-6' />

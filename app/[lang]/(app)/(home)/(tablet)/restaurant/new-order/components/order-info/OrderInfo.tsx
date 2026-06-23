@@ -59,6 +59,7 @@ import {
 } from '@poursha98/react-ios-time-picker';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import OTPCodeList from './OTPCodeList';
+import { Badge } from '@/components/ui/badge';
 
 export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
  const {
@@ -87,7 +88,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
    personID,
    onChangePersonPhoneNumber,
   },
-  invoice: { orderTotals },
+  orderOtps,
   systemPricing,
   access,
  } = useOrderBaseConfigContext();
@@ -981,6 +982,9 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
      <Field>
       <FieldLabel htmlFor='walletOtpCode'>
        {dic.orderInfo.walletOtpCode}
+       {orderOtps.isSuccess && orderOtps.otpCodes.length > 0 && (
+        <Badge variant='outline'>{orderOtps.otpCodes.length}</Badge>
+       )}
       </FieldLabel>
       <Dialog>
        <DialogTrigger asChild>
@@ -989,13 +993,29 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
          variant='outline'
          role='combobox'
          className='justify-between h-11 overflow-hidden'
-         disabled={!access['order']['edit']}
+         disabled={
+          !access['order']['edit'] ||
+          orderOtps.isLoading ||
+          !orderOtps.isSuccess
+         }
         >
-         <span className='grow text-ellipsis overflow-hidden text-start'></span>
-         <div className='flex gap-2 items-center'></div>
+         <span className='grow text-ellipsis overflow-hidden text-start flex items-center gap-2'>
+          {orderOtps.otpCodes.map((item) => (
+           <Badge
+            variant='outline'
+            key={item.code}
+            className='rounded-md p-2 text-primary border-primary'
+           >
+            {item.code}
+           </Badge>
+          ))}
+         </span>
+         <div className='flex gap-2 items-center'>
+          {orderOtps.isLoading && <Spinner />}
+         </div>
         </Button>
        </DialogTrigger>
-       <OTPCodeList dic={dic} />
+       <OTPCodeList dic={dic} isEditalbe={access['order']['edit']} />
       </Dialog>
       {/*<Controller
        control={control}
