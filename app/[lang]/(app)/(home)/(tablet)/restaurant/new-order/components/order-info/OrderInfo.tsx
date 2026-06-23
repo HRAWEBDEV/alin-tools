@@ -57,15 +57,7 @@ import {
  TimePickerSeparator,
  TimePickerButton,
 } from '@poursha98/react-ios-time-picker';
-import {
- Dialog,
- DialogContent,
- DialogDescription,
- DialogFooter,
- DialogHeader,
- DialogTitle,
- DialogTrigger,
-} from '@/components/ui/dialog';
+import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import OTPCodeList from './OTPCodeList';
 
 export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {

@@ -72,7 +72,7 @@ export default function OTPCodeList({ dic }: { dic: NewOrderDictionary }) {
     <div>
      {codes.length ? (
       <div>
-       <h3 className='mb-2'>
+       <h3 className='mb-2 text-sm text-neutral-700 dark:text-neutral-400'>
         {dic.addOTPModal.addedCodes} ({codes.length}):{' '}
        </h3>
        <ul className='grid gap-3'>
