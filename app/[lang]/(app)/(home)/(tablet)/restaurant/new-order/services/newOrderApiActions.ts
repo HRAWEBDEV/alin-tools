@@ -183,6 +183,7 @@ type SaveOrderPackage = {
   | 'customerCode'
  >;
  orderItems: OrderItem[];
+ otpCodes: string[];
 };
 
 interface Subscriber {
@@ -671,6 +672,20 @@ export type {
  Person,
 };
 
+function getOrderOtpCodes({
+ signal,
+ orderID,
+}: {
+ signal: AbortSignal;
+ orderID: number;
+}) {
+ const searchParams = new URLSearchParams([['orderID', orderID.toString()]]);
+ return axios.get<string[]>(
+  `/Restaurant/SaleInvoice/GetOTPCodes?${searchParams.toString()}`,
+  { signal },
+ );
+}
+
 export {
  newOrderKey,
  personKey,
@@ -695,4 +710,5 @@ export {
  savePerson,
  getEmployeeCustomer,
  getPagedEmployee,
+ getOrderOtpCodes,
 };
