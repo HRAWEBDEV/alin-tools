@@ -68,7 +68,7 @@ export default function RoomGuestMessage({
  return (
   <div
    data-received={message.readed}
-   className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 data-[received=true]:bg-secondary/5 isolate relative'
+   className='border border-border rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 data-[received=true]:bg-secondary/5 isolate relative'
   >
    <div className='absolute bottom-0 end-6 -z-1 opacity-60'>
     <MdTouchApp className='size-24 text-neutral-200 dark:text-neutral-800' />
@@ -113,7 +113,7 @@ export default function RoomGuestMessage({
      </p>
     </div>
    </button>
-   <div className='flex justify-between gap-4 items-center border-t border-input pt-2 mt-2'>
+   <div className='flex justify-between gap-4 items-center border-t border-border pt-2 mt-2'>
     <div></div>
     <div className='flex flex-wrap gap-2'>
      <Button

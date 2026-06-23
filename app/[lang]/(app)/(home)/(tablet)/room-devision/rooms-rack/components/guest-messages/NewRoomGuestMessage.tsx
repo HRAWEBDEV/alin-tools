@@ -93,7 +93,7 @@ export default function NewRoomGuestMessage({
    }}
   >
    <DialogContent className='flex flex-col w-[min(95%,35rem)] max-h-[95svh] max-w-none! p-0 overflow-hidden gap-0'>
-    <DialogHeader className='p-4 border-b border-input'>
+    <DialogHeader className='p-4 border-b border-border'>
      <DialogTitle>
       {editRoomGuestMessage.selectedId
        ? dic.roomGuestMessages.edit
@@ -130,7 +130,7 @@ export default function NewRoomGuestMessage({
       </Field>
      </FieldGroup>
     </div>
-    <DialogFooter className='p-4 border-t border-input'>
+    <DialogFooter className='p-4 border-t border-border'>
      <Button
       variant='outline'
       size='lg'

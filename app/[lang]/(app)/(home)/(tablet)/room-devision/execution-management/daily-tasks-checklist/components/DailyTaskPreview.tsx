@@ -297,7 +297,7 @@ export default function DailyTaskPreview({
     }}
    >
     <DialogContent className='p-0 gap-0'>
-     <DialogHeader className='p-4 border-b border-input'>
+     <DialogHeader className='p-4 border-b border-border'>
       <DialogTitle>
        {selectedNoteId ? dic.notes.edit : dic.notes.new}
       </DialogTitle>
@@ -316,7 +316,7 @@ export default function DailyTaskPreview({
        </InputGroup>
       </Field>
      </div>
-     <DialogFooter className='p-4 py-2 border-t border-input'>
+     <DialogFooter className='p-4 py-2 border-t border-border'>
       <DialogClose asChild>
        <Button
         className='sm:w-24'

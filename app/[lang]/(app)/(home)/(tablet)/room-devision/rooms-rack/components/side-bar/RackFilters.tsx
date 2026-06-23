@@ -99,7 +99,7 @@ export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
        <DrawerHeader className='hidden'>
         <DrawerTitle>{dic.filters.rackRoomsLimit}</DrawerTitle>
        </DrawerHeader>
-       <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+       <div className='p-4 pb-6 mb-6 border-b border-border flex flex-wrap justify-between gap-4'>
         <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
          {dic.filters.rackRoomsLimit}
         </h1>
@@ -159,7 +159,7 @@ export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
          <DrawerHeader className='hidden'>
           <DrawerTitle>{dic.filters.rackType}</DrawerTitle>
          </DrawerHeader>
-         <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+         <div className='p-4 pb-6 mb-6 border-b border-border flex flex-wrap justify-between gap-4'>
           <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
            {dic.filters.rackType}
           </h1>
@@ -228,7 +228,7 @@ export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
          <DrawerHeader className='hidden'>
           <DrawerTitle>{dic.filters.showType}</DrawerTitle>
          </DrawerHeader>
-         <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+         <div className='p-4 pb-6 mb-6 border-b border-border flex flex-wrap justify-between gap-4'>
           <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
            {dic.filters.showType}
           </h1>
@@ -349,7 +349,7 @@ export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
          <DrawerHeader className='hidden'>
           <DrawerTitle>{dic.filters.roomType}</DrawerTitle>
          </DrawerHeader>
-         <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+         <div className='p-4 pb-6 mb-6 border-b border-border flex flex-wrap justify-between gap-4'>
           <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
            {dic.filters.roomType}
           </h1>
@@ -432,7 +432,7 @@ export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
          <DrawerHeader className='hidden'>
           <DrawerTitle>{dic.filters.building}</DrawerTitle>
          </DrawerHeader>
-         <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+         <div className='p-4 pb-6 mb-6 border-b border-border flex flex-wrap justify-between gap-4'>
           <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
            {dic.filters.building}
           </h1>
@@ -515,7 +515,7 @@ export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
          <DrawerHeader className='hidden'>
           <DrawerTitle>{dic.filters.floor}</DrawerTitle>
          </DrawerHeader>
-         <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+         <div className='p-4 pb-6 mb-6 border-b border-border flex flex-wrap justify-between gap-4'>
           <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
            {dic.filters.floor}
           </h1>
@@ -600,7 +600,7 @@ export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
          <DrawerHeader className='hidden'>
           <DrawerTitle>{dic.filters.roomStateGroup}</DrawerTitle>
          </DrawerHeader>
-         <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+         <div className='p-4 pb-6 mb-6 border-b border-border flex flex-wrap justify-between gap-4'>
           <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
            {dic.filters.roomStateGroup}
           </h1>
@@ -685,7 +685,7 @@ export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
          <DrawerHeader className='hidden'>
           <DrawerTitle>{dic.filters.roomStateInOutState}</DrawerTitle>
          </DrawerHeader>
-         <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+         <div className='p-4 pb-6 mb-6 border-b border-border flex flex-wrap justify-between gap-4'>
           <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
            {dic.filters.roomStateInOutState}
           </h1>
@@ -770,7 +770,7 @@ export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
          <DrawerHeader className='hidden'>
           <DrawerTitle>{dic.filters.roomStateKind}</DrawerTitle>
          </DrawerHeader>
-         <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+         <div className='p-4 pb-6 mb-6 border-b border-border flex flex-wrap justify-between gap-4'>
           <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
            {dic.filters.roomStateKind}
           </h1>
@@ -855,7 +855,7 @@ export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
          <DrawerHeader className='hidden'>
           <DrawerTitle>{dic.filters.roomStateType}</DrawerTitle>
          </DrawerHeader>
-         <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+         <div className='p-4 pb-6 mb-6 border-b border-border flex flex-wrap justify-between gap-4'>
           <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
            {dic.filters.roomStateType}
           </h1>
@@ -938,7 +938,7 @@ export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
          <DrawerHeader className='hidden'>
           <DrawerTitle>{dic.filters.customers}</DrawerTitle>
          </DrawerHeader>
-         <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+         <div className='p-4 pb-6 mb-6 border-b border-border flex flex-wrap justify-between gap-4'>
           <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
            {dic.filters.customers}
           </h1>
@@ -979,7 +979,7 @@ export default function RackFilters({ dic }: { dic: RoomsRackDictionary }) {
      />
     </Field>
    </div>
-   <div className='sticky bottom-0 bg-background p-2 border-t border-input'>
+   <div className='sticky bottom-0 bg-background p-2 border-t border-border'>
     <Button
      className='w-full text-destructive border-destructive'
      variant='outline'

@@ -24,7 +24,7 @@ export default function EntranceAndExitItem({
   <>
    <Drawer>
     <DrawerTrigger asChild>
-     <button className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 isolate relative'>
+     <button className='border border-border rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 isolate relative'>
       <div className='absolute bottom-0 end-6 -z-1 opacity-60'>
        <MdTouchApp className='size-24 text-neutral-200 dark:text-neutral-800' />
       </div>

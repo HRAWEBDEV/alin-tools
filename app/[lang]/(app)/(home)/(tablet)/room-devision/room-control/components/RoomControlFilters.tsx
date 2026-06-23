@@ -164,7 +164,7 @@ export default function RoomControlFilters({
       </Button>
      </DialogTrigger>
      <DialogContent className='flex flex-col w-[min(95%,60rem)] max-h-[95svh] max-w-none! p-0 overflow-hidden gap-0'>
-      <DialogHeader className='p-4 border-b border-input'>
+      <DialogHeader className='p-4 border-b border-border'>
        <DialogTitle className='text-lg'>
         {roomControlDic.houseControl.history}{' '}
        </DialogTitle>
@@ -182,7 +182,7 @@ export default function RoomControlFilters({
        />
       </div>
       {!!visibleHistoryItems.length && (
-       <DialogFooter className='p-4 py-2 border-t border-input'>
+       <DialogFooter className='p-4 py-2 border-t border-border'>
         <div className='flex gap-1 items-center'>
          <div className='me-4'>
           <span>{roomControlDic.houseControl.result}: </span>
@@ -254,7 +254,7 @@ export default function RoomControlFilters({
           {activeFilters.length}
          </Badge>
         )}
-        <span className='border-s border-input ps-4'>
+        <span className='border-s border-border ps-4'>
          {dic.filters.result}: {roomControl.data?.length}
         </span>
        </Button>
@@ -313,7 +313,7 @@ export default function RoomControlFilters({
               <DrawerHeader className='hidden'>
                <DrawerTitle>{dic.filters.floor}</DrawerTitle>
               </DrawerHeader>
-              <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+              <div className='p-4 pb-6 mb-6 border-b border-border flex flex-wrap justify-between gap-4'>
                <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
                 {dic.filters.floor}
                </h1>
@@ -392,7 +392,7 @@ export default function RoomControlFilters({
               <DrawerHeader className='hidden'>
                <DrawerTitle>{dic.filters.roomType}</DrawerTitle>
               </DrawerHeader>
-              <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+              <div className='p-4 pb-6 mb-6 border-b border-border flex flex-wrap justify-between gap-4'>
                <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
                 {dic.filters.roomType}
                </h1>

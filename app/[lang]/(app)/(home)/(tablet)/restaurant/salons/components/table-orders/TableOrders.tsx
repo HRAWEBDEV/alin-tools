@@ -30,7 +30,7 @@ export default function TableOrders({
   return (
    <div className='flex flex-wrap gap-4'>
     {Array.from({ length: orderCount }, (_, i) => i).map((i) => (
-     <Skeleton key={i} className='size-40 border-4 border-input' />
+     <Skeleton key={i} className='size-40 border-4 border-border' />
     ))}
    </div>
   );
@@ -39,7 +39,7 @@ export default function TableOrders({
    {canAddNewOrder && (
     <DrawerClose asChild>
      <Link
-      className='size-40 border border-input rounded-md grid place-content-center bg-secondary/10 text-secondary'
+      className='size-40 border border-border rounded-md grid place-content-center bg-secondary/10 text-secondary'
       href={orderRedirectLink ? `${orderRedirectLink}&orderID=0` : '#'}
      >
       <FaPlus className='size-10' />

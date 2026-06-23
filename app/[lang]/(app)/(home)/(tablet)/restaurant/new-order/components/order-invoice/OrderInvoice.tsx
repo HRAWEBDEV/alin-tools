@@ -59,7 +59,7 @@ import {
 import { type OrderInfo } from '../../schemas/orderInfoSchema';
 
 const invoiceRowClass =
- 'flex justify-between gap-2 items-center text-base pb-3 mb-3 border-b border-input font-medium';
+ 'flex justify-between gap-2 items-center text-base pb-3 mb-3 border-b border-border font-medium';
 const invoiceLabelClass = 'shrink-0 w-32';
 
 export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
@@ -347,7 +347,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
  return orderItems.length ? (
   <div>
    <div className='w-[min(100%,35rem)] mx-auto pt-2'>
-    <div className='p-4 border border-input rounded-md bg-neutral-50 dark:bg-neutral-950 mb-2'>
+    <div className='p-4 border border-border rounded-md bg-neutral-50 dark:bg-neutral-950 mb-2'>
      <div className={invoiceRowClass}>
       <span className={invoiceLabelClass}>
        {'+ '}
@@ -417,7 +417,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
       <span>{format(remained)} ریال</span>
      </div>
     </div>
-    <div className='grid grid-cols-2 gap-3 mb-6 border-b border-input pb-6'>
+    <div className='grid grid-cols-2 gap-3 mb-6 border-b border-border pb-6'>
      <Button
       disabled={shopLoading || !access['order']['edit']}
       size='lg'
@@ -444,7 +444,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
     {/* payment setup */}
     {isPayable && access['order']['payment'] && (
      <div
-      className='rounded-md border border-input p-4'
+      className='rounded-md border border-border p-4'
       ref={invoicePaymentRef}
      >
       <form>
@@ -489,7 +489,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
               <DrawerHeader className='hidden'>
                <DrawerTitle>{dic.invoice.paymentType}</DrawerTitle>
               </DrawerHeader>
-              <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+              <div className='p-4 pb-6 mb-6 border-b border-border flex flex-wrap justify-between gap-4'>
                <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
                 {dic.invoice.paymentType}
                </h1>
@@ -577,7 +577,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
                 <DrawerHeader className='hidden'>
                  <DrawerTitle>{dic.invoice.bank}</DrawerTitle>
                 </DrawerHeader>
-                <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+                <div className='p-4 pb-6 mb-6 border-b border-border flex flex-wrap justify-between gap-4'>
                  <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
                   {dic.invoice.bank}
                  </h1>
@@ -658,7 +658,7 @@ export default function OrderInvoice({ dic }: { dic: NewOrderDictionary }) {
               <DrawerHeader className='hidden'>
                <DrawerTitle>{dic.invoice.cardReader}</DrawerTitle>
               </DrawerHeader>
-              <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+              <div className='p-4 pb-6 mb-6 border-b border-border flex flex-wrap justify-between gap-4'>
                <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
                 {dic.invoice.cardReader}
                </h1>

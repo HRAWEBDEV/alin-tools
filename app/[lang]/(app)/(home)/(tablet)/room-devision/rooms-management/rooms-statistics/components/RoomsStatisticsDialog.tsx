@@ -19,7 +19,7 @@ export default function RoomsStatisticsDialog({
  return (
   <Dialog open={open} onOpenChange={setOpen}>
    <DialogContent className='flex flex-col w-[min(95%,45rem)] max-h-[95svh] max-w-none! p-0 overflow-hidden gap-0'>
-    <DialogHeader className='p-4 border-b border-input'>
+    <DialogHeader className='p-4 border-b border-border'>
      <DialogTitle className='text-lg'>{dic.title}</DialogTitle>
     </DialogHeader>
     <div className='grow overflow-auto p-4'>

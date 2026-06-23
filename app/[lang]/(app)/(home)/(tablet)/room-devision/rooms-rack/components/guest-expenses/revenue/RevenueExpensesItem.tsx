@@ -21,7 +21,7 @@ export default function RevenueExpensesItem({
  return (
   <>
    <button
-    className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 relative isolate'
+    className='border border-border rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 relative isolate'
     onClick={() => editRevenue.onShowEditInvoice(revenue.id)}
    >
     <div className='absolute bottom-0 end-0 -z-1 opacity-60'>

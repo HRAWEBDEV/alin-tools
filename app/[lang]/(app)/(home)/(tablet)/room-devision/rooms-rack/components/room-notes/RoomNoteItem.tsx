@@ -69,7 +69,7 @@ export default function RoomNoteItem({
   <div
    data-is-deactive={note.disabled}
    data-is-deleted={note.deleted}
-   className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 data-[is-deactive="true"]:bg-destructive/5 data-[is-deleted="true"]:bg-destructive/5 isolate relative'
+   className='border border-border rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 data-[is-deactive="true"]:bg-destructive/5 data-[is-deleted="true"]:bg-destructive/5 isolate relative'
   >
    <div className='absolute bottom-0 end-6 -z-1 opacity-60'>
     <MdTouchApp className='size-24 text-neutral-200 dark:text-neutral-800' />
@@ -120,7 +120,7 @@ export default function RoomNoteItem({
      </p>
     </div>
    </button>
-   <div className='flex justify-between gap-4 items-center border-t border-input pt-2 mt-2 flex-wrap'>
+   <div className='flex justify-between gap-4 items-center border-t border-border pt-2 mt-2 flex-wrap'>
     <div className='flex gap-2'>
      {note.disableUserPersonName && (
       <div className='text-sm text-neutral-600 dark:text-neutral-400'>

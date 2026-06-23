@@ -44,7 +44,7 @@ export default function DailyTaskNote({
  });
  return (
   <button
-   className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 relative isolate text-start w-full min-h-28 mb-4 flex gap-4'
+   className='border border-border rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 relative isolate text-start w-full min-h-28 mb-4 flex gap-4'
    onClick={() => {
     if (isPending) return;
     onEdit(note.id);

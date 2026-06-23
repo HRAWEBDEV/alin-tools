@@ -232,7 +232,7 @@ export default function NewInvoice({
   >
    <DialogContent className='w-full h-full max-sm:rounded-none max-w-[unset]! sm:w-[min(95%,30rem)] gap-0 p-0 sm:h-auto sm:max-h-[95svh] overflow-hidden flex flex-col'>
     <form className='grow flex flex-col overflow-hidden'>
-     <DialogHeader className='p-4 border-b border-input'>
+     <DialogHeader className='p-4 border-b border-border'>
       <DialogHeader>
        <DialogTitle className='text-lg'>
         {editInvoice.selectedInvoiceID
@@ -435,7 +435,7 @@ export default function NewInvoice({
        </Field>
       </FieldGroup>
      </div>
-     <DialogFooter className='p-4 py-2 border-t border-input'>
+     <DialogFooter className='p-4 py-2 border-t border-border'>
       <div className='flex gap-2 justify-between grow'>
        {!!editInvoice.selectedInvoiceID ? (
         <div className='flex gap-2 items-center justify-end col-span-full'>

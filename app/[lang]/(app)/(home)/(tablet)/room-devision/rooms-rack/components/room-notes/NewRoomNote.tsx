@@ -106,7 +106,7 @@ export default function NewRoomNote({
    }}
   >
    <DialogContent className='flex flex-col w-[min(95%,35rem)] max-h-[95svh] max-w-none! p-0 overflow-hidden gap-0'>
-    <DialogHeader className='p-4 border-b border-input'>
+    <DialogHeader className='p-4 border-b border-border'>
      <DialogTitle>
       {editRoomNote.selectedId ? dic.roomNotes.edit : dic.roomNotes.new}
      </DialogTitle>
@@ -143,7 +143,7 @@ export default function NewRoomNote({
            <DrawerHeader className='hidden'>
             <DrawerTitle>{dic.roomNotes.noteType}</DrawerTitle>
            </DrawerHeader>
-           <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+           <div className='p-4 pb-6 mb-6 border-b border-border flex flex-wrap justify-between gap-4'>
             <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
              {dic.roomNotes.noteType}
             </h1>
@@ -194,7 +194,7 @@ export default function NewRoomNote({
      </FieldGroup>
     </div>
     {isEditable && (
-     <DialogFooter className='p-4 border-t border-input'>
+     <DialogFooter className='p-4 border-t border-border'>
       <Button
        variant='outline'
        size='lg'

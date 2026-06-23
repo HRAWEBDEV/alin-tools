@@ -96,7 +96,7 @@ export default function SalonTable({
  const menuContent =
   tableUtils.tableType === 'mock' ? null : (
    <DrawerContent className='h-[min(60svh,50rem)]'>
-    <DrawerHeader className='border-b border-input'>
+    <DrawerHeader className='border-b border-border'>
      <DrawerTitle className='text-2xl'>
       {tableUtils.dic.tables.tableActions}
      </DrawerTitle>
@@ -393,7 +393,7 @@ export default function SalonTable({
      onOpenChange={(newValue) => setShowTableOrdersList(newValue)}
     >
      <DrawerContent className='h-[min(80svh,35rem)]'>
-      <DrawerHeader className='text-xl border-b border-input'>
+      <DrawerHeader className='text-xl border-b border-border'>
        <DrawerTitle>
         {tableUtils.dic.multiOrder.title} {tableTypeName} {table.tableNo}
        </DrawerTitle>

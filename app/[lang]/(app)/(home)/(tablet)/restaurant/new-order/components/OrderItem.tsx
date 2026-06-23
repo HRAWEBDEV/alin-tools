@@ -58,7 +58,7 @@ export default function OrderItem({
    className={`flex flex-col ${showOrderImage ? 'pt-17 min-h-60' : 'pt-0'}`}
   >
    <div
-    className={`grow rounded-xl dark:bg-neutral-900 ${showOrderImage ? 'shadow-xl' : 'border shadow-lg border-input pt-2'}`}
+    className={`grow rounded-xl dark:bg-neutral-900 ${showOrderImage ? 'shadow-xl' : 'border shadow-lg border-border pt-2'}`}
    >
     {showOrderImage && (
      <div className='grid place-content-center -mt-17 mb-2'>

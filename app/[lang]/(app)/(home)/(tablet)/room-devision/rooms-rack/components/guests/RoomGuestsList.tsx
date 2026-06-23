@@ -34,7 +34,7 @@ export default function RoomGuestsList({
     {data?.map((guest) => (
      <button
       key={guest.id}
-      className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 isolate relative'
+      className='border border-border rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 isolate relative'
      >
       {/*<div className='absolute bottom-0 end-6 -z-1 opacity-60'>
        <MdTouchApp className='size-24 text-neutral-200 dark:text-neutral-800' />

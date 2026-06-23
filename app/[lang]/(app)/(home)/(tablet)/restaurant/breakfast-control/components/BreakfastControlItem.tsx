@@ -50,7 +50,7 @@ export default function BreakfastControlItem({
    <DialogTrigger asChild>
     <button
      data-is-served={checklist.served}
-     className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 data-[is-served="true"]:bg-secondary/10 relative isolate whitespace-normal'
+     className='border border-border rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 data-[is-served="true"]:bg-secondary/10 relative isolate whitespace-normal'
     >
      <div className='absolute bottom-0 end-0 -z-1 opacity-60'>
       <MdTouchApp className='size-24 text-neutral-200 dark:text-neutral-800' />
@@ -94,7 +94,7 @@ export default function BreakfastControlItem({
     </button>
    </DialogTrigger>
    <DialogContent className='p-0 gap-0'>
-    <DialogHeader className='p-4 py-2 border-b border-input'>
+    <DialogHeader className='p-4 py-2 border-b border-border'>
      <DialogTitle className='flex gap-2 items-center'>
       <BiError className='size-12 text-red-700 dark:text-red-400 font-medium' />
       <span>{dic.info.changeState}</span>
@@ -131,7 +131,7 @@ export default function BreakfastControlItem({
       </div>
      </div>
     </div>
-    <DialogFooter className='p-4 border-t border-input py-2'>
+    <DialogFooter className='p-4 border-t border-border py-2'>
      <DialogClose asChild>
       <Button
        size='lg'

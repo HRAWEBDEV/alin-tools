@@ -72,7 +72,7 @@ export default function MergeTableModal({
      </div>
     )}
     <div className='p-4 flex gap-4 items-center justify-center flex-col sm:flex-row'>
-     <div className='size-48 rounded-lg border border-input p-4 grid place-content-center bg-rose-100 dark:bg-rose-900'>
+     <div className='size-48 rounded-lg border border-border p-4 grid place-content-center bg-rose-100 dark:bg-rose-900'>
       <p className='text-4xl font-medium font-en-roboto'>
        {selectedTableNo.toString().padStart(2, '0')}
       </p>
@@ -81,7 +81,7 @@ export default function MergeTableModal({
       <span>{dic.mergeTableModal.mergeWith}</span>
       <FaArrowLeftLong className='size-20 ltr:rotate-180' />
      </div>
-     <div className='size-48 rounded-lg border border-input p-4 grid place-content-center bg-teal-100 dark:bg-teal-900'>
+     <div className='size-48 rounded-lg border border-border p-4 grid place-content-center bg-teal-100 dark:bg-teal-900'>
       <p className='text-4xl font-medium font-en-roboto'>
        {mergeToTableNo.toString().padStart(2, '0')}
       </p>

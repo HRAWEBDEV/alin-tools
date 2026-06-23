@@ -23,7 +23,7 @@ export default function NavProfile() {
    </div>
    <Button
     variant='ghost'
-    className='w-full p-1 pt-2 justify-start h-auto rounded-none border-t border-input'
+    className='w-full p-1 pt-2 justify-start h-auto rounded-none border-t border-border'
     onClick={() => toggleProfile()}
    >
     <Avatar className='size-14'>

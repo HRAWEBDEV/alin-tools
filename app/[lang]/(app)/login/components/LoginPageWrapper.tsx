@@ -22,7 +22,7 @@ export default function LoginPageWrapper({
      duration: 0.8,
      ease: 'easeInOut',
     }}
-    className='p-4 pb-10 glass-card h-full sm:h-auto bg-white/30 dark:bg-black/30 w-full sm:w-[min(100%,28rem)] m-auto data-[login-modal="true"]:border data-[login-modal="true"]:border-input sm:rounded-lg sm:data-[login-modal="true"]:shadow-lg'
+    className='p-4 pb-10 glass-card h-full sm:h-auto bg-white/30 dark:bg-black/30 w-full sm:w-[min(100%,28rem)] m-auto data-[login-modal="true"]:border data-[login-modal="true"]:border-border sm:rounded-lg sm:data-[login-modal="true"]:shadow-lg'
    >
     {!loginModalIsOpen && <LoginControllers />}
     <div className='w-[min(100%,24rem)] mx-auto'>

@@ -32,7 +32,7 @@ export default function RackNotifsBoard({
  return (
   <Dialog open={open} onOpenChange={setOpen}>
    <DialogContent className='flex flex-col w-[min(95%,45rem)] max-h-[95svh] max-w-none! p-0 overflow-hidden gap-0'>
-    <DialogHeader className='p-4 border-b border-input'>
+    <DialogHeader className='p-4 border-b border-border'>
      <DialogTitle className='text-lg'>
       {dic.rackNotificationsBoard.title}
       {pageCount > 1 && (
@@ -77,7 +77,7 @@ export default function RackNotifsBoard({
          return (
           <li
            key={room.roomLabel}
-           className={`border-b border-input ${noteStyles.text}`}
+           className={`border-b border-border ${noteStyles.text}`}
           >
            <button
             className='whitespace-nowrap w-full justify-start items-start text-start py-2'
@@ -101,7 +101,7 @@ export default function RackNotifsBoard({
          return (
           <li
            key={room.roomLabel}
-           className='border-b border-input text-orange-800 dark:text-orange-200'
+           className='border-b border-border text-orange-800 dark:text-orange-200'
           >
            <button
             className='whitespace-nowrap w-full justify-start items-start text-start py-2'

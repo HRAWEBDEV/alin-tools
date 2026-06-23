@@ -73,7 +73,7 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
     )}
    </div>
    {showMergeTable && selectedTable && (
-    <div className={tablesGridClass + ' pb-4 mb-2 border-b border-input'}>
+    <div className={tablesGridClass + ' pb-4 mb-2 border-b border-border'}>
      <SalonTable
       dic={dic}
       access={access}
@@ -115,7 +115,7 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
     </div>
    )}
    {showTransferTable && selectedTable && (
-    <div className={tablesGridClass + ' pb-4 mb-2 border-b border-input'}>
+    <div className={tablesGridClass + ' pb-4 mb-2 border-b border-border'}>
      <SalonTable
       dic={dic}
       access={access}

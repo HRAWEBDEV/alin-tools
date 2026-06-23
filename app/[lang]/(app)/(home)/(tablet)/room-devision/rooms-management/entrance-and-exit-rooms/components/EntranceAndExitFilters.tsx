@@ -209,7 +209,7 @@ export default function EntranceAndExitFilters({
               <DrawerHeader className='hidden'>
                <DrawerTitle>{dic.filters.type}</DrawerTitle>
               </DrawerHeader>
-              <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+              <div className='p-4 pb-6 mb-6 border-b border-border flex flex-wrap justify-between gap-4'>
                <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
                 {dic.filters.type}
                </h1>
@@ -288,7 +288,7 @@ export default function EntranceAndExitFilters({
               <DrawerHeader className='hidden'>
                <DrawerTitle>{dic.filters.floor}</DrawerTitle>
               </DrawerHeader>
-              <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+              <div className='p-4 pb-6 mb-6 border-b border-border flex flex-wrap justify-between gap-4'>
                <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
                 {dic.filters.floor}
                </h1>
@@ -367,7 +367,7 @@ export default function EntranceAndExitFilters({
               <DrawerHeader className='hidden'>
                <DrawerTitle>{dic.filters.roomType}</DrawerTitle>
               </DrawerHeader>
-              <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+              <div className='p-4 pb-6 mb-6 border-b border-border flex flex-wrap justify-between gap-4'>
                <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
                 {dic.filters.roomType}
                </h1>

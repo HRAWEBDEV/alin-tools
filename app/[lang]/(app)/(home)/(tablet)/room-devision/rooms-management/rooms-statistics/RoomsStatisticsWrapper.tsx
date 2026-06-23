@@ -94,7 +94,7 @@ export default function RoomsStatisticsWrapper({
     </div>
     <div className='grid gap-4 sm:grid-cols-2 md:grid-cols-3'>
      {/* occupancy */}
-     <div className='p-2 shadow-sm border border-input rounded-lg'>
+     <div className='p-2 shadow-sm border border-border rounded-lg'>
       <h3 className='text-center font-medium rounded-lg p-2 border mb-2 bg-destructive/10 text-destructive border-destructive/50 text-base'>
        {dic.occupied.title}
       </h3>
@@ -132,7 +132,7 @@ export default function RoomsStatisticsWrapper({
       </div>
      </div>
      {/* arrival */}
-     <div className='p-2 shadow-sm border border-input rounded-lg'>
+     <div className='p-2 shadow-sm border border-border rounded-lg'>
       <h3 className='text-center font-medium rounded-lg p-2 border mb-2 bg-secondary/10 text-secondary border-secondary/50 text-base'>
        {dic.arrival.title}
       </h3>
@@ -170,7 +170,7 @@ export default function RoomsStatisticsWrapper({
       </div>
      </div>
      {/* status */}
-     <div className='p-2 shadow-sm border border-input rounded-lg sm:col-span-full md:row-span-2 md:col-span-1'>
+     <div className='p-2 shadow-sm border border-border rounded-lg sm:col-span-full md:row-span-2 md:col-span-1'>
       <h3 className='text-center font-medium rounded-lg p-2 border mb-2 bg-orange-100 text-orange-600 border-orange-400 dark:bg-orange-950 dark:text-orange-400 dark:border-orange-600 text-base'>
        {dic.arrival.title}
       </h3>
@@ -244,7 +244,7 @@ export default function RoomsStatisticsWrapper({
       </div>
      </div>
      {/* service */}
-     <div className='p-2 shadow-sm border border-input rounded-lg'>
+     <div className='p-2 shadow-sm border border-border rounded-lg'>
       <h3 className='text-center font-medium rounded-lg p-2 border mb-2 bg-purple-100 text-purple-600 border-purple-400 dark:bg-purple-950 dark:text-purple-400 dark:border-purple-600 text-base'>
        {dic.service.title}
       </h3>
@@ -282,7 +282,7 @@ export default function RoomsStatisticsWrapper({
       </div>
      </div>
      {/* departure */}
-     <div className='p-2 shadow-sm border border-input rounded-lg'>
+     <div className='p-2 shadow-sm border border-border rounded-lg'>
       <h3 className='text-center font-medium rounded-lg p-2 border mb-2 bg-destructive/10 text-destructive border-destructive/50 text-base'>
        {dic.departure.title}
       </h3>

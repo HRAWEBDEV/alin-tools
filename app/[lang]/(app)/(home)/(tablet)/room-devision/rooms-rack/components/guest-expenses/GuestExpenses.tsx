@@ -46,7 +46,7 @@ export default function GuestExpenses({
  return (
   <Dialog open={open} onOpenChange={onChangeOpen}>
    <DialogContent className='w-full h-full max-sm:rounded-none max-w-[unset]! sm:w-[min(98%,70rem)] gap-0 p-0 sm:h-[95svh] overflow-hidden flex flex-col'>
-    <DialogHeader className='p-4 border-b border-input'>
+    <DialogHeader className='p-4 border-b border-border'>
      <DialogHeader>
       <DialogTitle className='text-lg'>
        {dic.guestExpenses.title} _ {dic.guestExpenses.roomLabel}:{' '}

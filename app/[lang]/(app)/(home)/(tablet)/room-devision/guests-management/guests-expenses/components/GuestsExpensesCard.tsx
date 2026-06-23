@@ -20,7 +20,7 @@ export default function GuestsExpenseCard({
  return (
   <button
    onClick={onClick}
-   className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 relative isolate cursor-pointer text-start flex flex-col'
+   className='border border-border rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 relative isolate cursor-pointer text-start flex flex-col'
   >
    <div className='absolute bottom-0 end-0 -z-1 opacity-60'>
     <MdTouchApp className='size-24 text-neutral-200 dark:text-neutral-800' />

@@ -47,7 +47,7 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
      <DrawerHeader className='hidden'>
       <DrawerTitle>{profile.title}</DrawerTitle>
      </DrawerHeader>
-     <div className='flex gap-4 border-b border-input p-4 mb-2'>
+     <div className='flex gap-4 border-b border-border p-4 mb-2'>
       <Avatar className='size-20'>
        {/* <AvatarImage src='https://github.com/shadcn.png' alt='@shadcn' /> */}
        <AvatarFallback className='bg-neutral-200'>H</AvatarFallback>

@@ -20,8 +20,8 @@ export default function RoomControlHistoryItem({
  }, [history]);
 
  return (
-  <button className='border border-input rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 relative isolate flex flex-col text-start'>
-   <div className='flex justify-between gap-2 items-center mb-1 pb-1 border-b border-input'>
+  <button className='border border-border rounded-md p-2 px-3 bg-neutral-100 dark:bg-neutral-900 relative isolate flex flex-col text-start'>
+   <div className='flex justify-between gap-2 items-center mb-1 pb-1 border-b border-border'>
     {allHistory && (
      <div className='flex items-center gap-1'>
       <span className='text-sm text-neutral-700 dark:text-neutral-400'>

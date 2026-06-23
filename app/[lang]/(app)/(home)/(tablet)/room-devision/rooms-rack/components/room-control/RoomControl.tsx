@@ -247,7 +247,7 @@ export default function RoomControl({
    }}
   >
    <DialogContent className='gap-0 p-0 max-h-[95svh] overflow-hidden flex flex-col'>
-    <DialogHeader className='p-4 border-b border-input'>
+    <DialogHeader className='p-4 border-b border-border'>
      <DialogHeader>
       <DialogTitle className='text-lg'>
        {dic.houseControl.title}{' '}
@@ -433,7 +433,7 @@ export default function RoomControl({
           </Button>
          </DialogTrigger>
          <DialogContent className='flex flex-col w-[min(95%,60rem)] max-h-[95svh] max-w-none! p-0 overflow-hidden gap-0'>
-          <DialogHeader className='p-4 border-b border-input'>
+          <DialogHeader className='p-4 border-b border-border'>
            <DialogHeader>
             <DialogTitle className='text-lg'>
              {dic.houseControl.history} {dic.houseControl.title}{' '}
@@ -453,7 +453,7 @@ export default function RoomControl({
            />
           </div>
           {!!visibleHistoryItems.length && (
-           <DialogFooter className='p-4 py-2 border-t border-input'>
+           <DialogFooter className='p-4 py-2 border-t border-border'>
             <div className='flex gap-1 items-center'>
              <div className='me-4'>
               <span>{dic.houseControl.result}: </span>

@@ -25,7 +25,7 @@ export default function RackInfo({
     </Button>
    </div>
    <div className='p-4 pt-2'>
-    <div className='grid grid-cols-1 gap-2 border-b border-input pb-2 mb-2 text-sm'>
+    <div className='grid grid-cols-1 gap-2 border-b border-border pb-2 mb-2 text-sm'>
      <div className='font-medium'>
       <span className='text-neutral-500'>{dic.info.occupiedRooms}: </span>
       <span>{rackInfo.data?.occupied}</span>
@@ -51,7 +51,7 @@ export default function RackInfo({
       <span>{rackInfo.data?.outOfOrder}</span>
      </div>
     </div>
-    <div className='grid grid-cols-1 gap-2 border-b border-input pb-2 mb-2 text-sm'>
+    <div className='grid grid-cols-1 gap-2 border-b border-border pb-2 mb-2 text-sm'>
      <div className='font-medium flex gap-1'>
       <span className='text-neutral-500'>{dic.info.todayCheckin}: </span>
       <span>{rackInfo.data?.todayCheckin}</span>
@@ -65,7 +65,7 @@ export default function RackInfo({
       <span>{rackInfo.data?.notCheckin}</span>
      </div>
     </div>
-    <div className='grid grid-cols-1 gap-2 border-b border-input pb-2 mb-2 text-sm'>
+    <div className='grid grid-cols-1 gap-2 border-b border-border pb-2 mb-2 text-sm'>
      <div className='font-medium flex gap-1'>
       <span className='text-neutral-500'>{dic.info.todayCheckout}: </span>
       <span>{rackInfo.data?.todayCheckout}</span>
@@ -79,7 +79,7 @@ export default function RackInfo({
       <span>{rackInfo.data?.notCheckout}</span>
      </div>
     </div>
-    <div className='grid grid-cols-1 gap-2 text-sm border-b border-input pb-2 mb-2'>
+    <div className='grid grid-cols-1 gap-2 text-sm border-b border-border pb-2 mb-2'>
      <div className='font-medium flex gap-1'>
       <span className='text-neutral-500'>{dic.info.guestsCount}: </span>
       <span>{rackInfo.data?.guestCout}</span>

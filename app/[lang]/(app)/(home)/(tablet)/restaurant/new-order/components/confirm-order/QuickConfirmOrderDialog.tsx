@@ -105,7 +105,7 @@ export default function QuickOrderInfoDialog({
     className='flex flex-col w-[min(95%,35rem)] max-h-[95svh] max-w-none! p-0 overflow-hidden gap-0'
     showCloseButton={false}
    >
-    <DialogHeader className='p-4 border-b border-input'>
+    <DialogHeader className='p-4 border-b border-border'>
      <DialogTitle>{dic.tools.orderInfo}</DialogTitle>
     </DialogHeader>
     <div className='grow overflow-auto p-4'>
@@ -136,7 +136,7 @@ export default function QuickOrderInfoDialog({
            <DrawerHeader className='hidden'>
             <DrawerTitle>{dic.orderInfo.saleType}</DrawerTitle>
            </DrawerHeader>
-           <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+           <div className='p-4 pb-6 mb-6 border-b border-border flex flex-wrap justify-between gap-4'>
             <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
              {dic.orderInfo.saleType}
             </h1>
@@ -346,7 +346,7 @@ export default function QuickOrderInfoDialog({
       </Field>
      </FieldGroup>
     </div>
-    <DialogFooter className='p-4 py-2 border-t border-input'>
+    <DialogFooter className='p-4 py-2 border-t border-border'>
      <Button
       size='lg'
       className='sm:w-36'

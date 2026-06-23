@@ -295,7 +295,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           <DrawerHeader className='hidden'>
            <DrawerTitle>{dic.orderInfo.saleTime}</DrawerTitle>
           </DrawerHeader>
-          <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+          <div className='p-4 pb-6 mb-6 border-b border-border flex flex-wrap justify-between gap-4'>
            <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
             {dic.orderInfo.saleTime}
            </h1>
@@ -359,7 +359,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           <DrawerHeader className='hidden'>
            <DrawerTitle>{dic.orderInfo.saleType}</DrawerTitle>
           </DrawerHeader>
-          <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+          <div className='p-4 pb-6 mb-6 border-b border-border flex flex-wrap justify-between gap-4'>
            <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
             {dic.orderInfo.saleType}
            </h1>
@@ -752,7 +752,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           <DrawerHeader className='hidden'>
            <DrawerTitle>{dic.orderInfo.tableNo}</DrawerTitle>
           </DrawerHeader>
-          <div className='p-4 pb-4 mb-4 border-b border-input flex flex-wrap justify-between gap-4 items-center'>
+          <div className='p-4 pb-4 mb-4 border-b border-border flex flex-wrap justify-between gap-4 items-center'>
            <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
             {dic.orderInfo.tableNo}
            </h1>

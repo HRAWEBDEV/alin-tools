@@ -165,7 +165,7 @@ export default function RoomNotesWrapper({
   <>
    <Dialog open={open} onOpenChange={onChangeOpen}>
     <DialogContent className='sm:max-w-[unset]! sm:w-[min(98%,40rem)] gap-0 p-0 max-h-[95svh] overflow-hidden flex flex-col'>
-     <DialogHeader className='p-4 border-b border-input'>
+     <DialogHeader className='p-4 border-b border-border'>
       <DialogHeader>
        <DialogTitle className='text-lg'>
         {dic.roomNotes.title} {room.roomLabel}
@@ -393,7 +393,7 @@ export default function RoomNotesWrapper({
                 <DrawerHeader className='hidden'>
                  <DrawerTitle>{dic.roomNotes.noteType}</DrawerTitle>
                 </DrawerHeader>
-                <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+                <div className='p-4 pb-6 mb-6 border-b border-border flex flex-wrap justify-between gap-4'>
                  <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
                   {dic.roomNotes.noteType}
                  </h1>
@@ -459,7 +459,7 @@ export default function RoomNotesWrapper({
                 <DrawerHeader className='hidden'>
                  <DrawerTitle>{dic.roomNotes.noteState}</DrawerTitle>
                 </DrawerHeader>
-                <div className='p-4 pb-6 mb-6 border-b border-input flex flex-wrap justify-between gap-4'>
+                <div className='p-4 pb-6 mb-6 border-b border-border flex flex-wrap justify-between gap-4'>
                  <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
                   {dic.roomNotes.noteState}
                  </h1>
@@ -507,7 +507,7 @@ export default function RoomNotesWrapper({
       />
      </div>
      {!!roomNotes.data?.rowsCount && (
-      <DialogFooter className='p-4 py-2 border-t border-input'>
+      <DialogFooter className='p-4 py-2 border-t border-border'>
        <div className='flex gap-1 items-center'>
         <div className='me-4'>
          <span>{dic.roomNotes.result}: </span>

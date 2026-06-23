@@ -60,7 +60,7 @@ export default function RoomStateType({
    }}
   >
    <DialogContent className='gap-0 p-0 max-h-[95svh] overflow-hidden flex flex-col'>
-    <DialogHeader className='p-4 border-b border-input'>
+    <DialogHeader className='p-4 border-b border-border'>
      <DialogHeader>
       <DialogTitle className='text-lg'>{dic.roomStateType.title}</DialogTitle>
      </DialogHeader>

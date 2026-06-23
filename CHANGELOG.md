@@ -1,6 +1,10 @@
 ## TODO
 - add reload button if necessary - for real time data
 
+# 2.3.4
+- stronger border and input border colors
+- add new order info otp list 
+- add program salons color indicator
 
 # 2.3.2
 - add order items description (hra-done)

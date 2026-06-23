@@ -5,7 +5,7 @@ import { useTheme } from 'next-themes';
 
 export default function NavWrapper({ children }: { children: ReactNode }) {
  const navClassname =
-  'relative hidden lg:flex overflow-hidden shrink-0 basis-(--app-restaurant-nav-width) bg-neutral-100 dark:bg-neutral-900 flex-col border-e border-input';
+  'relative hidden lg:flex overflow-hidden shrink-0 basis-(--app-restaurant-nav-width) bg-neutral-100 dark:bg-neutral-900 flex-col border-e border-border';
  const [isMounted, setIsMounted] = useState(false);
  const { resolvedTheme } = useTheme();
 

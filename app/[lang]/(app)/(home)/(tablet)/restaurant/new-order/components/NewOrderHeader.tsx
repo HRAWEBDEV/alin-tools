@@ -75,7 +75,7 @@ export default function NewOrderHeader({ dic }: { dic: NewOrderDictionary }) {
      </Button>
     </DrawerTrigger>
     <DrawerContent className='h-[min(80svh,35rem)]'>
-     <DrawerHeader className='text-xl border-b border-input'>
+     <DrawerHeader className='text-xl border-b border-border'>
       <DrawerTitle>
        {dic.multiOrder.title} {dic.orderInfo.tableNo} {tableValue?.key}
       </DrawerTitle>

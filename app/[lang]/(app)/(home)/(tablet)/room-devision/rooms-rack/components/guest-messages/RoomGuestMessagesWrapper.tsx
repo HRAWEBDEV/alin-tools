@@ -59,7 +59,7 @@ export default function RoomGuestMessagesWrapper({
   <>
    <Dialog open={open} onOpenChange={onChangeOpen}>
     <DialogContent className='sm:max-w-[unset]! sm:w-[min(98%,40rem)] gap-0 p-0 max-h-[95svh] overflow-hidden flex flex-col'>
-     <DialogHeader className='p-4 border-b border-input'>
+     <DialogHeader className='p-4 border-b border-border'>
       <DialogHeader>
        <DialogTitle className='text-lg'>
         {dic.roomGuestMessages.title} {room.roomLabel}

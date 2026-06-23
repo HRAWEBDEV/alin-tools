@@ -72,7 +72,7 @@ export default function OrderShoppingItem({
  }
 
  return (
-  <motion.div layout className='border-b border-input p-2'>
+  <motion.div layout className='border-b border-border p-2'>
    <div className='flex flex-row gap-2 sm:gap-0 sm:items-center'>
     <div className='flex flex-col items-center'>
      <div className='flex items-center justify-center shrink-0 rounded-full size-18 lg:size-24 bg-neutral-100 dark:bg-neutral-800 overflow-hidden object-center object-contain'>

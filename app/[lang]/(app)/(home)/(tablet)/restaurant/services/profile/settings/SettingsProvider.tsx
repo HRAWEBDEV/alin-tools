@@ -191,7 +191,7 @@ export default function SettingsProvider({
   switch (activeView) {
    default:
     return (
-     <DrawerHeader className='px-0 relative border-b border-input'>
+     <DrawerHeader className='px-0 relative border-b border-border'>
       <DrawerTitle className='dark:text-gray-300 text-gray-600 sm:text-xl text-md flex items-center justify-start gap-4 px-8'>
        <RiSettings4Fill className='text-gray-400 size-12' />
        <div>
@@ -203,7 +203,7 @@ export default function SettingsProvider({
 
    case 'themeToggler':
     return (
-     <DrawerHeader className='px-2 flex-row items-center justify-between relative border-b border-input'>
+     <DrawerHeader className='px-2 flex-row items-center justify-between relative border-b border-border'>
       <DrawerTitle className='dark:text-gray-300 text-gray-600 sm:text-xl text-md flex items-center justify-start gap-4 px-0'>
        <div className='relative'>
         {getModeIcon(theme as AppModes, { className: 'size-12 text-pink-600' })}
@@ -220,7 +220,7 @@ export default function SettingsProvider({
 
    case 'orderConfig':
     return (
-     <DrawerHeader className='px-0 flex-row items-center justify-between relative border-b border-input'>
+     <DrawerHeader className='px-0 flex-row items-center justify-between relative border-b border-border'>
       <DrawerTitle className='dark:text-gray-300 text-gray-600 sm:text-xl text-md flex items-center justify-start gap-4 px-0'>
        <div className='relative'>
         <DishIcon className='text-primary size-12' />
@@ -236,7 +236,7 @@ export default function SettingsProvider({
     );
    case 'salonsConfig':
     return (
-     <DrawerHeader className='px-2 flex-row items-center justify-between relative border-b border-input'>
+     <DrawerHeader className='px-2 flex-row items-center justify-between relative border-b border-border'>
       <DrawerTitle className='dark:text-gray-300 text-gray-600 sm:text-xl text-md flex items-center justify-start gap-4 px-0'>
        <div className='relative'>
         <DinnerIcon className='text-orange-600 hover:text-orange-500 size-12' />
