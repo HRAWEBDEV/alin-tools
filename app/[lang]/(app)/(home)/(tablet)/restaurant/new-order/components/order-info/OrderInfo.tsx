@@ -57,6 +57,16 @@ import {
  TimePickerSeparator,
  TimePickerButton,
 } from '@poursha98/react-ios-time-picker';
+import {
+ Dialog,
+ DialogContent,
+ DialogDescription,
+ DialogFooter,
+ DialogHeader,
+ DialogTitle,
+ DialogTrigger,
+} from '@/components/ui/dialog';
+import OTPCodeList from './OTPCodeList';
 
 export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
  const {
@@ -980,7 +990,22 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
       <FieldLabel htmlFor='walletOtpCode'>
        {dic.orderInfo.walletOtpCode}
       </FieldLabel>
-      <Controller
+      <Dialog>
+       <DialogTrigger asChild>
+        <Button
+         id='walletOtpCode'
+         variant='outline'
+         role='combobox'
+         className='justify-between h-11 overflow-hidden'
+         disabled={!access['order']['edit']}
+        >
+         <span className='grow text-ellipsis overflow-hidden text-start'></span>
+         <div className='flex gap-2 items-center'></div>
+        </Button>
+       </DialogTrigger>
+       <OTPCodeList dic={dic} />
+      </Dialog>
+      {/*<Controller
        control={control}
        name='walletOtpCode'
        render={({ field: { value, onChange, ...other } }) => (
@@ -1000,7 +1025,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
          />
         </InputGroup>
        )}
-      />
+      />*/}
      </Field>
      <Field className={`${!showPersonDetails && 'col-span-full'}`}>
       <FieldLabel htmlFor='customerName'>

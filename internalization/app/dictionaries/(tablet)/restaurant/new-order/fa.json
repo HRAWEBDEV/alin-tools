@@ -167,5 +167,14 @@
  "findWaiters": {},
  "multiOrder": {
   "title": "لیست سفارشات"
+ },
+ "addOTPModal": {
+  "title": "افزودن کد تایید کیف پول",
+  "add": "اضافه کن",
+  "walletOptCode": "کد تایید کیف پول",
+  "confirm": "بستن",
+  "edit": "ویرایش",
+  "addedCodes": "کدهای ثبت شده",
+  "duplicateOtpCode": "کد تایید تکراری است"
  }
 }
