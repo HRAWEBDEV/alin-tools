@@ -2,8 +2,8 @@
 - add reload button if necessary - for real time data
 
 # 2.3.4
-- stronger border and input border colors
-- add new order info otp list 
+- stronger border and input border colors (hra-done)
+- add new order info otp list (hra-done)
 - add program salons color indicator
 
 # 2.3.2
