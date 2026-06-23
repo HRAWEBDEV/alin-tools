@@ -996,7 +996,8 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
          disabled={
           !access['order']['edit'] ||
           orderOtps.isLoading ||
-          !orderOtps.isSuccess
+          orderOtps.isLoading ||
+          orderOtps.isError
          }
         >
          <span className='grow text-ellipsis overflow-hidden text-start flex items-center gap-2'>

@@ -30,7 +30,7 @@ export default function OTPCodeList({
  const inputRef = useRef<HTMLInputElement>(null);
 
  return (
-  <DialogContent className='flex flex-col w-full max-h-dvh sm:w-[min(95%,25rem)] sm:max-h-[80svh] max-w-none! p-0 overflow-hidden'>
+  <DialogContent className='flex flex-col w-[min(95%,25rem)] max-h-[80svh] max-w-none! p-0 overflow-hidden'>
    <DialogHeader className='p-4 py-1'>
     <DialogTitle className='hidden'>{dic.addOTPModal.title}</DialogTitle>
     <DialogDescription className='hidden'></DialogDescription>
