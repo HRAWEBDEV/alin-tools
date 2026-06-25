@@ -527,7 +527,7 @@ export default function OrderBaseConfigProvider({
  );
 
  function getOtpCodes(): string[] {
-  return otpCodes.filter((item) => item.isNew).map((item) => item.code);
+  return otpCodes.map((item) => item.code);
  }
 
  function getPackedOrderItems(orderItems: OrderItem[]) {
