@@ -124,7 +124,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
  return (
   <form onSubmit={(e) => e.preventDefault()} className='py-5 px-1'>
    <FieldGroup>
-    <div className='grid sm:grid-cols-2 gap-5'>
+    <div className='grid sm:grid-cols-2 gap-4'>
      <Field className='gap-2'>
       <FieldLabel htmlFor='saleTime'>{dic.orderInfo.saleTime}</FieldLabel>
       <Controller
@@ -344,7 +344,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        <FieldLabel htmlFor='walletOtpCode'>
         {dic.orderInfo.walletOtpCode}
         {orderOtps.isSuccess && orderOtps.otpCodes.length > 0 && (
-         <Badge variant='outline' className='bg-background'>
+         <Badge variant='outline' className='bg-background font-medium'>
           {orderOtps.otpCodes.length}
          </Badge>
         )}
@@ -364,15 +364,25 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           }
          >
           <span className='grow text-ellipsis overflow-hidden text-start flex items-center gap-2'>
-           {orderOtps.otpCodes.map((item) => (
+           {orderOtps.otpCodes.slice(0, 3).map((item) => (
+            <>
+             <Badge
+              variant='outline'
+              key={item.code}
+              className='rounded-md p-1 text-primary border-primary text-base'
+             >
+              {item.code}
+             </Badge>
+            </>
+           ))}
+           {orderOtps.otpCodes.length > 3 && (
             <Badge
              variant='outline'
-             key={item.code}
-             className='rounded-md p-1 text-primary border-primary text-base'
+             className='bg-background font-medium size-9 text-md'
             >
-             {item.code}
+             + {orderOtps.otpCodes.length - 3}
             </Badge>
-           ))}
+           )}
           </span>
           <div className='flex gap-2 items-center'>
            {orderOtps.isLoading && <Spinner />}
@@ -592,7 +602,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        )}
       />
      </Field>
-     <Field className={`${showPersonDetails && 'col-span-full'} gap-2`}>
+     <Field className={`${showPersonDetails && 'col-span-full'}`}>
       <FieldLabel htmlFor='customerName'>
        {dic.orderInfo.customerName}
       </FieldLabel>

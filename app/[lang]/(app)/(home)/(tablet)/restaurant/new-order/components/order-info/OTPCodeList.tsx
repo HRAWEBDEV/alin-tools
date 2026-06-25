@@ -31,12 +31,12 @@ export default function OTPCodeList({
 
  return (
   <DialogContent className='flex flex-col w-[min(95%,25rem)] max-h-[80svh] max-w-none! p-0 overflow-hidden'>
-   <DialogHeader className='p-4 py-1'>
+   <DialogHeader className='p-4 py-1 pb-4'>
     <DialogTitle className='hidden'>{dic.addOTPModal.title}</DialogTitle>
     <DialogDescription className='hidden'></DialogDescription>
    </DialogHeader>
    <div className='grow overflow-auto p-4 pt-0 scroll-smooth'>
-    <form className='sticky top-0 bg-background mb-4'>
+    <form className='sticky top-0 bg-background pb-4 z-1'>
      <FieldGroup className='gap-2'>
       <Field className='gap-3'>
        <FieldLabel htmlFor='addwalletOtpCode'>
