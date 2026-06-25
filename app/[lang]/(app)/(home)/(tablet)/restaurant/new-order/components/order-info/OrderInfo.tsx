@@ -622,6 +622,16 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        )}
       />
      </Field>
+     <Field className='col-span-full gap-2'>
+      <FieldLabel htmlFor='description'>{dic.orderInfo.description}</FieldLabel>
+      <InputGroup>
+       <InputGroupTextarea
+        id='description'
+        disabled={!access['order']['edit']}
+        {...register('comment')}
+       />
+      </InputGroup>
+     </Field>
      <Field
       data-invalid={!!errors.employee}
       data-disabled={saleTypeValue?.key !== SaleTypes.employee}
@@ -851,16 +861,6 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
         </InputGroup>
        )}
       />
-     </Field>
-     <Field className='col-span-full gap-2'>
-      <FieldLabel htmlFor='description'>{dic.orderInfo.description}</FieldLabel>
-      <InputGroup>
-       <InputGroupTextarea
-        id='description'
-        disabled={!access['order']['edit']}
-        {...register('comment')}
-       />
-      </InputGroup>
      </Field>
      <Controller
       control={control}
