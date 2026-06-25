@@ -602,7 +602,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        )}
       />
      </Field>
-     <Field className={`${showPersonDetails && 'col-span-full'}`}>
+     <Field className={`${showPersonDetails && 'col-span-full'} gap-2`}>
       <FieldLabel htmlFor='customerName'>
        {dic.orderInfo.customerName}
       </FieldLabel>
