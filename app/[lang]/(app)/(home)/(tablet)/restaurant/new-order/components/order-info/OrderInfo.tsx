@@ -70,7 +70,6 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
   getValues,
   formState: { errors },
   clearErrors,
-  setFocus,
  } = useFormContext<OrderInfo>();
  const {
   initialDataInfo: {
@@ -125,12 +124,749 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
  return (
   <form onSubmit={(e) => e.preventDefault()} className='py-5 px-1'>
    <FieldGroup>
-    <div className='grid sm:grid-cols-2 gap-5'>
+    <div className='grid sm:grid-cols-2 gap-4'>
+     <Field className='gap-2'>
+      <FieldLabel htmlFor='saleTime'>{dic.orderInfo.saleTime}</FieldLabel>
+      <Controller
+       control={control}
+       name='saleTime'
+       render={({ field }) => (
+        <Drawer>
+         <DrawerTrigger asChild disabled={!access['order']['edit']}>
+          <Button
+           id='saleTime'
+           variant='outline'
+           role='combobox'
+           className='justify-between h-11'
+           onBlur={field.onBlur}
+           ref={field.ref}
+          >
+           <span>{field.value?.value || ''}</span>
+           <ChevronsUpDown />
+          </Button>
+         </DrawerTrigger>
+         <DrawerContent className='h-[min(80svh,35rem)]'>
+          <DrawerHeader className='hidden'>
+           <DrawerTitle>{dic.orderInfo.saleTime}</DrawerTitle>
+          </DrawerHeader>
+          <div className='p-4 pb-6 mb-6 border-b border-border flex flex-wrap justify-between gap-4'>
+           <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
+            {dic.orderInfo.saleTime}
+           </h1>
+          </div>
+          <div>
+           {data?.saleTimes.length ? (
+            <ul>
+             {data.saleTimes.map((item) => (
+              <DrawerClose asChild key={item.key}>
+               <li
+                className='flex gap-1 items-center ps-6 py-2'
+                onClick={() => {
+                 field.onChange(item);
+                }}
+               >
+                <Checkbox
+                 className='size-6'
+                 checked={field.value?.value === item.value}
+                />
+                <Button
+                 tabIndex={-1}
+                 variant='ghost'
+                 className='w-full justify-start h-auto text-lg'
+                >
+                 <span>{item.value}</span>
+                </Button>
+               </li>
+              </DrawerClose>
+             ))}
+            </ul>
+           ) : (
+            <div className='text-center font-medium'></div>
+           )}
+          </div>
+         </DrawerContent>
+        </Drawer>
+       )}
+      />
+     </Field>
+     <Field className='gap-2'>
+      <FieldLabel htmlFor='saleType'>{dic.orderInfo.saleType}</FieldLabel>
+      <Controller
+       control={control}
+       name='saleType'
+       render={({ field }) => (
+        <Drawer>
+         <DrawerTrigger asChild disabled={!access['order']['edit']}>
+          <Button
+           id='saleType'
+           variant='outline'
+           role='combobox'
+           className='justify-between h-11'
+           onBlur={field.onBlur}
+           ref={field.ref}
+          >
+           <span>{field.value?.value || ''}</span>
+           <ChevronsUpDown />
+          </Button>
+         </DrawerTrigger>
+         <DrawerContent className='h-[min(80svh,35rem)]'>
+          <DrawerHeader className='hidden'>
+           <DrawerTitle>{dic.orderInfo.saleType}</DrawerTitle>
+          </DrawerHeader>
+          <div className='p-4 pb-6 mb-6 border-b border-border flex flex-wrap justify-between gap-4'>
+           <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
+            {dic.orderInfo.saleType}
+           </h1>
+          </div>
+          <div className='overflow-hidden overflow-y-auto'>
+           {data?.saleTypes.length ? (
+            <ul>
+             {data.saleTypes.map((item) => (
+              <DrawerClose asChild key={item.key}>
+               <li
+                className='flex gap-1 items-center ps-6 py-2'
+                onClick={() => {
+                 field.onChange(item);
+                 setValue('room', null);
+                 setValue('subscriber', null);
+                 setValue('contract', null);
+                 setValue('customer', null);
+                 setValue('employee', null);
+                 setValue('deliveryAgent', item?.key === SaleTypes.delivery);
+                 clearErrors(['room', 'subscriber']);
+                }}
+               >
+                <Checkbox
+                 className='size-6'
+                 checked={field.value?.key === item.key}
+                />
+                <Button
+                 tabIndex={-1}
+                 variant='ghost'
+                 className='w-full justify-start h-auto text-lg'
+                >
+                 <span>{item.value}</span>
+                </Button>
+               </li>
+              </DrawerClose>
+             ))}
+            </ul>
+           ) : (
+            <div className='text-center font-medium'></div>
+           )}
+          </div>
+         </DrawerContent>
+        </Drawer>
+       )}
+      />
+     </Field>
+     <div className='py-2'>
+      <Field className='gap-2'>
+       <FieldLabel htmlFor='tableNo'>{dic.orderInfo.tableNo}</FieldLabel>
+       <Controller
+        control={control}
+        name='table'
+        render={({ field }) => (
+         <Drawer>
+          <DrawerTrigger asChild>
+           <Button
+            id='saleType'
+            variant='outline'
+            role='combobox'
+            className='justify-between h-11'
+            disabled={freeTablesLoading || !access['order']['edit']}
+            onBlur={field.onBlur}
+            ref={field.ref}
+           >
+            <span>{field.value?.value || ''}</span>
+            <div className='flex gap-2'>
+             {freeTablesLoading && <Spinner />}
+             <ChevronsUpDown />
+            </div>
+           </Button>
+          </DrawerTrigger>
+          <DrawerContent className='h-[min(80svh,35rem)]'>
+           <DrawerHeader className='hidden'>
+            <DrawerTitle>{dic.orderInfo.tableNo}</DrawerTitle>
+           </DrawerHeader>
+           <div className='p-4 pb-4 mb-4 border-b border-border flex flex-wrap justify-between gap-4 items-center'>
+            <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
+             {dic.orderInfo.tableNo}
+            </h1>
+            <Button
+             disabled={freeTablesFetching}
+             variant='outline'
+             size='icon'
+             className='text-primary'
+             onClick={() => freeTablesRefetch()}
+            >
+             <IoReloadOutline className='size-5' />
+            </Button>
+           </div>
+           <div className='grow overflow-hidden overflow-y-auto'>
+            {freeTables?.length ? (
+             <ul>
+              {freeTables.map((item) => (
+               <DrawerClose asChild key={item.key}>
+                <li
+                 className='flex gap-1 items-center ps-6 py-2'
+                 onClick={() => {
+                  field.onChange(item);
+                 }}
+                >
+                 <Checkbox
+                  className='size-6'
+                  checked={field.value?.value === item.value}
+                 />
+                 <Button
+                  tabIndex={-1}
+                  variant='ghost'
+                  className='w-full justify-start h-auto text-lg'
+                 >
+                  <span>{item.value}</span>
+                 </Button>
+                </li>
+               </DrawerClose>
+              ))}
+             </ul>
+            ) : (
+             <div className='text-center font-medium'></div>
+            )}
+           </div>
+          </DrawerContent>
+         </Drawer>
+        )}
+       />
+      </Field>
+     </div>
+     <div className='bg-neutral-200 dark:bg-neutral-800 rounded-md p-2'>
+      <Field className='gap-2'>
+       <FieldLabel htmlFor='walletOtpCode'>
+        {dic.orderInfo.walletOtpCode}
+        {orderOtps.isSuccess && orderOtps.otpCodes.length > 0 && (
+         <Badge variant='outline' className='bg-background font-medium'>
+          {orderOtps.otpCodes.length}
+         </Badge>
+        )}
+       </FieldLabel>
+       <Dialog>
+        <DialogTrigger asChild>
+         <Button
+          id='walletOtpCode'
+          variant='outline'
+          role='combobox'
+          className='justify-between h-11 overflow-hidden'
+          disabled={
+           !access['order']['edit'] ||
+           orderOtps.isLoading ||
+           orderOtps.isLoading ||
+           orderOtps.isError
+          }
+         >
+          <span className='grow text-ellipsis overflow-hidden text-start flex items-center gap-2'>
+           {orderOtps.otpCodes.slice(0, 3).map((item) => (
+            <>
+             <Badge
+              variant='outline'
+              key={item.code}
+              className='rounded-md p-1 text-primary border-primary text-base'
+             >
+              {item.code}
+             </Badge>
+            </>
+           ))}
+           {orderOtps.otpCodes.length > 3 && (
+            <Badge
+             variant='outline'
+             className='bg-background font-medium size-9 text-md'
+            >
+             + {orderOtps.otpCodes.length - 3}
+            </Badge>
+           )}
+          </span>
+          <div className='flex gap-2 items-center'>
+           {orderOtps.isLoading && <Spinner />}
+          </div>
+         </Button>
+        </DialogTrigger>
+        <OTPCodeList dic={dic} isEditalbe={access['order']['edit']} />
+       </Dialog>
+      </Field>
+     </div>
+     <div>
+      <Field data-invalid={!!errors.phoneNumber} className='gap-2'>
+       <FieldLabel htmlFor='phoneNumber'>
+        {dic.orderInfo.phoneNumber}
+       </FieldLabel>
+       <Controller
+        control={control}
+        name='phoneNumber'
+        render={({ field: { value, onChange, ...other } }) => (
+         <InputGroup data-invalid={!!errors.phoneNumber} className='h-11'>
+          <NumericFormat
+           disabled={!access['order']['edit']}
+           {...other}
+           onBlur={() => {
+            const [firstName, lastName] = getValues(['firstName', 'lastName']);
+            other.onBlur();
+            if (value && !isErrorFindPerson && !firstName && !lastName) {
+             findPerson(value);
+            }
+           }}
+           value={value}
+           onValueChange={({ value }) => {
+            onChangePersonPhoneNumber();
+            onChange(value);
+           }}
+           allowLeadingZeros={true}
+           decimalScale={0}
+           customInput={InputGroupInput}
+          />
+          <InputGroupAddon align='inline-end' className='-me-3'>
+           <Button
+            variant='outline'
+            className='rounded-ss-none rounded-es-none border-secondary text-secondary h-11'
+            disabled={
+             isPendingFindPerson ||
+             !phoneNumberValue ||
+             !access['order']['edit']
+            }
+            onClick={() => {
+             const phoneNumber = getValues('phoneNumber');
+             if (!phoneNumber) return;
+             findPerson(phoneNumber);
+            }}
+           >
+            {isPendingFindPerson && <Spinner />}
+            {dic.orderQuickInfo.checkPhoneNumber}
+           </Button>
+          </InputGroupAddon>
+         </InputGroup>
+        )}
+       />
+       <FieldContent>
+        {!!errors.phoneNumber && (
+         <FieldError>{errors.phoneNumber?.message}</FieldError>
+        )}
+       </FieldContent>
+      </Field>
+      {isErrorFindPerson && (
+       <Alert className='border-yellow-600 dark:border-yellow-400 bg-yellow-600/10 dark:bg-yellow-400/10 py-2'>
+        <AlertDescription className='text-yellow-600 dark:text-yellow-400 font-medium'>
+         {dic.orderQuickInfo.noPersonFoundFillPersonInfo}
+        </AlertDescription>
+       </Alert>
+      )}
+     </div>
+     {showPersonDetails && (
+      <div className='grid gap-4 grid-cols-2'>
+       <Field data-invalid={!!errors?.firstName} className='gap-2'>
+        <FieldLabel htmlFor='firstName'>
+         {dic.orderInfo.firstName} {isErrorFindPerson && '*'}
+        </FieldLabel>
+        <InputGroup data-invalid={!!errors?.firstName} className='h-11'>
+         <InputGroupInput
+          readOnly={!!personID}
+          id='firstName'
+          {...register('firstName')}
+          disabled={!access['order']['edit']}
+         />
+        </InputGroup>
+        {!!errors?.firstName && (
+         <FieldContent>
+          <FieldError>{errors?.firstName?.message}</FieldError>
+         </FieldContent>
+        )}
+       </Field>
+       <Field data-invalid={!!errors?.lastName} className='gap-2'>
+        <FieldLabel htmlFor='lastName'>
+         {dic.orderInfo.lastName} {isErrorFindPerson && '*'}
+        </FieldLabel>
+        <InputGroup data-invalid={!!errors?.lastName} className='h-11'>
+         <InputGroupInput
+          readOnly={!!personID}
+          id='lastName'
+          {...register('lastName')}
+          disabled={!access['order']['edit']}
+         />
+        </InputGroup>
+        {!!errors?.lastName && (
+         <FieldContent>
+          <FieldError>{errors?.lastName?.message}</FieldError>
+         </FieldContent>
+        )}
+       </Field>
+      </div>
+     )}
+     <Field
+      data-invalid={!!errors.room}
+      data-disabled={saleTypeValue?.key !== SaleTypes.room}
+      className='gap-2'
+     >
+      <FieldLabel htmlFor='room'>{dic.orderInfo.room} *</FieldLabel>
+      <Controller
+       control={control}
+       name='room'
+       render={({ field }) => (
+        <Drawer>
+         <DrawerTrigger asChild>
+          <Button
+           id='room'
+           variant='outline'
+           role='combobox'
+           className='justify-between h-11'
+           disabled={
+            saleTypeValue?.key !== SaleTypes.room || !access['order']['edit']
+           }
+           onBlur={field.onBlur}
+           ref={field.ref}
+          >
+           <span className='grow text-ellipsis overflow-hidden text-start'>
+            {field.value?.value || ''}
+           </span>
+           <div className='flex gap-2 items-center'>
+            {!!roomValue && access['order']['edit'] && (
+             <Button
+              variant={'ghost'}
+              size={'icon-lg'}
+              onClick={(e) => {
+               e.stopPropagation();
+               setValue('room', null);
+              }}
+             >
+              <BsTrash className='size-5 text-red-700 dark:text-red-400' />
+             </Button>
+            )}
+            <ChevronsUpDown />
+           </div>
+          </Button>
+         </DrawerTrigger>
+         {!!errors.room && (
+          <FieldContent>
+           <FieldError>{errors.room.message}</FieldError>
+          </FieldContent>
+         )}
+         <FindRooms dic={dic} />
+        </Drawer>
+       )}
+      />
+     </Field>
+     <Field
+      data-disabled={saleTypeValue?.key === SaleTypes.room}
+      className='gap-2'
+     >
+      <FieldLabel htmlFor='customer'>{dic.orderInfo.customer}</FieldLabel>
+      <Controller
+       control={control}
+       name='customer'
+       render={({ field }) => (
+        <Drawer>
+         <DrawerTrigger asChild>
+          <Button
+           id='customer'
+           variant='outline'
+           role='combobox'
+           className='justify-between h-11'
+           disabled={
+            saleTypeValue?.key === SaleTypes.room ||
+            !access['order']['edit'] ||
+            !access['order']['changeCustomer']
+           }
+           onBlur={field.onBlur}
+           ref={field.ref}
+          >
+           <span className='grow text-ellipsis overflow-hidden text-start'>
+            {field.value?.code || ''}
+           </span>
+           <div className='flex gap-2 items-center'>
+            {customerValue &&
+             access['order']['edit'] &&
+             access['order']['changeCustomer'] && (
+              <Button
+               variant={'ghost'}
+               size={'icon-lg'}
+               onClick={(e) => {
+                e.stopPropagation();
+                setValue('customer', null);
+               }}
+              >
+               <BsTrash className='size-5 text-red-700 dark:text-red-400' />
+              </Button>
+             )}
+            <ChevronsUpDown />
+           </div>
+          </Button>
+         </DrawerTrigger>
+         <FindCustomer dic={dic} />
+        </Drawer>
+       )}
+      />
+     </Field>
+     <Field className={`${showPersonDetails && 'col-span-full'}`}>
+      <FieldLabel htmlFor='customerName'>
+       {dic.orderInfo.customerName}
+      </FieldLabel>
+      <Controller
+       control={control}
+       name='customerName'
+       render={({ field: { value, ...other } }) => (
+        <InputGroup className='h-11'>
+         <InputGroupInput
+          id='customer'
+          placeholder={orderInfoName}
+          value={value}
+          {...other}
+          disabled={!access['order']['edit']}
+         />
+        </InputGroup>
+       )}
+      />
+     </Field>
+     <Field
+      data-invalid={!!errors.employee}
+      data-disabled={saleTypeValue?.key !== SaleTypes.employee}
+      className='gap-2'
+     >
+      <FieldLabel htmlFor='employee'>{dic.orderInfo.employee} *</FieldLabel>
+      <Controller
+       control={control}
+       name='employee'
+       render={({ field }) => (
+        <Drawer>
+         <DrawerTrigger asChild>
+          <Button
+           id='employee'
+           variant='outline'
+           role='combobox'
+           className='justify-between h-11'
+           disabled={
+            saleTypeValue?.key !== SaleTypes.employee ||
+            !access['order']['edit']
+           }
+           onBlur={field.onBlur}
+           ref={field.ref}
+          >
+           <span className='grow text-ellipsis overflow-hidden text-start'>
+            {field.value?.code || ''}
+           </span>
+           <div className='flex gap-2 items-center'>
+            {!!employeeValue && access['order']['edit'] && (
+             <Button
+              variant={'ghost'}
+              size={'icon-lg'}
+              onClick={(e) => {
+               e.stopPropagation();
+               setValue('employee', null);
+              }}
+             >
+              <BsTrash className='size-5 text-red-700 dark:text-red-400' />
+             </Button>
+            )}
+            <ChevronsUpDown />
+           </div>
+          </Button>
+         </DrawerTrigger>
+         {!!errors.employee && (
+          <FieldContent>
+           <FieldError>{errors.employee.message}</FieldError>
+          </FieldContent>
+         )}
+         <FindEmployees dic={dic} />
+        </Drawer>
+       )}
+      />
+     </Field>
+     <Field className='gap-2'>
+      <FieldLabel htmlFor='persons'>{dic.orderInfo.guestCount}</FieldLabel>
+      <Controller
+       control={control}
+       name='persons'
+       render={({ field: { value, onChange, ...other } }) => (
+        <InputGroup className='h-11'>
+         <NumericFormat
+          id='persons'
+          {...other}
+          disabled={!access['order']['edit']}
+          value={value}
+          onValueChange={({ floatValue }) => onChange(floatValue || '')}
+          customInput={InputGroupInput}
+          allowNegative={false}
+          decimalScale={0}
+          allowLeadingZeros={false}
+         />
+        </InputGroup>
+       )}
+      />
+     </Field>
+     <Field className='gap-2'>
+      <FieldLabel htmlFor='discount-rate'>
+       {dic.orderInfo.discountRate}
+      </FieldLabel>
+      <Controller
+       control={control}
+       name='discountRate'
+       render={({ field: { value, onChange, ...other } }) => (
+        <InputGroup className='h-11'>
+         <NumericFormat
+          {...other}
+          disabled={
+           !access['order']['edit'] || !access['order']['changeDiscount']
+          }
+          value={value}
+          onChange={() => {
+           setValue('fixedDiscount', '');
+          }}
+          onValueChange={({ floatValue }) => {
+           onChange(floatValue || floatValue === 0 ? floatValue : '');
+          }}
+          id='discount-rate'
+          customInput={InputGroupInput}
+          allowNegative={false}
+          decimalScale={0}
+          allowLeadingZeros={false}
+          isAllowed={({ floatValue }) => {
+           if (!floatValue) return true;
+           return floatValue <= 100;
+          }}
+         />
+         {!!systemPricing.data && systemPricing.data.discountRate !== value && (
+          <InputGroupAddon align='inline-end' className='-me-2'>
+           <Button
+            variant='outline'
+            type='button'
+            disabled={
+             !access['order']['edit'] || !access['order']['changeDiscount']
+            }
+            onClick={(e) => {
+             e.stopPropagation();
+             systemPricing.handleSetSystemPricing();
+            }}
+           >
+            {dic.orderInfo.setSystemDiscountRate}:
+            <span> {systemPricing.data?.discountRate}</span>
+           </Button>
+          </InputGroupAddon>
+         )}
+        </InputGroup>
+       )}
+      />
+     </Field>
+     <Field data-invalid={!!errors.fixedDiscount} className='gap-2'>
+      <FieldLabel htmlFor='fixed-discount'>
+       {dic.orderInfo.fixedDiscount}
+      </FieldLabel>
+      <Controller
+       control={control}
+       name='fixedDiscount'
+       render={({ field: { value, onChange, ref, ...other } }) => (
+        <InputGroup className='h-11' data-invalid={!!errors.fixedDiscount}>
+         <NumericFormat
+          id='fixed-discount'
+          {...other}
+          disabled={!access['order']['edit']}
+          value={value}
+          onChange={() => {
+           setValue('discountRate', '');
+          }}
+          onValueChange={({ floatValue }) => {
+           onChange(floatValue || '');
+          }}
+          customInput={InputGroupInput}
+          thousandSeparator
+          allowLeadingZeros={false}
+          allowNegative={false}
+          getInputRef={ref}
+         />
+        </InputGroup>
+       )}
+      />
+      {!!errors.fixedDiscount && (
+       <FieldError>{errors.fixedDiscount.message}</FieldError>
+      )}
+     </Field>
+     <Field data-invalid={!!errors.contract} className='gap-2'>
+      <FieldLabel htmlFor='contract'>{dic.orderInfo.contractNo}</FieldLabel>
+      <Controller
+       control={control}
+       name='contract'
+       render={({ field }) => (
+        <Drawer>
+         <DrawerTrigger asChild disabled={!access['order']['edit']}>
+          <Button
+           id='contract'
+           variant='outline'
+           role='combobox'
+           className='justify-between h-11'
+           onBlur={field.onBlur}
+           ref={field.ref}
+          >
+           <span className='grow text-ellipsis overflow-hidden text-start'>
+            {field.value?.value || ''}
+           </span>
+           <div className='flex gap-2 items-center'>
+            {!!contractValue && access['order']['edit'] && (
+             <Button
+              variant={'ghost'}
+              size={'icon-lg'}
+              onClick={(e) => {
+               e.stopPropagation();
+               setValue('contract', null);
+              }}
+             >
+              <BsTrash className='size-5 text-red-700 dark:text-red-400' />
+             </Button>
+            )}
+            <ChevronsUpDown />
+           </div>
+          </Button>
+         </DrawerTrigger>
+         {!!errors.contract && (
+          <FieldContent>
+           <FieldError>{errors.contract.message}</FieldError>
+          </FieldContent>
+         )}
+         {/* todo */}
+         <FindContract dic={dic} />
+        </Drawer>
+       )}
+      />
+     </Field>
+     <Field className='gap-2'>
+      <FieldLabel htmlFor='rounding'>{dic.orderInfo.roundingValue}</FieldLabel>
+      <Controller
+       control={control}
+       name='rounding'
+       render={({ field: { value, onChange, ...other } }) => (
+        <InputGroup className='h-11'>
+         <NumericFormat
+          id='rounding'
+          {...other}
+          disabled={!access['order']['edit']}
+          value={value}
+          onValueChange={({ floatValue }) => onChange(floatValue || '')}
+          customInput={InputGroupInput}
+          thousandSeparator
+          allowLeadingZeros={false}
+         />
+        </InputGroup>
+       )}
+      />
+     </Field>
+     <Field className='col-span-full gap-2'>
+      <FieldLabel htmlFor='description'>{dic.orderInfo.description}</FieldLabel>
+      <InputGroup>
+       <InputGroupTextarea
+        id='description'
+        disabled={!access['order']['edit']}
+        {...register('comment')}
+       />
+      </InputGroup>
+     </Field>
      <Controller
       control={control}
       name='orderDate'
       render={({ field }) => (
-       <Field>
+       <Field className='gap-2'>
         <FieldLabel htmlFor='orderDate'>{dic.orderInfo.orderDate}</FieldLabel>
         <Popover
          open={showDateTimePicker}
@@ -180,7 +916,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
       control={control}
       name='orderDate'
       render={({ field }) => (
-       <Field>
+       <Field className='gap-2'>
         <FieldLabel htmlFor='orderTime'>{dic.orderInfo.orderTime}</FieldLabel>
         <Popover
          open={showTimePicker}
@@ -261,7 +997,6 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
              }}
             />
            </TimePickerWheels>
-
            <TimePickerButton
             className='mt-6 w-full bg-primary text-white py-3 rounded-2xl'
             onClick={() => setShowTimePicker(!showTimePicker)}
@@ -274,248 +1009,23 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        </Field>
       )}
      />
-     <Field>
-      <FieldLabel htmlFor='saleTime'>{dic.orderInfo.saleTime}</FieldLabel>
-      <Controller
-       control={control}
-       name='saleTime'
-       render={({ field }) => (
-        <Drawer>
-         <DrawerTrigger asChild disabled={!access['order']['edit']}>
-          <Button
-           id='saleTime'
-           variant='outline'
-           role='combobox'
-           className='justify-between h-11'
-           onBlur={field.onBlur}
-           ref={field.ref}
-          >
-           <span>{field.value?.value || ''}</span>
-           <ChevronsUpDown />
-          </Button>
-         </DrawerTrigger>
-         <DrawerContent className='h-[min(80svh,35rem)]'>
-          <DrawerHeader className='hidden'>
-           <DrawerTitle>{dic.orderInfo.saleTime}</DrawerTitle>
-          </DrawerHeader>
-          <div className='p-4 pb-6 mb-6 border-b border-border flex flex-wrap justify-between gap-4'>
-           <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
-            {dic.orderInfo.saleTime}
-           </h1>
-          </div>
-          <div>
-           {data?.saleTimes.length ? (
-            <ul>
-             {data.saleTimes.map((item) => (
-              <DrawerClose asChild key={item.key}>
-               <li
-                className='flex gap-1 items-center ps-6 py-2'
-                onClick={() => {
-                 field.onChange(item);
-                }}
-               >
-                <Checkbox
-                 className='size-6'
-                 checked={field.value?.value === item.value}
-                />
-                <Button
-                 tabIndex={-1}
-                 variant='ghost'
-                 className='w-full justify-start h-auto text-lg'
-                >
-                 <span>{item.value}</span>
-                </Button>
-               </li>
-              </DrawerClose>
-             ))}
-            </ul>
-           ) : (
-            <div className='text-center font-medium'></div>
-           )}
-          </div>
-         </DrawerContent>
-        </Drawer>
-       )}
-      />
-     </Field>
-     <Field>
-      <FieldLabel htmlFor='saleType'>{dic.orderInfo.saleType}</FieldLabel>
-      <Controller
-       control={control}
-       name='saleType'
-       render={({ field }) => (
-        <Drawer>
-         <DrawerTrigger asChild disabled={!access['order']['edit']}>
-          <Button
-           id='saleType'
-           variant='outline'
-           role='combobox'
-           className='justify-between h-11'
-           onBlur={field.onBlur}
-           ref={field.ref}
-          >
-           <span>{field.value?.value || ''}</span>
-           <ChevronsUpDown />
-          </Button>
-         </DrawerTrigger>
-         <DrawerContent className='h-[min(80svh,35rem)]'>
-          <DrawerHeader className='hidden'>
-           <DrawerTitle>{dic.orderInfo.saleType}</DrawerTitle>
-          </DrawerHeader>
-          <div className='p-4 pb-6 mb-6 border-b border-border flex flex-wrap justify-between gap-4'>
-           <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
-            {dic.orderInfo.saleType}
-           </h1>
-          </div>
-          <div className='overflow-hidden overflow-y-auto'>
-           {data?.saleTypes.length ? (
-            <ul>
-             {data.saleTypes.map((item) => (
-              <DrawerClose asChild key={item.key}>
-               <li
-                className='flex gap-1 items-center ps-6 py-2'
-                onClick={() => {
-                 field.onChange(item);
-                 setValue('room', null);
-                 setValue('subscriber', null);
-                 setValue('contract', null);
-                 setValue('customer', null);
-                 setValue('employee', null);
-                 setValue('deliveryAgent', item?.key === SaleTypes.delivery);
-                 clearErrors(['room', 'subscriber']);
-                }}
-               >
-                <Checkbox
-                 className='size-6'
-                 checked={field.value?.key === item.key}
-                />
-                <Button
-                 tabIndex={-1}
-                 variant='ghost'
-                 className='w-full justify-start h-auto text-lg'
-                >
-                 <span>{item.value}</span>
-                </Button>
-               </li>
-              </DrawerClose>
-             ))}
-            </ul>
-           ) : (
-            <div className='text-center font-medium'></div>
-           )}
-          </div>
-         </DrawerContent>
-        </Drawer>
-       )}
-      />
-     </Field>
-     <div>
-      <Field data-invalid={!!errors.phoneNumber}>
-       <FieldLabel htmlFor='phoneNumber'>
-        {dic.orderInfo.phoneNumber}
-       </FieldLabel>
-       <Controller
-        control={control}
-        name='phoneNumber'
-        render={({ field: { value, onChange, ...other } }) => (
-         <InputGroup data-invalid={!!errors.phoneNumber} className='h-11'>
-          <NumericFormat
-           disabled={!access['order']['edit']}
-           {...other}
-           onBlur={() => {
-            const [firstName, lastName] = getValues(['firstName', 'lastName']);
-            other.onBlur();
-            if (value && !isErrorFindPerson && !firstName && !lastName) {
-             findPerson(value);
-            }
-           }}
-           value={value}
-           onValueChange={({ value }) => {
-            onChangePersonPhoneNumber();
-            onChange(value);
-           }}
-           allowLeadingZeros={true}
-           decimalScale={0}
-           customInput={InputGroupInput}
-          />
-          <InputGroupAddon align='inline-end' className='-me-3'>
-           <Button
-            variant='outline'
-            className='rounded-ss-none rounded-es-none border-secondary text-secondary h-11'
-            disabled={
-             isPendingFindPerson ||
-             !phoneNumberValue ||
-             !access['order']['edit']
-            }
-            onClick={() => {
-             const phoneNumber = getValues('phoneNumber');
-             if (!phoneNumber) return;
-             findPerson(phoneNumber);
-            }}
-           >
-            {isPendingFindPerson && <Spinner />}
-            {dic.orderQuickInfo.checkPhoneNumber}
-           </Button>
-          </InputGroupAddon>
-         </InputGroup>
-        )}
+     <Field className='col-span-full gap-2'>
+      <FieldLabel htmlFor='invoiceType'>{dic.orderInfo.invoiceType}</FieldLabel>
+      <InputGroup className='h-11'>
+       <InputGroupInput
+        id='invoiceType'
+        readOnly
+        value={
+         orderDateValue.getTime() <= new Date().getTime()
+          ? dic.orderInfo.invoice
+          : dic.orderInfo.bill
+        }
        />
-       <FieldContent>
-        {!!errors.phoneNumber && (
-         <FieldError>{errors.phoneNumber?.message}</FieldError>
-        )}
-       </FieldContent>
-      </Field>
-      {isErrorFindPerson && (
-       <Alert className='border-yellow-600 dark:border-yellow-400 bg-yellow-600/10 dark:bg-yellow-400/10 py-2'>
-        <AlertDescription className='text-yellow-600 dark:text-yellow-400 font-medium'>
-         {dic.orderQuickInfo.noPersonFoundFillPersonInfo}
-        </AlertDescription>
-       </Alert>
-      )}
-     </div>
-     {showPersonDetails && (
-      <div className='grid gap-4 grid-cols-2'>
-       <Field data-invalid={!!errors?.firstName}>
-        <FieldLabel htmlFor='firstName'>
-         {dic.orderInfo.firstName} {isErrorFindPerson && '*'}
-        </FieldLabel>
-        <InputGroup data-invalid={!!errors?.firstName} className='h-11'>
-         <InputGroupInput
-          readOnly={!!personID}
-          id='firstName'
-          {...register('firstName')}
-          disabled={!access['order']['edit']}
-         />
-        </InputGroup>
-        {!!errors?.firstName && (
-         <FieldContent>
-          <FieldError>{errors?.firstName?.message}</FieldError>
-         </FieldContent>
-        )}
-       </Field>
-       <Field data-invalid={!!errors?.lastName}>
-        <FieldLabel htmlFor='lastName'>
-         {dic.orderInfo.lastName} {isErrorFindPerson && '*'}
-        </FieldLabel>
-        <InputGroup data-invalid={!!errors?.lastName} className='h-11'>
-         <InputGroupInput
-          readOnly={!!personID}
-          id='lastName'
-          {...register('lastName')}
-          disabled={!access['order']['edit']}
-         />
-        </InputGroup>
-        {!!errors?.lastName && (
-         <FieldContent>
-          <FieldError>{errors?.lastName?.message}</FieldError>
-         </FieldContent>
-        )}
-       </Field>
-      </div>
-     )}
+      </InputGroup>
+     </Field>
      <Field
       data-invalid={!!errors.subscriber}
+      className='gap-2'
       data-disabled={
        saleTypeValue?.key !== SaleTypes.delivery &&
        saleTypeValue?.key !== SaleTypes.contract
@@ -574,322 +1084,10 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        )}
       />
      </Field>
-     <Field data-disabled={saleTypeValue?.key === SaleTypes.room}>
-      <FieldLabel htmlFor='customer'>{dic.orderInfo.customer}</FieldLabel>
-      <Controller
-       control={control}
-       name='customer'
-       render={({ field }) => (
-        <Drawer>
-         <DrawerTrigger asChild>
-          <Button
-           id='customer'
-           variant='outline'
-           role='combobox'
-           className='justify-between h-11'
-           disabled={
-            saleTypeValue?.key === SaleTypes.room ||
-            !access['order']['edit'] ||
-            !access['order']['changeCustomer']
-           }
-           onBlur={field.onBlur}
-           ref={field.ref}
-          >
-           <span className='grow text-ellipsis overflow-hidden text-start'>
-            {field.value?.code || ''}
-           </span>
-           <div className='flex gap-2 items-center'>
-            {customerValue &&
-             access['order']['edit'] &&
-             access['order']['changeCustomer'] && (
-              <Button
-               variant={'ghost'}
-               size={'icon-lg'}
-               onClick={(e) => {
-                e.stopPropagation();
-                setValue('customer', null);
-               }}
-              >
-               <BsTrash className='size-5 text-red-700 dark:text-red-400' />
-              </Button>
-             )}
-            <ChevronsUpDown />
-           </div>
-          </Button>
-         </DrawerTrigger>
-         <FindCustomer dic={dic} />
-        </Drawer>
-       )}
-      />
-     </Field>
-     <Field
-      data-invalid={!!errors.room}
-      data-disabled={saleTypeValue?.key !== SaleTypes.room}
-     >
-      <FieldLabel htmlFor='room'>{dic.orderInfo.room} *</FieldLabel>
-      <Controller
-       control={control}
-       name='room'
-       render={({ field }) => (
-        <Drawer>
-         <DrawerTrigger asChild>
-          <Button
-           id='room'
-           variant='outline'
-           role='combobox'
-           className='justify-between h-11'
-           disabled={
-            saleTypeValue?.key !== SaleTypes.room || !access['order']['edit']
-           }
-           onBlur={field.onBlur}
-           ref={field.ref}
-          >
-           <span className='grow text-ellipsis overflow-hidden text-start'>
-            {field.value?.value || ''}
-           </span>
-           <div className='flex gap-2 items-center'>
-            {!!roomValue && access['order']['edit'] && (
-             <Button
-              variant={'ghost'}
-              size={'icon-lg'}
-              onClick={(e) => {
-               e.stopPropagation();
-               setValue('room', null);
-              }}
-             >
-              <BsTrash className='size-5 text-red-700 dark:text-red-400' />
-             </Button>
-            )}
-            <ChevronsUpDown />
-           </div>
-          </Button>
-         </DrawerTrigger>
-         {!!errors.room && (
-          <FieldContent>
-           <FieldError>{errors.room.message}</FieldError>
-          </FieldContent>
-         )}
-         <FindRooms dic={dic} />
-        </Drawer>
-       )}
-      />
-     </Field>
-     <Field
-      data-invalid={!!errors.employee}
-      data-disabled={saleTypeValue?.key !== SaleTypes.employee}
-     >
-      <FieldLabel htmlFor='employee'>{dic.orderInfo.employee} *</FieldLabel>
-      <Controller
-       control={control}
-       name='employee'
-       render={({ field }) => (
-        <Drawer>
-         <DrawerTrigger asChild>
-          <Button
-           id='employee'
-           variant='outline'
-           role='combobox'
-           className='justify-between h-11'
-           disabled={
-            saleTypeValue?.key !== SaleTypes.employee ||
-            !access['order']['edit']
-           }
-           onBlur={field.onBlur}
-           ref={field.ref}
-          >
-           <span className='grow text-ellipsis overflow-hidden text-start'>
-            {field.value?.code || ''}
-           </span>
-           <div className='flex gap-2 items-center'>
-            {!!employeeValue && access['order']['edit'] && (
-             <Button
-              variant={'ghost'}
-              size={'icon-lg'}
-              onClick={(e) => {
-               e.stopPropagation();
-               setValue('employee', null);
-              }}
-             >
-              <BsTrash className='size-5 text-red-700 dark:text-red-400' />
-             </Button>
-            )}
-            <ChevronsUpDown />
-           </div>
-          </Button>
-         </DrawerTrigger>
-         {!!errors.employee && (
-          <FieldContent>
-           <FieldError>{errors.employee.message}</FieldError>
-          </FieldContent>
-         )}
-         <FindEmployees dic={dic} />
-        </Drawer>
-       )}
-      />
-     </Field>
-     <Field>
-      <FieldLabel htmlFor='tableNo'>{dic.orderInfo.tableNo}</FieldLabel>
-      <Controller
-       control={control}
-       name='table'
-       render={({ field }) => (
-        <Drawer>
-         <DrawerTrigger asChild>
-          <Button
-           id='saleType'
-           variant='outline'
-           role='combobox'
-           className='justify-between h-11'
-           disabled={freeTablesLoading || !access['order']['edit']}
-           onBlur={field.onBlur}
-           ref={field.ref}
-          >
-           <span>{field.value?.value || ''}</span>
-           <div className='flex gap-2'>
-            {freeTablesLoading && <Spinner />}
-            <ChevronsUpDown />
-           </div>
-          </Button>
-         </DrawerTrigger>
-         <DrawerContent className='h-[min(80svh,35rem)]'>
-          <DrawerHeader className='hidden'>
-           <DrawerTitle>{dic.orderInfo.tableNo}</DrawerTitle>
-          </DrawerHeader>
-          <div className='p-4 pb-4 mb-4 border-b border-border flex flex-wrap justify-between gap-4 items-center'>
-           <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
-            {dic.orderInfo.tableNo}
-           </h1>
-           <Button
-            disabled={freeTablesFetching}
-            variant='outline'
-            size='icon'
-            className='text-primary'
-            onClick={() => freeTablesRefetch()}
-           >
-            <IoReloadOutline className='size-5' />
-           </Button>
-          </div>
-          <div className='grow overflow-hidden overflow-y-auto'>
-           {freeTables?.length ? (
-            <ul>
-             {freeTables.map((item) => (
-              <DrawerClose asChild key={item.key}>
-               <li
-                className='flex gap-1 items-center ps-6 py-2'
-                onClick={() => {
-                 field.onChange(item);
-                }}
-               >
-                <Checkbox
-                 className='size-6'
-                 checked={field.value?.value === item.value}
-                />
-                <Button
-                 tabIndex={-1}
-                 variant='ghost'
-                 className='w-full justify-start h-auto text-lg'
-                >
-                 <span>{item.value}</span>
-                </Button>
-               </li>
-              </DrawerClose>
-             ))}
-            </ul>
-           ) : (
-            <div className='text-center font-medium'></div>
-           )}
-          </div>
-         </DrawerContent>
-        </Drawer>
-       )}
-      />
-     </Field>
-     <Field>
-      <FieldLabel htmlFor='persons'>{dic.orderInfo.guestCount}</FieldLabel>
-      <Controller
-       control={control}
-       name='persons'
-       render={({ field: { value, onChange, ...other } }) => (
-        <InputGroup className='h-11'>
-         <NumericFormat
-          id='persons'
-          {...other}
-          disabled={!access['order']['edit']}
-          value={value}
-          onValueChange={({ floatValue }) => onChange(floatValue || '')}
-          customInput={InputGroupInput}
-          allowNegative={false}
-          decimalScale={0}
-          allowLeadingZeros={false}
-         />
-        </InputGroup>
-       )}
-      />
-     </Field>
-     <Field>
-      <FieldLabel htmlFor='invoiceType'>{dic.orderInfo.invoiceType}</FieldLabel>
-      <InputGroup className='h-11'>
-       <InputGroupInput
-        id='invoiceType'
-        readOnly
-        value={
-         orderDateValue.getTime() <= new Date().getTime()
-          ? dic.orderInfo.invoice
-          : dic.orderInfo.bill
-        }
-       />
-      </InputGroup>
-     </Field>
-     <Field data-invalid={!!errors.contract}>
-      <FieldLabel htmlFor='contract'>{dic.orderInfo.contractNo}</FieldLabel>
-      <Controller
-       control={control}
-       name='contract'
-       render={({ field }) => (
-        <Drawer>
-         <DrawerTrigger asChild disabled={!access['order']['edit']}>
-          <Button
-           id='contract'
-           variant='outline'
-           role='combobox'
-           className='justify-between h-11'
-           onBlur={field.onBlur}
-           ref={field.ref}
-          >
-           <span className='grow text-ellipsis overflow-hidden text-start'>
-            {field.value?.value || ''}
-           </span>
-           <div className='flex gap-2 items-center'>
-            {!!contractValue && access['order']['edit'] && (
-             <Button
-              variant={'ghost'}
-              size={'icon-lg'}
-              onClick={(e) => {
-               e.stopPropagation();
-               setValue('contract', null);
-              }}
-             >
-              <BsTrash className='size-5 text-red-700 dark:text-red-400' />
-             </Button>
-            )}
-            <ChevronsUpDown />
-           </div>
-          </Button>
-         </DrawerTrigger>
-         {!!errors.contract && (
-          <FieldContent>
-           <FieldError>{errors.contract.message}</FieldError>
-          </FieldContent>
-         )}
-         {/* todo */}
-         <FindContract dic={dic} />
-        </Drawer>
-       )}
-      />
-     </Field>
      <Field
       data-invalid={!!errors.customerContract}
       data-disabled={!customerValue}
+      className='gap-2'
      >
       <FieldLabel htmlFor='customerContract'>
        {dic.orderInfo.customerContractNo}
@@ -939,7 +1137,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        )}
       />
      </Field>
-     <Field>
+     <Field className='gap-2'>
       <FieldLabel htmlFor='waiter'>{dic.orderInfo.waiter}</FieldLabel>
       <Controller
        control={control}
@@ -979,174 +1177,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        )}
       />
      </Field>
-     <Field>
-      <FieldLabel htmlFor='walletOtpCode'>
-       {dic.orderInfo.walletOtpCode}
-       {orderOtps.isSuccess && orderOtps.otpCodes.length > 0 && (
-        <Badge variant='outline'>{orderOtps.otpCodes.length}</Badge>
-       )}
-      </FieldLabel>
-      <Dialog>
-       <DialogTrigger asChild>
-        <Button
-         id='walletOtpCode'
-         variant='outline'
-         role='combobox'
-         className='justify-between h-11 overflow-hidden'
-         disabled={
-          !access['order']['edit'] ||
-          orderOtps.isLoading ||
-          orderOtps.isLoading ||
-          orderOtps.isError
-         }
-        >
-         <span className='grow text-ellipsis overflow-hidden text-start flex items-center gap-2'>
-          {orderOtps.otpCodes.map((item) => (
-           <Badge
-            variant='outline'
-            key={item.code}
-            className='rounded-md p-2 text-primary border-primary'
-           >
-            {item.code}
-           </Badge>
-          ))}
-         </span>
-         <div className='flex gap-2 items-center'>
-          {orderOtps.isLoading && <Spinner />}
-         </div>
-        </Button>
-       </DialogTrigger>
-       <OTPCodeList dic={dic} isEditalbe={access['order']['edit']} />
-      </Dialog>
-      {/*<Controller
-       control={control}
-       name='walletOtpCode'
-       render={({ field: { value, onChange, ...other } }) => (
-        <InputGroup className='h-11'>
-         <NumericFormat
-          {...other}
-          disabled={!access['order']['edit']}
-          value={value}
-          onValueChange={({ value }) => {
-           onChange(value);
-          }}
-          id='walletOtpCode'
-          customInput={InputGroupInput}
-          allowNegative={false}
-          decimalScale={0}
-          allowLeadingZeros={true}
-         />
-        </InputGroup>
-       )}
-      />*/}
-     </Field>
-     <Field className={`${!showPersonDetails && 'col-span-full'}`}>
-      <FieldLabel htmlFor='customerName'>
-       {dic.orderInfo.customerName}
-      </FieldLabel>
-      <Controller
-       control={control}
-       name='customerName'
-       render={({ field: { value, ...other } }) => (
-        <InputGroup className='h-11'>
-         <InputGroupInput
-          id='customer'
-          placeholder={orderInfoName}
-          value={value}
-          {...other}
-          disabled={!access['order']['edit']}
-         />
-        </InputGroup>
-       )}
-      />
-     </Field>
-     <Field>
-      <FieldLabel htmlFor='discount-rate'>
-       {dic.orderInfo.discountRate}
-      </FieldLabel>
-      <Controller
-       control={control}
-       name='discountRate'
-       render={({ field: { value, onChange, ...other } }) => (
-        <InputGroup className='h-11'>
-         <NumericFormat
-          {...other}
-          disabled={
-           !access['order']['edit'] || !access['order']['changeDiscount']
-          }
-          value={value}
-          onChange={() => {
-           setValue('fixedDiscount', '');
-          }}
-          onValueChange={({ floatValue }) => {
-           onChange(floatValue || floatValue === 0 ? floatValue : '');
-          }}
-          id='discount-rate'
-          customInput={InputGroupInput}
-          allowNegative={false}
-          decimalScale={0}
-          allowLeadingZeros={false}
-          isAllowed={({ floatValue }) => {
-           if (!floatValue) return true;
-           return floatValue <= 100;
-          }}
-         />
-         {!!systemPricing.data && systemPricing.data.discountRate !== value && (
-          <InputGroupAddon align='inline-end' className='-me-2'>
-           <Button
-            variant='outline'
-            type='button'
-            disabled={
-             !access['order']['edit'] || !access['order']['changeDiscount']
-            }
-            onClick={(e) => {
-             e.stopPropagation();
-             systemPricing.handleSetSystemPricing();
-            }}
-           >
-            {dic.orderInfo.setSystemDiscountRate}:
-            <span> {systemPricing.data?.discountRate}</span>
-           </Button>
-          </InputGroupAddon>
-         )}
-        </InputGroup>
-       )}
-      />
-     </Field>
-     <Field data-invalid={!!errors.fixedDiscount}>
-      <FieldLabel htmlFor='fixed-discount'>
-       {dic.orderInfo.fixedDiscount}
-      </FieldLabel>
-      <Controller
-       control={control}
-       name='fixedDiscount'
-       render={({ field: { value, onChange, ref, ...other } }) => (
-        <InputGroup className='h-11' data-invalid={!!errors.fixedDiscount}>
-         <NumericFormat
-          id='fixed-discount'
-          {...other}
-          disabled={!access['order']['edit']}
-          value={value}
-          onChange={() => {
-           setValue('discountRate', '');
-          }}
-          onValueChange={({ floatValue }) => {
-           onChange(floatValue || '');
-          }}
-          customInput={InputGroupInput}
-          thousandSeparator
-          allowLeadingZeros={false}
-          allowNegative={false}
-          getInputRef={ref}
-         />
-        </InputGroup>
-       )}
-      />
-      {!!errors.fixedDiscount && (
-       <FieldError>{errors.fixedDiscount.message}</FieldError>
-      )}
-     </Field>
-     <Field>
+     <Field className='gap-2'>
       <FieldLabel htmlFor='bonNo'>{dic.orderInfo.bonNo}</FieldLabel>
       <Controller
        control={control}
@@ -1168,28 +1199,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        )}
       />
      </Field>
-     <Field>
-      <FieldLabel htmlFor='rounding'>{dic.orderInfo.roundingValue}</FieldLabel>
-      <Controller
-       control={control}
-       name='rounding'
-       render={({ field: { value, onChange, ...other } }) => (
-        <InputGroup className='h-11'>
-         <NumericFormat
-          id='rounding'
-          {...other}
-          disabled={!access['order']['edit']}
-          value={value}
-          onValueChange={({ floatValue }) => onChange(floatValue || '')}
-          customInput={InputGroupInput}
-          thousandSeparator
-          allowLeadingZeros={false}
-         />
-        </InputGroup>
-       )}
-      />
-     </Field>
-     <Field>
+     <Field className='gap-2'>
       <FieldLabel htmlFor='delivery'>{dic.orderInfo.deliveryValue}</FieldLabel>
       <Controller
        control={control}
@@ -1210,7 +1220,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
        )}
       />
      </Field>
-     <Field>
+     <Field className='gap-2'>
       <FieldLabel htmlFor='employeeTip'>{dic.orderInfo.employeeTip}</FieldLabel>
       <Controller
        control={control}
@@ -1229,16 +1239,6 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
         </InputGroup>
        )}
       />
-     </Field>
-     <Field className='col-span-full'>
-      <FieldLabel htmlFor='description'>{dic.orderInfo.description}</FieldLabel>
-      <InputGroup>
-       <InputGroupTextarea
-        id='description'
-        disabled={!access['order']['edit']}
-        {...register('comment')}
-       />
-      </InputGroup>
      </Field>
      <div className='col-span-full flex flex-wrap gap-8 mt-4 ps-4'>
       <Controller
