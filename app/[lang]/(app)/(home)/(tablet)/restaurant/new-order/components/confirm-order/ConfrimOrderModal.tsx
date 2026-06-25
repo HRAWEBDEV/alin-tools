@@ -55,8 +55,8 @@ export default function ConfirmOrderModal({
     closeConfirmOrder();
    }}
   >
-   <DialogContent className='flex flex-col w-full max-h-dvh sm:w-[min(95%,45rem)] sm:max-h-[95svh] max-w-none! p-0 overflow-hidden'>
-    <DialogHeader className='p-4'>
+   <DialogContent className='flex flex-col w-full max-h-dvh sm:w-[min(95%,45rem)] sm:max-h-[95svh] max-w-none! p-0 overflow-hidden gap-0'>
+    <DialogHeader className='p-4 pb-8'>
      <DialogTitle className='hidden'></DialogTitle>
      <DialogDescription className='hidden'></DialogDescription>
     </DialogHeader>
@@ -74,7 +74,7 @@ export default function ConfirmOrderModal({
        }
       }}
      >
-      <TabsList className='self-center sticky top-0 min-h-12 z-2'>
+      <TabsList className='self-center sticky top-0 min-h-12 z-2 bg-neutral-200 dark:bg-neutral-800'>
        <TabsTrigger value='orderInfo' className='w-28'>
         {dic.tools.orderInfo}
        </TabsTrigger>
@@ -152,7 +152,6 @@ export default function ConfirmOrderModal({
       <div className='flex gap-2 sm:gap-4'>
        {confirmOrderActiveType === 'orderInfo' && (
         <Button
-         variant='outline'
          className='h-11 max-sm:p-3 max-sm:grow sm:w-36'
          onClick={() => {
           closeConfirmOrder();
