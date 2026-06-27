@@ -12,18 +12,22 @@ import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { Badge } from '@/components/ui/badge';
 import { useState } from 'react';
 import { getRackReport } from '../../utils/rackReport';
+import RoomControlIndicator from '../room-control/RoomControlIndicator';
+import { type RoomControlDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/room-control/dictionary';
 
 export default function RackNotifsBoard({
  dic,
  open,
  setOpen,
+ roomControlDic,
 }: {
  dic: RoomsRackDictionary;
  open: boolean;
  setOpen: (value: boolean) => unknown;
+ roomControlDic: RoomControlDictionary;
 }) {
  const [activeReport, setActiveReport] =
-  useState<keyof ReturnType<typeof getRackReport>>('notes');
+  useState<keyof ReturnType<typeof getRackReport>>('houseControl');
  const { localeInfo } = useBaseConfig();
  const {
   rackReport,
@@ -53,6 +57,12 @@ export default function RackNotifsBoard({
         }
        >
         <TabsList className='h-11 w-[min(100%,30rem)] mx-auto bg-neutral-200 dark:bg-neutral-800'>
+         <TabsTrigger value='houseControl'>
+          {dic.options.houseControl}
+          <Badge variant='default' className='text-sm size-6'>
+           {rackReport.houseControl.length}
+          </Badge>
+         </TabsTrigger>
          <TabsTrigger value='notes'>
           {dic.options.roomNotes}
           <Badge variant='default' className='text-sm size-6'>
@@ -69,6 +79,31 @@ export default function RackNotifsBoard({
        </Tabs>
       </div>
      </header>
+     {activeReport === 'houseControl' && (
+      <div className='p-4'>
+       <ul>
+        {rackReport.houseControl.map((room) => {
+         return (
+          <li key={room.roomLabel} className={`border-b border-border`}>
+           <button
+            className='whitespace-nowrap w-full justify-start items-start text-start py-2'
+            onClick={() => onShowRackMenu(room)}
+           >
+            <p className='text-2xl font-medium'>{room.roomLabel}</p>
+            {room.hkStateID && (
+             <RoomControlIndicator
+              dic={roomControlDic}
+              hkStateID={room.hkStateID}
+              withText
+             />
+            )}
+           </button>
+          </li>
+         );
+        })}
+       </ul>
+      </div>
+     )}
      {activeReport === 'notes' && (
       <div className='p-4'>
        <ul>

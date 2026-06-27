@@ -71,6 +71,8 @@ import {
 } from '../room-notes/RackRoomNotesApiActions';
 import RackNotifsBoard from '../../components/rack-notifs-board/RackNotifsBoard';
 
+const notificationAudio = new Audio('/sounds/notification-sound.mp3');
+
 export function RoomsRackConfigProvider({
  children,
  dic,
@@ -749,7 +751,12 @@ export function RoomsRackConfigProvider({
      room={targetSelectedRoom}
     />
    </FormProvider>
-   <RackNotifsBoard open={showRackBoard} setOpen={setShowRackBoard} dic={dic} />
+   <RackNotifsBoard
+    open={showRackBoard}
+    setOpen={setShowRackBoard}
+    dic={dic}
+    roomControlDic={roomControlDic}
+   />
   </rackConfigContext.Provider>
  );
 }
