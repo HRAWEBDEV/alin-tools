@@ -343,7 +343,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
       <Field className='gap-2'>
        <FieldLabel htmlFor='walletOtpCode'>
         {dic.orderInfo.walletOtpCode}
-        {orderOtps.isSuccess && orderOtps.otpCodes.length > 0 && (
+        {orderOtps.otpCodes.length > 0 && (
          <Badge variant='outline' className='bg-background font-medium'>
           {orderOtps.otpCodes.length}
          </Badge>
