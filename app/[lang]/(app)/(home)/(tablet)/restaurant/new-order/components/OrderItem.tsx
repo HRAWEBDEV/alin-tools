@@ -58,7 +58,7 @@ export default function OrderItem({
    className={`flex flex-col ${showOrderImage ? 'pt-17 min-h-60' : 'pt-0'}`}
   >
    <div
-    className={`grow rounded-xl dark:bg-neutral-900 ${showOrderImage ? 'shadow-xl' : 'border shadow-lg border-border pt-2'}`}
+    className={`grow rounded-xl dark:bg-neutral-900 ${showOrderImage ? 'shadow-xl' : 'border shadow-lg border-border pt-2'} ${itemAmount ? 'bg-primary/15 dark:bg-primary/15' : ''}`}
    >
     {showOrderImage && (
      <div className='grid place-content-center -mt-17 mb-2'>
@@ -124,7 +124,7 @@ export default function OrderItem({
         {userOrderItemsLoading || userOrderIsLoading ? (
          <Spinner />
         ) : (
-         <FaCirclePlus className='size-9' />
+         <FaCirclePlus className='size-11' />
         )}
        </Button>
       </div>
@@ -147,7 +147,7 @@ export default function OrderItem({
          });
         }}
        >
-        <CiCircleMinus className='size-10' />
+        <CiCircleMinus className='size-11' />
        </Button>
        <div className='text-xl py-[0.2rem] px-1 shrink-0 text-center basis-8 font-medium text-primary rounded'>
         {itemAmount || 0}
@@ -168,7 +168,7 @@ export default function OrderItem({
          });
         }}
        >
-        <CiCirclePlus className='size-10' />
+        <CiCirclePlus className='size-11' />
        </Button>
       </div>
      )}
