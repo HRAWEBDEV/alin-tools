@@ -89,7 +89,9 @@ export default function RackNotifsBoard({
             className='whitespace-nowrap w-full justify-start items-start text-start py-2'
             onClick={() => onShowRackMenu(room)}
            >
-            <p className='text-2xl font-medium'>{room.roomLabel}</p>
+            <p className='text-2xl font-medium font-en-roboto'>
+             {room.roomLabel}
+            </p>
             {room.hkStateID && (
              <RoomControlIndicator
               dic={roomControlDic}
@@ -118,7 +120,9 @@ export default function RackNotifsBoard({
             className='whitespace-nowrap w-full justify-start items-start text-start py-2'
             onClick={() => onShowRackMenu(room)}
            >
-            <p className='text-xl font-medium'>{room.roomLabel}</p>
+            <p className='text-xl font-medium font-en-roboto'>
+             {room.roomLabel}
+            </p>
             <div>
              {dic.info.message} {room.messageTypeName}
             </div>
@@ -142,7 +146,9 @@ export default function RackNotifsBoard({
             className='whitespace-nowrap w-full justify-start items-start text-start py-2'
             onClick={() => onShowRackMenu(room)}
            >
-            <p className='text-xl font-medium'>{room.roomLabel}</p>
+            <p className='text-xl font-medium font-en-roboto'>
+             {room.roomLabel}
+            </p>
             <div>
              {dic.help.birtdate} {room.bornName}
             </div>

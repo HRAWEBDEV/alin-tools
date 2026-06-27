@@ -10,6 +10,12 @@ function getRackBirthdayReport(rooms: Rack[]) {
  return rooms.filter((item) => item.bithday);
 }
 
+const rackReportDefault: ReturnType<typeof getRackReport> = {
+ birthDays: [],
+ houseControl: [],
+ notes: [],
+};
+
 function getRackReport(rooms: Rack[]) {
  return rooms.reduce(
   (acc, cur) => {
@@ -38,6 +44,7 @@ function getRackReport(rooms: Rack[]) {
 }
 
 export {
+ rackReportDefault,
  getRackHouseControlReport,
  getRackNotesReport,
  getRackBirthdayReport,

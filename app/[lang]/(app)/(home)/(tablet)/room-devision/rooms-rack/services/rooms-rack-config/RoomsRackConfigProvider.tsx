@@ -1,5 +1,12 @@
 'use client';
-import { ReactNode, useState, useEffect, useCallback, useMemo } from 'react';
+import {
+ ReactNode,
+ useState,
+ useEffect,
+ useCallback,
+ useMemo,
+ useRef,
+} from 'react';
 import {
  type ChangePageActions,
  type RackConfig,
@@ -92,6 +99,9 @@ export function RoomsRackConfigProvider({
   }
   return defaultRackSetting;
  });
+ const prevRackReportRef = useRef<ReturnType<typeof getRackReport> | null>(
+  null,
+ );
  const [showRackBoard, setShowRackBoard] = useState(false);
  const [rackIsError, setRackIsError] = useState(false);
  const [rackIsSuccess, setRackIsSuccess] = useState(false);
@@ -662,7 +672,7 @@ export function RoomsRackConfigProvider({
   rackFiltersUseForm.setValue('date', rackFutureDateStart);
  }, [showTypeValue, rackFiltersUseForm, dateFns, rackFutureDateStart]);
 
- const rackReport = getRackReport(rackRooms);
+ const rackReport = useMemo(() => getRackReport(rackRooms), [rackRooms]);
 
  const ctx: RackConfig = {
   sidebar: {
@@ -715,6 +725,22 @@ export function RoomsRackConfigProvider({
   },
   rackReport,
  };
+
+ function handleTrackRackReportDiffs(
+  rackReport: ReturnType<typeof getRackReport>,
+ ) {
+  if (!prevRackReportRef.current) {
+  } else if (
+   JSON.stringify(rackReport) !== JSON.stringify(prevRackReportRef.current)
+  ) {
+   notificationAudio.play();
+  }
+  prevRackReportRef.current = rackReport;
+ }
+
+ useEffect(() => {
+  handleTrackRackReportDiffs(rackReport);
+ }, [rackReport]);
 
  return (
   <rackConfigContext.Provider value={ctx}>
