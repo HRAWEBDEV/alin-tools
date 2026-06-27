@@ -106,7 +106,7 @@ export default function OTPCodeList({
              className='text-destructive h-full rounded-ss-none rounded-es-none border-y-0 border-e-0'
              variant='outline'
              type='button'
-             disabled={!item.isNew || !isEditalbe}
+             disabled={!isEditalbe}
              onClick={(e) => {
               e.stopPropagation();
               setOtpCodes(otpCodes.filter((c) => c.code !== item.code));
