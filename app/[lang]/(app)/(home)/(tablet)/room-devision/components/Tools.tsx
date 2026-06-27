@@ -1,6 +1,7 @@
 import { ModeControllerButton } from '@/app/[lang]/(app)/components/ModeContoller';
 import { LocaleControllerButton } from '@/app/[lang]/(app)/components/LocaleController';
 import { ProfileButton } from '@/app/[lang]/(app)/components/ProfileButton';
+import { ContrastModeController } from '@/app/[lang]/(app)/components/ContrastModeController';
 
 export default function Tools({ flexReverse }: { flexReverse?: boolean }) {
  return (
@@ -8,6 +9,7 @@ export default function Tools({ flexReverse }: { flexReverse?: boolean }) {
    <ProfileButton />
    <LocaleControllerButton />
    <ModeControllerButton />
+   <ContrastModeController />
   </div>
  );
 }

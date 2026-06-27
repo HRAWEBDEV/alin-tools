@@ -25,6 +25,11 @@
   "modeController": {
    "description": "تغییر حالت"
   },
+  "contractMode": {
+   "title": "کنتراست",
+   "on": "روشن",
+   "off": "خاموش"
+  },
   "userInfoRouter": {
    "selectProgram": "انتخاب برنامه",
    "selectActiveProgram": "برنامه مورد نظر را انتخاب کنید",

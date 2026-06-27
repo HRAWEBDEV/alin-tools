@@ -5,6 +5,7 @@
 - stronger border and input border colors (hra-done)
 - add new order info otp list (hra-done)
 - add program salons color indicator
+- add contrast mode controller (hra-done)
 
 # 2.3.2
 - add order items description (hra-done)

@@ -11,6 +11,7 @@ import { type Locale, locales } from '@/internalization/app/localization';
 import { setUserLocale } from '@/utils/userLocaleManager';
 import { ThemeProvider } from 'next-themes';
 import { appModes } from '@/theme/appModes';
+import { getLocaleContrastMode, setLocaleContrastMode } from './contrastMode';
 
 interface Props {
  activeLocale: Locale;
@@ -19,6 +20,12 @@ interface Props {
 
 export default function BaseConfigProvider({ children, activeLocale }: Props) {
  const [userActiveTimeZone, setUserActiveTimeZone] = useState('');
+ const [contrastMode, setContrastMode] = useState(() => {
+  if (typeof window !== 'undefined') {
+   return getLocaleContrastMode();
+  }
+  return true;
+ });
  const windowWatcher = useWindowResizeWatchter();
  // locale handler
  function onChangeLocale(newLocale: Locale) {
@@ -29,9 +36,16 @@ export default function BaseConfigProvider({ children, activeLocale }: Props) {
   location.href = url.href;
  }
  //
+ function handleChangeContrastMode(newState: boolean) {
+  setContrastMode(newState);
+  setLocaleContrastMode(newState);
+ }
+ //
  const activeLocaleInfo = locales[activeLocale];
  // context value
  const ctx: BaseConfig = {
+  contrastMode,
+  onContrastModeChange: handleChangeContrastMode,
   locale: activeLocale,
   localeInfo: activeLocaleInfo,
   appVersion,
@@ -57,6 +71,13 @@ export default function BaseConfigProvider({ children, activeLocale }: Props) {
  useEffect(() => {
   setUserActiveTimeZone(new Intl.DateTimeFormat().resolvedOptions().timeZone);
  }, []);
+
+ useEffect(() => {
+  document.documentElement.setAttribute(
+   'data-contrast-mode',
+   contrastMode ? 'on' : 'off',
+  );
+ }, [contrastMode]);
 
  return (
   <baseConfigContext.Provider value={ctx}>

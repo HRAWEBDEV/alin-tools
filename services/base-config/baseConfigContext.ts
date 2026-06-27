@@ -8,6 +8,8 @@ import { WindowResizeWatcherUtils } from '@/hooks/useWindowResizeWatchter';
 
 interface BaseConfig {
  locale: Locale;
+ contrastMode: boolean;
+ onContrastModeChange: (mode: boolean) => unknown;
  localeInfo: LocaleInfo;
  appVersion: string;
  appBirthDate: Date;
