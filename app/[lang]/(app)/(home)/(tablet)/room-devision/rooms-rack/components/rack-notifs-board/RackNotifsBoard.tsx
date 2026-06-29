@@ -60,19 +60,19 @@ export default function RackNotifsBoard({
          <TabsTrigger value='houseControl'>
           {dic.options.houseControl}
           <Badge variant='default' className='text-sm size-6'>
-           {rackReport.houseControl.length}
+           {rackReport.alarms.length}
           </Badge>
          </TabsTrigger>
          <TabsTrigger value='notes'>
           {dic.options.roomNotes}
           <Badge variant='default' className='text-sm size-6'>
-           {rackReport.notes.length}
+           {rackReport.roomMessages.length}
           </Badge>
          </TabsTrigger>
          <TabsTrigger value='birthDays'>
           {dic.help.birtdate}
           <Badge variant='default' className='size-6 text-sm'>
-           {rackReport.birthDays.length}
+           {rackReport.birthDates.length}
           </Badge>
          </TabsTrigger>
         </TabsList>
@@ -82,7 +82,7 @@ export default function RackNotifsBoard({
      {activeReport === 'houseControl' && (
       <div className='p-4'>
        <ul>
-        {rackReport.houseControl.map((room) => {
+        {rackReport.alarms.map((room) => {
          return (
           <li key={room.roomLabel} className={`border-b border-border`}>
            <button
@@ -109,7 +109,7 @@ export default function RackNotifsBoard({
      {activeReport === 'notes' && (
       <div className='p-4'>
        <ul>
-        {rackReport.notes.map((room) => {
+        {rackReport.roomMessages.map((room) => {
          const noteStyles = getNoteTypeStyles(room.messageTypeID);
          return (
           <li
@@ -136,7 +136,7 @@ export default function RackNotifsBoard({
      {activeReport === 'birthDays' && (
       <div className='p-4'>
        <ul>
-        {rackReport.birthDays.map((room) => {
+        {rackReport.birthDates.map((room) => {
          return (
           <li
            key={room.roomLabel}

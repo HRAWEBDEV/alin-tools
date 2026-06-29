@@ -5,6 +5,7 @@ import {
  type RackInfo,
  type RackDetails,
  type Rack,
+ type RackReport,
 } from '../roomsRackApiActions';
 import { type Paging } from '../../../utils/apiTypes';
 import { type RackLayout } from '../../utils/rackLayout';
@@ -45,10 +46,12 @@ type RackConfig = {
   rackView: RackView;
   onChangeRackView: (view: RackView) => unknown;
   showRackMenu: boolean;
-  onShowRackMenu: (room: Rack) => unknown;
+  onShowRackMenu: (room: { roomLabel: Rack['roomLabel'] }) => unknown;
   onHideRackMenu: () => unknown;
-  selectedRoom: Rack | null;
-  onChangeSelectedRoom: (room: Rack | null) => unknown;
+  selectedRoom: { roomLabel: Rack['roomLabel'] } | null;
+  onChangeSelectedRoom: (
+   room: { roomLabel: Rack['roomLabel'] } | null,
+  ) => unknown;
   isError: boolean;
   isSuccess: boolean;
   isLoading: boolean;
@@ -63,7 +66,7 @@ type RackConfig = {
   rackDetails: RackDetails | null;
   rackFutureDateStart: Date;
  };
- rackReport: ReturnType<typeof getRackReport>;
+ rackReport: RackReport;
 };
 
 const rackConfigContext = createContext<RackConfig | null>(null);

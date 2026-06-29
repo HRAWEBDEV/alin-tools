@@ -20,6 +20,7 @@ import { type OutOfOrderRoomsDictionary } from '@/internalization/app/dictionari
 import {
  type Rack,
  type RackDetails,
+ type RackReport,
  roomsRackBaseKey,
  getInitialData,
  getRackInfo,
@@ -103,6 +104,15 @@ export function RoomsRackConfigProvider({
   null,
  );
  const [showRackBoard, setShowRackBoard] = useState(false);
+ const [rackReportIsError, setRackReportIsError] = useState(false);
+ const [rackReportIsSuccess, setRackReportIsSuccess] = useState(false);
+ const [rackReportIsLoading, setRackReportIsLoading] = useState(false);
+ const [rackRealTimeReport, setRackRealTimeReport] = useState<RackReport>({
+  alarms: [],
+  birthDates: [],
+  roomMessages: [],
+ });
+ console.log(rackRealTimeReport);
  const [rackIsError, setRackIsError] = useState(false);
  const [rackIsSuccess, setRackIsSuccess] = useState(false);
  const [rackIsLoading, setRackIsLoading] = useState(false);
@@ -116,7 +126,9 @@ export function RoomsRackConfigProvider({
   useState<SidebarPanel>('filters');
  const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
  const [sidebarIsPin, setSidebarIsPin] = useState(rackSetting.sidebarIsPin);
- const [selectedRoom, setSelectedRoom] = useState<Rack | null>(null);
+ const [selectedRoom, setSelectedRoom] = useState<{
+  roomLabel: Rack['roomLabel'];
+ } | null>(null);
  const [showRackMenu, setShowRackMenu] = useState(false);
  const [showRoomStateKind, setShowRoomStateKind] = useState(false);
  const [showOutOfOrder, setShowOutOfOrder] = useState(false);
@@ -134,6 +146,8 @@ export function RoomsRackConfigProvider({
  const [connection, setConnection] = useState<signalR.HubConnection | null>(
   null,
  );
+ const [rackReportConnection, setRackReportConnection] =
+  useState<signalR.HubConnection | null>(null);
  // queries
  const buildingKeyQueryValue = searchParams.get(buildingKeyQuery);
  const buildingValueQueryValue = searchParams.get(buildingValueQuery);
@@ -370,6 +384,25 @@ export function RoomsRackConfigProvider({
   rackPaging,
   dateValue,
  ]);
+ //  get rack report
+ const getRealTimeRackReport = useCallback(async () => {
+  if (!rackReportConnection) return;
+  setRackReportIsLoading(true);
+  setRackReportIsError(false);
+  try {
+   await rackReportConnection.invoke(
+    'GetRackUpdate',
+    rackReportConnection.connectionId,
+   );
+   setRackReportIsSuccess(true);
+  } catch (error) {
+   console.log('signalR get rack report failed: ', error);
+   setRackReportIsError(true);
+  } finally {
+   setRackReportIsLoading(false);
+  }
+ }, [rackReportConnection]);
+ //
 
  function handleToggleSidebar(open?: boolean, activePanel?: SidebarPanel) {
   const sidebarState = open === undefined ? !sidebarIsOpen : open;
@@ -447,10 +480,12 @@ export function RoomsRackConfigProvider({
  });
 
  // select room and toggle rack menu
- function handleChangeSelectedRoom(newRoom: Rack | null) {
+ function handleChangeSelectedRoom(
+  newRoom: { roomLabel: Rack['roomLabel'] } | null,
+ ) {
   setSelectedRoom(newRoom);
  }
- function handleShowRackMenu(room: Rack) {
+ function handleShowRackMenu(room: { roomLabel: Rack['roomLabel'] }) {
   handleChangeSelectedRoom(room);
   setShowRackMenu(true);
  }
@@ -459,6 +494,7 @@ export function RoomsRackConfigProvider({
   setShowRackMenu(false);
  }
 
+ // rack rooms signal r effects
  useEffect(() => {
   getRackRooms();
  }, [getRackRooms]);
@@ -518,6 +554,53 @@ export function RoomsRackConfigProvider({
    rackSignalRConnection.stop();
   };
  }, [userInfoRouterStorage]);
+
+ // rack report signal r effects
+ useEffect(() => {
+  getRealTimeRackReport();
+ }, [getRealTimeRackReport]);
+
+ useEffect(() => {
+  if (!rackReportConnection) return;
+  rackReportConnection.on('NotifUpdate', (rackReport) => {
+   setRackRealTimeReport(rackReport);
+  });
+  return () => rackReportConnection && rackReportConnection.off('NotifUpdate');
+ }, [rackReportConnection, rackInfoRefetch, rackPaging]);
+
+ useEffect(() => {
+  if (!rackReportConnection) return;
+  rackReportConnection.on('NotifChanged', () => {
+   getRealTimeRackReport();
+   notificationAudio.play();
+  });
+  return () => rackReportConnection && rackReportConnection.off('NotifChanged');
+ }, [getRackRooms, rackReportConnection, getRealTimeRackReport]);
+
+ useEffect(() => {
+  const rackReportSingalRConnection = new signalR.HubConnectionBuilder()
+   .withUrl(
+    `${
+     process.env.NEXT_PUBLIC_API_URI
+    }/roomracknotifhub?token=${getUserLoginToken()}&programid=${userInfoRouterStorage.programID}&departmentid=${userInfoRouterStorage.departmentID}&ownerid=${userInfoRouterStorage.ownerID}&systemid=${userInfoRouterStorage.systemID}`,
+   )
+   .configureLogging(signalR.LogLevel.Information)
+   .build();
+  const startConnection = async () => {
+   setRackReportConnection(null);
+   try {
+    await rackReportSingalRConnection.start();
+    setRackReportConnection(rackReportSingalRConnection);
+   } catch (error) {
+    console.log('start rack report connection error', error);
+   }
+  };
+  startConnection();
+  return () => {
+   rackReportSingalRConnection.stop();
+  };
+ }, [userInfoRouterStorage]);
+ //
 
  useEffect(() => {
   const newSearchParams = new URLSearchParams(location.search);
@@ -723,19 +806,19 @@ export function RoomsRackConfigProvider({
    data: noteTypes,
    isLoading: noteTypesIsLoading,
   },
-  rackReport,
+  rackReport: rackRealTimeReport,
  };
 
  function handleTrackRackReportDiffs(
   rackReport: ReturnType<typeof getRackReport>,
  ) {
-  if (!prevRackReportRef.current) {
-  } else if (
-   JSON.stringify(rackReport) !== JSON.stringify(prevRackReportRef.current)
-  ) {
-   notificationAudio.play();
-  }
-  prevRackReportRef.current = rackReport;
+  // if (!prevRackReportRef.current) {
+  // } else if (
+  //  JSON.stringify(rackReport) !== JSON.stringify(prevRackReportRef.current)
+  // ) {
+  //  notificationAudio.play();
+  // }
+  // prevRackReportRef.current = rackReport;
  }
 
  useEffect(() => {
