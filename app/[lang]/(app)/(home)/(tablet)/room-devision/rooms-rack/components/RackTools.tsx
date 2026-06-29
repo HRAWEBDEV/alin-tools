@@ -14,6 +14,7 @@ import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { rackShowTypes } from '../utils/rackShowTypes';
 import { getRackOccupancyStyles } from '../utils/rackOcuppancyStyles';
 import { FaArchive } from 'react-icons/fa';
+import { type RoomControlDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/room-control/dictionary';
 
 const smallBadgeKeys: (keyof RackFiltersSchema)[] = ['floor', 'building'];
 const largeBadgeKeys: (keyof RackFiltersSchema)[] = [
@@ -51,6 +52,7 @@ export default function RackTools({ dic }: { dic: RoomsRackDictionary }) {
   rack: { lastUpdate, rowsCount },
   rackInfo,
  } = useRackConfigContext();
+
  return (
   <>
    <h1

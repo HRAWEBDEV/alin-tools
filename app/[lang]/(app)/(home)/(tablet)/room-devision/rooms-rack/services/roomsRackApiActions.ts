@@ -18,6 +18,26 @@ type InitialData = {
  };
 };
 
+interface RackReport {
+ alarms: {
+  roomID: Rack['roomID'];
+  roomLabel: Rack['roomLabel'];
+  hkStateID: Rack['hkStateID'];
+ }[];
+ birthDates: {
+  roomID: Rack['roomID'];
+  roomLabel: Rack['roomLabel'];
+  bithday: Rack['bithday'];
+  bornName: Rack['bornName'];
+ }[];
+ roomMessages: {
+  roomID: Rack['roomID'];
+  roomLabel: Rack['roomLabel'];
+  messageTypeID: Rack['messageTypeID'];
+  messageTypeName: Rack['messageTypeName'];
+ }[];
+}
+
 interface RackInfo {
  occupied: number;
  vacent: number;
@@ -170,7 +190,7 @@ function changeRoomStateType({
  );
 }
 
-export type { InitialData, RackInfo, Rack, RackDetails };
+export type { InitialData, RackInfo, Rack, RackDetails, RackReport };
 export {
  roomsRackBaseKey,
  getInitialData,
