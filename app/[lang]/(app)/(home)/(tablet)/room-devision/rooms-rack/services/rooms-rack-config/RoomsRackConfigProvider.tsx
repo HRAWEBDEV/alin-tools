@@ -807,6 +807,7 @@ export function RoomsRackConfigProvider({
    isLoading: noteTypesIsLoading,
   },
   rackReport: rackRealTimeReport,
+  rackReportIsLoading,
  };
 
  function handleTrackRackReportDiffs(

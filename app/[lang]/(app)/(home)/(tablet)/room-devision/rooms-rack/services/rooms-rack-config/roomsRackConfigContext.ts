@@ -67,6 +67,7 @@ type RackConfig = {
   rackFutureDateStart: Date;
  };
  rackReport: RackReport;
+ rackReportIsLoading: boolean;
 };
 
 const rackConfigContext = createContext<RackConfig | null>(null);

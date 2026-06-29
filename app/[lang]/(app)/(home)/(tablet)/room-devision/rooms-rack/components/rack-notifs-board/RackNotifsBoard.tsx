@@ -14,6 +14,8 @@ import { useState } from 'react';
 import { getRackReport } from '../../utils/rackReport';
 import RoomControlIndicator from '../room-control/RoomControlIndicator';
 import { type RoomControlDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/room-control/dictionary';
+import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
+import NoItemFound from '@/app/[lang]/(app)/components/NoItemFound';
 
 export default function RackNotifsBoard({
  dic,
@@ -31,6 +33,7 @@ export default function RackNotifsBoard({
  const { localeInfo } = useBaseConfig();
  const {
   rackReport,
+  rackReportIsLoading,
   rack: { onShowRackMenu, pageCount, paging },
  } = useRackConfigContext();
  return (
@@ -46,6 +49,7 @@ export default function RackNotifsBoard({
       )}
      </DialogTitle>
     </DialogHeader>
+    {rackReportIsLoading && <LinearLoading />}
     <div className='grow overflow-auto flex flex-col'>
      <header className='p-2 sticky bottom-1 pb-0 order-2 lg:order-0 lg:pb-2 lg:top-0 lg:bottom-auto bg-background z-3'>
       <div>
@@ -81,6 +85,7 @@ export default function RackNotifsBoard({
      </header>
      {activeReport === 'houseControl' && (
       <div className='p-4'>
+       {!rackReport.alarms.length && !rackReportIsLoading && <NoItemFound />}
        <ul>
         {rackReport.alarms.map((room) => {
          return (
@@ -108,6 +113,9 @@ export default function RackNotifsBoard({
      )}
      {activeReport === 'notes' && (
       <div className='p-4'>
+       {!rackReport.roomMessages.length && !rackReportIsLoading && (
+        <NoItemFound />
+       )}
        <ul>
         {rackReport.roomMessages.map((room) => {
          const noteStyles = getNoteTypeStyles(room.messageTypeID);
@@ -135,6 +143,9 @@ export default function RackNotifsBoard({
      )}
      {activeReport === 'birthDays' && (
       <div className='p-4'>
+       {!rackReport.birthDates.length && !rackReportIsLoading && (
+        <NoItemFound />
+       )}
        <ul>
         {rackReport.birthDates.map((room) => {
          return (
