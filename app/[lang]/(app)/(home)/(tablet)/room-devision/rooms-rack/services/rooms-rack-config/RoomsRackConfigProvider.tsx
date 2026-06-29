@@ -566,7 +566,7 @@ export function RoomsRackConfigProvider({
    setRackRealTimeReport(rackReport);
   });
   return () => rackReportConnection && rackReportConnection.off('NotifUpdate');
- }, [rackReportConnection, rackInfoRefetch, rackPaging]);
+ }, [rackReportConnection]);
 
  useEffect(() => {
   if (!rackReportConnection) return;
@@ -575,7 +575,7 @@ export function RoomsRackConfigProvider({
    notificationAudio.play();
   });
   return () => rackReportConnection && rackReportConnection.off('NotifChanged');
- }, [getRackRooms, rackReportConnection, getRealTimeRackReport]);
+ }, [rackReportConnection, getRealTimeRackReport]);
 
  useEffect(() => {
   const rackReportSingalRConnection = new signalR.HubConnectionBuilder()
