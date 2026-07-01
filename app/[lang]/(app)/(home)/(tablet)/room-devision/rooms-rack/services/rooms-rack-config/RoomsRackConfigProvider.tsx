@@ -391,7 +391,7 @@ export function RoomsRackConfigProvider({
   setRackReportIsError(false);
   try {
    await rackReportConnection.invoke(
-    'GetRackUpdate',
+    'GetNotifUpdate',
     rackReportConnection.connectionId,
    );
    setRackReportIsSuccess(true);
