@@ -3,11 +3,12 @@ import { Button } from '@/components/ui/button';
 import { CiCircleMinus } from 'react-icons/ci';
 import { FaCirclePlus } from 'react-icons/fa6';
 import { CiCirclePlus } from 'react-icons/ci';
-import { type ItemProgram } from '../services/newOrderApiActions';
+import { MdOutlineKeyboardHide } from 'react-icons/md';
 import { useCurrencyFormatter } from '@/hooks/useCurrencyFormatter';
 import { motion } from 'motion/react';
 import Highlighter from 'react-highlight-words';
 import { useOrderBaseConfigContext } from '../services/order-tools/orderBaseConfigContext';
+import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { Spinner } from '@/components/ui/spinner';
 import OrderItemImage from './OrderItemImage';
 import ServeDishIcon from '@/app/[lang]/(app)/components/icons/ServeDishIcon';
@@ -23,6 +24,7 @@ import { InputGroupInput, InputGroup } from '@/components/ui/input-group';
 import { NumericFormat } from 'react-number-format';
 import { NewOrderDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/new-order/dictionary';
 import { MdTouchApp } from 'react-icons/md';
+import { type ItemProgram } from '../services/newOrderApiActions';
 
 export default function OrderItem({
  itemProgram,
@@ -39,6 +41,7 @@ export default function OrderItem({
  onOverlayChange: (id: number | null) => void;
  dic: NewOrderDictionary;
 }) {
+ const { contrastMode } = useBaseConfig();
  const showCountTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
  const [showTypeOrderCount, setShowTypeOrderCount] = useState(false);
  const [pointingItem, setPointingItem] = useState(false);
@@ -75,29 +78,25 @@ export default function OrderItem({
    <motion.div
     layout
     className={`flex flex-col ${showOrderImage ? 'pt-17 min-h-60' : 'pt-0'}`}
-    onPointerDown={() => {
-     if (!shopItemEditAccess) return;
-     if (showCountTimeoutRef.current) clearTimeout(showCountTimeoutRef.current);
-     setPointingItem(true);
-     showCountTimeoutRef.current = setTimeout(() => {
-      setShowTypeOrderCount(true);
-      setPointingItem(false);
-      setOrderItemCount(itemAmount || 0);
-     }, 500);
-    }}
-    onPointerUp={() => {
-     if (showCountTimeoutRef.current) clearTimeout(showCountTimeoutRef.current);
-     setPointingItem(false);
-    }}
+    // onPointerDown={() => {
+    //  if (!shopItemEditAccess) return;
+    //  if (showCountTimeoutRef.current) clearTimeout(showCountTimeoutRef.current);
+    //  setPointingItem(true);
+    //  showCountTimeoutRef.current = setTimeout(() => {
+    //   setShowTypeOrderCount(true);
+    //   setPointingItem(false);
+    //   setOrderItemCount(itemAmount || 0);
+    //  }, 350);
+    // }}
+    // onPointerUp={() => {
+    //  if (showCountTimeoutRef.current) clearTimeout(showCountTimeoutRef.current);
+    //  setPointingItem(false);
+    // }}
    >
     <div
      className={`grow relative isolate rounded-xl ${showOrderImage ? 'shadow-xl' : 'border shadow-lg border-border pt-2'} bg-background dark:bg-neutral-900 ${itemAmount ? 'bg-primary/15 dark:bg-primary/15' : ''} ${pointingItem ? 'bg-neutral-200! dark:bg-neutral-800!' : ''}`}
     >
-     <div className='absolute bottom-0 -end-4 -z-1'>
-      <MdTouchApp
-       className={`size-24 ${itemAmount ? 'text-neutral-100/60 dark:text-neutral-900/60' : 'text-neutral-100/80 dark:text-neutral-900/80'}`}
-      />
-     </div>
+     <div className='absolute bottom-0 start-0 z-1'></div>
      {showOrderImage && (
       <div
        className='grid place-content-center -mt-17 mb-2'
@@ -144,7 +143,30 @@ export default function OrderItem({
        </p>
       </div>
       {!itemAmount && (
-       <div className='flex justify-center items-center mb-2'>
+       <div className='flex justify-between items-center mb-2'>
+        <div className='basis-10'>
+         <Button
+          variant='ghost'
+          size='icon-lg'
+          className={`rounded-full ${contrastMode ? 'text-neutral-400 dark:text-neutral-600' : 'text-neutral-300 dark:text-neutral-700'}`}
+          disabled={
+           userOrderItemsLoading ||
+           userOrderIsLoading ||
+           !access['shopItem']['add']
+          }
+          onClick={() => {
+           if (!access['shopItem']['add']) return;
+           setShowTypeOrderCount(true);
+           setOrderItemCount(itemAmount || 0);
+          }}
+         >
+          {userOrderItemsLoading || userOrderIsLoading ? (
+           <Spinner />
+          ) : (
+           <MdOutlineKeyboardHide className='size-8' />
+          )}
+         </Button>
+        </div>
         <Button
          variant='ghost'
          size='icon-lg'
@@ -168,6 +190,7 @@ export default function OrderItem({
           <FaCirclePlus className='size-11' />
          )}
         </Button>
+        <div className='basis-10'></div>
        </div>
       )}
       {!userOrderIsLoading && !!itemAmount && (
