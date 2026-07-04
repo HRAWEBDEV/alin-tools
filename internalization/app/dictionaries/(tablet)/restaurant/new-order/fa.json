@@ -56,6 +56,7 @@
   "contractNo": "منو قراردادی",
   "customerContractNo": "شماره قرارداد",
   "setSystemDiscountRate": "اعمال تخفیف سیستمی",
+  "count": "تعداد",
   "fixedDiscountCannotBeMoreThanTotalSvalues": "تخفیف ثابت نمی تواند از جمع آیتم ها بیشتر باشد"
  },
  "orderQuickInfo": {

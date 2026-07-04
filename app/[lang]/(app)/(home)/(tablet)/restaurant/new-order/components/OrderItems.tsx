@@ -68,6 +68,7 @@ export default function OrderItems({ dic }: { dic: NewOrderDictionary }) {
          onChangeModalID={handlleChangeActiveID}
          overlayVisible={overlayVisible}
          onOverlayChange={handleToggleOverlayVisible}
+         dic={dic}
         />
        ))}
        <FoodImageDialog

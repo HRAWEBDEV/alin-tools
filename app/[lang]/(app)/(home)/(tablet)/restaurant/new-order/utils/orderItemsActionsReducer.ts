@@ -45,6 +45,13 @@ type OrderItemActions =
     };
    }
  | {
+    type: 'setShopOrderItemAmount';
+    payload: {
+     itemsIDs: ItemProgram['itemID'][];
+     setTo: number;
+    };
+   }
+ | {
     type: 'decreaseOrderItemsAmount';
     payload: {
      itemsIDs: ItemProgram['itemID'][];
@@ -198,6 +205,22 @@ function orderItemsReducer(state: OrderItem[], action: OrderItemActions) {
     if (increaseIds.includes(order.itemID)) {
      increaseIds = action.payload.itemsIDs.filter((id) => order.itemID !== id);
      const newAmount = order.amount + action.payload.increaseBy;
+     return {
+      ...order,
+      amount: newAmount,
+     };
+    }
+    return order;
+   });
+  //  setShopOrderItemAmount
+  case 'setShopOrderItemAmount':
+   let increaseSetIds = action.payload.itemsIDs;
+   return state.map((order) => {
+    if (increaseSetIds.includes(order.itemID)) {
+     increaseSetIds = action.payload.itemsIDs.filter(
+      (id) => order.itemID !== id,
+     );
+     const newAmount = action.payload.setTo;
      return {
       ...order,
       amount: newAmount,
