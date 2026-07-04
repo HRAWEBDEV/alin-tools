@@ -74,7 +74,7 @@ export default function OrderShoppingItem({
  return (
   <motion.div layout className='border-b border-border p-2'>
    <div className='flex flex-row gap-2 sm:gap-0 sm:items-center'>
-    <div className='flex flex-col items-center'>
+    <div className='flex flex-col items-center me-3'>
      <div className='flex items-center justify-center shrink-0 rounded-full size-18 lg:size-24 bg-neutral-100 dark:bg-neutral-800 overflow-hidden object-center object-contain'>
       <OrderItemImage
        src={targetItemProgram?.imageURL || undefined}
@@ -83,20 +83,6 @@ export default function OrderShoppingItem({
        <ServeDishIcon className='size-12 text-neutral-300 dark:text-neutral-700' />
       </OrderItemImage>
      </div>
-     <Button
-      variant='ghost'
-      size='icon-lg'
-      className='text-red-600/50 dark:text-red-400/50 rounded-full'
-      disabled={!shopItemDeleteAccess}
-      onClick={() => {
-       orderItemsDispatch({
-        type: 'removeShopOrderItems',
-        payload: [orderItem.id],
-       });
-      }}
-     >
-      <BsTrash className='size-6 sm:size-5' />
-     </Button>
     </div>
     <div className='text-start grow flex flex-col sm:flex-row sm:items-center'>
      <div className='grow'>
@@ -115,6 +101,17 @@ export default function OrderShoppingItem({
        )}
       </p>
       <div className='mb-1 flex items-center gap-2 flex-wrap'>
+       <Button
+        variant='outline'
+        className='text-sm p-0.5 py-1 gap-1 text-red-700 border-red-700 dark:text-red-400 dark:border-red-400 h-auto'
+        disabled={!shopItemEditAccess}
+        onClick={() => {
+         setShowRemoveOrderItemConfirm(true);
+        }}
+       >
+        <IoTrashOutline />
+        {dic.orderInfo.removeItem}
+       </Button>
        {orderItem.tagID ? (
         <Button
          variant='outline'

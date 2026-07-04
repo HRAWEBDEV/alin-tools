@@ -46,6 +46,7 @@
   "printCash": "چاپ رسید صندوق",
   "deliveryAgent": "تحویل به پیک",
   "addTag": "تگ",
+  "removeItem": "حذف آیتم",
   "duplicateOrderItem": "تکرار آیتم",
   "noEmployeeSelected": "کارمند انتخاب نشده است",
   "noRoomSelected": "شماره اتاق انتخاب نشده است",
