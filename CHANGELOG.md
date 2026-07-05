@@ -3,6 +3,7 @@
 
 
 # 2.3.6
+- add signalr automatic reconnect and visibility change event listeners (hra-done)
 
 # 2.3.5
 - add rack notifications signalR (hra-done)
