@@ -1,11 +1,17 @@
 import { createContext, use } from 'react';
 import { OutOfContext } from '@/utils/OutOfContext';
-import { type UserInfoStore } from './userInfoApiActions';
-import { type UserInfoRouterStorage } from './utils/userInfoRouterStorageManager';
+import {
+ type UserInfoStore,
+ type Program,
+ type Department,
+ type Owner,
+} from './userInfoApiActions';
 
 interface UserInfoStoreContext {
  data: UserInfoStore;
- userInfoRouterStorage: UserInfoRouterStorage;
+ routeOwner: Owner;
+ routeDepartment: Department;
+ routeProgram: Program;
  isLoading: boolean;
  isFetching: boolean;
  isError: boolean;

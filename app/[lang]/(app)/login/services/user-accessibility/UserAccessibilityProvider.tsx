@@ -19,14 +19,14 @@ export default function UserAccessibilityProvider({
  children: React.ReactNode;
 }) {
  const logout = useLogout();
- const { userInfoRouterStorage } = useUserInfoRouter();
+ const { routeDepartment, routeOwner, routeProgram } = useUserInfoRouter();
 
  const { data, isError, isSuccess } = useQuery({
   queryKey: [
    getUserAccessibilityApi,
-   userInfoRouterStorage.ownerID.toString(),
-   userInfoRouterStorage.departmentID.toString(),
-   userInfoRouterStorage.programID.toString(),
+   routeOwner.id.toString(),
+   routeDepartment.id.toString(),
+   routeProgram.id.toString(),
   ],
   async queryFn({ signal }) {
    const res = await getUserAccessbility({ signal });

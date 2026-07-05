@@ -1,0 +1,126 @@
+'use client';
+import { Button } from '@/components/ui/button';
+import { useRoomDevisionShareDictionary } from '../services/share-dictionary/roomDevisionShareDictionaryContext';
+import Link from 'next/link';
+import { useBaseConfig } from '@/services/base-config/baseConfigContext';
+import { usePathname } from 'next/navigation';
+import { FaUserFriends } from 'react-icons/fa';
+import { FaHotel, FaClipboardList, FaHouseUser } from 'react-icons/fa6';
+import { MdDoneAll } from 'react-icons/md';
+import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
+
+export default function NavList() {
+ const { locale } = useBaseConfig();
+ const { routeDepartment, routeProgram } = useUserInfoRouter();
+ const pathname = usePathname();
+ const pathSegments = pathname.split('/');
+ const activePath = pathSegments.at(-1);
+ const {
+  roomDevisionShareDictionary: {
+   components: { navigation },
+  },
+ } = useRoomDevisionShareDictionary();
+ return (
+  <ul className='p-2 w-[min(100%,15rem)] mx-auto grid'>
+   <li>
+    <Button
+     data-active={activePath === 'rooms-rack'}
+     variant='ghost'
+     className='w-full min-h-16 h-auto justify-start data-[active="true"]:bg-background border border-transparent data-[active="true"]:text-primary data-[active="true"]:border-primary'
+     asChild
+    >
+     <Link
+      href={
+       activePath === 'rooms-rack'
+        ? '#'
+        : `/${locale}/${routeDepartment.id}/room-devision/${routeProgram.id}/rooms-rack`
+      }
+      className='flex w-auto h-auto items-center gap-4'
+     >
+      <FaHotel className='size-8' />
+      <p className='text-base'>{navigation.roomsRack}</p>
+     </Link>
+    </Button>
+   </li>
+   <li>
+    <Button
+     data-active={activePath === 'rooms-management'}
+     variant='ghost'
+     className='w-full min-h-16 h-auto justify-start data-[active=""]:bg-background border border-transparent data-[active="true"]:text-primary data-[active="true"]:border-primary'
+     asChild
+    >
+     <Link
+      href={
+       activePath === 'rooms-management'
+        ? '#'
+        : `/${locale}/${routeDepartment.id}/room-devision/${routeProgram.id}/rooms-management`
+      }
+      className='flex w-auto h-auto items-center gap-4'
+     >
+      <FaHouseUser className='size-8' />
+      <p className='text-base'>{navigation.roomsManagement}</p>
+     </Link>
+    </Button>
+   </li>
+   <li>
+    <Button
+     data-active={activePath === 'guests-management'}
+     variant='ghost'
+     className='w-full min-h-16 h-auto justify-start data-[active=""]:bg-background border border-transparent data-[active="true"]:text-primary data-[active="true"]:border-primary'
+     asChild
+    >
+     <Link
+      href={
+       activePath === 'guests-management'
+        ? '#'
+        : `/${locale}/${routeDepartment.id}/room-devision/${routeProgram.id}/guests-management`
+      }
+      className='flex w-auto h-auto items-center gap-4'
+     >
+      <FaUserFriends className='size-8' />
+      <p className='text-base'>{navigation.guestsManagement}</p>
+     </Link>
+    </Button>
+   </li>
+   <li>
+    <Button
+     data-active={activePath === 'execution-management'}
+     variant='ghost'
+     className='w-full min-h-16 h-auto justify-start data-[active=""]:bg-background border border-transparent data-[active="true"]:text-primary data-[active="true"]:border-primary'
+     asChild
+    >
+     <Link
+      href={
+       activePath === 'execution-management'
+        ? '#'
+        : `/${locale}/${routeDepartment.id}/room-devision/${routeProgram.id}/execution-management`
+      }
+      className='flex w-auto h-auto items-center gap-4'
+     >
+      <FaClipboardList className='size-8' />
+      <p className='text-base'>{navigation.executionManagement}</p>
+     </Link>
+    </Button>
+   </li>
+   <li className='mt-4'>
+    <Button
+     data-active={activePath === 'room-control'}
+     className='w-full min-h-16 h-auto justify-start data-[active="true"]:bg-background border border-transparent data-[active="true"]:text-primary data-[active="true"]:border-primary'
+     asChild
+    >
+     <Link
+      href={
+       activePath === 'room-control'
+        ? '#'
+        : `/${locale}/${routeDepartment.id}/room-devision/${routeProgram.id}/room-control`
+      }
+      className='flex w-auto h-auto items-center gap-4'
+     >
+      <MdDoneAll className='size-8' />
+      <p className='text-base'>{navigation.roomsControl}</p>
+     </Link>
+    </Button>
+   </li>
+  </ul>
+ );
+}

@@ -1,0 +1,62 @@
+'use client';
+import { useRestaurantShareDictionary } from '../services/share-dictionary/restaurantShareDictionaryContext';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { FaUserCircle } from 'react-icons/fa';
+import DishIcon from '@/app/[lang]/(app)/components/icons/DishIcon';
+import DinnerIcon from '@/app/[lang]/(app)/components/icons/DinnerIcon';
+import { useProfileContext } from '../services/profile/profileContext';
+import { useBaseConfig } from '@/services/base-config/baseConfigContext';
+import { MdDoneAll } from 'react-icons/md';
+import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
+
+export default function Tabs() {
+ const { routeDepartment, routeProgram } = useUserInfoRouter();
+ const { locale } = useBaseConfig();
+ const { toggleProfile } = useProfileContext();
+ const {
+  restaurantShareDictionary: {
+   components: { tabs: tabsDic },
+  },
+ } = useRestaurantShareDictionary();
+
+ const tabClass = 'h-auto flex-col p-1! grow sm:text-base';
+ const tabIconClass = 'size-8 sm:size-9';
+
+ return (
+  <nav className=' shrink-0 flex items-center lg:hidden fixed end-0 start-0 bottom-0 z-(--app-restaurant-tabs-zindex) bg-neutral-100 dark:bg-neutral-900 *:shrink-0 border-t border-border text-neutral-700 dark:text-neutral-300 transition-transform in-data-[scroll-dicretion="down"]:translate-y-20'>
+   <Button variant='ghost' className={tabClass} asChild>
+    <Link
+     href={`/${locale}/${routeDepartment.id}/restaurant/${routeProgram.id}/salons`}
+    >
+     <DinnerIcon className={tabIconClass} />
+     <p>{tabsDic.salons}</p>
+    </Link>
+   </Button>
+   <Button variant='ghost' className={tabClass} asChild>
+    <Link
+     href={`/${locale}/${routeDepartment.id}/restaurant/${routeProgram.id}/new-order`}
+    >
+     <DishIcon className={tabIconClass} />
+     <p>{tabsDic.newOrder}</p>
+    </Link>
+   </Button>
+   <Button
+    variant='ghost'
+    className={`${tabClass} rounded-none bg-primary/30`}
+    asChild
+   >
+    <Link
+     href={`/${locale}/${routeDepartment.id}/restaurant/${routeProgram.id}/breakfast-control`}
+    >
+     <MdDoneAll className={tabIconClass} />
+     <p className='text-sm'>{tabsDic.breakfastControl}</p>
+    </Link>
+   </Button>
+   <Button variant='ghost' className={tabClass} onClick={() => toggleProfile()}>
+    <FaUserCircle className={tabIconClass} />
+    <p>{tabsDic.profile}</p>
+   </Button>
+  </nav>
+ );
+}

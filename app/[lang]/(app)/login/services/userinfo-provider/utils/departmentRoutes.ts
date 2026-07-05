@@ -3,7 +3,7 @@ const roomDevisionRoute = 'room-devision';
 const restaurantRotue = 'restaurant';
 
 function isTheRightPath(pathname: string, departmentID: number) {
- const activeRoute = pathname.split('/').at(2);
+ const activeRoute = pathname.split('/').at(3);
  switch (departmentID) {
   case Departments.foodAndBeverage:
    return activeRoute === restaurantRotue;
