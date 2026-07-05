@@ -179,6 +179,7 @@ export default function SalonBaseConfigProvider({
      process.env.NEXT_PUBLIC_API_URI
     }/tablerackchangenotifhub?token=${getUserLoginToken()}&programid=${routeProgram.id}&departmentid=${routeDepartment.id}&ownerid=${routeOwner.id}&systemid=${routeProgram.systemID}`,
    )
+   .withAutomaticReconnect()
    .configureLogging(signalR.LogLevel.Information)
    .build();
   const startConnection = async () => {
@@ -198,6 +199,23 @@ export default function SalonBaseConfigProvider({
  useEffect(() => {
   getSalonTables();
  }, [getSalonTables]);
+
+ useEffect(() => {
+  if (!connection) return;
+  const controller = new AbortController();
+  document.addEventListener(
+   'visibilitychange',
+   () => {
+    if (!document.hidden) {
+     getSalonTables();
+    }
+   },
+   {
+    signal: controller.signal,
+   },
+  );
+  return () => controller.abort();
+ }, [connection, getSalonTables]);
 
  //
  function handleShowChangeStateTable(open?: boolean) {
