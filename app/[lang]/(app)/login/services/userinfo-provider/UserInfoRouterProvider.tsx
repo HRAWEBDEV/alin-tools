@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import {
  type UserInfoStoreContext,
  userInfoRouterContext,
@@ -10,7 +10,7 @@ import Loading from '@/components/Loading';
 import { convertToUserInfoStore } from './userInfoApiActions';
 import { useLogout } from '../../hooks/useLogout';
 import { useShareDictionary } from '../../../services/share-dictionary/shareDictionaryContext';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter, usePathname, useParams } from 'next/navigation';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { useIsHomePage } from '../../hooks/useIsHomePage';
 import {
@@ -54,6 +54,8 @@ export default function UserInfoRouterProvider({
  const { locale } = useBaseConfig();
  const router = useRouter();
  const pathname = usePathname();
+ const { departmentID: paramDepartmentID, programID: paramProgramID } =
+  useParams();
  const programsRef = useRef<HTMLDivElement | null>(null);
  const {
   shareDictionary: {
@@ -77,14 +79,14 @@ export default function UserInfoRouterProvider({
  });
 
  const redirectUser = useCallback(
-  (depID: number) => {
+  (depID: number, programID: number) => {
    queryClient.clear();
    if (depID === Departments.foodAndBeverage) {
-    router.push(`/${locale}/${restaurantRotue}`);
+    router.push(`/${locale}/${depID}/${restaurantRotue}/${programID}`);
     return;
    }
    if (depID === Departments.roomDivision) {
-    router.push(`/${locale}/${roomDevisionRoute}`);
+    router.push(`/${locale}/${depID}/${roomDevisionRoute}/${programID}`);
     return;
    }
   },
@@ -96,13 +98,40 @@ export default function UserInfoRouterProvider({
   setShowUserRouter(true);
  }, []);
 
+ const routeOwner = useMemo(() => {
+  if (!isSuccess || !userInfoRouterStorage) return null;
+  return (
+   data.owners.find((item) => item.id === userInfoRouterStorage.ownerID) || null
+  );
+ }, [isSuccess, data, userInfoRouterStorage]);
+
+ const routeDepartment = useMemo(() => {
+  if (!isSuccess || !routeOwner || !paramDepartmentID) return null;
+  return (
+   routeOwner.departments.find(
+    (item) => item.id === Number(paramDepartmentID),
+   ) || null
+  );
+ }, [isSuccess, routeOwner, paramDepartmentID]);
+
+ const routeProgram = useMemo(() => {
+  if (!isSuccess || !routeDepartment || !paramProgramID) return null;
+  return (
+   routeDepartment.programs.find(
+    (item) => item.id === Number(paramProgramID),
+   ) || null
+  );
+ }, [isSuccess, routeDepartment, paramProgramID]);
+
  const ctx: UserInfoStoreContext = {
   data: data!,
   isError,
   isLoading,
   isFetching,
   changeProgram,
-  userInfoRouterStorage: userInfoRouterStorage!,
+  routeOwner: routeOwner!,
+  routeDepartment: routeDepartment!,
+  routeProgram: routeProgram!,
  };
 
  useEffect(() => {
@@ -118,7 +147,7 @@ export default function UserInfoRouterProvider({
    setShowUserRouter(false);
    setUserInfoRouterStorage(val);
    if (isHomePage) {
-    redirectUser(val.departmentID);
+    redirectUser(val.departmentID, val.programID);
     return;
    }
    if (!isTheRightPath(location.pathname, val.departmentID)) {
@@ -150,7 +179,12 @@ export default function UserInfoRouterProvider({
 
  return (
   <userInfoRouterContext.Provider value={ctx}>
-   {isSuccess && userInfoRouterStorage && children}
+   {isSuccess &&
+    userInfoRouterStorage &&
+    routeOwner &&
+    routeDepartment &&
+    routeProgram &&
+    children}
    <Dialog open={showUserRouter}>
     <DialogContent
      className='gap-0 flex flex-col w-[min(95%,50rem)] max-h-[95svh] max-w-none! p-0 overflow-hidden'
@@ -285,7 +319,7 @@ export default function UserInfoRouterProvider({
               setUserInfoRouterStorageValue(selectedUserInfo);
               setUserInfoRouterStorage(selectedUserInfo);
               setShowUserRouter(false);
-              redirectUser(selectedDialogDepartmentID!);
+              redirectUser(selectedDialogDepartmentID!, program.id);
              }}
             >
              <div className='absolute bottom-0 end-0 z-0'>

@@ -1,5 +1,5 @@
+import { CrudAccess } from '@/app/[lang]/(app)/(home)/(tablet)/[departmentID]/room-devision/utils/apiTypes';
 import { axios } from '@/app/[lang]/(app)/utils/defaultAxios';
-import { type CrudAccess } from '@/app/[lang]/(app)/(home)/(tablet)/room-devision/utils/apiTypes';
 
 interface UserAccessibility {
  restaurant: {

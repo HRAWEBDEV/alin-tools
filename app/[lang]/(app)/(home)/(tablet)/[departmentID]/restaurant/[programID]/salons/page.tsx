@@ -1,0 +1,31 @@
+import { Metadata } from 'next';
+import { getSalonsDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/salons/dictionary';
+import { type Locale } from '@/internalization/app/localization';
+import SalonsWrapper from './components/SalonsWrapper';
+import SalonBaseConfigProvider from './services/salon-base-config/SalonBaseConfigProvider';
+
+export async function generateMetadata({
+ params,
+}: PageProps<'/[lang]/[departmentID]/restaurant/[programID]/salons'>): Promise<Metadata> {
+ const { lang } = await params;
+ const dic = await getSalonsDictionary({
+  locale: lang as Locale,
+ });
+ return {
+  title: dic.title,
+ };
+}
+
+export default async function Salons({
+ params,
+}: PageProps<'/[lang]/[departmentID]/restaurant/[programID]/salons'>) {
+ const { lang } = await params;
+ const dic = await getSalonsDictionary({
+  locale: lang as Locale,
+ });
+ return (
+  <SalonBaseConfigProvider dic={dic}>
+   <SalonsWrapper dic={dic} />
+  </SalonBaseConfigProvider>
+ );
+}

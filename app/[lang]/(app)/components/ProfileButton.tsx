@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { FaUserCircle } from 'react-icons/fa';
-import { useProfileContext } from '../(home)/(tablet)/room-devision/services/profile/profileContext';
+import { useProfileContext } from '../(home)/(tablet)/[departmentID]/room-devision/services/profile/profileContext';
 
 function ProfileButton() {
  const { toggleProfile } = useProfileContext();
