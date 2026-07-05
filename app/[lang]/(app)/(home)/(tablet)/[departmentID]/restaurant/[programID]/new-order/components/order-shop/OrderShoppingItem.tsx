@@ -332,11 +332,8 @@ export default function OrderShoppingItem({
         variant='destructive'
         onClick={() => {
          orderItemsDispatch({
-          type: 'decreaseShopOrderItemsAmount',
-          payload: {
-           decreaseBy: 1,
-           id: orderItem.id,
-          },
+          type: 'removeShopOrderItems',
+          payload: [orderItem.id],
          });
         }}
        >

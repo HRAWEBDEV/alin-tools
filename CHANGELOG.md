@@ -1,10 +1,16 @@
 ## TODO
 - add reload button if necessary - for real time data
 
+
+# 2.3.6
+
 # 2.3.5
 - add rack notifications signalR (hra-done)
 - add rack notifications change sound (hra-done)
 - add keyboard to type order item count in add item mode (hra-done)
+## bug fixes
+- remove shop order items by id (hra-done)
+
 
 # 2.3.4
 - stronger border and input border colors (hra-done)
