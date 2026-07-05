@@ -501,6 +501,23 @@ export function RoomsRackConfigProvider({
 
  useEffect(() => {
   if (!connection) return;
+  const controller = new AbortController();
+  document.addEventListener(
+   'visibilitychange',
+   () => {
+    if (!document.hidden) {
+     getRackRooms();
+    }
+   },
+   {
+    signal: controller.signal,
+   },
+  );
+  return () => controller.abort();
+ }, [connection, getRackRooms]);
+
+ useEffect(() => {
+  if (!connection) return;
   connection.on('RackLastUpdate', (rackUpdate) => {
    const {
     rack: { rows, rowsCount },
@@ -538,6 +555,7 @@ export function RoomsRackConfigProvider({
      process.env.NEXT_PUBLIC_API_URI
     }/datachangenotifHub?token=${getUserLoginToken()}&programid=${routeProgram.id}&departmentid=${routeDepartment.id}&ownerid=${routeOwner.id}&systemid=${routeProgram.systemID}`,
    )
+   .withAutomaticReconnect()
    .configureLogging(signalR.LogLevel.Information)
    .build();
   const startConnection = async () => {
@@ -559,6 +577,23 @@ export function RoomsRackConfigProvider({
  useEffect(() => {
   getRealTimeRackReport();
  }, [getRealTimeRackReport]);
+
+ useEffect(() => {
+  if (!rackReportConnection) return;
+  const controller = new AbortController();
+  document.addEventListener(
+   'visibilitychange',
+   () => {
+    if (!document.hidden) {
+     getRealTimeRackReport();
+    }
+   },
+   {
+    signal: controller.signal,
+   },
+  );
+  return () => controller.abort();
+ }, [rackReportConnection, getRealTimeRackReport]);
 
  useEffect(() => {
   if (!rackReportConnection) return;
@@ -584,6 +619,7 @@ export function RoomsRackConfigProvider({
      process.env.NEXT_PUBLIC_API_URI
     }/roomracknotifhub?token=${getUserLoginToken()}&programid=${routeProgram.id}&departmentid=${routeDepartment.id}&ownerid=${routeOwner.id}&systemid=${routeProgram.systemID}`,
    )
+   .withAutomaticReconnect()
    .configureLogging(signalR.LogLevel.Information)
    .build();
   const startConnection = async () => {
