@@ -8,7 +8,7 @@ interface UserInfoRouterStorage {
  ownerName: string;
 }
 
-const userInfoRouterStorageKey = 'user-info-router';
+const userInfoRouterStorageKey = 'user-router-info';
 
 function isUserInfoRouterStorageValueValid(): boolean {
  return !!getUserInfoRouterStorageValue();

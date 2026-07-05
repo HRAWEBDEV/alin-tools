@@ -15,5 +15,5 @@ export default function HomePage() {
    `/${locale}/${routeDepartment.id}/restaurant/${routeProgram.id}/salons`,
   );
  }, [router, locale, routeDepartment, routeProgram]);
- return <div>restaurant</div>;
+ return <div></div>;
 }
