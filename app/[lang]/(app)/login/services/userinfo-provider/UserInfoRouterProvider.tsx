@@ -48,7 +48,12 @@ export default function UserInfoRouterProvider({
 }) {
  const queryClient = useQueryClient();
  const [userInfoRouterStorage, setUserInfoRouterStorage] =
-  useState<UserInfoRouterStorage | null>(null);
+  useState<UserInfoRouterStorage | null>(() => {
+   if (typeof window !== 'undefined') {
+    return getUserInfoRouterStorageValue();
+   }
+   return null;
+  });
  const [showUserRouter, setShowUserRouter] = useState(false);
  const isHomePage = useIsHomePage();
  const { locale } = useBaseConfig();
@@ -140,21 +145,13 @@ export default function UserInfoRouterProvider({
  }, [isError, logout]);
 
  useEffect(() => {
-  const val = getUserInfoRouterStorageValue();
-  if (!val) {
+  if (!isSuccess) return;
+  if (!routeOwner || !routeDepartment || !routeProgram) {
    setShowUserRouter(true);
   } else {
    setShowUserRouter(false);
-   setUserInfoRouterStorage(val);
-   if (isHomePage) {
-    redirectUser(val.departmentID, val.programID);
-    return;
-   }
-   if (!isTheRightPath(location.pathname, val.departmentID)) {
-    logout();
-   }
   }
- }, [isHomePage, redirectUser, logout]);
+ }, [isSuccess, routeOwner, routeDepartment, routeProgram]);
 
  useEffect(() => {
   if (programsRef.current && selectedDialogDepartmentID) {
