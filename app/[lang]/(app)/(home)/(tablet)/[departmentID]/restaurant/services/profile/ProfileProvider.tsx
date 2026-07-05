@@ -18,9 +18,12 @@ import { useSettingsContext } from './settings/settingsContext';
 import HeaderDate from '../../components/HeaderDate';
 import { appVersion } from '@/services/base-config/baseConfigContext';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
+import { CgArrowsExchange } from 'react-icons/cg';
+import { useRouter } from 'next/navigation';
 
 export default function ProfileProvider({ children }: { children: ReactNode }) {
- const { userActiveTimeZone } = useBaseConfig();
+ const router = useRouter();
+ const { locale, userActiveTimeZone } = useBaseConfig();
  const { routeDepartment, routeOwner, routeProgram, data } =
   useUserInfoRouter();
  const logout = useLogout();
@@ -100,20 +103,20 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
          <span className='dark:text-gray-200'>{profile.settings}</span>
         </Button>
        </li>
-       {/*<li>
+       <li>
         <Button
          variant='ghost'
          size={'icon-lg'}
          onClick={() => {
           setIsOpen(false);
-          changeProgram();
+          router.push(`/${locale}`);
          }}
          className='text-base p-4 px-8 w-full justify-start h-[unset] gap-4 items-center text-primary'
         >
-         <RiExchangeBoxLine className='size-8 ' />
+         <CgArrowsExchange className='size-8 ' />
          <span>{profile.changeProgram}</span>
         </Button>
-       </li>*/}
+       </li>
        <li>
         <Button
          variant='ghost'
