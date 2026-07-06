@@ -893,7 +893,10 @@ export default function OrderBaseConfigProvider({
   if (initData.itemGroups.length) {
    handleChangeSelectedItemGroup(initData.itemGroups[0]);
   }
-  orderInfoForm.setValue('sendToKitchen', initData.sendToKitchen);
+  orderInfoForm.setValue(
+   'sendToKitchen',
+   initData.forceSendToKitchen || initData.sendToKitchen,
+  );
   orderInfoForm.setValue('printCash', initData.printToCashbox);
   if (!!orderIDQuery) return;
   if (initData.saleTimes) {

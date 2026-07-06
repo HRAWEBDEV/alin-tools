@@ -69,6 +69,7 @@ interface InitialData {
  waiters: Combo[];
  sendToKitchen: boolean;
  printToCashbox: boolean;
+ forceSendToKitchen: boolean;
 }
 
 type OrderServiceRates = {

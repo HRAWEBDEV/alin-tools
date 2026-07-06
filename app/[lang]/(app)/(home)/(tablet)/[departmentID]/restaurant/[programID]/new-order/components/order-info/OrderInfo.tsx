@@ -1316,7 +1316,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
         <div className='flex gap-4 items-center'>
          <Checkbox
           id='sendToKitchen'
-          disabled={!access['order']['edit']}
+          disabled={!access['order']['edit'] || !!data?.forceSendToKitchen}
           className='scale-200'
           checked={field.value}
           defaultChecked={field.value}
