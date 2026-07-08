@@ -1,9 +1,11 @@
 interface NewOrderSettings {
  showOrderImage: boolean;
+ showDescription: boolean;
 }
 
 const defaultNewOrderSettings: NewOrderSettings = {
  showOrderImage: true,
+ showDescription: false,
 };
 
 const newOrderSettingsKey = 'new-order-settings';
@@ -15,7 +17,7 @@ function saveNewOrderSettings(setting: NewOrderSettings) {
 function getNewOrderSettings() {
  const val = localStorage.getItem(newOrderSettingsKey);
  if (!val) return defaultNewOrderSettings;
- return JSON.parse(val);
+ return { ...defaultNewOrderSettings, ...JSON.parse(val) };
 }
 
 export type { NewOrderSettings };

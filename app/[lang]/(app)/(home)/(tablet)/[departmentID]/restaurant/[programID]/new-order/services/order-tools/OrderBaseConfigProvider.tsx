@@ -73,6 +73,8 @@ import { useUserAccessibilityContext } from '@/app/[lang]/(app)/login/services/u
 import { PaymentType } from '../../utils/PaymentTypes';
 import { useSettingsContext } from '../../../../services/profile/settings/settingsContext';
 import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
+import { MdOutlineContentPasteOff } from 'react-icons/md';
+import { MdContentPaste } from 'react-icons/md';
 
 export default function OrderBaseConfigProvider({
  children,
@@ -160,6 +162,9 @@ export default function OrderBaseConfigProvider({
  const [confirmSetSystemPricing, setConfirmSetSystemPricing] = useState(false);
  const [showOrderImage, setShowOrderImage] = useState(
   newOrderSettings.showOrderImage,
+ );
+ const [showDescription, setShowDescription] = useState(
+  newOrderSettings.showDescription,
  );
  const [showCloseOrder, setShowCloseOrder] = useState(false);
  const [selectedItemGroup, setSelectedItemGroup] = useState<ItemGroup | null>(
@@ -1106,6 +1111,7 @@ export default function OrderBaseConfigProvider({
   },
   order: {
    showOrderImage,
+   showDescription,
    orderInfoName,
    orderItems: pricedOrderItems,
    onCloseOrder,
@@ -1242,7 +1248,22 @@ export default function OrderBaseConfigProvider({
 
  return (
   <orderBaseConfigContext.Provider value={ctx}>
-   <div className='fixed z-(--app-restaurant-tabs-zindex) start-4 lg:start-(--app-restaurant-nav-width) bottom-(--app-restaurant-tabs-height) in-data-[scroll-dicretion="down"]:bottom-2 lg:bottom-2 lg:ps-2'>
+   <div className='fixed z-(--app-restaurant-tabs-zindex) start-4 lg:start-(--app-restaurant-nav-width) bottom-(--app-restaurant-tabs-height) in-data-[scroll-dicretion="down"]:bottom-2 lg:bottom-2 lg:ps-2 flex flex-col gap-4'>
+    <Button
+     variant='ghost'
+     size='icon-lg'
+     onClick={() => {
+      const newValue = !showDescription;
+      changeNewOrderSettins('showDescription', newValue);
+      setShowDescription(newValue);
+     }}
+    >
+     {showDescription ? (
+      <MdContentPaste className='size-10 text-primary' />
+     ) : (
+      <MdOutlineContentPasteOff className='size-10 text-destructive' />
+     )}
+    </Button>
     <Button
      variant='ghost'
      size='icon-lg'

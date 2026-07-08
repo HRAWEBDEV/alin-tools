@@ -48,7 +48,7 @@ export default function OrderItem({
  const [orderItemCount, setOrderItemCount] = useState(0);
  const {
   itemsInfo: { searchedItemName },
-  order: { showOrderImage, orderItems, orderItemsDispatch },
+  order: { showOrderImage, showDescription, orderItems, orderItemsDispatch },
   userOrder: {
    order: { isLoading: userOrderIsLoading },
    orderItems: { isLoading: userOrderItemsLoading },
@@ -125,23 +125,27 @@ export default function OrderItem({
         textToHighlight={itemProgram.itemName || ''}
        />
       </h3>
-      <p className='px-2 text-xs text-neutral-600 dark:text-neutral-400 font-light mb-3'>
-       ---
-      </p>
-      <div className='flex flex-col mb-2'>
-       {false && (
-        <div className='text-[0.85rem] font-medium text-red-600 dark:text-red-400 line-through'>
-         <Badge variant='destructive' className='p-1 me-2 text-sm'>
-          12%
-         </Badge>
-         <span>14,000,000</span>
+      {showDescription && (
+       <>
+        <p className='px-2 text-xs text-neutral-600 dark:text-neutral-400 font-light mb-3'>
+         ---
+        </p>
+        <div className='flex flex-col mb-2'>
+         {false && (
+          <div className='text-[0.85rem] font-medium text-red-600 dark:text-red-400 line-through'>
+           <Badge variant='destructive' className='p-1 me-2 text-sm'>
+            12%
+           </Badge>
+           <span>14,000,000</span>
+          </div>
+         )}
+         <p className='text-lg sm:text-xl font-medium text-neutral-600 dark:text-neutral-400'>
+          {format(itemProgram.price)}
+          <span className='ms-1 text-sm'>ریال</span>
+         </p>
         </div>
-       )}
-       <p className='text-lg sm:text-xl font-medium text-neutral-600 dark:text-neutral-400'>
-        {format(itemProgram.price)}
-        <span className='ms-1 text-sm'>ریال</span>
-       </p>
-      </div>
+       </>
+      )}
       {!itemAmount && (
        <div className='flex justify-between items-center mb-2'>
         <div className='basis-10'>

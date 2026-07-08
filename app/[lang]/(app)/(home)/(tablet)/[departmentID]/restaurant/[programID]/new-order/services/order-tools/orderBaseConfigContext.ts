@@ -89,6 +89,7 @@ interface OrderBaseConfig {
  };
  order: {
   showOrderImage: boolean;
+  showDescription: boolean;
   orderInfoName: string;
   orderItems: OrderItem[];
   onSaveOrder: () => unknown;
