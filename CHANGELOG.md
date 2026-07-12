@@ -1,32 +1,42 @@
 ## TODO
+
 - add reload button if necessary - for real time data
 
-
 # 2.3.6
+
 - add signalr automatic reconnect and visibility change event listeners (hra-done)
+- show breakfast control menu only for restaurant system type 5 (hra-done)
 
 # 2.3.5
+
 - add rack notifications signalR (hra-done)
 - add rack notifications change sound (hra-done)
 - add keyboard to type order item count in add item mode (hra-done)
+
 ## bug fixes
+
 - remove shop order items by id (hra-done)
 
-
 # 2.3.4
+
 - stronger border and input border colors (hra-done)
 - add new order info otp list (hra-done)
 - add contrast mode controller (hra-done)
 
 # 2.3.2
+
 - add order items description (hra-done)
 - add new order employee sale type (hra-done)
 
 # 2.3.1
+
 ### features
+
 - add restaurant breakfast checklist menu (hra-done)
 - add order employee get customer (hra-done)
+
 ### bug fixes
+
 - move salons filters to url query (hra-done)
 - replace redirect link in table orders (hra-done)
 - add sticky filters for pages (hra-done)
@@ -34,32 +44,42 @@
 - fix drawer and dialog overflow (hra-done)
 
 # 2.3.0
+
 - add rack preview guest expenses (hre-done)
 - add rooms rack reserve pie chart (hra-done)
 - update rack out of service and not cleaned and waiting for QC states icons (hra-done)
-- add rack room birthday notifier icon  (hra-done)
+- add rack room birthday notifier icon (hra-done)
 
 # 2.2.0
+
 ### features
+
 - do not allow on close when mutation action is pending (hra-done)
 - check user time zone and notify user (hra-done)
 - show user time zone in user profile (hra-done)
-### bug 
+
+### bug
+
 - always get all item group in new order for loading images (hra-done)
 
-
 # 2.1.1
+
 ### features
+
 - update new order cash bank type when pay type is check (hra-done)
 - show two tables(normal-mode) in mobile resolution (hra-done)
 - update salons tables actions (hra-done)
 - show printed orders in salons table (hra-done)
+
 ### bug fixes
-- use all item program cache to load shop items data 
+
+- use all item program cache to load shop items data
 
 # 2.1.0
+
 ### features
-- add new order item no discount (hra-done) 
+
+- add new order item no discount (hra-done)
 - add app user accessibility (hra-done)
 - add res salons user accessibility (hra-done)
 - add apptype request header field (hra-done)
@@ -69,25 +89,33 @@
 - add new order non cash payment (hra-done)
 
 # 2.0.5
+
 ### features
+
 - add rack no show (hra-done)
 - add new order find room - search text and all guests filters (hra-done)
 - hide room control history paging when no items found (hra-done)
 
 ### bug fixes
+
 - fix room note and guest message white space (hra-done)
 
 # 2.0.1
+
 ### features
+
 - add new orer compact view (hra-done)
 - add new order settings (hra-done)
 - add salons multi order flag (hra-done)
 
 ### bug fixes
+
 - update rack paging (hra-done)
 
 # 2.0.0
+
 ### features
+
 - active house keeping program (hra-done)
 - add rooms rack page (hra-done)
 - add rooms statistics page (hra-done)
@@ -115,22 +143,30 @@
 - add room control history paging (hra-done)
 - add new order change pricing monitor (hra-done)
 - add new order customer contract (hra-done)
+
 ### bug fixes
+
 - remove main wrapper bottom padding in mobile mode, when scroll direction is down (hra-done)
 - use useThrottle instead of useDebouce to change scroll direction (hra-done)
 - fix order list cache bug (hra-done)
 - fix rooms statistics mobile responsive (hra-done)
 
 # 1.2.0
+
 ### features
+
 - add connection status (hra-done)
 - add tables multi order functionlaity (hra-done)
+
 ### bug fixes
 
 # 1.1.0
+
 ### features
+
 - add salons page minimal and bold views
-- add general settings 
-- add person info and search person functionality to new order page 
+- add general settings
+- add person info and search person functionality to new order page
 - add new order quick info form
+
 ### bug fixes

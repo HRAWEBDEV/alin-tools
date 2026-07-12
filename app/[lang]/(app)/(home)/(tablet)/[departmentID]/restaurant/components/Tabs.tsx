@@ -41,18 +41,20 @@ export default function Tabs() {
      <p>{tabsDic.newOrder}</p>
     </Link>
    </Button>
-   <Button
-    variant='ghost'
-    className={`${tabClass} rounded-none bg-primary/30`}
-    asChild
-   >
-    <Link
-     href={`/${locale}/${routeDepartment.id}/restaurant/${routeProgram.id}/breakfast-control`}
+   {routeProgram.systemTypeID === 5 && (
+    <Button
+     variant='ghost'
+     className={`${tabClass} rounded-none bg-primary/30`}
+     asChild
     >
-     <MdDoneAll className={tabIconClass} />
-     <p className='text-sm'>{tabsDic.breakfastControl}</p>
-    </Link>
-   </Button>
+     <Link
+      href={`/${locale}/${routeDepartment.id}/restaurant/${routeProgram.id}/breakfast-control`}
+     >
+      <MdDoneAll className={tabIconClass} />
+      <p className='text-sm'>{tabsDic.breakfastControl}</p>
+     </Link>
+    </Button>
+   )}
    <Button variant='ghost' className={tabClass} onClick={() => toggleProfile()}>
     <FaUserCircle className={tabIconClass} />
     <p>{tabsDic.profile}</p>

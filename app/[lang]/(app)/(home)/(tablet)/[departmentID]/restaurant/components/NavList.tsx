@@ -62,25 +62,27 @@ export default function NavList() {
      </Link>
     </Button>
    </li>
-   <li className='mt-4'>
-    <Button
-     data-active={activePath === 'breakfast-control'}
-     className='w-full min-h-16 h-auto justify-start data-[active="true"]:bg-background border border-transparent data-[active="true"]:text-primary data-[active="true"]:border-primary'
-     asChild
-    >
-     <Link
-      href={
-       activePath === 'breakfast-control'
-        ? '#'
-        : `/${locale}/${routeDepartment.id}/restaurant/${routeProgram.id}/breakfast-control`
-      }
-      className='flex w-auto h-auto items-center gap-4'
+   {routeProgram.systemTypeID === 5 && (
+    <li className='mt-4'>
+     <Button
+      data-active={activePath === 'breakfast-control'}
+      className='w-full min-h-16 h-auto justify-start data-[active="true"]:bg-background border border-transparent data-[active="true"]:text-primary data-[active="true"]:border-primary'
+      asChild
      >
-      <MdDoneAll className='size-8' />
-      <p className='text-base'>{navigation.breakfastControl}</p>
-     </Link>
-    </Button>
-   </li>
+      <Link
+       href={
+        activePath === 'breakfast-control'
+         ? '#'
+         : `/${locale}/${routeDepartment.id}/restaurant/${routeProgram.id}/breakfast-control`
+       }
+       className='flex w-auto h-auto items-center gap-4'
+      >
+       <MdDoneAll className='size-8' />
+       <p className='text-base'>{navigation.breakfastControl}</p>
+      </Link>
+     </Button>
+    </li>
+   )}
   </ul>
  );
 }
