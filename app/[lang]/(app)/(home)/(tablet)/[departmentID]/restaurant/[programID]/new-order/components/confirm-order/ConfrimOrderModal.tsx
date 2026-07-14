@@ -109,46 +109,7 @@ export default function ConfirmOrderModal({
     </div>
     <DialogFooter className='p-4'>
      <div className='grow flex flex-col-reverse sm:flex-row sm:justify-between gap-4'>
-      <div>
-       {confirmOrderActiveType === 'shoppingCard' && orderItems.length > 1 && (
-        <Dialog>
-         <DialogTrigger asChild>
-          <Button className='w-full sm:min-w-24 h-11' variant='outline'>
-           {dic.orderConfirm.clearOrderItems}
-          </Button>
-         </DialogTrigger>
-         <DialogContent className='p-0 gap-0'>
-          <DialogHeader className='p-4'></DialogHeader>
-          <div className='p-4'>
-           <div className='flex gap-1 items-center text-red-700 dark:text-red-400 font-medium'>
-            <BiError className='size-12' />
-            <p>{dic.orderConfirm.clearOrderItemsConfirmMessage}</p>
-           </div>
-          </div>
-          <DialogFooter className='p-4'>
-           <DialogClose asChild>
-            <Button className='sm:w-24 h-11' variant='outline'>
-             {dic.orderConfirm.cancel}
-            </Button>
-           </DialogClose>
-           <DialogClose asChild>
-            <Button
-             className='sm:w-24 h-11'
-             variant='destructive'
-             onClick={() => {
-              orderItemsDispatch({
-               type: 'clearOrderItems',
-              });
-             }}
-            >
-             {dic.orderConfirm.confirm}
-            </Button>
-           </DialogClose>
-          </DialogFooter>
-         </DialogContent>
-        </Dialog>
-       )}
-      </div>
+      <div></div>
       <div className='flex gap-2 sm:gap-4'>
        {confirmOrderActiveType === 'orderInfo' && (
         <Button
