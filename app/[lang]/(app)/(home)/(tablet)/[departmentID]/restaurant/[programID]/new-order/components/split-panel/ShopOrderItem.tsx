@@ -28,9 +28,9 @@ import { InputGroup, InputGroupTextarea } from '@/components/ui/input-group';
 import { Drawer, DrawerTrigger } from '@/components/ui/drawer';
 import FindTags from '../find-tags/FindTags';
 import HighlightWords from 'react-highlight-words';
-import { GoPlus } from 'react-icons/go';
 import { IoTrashOutline } from 'react-icons/io5';
 import { MdOutlineSplitscreen } from 'react-icons/md';
+import { FaTags } from 'react-icons/fa6';
 
 export default function ShopOrderItem({
  dic,
@@ -180,7 +180,8 @@ export default function ShopOrderItem({
          className='gap-1 text-primary border-primary h-auto'
          disabled={!shopItemEditAccess}
         >
-         <GoPlus className='size-5' />
+         <FaTags className='size-5' />
+         {orderItem.tagID && <Badge>1</Badge>}
         </Button>
        </DrawerTrigger>
        <FindTags id={orderItem.id} dic={dic} />
@@ -216,6 +217,7 @@ export default function ShopOrderItem({
          onClick={() => {}}
         >
          <TbFileDescription className='size-5' />
+         {orderItem.comment && <Badge>1</Badge>}
         </Button>
        </DialogTrigger>
        <form
