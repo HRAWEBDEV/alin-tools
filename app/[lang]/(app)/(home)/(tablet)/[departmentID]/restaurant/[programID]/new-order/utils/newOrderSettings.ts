@@ -1,11 +1,13 @@
 interface NewOrderSettings {
  showOrderImage: boolean;
  showDescription: boolean;
+ showSplitPanel: boolean;
 }
 
 const defaultNewOrderSettings: NewOrderSettings = {
  showOrderImage: true,
  showDescription: false,
+ showSplitPanel: false,
 };
 
 const newOrderSettingsKey = 'new-order-settings';

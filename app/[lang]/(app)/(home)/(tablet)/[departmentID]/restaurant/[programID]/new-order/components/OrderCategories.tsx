@@ -11,33 +11,63 @@ export default function OrderCategories({}: { dic: NewOrderDictionary }) {
  const {
   initialDataInfo: { data, isLoading },
   itemsInfo: { selectedItemGroup, changeSelectedItemGroup },
+  showSplitPanel,
  } = useOrderBaseConfigContext();
  const { scrollDirection, scrollToTop } = useMainWrapperSetupContext();
  const { localeInfo } = useBaseConfig();
- const [sliderRef] = useKeenSlider({
+
+ const [splitPanelSliderRef] = useKeenSlider({
   rtl: localeInfo.contentDirection === 'rtl',
   breakpoints: {
-   '(max-width:1280px)': {
+   '(max-width:1580px)': {
     slides: {
-     perView: scrollDirection === 'up' ? 6 : 8,
+     perView: 6,
+     spacing: 4,
+    },
+   },
+   '(max-width:1366px)': {
+    slides: {
+     perView: 4,
      spacing: 4,
     },
    },
    '(max-width:980px)': {
     slides: {
-     perView: scrollDirection === 'up' ? 4 : 6,
-     spacing: 4,
-    },
-   },
-   '(max-width:700px)': {
-    slides: {
-     perView: scrollDirection === 'up' ? 3 : 4,
+     perView: 3,
      spacing: 4,
     },
    },
   },
   slides: {
-   perView: scrollDirection === 'up' ? 10 : 8,
+   perView: 8,
+   spacing: 4,
+  },
+ });
+
+ const [sliderRef] = useKeenSlider({
+  rtl: localeInfo.contentDirection === 'rtl',
+  breakpoints: {
+   '(max-width:1280px)': {
+    slides: {
+     perView: 6,
+     spacing: 4,
+    },
+   },
+   '(max-width:980px)': {
+    slides: {
+     perView: 4,
+     spacing: 4,
+    },
+   },
+   '(max-width:700px)': {
+    slides: {
+     perView: 3,
+     spacing: 4,
+    },
+   },
+  },
+  slides: {
+   perView: 10,
    spacing: 4,
   },
  });
@@ -47,8 +77,8 @@ export default function OrderCategories({}: { dic: NewOrderDictionary }) {
  return (
   <div>
    <div
-    key={'show-slider ' + String(isLoading)}
-    ref={sliderRef}
+    key={'show-slider ' + String(isLoading) + ' ' + String(showSplitPanel)}
+    ref={showSplitPanel ? splitPanelSliderRef : sliderRef}
     className='keen-slider'
    >
     {isLoading ? (

@@ -40,7 +40,7 @@ export default function ConfirmOrderModal({
   showConfirmOrder,
   closeConfirmOrder,
   shopInfoLoading,
-  order: { orderItems, orderItemsDispatch, onSaveOrder },
+  order: { orderItems, onSaveOrder },
   access,
  } = useOrderBaseConfigContext();
  return (
