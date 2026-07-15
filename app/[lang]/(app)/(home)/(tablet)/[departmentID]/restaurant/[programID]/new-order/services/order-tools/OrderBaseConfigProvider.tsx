@@ -1281,9 +1281,9 @@ export default function OrderBaseConfigProvider({
      }}
     >
      {showDescription ? (
-      <MdContentPaste className='size-10 text-primary' />
+      <MdContentPaste className='size-8 text-primary' />
      ) : (
-      <MdOutlineContentPasteOff className='size-10 text-destructive' />
+      <MdOutlineContentPasteOff className='size-8 text-destructive' />
      )}
     </Button>
     <Button
@@ -1296,9 +1296,9 @@ export default function OrderBaseConfigProvider({
      }}
     >
      {showOrderImage ? (
-      <MdImage className='size-10 text-primary' />
+      <MdImage className='size-8 text-primary' />
      ) : (
-      <MdHideImage className='size-10 text-destructive' />
+      <MdHideImage className='size-8 text-destructive' />
      )}
     </Button>
    </div>
