@@ -275,7 +275,9 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
             role='combobox'
             className='justify-between h-11'
             disabled={
-             freeTablesLoading || !access['order']['edit'] || !data?.changeTable
+             freeTablesLoading ||
+             !access['order']['edit'] ||
+             (data?.changeTable !== undefined && !data?.changeTable)
             }
             onBlur={field.onBlur}
             ref={field.ref}
