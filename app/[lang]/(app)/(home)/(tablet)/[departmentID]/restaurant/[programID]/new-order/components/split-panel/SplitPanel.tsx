@@ -12,7 +12,6 @@ export default function SplitPanel({ dic }: { dic: NewOrderDictionary }) {
  const {
   shopInfoLoading,
   access,
-  changeConfirmType,
   showSplitPanel,
   showConfirmOrder,
   order: { orderItems, onSaveOrder },

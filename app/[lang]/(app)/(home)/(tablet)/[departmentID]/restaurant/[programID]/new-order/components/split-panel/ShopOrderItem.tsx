@@ -184,7 +184,18 @@ export default function ShopOrderItem({
          {orderItem.tagID && <Badge>1</Badge>}
         </Button>
        </DrawerTrigger>
-       <FindTags id={orderItem.id} dic={dic} />
+       <FindTags
+        id={orderItem.id}
+        dic={dic}
+        selectedTag={
+         orderItem.tagID && orderItem.tagComment
+          ? {
+             tegId: orderItem.tagID,
+             tagComment: orderItem.tagComment,
+            }
+          : undefined
+        }
+       />
       </Drawer>
       <Button
        variant='outline'
