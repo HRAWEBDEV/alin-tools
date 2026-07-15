@@ -53,7 +53,7 @@ export default function OrderItems({ dic }: { dic: NewOrderDictionary }) {
  return (
   <div className='p-4 pb-10 pt-0 overflow-hidden'>
    <AnimatePresence>
-    <div className='grid justify-center gap-2 grid-cols-[repeat(auto-fill,minmax(9rem,10rem))] sm:grid-cols-[repeat(auto-fill,minmax(10rem,11.2rem))]'>
+    <div className='grid justify-center gap-2 grid-cols-[repeat(auto-fill,minmax(9rem,10rem))] sm:grid-cols-[repeat(auto-fill,minmax(9.6rem,10rem))] lg:grid-cols-[repeat(auto-fill,minmax(11rem,12rem))]'>
      {isLoading || initLoading ? (
       <div className='grid place-content-center col-span-full pt-10'>
        <Spinner className='size-16 text-primary' />

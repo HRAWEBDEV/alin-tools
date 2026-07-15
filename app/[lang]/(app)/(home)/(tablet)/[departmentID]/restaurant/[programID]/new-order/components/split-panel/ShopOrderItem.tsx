@@ -171,39 +171,20 @@ export default function ShopOrderItem({
         setShowRemoveOrderItemConfirm(true);
        }}
       >
-       <IoTrashOutline />
+       <IoTrashOutline className='size-5' />
       </Button>
-      {orderItem.tagID ? (
-       <Button
-        variant='outline'
-        className='gap-1 text-red-700 border-red-700 dark:text-red-400 dark:border-red-400 h-auto'
-        disabled={!shopItemEditAccess}
-        onClick={() => {
-         orderItemsDispatch({
-          type: 'removeTag',
-          payload: {
-           id: orderItem.id,
-           tagID: orderItem.tagID!,
-          },
-         });
-        }}
-       >
-        <IoTrashOutline />
-       </Button>
-      ) : (
-       <Drawer>
-        <DrawerTrigger>
-         <Button
-          variant='outline'
-          className='gap-1 text-primary border-primary h-auto'
-          disabled={!shopItemEditAccess}
-         >
-          <GoPlus />
-         </Button>
-        </DrawerTrigger>
-        <FindTags id={orderItem.id} dic={dic} />
-       </Drawer>
-      )}
+      <Drawer>
+       <DrawerTrigger>
+        <Button
+         variant='outline'
+         className='gap-1 text-primary border-primary h-auto'
+         disabled={!shopItemEditAccess}
+        >
+         <GoPlus className='size-5' />
+        </Button>
+       </DrawerTrigger>
+       <FindTags id={orderItem.id} dic={dic} />
+      </Drawer>
       <Button
        variant='outline'
        className='gap-1 text-destructive border-destructive h-auto'
@@ -224,7 +205,7 @@ export default function ShopOrderItem({
         });
        }}
       >
-       <MdOutlineSplitscreen />
+       <MdOutlineSplitscreen className='size-5' />
       </Button>
       <Dialog>
        <DialogTrigger asChild>
@@ -234,7 +215,7 @@ export default function ShopOrderItem({
          disabled={!access['shopItem']['add']}
          onClick={() => {}}
         >
-         <TbFileDescription />
+         <TbFileDescription className='size-5' />
         </Button>
        </DialogTrigger>
        <form
