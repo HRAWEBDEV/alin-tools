@@ -7,11 +7,12 @@ import OrderItems from './OrderItems';
 import OrderBaseConfigProvider from '../services/order-tools/OrderBaseConfigProvider';
 import ConfirmOrderModal from './confirm-order/ConfrimOrderModal';
 import QuickConfirmOrderDialog from './confirm-order/QuickConfirmOrderDialog';
+import NewOrderContrainer from './NewOrderContrainer';
 
 export default function NewOrderWrapper({ dic }: { dic: NewOrderDictionary }) {
  return (
   <OrderBaseConfigProvider dic={dic}>
-   <div>
+   <NewOrderContrainer dic={dic}>
     <div className='p-4 lg:p-8 pb-0!'>
      <NewOrderHeader dic={dic} />
     </div>
@@ -22,7 +23,7 @@ export default function NewOrderWrapper({ dic }: { dic: NewOrderDictionary }) {
     <OrderItems dic={dic} />
     <ConfirmOrderModal dic={dic} />
     <QuickConfirmOrderDialog dic={dic} />
-   </div>
+   </NewOrderContrainer>
   </OrderBaseConfigProvider>
  );
 }

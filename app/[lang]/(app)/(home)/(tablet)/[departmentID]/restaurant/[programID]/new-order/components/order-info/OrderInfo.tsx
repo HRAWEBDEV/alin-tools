@@ -274,12 +274,28 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
             variant='outline'
             role='combobox'
             className='justify-between h-11'
-            disabled={freeTablesLoading || !access['order']['edit']}
+            disabled={
+             freeTablesLoading ||
+             !access['order']['edit'] ||
+             (data?.changeTable !== undefined && !data?.changeTable)
+            }
             onBlur={field.onBlur}
             ref={field.ref}
            >
             <span>{field.value?.value || ''}</span>
-            <div className='flex gap-2'>
+            <div className='flex gap-2 items-center'>
+             {tableValue && access['order']['edit'] && (
+              <Button
+               variant={'ghost'}
+               size={'icon-lg'}
+               onClick={(e) => {
+                e.stopPropagation();
+                setValue('table', null);
+               }}
+              >
+               <BsTrash className='size-5 text-red-700 dark:text-red-400' />
+              </Button>
+             )}
              {freeTablesLoading && <Spinner />}
              <ChevronsUpDown />
             </div>

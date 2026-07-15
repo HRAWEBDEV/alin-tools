@@ -25,6 +25,8 @@ type ConfirmOrderType = (typeof confirmOrderTypes)[number];
 const confirmOrderTypes = ['orderInfo', 'shoppingCard', 'invoice'] as const;
 
 interface OrderBaseConfig {
+ showSplitPanel: boolean;
+ toggleSplitPanel: (state?: boolean) => unknown;
  shopLoading: boolean;
  shopInfoLoading: boolean;
  confirmOrderIsOpen: boolean;

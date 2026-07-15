@@ -4,6 +4,7 @@
 
 # 2.3.6
 
+- add new order shop order panel (hra-done)
 - add signalr automatic reconnect and visibility change event listeners (hra-done)
 - show breakfast control menu only for restaurant system type 5 (hra-done)
 

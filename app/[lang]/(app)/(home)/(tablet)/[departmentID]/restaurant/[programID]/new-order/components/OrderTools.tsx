@@ -39,7 +39,7 @@ export default function OrderTools({ dic }: { dic: NewOrderDictionary }) {
    </div>
    <div className='md:flex md:justify-end grid grid-cols-2 gap-2'>
     <Button
-     className='md:w-40 text-primary border-primary h-10'
+     className='in-data-[active-split="true"]:xl:w-40 in-data-[active-split="false"]:md:w-40 text-primary border-primary h-10'
      variant='outline'
      disabled={shopInfoLoading}
      onClick={() => showConfirmOrder('orderInfo')}
@@ -49,11 +49,13 @@ export default function OrderTools({ dic }: { dic: NewOrderDictionary }) {
      ) : (
       <Spinner className='size-6' />
      )}
-     <span className='hidden md:inline-block'>{dic.tools.orderInfo}</span>
+     <span className='hidden in-data-[active-split="true"]:xl:inline-block in-data-[active-split="false"]:md:inline-block'>
+      {dic.tools.orderInfo}
+     </span>
     </Button>
     <Button
      variant='secondary'
-     className='relative md:w-40 h-10'
+     className='relative h-10 in-data-[active-split="true"]:xl:w-40 in-data-[active-split="false"]:md:w-40'
      disabled={shopLoading}
      onClick={() => showConfirmOrder('shoppingCard')}
     >
@@ -62,7 +64,9 @@ export default function OrderTools({ dic }: { dic: NewOrderDictionary }) {
      ) : (
       <Spinner className='size-6' />
      )}
-     <span className='hidden md:inline-block'>{dic.tools.shoppingCard}</span>
+     <span className='hidden in-data-[active-split="true"]:xl:inline-block in-data-[active-split="false"]:md:inline-block'>
+      {dic.tools.shoppingCard}
+     </span>
      {!!orderItems.length && (
       <Badge className='p-1 size-6 bg-orange-600 dark:bg-orange-400 font-medium text-base'>
        {orderItems.length}

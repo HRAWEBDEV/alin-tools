@@ -23,13 +23,19 @@ import { useDebouncedValue } from '@tanstack/react-pacer';
 import { type OrderItem } from '../../services/newOrderApiActions';
 import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseConfigContext';
 import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
+import { IoTrashOutline } from 'react-icons/io5';
 
 export default function FindTags({
  dic,
  id,
+ selectedTag,
 }: {
  dic: NewOrderDictionary;
  id: OrderItem['id'];
+ selectedTag?: {
+  tegId: number;
+  tagComment: string;
+ };
 }) {
  const { routeProgram } = useUserInfoRouter();
  const {
@@ -83,32 +89,56 @@ export default function FindTags({
    <DrawerHeader className='hidden'>
     <DrawerTitle>{dic.orderInfo.addTag}</DrawerTitle>
    </DrawerHeader>
-   <div className='p-4 pt-2 pb-4 border-b border-border flex flex-wrap justify-between gap-4'>
-    <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
-     {dic.orderInfo.addTag}
-    </h1>
-    <div className='w-[20rem] grid grid-cols-[1fr_max-content] gap-2'>
-     <InputGroup>
-      <InputGroupInput
-       type='search'
-       placeholder={dic.findRooms.search}
-       value={searchedText}
-       onChange={(e) => setSearchedText(e.target.value)}
-      />
-      <InputGroupAddon align='inline-end'>
-       <FaSearch className='text-primary size-4' />
-      </InputGroupAddon>
-     </InputGroup>
-     <Button
-      disabled={isFetching}
-      variant='outline'
-      size='icon'
-      className='text-primary'
-      onClick={() => refetch()}
-     >
-      <IoReloadOutline className='size-5' />
-     </Button>
+   <div className='p-4 pt-2 pb-4 border-b border-border flex flex-col flex-wrap'>
+    <div className='flex flex-wrap gap-4  justify-between'>
+     <h1 className='text-xl font-medium text-neutral-600 dark:text-neutral-400'>
+      {dic.orderInfo.addTag}
+     </h1>
+     <div className='w-[20rem] grid grid-cols-[1fr_max-content] gap-2'>
+      <InputGroup>
+       <InputGroupInput
+        type='search'
+        placeholder={dic.findRooms.search}
+        value={searchedText}
+        onChange={(e) => setSearchedText(e.target.value)}
+       />
+       <InputGroupAddon align='inline-end'>
+        <FaSearch className='text-primary size-4' />
+       </InputGroupAddon>
+      </InputGroup>
+      <Button
+       disabled={isFetching}
+       variant='outline'
+       size='icon'
+       className='text-primary'
+       onClick={() => refetch()}
+      >
+       <IoReloadOutline className='size-5' />
+      </Button>
+     </div>
     </div>
+    {selectedTag && (
+     <div className='flex flex-wrap gap-2 items-center'>
+      <p className='font-medium'>{selectedTag.tagComment}</p>
+      <Button
+       variant='ghost'
+       size='icon-lg'
+       className='text-destructive'
+       onClick={() => {
+        if (!selectedTag) return;
+        orderItemsDispatch({
+         type: 'removeTag',
+         payload: {
+          id,
+          tagID: selectedTag.tegId,
+         },
+        });
+       }}
+      >
+       <IoTrashOutline className='size-6' />
+      </Button>
+     </div>
+    )}
    </div>
    <div
     ref={(ref) => {

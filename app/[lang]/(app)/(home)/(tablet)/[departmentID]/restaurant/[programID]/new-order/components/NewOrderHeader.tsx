@@ -32,6 +32,7 @@ import TableOrders from '../../salons/components/table-orders/TableOrders';
 import { TableStateTypes } from '../../salons/utils/tableStates';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
+import { LuPanelLeft } from 'react-icons/lu';
 
 export default function NewOrderHeader({ dic }: { dic: NewOrderDictionary }) {
  const { routeDepartment, routeProgram } = useUserInfoRouter();
@@ -39,6 +40,8 @@ export default function NewOrderHeader({ dic }: { dic: NewOrderDictionary }) {
  const { locale } = useBaseConfig();
  const router = useRouter();
  const {
+  showSplitPanel,
+  toggleSplitPanel,
   queries: { fromSalons, salonName, salonID },
   order: { orderInfoName },
   userOrder,
@@ -114,7 +117,20 @@ export default function NewOrderHeader({ dic }: { dic: NewOrderDictionary }) {
      </h1>
     </div>
     <div className='basis-11 flex gap-4'>
-     <div className='hidden md:block'>{orderListButton}</div>
+     <div className='hidden md:block'>
+      <Button
+       size='icon-lg'
+       variant='outline'
+       data-is-active={showSplitPanel}
+       className='border-purple-700 text-purple-700 dark:border-purple-400 dark:text-purple-400 data-[is-active="true"]:bg-purple-700 data-[is-active="true"]:text-primary-foreground dark:data-[is-active="true"]:bg-purple-400'
+       onClick={() => toggleSplitPanel()}
+      >
+       <LuPanelLeft className='size-6' />
+      </Button>
+     </div>
+     {!!ordersList?.length && ordersList.length > 1 && (
+      <div className='hidden md:block'>{orderListButton}</div>
+     )}
      <Dialog>
       {fromSalons && (
        <DialogTrigger asChild>
@@ -155,8 +171,8 @@ export default function NewOrderHeader({ dic }: { dic: NewOrderDictionary }) {
      </Dialog>
     </div>
    </div>
-   <div className='text-sm grid grid-cols-2 md:grid-cols-5 gap-2'>
-    <div className='col-span-full md:col-span-1'>
+   <div className='text-sm grid grid-cols-2 md:grid-cols-5 in-data-[active-split="true"]:md:grid-cols-3 gap-2'>
+    <div className='col-span-full md:col-span-1 in-data-[active-split="true"]:md:col-span-2'>
      <span className='text-neutral-600 dark:text-neutral-400'>
       {dic.orderInfo.customerName}:{' '}
      </span>

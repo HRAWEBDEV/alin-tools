@@ -75,6 +75,7 @@ import { useSettingsContext } from '../../../../services/profile/settings/settin
 import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
 import { MdOutlineContentPasteOff } from 'react-icons/md';
 import { MdContentPaste } from 'react-icons/md';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 export default function OrderBaseConfigProvider({
  children,
@@ -83,6 +84,7 @@ export default function OrderBaseConfigProvider({
  children: ReactNode;
  dic: NewOrderDictionary;
 }) {
+ const isMediumRes = useMediaQuery('(min-width: 768px)');
  const systempricingCheckFirstRenderRef = useRef(true);
  const { userAccessibility } = useUserAccessibilityContext();
  const queryClient = useQueryClient();
@@ -160,6 +162,9 @@ export default function OrderBaseConfigProvider({
   },
  );
  const [confirmSetSystemPricing, setConfirmSetSystemPricing] = useState(false);
+ const [showSplitPanel, setShowSplitPanel] = useState(
+  newOrderSettings.showSplitPanel,
+ );
  const [showOrderImage, setShowOrderImage] = useState(
   newOrderSettings.showOrderImage,
  );
@@ -177,6 +182,13 @@ export default function OrderBaseConfigProvider({
  const [confirmOrderActiveType, setConfirmOrderActiveType] =
   useState<ConfirmOrderType>('orderInfo');
  const [orderItems, orderItemsDispatch] = useReducer(orderItemsReducer, []);
+
+ function toggleSplitPanel(newState?: boolean) {
+  const newValue = newState === undefined ? !showSplitPanel : newState;
+  changeNewOrderSettins('showSplitPanel', newValue);
+  setShowSplitPanel(newValue);
+ }
+
  function showConfirmOrder(confirmType?: ConfirmOrderType) {
   setConfirmOrderIsOpen(true);
   setConfirmOrderActiveType(confirmType || 'orderInfo');
@@ -1055,6 +1067,8 @@ export default function OrderBaseConfigProvider({
  }, [personData, orderInfoForm]);
 
  const ctx: OrderBaseConfig = {
+  showSplitPanel,
+  toggleSplitPanel,
   shopLoading,
   shopInfoLoading,
   confirmOrderIsOpen,
@@ -1246,6 +1260,14 @@ export default function OrderBaseConfigProvider({
   setOtpCodes(orderOtps.map((item) => ({ code: item, isNew: false })));
  }, [orderOtpsIsSuccess, orderOtps]);
 
+ useEffect(() => {
+  if (isMediumRes) {
+   setShowSplitPanel(newOrderSettings.showSplitPanel);
+  } else {
+   setShowSplitPanel(false);
+  }
+ }, [isMediumRes, newOrderSettings]);
+
  return (
   <orderBaseConfigContext.Provider value={ctx}>
    <div className='fixed z-(--app-restaurant-tabs-zindex) start-4 lg:start-(--app-restaurant-nav-width) bottom-(--app-restaurant-tabs-height) in-data-[scroll-dicretion="down"]:bottom-2 lg:bottom-2 lg:ps-2 flex flex-col gap-4'>
@@ -1259,9 +1281,9 @@ export default function OrderBaseConfigProvider({
      }}
     >
      {showDescription ? (
-      <MdContentPaste className='size-10 text-primary' />
+      <MdContentPaste className='size-8 text-primary' />
      ) : (
-      <MdOutlineContentPasteOff className='size-10 text-destructive' />
+      <MdOutlineContentPasteOff className='size-8 text-destructive' />
      )}
     </Button>
     <Button
@@ -1274,9 +1296,9 @@ export default function OrderBaseConfigProvider({
      }}
     >
      {showOrderImage ? (
-      <MdImage className='size-10 text-primary' />
+      <MdImage className='size-8 text-primary' />
      ) : (
-      <MdHideImage className='size-10 text-destructive' />
+      <MdHideImage className='size-8 text-destructive' />
      )}
     </Button>
    </div>
