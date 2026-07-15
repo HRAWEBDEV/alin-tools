@@ -70,6 +70,7 @@ interface InitialData {
  sendToKitchen: boolean;
  printToCashbox: boolean;
  forceSendToKitchen: boolean;
+ changeTable: boolean;
 }
 
 type OrderServiceRates = {
