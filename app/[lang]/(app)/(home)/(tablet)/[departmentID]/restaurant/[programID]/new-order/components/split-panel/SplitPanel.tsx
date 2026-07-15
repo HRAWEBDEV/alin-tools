@@ -22,7 +22,7 @@ export default function SplitPanel({ dic }: { dic: NewOrderDictionary }) {
  return (
   <div
    data-show-split-panel={showSplitPanel}
-   className='bg-neutral-100 dark:bg-neutral-900 border-s border-border w-(--app-restaurant-nav-width) fixed end-0 top-(--app-restaurant-header-height) lg:top-0 bottom-(--app-restaurant-tabs-height) in-data-[scroll-dicretion="down"]:bottom-0 lg:bottom-0 md:flex flex-col overflow-auto hidden'
+   className='bg-neutral-100 dark:bg-neutral-900 border-s border-border w-(--app-restaurant-nav-width) fixed end-0 top-(--app-restaurant-header-height) lg:top-0 bottom-(--app-restaurant-tabs-height) in-data-[scroll-dicretion="down"]:bottom-0 lg:bottom-0 sm:flex flex-col overflow-auto hidden'
   >
    <div className='sticky top-0 bg-neutral-100 dark:bg-neutral-900 z-3 p-4 border-b border-border'>
     <div className='flex gap-1 items-center'>

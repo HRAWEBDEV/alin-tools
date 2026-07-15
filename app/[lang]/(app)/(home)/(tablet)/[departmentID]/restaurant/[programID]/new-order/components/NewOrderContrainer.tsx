@@ -15,7 +15,7 @@ export default function NewOrderContrainer({
  return (
   <div
    data-active-split={showSplitPanel}
-   className='md:data-[active-split="true"]:pe-(--app-restaurant-nav-width)'
+   className='sm:data-[active-split="true"]:pe-(--app-restaurant-nav-width)'
   >
    {children}
    {showSplitPanel && <SplitPanel dic={dic} />}

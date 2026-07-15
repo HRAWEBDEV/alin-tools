@@ -117,7 +117,7 @@ export default function NewOrderHeader({ dic }: { dic: NewOrderDictionary }) {
      </h1>
     </div>
     <div className='basis-11 flex gap-4'>
-     <div className='hidden md:block'>
+     <div className='hidden sm:block'>
       <Button
        size='icon-lg'
        variant='outline'

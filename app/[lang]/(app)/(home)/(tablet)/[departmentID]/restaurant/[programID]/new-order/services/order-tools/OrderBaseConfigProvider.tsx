@@ -84,7 +84,7 @@ export default function OrderBaseConfigProvider({
  children: ReactNode;
  dic: NewOrderDictionary;
 }) {
- const isMediumRes = useMediaQuery('(min-width: 768px)');
+ const isMediumRes = useMediaQuery('(min-width: 640px)');
  const systempricingCheckFirstRenderRef = useRef(true);
  const { userAccessibility } = useUserAccessibilityContext();
  const queryClient = useQueryClient();
