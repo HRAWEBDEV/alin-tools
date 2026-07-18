@@ -47,7 +47,7 @@ export default function SplitPanel({ dic }: { dic: NewOrderDictionary }) {
       ))}
      </ul>
     ) : (
-     <></>
+     <NoItemFound />
     )}
    </div>
    <div className='sticky bottom-0 bg-neutral-100 dark:bg-neutral-900 z-3 grid gap-2 grid-cols-2 p-2 border-t border-border'>

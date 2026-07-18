@@ -48,15 +48,11 @@ export default function ShopOrderItem({
  const [showRemoveOrderItemConfirm, setShowRemoveOrderItemConfirm] =
   useState(false);
  const {
-  itemsInfo: { itemProgramAllGroup },
   order: { orderItemsDispatch },
   invoice: { isFixedDiscount },
   access,
  } = useOrderBaseConfigContext();
  const { format } = useCurrencyFormatter();
- const targetItemProgram = itemProgramAllGroup?.find(
-  (item) => item.itemID === orderItem.itemID,
- );
 
  let shopItemEditAccess = access['shopItem']['add'];
  let shopItemDeleteAccess = access['shopItem']['add'];
@@ -85,7 +81,7 @@ export default function ShopOrderItem({
         searchWords={[searchedOrder]}
        />
       </h3>
-      <div className='flex justify-center sm:justify-start mb-2 gap-4'>
+      <div className='flex justify-center sm:justify-start mb-2 gap-4 text-center pe-1'>
        {!isFixedDiscount && !!orderItem.discountRate && (
         <div className='text-[0.85rem] font-medium text-red-600 dark:text-red-400 line-through'>
          <Badge variant='destructive' className='p-1 me-2 text-sm'>
