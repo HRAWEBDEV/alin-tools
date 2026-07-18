@@ -134,12 +134,23 @@ function removeShopOrderItems(
 }
 
 function orderItemsReducer(state: OrderItem[], action: OrderItemActions) {
+ const newOrderShopPanel = document.querySelector(
+  '[data-new-order-shop-panel]',
+ );
+ function scrollToBottom() {
+  setTimeout(() => {
+   newOrderShopPanel?.scrollTo({
+    top: 2000,
+   });
+  }, 0);
+ }
  switch (action.type) {
   // insert bulk
   case 'insertOrderItems':
    return action.payload;
   // add
   case 'addOrderItems':
+   scrollToBottom();
    return [
     ...state,
     ...action.payload.map((item) => {
