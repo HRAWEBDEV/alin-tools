@@ -744,7 +744,7 @@ export default function OrderBaseConfigProvider({
      subscriberPersonID: data.subscriber ? Number(data.subscriber.key) : null,
      saleTimeID: data.saleTime ? Number(data.saleTime.key) : null,
      saleTypeID: Number(data.saleType!.key),
-     bonNo: data.bonNo || initData.bonNo,
+     bonNo: data.bonNo || null,
      orderDateTimeOffset: data.orderDate.toISOString(),
      persons: data.persons || null,
      roundingValue: data.rounding || 0,
