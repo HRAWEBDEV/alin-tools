@@ -81,6 +81,8 @@ import RackNotifsBoard from '../../components/rack-notifs-board/RackNotifsBoard'
 
 const notificationAudio = new Audio('/sounds/notification-sound.mp3');
 
+const rackRefreshStaleTime = 1000 * 60; // per minute
+
 export function RoomsRackConfigProvider({
  children,
  dic,
@@ -340,6 +342,7 @@ export function RoomsRackConfigProvider({
  // * signal r setup
  const getRackRooms = useCallback(async () => {
   if (!connection || !rackTypeValue || !showTypeValue) return;
+  if (connection.state !== signalR.HubConnectionState.Connected) return;
   if (showTypeValue.value === 'future' && !dateValue) return;
   setRackIsLoading(true);
   setRackIsError(false);
@@ -387,6 +390,8 @@ export function RoomsRackConfigProvider({
  //  get rack report
  const getRealTimeRackReport = useCallback(async () => {
   if (!rackReportConnection) return;
+  if (rackReportConnection.state !== signalR.HubConnectionState.Connected)
+   return;
   setRackReportIsLoading(true);
   setRackReportIsError(false);
   try {
@@ -506,6 +511,11 @@ export function RoomsRackConfigProvider({
    'visibilitychange',
    () => {
     if (!document.hidden) {
+     if (
+      rackLastUpdate &&
+      new Date().getTime() - rackLastUpdate?.getTime() < rackRefreshStaleTime
+     )
+      return;
      getRackRooms();
     }
    },
@@ -514,6 +524,13 @@ export function RoomsRackConfigProvider({
    },
   );
   return () => controller.abort();
+ }, [connection, getRackRooms, rackLastUpdate]);
+
+ useEffect(() => {
+  if (!connection) return;
+  connection.onreconnected(() => {
+   getRackRooms();
+  });
  }, [connection, getRackRooms]);
 
  useEffect(() => {
@@ -585,6 +602,11 @@ export function RoomsRackConfigProvider({
    'visibilitychange',
    () => {
     if (!document.hidden) {
+     if (
+      rackLastUpdate &&
+      new Date().getTime() - rackLastUpdate?.getTime() < rackRefreshStaleTime
+     )
+      return;
      getRealTimeRackReport();
     }
    },
@@ -593,6 +615,13 @@ export function RoomsRackConfigProvider({
    },
   );
   return () => controller.abort();
+ }, [rackReportConnection, getRealTimeRackReport, rackLastUpdate]);
+
+ useEffect(() => {
+  if (!rackReportConnection) return;
+  rackReportConnection.onreconnected(() => {
+   getRealTimeRackReport();
+  });
  }, [rackReportConnection, getRealTimeRackReport]);
 
  useEffect(() => {

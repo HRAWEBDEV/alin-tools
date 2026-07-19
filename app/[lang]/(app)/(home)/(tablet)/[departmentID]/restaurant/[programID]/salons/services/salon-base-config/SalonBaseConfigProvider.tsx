@@ -36,6 +36,8 @@ import { closeOrder } from '../../../new-order/services/newOrderApiActions';
 import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
 import { useUserAccessibilityContext } from '@/app/[lang]/(app)/login/services/user-accessibility/userAccessibilityContext';
 
+const salonsRefreshStaleTime = 1000 * 60; // per minute
+
 export default function SalonBaseConfigProvider({
  children,
  dic,
@@ -133,6 +135,7 @@ export default function SalonBaseConfigProvider({
  // * signal r setup
  const getSalonTables = useCallback(async () => {
   if (!connection || !selectedHall || !initData?.defaultSaleTimeID) return;
+  if (connection.state !== signalR.HubConnectionState.Connected) return;
   setIsLoadingTables(true);
   setTablesError(false);
   try {
@@ -207,6 +210,12 @@ export default function SalonBaseConfigProvider({
    'visibilitychange',
    () => {
     if (!document.hidden) {
+     if (
+      lastTablesUpdate &&
+      new Date().getTime() - lastTablesUpdate?.getTime() <
+       salonsRefreshStaleTime
+     )
+      return;
      getSalonTables();
     }
    },
@@ -215,6 +224,13 @@ export default function SalonBaseConfigProvider({
    },
   );
   return () => controller.abort();
+ }, [connection, getSalonTables, lastTablesUpdate]);
+
+ useEffect(() => {
+  if (!connection) return;
+  connection.onreconnected(() => {
+   getSalonTables();
+  });
  }, [connection, getSalonTables]);
 
  //

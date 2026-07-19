@@ -2,6 +2,14 @@
 
 - add reload button if necessary - for real time data
 
+# 2.3.7
+
+## bug fixes
+
+- check signal r connection when invoked (hra-done)
+- add signal r stale time check
+- add signal r connection, reconnected event to get refresh data (hra-done)
+
 # 2.3.6
 
 - add new order shop order panel (hra-done)
