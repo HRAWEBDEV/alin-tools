@@ -4,6 +4,12 @@
 
 # 2.3.7
 
+## Features
+
+## Changes
+
+- read only bon no in new order (hra-done)
+
 ## bug fixes
 
 - check signal r connection when invoked (hra-done)

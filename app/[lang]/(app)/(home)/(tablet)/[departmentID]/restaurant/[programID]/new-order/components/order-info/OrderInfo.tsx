@@ -1210,6 +1210,7 @@ export default function OrderInfo({ dic }: { dic: NewOrderDictionary }) {
           allowNegative={false}
           decimalScale={0}
           allowLeadingZeros={false}
+          readOnly
          />
         </InputGroup>
        )}
