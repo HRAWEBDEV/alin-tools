@@ -4,6 +4,8 @@
 
 # 2.3.7
 
+- add salons change direction mode (hra-done)
+
 ## Features
 
 ## Changes

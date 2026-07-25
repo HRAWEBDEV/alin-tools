@@ -32,6 +32,8 @@ interface SalonBaseConfig {
   selectedTable: Table | null;
   isLoading: boolean;
   isSuccess: boolean;
+  ltrTablesDirection: boolean;
+  changeLtrTablesDirection: (value?: boolean) => unknown;
   isError: boolean;
   lastTablesUpdate: Date | null;
   tablesReport: TablesReport;

@@ -29,9 +29,12 @@ import { TableStateTypes } from '../utils/tableStates';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { TableDisplayFilters } from './SalonDisplayFilters/TableDisplayFilters';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import DinnerIcon from '@/app/[lang]/(app)/components/icons/DinnerIcon';
+import { FaLongArrowAltRight } from 'react-icons/fa';
+
 export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
  const [searchedSalon, setSearchedSalon] = useState('');
- const { locale } = useBaseConfig();
+ const { locale, localeInfo } = useBaseConfig();
  const {
   hallsInfo: {
    isFetching,
@@ -51,6 +54,8 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
    changeFilters,
    showMergeTable,
    lastTablesUpdate,
+   ltrTablesDirection,
+   changeLtrTablesDirection,
   },
  } = useSalonBaseConfigContext();
 
@@ -140,12 +145,31 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
 
  return (
   <>
-   <h1 className='text-center md:text-start font-medium text-2xl lg:text-3xl p-4 lg:p-6 pb-0!'>
-    {dic.title}
-   </h1>
+   <div className='p-4 lg:p-6 pb-0! flex gap-2 items-center'>
+    <div className='basis-14 md:hidden'></div>
+    <h1 className='text-center md:text-start font-medium text-2xl lg:text-3xl grow'>
+     {dic.title}
+    </h1>
+    <div className='basis-14 flex justify-end'>
+     {localeInfo.contentDirection === 'rtl' && (
+      <Button
+       data-active-ltr-tables={ltrTablesDirection}
+       variant='outline'
+       size='icon-lg'
+       className='size-11 text-purple-700 border-purple-700 dark:text-purple-400 dark:border-purple-400 data-[active-ltr-tables=true]:bg-purple-700 dark:data-[active-ltr-tables=true]:bg-purple-400 data-[active-ltr-tables=true]:text-white dark:data-[active-ltr-tables=true]:text-white'
+       onClick={() => changeLtrTablesDirection()}
+      >
+       <div className='flex flex-col items-center justify-center'>
+        <DinnerIcon className='size-6' />
+        <FaLongArrowAltRight className='size-4' />
+       </div>
+      </Button>
+     )}
+    </div>
+   </div>
    <div className='bg-background sticky top-0 z-2 p-4 lg:p-6 pt-4! pb-2!'>
     <div className='flex flex-col md:flex-row md:justify-between lg:gap-2 gap-4 mb-2 top-0 sticky z-3 w-full'>
-     <div className='flex sm:gap-4 lg:gap-2 xl:gap-4 gap-4 items-center grow'>
+     <div className='flex gap-2 items-center grow'>
       <div className='grid lg:max-w-[24rem] xl:max-w-md 2xl:max-w-lg grid-cols-[max-content_1fr_max-content] grow w-full'>
        <Button
         size='icon'
@@ -240,7 +264,7 @@ export default function SalonsFilters({ dic }: { dic: SalonsDictionary }) {
       <TableDisplayFilters statusSwitches={statusSwitches} dic={dic} />
      </div>
      {isDesktop && (
-      <div className='flex md:gap-2 lg:gap-3 xl:gap-4 items-center flex-wrap justify-between md:justify-start shrink-0 lg:flex-nowrap'>
+      <div className='flex gap-4 items-center flex-wrap justify-center md:justify-start shrink-0 lg:flex-nowrap'>
        {statusSwitches}
       </div>
      )}

@@ -28,6 +28,7 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
    isSuccess: hallsInfoSuccess,
   },
   tablesInfo: {
+   ltrTablesDirection,
    mergeTableTo,
    transferTableTo,
    filteredData,
@@ -170,7 +171,12 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
      </div>
     ) : (
      <AnimatePresence>
-      <div className={tablesGridClass}>
+      <div
+       style={{
+        direction: ltrTablesDirection ? 'ltr' : 'unset',
+       }}
+       className={tablesGridClass}
+      >
        {filteredData.map((table) => (
         <SalonTable
          key={table.tableID}

@@ -35,6 +35,12 @@ import { Spinner } from '@/components/ui/spinner';
 import { closeOrder } from '../../../new-order/services/newOrderApiActions';
 import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
 import { useUserAccessibilityContext } from '@/app/[lang]/(app)/login/services/user-accessibility/userAccessibilityContext';
+import {
+ type SalonsSettings,
+ defaultSalonsSettings,
+ getSalonsSettings,
+ saveSalonsSettings,
+} from '../../utils/newSalonsSetting';
 
 const salonsRefreshStaleTime = 1000 * 60; // per minute
 
@@ -79,6 +85,13 @@ export default function SalonBaseConfigProvider({
  const [transferToTable, setTrasnferToTable] = useState<Table | null>(null);
  const [mergeToTable, setMergeToTable] = useState<Table | null>(null);
  const [showCloseOrder, setShowCloseOrder] = useState(false);
+ const [salonsSettings, setSalonsSettings] = useState<SalonsSettings>(() => {
+  if (typeof window !== 'undefined') {
+   return getSalonsSettings();
+  }
+  return defaultSalonsSettings;
+ });
+ const [ltrTablesDirection, setLtrTablesDirection] = useState(false);
 
  const [connection, setConnection] = useState<signalR.HubConnection | null>(
   null,
@@ -128,6 +141,24 @@ export default function SalonBaseConfigProvider({
   },
  });
 
+ // change setting
+ function changeSalonsSettings<T extends keyof SalonsSettings>(
+  key: T,
+  value: SalonsSettings[T],
+ ) {
+  const newSetting = {
+   ...salonsSettings,
+   [key]: value,
+  };
+  setSalonsSettings(newSetting);
+  saveSalonsSettings(newSetting);
+ }
+ //
+ function changeLtrTablesDirection(value?: boolean) {
+  const newState = value === undefined ? !ltrTablesDirection : value;
+  changeSalonsSettings('ltrTablesDirection', newState);
+  setLtrTablesDirection(newState);
+ }
  // tables filters
  function handleChangeTableFilters(tableFilters: TablesFilters) {
   setTableFilters(tableFilters);
@@ -373,6 +404,8 @@ export default function SalonBaseConfigProvider({
   },
   tablesInfo: {
    data: tables,
+   ltrTablesDirection,
+   changeLtrTablesDirection,
    isSuccess: tablesSuccess,
    filteredData: getFilteredTables({
     tables,
