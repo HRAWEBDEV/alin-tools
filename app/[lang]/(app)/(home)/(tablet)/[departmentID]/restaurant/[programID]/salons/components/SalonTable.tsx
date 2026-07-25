@@ -50,7 +50,7 @@ export default function SalonTable({
   if (newOpen) tableUtils.changeSelectedTable(table);
  };
  const tableStyles = getTableStateStyles(table.tableStateTypeID);
- const { locale } = useBaseConfig();
+ const { locale, localeInfo } = useBaseConfig();
  const tableRows = getTableRows(table.tableCapacity, table.occupiedPerson || 0);
 
  const { data: ordersList, isLoading: isLoadingOrdersList } = useQuery({
@@ -234,6 +234,9 @@ export default function SalonTable({
 
  return (
   <motion.div
+   style={{
+    direction: localeInfo.contentDirection,
+   }}
    layout
    className='grid group'
    data-bold={isBold}

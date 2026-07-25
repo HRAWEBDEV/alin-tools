@@ -111,7 +111,9 @@ export function TableDisplayFilters({
       <h6 className='font-medium text-center'>
        {dic.filters.drawerStatusTableTitle}
       </h6>
-      <div className='flex items-center justify-between'>{statusSwitches}</div>
+      <div className='flex items-center gap-4 justify-center'>
+       {statusSwitches}
+      </div>
      </div>
     </DrawerContent>
    </Drawer>
