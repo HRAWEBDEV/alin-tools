@@ -91,7 +91,9 @@ export default function SalonBaseConfigProvider({
   }
   return defaultSalonsSettings;
  });
- const [ltrTablesDirection, setLtrTablesDirection] = useState(false);
+ const [ltrTablesDirection, setLtrTablesDirection] = useState(
+  salonsSettings.ltrTablesDirection,
+ );
 
  const [connection, setConnection] = useState<signalR.HubConnection | null>(
   null,
