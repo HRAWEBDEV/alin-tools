@@ -9,27 +9,28 @@ import {
  DrawerContent,
  DrawerHeader,
  DrawerTitle,
- DrawerClose,
- DrawerTrigger,
 } from '@/components/ui/drawer';
 import { useRoomDevisionShareDictionary } from '../share-dictionary/roomDevisionShareDictionaryContext';
-import { ChevronsUpDown } from 'lucide-react';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
-import { Button } from '@/components/ui/button';
-import { FaPlus } from 'react-icons/fa';
-import { useQuery } from '@tanstack/react-query';
+import {
+ useInfiniteQuery,
+ useQuery,
+ useQueryClient,
+} from '@tanstack/react-query';
 import {
  getEventBoardInitialApi,
  getInitialData,
+ getEventBoardApi,
+ getEventBoard,
 } from './services/notificationApiActions';
-import { Field, FieldLabel } from '@/components/ui/field';
-import { Checkbox } from '@/components/ui/checkbox';
+import NotificationsWrapper from './components/NotificationsWrapper';
 
 export default function NotificationsProvider({
  children,
 }: {
  children: ReactNode;
 }) {
+ const queryClient = useQueryClient();
  const { localeInfo } = useBaseConfig();
  const {
   roomDevisionShareDictionary: {
@@ -37,6 +38,11 @@ export default function NotificationsProvider({
   },
  } = useRoomDevisionShareDictionary();
  const [isOpen, setIsOpen] = useState(false);
+ const [showNewNotification, setShowNewNotification] = useState(false);
+ const [selectedNotificationId, setSelectedNotificationId] = useState<
+  number | null
+ >(null);
+
  function handleToggleNotifications(open?: boolean) {
   setIsOpen((pre) => (open === undefined ? !pre : open));
  }
@@ -54,6 +60,65 @@ export default function NotificationsProvider({
   },
  });
 
+ const eventBoardQueryKey = [getEventBoardApi];
+ const { data, hasNextPage, fetchNextPage, isFetching, refetch, isSuccess } =
+  useInfiniteQuery({
+   queryKey: eventBoardQueryKey,
+   initialPageParam: {
+    limit: 300,
+    offset: 1,
+   },
+   async queryFn({ signal, pageParam }) {
+    const res = await getEventBoard({
+     signal,
+     limit: pageParam.limit,
+     offset: pageParam.offset,
+    });
+    return res.data;
+   },
+   getNextPageParam(lastPage) {
+    const nextOffset = lastPage.offset + 1;
+    if (lastPage.offset * lastPage.limit >= lastPage.rowsCount) {
+     return undefined;
+    }
+    return {
+     offset: nextOffset,
+     limit: lastPage.limit,
+    };
+   },
+   getPreviousPageParam(firstPage) {
+    if (firstPage.offset <= 1) {
+     return undefined;
+    }
+    return {
+     limit: firstPage.limit,
+     offset: firstPage.offset - 1,
+    };
+   },
+  });
+
+ const selectedNotification =
+  isSuccess && !!data.pages.length
+   ? !!data.pages[0].rowsCount
+     ? data.pages[0].rows.find((item) => item.id === selectedNotificationId) ||
+       null
+     : null
+   : null;
+
+ function handleInvalidateEventBoards() {
+  queryClient.invalidateQueries({ queryKey: eventBoardQueryKey });
+ }
+
+ //  edit setup
+ function handleEditNotification(id: number) {
+  setSelectedNotificationId(id);
+  setShowNewNotification(true);
+ }
+ function handleCloseNotifiction() {
+  setShowNewNotification(false);
+  setSelectedNotificationId(null);
+ }
+
  const ctx: NotificationContext = {
   isOpen,
   toggleProfile: handleToggleNotifications,
@@ -63,9 +128,24 @@ export default function NotificationsProvider({
    isSuccess: isSuccessInitialData,
    isError: isErrorInitialData,
   },
+  eventBoards: {
+   data: data,
+   onInvalidateEventBoards: handleInvalidateEventBoards,
+   hasNextPage,
+   fetchNextPage,
+   isFetching,
+   refetch,
+   isSuccess,
+  },
+  editEventBoard: {
+   show: showNewNotification,
+   selectedNotificationId,
+   selectedEventBoard: selectedNotification,
+   onEditEventBoard: handleEditNotification,
+   onCloseEditEventBoard: handleCloseNotifiction,
+  },
  };
  // get init data
-
  return (
   <notificationContext.Provider value={ctx}>
    {children}
@@ -80,80 +160,7 @@ export default function NotificationsProvider({
        {notificationsDic.title}
       </DrawerTitle>
      </DrawerHeader>
-     <div className='grow flex flex-col overflow-hidden'>
-      <div className='flex justify-end bg-background p-2 sticky top-0 gap-2 items-center'>
-       <div className='grow grid grid-cols-2 gap-2'>
-        <Field>
-         <Drawer>
-          <DrawerTrigger asChild>
-           <Button
-            id='program'
-            variant='outline'
-            role='combobox'
-            className='justify-between h-11'
-           >
-            <span>{}</span>
-            <ChevronsUpDown />
-           </Button>
-          </DrawerTrigger>
-          <DrawerContent className='h-[min(80svh,35rem)]'>
-           <DrawerHeader>
-            <DrawerTitle className='text-xl'>
-             {notificationsDic.filters.program}
-            </DrawerTitle>
-           </DrawerHeader>
-           <div>
-            {initialData?.prpgrams.length ? (
-             <ul>
-              {initialData.prpgrams.map((item) => (
-               <DrawerClose asChild key={item.key}>
-                <li
-                 className='flex gap-1 items-center ps-6 py-2'
-                 onClick={() => {
-                  // field.onChange(item);
-                 }}
-                >
-                 <Checkbox
-                  className='size-6'
-                  // checked={field.value?.value === item.value}
-                 />
-                 <Button
-                  tabIndex={-1}
-                  variant='ghost'
-                  className='w-full justify-start h-auto text-lg'
-                 >
-                  <span>{item.value}</span>
-                 </Button>
-                </li>
-               </DrawerClose>
-              ))}
-             </ul>
-            ) : (
-             <div className='text-center font-medium'></div>
-            )}
-           </div>
-          </DrawerContent>
-         </Drawer>
-        </Field>
-       </div>
-
-       <Button size='lg'>
-        <FaPlus />
-       </Button>
-      </div>
-      <div className='grow overflow-auto'></div>
-      <div className='sticky bottom-0'>
-       <DrawerClose asChild>
-        <Button
-         variant='outline'
-         className='w-full rounded-none h-11'
-         size='lg'
-        >
-         {notificationsDic.close}
-        </Button>
-       </DrawerClose>
-      </div>
-     </div>
+     <NotificationsWrapper />
     </DrawerContent>
    </Drawer>
   </notificationContext.Provider>

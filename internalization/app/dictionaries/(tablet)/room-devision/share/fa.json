@@ -12,9 +12,16 @@
   "notifications": {
    "title": "اعلانات",
    "newNotification": "اعلان جدید",
+   "loadMore": "موارد بیشتر",
    "filters": {
     "program": "برنامه‌ها",
     "user": "کاربر"
+   },
+   "newEvent": {
+    "eventEvent": "ویرایش اعلان",
+    "addEvent": "افزودن اعلان",
+    "confirm": "تایید",
+    "cancel": "انصراف"
    },
    "close": "بستن"
   },

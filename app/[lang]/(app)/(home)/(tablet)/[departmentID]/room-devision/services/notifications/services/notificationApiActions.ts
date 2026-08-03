@@ -1,5 +1,5 @@
 import { axios } from '@/app/[lang]/(app)/utils/defaultAxios';
-import { type Combo } from '../../../utils/apiTypes';
+import { type Combo, type PagedData } from '../../../utils/apiTypes';
 
 type InitialData = {
  prpgrams: Combo[];
@@ -24,5 +24,35 @@ function getInitialData({ signal }: { signal: AbortSignal }) {
  });
 }
 
-export type { InitialData };
-export { getEventBoardInitialApi, getInitialData };
+function getEventBoard({
+ limit,
+ offset,
+ signal,
+ programID,
+ userID,
+}: {
+ signal: AbortSignal;
+ limit: number;
+ offset: number;
+ programID?: string;
+ userID?: string;
+}) {
+ const searchParams = new URLSearchParams([
+  ['limit', limit.toString()],
+  ['offset', offset.toString()],
+ ]);
+ if (programID) searchParams.append('programID', programID);
+ if (userID) searchParams.append('userID', userID);
+ return axios.get<PagedData<EventBoard[]>>(getEventBoardApi, {
+  signal,
+  params: searchParams,
+ });
+}
+
+export type { InitialData, EventBoard };
+export {
+ getEventBoardInitialApi,
+ getInitialData,
+ getEventBoardApi,
+ getEventBoard,
+};
