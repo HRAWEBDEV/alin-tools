@@ -9,6 +9,15 @@
    "roomsManagement": "اتاق ها",
    "roomsControl": "کنترل"
   },
+  "notifications": {
+   "title": "اعلانات",
+   "newNotification": "اعلان جدید",
+   "filters": {
+    "program": "برنامه‌ها",
+    "user": "کاربر"
+   },
+   "close": "بستن"
+  },
   "profile": {
    "title": "پروفایل کاربر",
    "lastLoginDate": "آخرین ورود",

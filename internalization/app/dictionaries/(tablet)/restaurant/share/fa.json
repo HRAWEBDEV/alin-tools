@@ -9,6 +9,10 @@
    "connectionLost": "اتصال به اینترنت قطع شده است",
    "connected": "متصل"
   },
+  "notifications": {
+   "title": "اعلانات",
+   "close": "بستن"
+  },
   "settings": {
    "title": "تنظیمات",
    "backBtn": "بازگشت",

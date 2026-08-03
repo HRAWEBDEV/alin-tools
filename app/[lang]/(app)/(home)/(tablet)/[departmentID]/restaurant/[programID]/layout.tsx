@@ -8,6 +8,7 @@ import ResturantShareDictionaryProvider from '../services/share-dictionary/Resta
 import ProfileProvider from '../services/profile/ProfileProvider';
 import 'keen-slider/keen-slider.min.css';
 import SettingsProvider from '../services/profile/settings/SettingsProvider';
+import NotificationsProvider from '../services/notifications/NotificationsProvider';
 
 export default async function HomeLayout({
  children,
@@ -22,14 +23,16 @@ export default async function HomeLayout({
    <ResturantShareDictionaryProvider restaurantShareDictionary={shareDic}>
     <SettingsProvider>
      <ProfileProvider>
-      <div className='h-svh overflow-hidden flex flex-col'>
-       <Header />
-       <div className='flex grow overflow-hidden'>
-        <Nav />
-        <Main>{children}</Main>
+      <NotificationsProvider>
+       <div className='h-svh overflow-hidden flex flex-col'>
+        <Header />
+        <div className='flex grow overflow-hidden'>
+         <Nav />
+         <Main>{children}</Main>
+        </div>
+        <Tabs />
        </div>
-       <Tabs />
-      </div>
+      </NotificationsProvider>
      </ProfileProvider>
     </SettingsProvider>
    </ResturantShareDictionaryProvider>
