@@ -8,8 +8,17 @@ type InitialData = {
 
 type EventBoard = {
  id: number;
+ programID: number;
+ dateTimeDateTimeOffset: string;
  title: string;
  note: string;
+ createDateTimeOffset: string;
+ userPersonID: number;
+};
+
+type SaveEventBoard = {
+ eventBoard: Omit<EventBoard, 'userPersonID'>;
+ eventBoardShows: number[];
 };
 
 const getEventBoardInitialApi = '/Public/EventBoard/GetData';
@@ -49,10 +58,15 @@ function getEventBoard({
  });
 }
 
+function saveEventBoard(newEvent: SaveEventBoard) {
+ return axios.post(saveEventBoardApi, newEvent);
+}
+
 export type { InitialData, EventBoard };
 export {
  getEventBoardInitialApi,
  getInitialData,
  getEventBoardApi,
  getEventBoard,
+ saveEventBoard,
 };

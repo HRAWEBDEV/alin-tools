@@ -18,8 +18,10 @@
     "user": "کاربر"
    },
    "newEvent": {
-    "eventEvent": "ویرایش اعلان",
+    "editEvent": "ویرایش اعلان",
     "addEvent": "افزودن اعلان",
+    "title": "عنوان",
+    "description": "توضیحات",
     "confirm": "تایید",
     "cancel": "انصراف"
    },
