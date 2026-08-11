@@ -5,11 +5,11 @@ import {
  DialogContent,
  DialogFooter,
  DialogClose,
+ DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { useMutation } from '@tanstack/react-query';
 import { Spinner } from '@/components/ui/spinner';
-import { MdTouchApp } from 'react-icons/md';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
 import { useRoomDevisionShareDictionary } from '../../share-dictionary/roomDevisionShareDictionaryContext';
@@ -25,8 +25,12 @@ import {
  createNewNotificationSchema,
 } from '../schemas/newNotificationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { saveEventBoard } from '../services/notificationApiActions';
+import {
+ saveEventBoard,
+ deleteEventBoard,
+} from '../services/notificationApiActions';
 import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
+import { BiError } from 'react-icons/bi';
 
 export default function NewNotificationDialog({
  open,
@@ -51,6 +55,7 @@ export default function NewNotificationDialog({
    components: { notifications },
   },
  } = useRoomDevisionShareDictionary();
+
  const { mutate, isPending } = useMutation({
   mutationFn(data: NewNotificationSchema) {
    return saveEventBoard({
@@ -71,11 +76,24 @@ export default function NewNotificationDialog({
   },
  });
 
+ const { mutate: confirmDeleteEvent, isPending: isPendingDeleteEvent } =
+  useMutation({
+   mutationFn() {
+    return deleteEventBoard(selectedId!);
+   },
+   onSuccess() {},
+   onError(err: AxiosError<string>) {
+    toast.error(err.response?.data);
+   },
+  });
+
+ const pendAction = isPending || isPendingDeleteEvent;
+
  return (
   <Dialog
    open={open}
    onOpenChange={(newValue) => {
-    if (isPending) return;
+    if (pendAction) return;
     onChangeOpen(newValue);
    }}
   >
@@ -93,12 +111,52 @@ export default function NewNotificationDialog({
      <div className='p-4 grow overflow-auto'>
       {true && (
        <div className='flex justify-end'>
-        <Button
-         variant={'outline'}
-         className='w-24 border-destructive text-destructive'
-        >
-         {notifications.newEvent.remove}
-        </Button>
+        <Dialog>
+         <DialogTrigger asChild>
+          <Button
+           variant={'outline'}
+           className='w-24 border-destructive text-destructive'
+           disabled={pendAction}
+          >
+           {pendAction && <Spinner />}
+           {notifications.newEvent.remove}
+          </Button>
+         </DialogTrigger>
+         <DialogContent className='p-0 gap-0'>
+          <DialogHeader className='p-4'>
+           <DialogTitle className='hidden'>
+            {notifications.newEvent.remove}
+           </DialogTitle>
+          </DialogHeader>
+          <div className='p-4'>
+           <div className='flex gap-1 items-center text-red-700 dark:text-red-400 font-medium'>
+            <BiError className='size-12' />
+            <p>{notifications.newEvent.removeEventConfirmMessage}</p>
+           </div>
+          </div>
+          <DialogFooter className='p-4'>
+           <DialogClose asChild>
+            <Button className='sm:w-24' variant='outline' disabled={pendAction}>
+             {pendAction && <Spinner />}
+             {notifications.newEvent.cancel}
+            </Button>
+           </DialogClose>
+           <DialogClose asChild>
+            <Button
+             className='sm:w-24'
+             variant='destructive'
+             onClick={() => {
+              confirmDeleteEvent();
+             }}
+             disabled={pendAction}
+            >
+             {pendAction && <Spinner />}
+             {notifications.newEvent.confirm}
+            </Button>
+           </DialogClose>
+          </DialogFooter>
+         </DialogContent>
+        </Dialog>
        </div>
       )}
       <FieldGroup className='gap-4'>
@@ -138,18 +196,18 @@ export default function NewNotificationDialog({
       <DialogClose asChild>
        <Button
         type='button'
-        disabled={isPending}
+        disabled={pendAction}
         className='md:w-24'
         variant='outline'
        >
-        {isPending && <Spinner />}
+        {pendAction && <Spinner />}
         {notifications.newEvent.cancel}
        </Button>
       </DialogClose>
       <Button
        type='submit'
        className='md:w-24'
-       disabled={isPending}
+       disabled={pendAction}
        onClick={(e) => {
         e.preventDefault();
         handleSubmit((data) => {
@@ -157,7 +215,7 @@ export default function NewNotificationDialog({
         })();
        }}
       >
-       {isPending && <Spinner />}
+       {pendAction && <Spinner />}
        {notifications.newEvent.confirm}
       </Button>
      </DialogFooter>
