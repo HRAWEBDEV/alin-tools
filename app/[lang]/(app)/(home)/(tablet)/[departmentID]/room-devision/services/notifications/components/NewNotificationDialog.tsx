@@ -37,7 +37,7 @@ export default function NewNotificationDialog({
  selectedId: number | null;
  onChangeOpen: (state: boolean) => unknown;
 }) {
- const { data, routeProgram } = useUserInfoRouter();
+ const { routeProgram } = useUserInfoRouter();
  const {
   register,
   handleSubmit,
@@ -91,6 +91,16 @@ export default function NewNotificationDialog({
       </DialogHeader>
      </DialogHeader>
      <div className='p-4 grow overflow-auto'>
+      {true && (
+       <div className='flex justify-end'>
+        <Button
+         variant={'outline'}
+         className='w-24 border-destructive text-destructive'
+        >
+         {notifications.newEvent.remove}
+        </Button>
+       </div>
+      )}
       <FieldGroup className='gap-4'>
        <Field data-invalid={!!errors.title}>
         <FieldLabel htmlFor='title'>
@@ -108,6 +118,20 @@ export default function NewNotificationDialog({
          <InputGroupTextarea id='title' {...register('description')} />
         </InputGroup>
        </Field>
+       {selectedId && (
+        <div className='flex justify-between text-sm text-neutral-600 dark:text-neutral-400'>
+         <div>مدیر سیستم</div>
+         <div>
+          {new Date().toLocaleDateString('fa', {
+           year: 'numeric',
+           month: '2-digit',
+           day: '2-digit',
+           hour: '2-digit',
+           minute: '2-digit',
+          })}{' '}
+         </div>
+        </div>
+       )}
       </FieldGroup>
      </div>
      <DialogFooter className='p-4 py-2 border-t border-border'>

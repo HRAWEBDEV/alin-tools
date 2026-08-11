@@ -8,10 +8,9 @@ export default function NotificationItem({ event }: { event: EventBoard }) {
    className='w-full flex-col h-auto min-h-20 whitespace-normal text-start justify-start items-stretch gap-0 bg-neutral-100 dark:bg-neutral-900 shadow'
   >
    <div className='border-b border-border pb-2 mb-1'>
-    <h2 className='mb-1 font-medium text-primary'>حمیدرضا اکبری</h2>
+    <h2 className='mb-1 font-medium text-primary'>{event.title}</h2>
     <p className='text-neutral-700 dark:text-neutral-400 text-sm'>
-     اعلان سیستم خانه داری اعلان سیستم خانه داری اعلان سیستم خانه داری اعلان
-     سیستم خانه داری ...
+     {event.note}
     </p>
    </div>
    <div className='flex justify-between text-sm text-neutral-600 dark:text-neutral-400'>
@@ -23,7 +22,7 @@ export default function NotificationItem({ event }: { event: EventBoard }) {
       day: '2-digit',
       hour: '2-digit',
       minute: '2-digit',
-     })}
+     })}{' '}
     </div>
    </div>
   </Button>

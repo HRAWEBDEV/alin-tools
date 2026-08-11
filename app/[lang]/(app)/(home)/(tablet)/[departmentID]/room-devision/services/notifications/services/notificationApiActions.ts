@@ -62,6 +62,10 @@ function saveEventBoard(newEvent: SaveEventBoard) {
  return axios.post(saveEventBoardApi, newEvent);
 }
 
+function deleteEventBoard(eventBoardId: number) {
+ return axios.delete(`${deleteEventBoardApi}?EventBoardID=${eventBoardId}`);
+}
+
 export type { InitialData, EventBoard };
 export {
  getEventBoardInitialApi,
@@ -69,4 +73,5 @@ export {
  getEventBoardApi,
  getEventBoard,
  saveEventBoard,
+ deleteEventBoard,
 };
