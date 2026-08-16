@@ -223,7 +223,7 @@ export default function NewNotificationDialog({
         </InputGroup>
        </Field>
        {selectedId && (
-        <div className='flex justify-between text-sm text-neutral-600 dark:text-neutral-400'>
+        <div className='flex justify-between text-sm text-neutral-600 dark:text-neutral-400 items-center'>
          <div>مدیر سیستم</div>
          <div>
           {new Date().toLocaleDateString('fa', {
