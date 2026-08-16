@@ -12,7 +12,6 @@ import { useMutation } from '@tanstack/react-query';
 import { Spinner } from '@/components/ui/spinner';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
-import { useRoomDevisionShareDictionary } from '../../share-dictionary/roomDevisionShareDictionaryContext';
 import { Field, FieldLabel, FieldGroup } from '@/components/ui/field';
 import {
  InputGroup,
@@ -34,6 +33,7 @@ import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-pr
 import { BiError } from 'react-icons/bi';
 import { type EditNotifProps } from '../utils/editNotifProps';
 import { useEffect } from 'react';
+import { useShareDictionary } from '@/app/[lang]/(app)/services/share-dictionary/shareDictionaryContext';
 
 export default function NewNotificationDialog({
  open,
@@ -58,10 +58,10 @@ export default function NewNotificationDialog({
   },
  });
  const {
-  roomDevisionShareDictionary: {
+  shareDictionary: {
    components: { notifications },
   },
- } = useRoomDevisionShareDictionary();
+ } = useShareDictionary();
 
  const { mutate, isPending } = useMutation({
   mutationFn(data: NewNotificationSchema) {

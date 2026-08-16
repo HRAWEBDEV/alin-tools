@@ -10,7 +10,7 @@ import {
  DrawerHeader,
  DrawerTitle,
 } from '@/components/ui/drawer';
-import { useRoomDevisionShareDictionary } from '../share-dictionary/roomDevisionShareDictionaryContext';
+import { useShareDictionary } from '@/app/[lang]/(app)/services/share-dictionary/shareDictionaryContext';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import {
  useInfiniteQuery,
@@ -24,6 +24,7 @@ import {
  getEventBoard,
 } from './services/notificationApiActions';
 import NotificationsWrapper from './components/NotificationsWrapper';
+import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
 
 export default function NotificationsProvider({
  children,
@@ -31,12 +32,13 @@ export default function NotificationsProvider({
  children: ReactNode;
 }) {
  const queryClient = useQueryClient();
+ const { routeProgram } = useUserInfoRouter();
  const { localeInfo } = useBaseConfig();
  const {
-  roomDevisionShareDictionary: {
+  shareDictionary: {
    components: { notifications: notificationsDic },
   },
- } = useRoomDevisionShareDictionary();
+ } = useShareDictionary();
  const [isOpen, setIsOpen] = useState(false);
  const [showNewNotification, setShowNewNotification] = useState(false);
  const [selectedNotificationId, setSelectedNotificationId] = useState<
@@ -60,7 +62,7 @@ export default function NotificationsProvider({
   },
  });
 
- const eventBoardQueryKey = [getEventBoardApi];
+ const eventBoardQueryKey = [getEventBoardApi, routeProgram?.id.toString()];
  const { data, hasNextPage, fetchNextPage, isFetching, refetch, isSuccess } =
   useInfiniteQuery({
    queryKey: eventBoardQueryKey,
@@ -73,6 +75,7 @@ export default function NotificationsProvider({
      signal,
      limit: pageParam.limit,
      offset: pageParam.offset,
+     programID: routeProgram?.id.toString(),
     });
     return res.data;
    },

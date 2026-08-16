@@ -8,7 +8,7 @@ import ResturantShareDictionaryProvider from '../services/share-dictionary/Resta
 import ProfileProvider from '../services/profile/ProfileProvider';
 import 'keen-slider/keen-slider.min.css';
 import SettingsProvider from '../services/profile/settings/SettingsProvider';
-import NotificationsProvider from '../services/notifications/NotificationsProvider';
+import NotificationsProvider from '../../room-devision/services/notifications/NotificationsProvider';
 
 export default async function HomeLayout({
  children,

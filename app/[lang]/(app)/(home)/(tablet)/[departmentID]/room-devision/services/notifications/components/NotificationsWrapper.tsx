@@ -1,18 +1,9 @@
 import { Fragment, useState } from 'react';
-import {
- Drawer,
- DrawerContent,
- DrawerHeader,
- DrawerTitle,
- DrawerClose,
- DrawerTrigger,
-} from '@/components/ui/drawer';
+import { DrawerClose } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button';
 import { FaPlus } from 'react-icons/fa';
-import { ChevronsUpDown } from 'lucide-react';
-import { Field, FieldLabel } from '@/components/ui/field';
-import { Checkbox } from '@/components/ui/checkbox';
-import { useRoomDevisionShareDictionary } from '../../share-dictionary/roomDevisionShareDictionaryContext';
+import { Field } from '@/components/ui/field';
+import { useShareDictionary } from '@/app/[lang]/(app)/services/share-dictionary/shareDictionaryContext';
 import { useNotificationContext } from '../notificationsContext';
 import NoItemFound from '@/app/[lang]/(app)/components/NoItemFound';
 import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
@@ -27,10 +18,10 @@ export default function NotificationsWrapper() {
  const [showNewNotif, setShowNewNotif] = useState(false);
  const [selectedNotfiId, setSelectedNotifId] = useState<number | null>(null);
  const {
-  roomDevisionShareDictionary: {
+  shareDictionary: {
    components: { notifications: notificationsDic },
   },
- } = useRoomDevisionShareDictionary();
+ } = useShareDictionary();
 
  const selectedNotif = selectedNotfiId
   ? eventBoards.data?.pages[0].rows.find((row) => row.id === selectedNotfiId) ||

@@ -9,27 +9,6 @@
    "roomsManagement": "اتاق ها",
    "roomsControl": "کنترل"
   },
-  "notifications": {
-   "title": "اعلانات",
-   "newNotification": "اعلان جدید",
-   "loadMore": "موارد بیشتر",
-   "search": "جستجو",
-   "filters": {
-    "program": "برنامه‌ها",
-    "user": "کاربر"
-   },
-   "newEvent": {
-    "removeEventConfirmMessage": "آیا از حذف آیتم اطمینان دارید؟",
-    "editEvent": "ویرایش اعلان",
-    "addEvent": "افزودن اعلان",
-    "title": "عنوان",
-    "description": "توضیحات",
-    "remove": "حذف",
-    "confirm": "تایید",
-    "cancel": "انصراف"
-   },
-   "close": "بستن"
-  },
   "profile": {
    "title": "پروفایل کاربر",
    "lastLoginDate": "آخرین ورود",
