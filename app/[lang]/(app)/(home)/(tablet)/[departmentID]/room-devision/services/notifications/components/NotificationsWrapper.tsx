@@ -10,7 +10,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { FaPlus } from 'react-icons/fa';
 import { ChevronsUpDown } from 'lucide-react';
-import { Field } from '@/components/ui/field';
+import { Field, FieldLabel } from '@/components/ui/field';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useRoomDevisionShareDictionary } from '../../share-dictionary/roomDevisionShareDictionaryContext';
 import { useNotificationContext } from '../notificationsContext';
@@ -19,6 +19,8 @@ import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
 import { Spinner } from '@/components/ui/spinner';
 import NotificationItem from './NotificationItem';
 import NewNotificationDialog from './NewNotificationDialog';
+import { type EditNotifProps } from '../utils/editNotifProps';
+import { InputGroup, InputGroupInput } from '@/components/ui/input-group';
 
 export default function NotificationsWrapper() {
  const { initialData, eventBoards } = useNotificationContext();
@@ -30,65 +32,42 @@ export default function NotificationsWrapper() {
   },
  } = useRoomDevisionShareDictionary();
 
+ const selectedNotif = selectedNotfiId
+  ? eventBoards.data?.pages[0].rows.find((row) => row.id === selectedNotfiId) ||
+    null
+  : null;
+
+ function handleShowEditNotif(id: number | null) {
+  setShowNewNotif(true);
+  setSelectedNotifId(id);
+ }
+
+ function handleCloseEditNotif() {
+  setShowNewNotif(false);
+  setSelectedNotifId(null);
+ }
+
+ const editNotif: EditNotifProps = {
+  showNewNotif,
+  selectedNotfiId,
+  selectedNotif,
+  onShowEditNotif: handleShowEditNotif,
+  onCloseEditNotif: handleCloseEditNotif,
+  onInvalidate: eventBoards.onInvalidateEventBoards,
+ };
+
  return (
   <div className='grow flex flex-col overflow-hidden'>
    {eventBoards.isFetching && <LinearLoading />}
    <div className='flex justify-end bg-background p-2 sticky top-0 gap-2 items-center'>
     <div className='grow grid grid-cols-1 gap-2'>
      <Field>
-      <Drawer>
-       <DrawerTrigger asChild>
-        <Button
-         id='program'
-         variant='outline'
-         role='combobox'
-         className='justify-between h-11'
-        >
-         <span>{}</span>
-         <ChevronsUpDown />
-        </Button>
-       </DrawerTrigger>
-       <DrawerContent className='h-[min(80svh,35rem)]'>
-        <DrawerHeader>
-         <DrawerTitle className='text-xl'>
-          {notificationsDic.filters.program}
-         </DrawerTitle>
-        </DrawerHeader>
-        <div>
-         {initialData.data?.prpgrams.length ? (
-          <ul>
-           {initialData.data.prpgrams.map((item) => (
-            <DrawerClose asChild key={item.key}>
-             <li
-              className='flex gap-1 items-center ps-6 py-2'
-              onClick={() => {
-               // field.onChange(item);
-              }}
-             >
-              <Checkbox
-               className='size-6'
-               // checked={field.value?.value === item.value}
-              />
-              <Button
-               tabIndex={-1}
-               variant='ghost'
-               className='w-full justify-start h-auto text-lg'
-              >
-               <span>{item.value}</span>
-              </Button>
-             </li>
-            </DrawerClose>
-           ))}
-          </ul>
-         ) : (
-          <div className='text-center font-medium'></div>
-         )}
-        </div>
-       </DrawerContent>
-      </Drawer>
+      <InputGroup className='h-10'>
+       <InputGroupInput disabled placeholder={notificationsDic.search} />
+      </InputGroup>
      </Field>
     </div>
-    <Button size='lg' onClick={() => setShowNewNotif(true)}>
+    <Button size='lg' onClick={() => editNotif.onShowEditNotif(null)}>
      <FaPlus />
     </Button>
    </div>
@@ -106,7 +85,11 @@ export default function NotificationsWrapper() {
           </div>
          ) : (
           group.rows.map((event) => (
-           <NotificationItem key={event.id} event={event} />
+           <NotificationItem
+            key={event.id}
+            event={event}
+            editEvent={editNotif}
+           />
           ))
          )}
         </Fragment>
@@ -136,13 +119,8 @@ export default function NotificationsWrapper() {
    </div>
    <NewNotificationDialog
     open={showNewNotif}
+    editEvent={editNotif}
     selectedId={selectedNotfiId}
-    onChangeOpen={(state) => {
-     if (!state) {
-      setSelectedNotifId(null);
-     }
-     setShowNewNotif(state);
-    }}
    />
   </div>
  );

@@ -3,6 +3,12 @@ import { type Combo, type PagedData } from '../../../utils/apiTypes';
 
 type InitialData = {
  prpgrams: Combo[];
+ users: PagedData<
+  {
+   personID: number;
+   personFullName: string;
+  }[]
+ >;
  manegar: boolean;
 };
 
@@ -14,11 +20,16 @@ type EventBoard = {
  note: string;
  createDateTimeOffset: string;
  userPersonID: number;
+ userPersonFullName: string;
 };
 
 type SaveEventBoard = {
- eventBoard: Omit<EventBoard, 'userPersonID'>;
- eventBoardShows: number[];
+ eventBoard: Omit<EventBoard, 'userPersonID' | 'userPersonFullName'>;
+ eventBoardShows: {
+  id: number;
+  eventBoardID: number;
+  programID: number;
+ }[];
 };
 
 const getEventBoardInitialApi = '/Public/EventBoard/GetData';
@@ -62,6 +73,10 @@ function saveEventBoard(newEvent: SaveEventBoard) {
  return axios.post(saveEventBoardApi, newEvent);
 }
 
+function updateEventBoard(newEvent: SaveEventBoard) {
+ return axios.put(updateEventBoardApi, newEvent);
+}
+
 function deleteEventBoard(eventBoardId: number) {
  return axios.delete(`${deleteEventBoardApi}?EventBoardID=${eventBoardId}`);
 }
@@ -73,5 +88,6 @@ export {
  getEventBoardApi,
  getEventBoard,
  saveEventBoard,
+ updateEventBoard,
  deleteEventBoard,
 };

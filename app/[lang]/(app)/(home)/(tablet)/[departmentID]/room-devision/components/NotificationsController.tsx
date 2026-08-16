@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { useNotificationContext } from '../services/notifications/notificationsContext';
 
 function NotificationsController() {
- const { toggleProfile } = useNotificationContext();
+ const { toggleProfile, eventBoards } = useNotificationContext();
  return (
   <Button
    type='button'
@@ -14,11 +14,13 @@ function NotificationsController() {
    className='relative rounded-full size-11 bg-transparent text-neutral-600 dark:text-neutral-400'
    onClick={() => toggleProfile(true)}
   >
-   <div className='absolute -top-1 -end-2'>
-    <Badge variant='destructive' className='p-1 size-6'>
-     {2}
-    </Badge>
-   </div>
+   {!!eventBoards.data?.pages[0].rowsCount && (
+    <div className='absolute -top-1 -end-2'>
+     <Badge variant='destructive' className='p-1 size-6'>
+      {eventBoards.data?.pages[0].rowsCount}
+     </Badge>
+    </div>
+   )}
    <IoIosNotifications className='size-6' />
   </Button>
  );

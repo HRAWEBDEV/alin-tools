@@ -28,18 +28,21 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import {
  saveEventBoard,
  deleteEventBoard,
+ updateEventBoard,
 } from '../services/notificationApiActions';
 import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
 import { BiError } from 'react-icons/bi';
+import { type EditNotifProps } from '../utils/editNotifProps';
+import { useEffect } from 'react';
 
 export default function NewNotificationDialog({
  open,
+ editEvent,
  selectedId,
- onChangeOpen,
 }: {
  open: boolean;
+ editEvent: EditNotifProps;
  selectedId: number | null;
- onChangeOpen: (state: boolean) => unknown;
 }) {
  const { routeProgram } = useUserInfoRouter();
  const {
@@ -49,6 +52,10 @@ export default function NewNotificationDialog({
   reset,
  } = useForm<NewNotificationSchema>({
   resolver: zodResolver(createNewNotificationSchema()),
+  defaultValues: {
+   description: '',
+   title: '',
+  },
  });
  const {
   roomDevisionShareDictionary: {
@@ -58,19 +65,41 @@ export default function NewNotificationDialog({
 
  const { mutate, isPending } = useMutation({
   mutationFn(data: NewNotificationSchema) {
-   return saveEventBoard({
-    eventBoard: {
+   const eventBoardPrograms = [
+    {
      id: 0,
-     title: data.title,
-     note: data.description,
-     createDateTimeOffset: new Date().toISOString(),
-     dateTimeDateTimeOffset: new Date().toISOString(),
+     eventBoardID: editEvent.selectedNotfiId || 0,
      programID: routeProgram.id,
     },
-    eventBoardShows: [routeProgram.id],
-   });
+   ];
+   const eventBoard = {
+    ...(editEvent.selectedNotif || {}),
+    id: editEvent.selectedNotfiId || 0,
+    title: data.title,
+    note: data.description,
+    createDateTimeOffset:
+     editEvent.selectedNotif?.createDateTimeOffset || new Date().toISOString(),
+    dateTimeDateTimeOffset:
+     editEvent.selectedNotif?.dateTimeDateTimeOffset ||
+     new Date().toISOString(),
+    programID: routeProgram.id,
+   };
+
+   return editEvent.selectedNotfiId
+    ? updateEventBoard({
+       eventBoard,
+       eventBoardShows: eventBoardPrograms,
+      })
+    : saveEventBoard({
+       eventBoard,
+       eventBoardShows: eventBoardPrograms,
+      });
   },
-  onSuccess() {},
+  onSuccess() {
+   reset();
+   editEvent.onInvalidate();
+   editEvent.onCloseEditNotif();
+  },
   onError(err: AxiosError<string>) {
    toast.error(err.response?.data);
   },
@@ -81,7 +110,10 @@ export default function NewNotificationDialog({
    mutationFn() {
     return deleteEventBoard(selectedId!);
    },
-   onSuccess() {},
+   onSuccess() {
+    editEvent.onInvalidate();
+    editEvent.onCloseEditNotif();
+   },
    onError(err: AxiosError<string>) {
     toast.error(err.response?.data);
    },
@@ -89,16 +121,30 @@ export default function NewNotificationDialog({
 
  const pendAction = isPending || isPendingDeleteEvent;
 
+ useEffect(() => {
+  if (editEvent.selectedNotif) {
+   reset({
+    title: editEvent.selectedNotif.title,
+    description: editEvent.selectedNotif.note,
+   });
+  } else {
+   reset({
+    title: '',
+    description: '',
+   });
+  }
+ }, [editEvent, open, reset]);
+
  return (
   <Dialog
    open={open}
-   onOpenChange={(newValue) => {
+   onOpenChange={() => {
     if (pendAction) return;
-    onChangeOpen(newValue);
+    editEvent.onCloseEditNotif();
    }}
   >
-   <form className='max-h-[95svh] overflow-hidden flex flex-col'>
-    <DialogContent className='gap-0 p-0 overflow-hidden flex flex-col grow'>
+   <DialogContent className='gap-0 p-0 overflow-hidden flex flex-col grow max-h-[95svh]'>
+    <form className='grow overflow-hidden flex flex-col'>
      <DialogHeader className='p-4 border-b border-border'>
       <DialogHeader>
        <DialogTitle className='text-md'>
@@ -109,7 +155,7 @@ export default function NewNotificationDialog({
       </DialogHeader>
      </DialogHeader>
      <div className='p-4 grow overflow-auto'>
-      {true && (
+      {editEvent.selectedNotfiId && (
        <div className='flex justify-end'>
         <Dialog>
          <DialogTrigger asChild>
@@ -219,8 +265,8 @@ export default function NewNotificationDialog({
        {notifications.newEvent.confirm}
       </Button>
      </DialogFooter>
-    </DialogContent>
-   </form>
+    </form>
+   </DialogContent>
   </Dialog>
  );
 }
