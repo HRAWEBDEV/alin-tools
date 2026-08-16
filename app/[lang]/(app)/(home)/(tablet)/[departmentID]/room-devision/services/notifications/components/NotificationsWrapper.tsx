@@ -14,7 +14,7 @@ import { type EditNotifProps } from '../utils/editNotifProps';
 import { InputGroup, InputGroupInput } from '@/components/ui/input-group';
 
 export default function NotificationsWrapper() {
- const { initialData, eventBoards } = useNotificationContext();
+ const { eventBoards } = useNotificationContext();
  const [showNewNotif, setShowNewNotif] = useState(false);
  const [selectedNotfiId, setSelectedNotifId] = useState<number | null>(null);
  const {

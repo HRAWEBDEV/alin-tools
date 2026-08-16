@@ -40,10 +40,6 @@ export default function NotificationsProvider({
   },
  } = useShareDictionary();
  const [isOpen, setIsOpen] = useState(false);
- const [showNewNotification, setShowNewNotification] = useState(false);
- const [selectedNotificationId, setSelectedNotificationId] = useState<
-  number | null
- >(null);
 
  function handleToggleNotifications(open?: boolean) {
   setIsOpen((pre) => (open === undefined ? !pre : open));
@@ -100,26 +96,8 @@ export default function NotificationsProvider({
    },
   });
 
- const selectedNotification =
-  isSuccess && !!data.pages.length
-   ? !!data.pages[0].rowsCount
-     ? data.pages[0].rows.find((item) => item.id === selectedNotificationId) ||
-       null
-     : null
-   : null;
-
  function handleInvalidateEventBoards() {
   queryClient.invalidateQueries({ queryKey: eventBoardQueryKey });
- }
-
- //  edit setup
- function handleEditNotification(id: number) {
-  setSelectedNotificationId(id);
-  setShowNewNotification(true);
- }
- function handleCloseNotifiction() {
-  setShowNewNotification(false);
-  setSelectedNotificationId(null);
  }
 
  const ctx: NotificationContext = {
@@ -139,13 +117,6 @@ export default function NotificationsProvider({
    isFetching,
    refetch,
    isSuccess,
-  },
-  editEventBoard: {
-   show: showNewNotification,
-   selectedNotificationId,
-   selectedEventBoard: selectedNotification,
-   onEditEventBoard: handleEditNotification,
-   onCloseEditEventBoard: handleCloseNotifiction,
   },
  };
  // get init data

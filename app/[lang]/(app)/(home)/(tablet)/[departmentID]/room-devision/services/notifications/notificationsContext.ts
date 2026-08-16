@@ -25,13 +25,6 @@ interface NotificationContext {
   refetch: () => unknown;
   isSuccess: boolean;
  };
- editEventBoard: {
-  show: boolean;
-  selectedNotificationId: number | null;
-  selectedEventBoard: EventBoard | null;
-  onEditEventBoard: (id: number) => unknown;
-  onCloseEditEventBoard: () => unknown;
- };
 }
 
 const notificationContext = createContext<NotificationContext | null>(null);
