@@ -1,5 +1,5 @@
 'use client';
-import { useState, ReactNode } from 'react';
+import { useState, ReactNode, useEffect, useCallback } from 'react';
 import {
  type NotificationContext,
  notificationContext,
@@ -25,14 +25,19 @@ import {
 } from './services/notificationApiActions';
 import NotificationsWrapper from './components/NotificationsWrapper';
 import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
+import * as signalR from '@microsoft/signalr';
+import { getUserLoginToken } from '@/app/[lang]/(app)/login/utils/loginTokenManager';
 
 export default function NotificationsProvider({
  children,
 }: {
  children: ReactNode;
 }) {
+ const [connection, setConnection] = useState<signalR.HubConnection | null>(
+  null,
+ );
+ const { routeDepartment, routeOwner, routeProgram } = useUserInfoRouter();
  const queryClient = useQueryClient();
- const { routeProgram } = useUserInfoRouter();
  const { localeInfo } = useBaseConfig();
  const {
   shareDictionary: {
@@ -119,7 +124,65 @@ export default function NotificationsProvider({
    isSuccess,
   },
  };
+ // get events
+ const getEvents = useCallback(async () => {
+  if (!connection) return;
+  if (connection.state !== signalR.HubConnectionState.Connected) return;
+  try {
+   await connection.invoke(
+    'GetEventBoardUpdate',
+    connection.connectionId,
+    null,
+    null,
+   );
+  } catch (error) {
+   console.log('signalR get events failed: ', error);
+  } finally {
+  }
+ }, [connection]);
  // get init data
+ useEffect(() => {
+  const rackSignalRConnection = new signalR.HubConnectionBuilder()
+   .withUrl(
+    `${
+     process.env.NEXT_PUBLIC_API_URI
+    }/EventBoardChangeNotifHub?token=${getUserLoginToken()}&programid=${routeProgram.id}&departmentid=${routeDepartment.id}&ownerid=${routeOwner.id}&systemid=${routeProgram.systemID}`,
+   )
+   .withAutomaticReconnect()
+   .configureLogging(signalR.LogLevel.Information)
+   .build();
+  const startConnection = async () => {
+   setConnection(null);
+   try {
+    await rackSignalRConnection.start();
+    setConnection(rackSignalRConnection);
+   } catch (error) {
+    console.log('start event connection error', error);
+   }
+  };
+  startConnection();
+  return () => {
+   rackSignalRConnection.stop();
+  };
+ }, [routeOwner, routeDepartment, routeProgram]);
+
+ useEffect(() => {
+  if (!connection) return;
+  connection.on('EventBoardChanged', () => {
+   console.log('get changed event board');
+   getEvents();
+  });
+  return () => connection && connection.off('EventBoardChanged');
+ }, [connection, getEvents]);
+
+ useEffect(() => {
+  if (!connection) return;
+  connection.on('EventBoardUpdated', (event) => {
+   console.log('get updated event', event);
+  });
+  return () => connection && connection.off('EventBoardUpdated');
+ }, [connection]);
+
  return (
   <notificationContext.Provider value={ctx}>
    {children}
