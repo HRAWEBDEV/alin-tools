@@ -2,6 +2,10 @@
 
 - add reload button if necessary - for real time data
 
+# 2.3.8
+
+- add system notifications
+
 # 2.3.7
 
 - add salons change direction mode (hra-done)
