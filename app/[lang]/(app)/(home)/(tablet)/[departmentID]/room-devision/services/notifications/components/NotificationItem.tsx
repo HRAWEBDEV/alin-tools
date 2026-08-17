@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { type EventBoard } from '../services/notificationApiActions';
 import { type EditNotifProps } from '../utils/editNotifProps';
+import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 
 export default function NotificationItem({
  event,
@@ -9,6 +10,7 @@ export default function NotificationItem({
  event: EventBoard;
  editEvent: EditNotifProps;
 }) {
+ const { locale } = useBaseConfig();
  const shortDescription =
   event.note.length > 100 ? event.note.slice(0, 100) + '...' : event.note;
  return (
@@ -26,7 +28,7 @@ export default function NotificationItem({
    <div className='flex justify-between text-sm text-neutral-600 dark:text-neutral-400'>
     <div>{event.userPersonFullName}</div>
     <div>
-     {new Date().toLocaleDateString('fa', {
+     {new Date(event.createDateTimeOffset).toLocaleDateString(locale, {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',

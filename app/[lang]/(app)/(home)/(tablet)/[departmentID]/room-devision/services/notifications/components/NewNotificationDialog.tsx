@@ -34,6 +34,7 @@ import { BiError } from 'react-icons/bi';
 import { type EditNotifProps } from '../utils/editNotifProps';
 import { useEffect } from 'react';
 import { useShareDictionary } from '@/app/[lang]/(app)/services/share-dictionary/shareDictionaryContext';
+import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 
 export default function NewNotificationDialog({
  open,
@@ -44,6 +45,7 @@ export default function NewNotificationDialog({
  editEvent: EditNotifProps;
  selectedId: number | null;
 }) {
+ const { locale } = useBaseConfig();
  const { routeProgram } = useUserInfoRouter();
  const {
   register,
@@ -222,11 +224,15 @@ export default function NewNotificationDialog({
          <InputGroupTextarea id='title' {...register('description')} />
         </InputGroup>
        </Field>
-       {selectedId && (
+       {editEvent.selectedNotif && (
         <div className='flex justify-between text-sm text-neutral-600 dark:text-neutral-400 items-center'>
-         <div>مدیر سیستم</div>
+         <p className='font-medium'>
+          {editEvent.selectedNotif.userPersonFullName}
+         </p>
          <div>
-          {new Date().toLocaleDateString('fa', {
+          {new Date(
+           editEvent.selectedNotif.createDateTimeOffset,
+          ).toLocaleDateString(locale, {
            year: 'numeric',
            month: '2-digit',
            day: '2-digit',
