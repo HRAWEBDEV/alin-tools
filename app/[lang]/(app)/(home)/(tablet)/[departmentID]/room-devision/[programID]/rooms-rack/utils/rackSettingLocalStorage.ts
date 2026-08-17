@@ -22,7 +22,7 @@ function saveRackSetting(setting: RackSetting) {
 function getRackSetting() {
  const val = localStorage.getItem(rackSettingLocalKey);
  if (!val) return defaultRackSetting;
- return JSON.parse(val);
+ return { ...defaultRackSetting, ...JSON.parse(val) };
 }
 
 export type { RackSetting };
