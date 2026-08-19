@@ -15,6 +15,7 @@ type InitialData = {
 type EventBoard = {
  id: number;
  programID: number;
+ ownerID: number;
  dateTimeDateTimeOffset: string;
  title: string;
  note: string;

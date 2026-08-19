@@ -46,7 +46,7 @@ export default function NewNotificationDialog({
  selectedId: number | null;
 }) {
  const { locale } = useBaseConfig();
- const { routeProgram } = useUserInfoRouter();
+ const { routeProgram, routeOwner } = useUserInfoRouter();
  const {
   register,
   handleSubmit,
@@ -85,6 +85,7 @@ export default function NewNotificationDialog({
      editEvent.selectedNotif?.dateTimeDateTimeOffset ||
      new Date().toISOString(),
     programID: routeProgram.id,
+    ownerID: routeOwner.id,
    };
 
    return editEvent.selectedNotfiId
