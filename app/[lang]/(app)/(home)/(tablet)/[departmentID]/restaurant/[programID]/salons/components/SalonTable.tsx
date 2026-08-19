@@ -25,6 +25,8 @@ import TableOrders from './table-orders/TableOrders';
 import { useOrderRedirectLink } from '../hooks/useOrderRedirectLink';
 import { TableUtils } from '../utils/tableUtils';
 import { IoAlbums, IoPrint } from 'react-icons/io5';
+import { useNewOrderPrintInvoice } from '../../new-order/hooks/useNewOrderPrintInvoice';
+import { Spinner } from '@/components/ui/spinner';
 
 export default function SalonTable({
  table,
@@ -36,12 +38,14 @@ export default function SalonTable({
  isMinimal?: boolean;
  isBold?: boolean;
 } & TableUtils) {
+ const printInvoice = useNewOrderPrintInvoice();
  const orderRedirectLink = useOrderRedirectLink({
   table,
   tableUtils,
  });
  const router = useRouter();
  const [isOpen, setIsOpen] = useState(false);
+ const [showPrintInvoice, setShowPrintInvoice] = useState(false);
  const [showTableOrdersList, setShowTableOrdersList] = useState(false);
 
  const handleOpenChange = (newOpen: boolean) => {
@@ -191,6 +195,24 @@ export default function SalonTable({
          {tableUtils.dic.tables.changeTableState}
         </Button>
        )}
+      {table.orderCount === 1 && table.orderID && (
+       <Button
+        variant='outline'
+        className='justify-start text-start h-12 text-primary'
+        size='lg'
+        disabled={printInvoice.isPending}
+        onClick={() => {
+         printInvoice.print(table.orderID);
+        }}
+       >
+        {printInvoice.isPending ? (
+         <Spinner />
+        ) : (
+         <IoPrint className='size-8 text-inherit' />
+        )}
+        {tableUtils.dic.tables.printInvoice}
+       </Button>
+      )}
       {table.tableStateTypeID !== TableStateTypes.outOfService &&
        table.tableStateTypeID !== TableStateTypes.readyToService &&
        table.orderCount <= 1 && (
@@ -416,6 +438,12 @@ export default function SalonTable({
      </DrawerContent>
     </Drawer>
    )}
+   {/*<PrintInvoiceDialog
+    open={showPrintInvoice}
+    onToggle={(state) =>
+     setShowPrintInvoice((pre) => (state === undefined ? !pre : state))
+    }
+   />*/}
   </motion.div>
  );
 }

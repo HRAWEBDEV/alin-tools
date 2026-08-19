@@ -9,6 +9,12 @@
    "connectionLost": "اتصال به اینترنت قطع شده است",
    "connected": "متصل"
   },
+  "newOrderPrintInvoice": {
+   "title": "چاپ صورتحساب",
+   "printer": "پرینتر",
+   "confirm": "چاپ",
+   "close": "انصراف"
+  },
   "settings": {
    "title": "تنظیمات",
    "backBtn": "بازگشت",
