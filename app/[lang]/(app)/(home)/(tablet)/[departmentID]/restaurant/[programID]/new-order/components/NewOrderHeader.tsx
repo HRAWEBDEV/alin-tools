@@ -107,9 +107,8 @@ export default function NewOrderHeader({ dic }: { dic: NewOrderDictionary }) {
  return (
   <div className='flex flex-col gap-2'>
    <div className='flex justify-between items-center gap-4'>
-    <div className='basis-11 md:hidden'>{orderListButton}</div>
     <div>
-     <h1 className='text-center md:text-start font-medium text-2xl lg:text-3xl'>
+     <h1 className='font-medium text-2xl lg:text-3xl'>
       {dic.title}
       {userOrder.order.data && (
        <span className='text-2xl text-neutral-600 dark:text-neutral-400'>
@@ -124,7 +123,7 @@ export default function NewOrderHeader({ dic }: { dic: NewOrderDictionary }) {
       <Button
        size='icon-lg'
        variant='outline'
-       className='ltr:rotate-180 border-primary me-6'
+       className='ltr:rotate-180 border-primary sm:me-6'
        disabled={printInvoice.isPending}
        onClick={() => printInvoice.print(orderID)}
       >
@@ -147,7 +146,7 @@ export default function NewOrderHeader({ dic }: { dic: NewOrderDictionary }) {
       </Button>
      </div>
      {!!ordersList?.length && ordersList.length > 1 && (
-      <div className='hidden md:block'>{orderListButton}</div>
+      <div>{orderListButton}</div>
      )}
      <Dialog>
       {fromSalons && (
