@@ -5,6 +5,7 @@
 # 2.3.7
 
 - add salons change direction mode (hra-done)
+- add new order invoice print (hra-done)
 
 ## Features
 
