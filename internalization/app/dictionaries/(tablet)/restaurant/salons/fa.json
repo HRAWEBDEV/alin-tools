@@ -42,6 +42,7 @@
   "changeTableState": "تغییر وضعیت میز",
   "tableActions": "عملیات میز",
   "printed": "پرینت شده",
+  "printInvoice": "چاپ صورتحساب",
   "occupiedDateTime": "زمان اشغال"
  },
  "tableStateModal": {

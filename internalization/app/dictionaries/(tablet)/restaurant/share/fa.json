@@ -12,6 +12,12 @@
   "notifications": {
    "title": "اعلانات",
    "close": "بستن"
+   },
+  "newOrderPrintInvoice": {
+   "title": "چاپ صورتحساب",
+   "printer": "پرینتر",
+   "confirm": "چاپ",
+   "close": "انصراف"
   },
   "settings": {
    "title": "تنظیمات",

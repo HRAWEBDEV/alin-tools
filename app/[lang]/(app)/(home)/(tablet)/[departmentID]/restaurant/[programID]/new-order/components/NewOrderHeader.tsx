@@ -20,7 +20,7 @@ import {
  getTableOrders,
 } from '../../salons/services/salonsApiActions';
 import { useQuery } from '@tanstack/react-query';
-import { IoAlbums } from 'react-icons/io5';
+import { IoAlbums, IoPrint } from 'react-icons/io5';
 import {
  Drawer,
  DrawerContent,
@@ -33,8 +33,11 @@ import { TableStateTypes } from '../../salons/utils/tableStates';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
 import { LuPanelLeft } from 'react-icons/lu';
+import { useNewOrderPrintInvoice } from '../hooks/useNewOrderPrintInvoice';
+import { Spinner } from '@/components/ui/spinner';
 
 export default function NewOrderHeader({ dic }: { dic: NewOrderDictionary }) {
+ const printInvoice = useNewOrderPrintInvoice();
  const { routeDepartment, routeProgram } = useUserInfoRouter();
  const { watch } = useFormContext<OrderInfo>();
  const { locale } = useBaseConfig();
@@ -42,7 +45,7 @@ export default function NewOrderHeader({ dic }: { dic: NewOrderDictionary }) {
  const {
   showSplitPanel,
   toggleSplitPanel,
-  queries: { fromSalons, salonName, salonID },
+  queries: { fromSalons, salonName, salonID, orderID },
   order: { orderInfoName },
   userOrder,
  } = useOrderBaseConfigContext();
@@ -104,9 +107,8 @@ export default function NewOrderHeader({ dic }: { dic: NewOrderDictionary }) {
  return (
   <div className='flex flex-col gap-2'>
    <div className='flex justify-between items-center gap-4'>
-    <div className='basis-11 md:hidden'>{orderListButton}</div>
     <div>
-     <h1 className='text-center md:text-start font-medium text-2xl lg:text-3xl'>
+     <h1 className='font-medium text-2xl lg:text-3xl'>
       {dic.title}
       {userOrder.order.data && (
        <span className='text-2xl text-neutral-600 dark:text-neutral-400'>
@@ -117,6 +119,21 @@ export default function NewOrderHeader({ dic }: { dic: NewOrderDictionary }) {
      </h1>
     </div>
     <div className='basis-11 flex gap-4'>
+     {!showSplitPanel && !!orderID && (
+      <Button
+       size='icon-lg'
+       variant='outline'
+       className='ltr:rotate-180 border-primary sm:me-6'
+       disabled={printInvoice.isPending}
+       onClick={() => printInvoice.print(orderID)}
+      >
+       {printInvoice.isPending ? (
+        <Spinner />
+       ) : (
+        <IoPrint className='size-6 text-primary' />
+       )}
+      </Button>
+     )}
      <div className='hidden sm:block'>
       <Button
        size='icon-lg'
@@ -129,7 +146,7 @@ export default function NewOrderHeader({ dic }: { dic: NewOrderDictionary }) {
       </Button>
      </div>
      {!!ordersList?.length && ordersList.length > 1 && (
-      <div className='hidden md:block'>{orderListButton}</div>
+      <div>{orderListButton}</div>
      )}
      <Dialog>
       {fromSalons && (

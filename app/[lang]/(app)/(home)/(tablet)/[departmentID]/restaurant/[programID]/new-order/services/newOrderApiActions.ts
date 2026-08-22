@@ -688,6 +688,15 @@ function getOrderOtpCodes({
  );
 }
 
+function printNewOrderInvoice(orderId: number) {
+ return axios.get<Blob>(
+  `/Restaurant/SaleInvoice/GenerateOrderReport?OrderID=${orderId}`,
+  {
+   responseType: 'blob',
+  },
+ );
+}
+
 export {
  newOrderKey,
  personKey,
@@ -713,4 +722,5 @@ export {
  getEmployeeCustomer,
  getPagedEmployee,
  getOrderOtpCodes,
+ printNewOrderInvoice,
 };

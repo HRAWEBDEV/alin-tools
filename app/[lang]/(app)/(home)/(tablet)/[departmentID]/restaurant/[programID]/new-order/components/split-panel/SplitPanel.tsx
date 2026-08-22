@@ -7,13 +7,17 @@ import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import ShopOrderItem from './ShopOrderItem';
 import NoItemFound from '@/app/[lang]/(app)/components/NoItemFound';
+import { IoPrint } from 'react-icons/io5';
+import { useNewOrderPrintInvoice } from '../../hooks/useNewOrderPrintInvoice';
 
 export default function SplitPanel({ dic }: { dic: NewOrderDictionary }) {
+ const printInvoice = useNewOrderPrintInvoice();
  const {
   shopInfoLoading,
   access,
   showSplitPanel,
   showConfirmOrder,
+  queries: { orderID },
   order: { orderItems, onSaveOrder },
  } = useOrderBaseConfigContext();
  const [selectedOrderItemId, setSelectedOrderItemId] = useState<number | null>(
@@ -25,13 +29,28 @@ export default function SplitPanel({ dic }: { dic: NewOrderDictionary }) {
    data-show-split-panel={showSplitPanel}
    className='bg-neutral-100 dark:bg-neutral-900 border-s border-border w-(--app-restaurant-nav-width) fixed end-0 top-(--app-restaurant-header-height) lg:top-0 bottom-(--app-restaurant-tabs-height) in-data-[scroll-dicretion="down"]:bottom-0 lg:bottom-0 sm:flex flex-col overflow-auto hidden scroll-smooth'
   >
-   <div className='sticky top-0 bg-neutral-100 dark:bg-neutral-900 z-3 p-4 border-b border-border'>
+   <div className='sticky top-0 bg-neutral-100 dark:bg-neutral-900 z-3 p-4 py-3 border-b border-border flex items-center justify-between gap-4'>
     <div className='flex gap-1 items-center'>
      <h3 className='font-medium text-lg'>{dic.tools.shoppingCard}</h3>
      {!!orderItems.length && (
       <Badge className='size-7 text-md'>{orderItems.length}</Badge>
      )}
     </div>
+    {!!orderID && (
+     <Button
+      size='icon-lg'
+      variant='outline'
+      className='ltr:rotate-180 border-primary'
+      disabled={printInvoice.isPending}
+      onClick={() => printInvoice.print(orderID)}
+     >
+      {printInvoice.isPending ? (
+       <Spinner />
+      ) : (
+       <IoPrint className='size-6 text-primary' />
+      )}
+     </Button>
+    )}
    </div>
    <div className='grow'>
     {!!orderItems.length ? (
