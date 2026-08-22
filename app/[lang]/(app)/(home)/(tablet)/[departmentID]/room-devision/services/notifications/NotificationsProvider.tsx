@@ -124,22 +124,6 @@ export default function NotificationsProvider({
    isSuccess,
   },
  };
- // get events
- const getEvents = useCallback(async () => {
-  if (!connection) return;
-  if (connection.state !== signalR.HubConnectionState.Connected) return;
-  try {
-   await connection.invoke(
-    'GetEventBoardUpdate',
-    connection.connectionId,
-    null,
-    null,
-   );
-  } catch (error) {
-   console.log('signalR get events failed: ', error);
-  } finally {
-  }
- }, [connection]);
  // get init data
  useEffect(() => {
   const rackSignalRConnection = new signalR.HubConnectionBuilder()
@@ -170,10 +154,10 @@ export default function NotificationsProvider({
   if (!connection) return;
   connection.on('EventBoardChanged', () => {
    console.log('get changed event board');
-   getEvents();
+   refetch();
   });
   return () => connection && connection.off('EventBoardChanged');
- }, [connection, getEvents]);
+ }, [connection, refetch]);
 
  useEffect(() => {
   if (!connection) return;
