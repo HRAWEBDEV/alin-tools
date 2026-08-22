@@ -1,14 +1,8 @@
 'use client';
 import { ReactNode, useState } from 'react';
 import { SettingsContext, type Settings, ActiveView } from './settingsContext';
-import {
- Drawer,
- DrawerContent,
- DrawerHeader,
- DrawerTitle,
-} from '@/components/ui/drawer';
+import { Drawer, DrawerContent } from '@/components/ui/drawer';
 import { useRoomDevisionShareDictionary } from '../../share-dictionary/roomDevisionShareDictionaryContext';
-import { RiSettings4Fill } from 'react-icons/ri';
 import { AnimatePresence } from 'motion/react';
 import { motion } from 'motion/react';
 import { getModeIcon } from '@/app/[lang]/(app)/utils/getModeIcons';
@@ -22,8 +16,6 @@ export default function SettingsProvider({
 }: {
  children: ReactNode;
 }) {
- const { theme } = useTheme();
-
  const [isOpen, setIsOpen] = useState(false);
  const [activeView, setActiveView] = useState<ActiveView | null>(null);
 

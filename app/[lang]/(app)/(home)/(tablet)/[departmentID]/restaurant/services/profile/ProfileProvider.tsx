@@ -20,9 +20,12 @@ import { appVersion } from '@/services/base-config/baseConfigContext';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { CgArrowsExchange } from 'react-icons/cg';
 import { useRouter } from 'next/navigation';
+import { MdNewReleases } from 'react-icons/md';
+import { useReleasePreview } from '../../../../services/release-preview/releasePreviewContext';
 
 export default function ProfileProvider({ children }: { children: ReactNode }) {
  const router = useRouter();
+ const { onToggle: onToggleReleasePreview } = useReleasePreview();
  const { locale, userActiveTimeZone } = useBaseConfig();
  const { routeDepartment, routeOwner, routeProgram, data } =
   useUserInfoRouter();
@@ -115,6 +118,20 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
         >
          <CgArrowsExchange className='size-8 ' />
          <span>{profile.changeProgram}</span>
+        </Button>
+       </li>
+       <li>
+        <Button
+         variant='ghost'
+         size={'icon-lg'}
+         className='text-base p-4 px-8 w-full justify-start h-[unset] gap-4 items-center text-purple-600 dark:text-purple-400'
+         onClick={() => {
+          setIsOpen(false);
+          onToggleReleasePreview(true);
+         }}
+        >
+         <MdNewReleases className='size-8' />
+         <span>{profile.releases}</span>
         </Button>
        </li>
        <li>

@@ -11,6 +11,9 @@
   }
  },
  "components": {
+  "releases": {
+   "title": "تغییرات"
+  },
   "notifications": {
    "title": "اعلانات",
    "newNotification": "اعلان جدید",

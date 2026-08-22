@@ -16,7 +16,8 @@
    "logout": "خروج",
    "changeProgram": "تغییر برنامه",
    "connectionLost": "اتصال به اینترنت قطع شده است",
-   "connected": "متصل"
+   "connected": "متصل",
+   "releases": "تغییرات"
   },
   "settings": {
    "title": "تنظیمات",

@@ -8,6 +8,7 @@ import Header from '../components/Header';
 import Nav from '../components/Nav';
 import Main from '../components/Main';
 import Tabs from '../components/Tabs';
+import ReleasePreviewProvider from '../../../services/release-preview/RelasePreviewProvider';
 import NotificationsProvider from '../services/notifications/NotificationsProvider';
 
 export default async function HomeLayout({
@@ -24,20 +25,25 @@ export default async function HomeLayout({
    className='grow overflow-hidden flex flex-col'
   >
    <RoomDevisionShareDictionaryProvider roomDevisionShareDictionary={shareDic}>
-    <SettingsProvider>
-     <ProfileProvider>
-      <NotificationsProvider>
-       <div className='grow overflow-hidden flex flex-col'>
-        <Header />
-        <div className='flex grow overflow-hidden'>
-         <Nav />
-         <Main>{children}</Main>
+    <ReleasePreviewProvider
+     departmentName='room-devision'
+     versions={['v2.3.7']}
+    >
+     <SettingsProvider>
+      <ProfileProvider>
+       <NotificationsProvider>
+        <div className='grow overflow-hidden flex flex-col'>
+         <Header />
+         <div className='flex grow overflow-hidden'>
+          <Nav />
+          <Main>{children}</Main>
+         </div>
+         <Tabs />
         </div>
-        <Tabs />
-       </div>
-      </NotificationsProvider>
-     </ProfileProvider>
-    </SettingsProvider>
+       </NotificationsProvider>
+      </ProfileProvider>
+     </SettingsProvider>
+    </ReleasePreviewProvider>
    </RoomDevisionShareDictionaryProvider>
   </div>
  );
