@@ -22,7 +22,7 @@ export default async function HomeLayout({
  return (
   <>
    <ResturantShareDictionaryProvider restaurantShareDictionary={shareDic}>
-    <ReleasePreviewProvider departmentName='restaurant'>
+    <ReleasePreviewProvider departmentName='restaurant' versions={['v2.4.0']}>
      <SettingsProvider>
       <ProfileProvider>
        <NotificationsProvider>

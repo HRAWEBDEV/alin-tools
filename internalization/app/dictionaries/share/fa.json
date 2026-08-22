@@ -12,7 +12,8 @@
  },
  "components": {
   "releases": {
-   "title": "تغییرات"
+   "title": "تغییرات",
+   "loadMore": "موارد بیشتر"
   },
   "notifications": {
    "title": "اعلانات",

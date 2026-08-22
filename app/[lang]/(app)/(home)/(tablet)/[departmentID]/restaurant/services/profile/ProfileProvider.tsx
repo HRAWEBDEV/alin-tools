@@ -25,7 +25,7 @@ import { useReleasePreview } from '../../../../services/release-preview/releaseP
 
 export default function ProfileProvider({ children }: { children: ReactNode }) {
  const router = useRouter();
- const { onToggle: onToggleReleasePreview } = useReleasePreview();
+ const { onToggle: onToggleReleasePreview, newVersion } = useReleasePreview();
  const { locale, userActiveTimeZone } = useBaseConfig();
  const { routeDepartment, routeOwner, routeProgram, data } =
   useUserInfoRouter();
@@ -132,6 +132,7 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
         >
          <MdNewReleases className='size-8' />
          <span>{profile.releases}</span>
+         {newVersion && <span className='ml-2'>(New)</span>}
         </Button>
        </li>
        <li>

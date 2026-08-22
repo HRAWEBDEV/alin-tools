@@ -4,6 +4,7 @@ import { OutOfContext } from '@/utils/OutOfContext';
 interface ReleasePreview {
  isOpen: boolean;
  onToggle: (state?: boolean) => void;
+ newVersion: boolean;
 }
 
 const releasePreviewContext = createContext<ReleasePreview | null>(null);

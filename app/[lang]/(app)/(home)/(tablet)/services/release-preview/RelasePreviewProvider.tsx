@@ -1,5 +1,12 @@
 'use client';
-import { ReactNode, useState } from 'react';
+import {
+ ReactNode,
+ useState,
+ useEffect,
+ useMemo,
+ useCallback,
+ useRef,
+} from 'react';
 import {
  type ReleasePreview,
  releasePreviewContext,
@@ -7,7 +14,6 @@ import {
 import {
  Drawer,
  DrawerContent,
- DrawerClose,
  DrawerHeader,
  DrawerTitle,
  DrawerDescription,
@@ -17,6 +23,7 @@ import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
 import NoItemFound from '@/app/[lang]/(app)/components/NoItemFound';
+import { Button } from '@/components/ui/button';
 
 export default function ReleasePreviewProvider({
  children,
@@ -27,14 +34,19 @@ export default function ReleasePreviewProvider({
  departmentName: string;
  versions?: string[];
 }) {
- const [markdown, setMarkdown] = useState('');
+ const firstloadRef = useRef(true);
+ const [loadedLogsCount, setLoadedLogsCount] = useState(0);
+ const [markdowns, setMarkdowns] = useState<string[]>([]);
  const { localeInfo, locale } = useBaseConfig();
  const {
   shareDictionary: {
    components: { releases: dic },
   },
  } = useShareDictionary();
- const basePath = `/releases/${departmentName}/${locale}`;
+ const basePath = useMemo(
+  () => `/releases/${locale}/${departmentName}`,
+  [locale, departmentName],
+ );
  const [isOpen, setIsOpen] = useState(false);
 
  function handleToggle(state?: boolean) {
@@ -44,7 +56,36 @@ export default function ReleasePreviewProvider({
  const ctx: ReleasePreview = {
   isOpen,
   onToggle: handleToggle,
+  newVersion: !!markdowns.length,
  };
+
+ const showLog = useCallback(
+  async (version: string) => {
+   axios
+    .get(`${basePath}/${version}.md`)
+    .then((res) => {
+     setMarkdowns((pre) => [...pre, res.data]);
+    })
+    .catch(() => {
+     setMarkdowns((pre) => [...pre, '']);
+    })
+    .finally(() => {
+     setLoadedLogsCount((pre) => pre + 1);
+    });
+  },
+  [basePath],
+ );
+
+ useEffect(() => {
+  if (versions.length === 0) return;
+  if (firstloadRef.current) {
+   versions.slice(0, 2).forEach((version) => {
+    if (!version) return;
+    showLog(version);
+   });
+   firstloadRef.current = false;
+  }
+ }, [versions, showLog]);
 
  return (
   <releasePreviewContext.Provider value={ctx}>
@@ -60,14 +101,23 @@ export default function ReleasePreviewProvider({
       <DrawerDescription className='hidden'>{dic.title}</DrawerDescription>
      </DrawerHeader>
      <div className='p-4 grow overflow-auto'>
-      {versions.length === 0 ? (
+      {markdowns.length === 0 ? (
        <div>
         <NoItemFound />
        </div>
       ) : (
-       <article className='prose'>
-        <ReactMarkdown>{markdown}</ReactMarkdown>
-       </article>
+       <>
+        {markdowns.map((markdown, index) => (
+         <article className='prose mb-6' key={index}>
+          <ReactMarkdown>{markdown}</ReactMarkdown>
+         </article>
+        ))}
+       </>
+      )}
+      {loadedLogsCount < versions.length && (
+       <Button onClick={() => showLog(versions[loadedLogsCount])}>
+        {dic.loadMore}
+       </Button>
       )}
      </div>
     </DrawerContent>

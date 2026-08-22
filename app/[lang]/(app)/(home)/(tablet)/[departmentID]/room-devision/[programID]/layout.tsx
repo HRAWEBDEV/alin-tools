@@ -27,7 +27,8 @@ export default async function HomeLayout({
    <RoomDevisionShareDictionaryProvider roomDevisionShareDictionary={shareDic}>
     <ReleasePreviewProvider
      departmentName='room-devision'
-     versions={['v2.3.7']}
+
+     versions={['v2.4.0']}
     >
      <SettingsProvider>
       <ProfileProvider>
