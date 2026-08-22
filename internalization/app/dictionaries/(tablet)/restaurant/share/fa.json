@@ -10,6 +10,10 @@
    "connected": "متصل",
    "releases": "تغییرات"
   },
+  "notifications": {
+   "title": "اعلانات",
+   "close": "بستن"
+   },
   "newOrderPrintInvoice": {
    "title": "چاپ صورتحساب",
    "printer": "پرینتر",

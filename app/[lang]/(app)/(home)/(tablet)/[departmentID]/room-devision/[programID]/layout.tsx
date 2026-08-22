@@ -9,6 +9,7 @@ import Nav from '../components/Nav';
 import Main from '../components/Main';
 import Tabs from '../components/Tabs';
 import ReleasePreviewProvider from '../../../services/release-preview/RelasePreviewProvider';
+import NotificationsProvider from '../services/notifications/NotificationsProvider';
 
 export default async function HomeLayout({
  children,
@@ -30,14 +31,16 @@ export default async function HomeLayout({
     >
      <SettingsProvider>
       <ProfileProvider>
-       <div className='grow overflow-hidden flex flex-col'>
-        <Header />
-        <div className='flex grow overflow-hidden'>
-         <Nav />
-         <Main>{children}</Main>
+       <NotificationsProvider>
+        <div className='grow overflow-hidden flex flex-col'>
+         <Header />
+         <div className='flex grow overflow-hidden'>
+          <Nav />
+          <Main>{children}</Main>
+         </div>
+         <Tabs />
         </div>
-        <Tabs />
-       </div>
+       </NotificationsProvider>
       </ProfileProvider>
      </SettingsProvider>
     </ReleasePreviewProvider>

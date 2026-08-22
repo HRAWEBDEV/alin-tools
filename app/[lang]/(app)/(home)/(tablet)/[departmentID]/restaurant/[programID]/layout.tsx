@@ -9,6 +9,7 @@ import ProfileProvider from '../services/profile/ProfileProvider';
 import 'keen-slider/keen-slider.min.css';
 import SettingsProvider from '../services/profile/settings/SettingsProvider';
 import ReleasePreviewProvider from '../../../services/release-preview/RelasePreviewProvider';
+import NotificationsProvider from '../../room-devision/services/notifications/NotificationsProvider';
 
 export default async function HomeLayout({
  children,
@@ -24,14 +25,16 @@ export default async function HomeLayout({
     <ReleasePreviewProvider departmentName='restaurant'>
      <SettingsProvider>
       <ProfileProvider>
-       <div className='h-svh overflow-hidden flex flex-col'>
-        <Header />
-        <div className='flex grow overflow-hidden'>
-         <Nav />
-         <Main>{children}</Main>
+       <NotificationsProvider>
+        <div className='h-svh overflow-hidden flex flex-col'>
+         <Header />
+         <div className='flex grow overflow-hidden'>
+          <Nav />
+          <Main>{children}</Main>
+         </div>
+         <Tabs />
         </div>
-        <Tabs />
-       </div>
+       </NotificationsProvider>
       </ProfileProvider>
      </SettingsProvider>
     </ReleasePreviewProvider>
