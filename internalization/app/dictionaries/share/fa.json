@@ -14,6 +14,7 @@
   "notifications": {
    "title": "اعلانات",
    "newNotification": "اعلان جدید",
+   "youHaveNewNotification": "شما یک اعلان جدید دارید",
    "loadMore": "موارد بیشتر",
    "search": "جستجو",
    "filters": {

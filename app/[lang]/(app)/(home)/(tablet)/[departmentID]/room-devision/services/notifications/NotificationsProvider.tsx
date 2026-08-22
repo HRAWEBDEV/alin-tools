@@ -1,5 +1,5 @@
 'use client';
-import { useState, ReactNode, useEffect, useCallback } from 'react';
+import { useState, ReactNode, useEffect, useRef } from 'react';
 import {
  type NotificationContext,
  notificationContext,
@@ -27,12 +27,16 @@ import NotificationsWrapper from './components/NotificationsWrapper';
 import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
 import * as signalR from '@microsoft/signalr';
 import { getUserLoginToken } from '@/app/[lang]/(app)/login/utils/loginTokenManager';
+import { toast } from 'sonner';
+
+const notificationAudio = new Audio('/sounds/notification-sound.mp3');
 
 export default function NotificationsProvider({
  children,
 }: {
  children: ReactNode;
 }) {
+ const notifcationsCountRef = useRef<null | number>(null);
  const [connection, setConnection] = useState<signalR.HubConnection | null>(
   null,
  );
@@ -153,7 +157,6 @@ export default function NotificationsProvider({
  useEffect(() => {
   if (!connection) return;
   connection.on('EventBoardChanged', () => {
-   console.log('get changed event board');
    refetch();
   });
   return () => connection && connection.off('EventBoardChanged');
@@ -161,11 +164,22 @@ export default function NotificationsProvider({
 
  useEffect(() => {
   if (!connection) return;
-  connection.on('EventBoardUpdated', (event) => {
-   console.log('get updated event', event);
-  });
+  connection.on('EventBoardUpdated', () => {});
   return () => connection && connection.off('EventBoardUpdated');
  }, [connection]);
+
+ useEffect(() => {
+  if (!isSuccess) return;
+  const newCount = data?.pages[0].rowsCount || 0;
+  if (
+   notifcationsCountRef.current !== null &&
+   newCount > notifcationsCountRef.current
+  ) {
+   notificationAudio.play();
+   toast.success(notificationsDic.youHaveNewNotification);
+  }
+  notifcationsCountRef.current = newCount;
+ }, [data, isSuccess, notificationsDic.youHaveNewNotification]);
 
  return (
   <notificationContext.Provider value={ctx}>
@@ -178,7 +192,7 @@ export default function NotificationsProvider({
     <DrawerContent className='w-[min(80%,35rem)] overflow-hidden'>
      <DrawerHeader className='border-b border-border'>
       <DrawerTitle className='text-start text-lg'>
-       {notificationsDic.title}
+       {notificationsDic.title} ({data?.pages[0].rowsCount || 0})
       </DrawerTitle>
      </DrawerHeader>
      <NotificationsWrapper />
