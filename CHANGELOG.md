@@ -2,6 +2,10 @@
 
 - add reload button if necessary - for real time data
 
+# 2.4.0
+
+- add panel notifications setup (hra-done)
+
 # 2.3.7
 
 - add salons change direction mode (hra-done)
