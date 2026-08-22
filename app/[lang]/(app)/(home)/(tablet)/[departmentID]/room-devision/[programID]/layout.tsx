@@ -8,6 +8,7 @@ import Header from '../components/Header';
 import Nav from '../components/Nav';
 import Main from '../components/Main';
 import Tabs from '../components/Tabs';
+import NotificationsProvider from '../services/notifications/NotificationsProvider';
 
 export default async function HomeLayout({
  children,
@@ -25,14 +26,16 @@ export default async function HomeLayout({
    <RoomDevisionShareDictionaryProvider roomDevisionShareDictionary={shareDic}>
     <SettingsProvider>
      <ProfileProvider>
-      <div className='grow overflow-hidden flex flex-col'>
-       <Header />
-       <div className='flex grow overflow-hidden'>
-        <Nav />
-        <Main>{children}</Main>
+      <NotificationsProvider>
+       <div className='grow overflow-hidden flex flex-col'>
+        <Header />
+        <div className='flex grow overflow-hidden'>
+         <Nav />
+         <Main>{children}</Main>
+        </div>
+        <Tabs />
        </div>
-       <Tabs />
-      </div>
+      </NotificationsProvider>
      </ProfileProvider>
     </SettingsProvider>
    </RoomDevisionShareDictionaryProvider>

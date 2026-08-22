@@ -2,9 +2,15 @@
 
 - add reload button if necessary - for real time data
 
+<<<<<<< HEAD
+# 2.3.8
+
+- add system notifications
+=======
 # 2.4.0
 
 - add panel notifications setup (hra-done)
+>>>>>>> main
 
 # 2.3.7
 

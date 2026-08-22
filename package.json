@@ -1,6 +1,10 @@
 {
  "name": "alin-tools",
+<<<<<<< HEAD
+ "version": "2.3.8",
+=======
  "version": "2.4.0",
+>>>>>>> main
  "private": true,
  "scripts": {
   "dev": "next dev",
