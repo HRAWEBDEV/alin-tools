@@ -25,7 +25,7 @@ import TableOrders from './table-orders/TableOrders';
 import { useOrderRedirectLink } from '../hooks/useOrderRedirectLink';
 import { TableUtils } from '../utils/tableUtils';
 import { IoAlbums, IoPrint } from 'react-icons/io5';
-import { useNewOrderPrintInvoice } from '../../new-order/hooks/useNewOrderPrintInvoice';
+import { useNewOrderPrintCash } from '../../new-order/hooks/useNewOrderPrintCash';
 import { Spinner } from '@/components/ui/spinner';
 
 export default function SalonTable({
@@ -38,7 +38,7 @@ export default function SalonTable({
  isMinimal?: boolean;
  isBold?: boolean;
 } & TableUtils) {
- const printInvoice = useNewOrderPrintInvoice();
+ const printCash = useNewOrderPrintCash();
  const orderRedirectLink = useOrderRedirectLink({
   table,
   tableUtils,
@@ -200,17 +200,17 @@ export default function SalonTable({
         variant='outline'
         className='justify-start text-start h-12 text-primary'
         size='lg'
-        disabled={printInvoice.isPending}
+        disabled={printCash.isPending}
         onClick={() => {
-         printInvoice.print(table.orderID);
+         printCash.print(table.orderID);
         }}
        >
-        {printInvoice.isPending ? (
+        {printCash.isPending ? (
          <Spinner />
         ) : (
          <IoPrint className='size-8 text-inherit' />
         )}
-        {tableUtils.dic.tables.printInvoice}
+        {tableUtils.dic.tables.printCash}
        </Button>
       )}
       {table.tableStateTypeID !== TableStateTypes.outOfService &&

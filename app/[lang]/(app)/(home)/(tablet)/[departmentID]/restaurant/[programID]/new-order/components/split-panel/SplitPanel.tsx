@@ -8,10 +8,10 @@ import { Spinner } from '@/components/ui/spinner';
 import ShopOrderItem from './ShopOrderItem';
 import NoItemFound from '@/app/[lang]/(app)/components/NoItemFound';
 import { IoPrint } from 'react-icons/io5';
-import { useNewOrderPrintInvoice } from '../../hooks/useNewOrderPrintInvoice';
+import { useNewOrderPrintCash } from '../../hooks/useNewOrderPrintCash';
 
 export default function SplitPanel({ dic }: { dic: NewOrderDictionary }) {
- const printInvoice = useNewOrderPrintInvoice();
+ const printCash = useNewOrderPrintCash();
  const {
   shopInfoLoading,
   access,
@@ -41,10 +41,10 @@ export default function SplitPanel({ dic }: { dic: NewOrderDictionary }) {
       size='icon-lg'
       variant='outline'
       className='ltr:rotate-180 border-primary'
-      disabled={printInvoice.isPending}
-      onClick={() => printInvoice.print(orderID)}
+      disabled={printCash.isPending}
+      onClick={() => printCash.print(orderID)}
      >
-      {printInvoice.isPending ? (
+      {printCash.isPending ? (
        <Spinner />
       ) : (
        <IoPrint className='size-6 text-primary' />

@@ -33,11 +33,11 @@ import { TableStateTypes } from '../../salons/utils/tableStates';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
 import { LuPanelLeft } from 'react-icons/lu';
-import { useNewOrderPrintInvoice } from '../hooks/useNewOrderPrintInvoice';
+import { useNewOrderPrintCash } from '../hooks/useNewOrderPrintCash';
 import { Spinner } from '@/components/ui/spinner';
 
 export default function NewOrderHeader({ dic }: { dic: NewOrderDictionary }) {
- const printInvoice = useNewOrderPrintInvoice();
+ const printCash = useNewOrderPrintCash();
  const { routeDepartment, routeProgram } = useUserInfoRouter();
  const { watch } = useFormContext<OrderInfo>();
  const { locale } = useBaseConfig();
@@ -124,10 +124,10 @@ export default function NewOrderHeader({ dic }: { dic: NewOrderDictionary }) {
        size='icon-lg'
        variant='outline'
        className='ltr:rotate-180 border-primary sm:me-6'
-       disabled={printInvoice.isPending}
-       onClick={() => printInvoice.print(orderID)}
+       disabled={printCash.isPending}
+       onClick={() => printCash.print(orderID)}
       >
-       {printInvoice.isPending ? (
+       {printCash.isPending ? (
         <Spinner />
        ) : (
         <IoPrint className='size-6 text-primary' />

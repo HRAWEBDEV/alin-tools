@@ -697,6 +697,15 @@ function printNewOrderInvoice(orderId: number) {
  );
 }
 
+function printNewOrderCash(orderId: number) {
+ return axios.post<Blob>(
+  `/Restaurant/SaleInvoice/ManualSendPrint?OrderID=${orderId}`,
+  {
+   responseType: 'blob',
+  },
+ );
+}
+
 export {
  newOrderKey,
  personKey,
@@ -723,4 +732,5 @@ export {
  getPagedEmployee,
  getOrderOtpCodes,
  printNewOrderInvoice,
+ printNewOrderCash,
 };

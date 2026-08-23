@@ -43,6 +43,7 @@
   "tableActions": "عملیات میز",
   "printed": "پرینت شده",
   "printInvoice": "چاپ صورتحساب",
+  "printCash": "رسید صندوق",
   "occupiedDateTime": "زمان اشغال"
  },
  "tableStateModal": {
