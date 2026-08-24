@@ -1,61 +1,63 @@
-## TODO
+# CHANGE LOGS
 
-- add reload button if necessary - for real time data
+## 2.4.1
 
-# 2.3.8
+- add AGENT.md file (hra-done)
+
+## 2.4.0
+
+- add panel notifications setup (hra-done)
+
+## 2.3.8
 
 - add system notifications (hra-done)
 - add release notes system (hra-done)
 
-# 2.4.0
-
-- add panel notifications setup (hra-done)
-
-# 2.3.7
+## 2.3.7
 
 - add salons change direction mode (hra-done)
 - add new order invoice print (hra-done)
 
-## Features
+### Features
 
-## Changes
+### Changes
 
 - read only bon no in new order (hra-done)
 
-## bug fixes
+### bug fixes
 
 - check signal r connection when invoked (hra-done)
 - add signal r stale time check
 - add signal r connection, reconnected event to get refresh data (hra-done)
 
-# 2.3.6
+## 2.3.6
 
 - add new order shop order panel (hra-done)
 - add signalr automatic reconnect and visibility change event listeners (hra-done)
 - show breakfast control menu only for restaurant system type 5 (hra-done)
 
-# 2.3.5
+## 2.3.5
 
 - add rack notifications signalR (hra-done)
 - add rack notifications change sound (hra-done)
 - add keyboard to type order item count in add item mode (hra-done)
 
-## bug fixes
+### bug fixes
 
 - remove shop order items by id (hra-done)
 
-# 2.3.4
+## 2.3.4
 
 - stronger border and input border colors (hra-done)
 - add new order info otp list (hra-done)
 - add contrast mode controller (hra-done)
 
-# 2.3.2
+## 2.3.2
 
 - add order items description (hra-done)
 - add new order employee sale type (hra-done)
 
-# 2.3.1
+## 2.3.1
 
 ### features
 
@@ -70,14 +72,14 @@
 - add new order wallet payment timer (hra-done)
 - fix drawer and dialog overflow (hra-done)
 
-# 2.3.0
+## 2.3.0
 
 - add rack preview guest expenses (hre-done)
 - add rooms rack reserve pie chart (hra-done)
 - update rack out of service and not cleaned and waiting for QC states icons (hra-done)
 - add rack room birthday notifier icon (hra-done)
 
-# 2.2.0
+## 2.2.0
 
 ### features
 
@@ -89,7 +91,7 @@
 
 - always get all item group in new order for loading images (hra-done)
 
-# 2.1.1
+## 2.1.1
 
 ### features
 
@@ -102,7 +104,7 @@
 
 - use all item program cache to load shop items data
 
-# 2.1.0
+## 2.1.0
 
 ### features
 
@@ -115,7 +117,7 @@
 - add order change customer and discount access (hra-done)
 - add new order non cash payment (hra-done)
 
-# 2.0.5
+## 2.0.5
 
 ### features
 
@@ -127,7 +129,7 @@
 
 - fix room note and guest message white space (hra-done)
 
-# 2.0.1
+## 2.0.1
 
 ### features
 
@@ -139,7 +141,7 @@
 
 - update rack paging (hra-done)
 
-# 2.0.0
+## 2.0.0
 
 ### features
 
@@ -178,7 +180,7 @@
 - fix order list cache bug (hra-done)
 - fix rooms statistics mobile responsive (hra-done)
 
-# 1.2.0
+## 1.2.0
 
 ### features
 
@@ -187,7 +189,7 @@
 
 ### bug fixes
 
-# 1.1.0
+## 1.1.0
 
 ### features
 
