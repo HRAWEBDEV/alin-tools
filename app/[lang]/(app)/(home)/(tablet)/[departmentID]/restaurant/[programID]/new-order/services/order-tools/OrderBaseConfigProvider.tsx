@@ -277,6 +277,7 @@ export default function OrderBaseConfigProvider({
   String(hasServiceValue),
   roomValue?.key || 'all',
   contractValue?.key || 'all',
+  customerValue?.key || 'all',
  ];
  async function itemProgramQueryFn({
   signal,
@@ -293,6 +294,7 @@ export default function OrderBaseConfigProvider({
    saleTypeID: saleTypeValue!.key,
    hasService: hasServiceValue,
    registerID: roomValue?.key,
+   customerID: customerValue?.key,
   });
   return res.data;
  }

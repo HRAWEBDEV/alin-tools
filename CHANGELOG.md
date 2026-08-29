@@ -4,6 +4,10 @@
 
 - add AGENT.md file (hra-done)
 
+### bug fixes
+
+- add customer id filter to new order get all item programs (hra-done)
+
 ## 2.4.0
 
 - add panel notifications setup (hra-done)
