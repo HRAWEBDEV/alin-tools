@@ -42,6 +42,7 @@
   "changeTableState": "تغییر وضعیت میز",
   "tableActions": "عملیات میز",
   "printed": "پرینت شده",
+  "faildToSendToKitchen": "خطا در ارسال به آشپزخانه",
   "printInvoice": "چاپ صورتحساب",
   "printCash": "رسید صندوق",
   "occupiedDateTime": "زمان اشغال"

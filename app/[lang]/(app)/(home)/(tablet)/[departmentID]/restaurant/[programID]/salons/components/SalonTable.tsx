@@ -27,6 +27,7 @@ import { TableUtils } from '../utils/tableUtils';
 import { IoAlbums, IoPrint } from 'react-icons/io5';
 import { useNewOrderPrintCash } from '../../new-order/hooks/useNewOrderPrintCash';
 import { Spinner } from '@/components/ui/spinner';
+import { PiChefHatFill } from 'react-icons/pi';
 
 export default function SalonTable({
  table,
@@ -38,9 +39,6 @@ export default function SalonTable({
  isMinimal?: boolean;
  isBold?: boolean;
 } & TableUtils) {
- if (table.orderID) {
-  console.log(table);
- }
  const printCash = useNewOrderPrintCash();
  const orderRedirectLink = useOrderRedirectLink({
   table,
@@ -128,6 +126,14 @@ export default function SalonTable({
           {!!table.printCount && table.printCount > 1 && (
            <span>({table.printCount})</span>
           )}{' '}
+         </p>
+        </div>
+       )}
+       {!!table.orderID && table.failKitchenPrint && (
+        <div className='flex gap-2 items-center'>
+         <PiChefHatFill className='size-8 text-destructive' />
+         <p className='text-xs'>
+          {tableUtils.dic.tables.faildToSendToKitchen}{' '}
          </p>
         </div>
        )}
@@ -380,6 +386,16 @@ export default function SalonTable({
          {table.printed && (
           <IoPrint
            className={`${isMinimal ? 'size-5' : 'size-7'} text-secondary`}
+          />
+         )}
+         {!!table.orderID && table.penddingKitchenPrint && (
+          <PiChefHatFill
+           className={`${isMinimal ? 'size-5' : 'size-7'} animate-pulse`}
+          />
+         )}
+         {!!table.orderID && table.failKitchenPrint && (
+          <PiChefHatFill
+           className={`${isMinimal ? 'size-5' : 'size-7'} text-destructive`}
           />
          )}
         </div>
