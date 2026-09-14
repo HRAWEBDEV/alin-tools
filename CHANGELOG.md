@@ -2,7 +2,7 @@
 
 ## 2.4.2
 
-- add table send kitchen state indicator
+- add table send kitchen state indicator (hra-done)
 
 ## 2.4.1
 
