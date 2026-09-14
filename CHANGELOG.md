@@ -1,5 +1,9 @@
 # CHANGE LOGS
 
+## 2.4.2
+
+- add table send kitchen state indicator
+
 ## 2.4.1
 
 - add AGENT.md file (hra-done)

@@ -38,6 +38,9 @@ export default function SalonTable({
  isMinimal?: boolean;
  isBold?: boolean;
 } & TableUtils) {
+ if (table.orderID) {
+  console.log(table);
+ }
  const printCash = useNewOrderPrintCash();
  const orderRedirectLink = useOrderRedirectLink({
   table,
