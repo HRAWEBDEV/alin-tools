@@ -48,6 +48,7 @@ export default function ShopOrderItem({
  const [showRemoveOrderItemConfirm, setShowRemoveOrderItemConfirm] =
   useState(false);
  const {
+  userOrder: { orderItems },
   order: { orderItemsDispatch },
   invoice: { isFixedDiscount },
   access,
@@ -58,8 +59,13 @@ export default function ShopOrderItem({
  let shopItemDeleteAccess = access['shopItem']['add'];
 
  if (orderItem.id > 0) {
+  const userOrderItem = orderItems.data?.find(
+   (item) => item.id === orderItem.id,
+  );
   shopItemEditAccess = access['shopItem']['edit'];
-  shopItemDeleteAccess = access['shopItem']['delete'];
+  if (userOrderItem && orderItem.amount <= userOrderItem.amount) {
+   shopItemDeleteAccess = access['shopItem']['delete'];
+  }
  }
 
  let previewOrderItemComment = orderItem.comment || '';
