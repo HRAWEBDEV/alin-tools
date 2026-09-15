@@ -63,6 +63,7 @@ export default function ShopOrderItem({
    (item) => item.id === orderItem.id,
   );
   shopItemEditAccess = access['shopItem']['edit'];
+  shopItemDeleteAccess = access['shopItem']['edit'];
   if (userOrderItem && orderItem.amount <= userOrderItem.amount) {
    shopItemDeleteAccess = access['shopItem']['delete'];
   }
