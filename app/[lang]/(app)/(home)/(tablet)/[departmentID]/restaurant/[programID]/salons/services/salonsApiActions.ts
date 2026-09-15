@@ -45,6 +45,9 @@ interface Table {
  OccupiedDateTimeOffset: string | null;
  printed: boolean;
  printCount: number | null;
+ successKitchenPrint: boolean;
+ penddingKitchenPrint: boolean;
+ failKitchenPrint: boolean;
 }
 
 function generateTableMockData(updateTable: Partial<Table> = {}): Table {
@@ -76,6 +79,9 @@ function generateTableMockData(updateTable: Partial<Table> = {}): Table {
   orderCount: 1,
   printed: false,
   printCount: 0,
+  successKitchenPrint: false,
+  penddingKitchenPrint: false,
+  failKitchenPrint: false,
   ...updateTable,
  };
 }
