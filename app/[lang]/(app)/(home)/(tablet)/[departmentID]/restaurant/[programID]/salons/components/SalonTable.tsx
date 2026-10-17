@@ -347,7 +347,7 @@ export default function SalonTable({
       )}
       {!isMinimal && (
        <div
-        className={`p-1 rounded-2xl border border-dashed text-center ${tableStyles.backgoundColor} ${tableStyles.border} ${tableStyles.text} `}
+        className={`p-1 rounded-2xl border border-dashed text-center ${tableStyles.backgoundColor} ${tableStyles.border} ${tableStyles.text}`}
        >
         <span className='text-base font-medium group-data-[bold=true]:font-bold'>
          <span>{tableTypeName} </span>
