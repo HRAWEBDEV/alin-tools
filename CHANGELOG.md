@@ -1,5 +1,9 @@
 # CHANGE LOGS
 
+## 3.0.0
+
+- add pc pos payment feature in restaurant
+
 ## 2.4.2
 
 - add table send kitchen state indicator (hra-done)

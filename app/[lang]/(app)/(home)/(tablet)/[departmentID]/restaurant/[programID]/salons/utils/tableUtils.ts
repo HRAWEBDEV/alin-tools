@@ -16,6 +16,7 @@ export type TableUtils =
     onShowChangeTableState: SalonBaseConfig['tablesInfo']['onShowChangeTableState'];
     changeShowTransferTable: SalonBaseConfig['tablesInfo']['changeShowTransferTable'];
     changeShowMergeTable: SalonBaseConfig['tablesInfo']['changeShowMergeTable'];
+    onToggleTablePayment: SalonBaseConfig['tablesInfo']['onToggleTablePayment'];
     mergeTableTo: SalonBaseConfig['tablesInfo']['mergeTableTo'];
     transferTableTo: SalonBaseConfig['tablesInfo']['transferTableTo'];
     access: SalonBaseConfig['access'];

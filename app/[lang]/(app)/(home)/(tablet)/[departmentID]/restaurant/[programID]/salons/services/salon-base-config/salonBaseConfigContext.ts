@@ -55,6 +55,7 @@ interface SalonBaseConfig {
   changeSelectedTable: (newTable: Table | null) => unknown;
   changeShowTransferTableConfirm: (open?: boolean) => unknown;
   changeShowMergeTableConfirm: (open?: boolean) => unknown;
+  onToggleTablePayment: () => unknown;
   onCloseOrder: () => unknown;
  };
  access: Pick<UserAccessibility['restaurant'], 'order' | 'table'>;

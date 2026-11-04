@@ -49,6 +49,7 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
    changeShowTransferTableConfirm,
    changeShowMergeTable,
    changeShowMergeTableConfirm,
+   onToggleTablePayment,
   },
  } = useSalonBaseConfigContext();
 
@@ -87,6 +88,7 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
       changeShowMergeTable={changeShowMergeTable}
       changeShowTransferTable={changeShowTransferTable}
       mergeTableTo={mergeTableTo}
+      onToggleTablePayment={onToggleTablePayment}
       onShowChangeTableState={onShowChangeTableState}
       selectedHall={selectedHall}
       selectedTable={selectedTable}
@@ -130,6 +132,7 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
       changeShowTransferTable={changeShowTransferTable}
       mergeTableTo={mergeTableTo}
       onShowChangeTableState={onShowChangeTableState}
+      onToggleTablePayment={onToggleTablePayment}
       selectedHall={selectedHall}
       selectedTable={selectedTable}
       showMergeTable={showMergeTable}
@@ -190,6 +193,7 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
          changeSelectedTable={changeSelectedTable}
          changeShowMergeTable={changeShowMergeTable}
          changeShowTransferTable={changeShowTransferTable}
+         onToggleTablePayment={onToggleTablePayment}
          mergeTableTo={mergeTableTo}
          onShowChangeTableState={onShowChangeTableState}
          selectedHall={selectedHall}

@@ -28,6 +28,7 @@ import { IoAlbums, IoPrint } from 'react-icons/io5';
 import { useNewOrderPrintCash } from '../../new-order/hooks/useNewOrderPrintCash';
 import { Spinner } from '@/components/ui/spinner';
 import { PiChefHatFill } from 'react-icons/pi';
+import { MdOutlinePayments } from 'react-icons/md';
 
 export default function SalonTable({
  table,
@@ -46,7 +47,6 @@ export default function SalonTable({
  });
  const router = useRouter();
  const [isOpen, setIsOpen] = useState(false);
- const [showPrintInvoice, setShowPrintInvoice] = useState(false);
  const [showTableOrdersList, setShowTableOrdersList] = useState(false);
 
  const handleOpenChange = (newOpen: boolean) => {
@@ -100,7 +100,7 @@ export default function SalonTable({
 
  const menuContent =
   tableUtils.tableType === 'mock' ? null : (
-   <DrawerContent className='h-[min(60svh,50rem)]'>
+   <DrawerContent className='h-[min(85svh,40rem)] sm:h-[min(85svh,28rem)]'>
     <DrawerHeader className='border-b border-border'>
      <DrawerTitle className='text-2xl'>
       {tableUtils.dic.tables.tableActions}
@@ -204,7 +204,21 @@ export default function SalonTable({
          {tableUtils.dic.tables.changeTableState}
         </Button>
        )}
-      {table.orderCount === 1 && table.orderID && (
+      {!!table.orderID && (
+       <Button
+        variant='outline'
+        className='justify-start text-start h-12 text-destructive'
+        size='lg'
+        onClick={() => {
+         tableUtils.onToggleTablePayment();
+         setIsOpen(false);
+        }}
+       >
+        <MdOutlinePayments className='size-8 text-inherit' />
+        {tableUtils.dic.tables.pay}
+       </Button>
+      )}
+      {table.orderCount === 1 && !!table.orderID && (
        <Button
         variant='outline'
         className='justify-start text-start h-12 text-primary'

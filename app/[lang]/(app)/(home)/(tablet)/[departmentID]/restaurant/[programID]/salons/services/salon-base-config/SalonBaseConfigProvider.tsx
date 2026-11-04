@@ -41,6 +41,7 @@ import {
  getSalonsSettings,
  saveSalonsSettings,
 } from '../../utils/newSalonsSetting';
+import OrderPaymentModal from '../../components/order-payment/OrderPaymentModal';
 
 const salonsRefreshStaleTime = 1000 * 60; // per minute
 
@@ -85,6 +86,7 @@ export default function SalonBaseConfigProvider({
  const [transferToTable, setTrasnferToTable] = useState<Table | null>(null);
  const [mergeToTable, setMergeToTable] = useState<Table | null>(null);
  const [showCloseOrder, setShowCloseOrder] = useState(false);
+ const [showTablePayment, setShowTablePayment] = useState(false);
  const [salonsSettings, setSalonsSettings] = useState<SalonsSettings>(() => {
   if (typeof window !== 'undefined') {
    return getSalonsSettings();
@@ -385,9 +387,11 @@ export default function SalonBaseConfigProvider({
     toast.error(err.message || '');
    },
   });
+ // payment
+ function handleToggleTablePayment() {
+  setShowTablePayment((pre) => !pre);
+ }
  // ctx
-
- //
 
  const ctx: SalonBaseConfig = {
   initData: initData!,
@@ -439,6 +443,7 @@ export default function SalonBaseConfigProvider({
    changeShowTransferTableConfirm,
    changeShowMergeTable,
    changeShowMergeTableConfirm,
+   onToggleTablePayment: handleToggleTablePayment,
   },
   access: {
    order: userAccessibility['restaurant']['order'],
@@ -490,6 +495,14 @@ export default function SalonBaseConfigProvider({
  return (
   <salonBaseConfigContext.Provider value={ctx}>
    {children}
+   {!!selectedTable && (
+    <OrderPaymentModal
+     dic={dic}
+     orderId={selectedTable.orderID}
+     open={showTablePayment}
+     onOpenChange={setShowTablePayment}
+    />
+   )}
    <Dialog
     open={showCloseOrder}
     onOpenChange={(newValue) => {
