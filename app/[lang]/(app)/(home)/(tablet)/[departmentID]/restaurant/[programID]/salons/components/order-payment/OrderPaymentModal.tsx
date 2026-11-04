@@ -20,6 +20,7 @@ import {
 } from '../../../new-order/services/newOrderApiActions';
 import UnExpectedError from '@/app/[lang]/(app)/components/UnExpectedError';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Badge } from '@/components/ui/badge';
 
 export default function OrderPaymentModal({
  dic,
@@ -122,6 +123,11 @@ export default function OrderPaymentModal({
        </TabsTrigger>
        <TabsTrigger value='shop' className='w-28'>
         {dic.orderPayment.shop}
+        {userOrderItemsSuccess && (
+         <Badge className='p-1 size-6 rounded-full text-base font-medium'>
+          {userOrderItems.length}
+         </Badge>
+        )}
        </TabsTrigger>
        <TabsTrigger value='orderInfo' className='w-28'>
         {dic.orderPayment.orderInfo}
