@@ -16,7 +16,25 @@ export default function PaymentInvoice({
 }) {
  const { format } = useCurrencyFormatter();
  return (
-  <div>
+  <div className='mt-2'>
+   <div className='grid grid-cols-2 gap-1 text-sm'>
+    <div>
+     <span>{dic.orderPayment.orderNo}: </span>
+     <span>{order.orderNo}</span>
+    </div>
+    <div>
+     <span>{dic.orderPayment.tableNo}: </span>
+     <span>{order.tableNo}</span>
+    </div>
+    <div>
+     <span>{dic.orderPayment.customer}: </span>
+     <span>{order.customerName}</span>
+    </div>
+    <div>
+     <span>{dic.orderPayment.name}: </span>
+     <span>{order.name}</span>
+    </div>
+   </div>
    <div className='w-[min(100%,35rem)] mx-auto pt-2'>
     <div className='p-4 py-2 border border-border rounded-md bg-neutral-50 dark:bg-neutral-950 mb-2'>
      <div className={invoiceRowClass}>
