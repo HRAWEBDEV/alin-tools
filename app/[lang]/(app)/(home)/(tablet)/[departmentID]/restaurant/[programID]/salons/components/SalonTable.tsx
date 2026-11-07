@@ -209,6 +209,7 @@ export default function SalonTable({
         variant='outline'
         className='justify-start text-start h-12 text-destructive'
         size='lg'
+        disabled={!tableUtils.access.order.payment}
         onClick={() => {
          tableUtils.onToggleTablePayment();
          setIsOpen(false);

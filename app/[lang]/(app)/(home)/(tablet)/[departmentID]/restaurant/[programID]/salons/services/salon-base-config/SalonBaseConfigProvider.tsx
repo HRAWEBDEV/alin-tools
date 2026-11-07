@@ -495,7 +495,7 @@ export default function SalonBaseConfigProvider({
  return (
   <salonBaseConfigContext.Provider value={ctx}>
    {children}
-   {!!selectedTable && (
+   {!!selectedTable && userAccessibility.restaurant.order.payment && (
     <OrderPaymentModal
      dic={dic}
      orderId={selectedTable.orderID}

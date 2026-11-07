@@ -153,7 +153,12 @@ export default function OrderPaymentModal({
      <div>{render()}</div>
     </div>
     <DialogFooter className='border-t border-border py-2 px-4'>
-     <Button variant='outline' className='sm:w-24'>
+     <Button
+      variant='outline'
+      className='sm:w-24'
+
+      onClick={() => onOpenChange(false)}
+     >
       {dic.orderPayment.close}
      </Button>
      <Button className='sm:w-36'>{dic.orderPayment.pay}</Button>
