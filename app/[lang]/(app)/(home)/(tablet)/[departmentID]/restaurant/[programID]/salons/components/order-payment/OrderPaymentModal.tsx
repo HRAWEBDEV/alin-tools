@@ -174,7 +174,7 @@ export default function OrderPaymentModal({
          </Badge>
         )}
        </TabsTrigger>
-       {isSuccessOrdersList && (
+       {isSuccessOrdersList && ordersList.length > 1 && (
         <TabsTrigger value='orderInfo' className='w-28'>
          {dic.orderPayment.orders}
          <Badge className='p-1 size-6 rounded-full text-base font-medium'>
