@@ -5,9 +5,11 @@ import { type SalonsDictionary } from '@/internalization/app/dictionaries/(table
 export default function PaymentShop({
  orderItems,
  dic,
+ userOrderItemsTotalNetValue,
 }: {
  orderItems: OrderItem[];
  dic: SalonsDictionary;
+ userOrderItemsTotalNetValue: number;
 }) {
  const { format } = useCurrencyFormatter();
  return (

@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import {
  Dialog,
  DialogTitle,
@@ -69,6 +69,11 @@ export default function OrderPaymentModal({
   },
  });
 
+ const userOrderItemsTotalNetValue = useMemo(() => {
+  if (!userOrderItemsSuccess) return 0;
+  return userOrderItems.reduce((acc, cur) => cur.price * cur.amount + acc, 0);
+ }, [userOrderItemsSuccess, userOrderItems]);
+
  function render() {
   if (userOrderError || userOrderItemsError) {
    return (
@@ -90,10 +95,22 @@ export default function OrderPaymentModal({
    );
   }
   if (activeTab === 'invoice') {
-   return <PaymentInvoice dic={dic} order={userOrder} />;
+   return (
+    <PaymentInvoice
+     dic={dic}
+     order={userOrder}
+     userOrderItemsTotalNetValue={userOrderItemsTotalNetValue}
+    />
+   );
   }
   if (activeTab === 'shop') {
-   return <PaymentShop orderItems={userOrderItems} dic={dic} />;
+   return (
+    <PaymentShop
+     orderItems={userOrderItems}
+     dic={dic}
+     userOrderItemsTotalNetValue={userOrderItemsTotalNetValue}
+    />
+   );
   }
   if (activeTab === 'orderInfo') {
    return <PaymentOrderInfo dic={dic} />;
@@ -131,16 +148,15 @@ export default function OrderPaymentModal({
          </Badge>
         )}
        </TabsTrigger>
-       <TabsTrigger value='orderInfo' className='w-28'>
-        {dic.orderPayment.orderInfo}
-       </TabsTrigger>
       </TabsList>
      </Tabs>
      <div>{render()}</div>
     </div>
     <DialogFooter className='border-t border-border py-2 px-4'>
-     <Button variant='outline' className='sm:w-24'></Button>
-     <Button className='sm:w-32'></Button>
+     <Button variant='outline' className='sm:w-24'>
+      {dic.orderPayment.close}
+     </Button>
+     <Button className='sm:w-36'>{dic.orderPayment.pay}</Button>
     </DialogFooter>
    </DialogContent>
   </Dialog>
