@@ -419,10 +419,6 @@ export default function OrderBaseConfigProvider({
   queryKey: [newOrderKey, 'order-items', orderIDQuery],
   async queryFn({ signal }) {
    const { data } = await getOrderItems({ signal, orderID: orderIDQuery! });
-   orderItemsDispatch({
-    type: 'insertOrderItems',
-    payload: data,
-   });
    return data;
   },
  });
@@ -1269,6 +1265,14 @@ export default function OrderBaseConfigProvider({
    setShowSplitPanel(false);
   }
  }, [isMediumRes, newOrderSettings]);
+
+ useEffect(() => {
+  if (!userOrderItemsSuccess) return;
+  orderItemsDispatch({
+   type: 'insertOrderItems',
+   payload: userOrderItems,
+  });
+ }, [userOrderItemsSuccess, userOrderItems]);
 
  return (
   <orderBaseConfigContext.Provider value={ctx}>

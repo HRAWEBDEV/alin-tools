@@ -5,6 +5,7 @@ import {
  DialogTitle,
  DialogContent,
  DialogHeader,
+ DialogFooter,
 } from '@/components/ui/dialog';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { type SalonsDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/salons/dictionary';
@@ -21,6 +22,7 @@ import {
 import UnExpectedError from '@/app/[lang]/(app)/components/UnExpectedError';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 
 export default function OrderPaymentModal({
  dic,
@@ -91,7 +93,7 @@ export default function OrderPaymentModal({
    return <PaymentInvoice dic={dic} order={userOrder} />;
   }
   if (activeTab === 'shop') {
-   return <PaymentShop orderItems={userOrderItems} />;
+   return <PaymentShop orderItems={userOrderItems} dic={dic} />;
   }
   if (activeTab === 'orderInfo') {
    return <PaymentOrderInfo dic={dic} />;
@@ -136,6 +138,10 @@ export default function OrderPaymentModal({
      </Tabs>
      <div>{render()}</div>
     </div>
+    <DialogFooter className='border-t border-border py-2 px-4'>
+     <Button variant='outline' className='sm:w-24'></Button>
+     <Button className='sm:w-32'></Button>
+    </DialogFooter>
    </DialogContent>
   </Dialog>
  );

@@ -126,6 +126,8 @@
   "lastName": "نام خانوادگی",
   "credit": "اعتبار",
   "nonCash": "غیر نقدی",
-  "fixedDiscount": "تخفیف ثابت"
+  "fixedDiscount": "تخفیف ثابت",
+  "amount": "تعداد",
+  "tatalPrice": "قیمت کل"
  }
 }

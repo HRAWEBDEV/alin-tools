@@ -17,22 +17,30 @@ export default function PaymentInvoice({
  const { format } = useCurrencyFormatter();
  return (
   <div className='mt-2'>
-   <div className='grid grid-cols-2 gap-1 text-sm'>
+   <div className='grid grid-cols-2 gapy-1 text-sm'>
     <div>
-     <span>{dic.orderPayment.orderNo}: </span>
-     <span>{order.orderNo}</span>
+     <span className='text-neutral-700 dark:text-neutral-400'>
+      {dic.orderPayment.orderNo}:{' '}
+     </span>
+     <span className='font-medium'>{order.orderNo}</span>
     </div>
     <div>
-     <span>{dic.orderPayment.tableNo}: </span>
-     <span>{order.tableNo}</span>
+     <span className='text-neutral-700 dark:text-neutral-400'>
+      {dic.orderPayment.tableNo}:{' '}
+     </span>
+     <span className='font-medium'>{order.tableNo}</span>
     </div>
     <div>
-     <span>{dic.orderPayment.customer}: </span>
-     <span>{order.customerName}</span>
+     <span className='text-neutral-700 dark:text-neutral-400'>
+      {dic.orderPayment.customer}:{' '}
+     </span>
+     <span className='font-medium'>{order.customerName}</span>
     </div>
     <div>
-     <span>{dic.orderPayment.name}: </span>
-     <span>{order.name}</span>
+     <span className='text-neutral-700 dark:text-neutral-400'>
+      {dic.orderPayment.name}:{' '}
+     </span>
+     <span className='font-medium'>{order.name}</span>
     </div>
    </div>
    <div className='w-[min(100%,35rem)] mx-auto pt-2'>
