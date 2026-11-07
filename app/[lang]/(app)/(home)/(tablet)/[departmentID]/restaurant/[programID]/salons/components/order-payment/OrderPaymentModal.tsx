@@ -151,7 +151,7 @@ export default function OrderPaymentModal({
     onOpenChange(newValue);
    }}
   >
-   <DialogContent className='flex flex-col w-[min(95%,30rem)] max-h-[95svh] max-w-none! p-0 overflow-hidden gap-0'>
+   <DialogContent className='flex flex-col w-[min(95%,30rem)] max-h-[95svh] min-h-[450px] max-w-none! p-0 overflow-hidden gap-0'>
     <DialogHeader className='px-2 py-4 border-b border-border'>
      <DialogTitle>{dic.orderPayment.title}</DialogTitle>
     </DialogHeader>
