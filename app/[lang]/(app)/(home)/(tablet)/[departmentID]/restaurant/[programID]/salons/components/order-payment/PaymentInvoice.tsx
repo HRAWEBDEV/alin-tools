@@ -2,6 +2,8 @@ import { useCurrencyFormatter } from '@/hooks/useCurrencyFormatter';
 import { type SalonsDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/salons/dictionary';
 import { type Order } from '../../../new-order/services/newOrderApiActions';
 import OrderPayment from '../../../new-order/components/order-invoice/OrderPayment';
+import { Button } from '@/components/ui/button';
+import { useN950Pos } from '@/app/[lang]/(app)/middlewares/useN950Pos';
 
 const invoiceRowClass =
  'flex justify-between gap-2 items-center text-base pb-2 mb-2 border-b border-border font-medium text-sm';
@@ -17,6 +19,7 @@ export default function PaymentInvoice({
  order: Order;
  userOrderItemsTotalNetValue: number;
 }) {
+ const { status, handlePurchase } = useN950Pos();
  const { format } = useCurrencyFormatter();
  return (
   <div className='mt-2'>
@@ -107,14 +110,25 @@ export default function PaymentInvoice({
      </div>
     </div>
    </div>
-   <OrderPayment
-    dic={dic.orderPayment}
-    canPay={true}
-    paymentValue={order.payableValue}
-    onCloseOrder={() => {}}
-    isLoading={false}
-    onConfirmPayment={() => {}}
-   />
+   <div>{status}</div>
+   <Button
+    onClick={() => {
+     handlePurchase({
+      paymentValue: '10000',
+     });
+    }}
+   >
+    test
+   </Button>
   </div>
  );
 }
+
+// <OrderPayment
+//  dic={dic.orderPayment}
+//  canPay={true}
+//  paymentValue={order.payableValue}
+//  onCloseOrder={() => {}}
+//  isLoading={false}
+//  onConfirmPayment={() => {}}
+// />
