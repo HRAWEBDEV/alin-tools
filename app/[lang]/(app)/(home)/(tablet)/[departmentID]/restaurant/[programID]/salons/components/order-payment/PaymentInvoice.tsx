@@ -19,7 +19,8 @@ export default function PaymentInvoice({
  order: Order;
  userOrderItemsTotalNetValue: number;
 }) {
- const { status, handlePurchase } = useN950Pos();
+ const { status, posResponse, handlePurchase, handlePrintInvoice } =
+  useN950Pos();
  const { format } = useCurrencyFormatter();
  return (
   <div className='mt-2'>
@@ -111,6 +112,7 @@ export default function PaymentInvoice({
     </div>
    </div>
    <div>{status}</div>
+   <div>{posResponse ? JSON.stringify(posResponse) : '---'}</div>
    <Button
     onClick={() => {
      handlePurchase({
@@ -119,6 +121,14 @@ export default function PaymentInvoice({
     }}
    >
     test
+   </Button>
+   <Button
+    onClick={() => {
+     alert('clicked');
+     handlePrintInvoice();
+    }}
+   >
+    print
    </Button>
   </div>
  );
