@@ -1,6 +1,7 @@
 import { useCurrencyFormatter } from '@/hooks/useCurrencyFormatter';
 import { type SalonsDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/salons/dictionary';
 import { type Order } from '../../../new-order/services/newOrderApiActions';
+import OrderPayment from '../../../new-order/components/order-invoice/OrderPayment';
 
 const invoiceRowClass =
  'flex justify-between gap-2 items-center text-base pb-2 mb-2 border-b border-border font-medium text-sm';
@@ -19,7 +20,7 @@ export default function PaymentInvoice({
  const { format } = useCurrencyFormatter();
  return (
   <div className='mt-2'>
-   <div className='grid grid-cols-2 gapy-1 text-sm'>
+   <div className='grid grid-cols-2 gap-y-1 text-sm'>
     <div>
      <span className='text-neutral-700 dark:text-neutral-400'>
       {dic.orderPayment.orderNo}:{' '}
@@ -45,7 +46,7 @@ export default function PaymentInvoice({
      <span className='font-medium'>{order.name || '---'} </span>
     </div>
    </div>
-   <div className='w-[min(100%,35rem)] mx-auto pt-2'>
+   <div className='w-[min(100%,35rem)] mx-auto pt-2 pb-2'>
     <div className='p-4 py-2 border border-border rounded-md bg-neutral-50 dark:bg-neutral-950 mb-2'>
      <div className={invoiceRowClass}>
       <span className={invoiceLabelClass}>
@@ -106,6 +107,14 @@ export default function PaymentInvoice({
      </div>
     </div>
    </div>
+   <OrderPayment
+    dic={dic.orderPayment}
+    canPay={true}
+    paymentValue={order.payableValue}
+    onCloseOrder={() => {}}
+    isLoading={false}
+    onConfirmPayment={() => {}}
+   />
   </div>
  );
 }

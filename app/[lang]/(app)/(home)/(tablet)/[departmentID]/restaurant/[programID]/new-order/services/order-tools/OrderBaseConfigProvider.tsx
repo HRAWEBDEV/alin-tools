@@ -376,7 +376,6 @@ export default function OrderBaseConfigProvider({
  const {
   data: userOrder,
   isLoading: userOrderLoading,
-  isFetching: userOrderIsFetching,
   isError: userOrderError,
   isSuccess: userOrderSuccess,
  } = useQuery({
@@ -393,7 +392,6 @@ export default function OrderBaseConfigProvider({
  const {
   data: orderOtps,
   isLoading: orderOtpsLoading,
-  isFetching: orderOtpsIsFetching,
   isError: orderOtpsIsError,
   isSuccess: orderOtpsIsSuccess,
  } = useQuery({
@@ -423,19 +421,16 @@ export default function OrderBaseConfigProvider({
   },
  });
 
- const {
-  data: employeeCustomer,
-  isLoading: employeeCustomerIsLoading,
-  isSuccess: employeeCustomerIsSuccess,
- } = useQuery({
-  staleTime: 'static',
-  enabled: saleTypeValue?.key === SaleTypes.employee,
-  queryKey: [newOrderKey, 'employee-customer'],
-  async queryFn({ signal }) {
-   const res = await getEmployeeCustomer({ signal });
-   return res.data;
-  },
- });
+ const { data: employeeCustomer, isSuccess: employeeCustomerIsSuccess } =
+  useQuery({
+   staleTime: 'static',
+   enabled: saleTypeValue?.key === SaleTypes.employee,
+   queryKey: [newOrderKey, 'employee-customer'],
+   async queryFn({ signal }) {
+    const res = await getEmployeeCustomer({ signal });
+    return res.data;
+   },
+  });
  // person setup
  const { data: personData } = useQuery({
   staleTime: 'static',

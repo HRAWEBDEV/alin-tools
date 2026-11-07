@@ -5,9 +5,13 @@ const defaultValues: InvoiceWalletSchema = {
  phoneNumber: '',
 };
 
-function createInvoiceWalletSchema({ dic }: { dic: NewOrderDictionary }) {
+function createInvoiceWalletSchema({
+ dic,
+}: {
+ dic: NewOrderDictionary['invoice'];
+}) {
  return z.object({
-  phoneNumber: z.string().min(1, dic.invoice.fillMobileNo),
+  phoneNumber: z.string().min(1, dic.fillMobileNo),
  });
 }
 

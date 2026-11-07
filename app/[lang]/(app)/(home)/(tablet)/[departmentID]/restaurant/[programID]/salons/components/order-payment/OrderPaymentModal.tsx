@@ -5,7 +5,6 @@ import {
  DialogTitle,
  DialogContent,
  DialogHeader,
- DialogFooter,
 } from '@/components/ui/dialog';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { type SalonsDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/salons/dictionary';
@@ -13,7 +12,7 @@ import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import PaymentInvoice from './PaymentInvoice';
 import PaymentOrderInfo from './PaymentOrderInfo';
 import PaymentShop from './PaymentShop';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import {
  getOrder,
  getOrderItems,
@@ -22,8 +21,16 @@ import {
 import UnExpectedError from '@/app/[lang]/(app)/components/UnExpectedError';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { getHallKey, getTableOrders } from '../../services/salonsApiActions';
+import { useQueryClient } from '@tanstack/react-query';
+import {
+ saveAndCloseOrder,
+ sendToPcPos,
+} from '../../../new-order/services/orderInvoicePaymentApiActions';
+import { PaymentType } from '../../../new-order/utils/PaymentTypes';
+import { toast } from 'sonner';
+import { AxiosError } from 'axios';
+import { OrderInvoicePayment } from '../../../new-order/schemas/orderInvoicePaymentSchema';
 
 export default function OrderPaymentModal({
  dic,
@@ -38,6 +45,7 @@ export default function OrderPaymentModal({
  tableID: number;
  onOpenChange: (open: boolean) => unknown;
 }) {
+ const queryClient = useQueryClient();
  const [activeOrderId, setActiveOrderId] = useState(orderId);
  const { localeInfo } = useBaseConfig();
  const [activeTab, setActiveTab] = useState('invoice');
@@ -92,6 +100,52 @@ export default function OrderPaymentModal({
   if (!userOrderItemsSuccess) return 0;
   return userOrderItems.reduce((acc, cur) => cur.price * cur.amount + acc, 0);
  }, [userOrderItemsSuccess, userOrderItems]);
+
+ const { mutate: handleConfirmPayment, isPending: isPendingConfirmPayment } =
+  useMutation({
+   async mutationFn({ paymentData }: { paymentData: OrderInvoicePayment }) {
+    if (paymentData.paymentType?.key === PaymentType.creditCard) {
+     return sendToPcPos({
+      order: userOrder!,
+      orderItems: userOrderItems!,
+      sendToKitchen: false,
+      printToCashBox: false,
+      bankID: Number(paymentData.bank!.key),
+      posID: Number(paymentData.cardReader!.key),
+      otpCodes: [],
+     });
+    }
+    const isWalletPayment = paymentData.paymentType?.key === PaymentType.wallet;
+    return saveAndCloseOrder({
+     order: userOrder!,
+     orderItems: userOrderItems!,
+     sendToKitchen: false,
+     printToCashBox: false,
+     walletID: isWalletPayment ? paymentData.walletKey : undefined,
+     otpCode: isWalletPayment ? paymentData.otpCode : undefined,
+     otpCodes: [],
+     cash: {
+      bankAccountID: Number(paymentData.bank?.key) || null,
+      payRefNo: paymentData.paymentRefNo || null,
+      payTypeID: Number(paymentData.paymentType?.key) || null,
+      sValue: userOrder!.payableValue,
+     },
+    });
+   },
+   onSuccess(res) {
+    if (activeOrderId) {
+     queryClient.invalidateQueries({
+      queryKey: [newOrderKey, 'order-items', activeOrderId],
+     });
+    }
+    if (res.data.message) {
+     toast.warning(res.data.message);
+    }
+   },
+   onError(err: AxiosError<string>) {
+    toast.error(err.response?.data || '');
+   },
+  });
 
  function render() {
   if (userOrderError || userOrderItemsError) {
@@ -186,17 +240,6 @@ export default function OrderPaymentModal({
      </Tabs>
      <div>{render()}</div>
     </div>
-    <DialogFooter className='border-t border-border py-2 px-4'>
-     <Button
-      variant='outline'
-      className='sm:w-24'
-
-      onClick={() => onOpenChange(false)}
-     >
-      {dic.orderPayment.close}
-     </Button>
-     <Button className='sm:w-36'>{dic.orderPayment.pay}</Button>
-    </DialogFooter>
    </DialogContent>
   </Dialog>
  );

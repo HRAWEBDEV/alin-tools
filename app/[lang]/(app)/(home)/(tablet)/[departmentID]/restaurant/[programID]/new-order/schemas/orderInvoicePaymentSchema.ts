@@ -11,7 +11,11 @@ const defaultValues: Partial<OrderInvoicePayment> = {
  walletKey: '',
 };
 
-function createOrderInvoicePaymentSchema({ dic }: { dic: NewOrderDictionary }) {
+function createOrderInvoicePaymentSchema({
+ dic,
+}: {
+ dic: NewOrderDictionary['invoice'];
+}) {
  return z
   .object({
    paymentType: z
@@ -45,7 +49,7 @@ function createOrderInvoicePaymentSchema({ dic }: { dic: NewOrderDictionary }) {
    },
    {
     path: ['paymentType'],
-    message: dic.invoice.selectPayType,
+    message: dic.selectPayType,
    },
   )
   .refine(
@@ -58,7 +62,7 @@ function createOrderInvoicePaymentSchema({ dic }: { dic: NewOrderDictionary }) {
    },
    {
     path: ['paymentRefNo'],
-    message: dic.invoice.enterPaymentRefNo,
+    message: dic.enterPaymentRefNo,
    },
   )
   .refine(
@@ -71,7 +75,7 @@ function createOrderInvoicePaymentSchema({ dic }: { dic: NewOrderDictionary }) {
    },
    {
     path: ['bank'],
-    message: dic.invoice.selectBank,
+    message: dic.selectBank,
    },
   )
   .refine(
@@ -80,7 +84,7 @@ function createOrderInvoicePaymentSchema({ dic }: { dic: NewOrderDictionary }) {
    },
    {
     path: ['cardReader'],
-    message: dic.invoice.selectCardReader,
+    message: dic.selectCardReader,
    },
   )
   .refine(
@@ -92,7 +96,7 @@ function createOrderInvoicePaymentSchema({ dic }: { dic: NewOrderDictionary }) {
    },
    {
     path: ['otpCode'],
-    message: dic.invoice.fillOtpCode,
+    message: dic.fillOtpCode,
    },
   );
 }
