@@ -71,18 +71,18 @@ export default function PaymentInvoice({
      </div>
      <div className={invoiceRowClass}>
       <span className={invoiceLabelClass}>
+       {'- '}
+       {dic.orderPayment.discount}
+      </span>
+      <span className='font-medium'>{format(order.discount)} ریال</span>
+     </div>
+     <div className={invoiceRowClass}>
+      <span className={invoiceLabelClass}>
        {'+ '} {dic.orderPayment.itemsTotalPrice}
       </span>
       <span className='font-medium'>
        {format(userOrderItemsTotalNetValue)} ریال
       </span>
-     </div>
-     <div className={invoiceRowClass}>
-      <span className={invoiceLabelClass}>
-       {'- '}
-       {dic.orderPayment.discount}
-      </span>
-      <span className='font-medium'>{format(order.discount)} ریال</span>
      </div>
      <div className={invoiceRowClass}>
       <span className={invoiceLabelClass}>
@@ -94,11 +94,15 @@ export default function PaymentInvoice({
      <div
       className={
        invoiceRowClass +
-       ' p-2 sm:px-8 bg-primary/5 border-none text-primary rounded-md text-xl! mb-0!'
+       ' p-2 bg-primary/5 border-none text-primary rounded-md mb-0!'
       }
      >
-      <span className={invoiceLabelClass}>{dic.orderPayment.remained}</span>
-      <span className='font-medium'>{format(order.payableValue)} ریال</span>
+      <span className={invoiceLabelClass + ' text-sm'}>
+       {dic.orderPayment.remained}
+      </span>
+      <span className='font-medium text-lg sm:text-xl'>
+       {format(order.payableValue)} ریال
+      </span>
      </div>
     </div>
    </div>
