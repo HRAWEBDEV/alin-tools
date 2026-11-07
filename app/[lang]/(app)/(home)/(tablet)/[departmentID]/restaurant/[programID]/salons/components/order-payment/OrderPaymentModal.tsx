@@ -23,18 +23,22 @@ import UnExpectedError from '@/app/[lang]/(app)/components/UnExpectedError';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { getHallKey, getTableOrders } from '../../services/salonsApiActions';
 
 export default function OrderPaymentModal({
  dic,
  open,
  orderId,
+ tableID,
  onOpenChange,
 }: {
  dic: SalonsDictionary;
  open: boolean;
  orderId: number;
+ tableID: number;
  onOpenChange: (open: boolean) => unknown;
 }) {
+ const [activeOrderId, setActiveOrderId] = useState(orderId);
  const { localeInfo } = useBaseConfig();
  const [activeTab, setActiveTab] = useState('invoice');
 
@@ -46,10 +50,25 @@ export default function OrderPaymentModal({
  } = useQuery({
   staleTime: 'static',
   gcTime: 0,
-  queryKey: [newOrderKey, 'order-info', orderId.toString()],
+  queryKey: [newOrderKey, 'order-info', activeOrderId.toString()],
   async queryFn({ signal }) {
-   const { data } = await getOrder({ signal, orderID: orderId });
+   const { data } = await getOrder({ signal, orderID: activeOrderId });
    return data;
+  },
+ });
+
+ const {
+  data: ordersList,
+  isLoading: isLoadingOrdersList,
+  isSuccess: isSuccessOrdersList,
+ } = useQuery({
+  queryKey: [getHallKey, 'ordersList', tableID.toString()],
+  async queryFn({ signal }) {
+   const res = await getTableOrders({
+    tableID: tableID,
+    signal,
+   });
+   return res.data;
   },
  });
 
@@ -61,10 +80,10 @@ export default function OrderPaymentModal({
  } = useQuery({
   staleTime: 'static',
   gcTime: 0,
-  enabled: !!orderId,
-  queryKey: [newOrderKey, 'order-items', orderId],
+  enabled: !!activeOrderId,
+  queryKey: [newOrderKey, 'order-items', activeOrderId],
   async queryFn({ signal }) {
-   const { data } = await getOrderItems({ signal, orderID: orderId! });
+   const { data } = await getOrderItems({ signal, orderID: activeOrderId! });
    return data;
   },
  });
@@ -94,7 +113,7 @@ export default function OrderPaymentModal({
     </div>
    );
   }
-  if (activeTab === 'invoice') {
+  if (activeTab === 'invoice' && isSuccessOrdersList) {
    return (
     <PaymentInvoice
      dic={dic}
@@ -112,8 +131,15 @@ export default function OrderPaymentModal({
     />
    );
   }
-  if (activeTab === 'orderInfo') {
-   return <PaymentOrderInfo dic={dic} />;
+  if (activeTab === 'orderInfo' && isSuccessOrdersList) {
+   return (
+    <PaymentOrderInfo
+     dic={dic}
+     ordersList={ordersList}
+     activeOrderId={activeOrderId}
+     setActiveOrderId={setActiveOrderId}
+    />
+   );
   }
   return null;
  }
@@ -148,6 +174,14 @@ export default function OrderPaymentModal({
          </Badge>
         )}
        </TabsTrigger>
+       {isSuccessOrdersList && (
+        <TabsTrigger value='orderInfo' className='w-28'>
+         {dic.orderPayment.orders}
+         <Badge className='p-1 size-6 rounded-full text-base font-medium'>
+          {ordersList.length}
+         </Badge>
+        </TabsTrigger>
+       )}
       </TabsList>
      </Tabs>
      <div>{render()}</div>

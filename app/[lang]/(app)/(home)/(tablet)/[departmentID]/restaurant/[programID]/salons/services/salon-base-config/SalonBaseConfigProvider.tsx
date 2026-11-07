@@ -497,8 +497,10 @@ export default function SalonBaseConfigProvider({
    {children}
    {!!selectedTable && userAccessibility.restaurant.order.payment && (
     <OrderPaymentModal
+     key={selectedTable.tableID}
      dic={dic}
      orderId={selectedTable.orderID}
+     tableID={selectedTable.tableID}
      open={showTablePayment}
      onOpenChange={setShowTablePayment}
     />
