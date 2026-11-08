@@ -10,7 +10,6 @@ import {
 import {
  type ItemGroup,
  type SaveOrderPackage,
- newOrderKey,
  getOrderOtpCodes,
  getItemPrograms,
  getOrderItems,
