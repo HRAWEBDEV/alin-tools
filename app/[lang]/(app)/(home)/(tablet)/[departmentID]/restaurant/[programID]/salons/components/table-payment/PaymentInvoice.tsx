@@ -1,8 +1,6 @@
 import { useCurrencyFormatter } from '@/hooks/useCurrencyFormatter';
 import { type SalonsDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/salons/dictionary';
 import { type Order } from '../../../new-order/services/newOrderApiActions';
-import { Button } from '@/components/ui/button';
-import { useN950Pos } from '@/app/[lang]/(app)/(home)/(tablet)/hooks/useN950Pos';
 
 const invoiceRowClass =
  'flex justify-between gap-2 items-center text-base pb-2 mb-2 border-b border-border font-medium text-sm';
@@ -18,8 +16,6 @@ export default function PaymentInvoice({
  order: Order;
  userOrderItemsTotalNetValue: number;
 }) {
- const { status, posResponse, handlePurchase, handlePrintInvoice } =
-  useN950Pos();
  const { format } = useCurrencyFormatter();
  return (
   <div className='mt-2'>
@@ -110,25 +106,6 @@ export default function PaymentInvoice({
      </div>
     </div>
    </div>
-   <div>{status}</div>
-   <div>{posResponse ? JSON.stringify(posResponse) : '---'}</div>
-   <Button
-    onClick={() => {
-     handlePurchase({
-      paymentValue: '10000',
-     });
-    }}
-   >
-    test
-   </Button>
-   <Button
-    onClick={() => {
-     alert('clicked');
-     handlePrintInvoice();
-    }}
-   >
-    print
-   </Button>
   </div>
  );
 }

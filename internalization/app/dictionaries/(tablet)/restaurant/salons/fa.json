@@ -132,6 +132,9 @@
   "amount": "تعداد",
   "tatalPrice": "قیمت کل",
   "pay": "پرداخت",
-  "close": "بستن"
+  "close": "بستن",
+  "connectingToPaymentDevice": "درحال اتصال به دستگاه",
+  "noDeviceDetected": "دستگاهی یافت نشد",
+  "searchForDeviceAgain": "جستجو مجدد"
  }
 }

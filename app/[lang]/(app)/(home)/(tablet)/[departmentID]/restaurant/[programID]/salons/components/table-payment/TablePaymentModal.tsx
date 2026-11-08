@@ -5,6 +5,7 @@ import {
  DialogTitle,
  DialogContent,
  DialogHeader,
+ DialogFooter,
 } from '@/components/ui/dialog';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { type SalonsDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/salons/dictionary';
@@ -23,6 +24,12 @@ import UnExpectedError from '@/app/[lang]/(app)/components/UnExpectedError';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { getHallKey, getTableOrders } from '../../services/salonsApiActions';
+import { Button } from '@/components/ui/button';
+import { useN950Pos } from '@/app/[lang]/(app)/(home)/(tablet)/hooks/useN950Pos';
+import { Spinner } from '@/components/ui/spinner';
+import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
+import { AlertTriangleIcon, AlertCircleIcon } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 export default function TablePaymentModal({
  dic,
@@ -37,6 +44,7 @@ export default function TablePaymentModal({
  tableID: number;
  onOpenChange: (open: boolean) => unknown;
 }) {
+ const { status, connect } = useN950Pos();
  const [activeOrderId, setActiveOrderId] = useState(orderId);
  const { localeInfo } = useBaseConfig();
  const [activeTab, setActiveTab] = useState('invoice');
@@ -95,7 +103,7 @@ export default function TablePaymentModal({
  function render() {
   if (userOrderError || userOrderItemsError) {
    return (
-    <div className='mt-2'>
+    <div className='my-2'>
      <UnExpectedError />
     </div>
    );
@@ -107,7 +115,7 @@ export default function TablePaymentModal({
    !userOrderItemsSuccess
   ) {
    return (
-    <div className='mt-2'>
+    <div className='my-2'>
      <Skeleton className='w-full h-44' />
     </div>
    );
@@ -184,7 +192,50 @@ export default function TablePaymentModal({
       </TabsList>
      </Tabs>
      <div>{render()}</div>
+     {status !== 'connected' && (
+      <div>
+       {status === 'connecting' && (
+        <div>
+         <Alert className='max-w-md border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-50'>
+          <AlertTriangleIcon />
+          <AlertTitle className='hidden'></AlertTitle>
+          <AlertDescription>
+           {dic.orderPayment.connectingToPaymentDevice} ...
+          </AlertDescription>
+          <div className='col-span-full mt-1'>
+           <LinearLoading />
+          </div>
+         </Alert>
+        </div>
+       )}
+       {(status === 'disconnected' || status === 'error') && (
+        <div>
+         <Alert className='max-w-md border-red-200 bg-red-50 text-red-900 dark:border-red-900 dark:bg-red-950 dark:text-red-50'>
+          <AlertCircleIcon />
+          <AlertTitle className='hidden'></AlertTitle>
+          <AlertDescription>
+           {dic.orderPayment.noDeviceDetected}.
+          </AlertDescription>
+          <div className='col-span-full mt-1'>
+           <Button size='sm' variant='destructive' onClick={() => connect()}>
+            {dic.orderPayment.searchForDeviceAgain}
+           </Button>
+          </div>
+         </Alert>
+        </div>
+       )}
+      </div>
+     )}
     </div>
+    <DialogFooter className='py-2 px-4 border-t border-border'>
+     <Button variant={'outline'} onClick={() => onOpenChange(false)}>
+      {dic.orderPayment.close}
+     </Button>
+     <Button disabled={status !== 'connected'} className='sm:w-36'>
+      {status === 'connecting' && <Spinner />}
+      {dic.orderPayment.pay}
+     </Button>
+    </DialogFooter>
    </DialogContent>
   </Dialog>
  );
