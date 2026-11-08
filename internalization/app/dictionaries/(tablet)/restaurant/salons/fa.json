@@ -135,6 +135,7 @@
   "close": "بستن",
   "connectingToPaymentDevice": "درحال اتصال به دستگاه",
   "noDeviceDetected": "دستگاهی یافت نشد",
-  "searchForDeviceAgain": "جستجو مجدد"
+  "searchForDeviceAgain": "جستجو مجدد",
+  "autoTablePaymentReceiptPrint": "پرینت خودکار رسید پرداخت"
  }
 }

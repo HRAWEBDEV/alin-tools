@@ -135,38 +135,17 @@ export function useN950Pos() {
   [sendMessage],
  );
 
- const handlePrintInvoice = useCallback(() => {
-  setLastOperation('printInvoice');
-  sendMessage({
-   CompanyName: 'SEP',
-   RequestType: 'receiptBitMap',
-   invoice: {
-    num: 1,
-    price: 11000,
-    sumQty: 2,
-    sumPrice: 10000,
-    discountAmount: 0,
-    serviceAmount: 1000,
-    taxAmount: 0,
-    phoneNumber: '09120000000',
-    description: 'Test invoice',
-    tableName: 'Table 1',
-    customerName: 'Test Customer',
-    waiterName: 'Test Waiter',
-    guestQty: 2,
-    creationTime: '12:30:00',
-    farsiDate: '1405/08/16',
-    creditPrice: 0,
-    restaurantName: 'Test Restaurant',
-    roundedAmount: 0,
-    invoices: null,
-    invoiceDetails: [
-     { name: 'Item A', qty: 1, sumUnitPrice: 4000, toz: '' },
-     { name: 'Item B', qty: 1, sumUnitPrice: 6000, toz: 'no sugar' },
-    ],
-   },
-  });
- }, [sendMessage]);
+ const handlePrintInvoice = useCallback(
+  ({ invoice }: { invoice: InvoiceModel }) => {
+   setLastOperation('printInvoice');
+   sendMessage({
+    CompanyName: 'SEP',
+    RequestType: 'receiptBitMap',
+    invoice,
+   });
+  },
+  [sendMessage],
+ );
 
  useEffect(() => {
   connect();

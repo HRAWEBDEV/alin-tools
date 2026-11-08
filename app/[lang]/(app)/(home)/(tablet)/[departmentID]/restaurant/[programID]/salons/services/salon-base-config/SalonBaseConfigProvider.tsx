@@ -151,7 +151,7 @@ export default function SalonBaseConfigProvider({
  });
 
  // change setting
- function changeSalonsSettings<T extends keyof SalonsSettings>(
+ function handleChangeSalonsSettings<T extends keyof SalonsSettings>(
   key: T,
   value: SalonsSettings[T],
  ) {
@@ -165,7 +165,7 @@ export default function SalonBaseConfigProvider({
  //
  function changeLtrTablesDirection(value?: boolean) {
   const newState = value === undefined ? !ltrTablesDirection : value;
-  changeSalonsSettings('ltrTablesDirection', newState);
+  handleChangeSalonsSettings('ltrTablesDirection', newState);
   setLtrTablesDirection(newState);
  }
  // tables filters
@@ -398,6 +398,8 @@ export default function SalonBaseConfigProvider({
 
  const ctx: SalonBaseConfig = {
   initData: initData!,
+  salonsSettings,
+  onChangeSalonsSettings: handleChangeSalonsSettings,
   hallsInfo: {
    data: initData!.salons,
    isFetching: initDataIsFetching,

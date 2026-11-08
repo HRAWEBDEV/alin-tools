@@ -1,6 +1,9 @@
 import { useCurrencyFormatter } from '@/hooks/useCurrencyFormatter';
 import { type SalonsDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/salons/dictionary';
 import { type Order } from '../../../new-order/services/newOrderApiActions';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { useSalonBaseConfigContext } from '../../services/salon-base-config/salonBaseConfigContext';
 
 const invoiceRowClass =
  'flex justify-between gap-2 items-center text-base pb-2 mb-2 border-b border-border font-medium text-sm';
@@ -16,9 +19,10 @@ export default function PaymentInvoice({
  order: Order;
  userOrderItemsTotalNetValue: number;
 }) {
+ const { salonsSettings, onChangeSalonsSettings } = useSalonBaseConfigContext();
  const { format } = useCurrencyFormatter();
  return (
-  <div className='mt-2'>
+  <div className='mt-2 mb-4'>
    <div className='grid grid-cols-2 gap-y-1 text-sm'>
     <div>
      <span className='text-neutral-700 dark:text-neutral-400'>
@@ -45,7 +49,7 @@ export default function PaymentInvoice({
      <span className='font-medium'>{order.name || '---'} </span>
     </div>
    </div>
-   <div className='w-[min(100%,35rem)] mx-auto pt-2 pb-2'>
+   <div className='w-[min(100%,35rem)] mx-auto pt-2'>
     <div className='p-4 py-2 border border-border rounded-md bg-neutral-50 dark:bg-neutral-950 mb-2'>
      <div className={invoiceRowClass}>
       <span className={invoiceLabelClass}>
@@ -105,6 +109,19 @@ export default function PaymentInvoice({
       </span>
      </div>
     </div>
+   </div>
+   <div className='flex items-center gap-2'>
+    <Switch
+     id='print'
+     dir='ltr'
+     checked={salonsSettings.autoTablePaymentReceiptPrint}
+     onCheckedChange={(value) => {
+      onChangeSalonsSettings('autoTablePaymentReceiptPrint', value);
+     }}
+    />
+    <Label htmlFor='print'>
+     {dic.orderPayment.autoTablePaymentReceiptPrint}
+    </Label>
    </div>
   </div>
  );

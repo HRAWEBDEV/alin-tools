@@ -3,6 +3,7 @@ import { use, createContext } from 'react';
 import { OutOfContext } from '@/utils/OutOfContext';
 import { type TablesReport } from '../../utils/getTablesReport';
 import { UserAccessibility } from '@/app/[lang]/(app)/login/services/user-accessibility/services/userAccessibilityApiActions';
+import { SalonsSettings } from '../../utils/newSalonsSetting';
 
 interface TablesFilters {
  showOccupiedTables: boolean;
@@ -13,6 +14,11 @@ interface TablesFilters {
 
 interface SalonBaseConfig {
  initData: InitiData;
+ salonsSettings: SalonsSettings;
+ onChangeSalonsSettings: <T extends keyof SalonsSettings>(
+  key: T,
+  value: SalonsSettings[T],
+ ) => unknown;
  hallsInfo: {
   data: InitiData['salons'];
   selectedHall: InitiData['salons'][number] | null;
