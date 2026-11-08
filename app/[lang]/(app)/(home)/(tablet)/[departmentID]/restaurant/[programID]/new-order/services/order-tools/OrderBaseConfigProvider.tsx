@@ -25,6 +25,17 @@ import {
  OrderItem,
  ItemProgram,
  getEmployeeCustomer,
+ getItemProgramsApi,
+ getInitDataApi,
+ getInitData,
+ getOrderApi,
+ getOtpCodesApi,
+ getOrderItemsApi,
+ getEmployeeCustomerApi,
+ getPersonApi,
+ getFreeTablesApi,
+ getOrderPaymentApi,
+ getOrderServiceRatesApi,
 } from '../newOrderApiActions';
 import { getHallKey } from '../../../salons/services/salonsApiActions';
 import {
@@ -75,7 +86,6 @@ import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-pr
 import { MdOutlineContentPasteOff } from 'react-icons/md';
 import { MdContentPaste } from 'react-icons/md';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { useOrderInitialDataQuery } from '../../hooks/useOrdersQueries';
 
 export default function OrderBaseConfigProvider({
  children,
@@ -254,7 +264,15 @@ export default function OrderBaseConfigProvider({
   isError: initError,
   isSuccess: initSuccess,
   isFetching: initFetching,
- } = useOrderInitialDataQuery();
+ } = useQuery({
+  staleTime: 'static',
+  gcTime: 0,
+  queryKey: [getInitDataApi],
+  async queryFn({ signal }) {
+   const res = await getInitData({ signal });
+   return res.data;
+  },
+ });
 
  function handleChangeSearchedItemName(newSearch: string) {
   setSearchedItemName(newSearch);
@@ -262,34 +280,6 @@ export default function OrderBaseConfigProvider({
 
  const itemProgramIsEnabled =
   initSuccess && !!selectedItemGroup && !!saleTypeValue;
- const itemProgramQueryKey = [
-  newOrderKey,
-  'item-programs',
-  saleTypeValue?.key || '',
-  String(hasServiceValue),
-  roomValue?.key || 'all',
-  contractValue?.key || 'all',
-  customerValue?.key || 'all',
- ];
- async function itemProgramQueryFn({
-  signal,
-  itemGroupID,
- }: {
-  signal: AbortSignal;
-  itemGroupID: string;
- }) {
-  const res = await getItemPrograms({
-   signal,
-   contractMenuID: contractValue?.key,
-   itemGroupID,
-   orderDateTime: new Date().toISOString(),
-   saleTypeID: saleTypeValue!.key,
-   hasService: hasServiceValue,
-   registerID: roomValue?.key,
-   customerID: customerValue?.key,
-  });
-  return res.data;
- }
  const {
   data: itemProgramsData,
   isLoading: itemProgramsLoading,
@@ -298,24 +288,57 @@ export default function OrderBaseConfigProvider({
   isError: itemProgramsError,
  } = useQuery({
   enabled: itemProgramIsEnabled,
-  queryKey: [...itemProgramQueryKey, selectedItemGroup?.key || ''],
+  queryKey: [
+   getItemProgramsApi,
+   {
+    contractMenuID: contractValue?.key,
+    itemGroupID: selectedItemGroup?.key,
+    saleTypeID: saleTypeValue?.key,
+    hasService: hasServiceValue,
+    registerID: roomValue?.key,
+    customerID: customerValue?.key,
+   },
+  ],
   async queryFn({ signal }) {
-   return await itemProgramQueryFn({
+   const result = await getItemPrograms({
+    contractMenuID: contractValue?.key,
+    itemGroupID: selectedItemGroup!.key,
+    orderDateTime: new Date().toISOString(),
+    saleTypeID: saleTypeValue!.key,
+    hasService: hasServiceValue,
+    registerID: roomValue?.key,
+    customerID: customerValue?.key,
     signal,
-    itemGroupID: selectedItemGroup!.key!,
    });
+   return result.data;
   },
  });
  // get all items
  const {} = useQuery({
-  enabled:
-   itemProgramIsEnabled && selectedItemGroup.key !== initData.itemGroups[0].key,
-  queryKey: [...itemProgramQueryKey, initData?.itemGroups[0].key],
+  enabled: itemProgramIsEnabled,
+  queryKey: [
+   getItemProgramsApi,
+   {
+    contractMenuID: contractValue?.key,
+    itemGroupID: initData?.itemGroups[0].key,
+    saleTypeID: saleTypeValue?.key,
+    hasService: hasServiceValue,
+    registerID: roomValue?.key,
+    customerID: customerValue?.key,
+   },
+  ],
   async queryFn({ signal }) {
-   return await itemProgramQueryFn({
-    signal,
+   const result = await getItemPrograms({
+    contractMenuID: contractValue?.key,
     itemGroupID: initData!.itemGroups[0].key,
+    orderDateTime: new Date().toISOString(),
+    saleTypeID: saleTypeValue!.key,
+    hasService: hasServiceValue,
+    registerID: roomValue?.key,
+    customerID: customerValue?.key,
+    signal,
    });
+   return result.data;
   },
  });
 
@@ -330,36 +353,42 @@ export default function OrderBaseConfigProvider({
    !!initData.itemGroups.length &&
    !!queryClient.getQueriesData({
     queryKey: [
-     newOrderKey,
-     'item-programs',
-     saleTypeValue?.key || '',
-     String(hasServiceValue),
-     roomValue?.key || 'all',
-     contractValue?.key || 'all',
-     initData?.itemGroups[0].key,
+     getItemProgramsApi,
+     {
+      contractMenuID: contractValue?.key,
+      itemGroupID: initData?.itemGroups[0].key,
+      saleTypeID: saleTypeValue?.key,
+      hasService: hasServiceValue,
+      registerID: roomValue?.key,
+      customerID: customerValue?.key,
+     },
     ],
    })[0] &&
    !!queryClient.getQueriesData({
     queryKey: [
-     newOrderKey,
-     'item-programs',
-     saleTypeValue?.key || '',
-     String(hasServiceValue),
-     roomValue?.key || 'all',
-     contractValue?.key || 'all',
-     initData?.itemGroups[0].key,
+     getItemProgramsApi,
+     {
+      contractMenuID: contractValue?.key,
+      itemGroupID: initData?.itemGroups[0].key,
+      saleTypeID: saleTypeValue?.key,
+      hasService: hasServiceValue,
+      registerID: roomValue?.key,
+      customerID: customerValue?.key,
+     },
     ],
    })[0][1]
   )
    return (queryClient.getQueriesData({
     queryKey: [
-     newOrderKey,
-     'item-programs',
-     saleTypeValue?.key || '',
-     String(hasServiceValue),
-     roomValue?.key || 'all',
-     contractValue?.key || 'all',
-     '-1',
+     getItemProgramsApi,
+     {
+      contractMenuID: contractValue?.key,
+      itemGroupID: initData?.itemGroups[0].key,
+      saleTypeID: saleTypeValue?.key,
+      hasService: hasServiceValue,
+      registerID: roomValue?.key,
+      customerID: customerValue?.key,
+     },
     ],
    })[0][1] || []) as ItemProgram[];
   return itemProgramsData || [];
@@ -375,7 +404,7 @@ export default function OrderBaseConfigProvider({
   staleTime: 'static',
   gcTime: 0,
   enabled: !!orderIDQuery,
-  queryKey: [newOrderKey, 'order-info', orderIDQuery?.toString()],
+  queryKey: [getOrderApi, orderIDQuery?.toString()],
   async queryFn({ signal }) {
    const { data } = await getOrder({ signal, orderID: orderIDQuery! });
    return data;
@@ -392,7 +421,7 @@ export default function OrderBaseConfigProvider({
   staleTime: 'static',
   gcTime: 0,
   enabled: !!orderIDQuery,
-  queryKey: [newOrderKey, 'order-otps', orderIDQuery?.toString()],
+  queryKey: [getOtpCodesApi, orderIDQuery?.toString()],
   async queryFn({ signal }) {
    const { data } = await getOrderOtpCodes({ signal, orderID: orderIDQuery! });
    return data;
@@ -408,7 +437,7 @@ export default function OrderBaseConfigProvider({
   staleTime: 'static',
   gcTime: 0,
   enabled: !!orderIDQuery,
-  queryKey: [newOrderKey, 'order-items', orderIDQuery],
+  queryKey: [getOrderItemsApi, orderIDQuery],
   async queryFn({ signal }) {
    const { data } = await getOrderItems({ signal, orderID: orderIDQuery! });
    orderItemsDispatch({
@@ -426,7 +455,7 @@ export default function OrderBaseConfigProvider({
  } = useQuery({
   staleTime: 'static',
   enabled: saleTypeValue?.key === SaleTypes.employee,
-  queryKey: [newOrderKey, 'employee-customer'],
+  queryKey: [getEmployeeCustomerApi],
   async queryFn({ signal }) {
    const res = await getEmployeeCustomer({ signal });
    return res.data;
@@ -436,7 +465,7 @@ export default function OrderBaseConfigProvider({
  const { data: personData } = useQuery({
   staleTime: 'static',
   enabled: !!personID,
-  queryKey: ['person', personID?.toString()],
+  queryKey: [getPersonApi],
   async queryFn({ signal }) {
    const res = await getPerson({ signal, personID: personID! });
    return res.data;
@@ -462,7 +491,7 @@ export default function OrderBaseConfigProvider({
    }
    setPersonID(res.data.personData.id);
    queryClient.setQueryData(
-    ['person', res.data.personData.id.toString()],
+    [getPersonApi, res.data.personData.id.toString()],
     res.data.personData,
    );
    orderInfoForm.clearErrors(['firstName', 'lastName']);
@@ -487,11 +516,12 @@ export default function OrderBaseConfigProvider({
   staleTime: 'static',
   gcTime: 0,
   queryKey: [
-   newOrderKey,
-   'free-tables',
-   saleTimeValue?.key,
-   orderDateValue,
-   salonIDQuery,
+   getFreeTablesApi,
+   {
+    saleTime: saleTimeValue?.key,
+    orderDate: orderDateValue,
+    salonId: salonIDQuery,
+   },
   ],
   async queryFn({ signal }) {
    const res = await getFreeTables({
@@ -517,7 +547,7 @@ export default function OrderBaseConfigProvider({
   isError: orderPaymentError,
  } = useQuery({
   enabled: !!userOrder?.id,
-  queryKey: [newOrderKey, 'order-payment', orderIDQuery?.toString()],
+  queryKey: [getOrderPaymentApi, orderIDQuery?.toString()],
   gcTime: 0,
   async queryFn({ signal }) {
    const res = await getOrderPayment({
@@ -580,11 +610,12 @@ export default function OrderBaseConfigProvider({
  } = useQuery({
   enabled: !!saleTypeValue,
   queryKey: [
-   newOrderKey,
-   'system-pricing',
-   saleTypeValue?.key || 'all',
-   roomValue?.key || 'all',
-   customerValue?.key || 'all',
+   getOrderServiceRatesApi,
+   {
+    saleType: saleTypeValue?.key,
+    room: roomValue?.key,
+    customer: customerValue?.key,
+   },
   ],
   async queryFn({ signal }) {
    const res = await getOrderServiceRates({
@@ -628,7 +659,7 @@ export default function OrderBaseConfigProvider({
    onSuccess(res) {
     if (orderIDQuery) {
      queryClient.invalidateQueries({
-      queryKey: [newOrderKey, 'order-items', orderIDQuery],
+      queryKey: [getOrderItemsApi, orderIDQuery],
      });
     }
     handleInvalidateTableOrderList();
@@ -665,7 +696,7 @@ export default function OrderBaseConfigProvider({
   onSuccess(res) {
    if (orderIDQuery) {
     queryClient.invalidateQueries({
-     queryKey: [newOrderKey, 'order-items', orderIDQuery],
+     queryKey: [getOrderItemsApi, orderIDQuery],
     });
    }
    handleInvalidateTableOrderList();
@@ -864,7 +895,7 @@ export default function OrderBaseConfigProvider({
    onSuccess(res) {
     if (orderIDQuery) {
      queryClient.invalidateQueries({
-      queryKey: [newOrderKey, 'order-items', orderIDQuery],
+      queryKey: [getOrderItemsApi, orderIDQuery],
      });
     }
     handleInvalidateTableOrderList();

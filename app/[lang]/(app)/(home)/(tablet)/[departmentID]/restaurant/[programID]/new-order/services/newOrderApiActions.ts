@@ -79,6 +79,17 @@ type OrderServiceRates = {
 } | null;
 
 type ItemGroup = Combo;
+
+type GetItemProgramsProps = {
+ itemGroupID: string;
+ contractMenuID?: string;
+ orderDateTime: string;
+ saleTypeID: string;
+ registerID?: string;
+ customerID?: string;
+ hasService: boolean;
+};
+
 interface ItemProgram {
  id: number;
  itemID: number;
@@ -226,6 +237,7 @@ function getInitData({ signal }: { signal: AbortSignal }) {
  });
 }
 
+const getItemProgramsApi = '/Restaurant/SaleInvoice/GetAllItemPrograms';
 function getItemPrograms({
  signal,
  itemGroupID,
@@ -235,15 +247,8 @@ function getItemPrograms({
  registerID,
  hasService,
  customerID,
-}: {
+}: GetItemProgramsProps & {
  signal: AbortSignal;
- itemGroupID: string;
- contractMenuID?: string;
- orderDateTime: string;
- saleTypeID: string;
- registerID?: string;
- customerID?: string;
- hasService: boolean;
 }) {
  const searchParams = new URLSearchParams([
   ['itemGroupID', itemGroupID.toString()],
@@ -261,10 +266,11 @@ function getItemPrograms({
   searchParams.set('customerID', customerID.toString());
  }
  return axios.get<ItemProgram[]>(
-  `/Restaurant/SaleInvoice/GetAllItemPrograms?${searchParams.toString()}`,
+  `${getItemProgramsApi}?${searchParams.toString()}`,
   { signal },
  );
 }
+const getFreeTablesApi = '/Restaurant/tablet/GetAllocatableTables';
 // get Free tables
 function getFreeTables({
  salonID,
@@ -284,14 +290,12 @@ function getFreeTables({
  if (salonID) {
   searchPamras.set('salonID', salonID);
  }
- return axios.get<Combo[]>(
-  `/Restaurant/tablet/GetAllocatableTables?${searchPamras.toString()}`,
-  {
-   signal,
-  },
- );
+ return axios.get<Combo[]>(`${getFreeTablesApi}?${searchPamras.toString()}`, {
+  signal,
+ });
 }
 // order
+const getOrderApi = '/Restaurant/SaleInvoice/GetOrder';
 function getOrder({
  signal,
  orderID,
@@ -299,14 +303,12 @@ function getOrder({
  signal: AbortSignal;
  orderID: number;
 }) {
- return axios.get<Order>(
-  `/Restaurant/SaleInvoice/GetOrder?orderID=${orderID}`,
-  {
-   signal,
-  },
- );
+ return axios.get<Order>(`${getOrderApi}?orderID=${orderID}`, {
+  signal,
+ });
 }
 
+const getOrderItemsApi = '/Restaurant/SaleInvoice/GetOrderItems';
 function getOrderItems({
  signal,
  orderID,
@@ -314,12 +316,9 @@ function getOrderItems({
  signal: AbortSignal;
  orderID: number;
 }) {
- return axios.get<OrderItem[]>(
-  `/Restaurant/SaleInvoice/GetOrderItems?orderID=${orderID}`,
-  {
-   signal,
-  },
- );
+ return axios.get<OrderItem[]>(`${getOrderItemsApi}?orderID=${orderID}`, {
+  signal,
+ });
 }
 
 function saveOrder({
@@ -348,6 +347,8 @@ function saveOrder({
  }>(`/Restaurant/tablet/SaveOrder?${searchParams.toString()}`, orderPackage);
 }
 
+const getOrderServiceRatesApi =
+ '/Restaurant/SaleInvoice/GetServiceDiscountRates';
 // service rates
 function getOrderServiceRates({
  orderID,
@@ -373,7 +374,7 @@ function getOrderServiceRates({
   searchParams.set('customerID', customerID.toString());
  }
  return axios.get<SystemPricing>(
-  `/Restaurant/SaleInvoice/GetServiceDiscountRates?${searchParams.toString()}`,
+  `${getOrderServiceRatesApi}?${searchParams.toString()}`,
   {
    signal,
   },
@@ -384,6 +385,7 @@ function closeOrder({ orderID }: { orderID: number }) {
  return axios.post(`/Restaurant/SaleInvoice/CloseOrder?orderID=${orderID}`);
 }
 
+const getOrderPaymentApi = '/Restaurant/SaleInvoice/GetOrderCashPrePayment';
 // order payment
 function getOrderPayment({
  orderID,
@@ -392,12 +394,9 @@ function getOrderPayment({
  orderID: number;
  signal: AbortSignal;
 }) {
- return axios.get<number>(
-  `/Restaurant/SaleInvoice/GetOrderCashPrePayment?orderID=${orderID}`,
-  {
-   signal,
-  },
- );
+ return axios.get<number>(`${getOrderPaymentApi}?orderID=${orderID}`, {
+  signal,
+ });
 }
 
 // subscribers
@@ -564,6 +563,7 @@ function getWaiters({
  );
 }
 
+const getPersonApi = '/Public/Person/ReadPersonByKey';
 function getPerson({
  signal,
  personID,
@@ -573,7 +573,7 @@ function getPerson({
 }) {
  const searchParams = new URLSearchParams([['personID', personID.toString()]]);
  return axios.get<Person['personData']>(
-  `/Public/Person/ReadPersonByKey?${searchParams.toString()}`,
+  `${getPersonApi}?${searchParams.toString()}`,
   {
    signal,
   },
@@ -634,8 +634,9 @@ function getCustomerContract({
  );
 }
 
+const getEmployeeCustomerApi = '/Restaurant/Tablet/GetEmployeeCustomer';
 function getEmployeeCustomer({ signal }: { signal: AbortSignal }) {
- return axios.get<Customer>('/Restaurant/Tablet/GetEmployeeCustomer', {
+ return axios.get<Customer>(getEmployeeCustomerApi, {
   signal,
  });
 }
@@ -680,6 +681,7 @@ export type {
  Person,
 };
 
+const getOtpCodesApi = '/Restaurant/SaleInvoice/GetOTPCodes';
 function getOrderOtpCodes({
  signal,
  orderID,
@@ -688,10 +690,9 @@ function getOrderOtpCodes({
  orderID: number;
 }) {
  const searchParams = new URLSearchParams([['orderID', orderID.toString()]]);
- return axios.get<string[]>(
-  `/Restaurant/SaleInvoice/GetOTPCodes?${searchParams.toString()}`,
-  { signal },
- );
+ return axios.get<string[]>(`${getOtpCodesApi}?${searchParams.toString()}`, {
+  signal,
+ });
 }
 
 function printNewOrderInvoice(orderId: number) {
@@ -713,10 +714,21 @@ function printNewOrderCash(orderId: number) {
  );
 }
 
+export type { GetItemProgramsProps };
+
 export {
  newOrderKey,
  personKey,
  getInitDataApi,
+ getItemProgramsApi,
+ getOrderApi,
+ getOtpCodesApi,
+ getOrderItemsApi,
+ getEmployeeCustomerApi,
+ getPersonApi,
+ getFreeTablesApi,
+ getOrderPaymentApi,
+ getOrderServiceRatesApi,
  getFreeTables,
  getInitData,
  getItemPrograms,
