@@ -12,7 +12,6 @@ import {
  type SaveOrderPackage,
  newOrderKey,
  getOrderOtpCodes,
- getInitData,
  getItemPrograms,
  getOrderItems,
  getOrder,
@@ -76,6 +75,11 @@ import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-pr
 import { MdOutlineContentPasteOff } from 'react-icons/md';
 import { MdContentPaste } from 'react-icons/md';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import {
+ useItemProgramsQuery,
+ useOrderInitialDataQuery,
+ useUserOrderQuery,
+} from '../../hooks/useOrder';
 
 export default function OrderBaseConfigProvider({
  children,
@@ -254,15 +258,7 @@ export default function OrderBaseConfigProvider({
   isError: initError,
   isSuccess: initSuccess,
   isFetching: initFetching,
- } = useQuery({
-  staleTime: 'static',
-  gcTime: 0,
-  queryKey: [newOrderKey, 'initial-data'],
-  async queryFn({ signal }) {
-   const res = await getInitData({ signal });
-   return res.data;
-  },
- });
+ } = useOrderInitialDataQuery();
 
  function handleChangeSearchedItemName(newSearch: string) {
   setSearchedItemName(newSearch);
@@ -279,51 +275,38 @@ export default function OrderBaseConfigProvider({
   contractValue?.key || 'all',
   customerValue?.key || 'all',
  ];
- async function itemProgramQueryFn({
-  signal,
-  itemGroupID,
- }: {
-  signal: AbortSignal;
-  itemGroupID: string;
- }) {
-  const res = await getItemPrograms({
-   signal,
-   contractMenuID: contractValue?.key,
-   itemGroupID,
-   orderDateTime: new Date().toISOString(),
-   saleTypeID: saleTypeValue!.key,
-   hasService: hasServiceValue,
-   registerID: roomValue?.key,
-   customerID: customerValue?.key,
-  });
-  return res.data;
- }
+
  const {
   data: itemProgramsData,
   isLoading: itemProgramsLoading,
   isFetching: itemProgramsFetching,
   isSuccess: itemProgramsSuccess,
   isError: itemProgramsError,
- } = useQuery({
+ } = useItemProgramsQuery({
   enabled: itemProgramIsEnabled,
-  queryKey: [...itemProgramQueryKey, selectedItemGroup?.key || ''],
-  async queryFn({ signal }) {
-   return await itemProgramQueryFn({
-    signal,
-    itemGroupID: selectedItemGroup!.key!,
-   });
+  props: {
+   contractMenuID: contractValue?.key,
+   itemGroupID: selectedItemGroup!.key,
+   orderDateTime: new Date().toISOString(),
+   saleTypeID: saleTypeValue!.key,
+   hasService: hasServiceValue,
+   registerID: roomValue?.key,
+   customerID: customerValue?.key,
   },
  });
+
  // get all items
- const {} = useQuery({
+ const {} = useItemProgramsQuery({
   enabled:
    itemProgramIsEnabled && selectedItemGroup.key !== initData.itemGroups[0].key,
-  queryKey: [...itemProgramQueryKey, initData?.itemGroups[0].key],
-  async queryFn({ signal }) {
-   return await itemProgramQueryFn({
-    signal,
-    itemGroupID: initData!.itemGroups[0].key,
-   });
+  props: {
+   contractMenuID: contractValue?.key,
+   itemGroupID: initData!.itemGroups[0].key,
+   orderDateTime: new Date().toISOString(),
+   saleTypeID: saleTypeValue!.key,
+   hasService: hasServiceValue,
+   registerID: roomValue?.key,
+   customerID: customerValue?.key,
   },
  });
 
@@ -378,14 +361,10 @@ export default function OrderBaseConfigProvider({
   isLoading: userOrderLoading,
   isError: userOrderError,
   isSuccess: userOrderSuccess,
- } = useQuery({
-  staleTime: 'static',
-  gcTime: 0,
+ } = useUserOrderQuery({
   enabled: !!orderIDQuery,
-  queryKey: [newOrderKey, 'order-info', orderIDQuery?.toString()],
-  async queryFn({ signal }) {
-   const { data } = await getOrder({ signal, orderID: orderIDQuery! });
-   return data;
+  props: {
+   orderId: orderIDQuery || 0,
   },
  });
 

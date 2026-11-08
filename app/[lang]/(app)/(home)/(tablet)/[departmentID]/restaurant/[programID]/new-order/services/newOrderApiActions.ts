@@ -73,6 +73,17 @@ interface InitialData {
  changeTable: boolean;
 }
 
+interface GetItemProgramsProps {
+ signal: AbortSignal;
+ itemGroupID: string;
+ contractMenuID?: string;
+ orderDateTime: string;
+ saleTypeID: string;
+ registerID?: string;
+ customerID?: string;
+ hasService: boolean;
+}
+
 type OrderServiceRates = {
  serviceRate: number;
  discountRate: number;
@@ -219,12 +230,14 @@ interface Tag {
  comment: string;
 }
 
+const getInitialDataApi = '/Restaurant/SaleInvoice/GetInitDatas';
 function getInitData({ signal }: { signal: AbortSignal }) {
- return axios.get<InitialData>('/Restaurant/SaleInvoice/GetInitDatas', {
+ return axios.get<InitialData>(getInitialDataApi, {
   signal,
  });
 }
 
+const getItemProgramsApi = '/Restaurant/SaleInvoice/GetAllItemPrograms';
 function getItemPrograms({
  signal,
  itemGroupID,
@@ -234,16 +247,7 @@ function getItemPrograms({
  registerID,
  hasService,
  customerID,
-}: {
- signal: AbortSignal;
- itemGroupID: string;
- contractMenuID?: string;
- orderDateTime: string;
- saleTypeID: string;
- registerID?: string;
- customerID?: string;
- hasService: boolean;
-}) {
+}: GetItemProgramsProps) {
  const searchParams = new URLSearchParams([
   ['itemGroupID', itemGroupID.toString()],
   ['orderDateTime', orderDateTime],
@@ -260,7 +264,7 @@ function getItemPrograms({
   searchParams.set('customerID', customerID.toString());
  }
  return axios.get<ItemProgram[]>(
-  `/Restaurant/SaleInvoice/GetAllItemPrograms?${searchParams.toString()}`,
+  `${getItemProgramsApi}?${searchParams.toString()}`,
   { signal },
  );
 }
@@ -291,6 +295,7 @@ function getFreeTables({
  );
 }
 // order
+const getOrderApi = '/Restaurant/SaleInvoice/GetOrder';
 function getOrder({
  signal,
  orderID,
@@ -298,12 +303,9 @@ function getOrder({
  signal: AbortSignal;
  orderID: number;
 }) {
- return axios.get<Order>(
-  `/Restaurant/SaleInvoice/GetOrder?orderID=${orderID}`,
-  {
-   signal,
-  },
- );
+ return axios.get<Order>(`${getOrderApi}?orderID=${orderID}`, {
+  signal,
+ });
 }
 
 function getOrderItems({
@@ -712,9 +714,13 @@ function printNewOrderCash(orderId: number) {
  );
 }
 
+export type { GetItemProgramsProps };
 export {
  newOrderKey,
  personKey,
+ getItemProgramsApi,
+ getInitialDataApi,
+ getOrderApi,
  getFreeTables,
  getInitData,
  getItemPrograms,
