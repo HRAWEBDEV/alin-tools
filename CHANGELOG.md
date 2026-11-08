@@ -1,5 +1,9 @@
 # CHANGE LOGS
 
+## 2.5.0
+
+- review new order query keys (hra-done)
+
 ## 2.4.2
 
 - add table send kitchen state indicator (hra-done)
