@@ -136,6 +136,7 @@
   "connectingToPaymentDevice": "درحال اتصال به دستگاه",
   "noDeviceDetected": "دستگاهی یافت نشد",
   "searchForDeviceAgain": "جستجو مجدد",
-  "autoTablePaymentReceiptPrint": "پرینت خودکار رسید پرداخت"
+  "autoTablePaymentReceiptPrint": "پرینت خودکار رسید پرداخت",
+  "paymentSuccessfullyDone": "پرداخت با موفقیت انجام شد"
  }
 }

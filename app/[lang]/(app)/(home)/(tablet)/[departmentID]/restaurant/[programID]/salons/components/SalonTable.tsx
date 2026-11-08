@@ -28,7 +28,7 @@ import { IoAlbums, IoPrint } from 'react-icons/io5';
 import { useNewOrderPrintCash } from '../../new-order/hooks/useNewOrderPrintCash';
 import { Spinner } from '@/components/ui/spinner';
 import { PiChefHatFill } from 'react-icons/pi';
-import { MdOutlinePayments } from 'react-icons/md';
+import { TbCreditCard } from 'react-icons/tb';
 
 export default function SalonTable({
  table,
@@ -216,7 +216,7 @@ export default function SalonTable({
          setIsOpen(false);
         }}
        >
-        <MdOutlinePayments className='size-8 text-inherit' />
+        <TbCreditCard className='size-8 text-inherit' />
         {tableUtils.dic.tables.pay}
        </Button>
       )}

@@ -13,12 +13,15 @@ import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import PaymentInvoice from './PaymentInvoice';
 import PaymentOrderInfo from './PaymentOrderInfo';
 import PaymentShop from './PaymentShop';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
  getOrder,
+ getOrderPaymentApi,
  getOrderApi,
  getOrderItems,
  getOrderItemsApi,
+ getOtpCodesApi,
+ getOrderOtpCodes,
 } from '../../../new-order/services/newOrderApiActions';
 import UnExpectedError from '@/app/[lang]/(app)/components/UnExpectedError';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -30,6 +33,11 @@ import { Spinner } from '@/components/ui/spinner';
 import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
 import { AlertTriangleIcon, AlertCircleIcon } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { saveAndCloseOrder } from '../../../new-order/services/orderInvoicePaymentApiActions';
+import { PaymentType } from '../../../new-order/utils/PaymentTypes';
+import { toast } from 'sonner';
+import { AxiosError } from 'axios';
+import { useSalonBaseConfigContext } from '../../services/salon-base-config/salonBaseConfigContext';
 
 export default function TablePaymentModal({
  dic,
@@ -44,10 +52,12 @@ export default function TablePaymentModal({
  tableID: number;
  onOpenChange: (open: boolean) => unknown;
 }) {
- const { status, connect } = useN950Pos();
+ const queryClient = useQueryClient();
+ const { status, connect, handlePurchase, handlePrintInvoice } = useN950Pos();
  const [activeOrderId, setActiveOrderId] = useState(orderId);
  const { localeInfo } = useBaseConfig();
  const [activeTab, setActiveTab] = useState('invoice');
+ const { salonsSettings } = useSalonBaseConfigContext();
 
  const {
   data: userOrder,
@@ -95,13 +105,103 @@ export default function TablePaymentModal({
   },
  });
 
+ const {
+  data: orderOtps,
+  isLoading: orderOtpsLoading,
+  isFetching: orderOtpsIsFetching,
+  isError: orderOtpsIsError,
+  isSuccess: orderOtpsIsSuccess,
+ } = useQuery({
+  staleTime: 'static',
+  gcTime: 0,
+  enabled: !!orderId,
+  queryKey: [getOtpCodesApi, orderId?.toString()],
+  async queryFn({ signal }) {
+   const { data } = await getOrderOtpCodes({ signal, orderID: orderId! });
+   return data;
+  },
+ });
+
  const userOrderItemsTotalNetValue = useMemo(() => {
   if (!userOrderItemsSuccess) return 0;
   return userOrderItems.reduce((acc, cur) => cur.price * cur.amount + acc, 0);
  }, [userOrderItemsSuccess, userOrderItems]);
 
+ function confirmPrintInvoice() {
+  if (!userOrderSuccess || !userOrderItemsSuccess) return;
+  handlePrintInvoice({
+   invoice: {
+    num: userOrder.orderNo,
+    creationTime: new Date().toISOString(),
+    customerName: userOrder.customerName || '',
+    phoneNumber: '',
+    waiterName: userOrder.waiterPersonFullName || '',
+    tableName: userOrder.tableNo?.toString() || '',
+    guestQty: userOrder.persons || 0,
+    sumQty: userOrderItems.length || 0,
+    sumPrice: 0,
+    description: '',
+    taxAmount: userOrder.tax,
+    discountAmount: userOrder.discount || 0,
+    creditPrice: 0,
+    serviceAmount: userOrder.service,
+    price: Math.ceil(userOrder.payableValue),
+    roundedAmount: 0,
+    restaurantName: '',
+    farsiDate: '',
+    invoices: null,
+    invoiceDetails: userOrderItems.map((item) => ({
+     sumUnitPrice: item.netValue,
+     name: item.itemName || '',
+     qty: item.amount,
+     toz: '',
+    })),
+   },
+  });
+ }
+
+ const { mutate: confirmPayment, isPending: isPendingConfirmPayment } =
+  useMutation({
+   mutationFn() {
+    return saveAndCloseOrder({
+     order: userOrder!,
+     orderItems: userOrderItems!,
+     sendToKitchen: false,
+     printToCashBox: false,
+     otpCodes: orderOtps || [],
+     cash: {
+      bankAccountID: null,
+      // todo fill pay ref no
+      payRefNo: '21',
+      payTypeID: Number(PaymentType.creditCard),
+      sValue: userOrder!.payableValue,
+     },
+    });
+   },
+   onSuccess() {
+    queryClient.invalidateQueries({
+     queryKey: [getOrderApi, orderId.toString()],
+    });
+    queryClient.invalidateQueries({
+     queryKey: [getOrderPaymentApi, orderId.toString()],
+    });
+    queryClient.invalidateQueries({
+     queryKey: [getOrderItemsApi, orderId],
+    });
+    toast.error(dic.orderPayment.paymentSuccessfullyDone);
+    if (salonsSettings.autoTablePaymentReceiptPrint) {
+     confirmPrintInvoice();
+     onOpenChange(false);
+    }
+   },
+
+   onError(err: AxiosError<string>) {
+    toast.error(err.response?.data || '');
+   },
+  });
+
  function render() {
-  if (userOrderError || userOrderItemsError) {
+  if (userOrderError || userOrderItemsError || orderOtpsIsError) {
    return (
     <div className='my-2'>
      <UnExpectedError />
@@ -112,7 +212,9 @@ export default function TablePaymentModal({
    userOrderLoading ||
    userOrderItemsLoading ||
    !userOrderSuccess ||
-   !userOrderItemsSuccess
+   !userOrderItemsSuccess ||
+   orderOtpsLoading ||
+   !orderOtpsIsSuccess
   ) {
    return (
     <div className='my-2'>
@@ -155,6 +257,7 @@ export default function TablePaymentModal({
   <Dialog
    open={open}
    onOpenChange={(newValue) => {
+    if (isPendingConfirmPayment) return;
     onOpenChange(newValue);
    }}
   >
@@ -228,11 +331,35 @@ export default function TablePaymentModal({
      )}
     </div>
     <DialogFooter className='py-2 px-4 border-t border-border'>
-     <Button variant={'outline'} onClick={() => onOpenChange(false)}>
+     <Button
+      variant={'outline'}
+      disabled={isPendingConfirmPayment}
+      onClick={() => {
+       if (isPendingConfirmPayment) return;
+       onOpenChange(false);
+      }}
+     >
       {dic.orderPayment.close}
      </Button>
-     <Button disabled={status !== 'connected'} className='sm:w-36'>
-      {status === 'connecting' && <Spinner />}
+     <Button
+      disabled={
+       status !== 'connected' ||
+       !userOrderSuccess ||
+       !userOrder.payableValue ||
+       isPendingConfirmPayment ||
+       !orderOtpsIsSuccess
+      }
+      className='sm:w-36'
+      onClick={() => {
+       if (!userOrderSuccess) return;
+       const roundPayableValue = userOrder.payableValue;
+       if (!roundPayableValue) return;
+       handlePurchase({
+        paymentValue: Math.ceil(userOrder.payableValue).toString(),
+       });
+      }}
+     >
+      {isPendingConfirmPayment && <Spinner />}
       {dic.orderPayment.pay}
      </Button>
     </DialogFooter>
