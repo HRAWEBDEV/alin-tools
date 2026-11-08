@@ -12,7 +12,6 @@ import {
  type SaveOrderPackage,
  newOrderKey,
  getOrderOtpCodes,
- getInitData,
  getItemPrograms,
  getOrderItems,
  getOrder,
@@ -76,6 +75,7 @@ import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-pr
 import { MdOutlineContentPasteOff } from 'react-icons/md';
 import { MdContentPaste } from 'react-icons/md';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { useOrderInitialDataQuery } from '../../hooks/useOrdersQueries';
 
 export default function OrderBaseConfigProvider({
  children,
@@ -254,15 +254,7 @@ export default function OrderBaseConfigProvider({
   isError: initError,
   isSuccess: initSuccess,
   isFetching: initFetching,
- } = useQuery({
-  staleTime: 'static',
-  gcTime: 0,
-  queryKey: [newOrderKey, 'initial-data'],
-  async queryFn({ signal }) {
-   const res = await getInitData({ signal });
-   return res.data;
-  },
- });
+ } = useOrderInitialDataQuery();
 
  function handleChangeSearchedItemName(newSearch: string) {
   setSearchedItemName(newSearch);

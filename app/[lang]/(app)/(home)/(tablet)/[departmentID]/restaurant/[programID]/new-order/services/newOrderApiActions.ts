@@ -219,8 +219,9 @@ interface Tag {
  comment: string;
 }
 
+const getInitDataApi = '/Restaurant/SaleInvoice/GetInitDatas';
 function getInitData({ signal }: { signal: AbortSignal }) {
- return axios.get<InitialData>('/Restaurant/SaleInvoice/GetInitDatas', {
+ return axios.get<InitialData>(getInitDataApi, {
   signal,
  });
 }
@@ -715,6 +716,7 @@ function printNewOrderCash(orderId: number) {
 export {
  newOrderKey,
  personKey,
+ getInitDataApi,
  getFreeTables,
  getInitData,
  getItemPrograms,
