@@ -28,6 +28,7 @@ import { IoAlbums, IoPrint } from 'react-icons/io5';
 import { useNewOrderPrintCash } from '../../new-order/hooks/useNewOrderPrintCash';
 import { Spinner } from '@/components/ui/spinner';
 import { PiChefHatFill } from 'react-icons/pi';
+import { MdOutlinePayments } from 'react-icons/md';
 
 export default function SalonTable({
  table,
@@ -204,6 +205,21 @@ export default function SalonTable({
          {tableUtils.dic.tables.changeTableState}
         </Button>
        )}
+      {!!table.orderID && (
+       <Button
+        variant='outline'
+        className='justify-start text-start h-12 text-destructive'
+        size='lg'
+        disabled={!tableUtils.access.order.payment}
+        onClick={() => {
+         tableUtils.onToggleTablePayment();
+         setIsOpen(false);
+        }}
+       >
+        <MdOutlinePayments className='size-8 text-inherit' />
+        {tableUtils.dic.tables.pay}
+       </Button>
+      )}
       {table.orderCount === 1 && table.orderID && (
        <Button
         variant='outline'

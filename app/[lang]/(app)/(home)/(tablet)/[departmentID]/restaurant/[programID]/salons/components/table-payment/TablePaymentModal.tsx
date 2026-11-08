@@ -23,15 +23,6 @@ import UnExpectedError from '@/app/[lang]/(app)/components/UnExpectedError';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { getHallKey, getTableOrders } from '../../services/salonsApiActions';
-import { useQueryClient } from '@tanstack/react-query';
-import {
- saveAndCloseOrder,
- sendToPcPos,
-} from '../../../new-order/services/orderInvoicePaymentApiActions';
-import { PaymentType } from '../../../new-order/utils/PaymentTypes';
-import { toast } from 'sonner';
-import { AxiosError } from 'axios';
-import { OrderInvoicePayment } from '../../../new-order/schemas/orderInvoicePaymentSchema';
 
 export default function TablePaymentModal({
  dic,
@@ -46,7 +37,6 @@ export default function TablePaymentModal({
  tableID: number;
  onOpenChange: (open: boolean) => unknown;
 }) {
- const queryClient = useQueryClient();
  const [activeOrderId, setActiveOrderId] = useState(orderId);
  const { localeInfo } = useBaseConfig();
  const [activeTab, setActiveTab] = useState('invoice');

@@ -49,6 +49,7 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
    changeShowTransferTableConfirm,
    changeShowMergeTable,
    changeShowMergeTableConfirm,
+   onToggleTablePayment,
   },
  } = useSalonBaseConfigContext();
 
@@ -94,6 +95,7 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
       showTransferTable={showTransferTable}
       tableTypes={tableTypes}
       transferTableTo={transferTableTo}
+      onToggleTablePayment={onToggleTablePayment}
      />
      <div
       className={`${isDisplayMinimal ? 'col-span-3' : 'col-span-2'} flex flex-col`}
@@ -136,6 +138,7 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
       showTransferTable={showTransferTable}
       tableTypes={tableTypes}
       transferTableTo={transferTableTo}
+      onToggleTablePayment={onToggleTablePayment}
      />
      <div
       className={`${isDisplayMinimal ? 'col-span-3' : 'col-span-2'} flex flex-col`}
@@ -198,6 +201,7 @@ export default function SalonTables({ dic }: { dic: SalonsDictionary }) {
          showTransferTable={showTransferTable}
          tableTypes={tableTypes}
          transferTableTo={transferTableTo}
+         onToggleTablePayment={onToggleTablePayment}
         />
        ))}
       </div>
