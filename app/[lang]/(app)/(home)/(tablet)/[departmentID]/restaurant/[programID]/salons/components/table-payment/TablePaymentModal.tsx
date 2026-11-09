@@ -286,7 +286,7 @@ export default function TablePaymentModal({
     });
     toast.success(dic.orderPayment.paymentSuccessfullyDone);
    }
-  } else if (posResponse.RC === '1') {
+  } else {
    toast.error(dic.orderPayment.paymentUnSuccessfull);
   }
  }, [posResponse, lastOperation, confirmPayment, dic, confirmPrintInvoice]);
