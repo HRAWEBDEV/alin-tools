@@ -137,6 +137,9 @@
   "noDeviceDetected": "دستگاهی یافت نشد",
   "searchForDeviceAgain": "جستجو مجدد",
   "autoTablePaymentReceiptPrint": "پرینت خودکار رسید پرداخت",
-  "paymentSuccessfullyDone": "پرداخت با موفقیت انجام شد"
+  "paymentSuccessfullyDone": "پرداخت با موفقیت انجام شد",
+  "confirmPaymentSuccessfullyDone": "پرداخت با موفقیت ثبت شد",
+  "paymentUnSuccessfull": "پرداخت ناموفق بود",
+  "confirmPaymentUnSuccessfull": "پرداخت ثبت نشد"
  }
 }

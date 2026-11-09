@@ -1,5 +1,5 @@
 'use client';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import {
  Dialog,
  DialogTitle,
@@ -38,6 +38,7 @@ import { PaymentType } from '../../../new-order/utils/PaymentTypes';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
 import { useSalonBaseConfigContext } from '../../services/salon-base-config/salonBaseConfigContext';
+import { useUserInfoRouter } from '@/app/[lang]/(app)/login/services/userinfo-provider/UserInfoRouterContext';
 
 export default function TablePaymentModal({
  dic,
@@ -53,11 +54,19 @@ export default function TablePaymentModal({
  onOpenChange: (open: boolean) => unknown;
 }) {
  const queryClient = useQueryClient();
- const { status, connect, handlePurchase, handlePrintInvoice } = useN950Pos();
+ const {
+  status,
+  lastOperation,
+  posResponse,
+  connect,
+  handlePurchase,
+  handlePrintInvoice,
+ } = useN950Pos();
  const [activeOrderId, setActiveOrderId] = useState(orderId);
  const { localeInfo } = useBaseConfig();
  const [activeTab, setActiveTab] = useState('invoice');
  const { salonsSettings } = useSalonBaseConfigContext();
+ const { routeOwner, routeProgram } = useUserInfoRouter();
 
  const {
   data: userOrder,
@@ -127,12 +136,16 @@ export default function TablePaymentModal({
   return userOrderItems.reduce((acc, cur) => cur.price * cur.amount + acc, 0);
  }, [userOrderItemsSuccess, userOrderItems]);
 
- function confirmPrintInvoice() {
+ const confirmPrintInvoice = useCallback(() => {
   if (!userOrderSuccess || !userOrderItemsSuccess) return;
   handlePrintInvoice({
    invoice: {
     num: userOrder.orderNo,
-    creationTime: new Date().toISOString(),
+    creationTime: new Date().toLocaleTimeString('fa', {
+     hour: '2-digit',
+     minute: '2-digit',
+     second: '2-digit',
+    }),
     customerName: userOrder.customerName || '',
     phoneNumber: '',
     waiterName: userOrder.waiterPersonFullName || '',
@@ -147,8 +160,12 @@ export default function TablePaymentModal({
     serviceAmount: userOrder.service,
     price: Math.ceil(userOrder.payableValue),
     roundedAmount: 0,
-    restaurantName: '',
-    farsiDate: '',
+    restaurantName: routeOwner.name + ' - ' + routeProgram.name,
+    farsiDate: new Date().toLocaleDateString('fa', {
+     year: 'numeric',
+     month: '2-digit',
+     day: '2-digit',
+    }),
     invoices: null,
     invoiceDetails: userOrderItems.map((item) => ({
      sumUnitPrice: item.netValue,
@@ -158,11 +175,19 @@ export default function TablePaymentModal({
     })),
    },
   });
- }
+ }, [
+  userOrderSuccess,
+  userOrderItemsSuccess,
+  userOrder,
+  handlePrintInvoice,
+  routeOwner,
+  routeProgram,
+  userOrderItems,
+ ]);
 
  const { mutate: confirmPayment, isPending: isPendingConfirmPayment } =
   useMutation({
-   mutationFn() {
+   mutationFn({ refNo }: { refNo: string }) {
     return saveAndCloseOrder({
      order: userOrder!,
      orderItems: userOrderItems!,
@@ -171,8 +196,7 @@ export default function TablePaymentModal({
      otpCodes: orderOtps || [],
      cash: {
       bankAccountID: null,
-      // todo fill pay ref no
-      payRefNo: '21',
+      payRefNo: refNo,
       payTypeID: Number(PaymentType.creditCard),
       sValue: userOrder!.payableValue,
      },
@@ -188,15 +212,15 @@ export default function TablePaymentModal({
     queryClient.invalidateQueries({
      queryKey: [getOrderItemsApi, orderId],
     });
-    toast.error(dic.orderPayment.paymentSuccessfullyDone);
+    toast.success(dic.orderPayment.confirmPaymentSuccessfullyDone);
     if (salonsSettings.autoTablePaymentReceiptPrint) {
      confirmPrintInvoice();
      onOpenChange(false);
     }
    },
-
    onError(err: AxiosError<string>) {
     toast.error(err.response?.data || '');
+    toast.error(dic.orderPayment.confirmPaymentUnSuccessfull);
    },
   });
 
@@ -253,6 +277,20 @@ export default function TablePaymentModal({
   return null;
  }
 
+ useEffect(() => {
+  if (!posResponse) return;
+  if (posResponse.RC === '0') {
+   if (lastOperation === 'purchase') {
+    confirmPayment({
+     refNo: posResponse.referenceNumber,
+    });
+    toast.success(dic.orderPayment.paymentSuccessfullyDone);
+   }
+  } else if (posResponse.RC === '1') {
+   toast.error(dic.orderPayment.paymentUnSuccessfull);
+  }
+ }, [posResponse, lastOperation, confirmPayment, dic, confirmPrintInvoice]);
+
  return (
   <Dialog
    open={open}
@@ -294,9 +332,8 @@ export default function TablePaymentModal({
        )}
       </TabsList>
      </Tabs>
-     <div>{render()}</div>
      {status !== 'connected' && (
-      <div>
+      <div className='mt-2'>
        {status === 'connecting' && (
         <div>
          <Alert className='max-w-md border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-50'>
@@ -329,6 +366,7 @@ export default function TablePaymentModal({
        )}
       </div>
      )}
+     <div>{render()}</div>
     </div>
     <DialogFooter className='py-2 px-4 border-t border-border'>
      <Button

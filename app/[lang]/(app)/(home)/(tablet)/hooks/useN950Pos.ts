@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 const SOCKET_ADDRESS = 'ws://127.0.0.1:1372/';
+const APP_ID = '1';
 
 type ConnectionStatus = 'connecting' | 'connected' | 'error' | 'disconnected';
 
@@ -102,6 +103,7 @@ export function useN950Pos() {
 
  const sendMessage = useCallback(
   (message: object) => {
+   setPosResponse(null);
    if (!socket || socket.readyState !== WebSocket.OPEN) {
     throw new Error('WebSocket is not open');
    }
@@ -127,6 +129,7 @@ export function useN950Pos() {
     RequestType: 'Sale',
     AM: paymentValue,
     paymentType: 'CARD',
+    AppID: APP_ID,
     ID: '',
     GovID: '',
     SC: '',
@@ -141,6 +144,7 @@ export function useN950Pos() {
    sendMessage({
     CompanyName: 'SEP',
     RequestType: 'receiptBitMap',
+    AppID: APP_ID,
     invoice,
    });
   },

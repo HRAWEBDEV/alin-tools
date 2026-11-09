@@ -5,7 +5,7 @@ interface SalonsSettings {
 
 const defaultSalonsSettings: SalonsSettings = {
  ltrTablesDirection: false,
- autoTablePaymentReceiptPrint: false,
+ autoTablePaymentReceiptPrint: true,
 };
 
 const salonsSettingsKey = 'salons-settings';
