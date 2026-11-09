@@ -215,8 +215,8 @@ export default function TablePaymentModal({
     toast.success(dic.orderPayment.confirmPaymentSuccessfullyDone);
     if (salonsSettings.autoTablePaymentReceiptPrint) {
      confirmPrintInvoice();
-     onOpenChange(false);
     }
+    onOpenChange(false);
    },
    onError(err: AxiosError<string>) {
     toast.error(err.response?.data || '');
