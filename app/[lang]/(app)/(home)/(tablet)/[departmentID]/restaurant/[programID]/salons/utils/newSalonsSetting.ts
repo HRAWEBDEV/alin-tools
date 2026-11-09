@@ -1,9 +1,11 @@
 interface SalonsSettings {
  ltrTablesDirection: boolean;
+ autoTablePaymentReceiptPrint: boolean;
 }
 
 const defaultSalonsSettings: SalonsSettings = {
  ltrTablesDirection: false,
+ autoTablePaymentReceiptPrint: true,
 };
 
 const salonsSettingsKey = 'salons-settings';

@@ -1,5 +1,13 @@
 # CHANGE LOGS
 
+## 3.0.0
+
+- add table payment feature (hra-done)
+
+## 2.5.0
+
+- review new order query keys (hra-done)
+
 ## 2.4.2
 
 - add table send kitchen state indicator (hra-done)

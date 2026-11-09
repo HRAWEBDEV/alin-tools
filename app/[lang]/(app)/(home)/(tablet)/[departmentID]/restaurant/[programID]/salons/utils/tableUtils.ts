@@ -18,6 +18,7 @@ export type TableUtils =
     changeShowMergeTable: SalonBaseConfig['tablesInfo']['changeShowMergeTable'];
     mergeTableTo: SalonBaseConfig['tablesInfo']['mergeTableTo'];
     transferTableTo: SalonBaseConfig['tablesInfo']['transferTableTo'];
+    onToggleTablePayment: SalonBaseConfig['tablesInfo']['onToggleTablePayment'];
     access: SalonBaseConfig['access'];
    }
  | {

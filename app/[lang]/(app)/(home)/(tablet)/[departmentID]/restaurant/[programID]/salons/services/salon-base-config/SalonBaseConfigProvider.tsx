@@ -41,6 +41,7 @@ import {
  getSalonsSettings,
  saveSalonsSettings,
 } from '../../utils/newSalonsSetting';
+import TablePaymentModal from '../../components/table-payment/TablePaymentModal';
 
 const salonsRefreshStaleTime = 1000 * 60; // per minute
 
@@ -78,6 +79,7 @@ export default function SalonBaseConfigProvider({
  const [lastTablesUpdate, setLastTablesUpdate] = useState<Date | null>(null);
  const [showChangeTableState, setShowChangeTableState] = useState(false);
  const [showMergeTable, setShowMergeTable] = useState(false);
+ const [showTablePayment, setShowTablePayment] = useState(false);
  const [showMergeTableConfirm, setShowMergeTableConfirm] = useState(false);
  const [showTransferTable, setShowTransferTable] = useState(false);
  const [showTransferTableConfirm, setShowTransferTableConfirm] =
@@ -111,6 +113,11 @@ export default function SalonBaseConfigProvider({
   return null;
  });
 
+ // payment
+ function handleToggleTablePayment() {
+  setShowTablePayment((pre) => !pre);
+ }
+
  const {
   data: initData = {
    salons: [],
@@ -120,6 +127,7 @@ export default function SalonBaseConfigProvider({
    defaultSaleTimeID: 0,
    defaultPrintCashBox: 0,
    multiOrder: false,
+   pocTabletBankID: 0,
   },
   isFetching: initDataIsFetching,
   isLoading: initDataIsLoading,
@@ -134,6 +142,7 @@ export default function SalonBaseConfigProvider({
    defaultSaleTimeID: 0,
    defaultPrintCashBox: 0,
    multiOrder: false,
+   pocTabletBankID: 0,
   },
   queryKey: [getHallKey, 'list'],
   staleTime: 1000 * 60 * 60,
@@ -144,7 +153,7 @@ export default function SalonBaseConfigProvider({
  });
 
  // change setting
- function changeSalonsSettings<T extends keyof SalonsSettings>(
+ function handleChangeSalonsSettings<T extends keyof SalonsSettings>(
   key: T,
   value: SalonsSettings[T],
  ) {
@@ -158,7 +167,7 @@ export default function SalonBaseConfigProvider({
  //
  function changeLtrTablesDirection(value?: boolean) {
   const newState = value === undefined ? !ltrTablesDirection : value;
-  changeSalonsSettings('ltrTablesDirection', newState);
+  handleChangeSalonsSettings('ltrTablesDirection', newState);
   setLtrTablesDirection(newState);
  }
  // tables filters
@@ -391,6 +400,8 @@ export default function SalonBaseConfigProvider({
 
  const ctx: SalonBaseConfig = {
   initData: initData!,
+  salonsSettings,
+  onChangeSalonsSettings: handleChangeSalonsSettings,
   hallsInfo: {
    data: initData!.salons,
    isFetching: initDataIsFetching,
@@ -439,6 +450,7 @@ export default function SalonBaseConfigProvider({
    changeShowTransferTableConfirm,
    changeShowMergeTable,
    changeShowMergeTableConfirm,
+   onToggleTablePayment: handleToggleTablePayment,
   },
   access: {
    order: userAccessibility['restaurant']['order'],
@@ -490,6 +502,17 @@ export default function SalonBaseConfigProvider({
  return (
   <salonBaseConfigContext.Provider value={ctx}>
    {children}
+   {!!selectedTable &&
+    showTablePayment &&
+    userAccessibility.restaurant.order.payment && (
+     <TablePaymentModal
+      dic={dic}
+      orderId={selectedTable.orderID}
+      tableID={selectedTable.tableID}
+      open={showTablePayment}
+      onOpenChange={setShowTablePayment}
+     />
+    )}
    <Dialog
     open={showCloseOrder}
     onOpenChange={(newValue) => {

@@ -28,6 +28,7 @@ import { IoAlbums, IoPrint } from 'react-icons/io5';
 import { useNewOrderPrintCash } from '../../new-order/hooks/useNewOrderPrintCash';
 import { Spinner } from '@/components/ui/spinner';
 import { PiChefHatFill } from 'react-icons/pi';
+import { TbCreditCard } from 'react-icons/tb';
 
 export default function SalonTable({
  table,
@@ -100,7 +101,7 @@ export default function SalonTable({
 
  const menuContent =
   tableUtils.tableType === 'mock' ? null : (
-   <DrawerContent className='h-[min(60svh,50rem)]'>
+   <DrawerContent className='h-[min(90svh,50rem)] sm:h-[min(60svh,50rem)]'>
     <DrawerHeader className='border-b border-border'>
      <DrawerTitle className='text-2xl'>
       {tableUtils.dic.tables.tableActions}
@@ -204,6 +205,21 @@ export default function SalonTable({
          {tableUtils.dic.tables.changeTableState}
         </Button>
        )}
+      {!!table.orderID && (
+       <Button
+        variant='outline'
+        className='justify-start text-start h-12 text-destructive'
+        size='lg'
+        disabled={!tableUtils.access.order.payment}
+        onClick={() => {
+         tableUtils.onToggleTablePayment();
+         setIsOpen(false);
+        }}
+       >
+        <TbCreditCard className='size-8 text-inherit' />
+        {tableUtils.dic.tables.pay}
+       </Button>
+      )}
       {table.orderCount === 1 && table.orderID && (
        <Button
         variant='outline'
