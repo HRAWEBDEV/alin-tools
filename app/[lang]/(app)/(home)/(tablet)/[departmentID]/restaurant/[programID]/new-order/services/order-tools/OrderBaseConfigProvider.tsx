@@ -117,6 +117,7 @@ export default function OrderBaseConfigProvider({
   ),
   defaultValues: {
    ...defaultOrderInfo,
+   persons: 1,
    orderDate: new Date(),
    table:
     tableIDQuery && tableNoQuery
