@@ -34,14 +34,14 @@ interface PaymentProps {
  paymentValue: string;
 }
 
-export interface InvoiceDetail {
+interface InvoiceDetail {
  sumUnitPrice: number; // total price of this item
  name: string; // item name
  qty: number; // item quantity
  toz: string; // item description
 }
 
-export interface InvoiceModel {
+interface InvoiceModel {
  num: number; // invoice number
  price: number; // payable amount
  sumQty: number; // total item count
@@ -64,12 +64,13 @@ export interface InvoiceModel {
  invoiceDetails: InvoiceDetail[];
 }
 
+type Operations =
+ 'checkConnection' | 'printInvoice' | 'purchase' | 'reverseTransaction';
+
 export function useN950Pos() {
  const [socket, setSocket] = useState<WebSocket | null>(null);
  const [status, setStatus] = useState<ConnectionStatus>('connecting');
- const [lastOperation, setLastOperation] = useState<
-  'checkConnection' | 'printInvoice' | 'purchase' | ''
- >('');
+ const [lastOperation, setLastOperation] = useState<Operations | ''>('');
  const [posResponse, setPosResponse] = useState<PosResponse | null>(null);
 
  const connect = useCallback(() => {
@@ -151,6 +152,19 @@ export function useN950Pos() {
   [sendMessage],
  );
 
+ const handleReverseTransaction = useCallback(
+  ({ refNum }: { refNum: string }) => {
+   setLastOperation('reverseTransaction');
+   sendMessage({
+    CompanyName: 'SEP',
+    RequestType: 'ReverseTransaction',
+    RefNum: refNum,
+    AppID: APP_ID,
+   });
+  },
+  [sendMessage],
+ );
+
  useEffect(() => {
   connect();
  }, [connect]);
@@ -168,5 +182,8 @@ export function useN950Pos() {
   checkPosConnection,
   handlePurchase,
   handlePrintInvoice,
+  handleReverseTransaction,
  };
 }
+
+export type { PosResponse, Operations, InvoiceDetail, InvoiceModel };

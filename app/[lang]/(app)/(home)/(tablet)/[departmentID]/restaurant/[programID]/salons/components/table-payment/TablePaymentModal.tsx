@@ -1,5 +1,11 @@
 'use client';
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import {
+ useState,
+ useMemo,
+ useEffect,
+ useEffectEvent,
+ useCallback,
+} from 'react';
 import {
  Dialog,
  DialogTitle,
@@ -28,7 +34,11 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { getHallKey, getTableOrders } from '../../services/salonsApiActions';
 import { Button } from '@/components/ui/button';
-import { useN950Pos } from '@/app/[lang]/(app)/(home)/(tablet)/hooks/useN950Pos';
+import {
+ type Operations,
+ type PosResponse,
+ useN950Pos,
+} from '@/app/[lang]/(app)/(home)/(tablet)/hooks/useN950Pos';
 import { Spinner } from '@/components/ui/spinner';
 import LinearLoading from '@/app/[lang]/(app)/components/LinearLoading';
 import { AlertTriangleIcon, AlertCircleIcon } from 'lucide-react';
@@ -61,10 +71,22 @@ export default function TablePaymentModal({
   connect,
   handlePurchase,
   handlePrintInvoice,
+  handleReverseTransaction,
  } = useN950Pos();
  const [activeOrderId, setActiveOrderId] = useState(orderId);
+ const [transactionErrors, setTransactionErrors] = useState<
+  (PosResponse & {
+   operation: Operations;
+   orderId: number;
+   isBack: boolean;
+   id: number;
+  })[]
+ >([]);
  const { localeInfo } = useBaseConfig();
  const [activeTab, setActiveTab] = useState('invoice');
+ const [selectedTransactionErrorId, setSelectedTransactionErrorId] = useState<
+  number | null
+ >(null);
  const { salonsSettings, initData } = useSalonBaseConfigContext();
  const { routeOwner, routeProgram } = useUserInfoRouter();
 
@@ -186,6 +208,14 @@ export default function TablePaymentModal({
   userOrderItemsTotalNetValue,
  ]);
 
+ const handleConfirmReverseTransaction = useCallback(
+  (errorLog: (typeof transactionErrors)[number]) => {
+   setSelectedTransactionErrorId(errorLog.id);
+   handleReverseTransaction({ refNum: errorLog.referenceNumber });
+  },
+  [handleReverseTransaction],
+ );
+
  const { mutate: confirmPayment, isPending: isPendingConfirmPayment } =
   useMutation({
    mutationFn({ refNo }: { refNo: string }) {
@@ -278,17 +308,62 @@ export default function TablePaymentModal({
   return null;
  }
 
+ const logTransactionError = useEffectEvent((posResponse: PosResponse) => {
+  setTransactionErrors((pre) => [
+   ...pre,
+   {
+    ...posResponse,
+    id: Date.now(),
+    orderId: activeOrderId,
+    isBack: false,
+    operation: 'purchase',
+   },
+  ]);
+ });
+
+ const handleStopReverseTransaction = useEffectEvent(() => {
+  setSelectedTransactionErrorId(null);
+ });
+
+ const handleSuccessReverseTransaction = useEffectEvent(() => {
+  setTransactionErrors((pre) => {
+   return pre.map((item) => {
+    if (item.id === selectedTransactionErrorId) {
+     return { ...item, isBack: true };
+    }
+    return item;
+   });
+  });
+  handleStopReverseTransaction();
+ });
+
+ const activeOrderTransactionErrors = useMemo(() => {
+  return transactionErrors.filter((item) => item.orderId === activeOrderId);
+ }, [activeOrderId, transactionErrors]);
+
  useEffect(() => {
   if (!posResponse) return;
+  if (lastOperation !== 'purchase') return;
   if (posResponse.RC === '0') {
-   if (lastOperation === 'purchase') {
-    confirmPayment({
-     refNo: posResponse.referenceNumber,
-    });
-    toast.success(dic.orderPayment.paymentSuccessfullyDone);
-   }
+   confirmPayment({
+    refNo: posResponse.referenceNumber,
+   });
+   toast.success(dic.orderPayment.paymentSuccessfullyDone);
   } else {
    toast.error(dic.orderPayment.paymentUnSuccessfull);
+   logTransactionError(posResponse);
+  }
+ }, [posResponse, lastOperation, confirmPayment, dic, confirmPrintInvoice]);
+
+ useEffect(() => {
+  if (!posResponse) return;
+  if (lastOperation !== 'reverseTransaction') return;
+  if (posResponse.RC === '0') {
+   toast.success(dic.orderPayment.reserveTransactionDone);
+   handleSuccessReverseTransaction();
+  } else {
+   handleStopReverseTransaction();
+   toast.error(dic.orderPayment.reserveTransactionError);
   }
  }, [posResponse, lastOperation, confirmPayment, dic, confirmPrintInvoice]);
 
@@ -296,7 +371,7 @@ export default function TablePaymentModal({
   <Dialog
    open={open}
    onOpenChange={(newValue) => {
-    if (isPendingConfirmPayment) return;
+    if (isPendingConfirmPayment || !!selectedTransactionErrorId) return;
     onOpenChange(newValue);
    }}
   >
@@ -308,7 +383,7 @@ export default function TablePaymentModal({
      <Tabs
       value={activeTab}
       onValueChange={(val) => setActiveTab(val)}
-      className='mx-auto sticky top-0 bg-popover pt-2'
+      className='mx-auto sticky top-0 bg-popover pt-2 z-2'
       dir={localeInfo.contentDirection}
      >
       <TabsList className='self-center min-h-10 z-2 bg-neutral-200 dark:bg-neutral-800'>
@@ -367,14 +442,48 @@ export default function TablePaymentModal({
        )}
       </div>
      )}
+     <div className='mt-2 grid gap-2'>
+      {activeOrderTransactionErrors.map((item) => (
+       <div key={item.id}>
+        <Alert className='max-w-md border-red-200 bg-red-50 text-red-900 dark:border-red-900 dark:bg-red-950 dark:text-red-50'>
+         <AlertCircleIcon />
+         <AlertTitle className='hidden'></AlertTitle>
+         <AlertDescription>
+          {dic.orderPayment.confirmPaymentUnSuccessfull}.
+         </AlertDescription>
+         <div className='col-span-full'>
+          <span>{dic.orderPayment.paymentRefNo}: </span>
+          <span className='font-medium text-lg'>{item.referenceNumber}</span>
+         </div>
+         <div className='col-span-full mt-1'>
+          {!item.isBack ? (
+           <Button
+            size='sm'
+            variant='destructive'
+            disabled={!!selectedTransactionErrorId}
+            onClick={() => handleConfirmReverseTransaction(item)}
+           >
+            {!!selectedTransactionErrorId && <Spinner />}
+            {dic.orderPayment.reverseTransaction}
+           </Button>
+          ) : (
+           <p className='text-secondary'>
+            {dic.orderPayment.reserveTransactionDone}
+           </p>
+          )}
+         </div>
+        </Alert>
+       </div>
+      ))}
+     </div>
      <div>{render()}</div>
     </div>
     <DialogFooter className='py-2 px-4 border-t border-border'>
      <Button
       variant={'outline'}
-      disabled={isPendingConfirmPayment}
+      disabled={isPendingConfirmPayment || !!selectedTransactionErrorId}
       onClick={() => {
-       if (isPendingConfirmPayment) return;
+       if (isPendingConfirmPayment || !!selectedTransactionErrorId) return;
        onOpenChange(false);
       }}
      >
@@ -386,11 +495,12 @@ export default function TablePaymentModal({
        !userOrderSuccess ||
        !userOrder.payableValue ||
        isPendingConfirmPayment ||
-       !orderOtpsIsSuccess
+       !orderOtpsIsSuccess ||
+       !!selectedTransactionErrorId
       }
       className='sm:w-36'
       onClick={() => {
-       if (!userOrderSuccess) return;
+       if (!userOrderSuccess || !!selectedTransactionErrorId) return;
        const roundPayableValue = userOrder.payableValue;
        if (!roundPayableValue) return;
        handlePurchase({
