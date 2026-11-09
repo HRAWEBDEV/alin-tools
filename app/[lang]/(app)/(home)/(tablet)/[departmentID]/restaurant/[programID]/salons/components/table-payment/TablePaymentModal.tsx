@@ -65,7 +65,7 @@ export default function TablePaymentModal({
  const [activeOrderId, setActiveOrderId] = useState(orderId);
  const { localeInfo } = useBaseConfig();
  const [activeTab, setActiveTab] = useState('invoice');
- const { salonsSettings } = useSalonBaseConfigContext();
+ const { salonsSettings, initData } = useSalonBaseConfigContext();
  const { routeOwner, routeProgram } = useUserInfoRouter();
 
  const {
@@ -152,7 +152,7 @@ export default function TablePaymentModal({
     tableName: userOrder.tableNo?.toString() || '',
     guestQty: userOrder.persons || 0,
     sumQty: userOrderItems.length || 0,
-    sumPrice: 0,
+    sumPrice: userOrderItemsTotalNetValue,
     description: '',
     taxAmount: userOrder.tax,
     discountAmount: userOrder.discount || 0,
@@ -183,6 +183,7 @@ export default function TablePaymentModal({
   routeOwner,
   routeProgram,
   userOrderItems,
+  userOrderItemsTotalNetValue,
  ]);
 
  const { mutate: confirmPayment, isPending: isPendingConfirmPayment } =
@@ -195,7 +196,7 @@ export default function TablePaymentModal({
      printToCashBox: false,
      otpCodes: orderOtps || [],
      cash: {
-      bankAccountID: null,
+      bankAccountID: initData.pocTabletBankID,
       payRefNo: refNo,
       payTypeID: Number(PaymentType.creditCard),
       sValue: userOrder!.payableValue,

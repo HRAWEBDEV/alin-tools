@@ -9,6 +9,7 @@ interface InitiData {
  defaultSaleTimeID: number;
  defaultPrintCashBox: number;
  multiOrder: boolean;
+ pocTabletBankID: number;
 }
 
 type TableOrder = Combo;
