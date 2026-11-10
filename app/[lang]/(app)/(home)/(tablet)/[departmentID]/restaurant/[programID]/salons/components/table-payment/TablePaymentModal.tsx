@@ -334,7 +334,10 @@ export default function TablePaymentModal({
      dic={dic}
      ordersList={ordersList}
      activeOrderId={activeOrderId}
-     setActiveOrderId={setActiveOrderId}
+     setActiveOrderId={(newOrderId) => {
+      if (pendAction) return;
+      setActiveOrderId(newOrderId);
+     }}
     />
    );
   }

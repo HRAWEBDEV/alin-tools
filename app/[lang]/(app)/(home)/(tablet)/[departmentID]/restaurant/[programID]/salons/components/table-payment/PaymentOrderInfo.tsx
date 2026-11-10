@@ -16,7 +16,7 @@ export default function PaymentOrderInfo({
  dic: SalonsDictionary;
  ordersList: Combo[];
  activeOrderId: number;
- setActiveOrderId: Dispatch<SetStateAction<number>>;
+ setActiveOrderId: (newOrderId: number) => unknown;
 }) {
  const { localeInfo } = useBaseConfig();
  return (
