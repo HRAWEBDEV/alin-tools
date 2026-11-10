@@ -109,7 +109,6 @@ export default function TablePaymentModal({
 
  const {
   data: ordersList,
-  isLoading: isLoadingOrdersList,
   isError: isErrorOrdersList,
   isSuccess: isSuccessOrdersList,
  } = useQuery({
@@ -142,7 +141,6 @@ export default function TablePaymentModal({
  const {
   data: orderOtps,
   isLoading: orderOtpsLoading,
-  isFetching: orderOtpsIsFetching,
   isError: orderOtpsIsError,
   isSuccess: orderOtpsIsSuccess,
  } = useQuery({
@@ -272,6 +270,9 @@ export default function TablePaymentModal({
     queryClient.invalidateQueries({
      queryKey: [getOrderItemsApi, activeOrderId],
     });
+    queryClient.invalidateQueries({
+     queryKey: [getHallKey, 'ordersList', tableID.toString()],
+    });
     toast.success(dic.orderPayment.confirmPaymentSuccessfullyDone);
     if (salonsSettings.autoTablePaymentReceiptPrint) {
      confirmPrintInvoice();
@@ -288,12 +289,7 @@ export default function TablePaymentModal({
   });
 
  function render() {
-  if (
-   userOrderError ||
-   userOrderItemsError ||
-   orderOtpsIsError ||
-   isErrorOrdersList
-  ) {
+  if (userOrderError || userOrderItemsError || orderOtpsIsError) {
    return (
     <div className='my-2'>
      <UnExpectedError />
@@ -551,7 +547,6 @@ export default function TablePaymentModal({
        !userOrderSuccess ||
        !userOrder.payableValue ||
        !orderOtpsIsSuccess ||
-       !isSuccessOrdersList ||
        pendAction
       }
       className='sm:w-36'
