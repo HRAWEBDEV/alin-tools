@@ -216,6 +216,19 @@ export default function TablePaymentModal({
   [handleReverseTransaction],
  );
 
+ const logTransactionError = (posResponse: PosResponse) => {
+  setTransactionErrors((pre) => [
+   ...pre,
+   {
+    ...posResponse,
+    id: Date.now(),
+    orderId: activeOrderId,
+    isBack: false,
+    operation: 'purchase',
+   },
+  ]);
+ };
+
  const { mutate: confirmPayment, isPending: isPendingConfirmPayment } =
   useMutation({
    mutationFn({ refNo }: { refNo: string }) {
@@ -252,6 +265,9 @@ export default function TablePaymentModal({
    onError(err: AxiosError<string>) {
     toast.error(err.response?.data || '');
     toast.error(dic.orderPayment.confirmPaymentUnSuccessfull);
+    if (!!posResponse && lastOperation === 'purchase') {
+     logTransactionError(posResponse);
+    }
    },
   });
 
@@ -308,19 +324,6 @@ export default function TablePaymentModal({
   return null;
  }
 
- const logTransactionError = useEffectEvent((posResponse: PosResponse) => {
-  setTransactionErrors((pre) => [
-   ...pre,
-   {
-    ...posResponse,
-    id: Date.now(),
-    orderId: activeOrderId,
-    isBack: false,
-    operation: 'purchase',
-   },
-  ]);
- });
-
  const handleStopReverseTransaction = useEffectEvent(() => {
   setSelectedTransactionErrorId(null);
  });
@@ -351,7 +354,6 @@ export default function TablePaymentModal({
    toast.success(dic.orderPayment.paymentSuccessfullyDone);
   } else {
    toast.error(dic.orderPayment.paymentUnSuccessfull);
-   logTransactionError(posResponse);
   }
  }, [posResponse, lastOperation, confirmPayment, dic, confirmPrintInvoice]);
 
