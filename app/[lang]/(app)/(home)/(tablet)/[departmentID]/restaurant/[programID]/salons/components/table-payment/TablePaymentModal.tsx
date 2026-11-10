@@ -74,6 +74,8 @@ export default function TablePaymentModal({
   handleReverseTransaction,
  } = useN950Pos();
  const [activeOrderId, setActiveOrderId] = useState(orderId);
+ const [isPurchasing, setIsPurchasing] = useState(false);
+ const [isReversing, setIsReversing] = useState(false);
  const [transactionErrors, setTransactionErrors] = useState<
   (PosResponse & {
    operation: Operations;
@@ -108,6 +110,7 @@ export default function TablePaymentModal({
  const {
   data: ordersList,
   isLoading: isLoadingOrdersList,
+  isError: isErrorOrdersList,
   isSuccess: isSuccessOrdersList,
  } = useQuery({
   queryKey: [getHallKey, 'ordersList', tableID.toString()],
@@ -212,6 +215,7 @@ export default function TablePaymentModal({
   (errorLog: (typeof transactionErrors)[number]) => {
    setSelectedTransactionErrorId(errorLog.id);
    handleReverseTransaction({ refNum: errorLog.referenceNumber });
+   setIsReversing(true);
   },
   [handleReverseTransaction],
  );
@@ -234,6 +238,7 @@ export default function TablePaymentModal({
    },
   ]);
  };
+ const amountToCharge = userOrder ? Math.ceil(userOrder.payableValue) : 0;
 
  const { mutate: confirmPayment, isPending: isPendingConfirmPayment } =
   useMutation({
@@ -248,7 +253,7 @@ export default function TablePaymentModal({
       bankAccountID: initData.pocTabletBankID,
       payRefNo: refNo,
       payTypeID: Number(PaymentType.creditCard),
-      sValue: userOrder!.payableValue,
+      sValue: amountToCharge,
      },
     });
    },
@@ -278,7 +283,12 @@ export default function TablePaymentModal({
   });
 
  function render() {
-  if (userOrderError || userOrderItemsError || orderOtpsIsError) {
+  if (
+   userOrderError ||
+   userOrderItemsError ||
+   orderOtpsIsError ||
+   isErrorOrdersList
+  ) {
    return (
     <div className='my-2'>
      <UnExpectedError />
@@ -303,6 +313,7 @@ export default function TablePaymentModal({
    return (
     <PaymentInvoice
      dic={dic}
+     amountToCharge={amountToCharge}
      order={userOrder}
      userOrderItemsTotalNetValue={userOrderItemsTotalNetValue}
     />
@@ -350,11 +361,13 @@ export default function TablePaymentModal({
   return transactionErrors.filter((item) => item.orderId === activeOrderId);
  }, [activeOrderId, transactionErrors]);
 
- const pendAction = !!selectedTransactionErrorId || isPendingConfirmPayment;
+ const pendAction =
+  !!selectedTransactionErrorId ||
+  isPendingConfirmPayment ||
+  isPurchasing ||
+  isReversing;
 
- useEffect(() => {
-  if (!posResponse) return;
-  if (lastOperation !== 'purchase') return;
+ const onPurchaseResponse = useEffectEvent((posResponse: PosResponse) => {
   if (posResponse.RC === '0') {
    confirmPayment({
     refNo: posResponse.referenceNumber,
@@ -363,11 +376,10 @@ export default function TablePaymentModal({
   } else {
    toast.error(dic.orderPayment.paymentUnSuccessfull);
   }
- }, [posResponse, lastOperation, confirmPayment, dic, confirmPrintInvoice]);
+  setIsPurchasing(false);
+ });
 
- useEffect(() => {
-  if (!posResponse) return;
-  if (lastOperation !== 'reverseTransaction') return;
+ const onReverseResponse = useEffectEvent((posResponse: PosResponse) => {
   if (posResponse.RC === '0') {
    toast.success(dic.orderPayment.reserveTransactionDone);
    handleSuccessReverseTransaction();
@@ -375,7 +387,18 @@ export default function TablePaymentModal({
    handleStopReverseTransaction();
    toast.error(dic.orderPayment.reserveTransactionError);
   }
- }, [posResponse, lastOperation, confirmPayment, dic, confirmPrintInvoice]);
+  setIsReversing(false);
+ });
+
+ useEffect(() => {
+  if (!posResponse || lastOperation !== 'purchase') return;
+  onPurchaseResponse(posResponse);
+ }, [posResponse, lastOperation]);
+
+ useEffect(() => {
+  if (!posResponse || lastOperation !== 'reverseTransaction') return;
+  onReverseResponse(posResponse);
+ }, [posResponse, lastOperation]);
 
  return (
   <Dialog
@@ -392,7 +415,10 @@ export default function TablePaymentModal({
     <div className='grow overflow-auto p-4 py-2 pt-0 scroll-smooth'>
      <Tabs
       value={activeTab}
-      onValueChange={(val) => setActiveTab(val)}
+      onValueChange={(val) => {
+       if (pendAction) return;
+       setActiveTab(val);
+      }}
       className='mx-auto sticky top-0 bg-popover pt-2 z-2'
       dir={localeInfo.contentDirection}
      >
@@ -474,7 +500,7 @@ export default function TablePaymentModal({
              disabled={pendAction}
              onClick={() => handleConfirmReverseTransaction(item)}
             >
-             {pendAction && <Spinner />}
+             {!!selectedTransactionErrorId && <Spinner />}
              {dic.orderPayment.reverseTransaction}
             </Button>
             <Button
@@ -488,7 +514,7 @@ export default function TablePaymentModal({
               });
              }}
             >
-             {!!selectedTransactionErrorId && <Spinner />}
+             {isPendingConfirmPayment && <Spinner />}
              {dic.orderPayment.confirmAgain}
             </Button>
            </div>
@@ -528,12 +554,13 @@ export default function TablePaymentModal({
        if (!userOrderSuccess || pendAction) return;
        const roundPayableValue = userOrder.payableValue;
        if (!roundPayableValue) return;
+       setIsPurchasing(true);
        handlePurchase({
-        paymentValue: Math.ceil(userOrder.payableValue).toString(),
+        paymentValue: amountToCharge.toString(),
        });
       }}
      >
-      {pendAction && <Spinner />}
+      {isPendingConfirmPayment && <Spinner />}
       {dic.orderPayment.pay}
      </Button>
     </DialogFooter>

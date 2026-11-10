@@ -31,7 +31,9 @@ export default function PaymentShop({
         <span className='text-neutral-700 dark:text-neutral-400'>
          {dic.orderPayment.tatalPrice}:{' '}
         </span>
-        <span className='font-medium'>{format(item.netValue)} ریال</span>
+        <span className='font-medium'>
+         {format(Math.ceil(item.netValue))} ریال
+        </span>
        </div>
       </div>
      </li>

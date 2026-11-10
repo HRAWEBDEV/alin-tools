@@ -14,8 +14,10 @@ export default function PaymentInvoice({
  dic,
  order,
  userOrderItemsTotalNetValue,
+ amountToCharge,
 }: {
  dic: SalonsDictionary;
+ amountToCharge: number;
  order: Order;
  userOrderItemsTotalNetValue: number;
 }) {
@@ -105,7 +107,7 @@ export default function PaymentInvoice({
        {dic.orderPayment.remained}
       </span>
       <span className='font-medium text-lg sm:text-xl'>
-       {format(order.payableValue)} ریال
+       {format(amountToCharge)} ریال
       </span>
      </div>
     </div>
