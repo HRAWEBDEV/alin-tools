@@ -217,6 +217,12 @@ export default function TablePaymentModal({
  );
 
  const logTransactionError = (posResponse: PosResponse) => {
+  if (
+   transactionErrors.some(
+    (item) => item.referenceNumber === posResponse.referenceNumber,
+   )
+  )
+   return;
   setTransactionErrors((pre) => [
    ...pre,
    {
