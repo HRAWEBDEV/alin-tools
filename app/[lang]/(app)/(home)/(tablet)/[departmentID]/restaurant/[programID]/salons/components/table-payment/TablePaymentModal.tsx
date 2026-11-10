@@ -344,6 +344,8 @@ export default function TablePaymentModal({
   return transactionErrors.filter((item) => item.orderId === activeOrderId);
  }, [activeOrderId, transactionErrors]);
 
+ const pendAction = !!selectedTransactionErrorId || isPendingConfirmPayment;
+
  useEffect(() => {
   if (!posResponse) return;
   if (lastOperation !== 'purchase') return;
@@ -373,7 +375,7 @@ export default function TablePaymentModal({
   <Dialog
    open={open}
    onOpenChange={(newValue) => {
-    if (isPendingConfirmPayment || !!selectedTransactionErrorId) return;
+    if (pendAction) return;
     onOpenChange(newValue);
    }}
   >
@@ -459,15 +461,31 @@ export default function TablePaymentModal({
          </div>
          <div className='col-span-full mt-1'>
           {!item.isBack ? (
-           <Button
-            size='sm'
-            variant='destructive'
-            disabled={!!selectedTransactionErrorId}
-            onClick={() => handleConfirmReverseTransaction(item)}
-           >
-            {!!selectedTransactionErrorId && <Spinner />}
-            {dic.orderPayment.reverseTransaction}
-           </Button>
+           <div className='flex gap-2 items-center flex-wrap'>
+            <Button
+             size='sm'
+             variant='destructive'
+             disabled={pendAction}
+             onClick={() => handleConfirmReverseTransaction(item)}
+            >
+             {pendAction && <Spinner />}
+             {dic.orderPayment.reverseTransaction}
+            </Button>
+            <Button
+             size='sm'
+             variant='destructive'
+             disabled={pendAction}
+             onClick={() => {
+              if (pendAction) return;
+              confirmPayment({
+               refNo: item.referenceNumber,
+              });
+             }}
+            >
+             {!!selectedTransactionErrorId && <Spinner />}
+             {dic.orderPayment.confirmAgain}
+            </Button>
+           </div>
           ) : (
            <p className='text-secondary'>
             {dic.orderPayment.reserveTransactionDone}
@@ -483,9 +501,9 @@ export default function TablePaymentModal({
     <DialogFooter className='py-2 px-4 border-t border-border'>
      <Button
       variant={'outline'}
-      disabled={isPendingConfirmPayment || !!selectedTransactionErrorId}
+      disabled={pendAction}
       onClick={() => {
-       if (isPendingConfirmPayment || !!selectedTransactionErrorId) return;
+       if (pendAction) return;
        onOpenChange(false);
       }}
      >
@@ -496,13 +514,12 @@ export default function TablePaymentModal({
        status !== 'connected' ||
        !userOrderSuccess ||
        !userOrder.payableValue ||
-       isPendingConfirmPayment ||
        !orderOtpsIsSuccess ||
-       !!selectedTransactionErrorId
+       pendAction
       }
       className='sm:w-36'
       onClick={() => {
-       if (!userOrderSuccess || !!selectedTransactionErrorId) return;
+       if (!userOrderSuccess || pendAction) return;
        const roundPayableValue = userOrder.payableValue;
        if (!roundPayableValue) return;
        handlePurchase({
@@ -510,7 +527,7 @@ export default function TablePaymentModal({
        });
       }}
      >
-      {isPendingConfirmPayment && <Spinner />}
+      {pendAction && <Spinner />}
       {dic.orderPayment.pay}
      </Button>
     </DialogFooter>

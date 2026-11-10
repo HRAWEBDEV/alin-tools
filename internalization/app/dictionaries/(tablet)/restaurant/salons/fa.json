@@ -143,6 +143,7 @@
   "confirmPaymentUnSuccessfull": "پرداخت ثبت نشد",
   "reverseTransaction": "بازگشت وجه",
   "reserveTransactionDone": "اصلاحیه تراکنش صادر شد",
-  "reserveTransactionError": "اصلاحیه تراکنش صادر نشد"
+  "reserveTransactionError": "اصلاحیه تراکنش صادر نشد",
+  "confirmAgain": "ثبت مجدد"
  }
 }
