@@ -214,8 +214,12 @@ export default function TablePaymentModal({
  const handleConfirmReverseTransaction = useCallback(
   (errorLog: (typeof transactionErrors)[number]) => {
    setSelectedTransactionErrorId(errorLog.id);
-   handleReverseTransaction({ refNum: errorLog.referenceNumber });
    setIsReversing(true);
+   try {
+    handleReverseTransaction({ refNum: errorLog.referenceNumber });
+   } catch {
+    setIsReversing(false);
+   }
   },
   [handleReverseTransaction],
  );
@@ -364,11 +368,7 @@ export default function TablePaymentModal({
   return transactionErrors.filter((item) => item.orderId === activeOrderId);
  }, [activeOrderId, transactionErrors]);
 
- const pendAction =
-  !!selectedTransactionErrorId ||
-  isPendingConfirmPayment ||
-  isPurchasing ||
-  isReversing;
+ const pendAction = isPendingConfirmPayment || isPurchasing || isReversing;
 
  const onPurchaseResponse = useEffectEvent((posResponse: PosResponse) => {
   if (posResponse.RC === '0') {
@@ -550,6 +550,7 @@ export default function TablePaymentModal({
        !userOrderSuccess ||
        !userOrder.payableValue ||
        !orderOtpsIsSuccess ||
+       !isSuccessOrdersList ||
        pendAction
       }
       className='sm:w-36'
@@ -558,9 +559,13 @@ export default function TablePaymentModal({
        const roundPayableValue = userOrder.payableValue;
        if (!roundPayableValue) return;
        setIsPurchasing(true);
-       handlePurchase({
-        paymentValue: amountToCharge.toString(),
-       });
+       try {
+        handlePurchase({
+         paymentValue: amountToCharge.toString(),
+        });
+       } catch {
+        setIsPurchasing(false);
+       }
       }}
      >
       {isPendingConfirmPayment && <Spinner />}
