@@ -219,6 +219,7 @@ export default function TablePaymentModal({
     handleReverseTransaction({ refNum: errorLog.referenceNumber });
    } catch {
     setIsReversing(false);
+    setSelectedTransactionErrorId(null);
    }
   },
   [handleReverseTransaction],
@@ -350,6 +351,7 @@ export default function TablePaymentModal({
 
  const handleStopReverseTransaction = useEffectEvent(() => {
   setSelectedTransactionErrorId(null);
+  setIsReversing(false);
  });
 
  const handleSuccessReverseTransaction = useEffectEvent(() => {
@@ -390,7 +392,6 @@ export default function TablePaymentModal({
    handleStopReverseTransaction();
    toast.error(dic.orderPayment.reserveTransactionError);
   }
-  setIsReversing(false);
  });
 
  useEffect(() => {
@@ -503,7 +504,7 @@ export default function TablePaymentModal({
              disabled={pendAction}
              onClick={() => handleConfirmReverseTransaction(item)}
             >
-             {!!selectedTransactionErrorId && <Spinner />}
+             {!!isReversing && <Spinner />}
              {dic.orderPayment.reverseTransaction}
             </Button>
             <Button
