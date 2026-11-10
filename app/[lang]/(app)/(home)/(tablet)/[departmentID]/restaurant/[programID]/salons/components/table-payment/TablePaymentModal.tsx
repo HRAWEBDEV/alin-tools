@@ -145,10 +145,10 @@ export default function TablePaymentModal({
  } = useQuery({
   staleTime: 'static',
   gcTime: 0,
-  enabled: !!orderId,
-  queryKey: [getOtpCodesApi, orderId?.toString()],
+  enabled: !!activeOrderId,
+  queryKey: [getOtpCodesApi, activeOrderId?.toString()],
   async queryFn({ signal }) {
-   const { data } = await getOrderOtpCodes({ signal, orderID: orderId! });
+   const { data } = await getOrderOtpCodes({ signal, orderID: activeOrderId! });
    return data;
   },
  });
@@ -254,13 +254,13 @@ export default function TablePaymentModal({
    },
    onSuccess() {
     queryClient.invalidateQueries({
-     queryKey: [getOrderApi, orderId.toString()],
+     queryKey: [getOrderApi, activeOrderId.toString()],
     });
     queryClient.invalidateQueries({
-     queryKey: [getOrderPaymentApi, orderId.toString()],
+     queryKey: [getOrderPaymentApi, activeOrderId.toString()],
     });
     queryClient.invalidateQueries({
-     queryKey: [getOrderItemsApi, orderId],
+     queryKey: [getOrderItemsApi, activeOrderId],
     });
     toast.success(dic.orderPayment.confirmPaymentSuccessfullyDone);
     if (salonsSettings.autoTablePaymentReceiptPrint) {
