@@ -223,6 +223,9 @@ interface Room {
  registerID: number;
  roomLabel: string;
  guestFullName: string;
+ groupSide: boolean;
+ customerName: string;
+ customerID: number;
 }
 
 interface Tag {

@@ -147,45 +147,62 @@ export default function FindRooms({ dic }: { dic: NewOrderDictionary }) {
       <ul className='grid gap-2 grid-cols-[repeat(auto-fill,minmax(14rem,15rem))]'>
        {data?.pages.map((group, i) => (
         <Fragment key={i}>
-         {group.rows.map(({ id, registerID, guestFullName, roomLabel }) => (
-          <li key={id}>
-           <DrawerClose asChild>
-            <Button
-             variant={'outline'}
-             className='py-4 items-start justify-start text-start w-full whitespace-normal bg-background shadow-md rounded-lg h-full'
-             onClick={() => {
-              setValue('room', {
-               key: registerID.toString(),
-               value: roomLabel,
-               customerName: guestFullName,
-              });
-              clearErrors(['room']);
-             }}
-            >
-             <div className='grid gap-1'>
-              <div>
-               <span className='text-sm text-neutral-600 dark:text-neutral-400'>
-                {dic.findRooms.roomNo}:{' '}
-               </span>
-               <Highlighter
-                searchWords={[debouncedSearch]}
-                textToHighlight={roomLabel}
-               />
+         {group.rows.map(
+          ({
+           id,
+           registerID,
+           guestFullName,
+           roomLabel,
+           customerID,
+           customerName,
+           groupSide,
+          }) => (
+           <li key={id}>
+            <DrawerClose asChild>
+             <Button
+              variant={'outline'}
+              className='py-4 items-start justify-start text-start w-full whitespace-normal bg-background shadow-md rounded-lg h-full'
+              onClick={() => {
+               setValue('room', {
+                key: registerID.toString(),
+                value: roomLabel,
+                customerName: guestFullName,
+               });
+               if (groupSide) {
+                setValue('customer', {
+                 code: '',
+                 key: customerID.toString(),
+                 value: customerName,
+                });
+               }
+               clearErrors(['room']);
+              }}
+             >
+              <div className='grid gap-1'>
+               <div>
+                <span className='text-sm text-neutral-600 dark:text-neutral-400'>
+                 {dic.findRooms.roomNo}:{' '}
+                </span>
+                <Highlighter
+                 searchWords={[debouncedSearch]}
+                 textToHighlight={roomLabel}
+                />
+               </div>
+               <div>
+                <span className='text-sm text-neutral-600 dark:text-neutral-400'>
+                 {dic.findRooms.guestName}:{' '}
+                </span>
+                <Highlighter
+                 searchWords={[debouncedSearch]}
+                 textToHighlight={guestFullName}
+                />
+               </div>
               </div>
-              <div>
-               <span className='text-sm text-neutral-600 dark:text-neutral-400'>
-                {dic.findRooms.guestName}:{' '}
-               </span>
-               <Highlighter
-                searchWords={[debouncedSearch]}
-                textToHighlight={guestFullName}
-               />
-              </div>
-             </div>
-            </Button>
-           </DrawerClose>
-          </li>
-         ))}
+             </Button>
+            </DrawerClose>
+           </li>
+          ),
+         )}
         </Fragment>
        ))}
       </ul>
