@@ -26,6 +26,8 @@ Before making significant changes, read the feature doc in `docs/features/` and 
 
 **There is no test suite yet** (Phase 3 of the modernization plan adds Vitest + RTL + Playwright). Until then, the verification trio after every change is: `npm run lint` + `npx tsc --noEmit` + `npm run build`. Lint has a **deliberate 11-error baseline** (see Lint errors below) — do not quick-fix them; compare counts, don't aim for zero yet.
 
+**Test placement convention:** tests live in a `__tests__/` directory **inside the directory of the code under test** (colocated). When testing a directory, create `<feature-dir>/__tests__/` and put that directory's test files there — e.g. tests for `restaurant/new-order/services/newOrderApiActions.ts` go in `restaurant/new-order/services/__tests__/`. Do not gather tests in a single top-level `tests/` or `src/__tests__` tree.
+
 ## Stack quirks (things you'd guess wrong)
 
 - **Next.js ^16** — `typedRoutes: true` (typed route params come from generated `PageProps<'/...'>` / `LayoutProps<'/...'>` helpers, not hand-written types); middleware is `proxy.ts` at root (Next 16 renamed `middleware.ts`); `experimental.globalNotFound: true`; `compiler.removeConsole` in production.
