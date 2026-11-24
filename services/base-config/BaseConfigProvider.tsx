@@ -73,6 +73,19 @@ export default function BaseConfigProvider({ children, activeLocale }: Props) {
  });
  useEffect(() => {
   setActiveTimeZone();
+  const controller = new AbortController();
+  document.addEventListener(
+   'visibilitychange',
+   () => {
+    if (!document.hidden) {
+     setActiveTimeZone();
+    }
+   },
+   {
+    signal: controller.signal,
+   },
+  );
+  return () => controller.abort();
  }, []);
 
  useEffect(() => {
