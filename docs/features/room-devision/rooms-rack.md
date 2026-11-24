@@ -72,11 +72,11 @@ Context `useRackConfigContext()`: `sidebar` (pin/open/activePanel), `initData`, 
 
 ## Known issues / smells
 
-- `RoomsRackConfigProvider.tsx` (940): duplicated `customersValue` URL-sync block (703-717, copy-paste bug), dead `handleTrackRackReportDiffs` + `prevRackReportRef` (881-895) — split target (useRackConnection/useRackReportConnection/useRackFiltersForm/useRackSettings)
+- `RoomsRackConfigProvider.tsx` (932): duplicated `customersValue` URL-sync block (703-717, copy-paste bug) — split target (useRackConnection/useRackReportConnection/useRackFiltersForm/useRackSettings)
 - `RackFilters.tsx` (1,015): 12 repeated Controller+Drawer blocks → config-driven `RackFilterField`
 - `RoomMenu.tsx` (509): receives ~20 props (8 show/hide pairs) — prop drilling
 - Filter-drawer pattern also repeated in `OutOfOrderRoomsFilters.tsx` (533) and `RoomControlFilters.tsx` (504)
 - Lint error: `RoomControl.tsx:215` (`set-state-in-effect`)
-- Unused lint warnings: `RoomsRackConfigProvider.tsx:105,109-110,882`; `RoomControlFilters.tsx:36`
+- Unused lint warnings: `RoomControlFilters.tsx:36`
 - CSS vars here reuse `--app-restaurant-*` names (copy-paste origin)
 - `Duplicated Revenue`/`Invoice` types vs guests-management apiActions

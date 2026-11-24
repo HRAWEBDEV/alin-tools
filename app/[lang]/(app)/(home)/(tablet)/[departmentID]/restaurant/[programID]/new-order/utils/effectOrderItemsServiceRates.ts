@@ -31,7 +31,6 @@ export function effectOrderItemsServiceRates({
    defaultDiscountRate: userDiscount,
    amount: orderItem.amount,
    fixedDiscount,
-   remainedFixedDiscount,
    usedRemainedFixedDiscount,
    shopSValue: totalSValue,
    isLastItem: i === lastNoDiscountItemIndex,

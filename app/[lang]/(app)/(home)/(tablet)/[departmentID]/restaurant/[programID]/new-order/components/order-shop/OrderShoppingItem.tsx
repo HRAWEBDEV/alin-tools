@@ -8,7 +8,6 @@ import { type OrderItem } from '../../services/newOrderApiActions';
 import { useCurrencyFormatter } from '@/hooks/useCurrencyFormatter';
 import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseConfigContext';
 import ServeDishIcon from '@/app/[lang]/(app)/components/icons/ServeDishIcon';
-import { BsTrash } from 'react-icons/bs';
 import { BiError } from 'react-icons/bi';
 import { TbFileDescription } from 'react-icons/tb';
 import {

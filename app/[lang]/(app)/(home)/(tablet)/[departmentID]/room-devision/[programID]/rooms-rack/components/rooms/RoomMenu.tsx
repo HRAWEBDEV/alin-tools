@@ -59,7 +59,6 @@ import {
  outOfOrderRoomsBaseKey,
  getOutOfOrderRoom,
 } from '../../../rooms-management/out-of-order-rooms/services/outOfOrderApiActions';
-import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import NewOutOfOrderRoom from '../../../rooms-management/out-of-order-rooms/components/NewOutOfOrderRoom';
 import GuestExpenses from '../guest-expenses/GuestExpenses';
 
@@ -111,7 +110,6 @@ export default function RoomMenu({
  outOfOrderDic: OutOfOrderRoomsDictionary;
 }) {
  const queryClient = useQueryClient();
- const { locale } = useBaseConfig();
  // guest messages setup
  const {
   data: guestMessages,

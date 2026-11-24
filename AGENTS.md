@@ -8,7 +8,7 @@ Canonical agent-facing documentation for this repository. `CLAUDE.md` only point
 - Per-feature pages (endpoints, hubs, schemas, known issues) → `docs/features/{restaurant,room-devision}/*.md` — read the relevant one before touching a feature
 - Modernization plan (Phases 0–5) → `docs/how_to_integrate_ai.md`
 
-Last verified 2026-11-24: `npx tsc --noEmit` clean; `npm run lint` = 81 problems (11 errors, 70 warnings) — this is the **baseline**, cataloged below. If your numbers are higher, you broke it.
+Last verified 2026-11-24: `npx tsc --noEmit` clean; `npm run lint` = 26 problems (11 errors, 15 warnings) — this is the **baseline**, cataloged below. If your numbers are higher, you broke it.
 
 ## Project overview
 
@@ -94,7 +94,7 @@ Working backlog for the modernization (Phases 2–4, see `docs/how_to_integrate_
 | `restaurant/new-order/components/order-info/OrderInfo.tsx` | 1,377 | → generic `DrawerPickerField` (~10 copy-pasted picker blocks) + Person/Date/Totals/Flags sections |
 | `room-devision/components/LogoShape.tsx` | 1,635 | Byte-identical duplicate of the restaurant one (diff=0) |
 | `room-devision/rooms-rack/components/side-bar/RackFilters.tsx` | 1,015 | 12 repeated Controller+Drawer blocks → config-driven `RackFilterField` |
-| `room-devision/rooms-rack/services/rooms-rack-config/RoomsRackConfigProvider.tsx` | 940 | → useRackConnection / useRackReportConnection / useRackFiltersForm (URL sync) / useRackSettings |
+| `room-devision/rooms-rack/services/rooms-rack-config/RoomsRackConfigProvider.tsx` | 932 | → useRackConnection / useRackReportConnection / useRackFiltersForm (URL sync) / useRackSettings |
 | `restaurant/new-order/components/order-invoice/OrderInvoice.tsx` | 917 | Payment-method form + POS/wallet branches → split |
 | `restaurant/new-order/services/newOrderApiActions.ts` | 756 | ~40% type definitions → `types.ts`; split by domain (order/directory/person) |
 | `room-devision/rooms-rack/components/guest-expenses/stay/NewStayExpense.tsx` | 718 | Form fields + calculator + item drawer |
@@ -123,12 +123,12 @@ All `react-hooks/set-state-in-effect` except where noted:
 - `room-devision/rooms-rack/components/room-control/RoomControl.tsx:215`
 - `components/animate-ui/primitives/animate/slot.tsx:75,86` (`react-hooks/static-components` ×2)
 - `salons/components/SalonTable.tsx`, `table-payment/PaymentOrderInfo.tsx`, `TablePaymentModal.tsx`, `StayExpenses.tsx`, `execution-management/daily-tasks-checklist/DailyTasksChecklistWrapper.tsx` (remaining baseline sites)
-- 70 warnings: mostly `@typescript-eslint/no-unused-vars`; notable: `SalonTable.tsx:50` `showPrintInvoice` state (half-removed feature)
+- 15 warnings: all `react-hooks/incompatible-library` (RHF `watch()` blocks React Compiler memoization; expected)
 
 ### Dead code / cleanup candidates
 - `login/services/DepartmentRouter.tsx` — entirely commented out
 - `components/ui/{accordion,alert-dialog,breadcrumb,button-group,command,input-otp}.tsx` — installed, never imported
-- Empty `EventBoardUpdated` handler (`NotificationsProvider.tsx:166`); empty effect `OrderBaseConfigProvider.tsx:1204-1209`; dead `handleTrackRackReportDiffs` (`RoomsRackConfigProvider.tsx:881-895`)
+- Empty `EventBoardUpdated` handler (`NotificationsProvider.tsx:166`); empty effect `OrderBaseConfigProvider.tsx:1204-1209`
 - `console.log('here')` in both module-home redirect pages
 - `generateTableMockData` mock-table scaffolding still wired into salons UI paths
 - 20 placeholder `en.json` files; settings drawer in room-devision `SettingsProvider.tsx` is an empty stub

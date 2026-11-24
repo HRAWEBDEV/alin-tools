@@ -109,7 +109,6 @@ export default function TablePaymentModal({
 
  const {
   data: ordersList,
-  isError: isErrorOrdersList,
   isSuccess: isSuccessOrdersList,
  } = useQuery({
   queryKey: [getHallKey, 'ordersList', tableID.toString()],

@@ -397,7 +397,6 @@ export default function OrderBaseConfigProvider({
  const {
   data: userOrder,
   isLoading: userOrderLoading,
-  isFetching: userOrderIsFetching,
   isError: userOrderError,
   isSuccess: userOrderSuccess,
  } = useQuery({
@@ -414,7 +413,6 @@ export default function OrderBaseConfigProvider({
  const {
   data: orderOtps,
   isLoading: orderOtpsLoading,
-  isFetching: orderOtpsIsFetching,
   isError: orderOtpsIsError,
   isSuccess: orderOtpsIsSuccess,
  } = useQuery({
@@ -450,7 +448,6 @@ export default function OrderBaseConfigProvider({
 
  const {
   data: employeeCustomer,
-  isLoading: employeeCustomerIsLoading,
   isSuccess: employeeCustomerIsSuccess,
  } = useQuery({
   staleTime: 'static',

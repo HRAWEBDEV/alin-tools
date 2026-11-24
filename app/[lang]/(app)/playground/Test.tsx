@@ -34,7 +34,7 @@ export function Test() {
    addLog(`Response: ${event.data}`);
   };
 
-  socket.onerror = (err) => {
+  socket.onerror = () => {
    addLog('WebSocket connection error');
   };
 

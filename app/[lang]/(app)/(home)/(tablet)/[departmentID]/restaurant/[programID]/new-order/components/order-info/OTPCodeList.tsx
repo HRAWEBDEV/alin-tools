@@ -26,7 +26,7 @@ export default function OTPCodeList({
   orderOtps: { otpCodes, setOtpCodes },
  } = useOrderBaseConfigContext();
  const [otpCode, setOtpCode] = useState<string>('');
- const [mode, setMode] = useState<'edit' | 'insert'>('insert');
+ const [mode] = useState<'edit' | 'insert'>('insert');
  const inputRef = useRef<HTMLInputElement>(null);
 
  return (

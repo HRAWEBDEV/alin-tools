@@ -8,7 +8,6 @@ import { cx } from 'class-variance-authority';
 export default function OrderItemImage({
  src,
  alt,
- activeID,
  id,
  onChangeID,
  overlayVisible,
@@ -17,7 +16,6 @@ export default function OrderItemImage({
 }: {
  src?: string;
  alt?: string;
- activeID?: number | null;
  id?: number;
  overlayVisible?: number | null;
  onOverlayChange?: (id: number | null) => void;

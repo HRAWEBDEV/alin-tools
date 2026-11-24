@@ -10,9 +10,8 @@ import Loading from '@/components/Loading';
 import { convertToUserInfoStore } from './userInfoApiActions';
 import { useLogout } from '../../hooks/useLogout';
 import { useShareDictionary } from '../../../services/share-dictionary/shareDictionaryContext';
-import { useRouter, usePathname, useParams } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
-import { useIsHomePage } from '../../hooks/useIsHomePage';
 import {
  Dialog,
  DialogTitle,
@@ -38,7 +37,6 @@ import { handleScroll } from './utils/handleScroll';
 import {
  roomDevisionRoute,
  restaurantRotue,
- isTheRightPath,
 } from './utils/departmentRoutes';
 
 export default function UserInfoRouterProvider({
@@ -55,10 +53,8 @@ export default function UserInfoRouterProvider({
    return null;
   });
  const [showUserRouter, setShowUserRouter] = useState(false);
- const isHomePage = useIsHomePage();
  const { locale } = useBaseConfig();
  const router = useRouter();
- const pathname = usePathname();
  const { departmentID: paramDepartmentID, programID: paramProgramID } =
   useParams();
  const programsRef = useRef<HTMLDivElement | null>(null);

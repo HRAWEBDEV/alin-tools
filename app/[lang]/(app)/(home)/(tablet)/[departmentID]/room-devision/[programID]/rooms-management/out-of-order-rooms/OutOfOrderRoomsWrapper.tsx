@@ -43,7 +43,6 @@ export default function OutOfOrderRoomsWrapper({
  const {
   data: initData,
   isLoading: initDataIsLoading,
-  isError: initDataIsError,
  } = useQuery({
   queryKey: [outOfOrderRoomsBaseKey, 'init-data'],
   async queryFn({ signal }) {

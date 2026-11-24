@@ -6,7 +6,6 @@ const orderItemsPricingCalculator = ({
  amount,
  fixedDiscount,
  shopSValue,
- remainedFixedDiscount,
  usedRemainedFixedDiscount,
  isLastItem,
 }: {
@@ -16,7 +15,6 @@ const orderItemsPricingCalculator = ({
  hasService: boolean;
  amount: number;
  shopSValue: number;
- remainedFixedDiscount: number;
  usedRemainedFixedDiscount: (used: number) => number;
  isLastItem: boolean;
 }) => {

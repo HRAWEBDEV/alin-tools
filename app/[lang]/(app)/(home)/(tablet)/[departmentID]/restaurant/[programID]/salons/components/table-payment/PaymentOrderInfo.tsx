@@ -5,7 +5,6 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Field, FieldContent, FieldLabel } from '@/components/ui/field';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import { type Combo } from '../../../../utils/apiTypes';
-import { Dispatch, SetStateAction } from 'react';
 
 export default function PaymentOrderInfo({
  dic,

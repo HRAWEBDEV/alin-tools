@@ -33,7 +33,7 @@ export default function FindItems({
  onChangeItem: (item: StayExpenseItem) => unknown;
 }) {
  const containerRef = useRef<HTMLDivElement>(null);
- const [searchedText, setSearchedText] = useState('');
+ const [searchedText] = useState('');
  const [debouncedSearch] = useDebouncedValue(searchedText, {
   wait: 200,
  });

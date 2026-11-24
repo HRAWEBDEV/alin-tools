@@ -47,7 +47,6 @@ export default function SalonTable({
  });
  const router = useRouter();
  const [isOpen, setIsOpen] = useState(false);
- const [showPrintInvoice, setShowPrintInvoice] = useState(false);
  const [showTableOrdersList, setShowTableOrdersList] = useState(false);
 
  const handleOpenChange = (newOpen: boolean) => {

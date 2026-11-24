@@ -9,7 +9,6 @@ import {
 } from '../roomsRackApiActions';
 import { type Paging } from '../../../../utils/apiTypes';
 import { type RackLayout } from '../../utils/rackLayout';
-import { getRackReport } from '../../utils/rackReport';
 import { type InitialData as NoteTypes } from '../room-notes/RackRoomNotesApiActions';
 
 type RackView = RackLayout;

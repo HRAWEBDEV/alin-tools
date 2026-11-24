@@ -39,7 +39,6 @@ export default function EntranceAndExitRoomsWrapper({
  const {
   data: initData,
   isLoading: initDataIsLoading,
-  isError: initDataIsError,
  } = useQuery({
   queryKey: [entranceAndExitBaseKey, 'init-data'],
   async queryFn({ signal }) {

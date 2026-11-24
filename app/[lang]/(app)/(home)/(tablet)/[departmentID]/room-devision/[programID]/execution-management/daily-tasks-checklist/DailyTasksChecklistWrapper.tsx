@@ -43,7 +43,6 @@ export default function DailyTasksChecklistWrapper({
  const {
   data: initData,
   isLoading: initDataIsLoading,
-  isError: initDataIsError,
   isSuccess: initDataIsSuccess,
  } = useQuery({
   queryKey: [dailyTasksBaseKey, 'init-data'],

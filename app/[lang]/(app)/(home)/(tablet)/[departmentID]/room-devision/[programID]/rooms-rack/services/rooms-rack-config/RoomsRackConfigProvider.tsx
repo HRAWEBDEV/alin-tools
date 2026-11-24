@@ -72,7 +72,6 @@ import {
   defaultRackSetting,
   saveRackSetting,
 } from '../../utils/rackSettingLocalStorage';
-import { getRackReport } from '../../utils/rackReport';
 import {
   rackRoomNotesBaseKey,
   getInitialData as getNotesInitData,
@@ -102,12 +101,7 @@ export function RoomsRackConfigProvider({
     }
     return defaultRackSetting;
   });
-  const prevRackReportRef = useRef<ReturnType<typeof getRackReport> | null>(
-    null,
-  );
   const [showRackBoard, setShowRackBoard] = useState(false);
-  const [rackReportIsError, setRackReportIsError] = useState(false);
-  const [rackReportIsSuccess, setRackReportIsSuccess] = useState(false);
   const [rackReportIsLoading, setRackReportIsLoading] = useState(false);
   const [rackRealTimeReport, setRackRealTimeReport] = useState<RackReport>({
     alarms: [],
@@ -393,16 +387,13 @@ export function RoomsRackConfigProvider({
     if (rackReportConnection.state !== signalR.HubConnectionState.Connected)
       return;
     setRackReportIsLoading(true);
-    setRackReportIsError(false);
     try {
       await rackReportConnection.invoke(
         'GetNotifUpdate',
         rackReportConnection.connectionId,
       );
-      setRackReportIsSuccess(true);
     } catch (error) {
       console.log('signalR get rack report failed: ', error);
-      setRackReportIsError(true);
     } finally {
       setRackReportIsLoading(false);
     }
@@ -823,8 +814,6 @@ export function RoomsRackConfigProvider({
     rackFiltersUseForm.setValue('date', rackFutureDateStart);
   }, [showTypeValue, rackFiltersUseForm, dateFns, rackFutureDateStart]);
 
-  const rackReport = useMemo(() => getRackReport(rackRooms), [rackRooms]);
-
   const ctx: RackConfig = {
     sidebar: {
       isPin: sidebarIsPin,
@@ -877,22 +866,6 @@ export function RoomsRackConfigProvider({
     rackReport: rackRealTimeReport,
     rackReportIsLoading,
   };
-
-  function handleTrackRackReportDiffs(
-    rackReport: ReturnType<typeof getRackReport>,
-  ) {
-    // if (!prevRackReportRef.current) {
-    // } else if (
-    //  JSON.stringify(rackReport) !== JSON.stringify(prevRackReportRef.current)
-    // ) {
-    //  notificationAudio.play();
-    // }
-    // prevRackReportRef.current = rackReport;
-  }
-
-  useEffect(() => {
-    handleTrackRackReportDiffs(rackReport);
-  }, [rackReport]);
 
   return (
     <rackConfigContext.Provider value={ctx}>

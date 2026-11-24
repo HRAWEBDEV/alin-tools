@@ -2,7 +2,6 @@
 import { useState, useMemo } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import {
- useInfiniteQuery,
  useQuery,
  useQueryClient,
 } from '@tanstack/react-query';
@@ -34,8 +33,6 @@ import GuestsExpensesList from './GuestsExpensesList';
 import GuestsExpenseActionDrawer, {
  type InitData,
 } from './GuestsExpensesActionDrawer';
-
-const PAGE_SIZE = 50;
 
 type Props = {
  dic: GuestsExpensesDictionary;

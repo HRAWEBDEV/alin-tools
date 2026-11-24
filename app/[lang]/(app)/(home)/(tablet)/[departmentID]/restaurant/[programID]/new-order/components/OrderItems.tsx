@@ -61,11 +61,10 @@ export default function OrderItems({ dic }: { dic: NewOrderDictionary }) {
      ) : (
       <>
        {filteredData?.map((itemProgram) => (
-        <OrderItem
-         key={itemProgram.id}
-         itemProgram={itemProgram}
-         activeImageModalID={activeImageModalID}
-         onChangeModalID={handlleChangeActiveID}
+         <OrderItem
+          key={itemProgram.id}
+          itemProgram={itemProgram}
+          onChangeModalID={handlleChangeActiveID}
          overlayVisible={overlayVisible}
          onOverlayChange={handleToggleOverlayVisible}
          dic={dic}

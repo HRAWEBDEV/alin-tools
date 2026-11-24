@@ -36,7 +36,6 @@ import {
 import { ChevronsUpDown } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { SaleTypes } from '../../utils/SaleTypes';
-import { useSettingsContext } from '../../../../services/profile/settings/settingsContext';
 import { useOrderBaseConfigContext } from '../../services/order-tools/orderBaseConfigContext';
 import { Spinner } from '@/components/ui/spinner';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -47,9 +46,7 @@ export default function QuickOrderInfoDialog({
 }: {
  dic: NewOrderDictionary;
 }) {
- const { orderConfigSetup } = useSettingsContext();
  const {
-  queries: { orderID },
   initialDataInfo: { data },
   person: {
    findPerson,
@@ -58,7 +55,6 @@ export default function QuickOrderInfoDialog({
    isPendingFindPerson,
    onChangePersonPhoneNumber,
   },
-  access,
  } = useOrderBaseConfigContext();
  const [open, setIsOpen] = useState(false);
  const {

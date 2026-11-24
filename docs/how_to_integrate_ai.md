@@ -85,7 +85,7 @@ Rules:
 One concern per change, tests green after each, no behavior change. Priority order from `AGENTS.md` backlog:
 
 - [ ] Split `OrderBaseConfigProvider.tsx` (1,415 lines) → useOrderQueries / usePersonLookup / useOrderFormSync / useOrderMutations + extracted dialogs
-- [ ] Split `RoomsRackConfigProvider.tsx` (940) → useRackConnection / useRackReportConnection / useRackFiltersForm / useRackSettings
+- [ ] Split `RoomsRackConfigProvider.tsx` (932) → useRackConnection / useRackReportConnection / useRackFiltersForm / useRackSettings
 - [ ] Extract logic from `OrderInfo.tsx` (1,377) → generic `DrawerPickerField` + section components
 - [ ] Split `TablePaymentModal.tsx` (574) and `OrderInvoice.tsx` (917) payment-flow logic
 - [ ] De-duplicate restaurant vs room-devision shared components (`LogoShape`, `Header`, `Nav*`, `Tabs`, `HeaderDate`, `useScrollWatcher`, print hooks, close-order dialog)

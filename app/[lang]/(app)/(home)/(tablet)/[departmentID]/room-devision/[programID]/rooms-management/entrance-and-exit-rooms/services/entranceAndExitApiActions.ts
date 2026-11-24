@@ -1,5 +1,5 @@
 import { axios } from '@/app/[lang]/(app)/utils/defaultAxios';
-import { Combo, PagedData } from '../../../../utils/apiTypes';
+import { Combo } from '../../../../utils/apiTypes';
 
 interface InitialData {
  floors: Combo[];

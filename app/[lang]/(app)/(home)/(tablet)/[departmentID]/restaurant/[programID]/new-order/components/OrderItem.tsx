@@ -18,33 +18,29 @@ import {
  DialogContent,
  DialogTitle,
 } from '@/components/ui/dialog';
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { Field, FieldLabel } from '@/components/ui/field';
 import { InputGroupInput, InputGroup } from '@/components/ui/input-group';
 import { NumericFormat } from 'react-number-format';
 import { NewOrderDictionary } from '@/internalization/app/dictionaries/(tablet)/restaurant/new-order/dictionary';
-import { MdTouchApp } from 'react-icons/md';
 import { type ItemProgram } from '../services/newOrderApiActions';
 
 export default function OrderItem({
  itemProgram,
- activeImageModalID,
  onChangeModalID,
  overlayVisible,
  onOverlayChange,
  dic,
 }: {
  itemProgram: ItemProgram;
- activeImageModalID: null | number;
  onChangeModalID: (id: number | null) => void;
  overlayVisible: null | number;
  onOverlayChange: (id: number | null) => void;
  dic: NewOrderDictionary;
 }) {
  const { contrastMode } = useBaseConfig();
- const showCountTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
  const [showTypeOrderCount, setShowTypeOrderCount] = useState(false);
- const [pointingItem, setPointingItem] = useState(false);
+ const [pointingItem] = useState(false);
  const [orderItemCount, setOrderItemCount] = useState(0);
  const {
   itemsInfo: { searchedItemName },
@@ -107,7 +103,6 @@ export default function OrderItem({
          src={itemProgram.imageURL || undefined}
          alt={itemProgram.itemName || undefined}
          id={itemProgram.id}
-         activeID={activeImageModalID}
          onChangeID={onChangeModalID}
          overlayVisible={overlayVisible}
          onOverlayChange={onOverlayChange}

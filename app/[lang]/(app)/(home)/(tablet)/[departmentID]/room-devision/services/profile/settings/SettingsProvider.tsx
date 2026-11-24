@@ -4,12 +4,6 @@ import { SettingsContext, type Settings, ActiveView } from './settingsContext';
 import { Drawer, DrawerContent } from '@/components/ui/drawer';
 import { useRoomDevisionShareDictionary } from '../../share-dictionary/roomDevisionShareDictionaryContext';
 import { AnimatePresence } from 'motion/react';
-import { motion } from 'motion/react';
-import { getModeIcon } from '@/app/[lang]/(app)/utils/getModeIcons';
-import { useTheme } from 'next-themes';
-import { AppModes } from '@/theme/appModes';
-import { appVersion } from '@/services/base-config/baseConfigContext';
-import { Button } from '@/components/ui/button';
 
 export default function SettingsProvider({
  children,
@@ -31,28 +25,6 @@ export default function SettingsProvider({
   activeView,
   setActiveView,
  };
-
- function optionsList() {
-  return (
-   <motion.ul
-    initial={{ x: 200, y: 10, opacity: 0 }}
-    animate={{ x: 0, y: 0, opacity: 1 }}
-    exit={{ x: 200, y: 10, opacity: 0 }}
-    transition={{ duration: 0.3 }}
-   >
-    <li>
-     <Button
-      variant='ghost'
-      size={'icon-lg'}
-      className='text-base p-4 px-8 w-full justify-start h-[unset] gap-4 items-center text-orange-600 hover:text-orange-500 hover:bg-orange-600/10 transition-colors'
-      onClick={() => setActiveView('salonsConfig')}
-     >
-      <span>test</span>
-     </Button>
-    </li>
-   </motion.ul>
-  );
- }
 
  return (
   <SettingsContext.Provider value={ctx}>

@@ -43,7 +43,6 @@ export default function GuestCheckoutChecklistWrapper({
  const {
   data: initData,
   isLoading: initDataIsLoading,
-  isError: initDataIsError,
  } = useQuery({
   queryKey: [guestCheckoutChecklistBaseKey, 'init-data'],
   async queryFn({ signal }) {

@@ -138,7 +138,6 @@ export default function NewOutOfOrderRoom({
  const {
   data: initData,
   isLoading: initDataIsLoading,
-  isError: initDataIsError,
  } = useQuery({
   queryKey: [outOfOrderRoomsBaseKey, 'init-data'],
   async queryFn({ signal }) {

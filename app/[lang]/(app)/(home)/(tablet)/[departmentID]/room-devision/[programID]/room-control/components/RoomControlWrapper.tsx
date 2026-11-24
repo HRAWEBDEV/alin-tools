@@ -49,7 +49,6 @@ export default function RoomControlWrapper({
  const {
   data: initData,
   isLoading: initDataIsLoading,
-  isError: initDataIsError,
  } = useQuery({
   staleTime: 'static',
   queryKey: [roomControlBaseKey, 'init-data'],
