@@ -1,5 +1,9 @@
 # CHANGE LOGS
 
+## 3.0.1
+
+- fix new order person user query static data bug (hra-done)
+
 ## 3.0.0
 
 - add table payment feature (hra-done)
