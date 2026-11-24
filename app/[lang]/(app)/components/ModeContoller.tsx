@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useEffectEvent, useState } from 'react';
 import { type AppModes, appModes } from '@/theme/appModes';
 import { useTheme } from 'next-themes';
 import {
@@ -36,8 +36,9 @@ function ModeControllerButton() {
   </Button>
  );
 
+ const handleMount = useEffectEvent(() => setIsMounted(true));
  useEffect(() => {
-  setIsMounted(true);
+  handleMount();
  }, []);
 
  if (!mounted) return <>{modeButton}</>;

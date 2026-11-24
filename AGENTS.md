@@ -8,7 +8,7 @@ Canonical agent-facing documentation for this repository. `CLAUDE.md` only point
 - Per-feature pages (endpoints, hubs, schemas, known issues) → `docs/features/{restaurant,room-devision}/*.md` — read the relevant one before touching a feature
 - Modernization plan (Phases 0–5) → `docs/how_to_integrate_ai.md`
 
-Last verified 2026-11-24: `npx tsc --noEmit` clean; `npm run lint` = 26 problems (11 errors, 15 warnings) — this is the **baseline**, cataloged below. If your numbers are higher, you broke it.
+Last verified 2026-11-24: `npx tsc --noEmit` clean; `npm run lint` = 16 problems (1 error, 15 warnings) — this is the **baseline**, cataloged below. If your numbers are higher, you broke it.
 
 ## Project overview
 
@@ -24,7 +24,7 @@ Before making significant changes, read the feature doc in `docs/features/` and 
 - `npm run lint` — ESLint (flat config, `eslint-config-next` core-web-vitals + typescript)
 - `npx tsc --noEmit` — typecheck
 
-**There is no test suite yet** (Phase 3 of the modernization plan adds Vitest + RTL + Playwright). Until then, the verification trio after every change is: `npm run lint` + `npx tsc --noEmit` + `npm run build`. Lint has a **deliberate 11-error baseline** (see Lint errors below) — do not quick-fix them; compare counts, don't aim for zero yet.
+**There is no test suite yet** (Phase 3 of the modernization plan adds Vitest + RTL + Playwright). Until then, the verification trio after every change is: `npm run lint` + `npx tsc --noEmit` + `npm run build`. Lint has a **deliberate 1-error baseline** (see Lint errors below) — do not quick-fix it; compare counts, don't aim for zero yet.
 
 **Test placement convention:** tests live in a `__tests__/` directory **inside the directory of the code under test** (colocated). When testing a directory, create `<feature-dir>/__tests__/` and put that directory's test files there — e.g. tests for `restaurant/new-order/services/newOrderApiActions.ts` go in `restaurant/new-order/services/__tests__/`. Do not gather tests in a single top-level `tests/` or `src/__tests__` tree.
 
@@ -111,19 +111,10 @@ Working backlog for the modernization (Phases 2–4, see `docs/how_to_integrate_
 - `share-dictionary` provider pairs duplicated per division; `Revenue`/`Invoice` types duplicated across rooms-rack and guests-management apiActions; `ApiPagedData` defined locally in `arrivalReservesApiActions.ts:13` while `PagedData` exists in `room-devision/utils/apiTypes.ts`
 - Platform→feature leak: `services/userAccessibilityApiActions.ts:1` imports `CrudAccess` from a room-devision feature folder
 
-### Lint errors (11 total, baseline as of 2026-11-24 — do NOT quick-fix; Phase 4 fixes them with tests as safety net)
-All `react-hooks/set-state-in-effect` except where noted:
-- `services/base-config/BaseConfigProvider.tsx:72`
-- `app/[lang]/(app)/components/ModeContoller.tsx:40`, `ProfileButton.tsx:25`
-- `login/services/userinfo-provider/UserInfoRouterProvider.tsx:150`
-- `app/[lang]/(app)/services/user-region/UserRegionCheck.tsx:29`
-- `restaurant/components/NavWrapper.tsx:13` + room-devision twin
-- `restaurant/new-order/.../orderItemsPricingCalculator.ts` (~line 9)
-- `room-devision/.../DailyTaskPreview.tsx:112`
-- `room-devision/rooms-rack/components/room-control/RoomControl.tsx:215`
-- `components/animate-ui/primitives/animate/slot.tsx:75,86` (`react-hooks/static-components` ×2)
-- `salons/components/SalonTable.tsx`, `table-payment/PaymentOrderInfo.tsx`, `TablePaymentModal.tsx`, `StayExpenses.tsx`, `execution-management/daily-tasks-checklist/DailyTasksChecklistWrapper.tsx` (remaining baseline sites)
+### Lint errors (1 total, baseline as of 2026-11-24 — do NOT quick-fix; Phase 4 fixes it with tests as safety net)
+- `components/animate-ui/primitives/animate/slot.tsx:86` (`react-hooks/static-components`, note at :75) — component created during render; needs a cached `motion.create` outside render, not `useEffectEvent`
 - 15 warnings: all `react-hooks/incompatible-library` (RHF `watch()` blocks React Compiler memoization; expected)
+- Former 10 `react-hooks/set-state-in-effect` errors were fixed 2026-11-24 by wrapping the setState bodies in `useEffectEvent` — follow that pattern for new sites
 
 ### Dead code / cleanup candidates
 - `login/services/DepartmentRouter.tsx` — entirely commented out

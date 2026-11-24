@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useEffectEvent } from 'react';
 import { ReactNode } from 'react';
 import { useTheme } from 'next-themes';
 
@@ -9,8 +9,9 @@ export default function NavWrapper({ children }: { children: ReactNode }) {
  const [isMounted, setIsMounted] = useState(false);
  const { resolvedTheme } = useTheme();
 
+ const handleMount = useEffectEvent(() => setIsMounted(true));
  useEffect(() => {
-  setIsMounted(true);
+  handleMount();
  }, []);
 
  if (!isMounted) return <nav className={navClassname}></nav>;

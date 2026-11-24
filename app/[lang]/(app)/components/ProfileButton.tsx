@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useEffectEvent, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { FaUserCircle } from 'react-icons/fa';
 import { useProfileContext } from '../(home)/(tablet)/[departmentID]/room-devision/services/profile/profileContext';
@@ -21,8 +21,9 @@ function ProfileButton() {
   </Button>
  );
 
+ const handleMount = useEffectEvent(() => setIsMounted(true));
  useEffect(() => {
-  setIsMounted(true);
+  handleMount();
  }, []);
 
  if (!mounted) return <>{modeButton}</>;

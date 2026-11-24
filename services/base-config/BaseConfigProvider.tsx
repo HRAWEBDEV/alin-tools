@@ -1,5 +1,5 @@
 'use client';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useEffectEvent, useState } from 'react';
 import { useWindowResizeWatchter } from '@/hooks/useWindowResizeWatchter';
 import {
  type BaseConfig,
@@ -68,8 +68,11 @@ export default function BaseConfigProvider({ children, activeLocale }: Props) {
   return () => ctx.abort();
  }, []);
 
- useEffect(() => {
+ const setActiveTimeZone = useEffectEvent(() => {
   setUserActiveTimeZone(new Intl.DateTimeFormat().resolvedOptions().timeZone);
+ });
+ useEffect(() => {
+  setActiveTimeZone();
  }, []);
 
  useEffect(() => {

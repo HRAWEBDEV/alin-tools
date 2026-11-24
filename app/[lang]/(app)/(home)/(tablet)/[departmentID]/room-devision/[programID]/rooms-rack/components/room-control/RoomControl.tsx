@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useEffectEvent, useMemo } from 'react';
 import { type RoomControlDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/rooms-rack/room-control/dictionary';
 import {
  Dialog,
@@ -211,7 +211,7 @@ export default function RoomControl({
 
  const nextStep = getNextStep(serverRoomControlStepDetails);
 
- useEffect(() => {
+ const syncRoomControlState = useEffectEvent(() => {
   setMaidComment(roomControl?.maidComment || '');
   setRoomControlStepDetails({
    alert: {
@@ -227,6 +227,9 @@ export default function RoomControl({
     ...serverRoomControlStepDetails['checkRoom'],
    },
   });
+ });
+ useEffect(() => {
+  syncRoomControlState();
  }, [roomControl, open, serverRoomControlStepDetails]);
 
  const pendingAction =

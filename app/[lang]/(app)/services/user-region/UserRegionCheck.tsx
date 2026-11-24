@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, ReactNode } from 'react';
+import { useState, useEffect, useEffectEvent, ReactNode } from 'react';
 import { useBaseConfig } from '@/services/base-config/baseConfigContext';
 import {
  Dialog,
@@ -23,11 +23,14 @@ export default function UserRegionCheck({ children }: { children: ReactNode }) {
  const [notifyUserTimeZoneMismatch, setNotifyUserTimeZoneMismatch] =
   useState(false);
 
- useEffect(() => {
-  if (!localeInfo || !localeInfo.timezone || !userActiveTimeZone) return;
+ const checkTimeZoneMismatch = useEffectEvent(() => {
   if (userActiveTimeZone !== localeInfo.timezone) {
    setNotifyUserTimeZoneMismatch(true);
   }
+ });
+ useEffect(() => {
+  if (!localeInfo || !localeInfo.timezone || !userActiveTimeZone) return;
+  checkTimeZoneMismatch();
  }, [localeInfo, userActiveTimeZone]);
 
  return (

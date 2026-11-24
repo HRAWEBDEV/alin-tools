@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useEffectEvent, useState, useCallback } from 'react';
 
 const SOCKET_ADDRESS = 'ws://127.0.0.1:1372/';
 const APP_ID = '1';
@@ -165,8 +165,9 @@ export function useN950Pos() {
   [sendMessage],
  );
 
+ const connectOnMount = useEffectEvent(connect);
  useEffect(() => {
-  connect();
+  connectOnMount();
  }, [connect]);
 
  useEffect(() => {

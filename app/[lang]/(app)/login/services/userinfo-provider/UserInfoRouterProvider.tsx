@@ -1,5 +1,12 @@
 'use client';
-import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
+import {
+ useEffect,
+ useEffectEvent,
+ useState,
+ useCallback,
+ useRef,
+ useMemo,
+} from 'react';
 import {
  type UserInfoStoreContext,
  userInfoRouterContext,
@@ -140,13 +147,16 @@ export default function UserInfoRouterProvider({
   logout();
  }, [isError, logout]);
 
- useEffect(() => {
-  if (!isSuccess) return;
+ const syncUserRouterVisibility = useEffectEvent(() => {
   if (!routeOwner || !routeDepartment || !routeProgram) {
    setShowUserRouter(true);
   } else {
    setShowUserRouter(false);
   }
+ });
+ useEffect(() => {
+  if (!isSuccess) return;
+  syncUserRouterVisibility();
  }, [isSuccess, routeOwner, routeDepartment, routeProgram]);
 
  useEffect(() => {

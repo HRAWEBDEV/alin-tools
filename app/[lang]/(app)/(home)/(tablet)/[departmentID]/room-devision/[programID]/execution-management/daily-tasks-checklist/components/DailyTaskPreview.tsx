@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useEffectEvent, useState } from 'react';
 import { type DailyTasksChecklistDictionary } from '@/internalization/app/dictionaries/(tablet)/room-devision/daily-tasks-checklist/dictionary';
 import {
  Drawer,
@@ -108,8 +108,11 @@ export default function DailyTaskPreview({
   },
  });
 
- useEffect(() => {
+ const syncNoteComment = useEffectEvent(() => {
   setNoteComment(targetNote?.comment || '');
+ });
+ useEffect(() => {
+  syncNoteComment();
  }, [targetNote]);
 
  return (
