@@ -383,9 +383,7 @@ export default function TablePaymentModal({
 
  const isOrderInfoTabAvailable = isSuccessOrdersList && ordersList.length > 1;
  const effectiveActiveTab =
-  activeTab === 'orderInfo' && !isOrderInfoTabAvailable
-   ? 'invoice'
-   : activeTab;
+  activeTab === 'orderInfo' && !isOrderInfoTabAvailable ? 'invoice' : activeTab;
 
  const onPurchaseResponse = useEffectEvent((posResponse: PosResponse) => {
   if (posResponse.RC === '0') {
@@ -427,7 +425,10 @@ export default function TablePaymentModal({
     onOpenChange(newValue);
    }}
   >
-   <DialogContent className='flex flex-col w-[min(95%,30rem)] max-h-[95svh] min-h-[450px] max-w-none! p-0 overflow-hidden gap-0'>
+   <DialogContent
+    onInteractOutside={(event) => event.preventDefault()}
+    className='flex flex-col w-[min(95%,30rem)] max-h-[95svh] min-h-[450px] max-w-none! p-0 overflow-hidden gap-0'
+   >
     <DialogHeader className='px-2 py-4 border-b border-border'>
      <DialogTitle>{dic.orderPayment.title}</DialogTitle>
     </DialogHeader>
@@ -550,6 +551,13 @@ export default function TablePaymentModal({
      <div>{render()}</div>
     </div>
     <DialogFooter className='py-2 px-4 border-t border-border'>
+     <Button
+      onClick={() => {
+       confirmPrintInvoice();
+      }}
+     >
+      چاپ
+     </Button>
      <Button
       variant={'outline'}
       disabled={pendAction}

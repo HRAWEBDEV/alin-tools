@@ -1,5 +1,9 @@
 # CHANGE LOGS
 
+## 3.0.2
+
+- fix tablet pos minor bugs (hra-done)
+
 ## 3.0.1
 
 - fix new order person user query static data bug (hra-done)
