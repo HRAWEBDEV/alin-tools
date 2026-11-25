@@ -552,13 +552,6 @@ export default function TablePaymentModal({
     </div>
     <DialogFooter className='py-2 px-4 border-t border-border'>
      <Button
-      onClick={() => {
-       confirmPrintInvoice();
-      }}
-     >
-      چاپ
-     </Button>
-     <Button
       variant={'outline'}
       disabled={pendAction}
       onClick={() => {
