@@ -289,8 +289,8 @@ export default function TablePaymentModal({
     onOpenChange(false);
    },
    onError(err: AxiosError<string>) {
-    toast.error(err.response?.data || '');
     toast.error(dic.orderPayment.confirmPaymentUnSuccessfull);
+    toast.error(err.response?.data || '');
     if (!!posResponse && lastOperation === 'purchase') {
      logTransactionError(posResponse);
     }
