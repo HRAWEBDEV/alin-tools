@@ -5,6 +5,7 @@ import {
  useEffect,
  useEffectEvent,
  useCallback,
+ useRef,
 } from 'react';
 import {
  Dialog,
@@ -28,6 +29,8 @@ import {
  getOrderItemsApi,
  getOtpCodesApi,
  getOrderOtpCodes,
+ type Order,
+ type OrderItem,
 } from '../../../new-order/services/newOrderApiActions';
 import UnExpectedError from '@/app/[lang]/(app)/components/UnExpectedError';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -89,6 +92,12 @@ export default function TablePaymentModal({
  const [selectedTransactionErrorId, setSelectedTransactionErrorId] = useState<
   number | null
  >(null);
+ const purchaseSnapshotRef = useRef<{
+  order: Order;
+  orderItems: OrderItem[];
+  otpCodes: string[];
+  amount: number;
+ } | null>(null);
  const { salonsSettings, initData } = useSalonBaseConfigContext();
  const { routeOwner, routeProgram } = useUserInfoRouter();
 
@@ -107,10 +116,7 @@ export default function TablePaymentModal({
   },
  });
 
- const {
-  data: ordersList,
-  isSuccess: isSuccessOrdersList,
- } = useQuery({
+ const { data: ordersList, isSuccess: isSuccessOrdersList } = useQuery({
   queryKey: [getHallKey, 'ordersList', tableID.toString()],
   async queryFn({ signal }) {
    const res = await getTableOrders({
@@ -180,7 +186,7 @@ export default function TablePaymentModal({
     discountAmount: userOrder.discount || 0,
     creditPrice: 0,
     serviceAmount: userOrder.service,
-    price: Math.ceil(userOrder.payableValue),
+    price: userOrder.payableValue,
     roundedAmount: 0,
     restaurantName: routeOwner.name + ' - ' + routeProgram.name,
     farsiDate: new Date().toLocaleDateString('fa', {
@@ -233,29 +239,33 @@ export default function TablePaymentModal({
    ...pre,
    {
     ...posResponse,
-    id: Date.now(),
+    id: (pre[pre.length - 1]?.id ?? 0) + 1,
     orderId: activeOrderId,
     isBack: false,
     operation: 'purchase',
    },
   ]);
  };
- const amountToCharge = userOrder ? Math.ceil(userOrder.payableValue) : 0;
+ const amountToCharge = userOrder ? userOrder.payableValue : 0;
 
  const { mutate: confirmPayment, isPending: isPendingConfirmPayment } =
   useMutation({
    mutationFn({ refNo }: { refNo: string }) {
+    const snapshot = purchaseSnapshotRef.current;
+    if (!snapshot) {
+     return Promise.reject(new Error('No purchase snapshot'));
+    }
     return saveAndCloseOrder({
-     order: userOrder!,
-     orderItems: userOrderItems!,
+     order: snapshot.order,
+     orderItems: snapshot.orderItems,
      sendToKitchen: false,
      printToCashBox: false,
-     otpCodes: orderOtps || [],
+     otpCodes: snapshot.otpCodes,
      cash: {
       bankAccountID: initData.pocTabletBankID,
       payRefNo: refNo,
       payTypeID: Number(PaymentType.creditCard),
-      sValue: amountToCharge,
+      sValue: snapshot.amount,
      },
     });
    },
@@ -309,7 +319,7 @@ export default function TablePaymentModal({
     </div>
    );
   }
-  if (activeTab === 'invoice' && isSuccessOrdersList) {
+  if (effectiveActiveTab === 'invoice') {
    return (
     <PaymentInvoice
      dic={dic}
@@ -319,7 +329,7 @@ export default function TablePaymentModal({
     />
    );
   }
-  if (activeTab === 'shop') {
+  if (effectiveActiveTab === 'shop') {
    return (
     <PaymentShop
      orderItems={userOrderItems}
@@ -328,14 +338,14 @@ export default function TablePaymentModal({
     />
    );
   }
-  if (activeTab === 'orderInfo' && isSuccessOrdersList) {
+  if (effectiveActiveTab === 'orderInfo' && isSuccessOrdersList) {
    return (
     <PaymentOrderInfo
      dic={dic}
      ordersList={ordersList}
      activeOrderId={activeOrderId}
      setActiveOrderId={(newOrderId) => {
-      if (pendAction) return;
+      if (pendAction || hasUnresolvedTransactionError) return;
       setActiveOrderId(newOrderId);
      }}
     />
@@ -365,7 +375,17 @@ export default function TablePaymentModal({
   return transactionErrors.filter((item) => item.orderId === activeOrderId);
  }, [activeOrderId, transactionErrors]);
 
+ const hasUnresolvedTransactionError = transactionErrors.some(
+  (item) => !item.isBack,
+ );
+
  const pendAction = isPendingConfirmPayment || isPurchasing || isReversing;
+
+ const isOrderInfoTabAvailable = isSuccessOrdersList && ordersList.length > 1;
+ const effectiveActiveTab =
+  activeTab === 'orderInfo' && !isOrderInfoTabAvailable
+   ? 'invoice'
+   : activeTab;
 
  const onPurchaseResponse = useEffectEvent((posResponse: PosResponse) => {
   if (posResponse.RC === '0') {
@@ -413,7 +433,7 @@ export default function TablePaymentModal({
     </DialogHeader>
     <div className='grow overflow-auto p-4 py-2 pt-0 scroll-smooth'>
      <Tabs
-      value={activeTab}
+      value={effectiveActiveTab}
       onValueChange={(val) => {
        if (pendAction) return;
        setActiveTab(val);
@@ -546,13 +566,21 @@ export default function TablePaymentModal({
        !userOrderSuccess ||
        !userOrder.payableValue ||
        !orderOtpsIsSuccess ||
-       pendAction
+       pendAction ||
+       hasUnresolvedTransactionError
       }
       className='sm:w-36'
       onClick={() => {
-       if (!userOrderSuccess || pendAction) return;
+       if (!userOrderSuccess || pendAction || hasUnresolvedTransactionError)
+        return;
        const roundPayableValue = userOrder.payableValue;
        if (!roundPayableValue) return;
+       purchaseSnapshotRef.current = {
+        order: userOrder,
+        orderItems: userOrderItems!,
+        otpCodes: orderOtps || [],
+        amount: amountToCharge,
+       };
        setIsPurchasing(true);
        try {
         handlePurchase({
@@ -560,6 +588,7 @@ export default function TablePaymentModal({
         });
        } catch {
         setIsPurchasing(false);
+        purchaseSnapshotRef.current = null;
        }
       }}
      >
