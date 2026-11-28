@@ -18,7 +18,7 @@ export default function UserAccessibilityProvider({
 }: {
  children: React.ReactNode;
 }) {
- const logout = useLogout();
+ const logout = useLogout({ broadcast: false });
  const { routeDepartment, routeOwner, routeProgram } = useUserInfoRouter();
 
  const { data, isError, isSuccess } = useQuery({

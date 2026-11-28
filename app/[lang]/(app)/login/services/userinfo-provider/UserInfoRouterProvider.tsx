@@ -41,10 +41,7 @@ import {
 } from './utils/userInfoRouterStorageManager';
 import { useQueryClient } from '@tanstack/react-query';
 import { handleScroll } from './utils/handleScroll';
-import {
- roomDevisionRoute,
- restaurantRotue,
-} from './utils/departmentRoutes';
+import { roomDevisionRoute, restaurantRotue } from './utils/departmentRoutes';
 
 export default function UserInfoRouterProvider({
  children,
@@ -70,7 +67,7 @@ export default function UserInfoRouterProvider({
    components: { userInfoRouter: userInfoRouterDic },
   },
  } = useShareDictionary();
- const logout = useLogout();
+ const logout = useLogout({ broadcast: false });
  //
  const [selectedDialogDepartmentID, setSelectedDialogDepartmentID] = useState<
   number | null
@@ -158,6 +155,21 @@ export default function UserInfoRouterProvider({
   if (!isSuccess) return;
   syncUserRouterVisibility();
  }, [isSuccess, routeOwner, routeDepartment, routeProgram]);
+
+ // const syncUserInfoRouterStorage = useEffectEvent(() => {
+ //  setUserInfoRouterStorage(getUserInfoRouterStorageValue());
+ // });
+ // useEffect(() => {
+ //  const onUserInfoRouterStorageChange = (event: StorageEvent) => {
+ //   if (event.key === userInfoRouterStorageKey) {
+ //    syncUserInfoRouterStorage();
+ //   }
+ //  };
+ //  window.addEventListener('storage', onUserInfoRouterStorageChange);
+ //  return () => {
+ //   window.removeEventListener('storage', onUserInfoRouterStorageChange);
+ //  };
+ // }, []);
 
  useEffect(() => {
   if (programsRef.current && selectedDialogDepartmentID) {

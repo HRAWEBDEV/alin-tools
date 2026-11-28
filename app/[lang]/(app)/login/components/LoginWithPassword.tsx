@@ -31,6 +31,7 @@ import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { toast } from 'sonner';
 import { setUserLoginToken } from '../utils/loginTokenManager';
+import { publishAuthMessage } from '../services/auth-broadcast/authBroadcast';
 import { useLoginContext } from '../services/login/loginContext';
 
 const formDefaults: LoginWithPasswordCredentials = {
@@ -57,6 +58,7 @@ export default function LoginWithPassword({ dic }: { dic: LoginDictionary }) {
   },
   onSuccess({ data }) {
    setUserLoginToken(data.item1);
+   publishAuthMessage({ type: 'login' });
    if (loginModalIsOpen) {
     changeLoginModalIsOpen(false);
    } else {
