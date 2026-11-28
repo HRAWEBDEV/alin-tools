@@ -3,6 +3,7 @@
 import { axios } from '@/app/[lang]/(app)/utils/defaultAxios';
 import { useEffect } from 'react';
 import { useLoginContext } from './login/loginContext';
+import { publishAuthMessage } from './auth-broadcast/authBroadcast';
 
 export default function LoginInterceptor() {
  const { changeLoginModalIsOpen } = useLoginContext();
@@ -17,6 +18,12 @@ export default function LoginInterceptor() {
       error.response &&
       (error.response.status === 403 || error.response.status === 401)
      ) {
+      if (
+       error.response.status === 401 &&
+       !error.config?.url?.includes('/Public/UI/GetJwtToken')
+      ) {
+       publishAuthMessage({ type: 'logout' });
+      }
       changeLoginModalIsOpen(true);
       console.error('Response error:', error.response);
      }
