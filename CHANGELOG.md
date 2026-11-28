@@ -1,5 +1,9 @@
 # CHANGE LOGS
 
+## 3.1.0
+
+- add auth broadcast (hra-done)
+
 ## 3.0.2
 
 - fix tablet pos minor bugs (hra-done)
